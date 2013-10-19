@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ModuleManager">
+    <modules>
+      <module name="consulo-java" dirurl="file://$PROJECT_DIR$">
+        <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-compiler-artifact-impl" />
+        <orderEntry type="module" module-name="java-execution-api" />
+        <orderEntry type="module" module-name="java-psi-api" />
+        <orderEntry type="module" module-name="java-indexing-api" />
+        <orderEntry type="module" module-name="jvm-bytecode-viewer" />
+        <orderEntry type="module" module-name="java-analysis-api" />
+        <orderEntry type="module" module-name="java-compiler-impl" />
+        <orderEntry type="module" module-name="java-debugger-api" />
+        <orderEntry type="module" module-name="java-indexing-impl" />
+        <orderEntry type="module" module-name="java-debugger-impl" />
+        <orderEntry type="module" module-name="java-execution-impl" />
+        <orderEntry type="module" module-name="java-analysis-impl" />
+        <orderEntry type="module" module-name="java-impl" />
+        <orderEntry type="module" module-name="java-psi-impl" />
+        <orderEntry type="module" module-name="java-generate-tostring" />
+      </module>
+      <module name="java-compiler-artifact-impl" dirurl="file://$PROJECT_DIR$/java-compiler-artifact-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+      </module>
+      <module name="java-execution-api" dirurl="file://$PROJECT_DIR$/java-execution-api">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-psi-api" exported="" />
+      </module>
+      <module name="java-psi-api" dirurl="file://$PROJECT_DIR$/java-psi-api">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+      </module>
+      <module name="java-indexing-api" dirurl="file://$PROJECT_DIR$/java-indexing-api">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="MODULE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-psi-api" exported="" />
+      </module>
+      <module name="jvm-bytecode-viewer" dirurl="file://$PROJECT_DIR$/jvm-bytecode-viewer">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-psi-api" />
+      </module>
+      <module name="java-rt" dirurl="file://$PROJECT_DIR$/java-rt">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+      </module>
+      <module name="java-analysis-api" dirurl="file://$PROJECT_DIR$/java-analysis-api">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-psi-api" exported="" />
+      </module>
+      <module name="java-debugger-api" dirurl="file://$PROJECT_DIR$/java-debugger-api">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-execution-api" />
+        <orderEntry type="module" module-name="java-psi-api" />
+      </module>
+      <module name="java-compiler-impl" dirurl="file://$PROJECT_DIR$/java-compiler-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="lombok" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-psi-impl" />
+        <orderEntry type="module" module-name="java-impl" />
+        <orderEntry type="module" module-name="java-rt" />
+      </module>
+      <module name="java-indexing-impl" dirurl="file://$PROJECT_DIR$/java-indexing-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-indexing-api" exported="" />
+        <orderEntry type="module" module-name="java-psi-impl" />
+      </module>
+      <module name="java-debugger-impl" dirurl="file://$PROJECT_DIR$/java-debugger-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-debugger-api" />
+        <orderEntry type="module" module-name="java-execution-impl" />
+      </module>
+      <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-execution-api" exported="" />
+        <orderEntry type="module" module-name="java-impl" />
+        <orderEntry type="module" module-name="java-debugger-impl" />
+        <orderEntry type="module" module-name="java-rt" />
+      </module>
+      <module name="java-analysis-impl" dirurl="file://$PROJECT_DIR$/java-analysis-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-analysis-api" exported="" />
+        <orderEntry type="module" module-name="java-psi-impl" />
+      </module>
+      <module name="java-psi-impl" dirurl="file://$PROJECT_DIR$/java-psi-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-psi-api" exported="" />
+        <orderEntry type="module" module-name="java-indexing-impl" />
+        <orderEntry type="module" module-name="java-impl" />
+        <orderEntry type="module" module-name="java-execution-api" />
+      </module>
+      <module name="java-impl" dirurl="file://$PROJECT_DIR$/java-impl">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="MODULE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" custom-plugin-dir-url="F:\github.com\consulo\consulo-java\dep" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-psi-impl" exported="" />
+        <orderEntry type="module" module-name="java-analysis-impl" exported="" />
+        <orderEntry type="module-library">
+          <library name="consulo:Regexp">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../dep/regexp/lib/regexp.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
+        <orderEntry type="module" module-name="java-indexing-impl" exported="" />
+        <orderEntry type="module" module-name="java-rt" />
+        <orderEntry type="module" module-name="java-execution-api" />
+        <orderEntry type="module-library">
+          <library name="consulo:XML">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xbean.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
+      </module>
+      <module name="java-generate-tostring" dirurl="file://$PROJECT_DIR$/java-generate-tostring">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-impl" />
+      </module>
+      <module name="java-intellilang" dirurl="file://$PROJECT_DIR$/java-intellilang">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module-library">
+          <library name="consulo:IntelliLang">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../dep/intelliLang/lib/intelliLang.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
+        <orderEntry type="module" module-name="java-impl" />
+        <orderEntry type="module" module-name="java-compiler-impl" />
+      </module>
+      <module name="java-intention-power-pack" dirurl="file://$PROJECT_DIR$/java-intention-power-pack">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-impl" />
+      </module>
+      <module name="java-inspection-gadgets" dirurl="file://$PROJECT_DIR$/java-inspection-gadgets">
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" custom-plugin-dir-url="F:\github.com\consulo\consulo-java\dep" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="java-impl" />
+        <orderEntry type="module-library">
+          <library name="consulo:XML">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xbean.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
+      </module>
+    </modules>
+  </component>
+</project>
+

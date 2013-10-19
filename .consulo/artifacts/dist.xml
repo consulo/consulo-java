@@ -1,0 +1,44 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="dist">
+    <output-path>$PROJECT_DIR$/out/artifacts/dist</output-path>
+    <root id="root">
+      <element id="directory" name="java">
+        <element id="directory" name="lib">
+          <element id="zip-archive" name="java.jar">
+            <element id="module-output" name="java-analysis-api" />
+            <element id="module-output" name="java-analysis-impl" />
+            <element id="module-output" name="java-compiler-artifact-impl" />
+            <element id="module-output" name="java-compiler-impl" />
+            <element id="module-output" name="java-debugger-api" />
+            <element id="module-output" name="java-debugger-impl" />
+            <element id="module-output" name="java-execution-api" />
+            <element id="module-output" name="java-execution-impl" />
+            <element id="module-output" name="java-generate-tostring" />
+            <element id="module-output" name="java-impl" />
+            <element id="module-output" name="java-indexing-api" />
+            <element id="module-output" name="java-indexing-impl" />
+            <element id="module-output" name="java-inspection-gadgets" />
+            <element id="module-production-resource-output" name="java-intellilang" />
+            <element id="module-output" name="java-intention-power-pack" />
+            <element id="module-output" name="java-psi-api" />
+            <element id="module-output" name="java-psi-impl" />
+            <element id="module-output" name="jvm-bytecode-viewer" />
+            <element id="module-production-resource-output" name="consulo-java" />
+            <element id="module-production-resource-output" name="java-generate-tostring" />
+            <element id="module-production-resource-output" name="java-inspection-gadgets" />
+            <element id="module-output" name="java-intellilang" />
+            <element id="module-production-resource-output" name="java-psi-impl" />
+            <element id="module-production-resource-output" name="java-intention-power-pack" />
+            <element id="module-production-resource-output" name="java-impl" />
+          </element>
+          <element id="zip-archive" name="java-rt.jar">
+            <element id="module-output" name="java-rt" />
+          </element>
+          <element id="zip-archive" name="jdk-annotations.jar">
+            <element id="dir-copy" path="$PROJECT_DIR$/jdkAnnotations" />
+          </element>
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

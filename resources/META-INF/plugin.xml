@@ -1,0 +1,233 @@
+<!--
+  ~ Copyright 2013 Consulo.org
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<id>org.consulo.java</id>
+	<name>Java</name>
+	<version>1.0</version>
+	<vendor>Consulo</vendor>
+	<resource-bundle>messages.JavaBundle</resource-bundle>
+
+	<depends optional="true" config-file="com.intellij.regexp.xml">com.intellij.regexp</depends>
+	<depends optional="true" config-file="org.intellij.intellilang.xml">org.intellij.intelliLang</depends>
+	<depends>com.intellij.xml</depends>
+
+	<xi:include href="/META-INF/JvmByteCodeViewer.xml" xpointer="xpointer(/idea-plugin/*)"/>
+	<xi:include href="/META-INF/GenerateToString.xml" xpointer="xpointer(/idea-plugin/*)" />
+	<xi:include href="/META-INF/InspectionGadgets.xml" xpointer="xpointer(/idea-plugin/*)" />
+	<xi:include href="/META-INF/IntentionPowerPack.xml" xpointer="xpointer(/idea-plugin/*)" />
+	<xi:include href="/META-INF/JavaPlugin.xml" xpointer="xpointer(/idea-plugin/*)" />
+
+	<extensionPoints>
+		<extensionPoint name="augmentProvider" interface="com.intellij.psi.augment.PsiAugmentProvider"/>
+
+		<extensionPoint name="allOverridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="annotatedElementsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="annotatedPackagesSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="classInheritorsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="deepestSuperMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="directClassInheritorsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="methodReferencesSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="overridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="superMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="allClassesSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="importFilter" interface="com.intellij.codeInsight.ImportFilter"/>
+		<extensionPoint name="encapsulateFields.helper" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.refactoring.encapsulateFields.EncapsulateFieldHelper"/>
+		</extensionPoint>
+		<extensionPoint name="attachSourcesProvider" interface="com.intellij.codeInsight.AttachSourcesProvider"/>
+
+		<extensionPoint name="variableTypeCalculator" interface="com.intellij.codeInsight.template.macro.VariableTypeCalculator"/>
+
+		<extensionPoint name="paletteItemProvider" area="CONSULO_PROJECT" interface="com.intellij.ide.palette.PaletteItemProvider"/>
+
+		<extensionPoint name="testPatcher" interface="com.intellij.execution.JavaTestPatcher"/>
+		<extensionPoint name="exceptionFilter" interface="com.intellij.execution.filters.ExceptionFilterFactory"/>
+		<extensionPoint name="programPatcher"
+						interface="com.intellij.execution.runners.JavaProgramPatcher"/>
+
+		<extensionPoint name="codeInsight.changeVariableTypeQuickFixProvider"
+						interface="com.intellij.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider"/>
+		<extensionPoint name="conversion.rule"
+						interface="com.intellij.refactoring.typeMigration.rules.TypeConversionRule"/>
+
+		<extensionPoint name="overrideImplementsAnnotationsHandler"
+						interface="com.intellij.codeInsight.generation.OverrideImplementsAnnotationsHandler"/>
+		<extensionPoint name="generateAccessorProvider"
+						interface="com.intellij.util.NotNullFunction"/>
+
+		<extensionPoint name="junitRecognizer"
+						interface="com.intellij.execution.JUnitRecognizer"/>
+
+		<extensionPoint name="i18nInspectionTool"
+						interface="com.intellij.codeInspection.FileCheckingInspection"/>
+		<extensionPoint name="invalidPropertyKeyInspectionTool"
+						interface="com.intellij.codeInspection.FileCheckingInspection"/>
+		<extensionPoint name="java15InspectionTool"
+						interface="com.intellij.codeInspection.FileCheckingInspection"/>
+
+		<extensionPoint name="deadCode"
+						interface="com.intellij.codeInspection.reference.EntryPoint"/>
+
+
+		<extensionPoint name="canBeFinal"
+						interface="com.intellij.codeInspection.canBeFinal.CanBeFinalHandler"/>
+		<!-- PsiMember -->
+		<extensionPoint name="javaDocNotNecessary"
+						interface="com.intellij.openapi.util.Condition"/>
+
+		<!-- RefMethod -->
+		<extensionPoint name="canBeEmpty"
+						interface="com.intellij.openapi.util.Condition"/>
+
+		<extensionPoint name="safeDelete.importSearcher"
+						interface="com.intellij.refactoring.safeDelete.ImportSearcher"/>
+
+		<extensionPoint name="visibility"
+						interface="com.intellij.codeInspection.visibility.VisibilityExtension"/>
+
+		<extensionPoint name="methodImplementor"
+						interface="com.intellij.codeInsight.MethodImplementor"/>
+
+		<extensionPoint name="codeInsight.containerProvider"
+						interface="com.intellij.codeInsight.ContainerProvider"/>
+
+		<extensionPoint name="debugger.codeFragmentFactory"
+						interface="com.intellij.debugger.engine.evaluation.CodeFragmentFactory"/>
+
+		<extensionPoint name="debugger.breakpointFactory"
+						interface="com.intellij.debugger.ui.breakpoints.BreakpointFactory"/>
+
+		<extensionPoint name="debugger.jvmDebugProvider"
+						interface="com.intellij.debugger.engine.JVMDebugProvider"/>
+
+		<extensionPoint name="debugger.positionManagerFactory"
+						interface="com.intellij.debugger.PositionManagerFactory"
+						area="CONSULO_PROJECT"/>
+		<extensionPoint name="debugger.jvmSmartStepIntoHandler"
+						interface="com.intellij.debugger.actions.JvmSmartStepIntoHandler"/>
+
+
+		<extensionPoint name="compiler.inspectionValidator"
+						interface="com.intellij.openapi.compiler.util.InspectionValidator"
+						area="CONSULO_PROJECT"/>
+
+		<extensionPoint name="javaExpressionSurrounder"
+						interface="com.intellij.codeInsight.generation.surroundWith.JavaExpressionSurrounder"/>
+
+		<extensionPoint name="unscrambleSupport" interface="com.intellij.unscramble.UnscrambleSupport"/>
+
+		<extensionPoint name="clsStubBuilderFactory" interface="com.intellij.psi.impl.compiled.ClsStubBuilderFactory"/>
+		<extensionPoint name="mainMethodProvider" interface="com.intellij.codeInsight.runner.JavaMainMethodProvider"/>
+
+		<extensionPoint name="debuggerClassFilterProvider" interface="com.intellij.ui.classFilter.DebuggerClassFilterProvider"/>
+		<extensionPoint name="topLevelClassProvider" interface="com.intellij.debugger.engine.TopLevelParentClassProvider"/>
+
+		<extensionPoint name="debuggerEditorTextProvider" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.debugger.impl.EditorTextProvider"/>
+		</extensionPoint>
+
+		<extensionPoint name="javadocTagInfo" area="CONSULO_PROJECT" interface="com.intellij.psi.javadoc.JavadocTagInfo"/>
+
+		<extensionPoint name="refactoring.introduceParameterMethodUsagesProcessor"
+						interface="com.intellij.refactoring.introduceParameter.IntroduceParameterMethodUsagesProcessor"/>
+
+		<extensionPoint name="annotationSupport" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.psi.PsiAnnotationSupport"/>
+		</extensionPoint>
+
+		<extensionPoint name="constantExpressionEvaluator" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.psi.impl.ConstantExpressionEvaluator"/>
+		</extensionPoint>
+
+		<extensionPoint name="expressionConverter" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.refactoring.introduceParameter.ExpressionConverter"/>
+		</extensionPoint>
+
+		<!--<extensionPoint name="expectedTypesProvider" interface="com.intellij.codeInsight.ExpectedTypesProviderExtension"/>-->
+
+		<extensionPoint name="elementFinder" area="CONSULO_PROJECT" interface="com.intellij.psi.PsiElementFinder"/>
+		<extensionPoint name="java.shortNamesCache" area="CONSULO_PROJECT" interface="com.intellij.psi.search.PsiShortNamesCache"/>
+
+		<extensionPoint name="allowedApiFilter" interface="com.intellij.psi.impl.AllowedApiFilterExtension"/>
+
+		<extensionPoint name="generation.topLevelFactory" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.psi.JVMElementFactoryProvider"/>
+		</extensionPoint>
+
+		<extensionPoint name="codeInsight.createFieldFromUsageHelper" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.codeInsight.daemon.impl.quickfix.CreateFieldFromUsageHelper"/>
+		</extensionPoint>
+
+		<extensionPoint name="getterSetterProvider" interface="com.intellij.codeInsight.generation.GetterSetterPrototypeProvider"/>
+
+
+		<extensionPoint name="refactoring.safeDelete.JavaSafeDeleteDelegate" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.refactoring.safeDelete.JavaSafeDeleteDelegate"/>
+		</extensionPoint>
+
+		<extensionPoint name="constructorBodyGenerator"
+						beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.codeInsight.generation.ConstructorBodyGenerator"/>
+		</extensionPoint>
+
+		<extensionPoint name="refactoring.moveInnerHandler" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.refactoring.move.moveInner.MoveInnerHandler"/>
+		</extensionPoint>
+
+		<extensionPoint name="refactoring.moveClassToInnerHandler"
+						interface="com.intellij.refactoring.move.moveClassesOrPackages.MoveClassToInnerHandler"/>
+
+		<extensionPoint name="refactoring.moveAllClassesInFileHandler"
+						interface="com.intellij.refactoring.move.moveClassesOrPackages.MoveAllClassesInFileHandler"/>
+
+		<extensionPoint name="refactoring.moveClassHandler" interface="com.intellij.refactoring.move.moveClassesOrPackages.MoveClassHandler"/>
+
+		<extensionPoint name="refactoring.moveMemberHandler" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.refactoring.move.moveMembers.MoveMemberHandler"/>
+		</extensionPoint>
+
+		<extensionPoint name="testGenerator"
+						beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.testIntegration.createTest.TestGenerator"/>
+		</extensionPoint>
+
+		<extensionPoint name="psi.clsCustomNavigationPolicy"
+						interface="com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy"/>
+		<extensionPoint name="psi.clsDecompiledFileProvider"
+						interface="com.intellij.psi.ClsFileDecompiledPsiFileProvider"/>
+		<extensionPoint name="extraExceptionHandler" interface="com.intellij.codeInsight.ExtraExceptionHandler"/>
+
+		<extensionPoint name="backendCompiler" beanClass="com.intellij.compiler.impl.javaCompiler.BackendCompilerEP" area="CONSULO_PROJECT">
+			<with attribute="implementationClass" implements="com.intellij.compiler.impl.javaCompiler.BackendCompiler"/>
+		</extensionPoint>
+		<extensionPoint name="runConfigurationExtension" interface="com.intellij.execution.RunConfigurationExtension"/>
+		<extensionPoint name="jreProvider" interface="com.intellij.execution.ui.JreProvider"/>
+		<extensionPoint name="vetoSPICondition" interface="com.intellij.openapi.util.Condition"/>
+		<extensionPoint name="codeStyle.referenceAdjuster" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.psi.codeStyle.ReferenceAdjuster"/>
+		</extensionPoint>
+	</extensionPoints>
+
+	<extensions defaultExtensionNs="com.intellij">
+		<packaging.artifactType implementation="com.intellij.packaging.impl.artifacts.JarArtifactType" order="after zip-artifact"/>
+		<packaging.elementType implementation="com.intellij.packaging.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
+		<moduleExtensionProvider id="java" key="java" implementationClass="org.consulo.java.platform.module.extension.JavaModuleExtensionProvider"/>
+		<orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
+		<orderRootTypeEditor key="JAVA_ANNOTATIONS"
+							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
+
+	</extensions>
+</idea-plugin>
