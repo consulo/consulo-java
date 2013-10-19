@@ -17,7 +17,7 @@ package com.intellij.execution.configurations;
 
 import java.nio.charset.Charset;
 
-import org.consulo.module.extension.JavaModuleExtension;
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CantRunException;

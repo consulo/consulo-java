@@ -24,7 +24,7 @@ package com.intellij.compiler.impl.javaCompiler;
 import java.util.Arrays;
 
 import org.consulo.lombok.annotations.Logger;
-import org.consulo.module.extension.JavaModuleExtension;
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.impl.CompileDriver;

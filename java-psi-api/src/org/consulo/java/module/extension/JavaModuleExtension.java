@@ -1,5 +1,6 @@
-package org.consulo.module.extension;
+package org.consulo.java.module.extension;
 
+import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.pom.java.LanguageLevel;
 
