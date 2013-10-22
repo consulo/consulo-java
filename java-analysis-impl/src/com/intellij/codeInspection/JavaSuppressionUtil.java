@@ -15,17 +15,6 @@
  */
 package com.intellij.codeInspection;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.regex.Matcher;
-
-import javax.annotation.Generated;
-
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
@@ -46,6 +35,16 @@ import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Generated;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.regex.Matcher;
 
 public class JavaSuppressionUtil {
   public static final String SUPPRESS_INSPECTIONS_ANNOTATION_NAME = "java.lang.SuppressWarnings";
@@ -288,7 +287,7 @@ public class JavaSuppressionUtil {
   public static boolean canHave15Suppressions(@NotNull PsiElement file) {
     final Module module = ModuleUtilCore.findModuleForPsiElement(file);
     if (module == null) return false;
-    final Sdk jdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
+    final Sdk jdk = ModuleUtil.getSdk(module, JavaModuleExtensionImpl.class);
     if (jdk == null) return false;
     JavaSdkVersion version = getVersion(jdk);
     if (version == null) return false;

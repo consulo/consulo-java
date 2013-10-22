@@ -15,10 +15,6 @@
  */
 package com.intellij.compiler;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -27,6 +23,10 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
 import com.intellij.util.PathUtil;
 import com.intellij.util.PathsList;
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class JavaSdkUtil {
   @NonNls public static final String IDEA_PREPEND_RTJAR = "idea.prepend.rtjar";

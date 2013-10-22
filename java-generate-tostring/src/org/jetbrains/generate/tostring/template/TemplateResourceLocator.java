@@ -15,13 +15,13 @@
  */
 package org.jetbrains.generate.tostring.template;
 
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import org.jetbrains.generate.tostring.exception.TemplateResourceException;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import org.jetbrains.generate.tostring.exception.TemplateResourceException;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 
 /**
  * Resource locator for default method body templates.

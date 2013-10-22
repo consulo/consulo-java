@@ -57,7 +57,7 @@ public class AllClassesSearch extends ExtensibleQueryFactory<PsiClass, AllClasse
   }
 
   private AllClassesSearch() {
-    super("org.consulo.java.platform");
+    super("org.consulo.java");
   }
 
   public static Query<PsiClass> search(SearchScope scope, Project project) {

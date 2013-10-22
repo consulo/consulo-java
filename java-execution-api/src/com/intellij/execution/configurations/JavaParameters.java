@@ -15,11 +15,6 @@
  */
 package com.intellij.execution.configurations;
 
-import java.nio.charset.Charset;
-
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.openapi.actionSystem.DataKey;
@@ -27,14 +22,15 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.OrderRootsEnumerator;
-import com.intellij.openapi.roots.SdkOrderEntry;
+import com.intellij.openapi.roots.*;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
 import com.intellij.util.NotNullFunction;
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.nio.charset.Charset;
 
 public class JavaParameters extends SimpleJavaParameters {
   public static final DataKey<JavaParameters> JAVA_PARAMETERS = DataKey.create("javaParameters");

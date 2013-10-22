@@ -21,22 +21,12 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import java.util.Arrays;
-
-import org.consulo.lombok.annotations.Logger;
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.compiler.TranslatingCompiler;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
@@ -45,6 +35,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.consulo.lombok.annotations.Logger;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 @Logger
 public class JavaCompiler implements TranslatingCompiler {
@@ -81,7 +76,7 @@ public class JavaCompiler implements TranslatingCompiler {
     }
     final BackendCompiler backEndCompiler = getBackEndCompiler();
     final BackendCompilerWrapper wrapper =
-      new BackendCompilerWrapper(moduleChunk, myProject, Arrays.asList(files), (CompileContextEx)context, backEndCompiler, sink);
+      new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files), (CompileContextEx)context, backEndCompiler, sink);
     try {
       if (CompileDriver.ourDebugMode) {
         System.out.println("Starting java compiler; with backend compiler: " + backEndCompiler.getClass().getName());

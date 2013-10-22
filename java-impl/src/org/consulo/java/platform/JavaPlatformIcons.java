@@ -24,5 +24,5 @@ import javax.swing.*;
  * @since 13:59/19.05.13
  */
 public interface JavaPlatformIcons {
-  Icon Java = IconLoader.findIcon("/org/consulo/java/platform/icons/java.png");
+  Icon Java = IconLoader.findIcon("/icons/java.png");
 }

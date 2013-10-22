@@ -15,24 +15,25 @@
  */
 package org.consulo.java.platform.module.extension;
 
-import javax.swing.JComponent;
-
-import org.consulo.java.platform.module.extension.ui.JavaModuleExtensionPanel;
-import org.consulo.module.extension.MutableModuleExtensionWithSdk;
-import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.pom.java.LanguageLevel;
 import lombok.NonNull;
+import org.consulo.java.platform.module.extension.ui.JavaModuleExtensionPanel;
+import org.consulo.module.extension.MutableModuleExtensionWithSdk;
+import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 /**
  * @author VISTALL
  * @since 12:39/19.05.13
  */
-public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements MutableModuleExtensionWithSdk<JavaModuleExtensionImpl> {
+public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl
+  implements MutableModuleExtensionWithSdk<JavaModuleExtensionImpl> {
   @NotNull
   private final JavaModuleExtensionImpl myModuleExtension;
 

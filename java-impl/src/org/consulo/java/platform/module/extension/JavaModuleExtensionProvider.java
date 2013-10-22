@@ -15,13 +15,13 @@
  */
 package org.consulo.java.platform.module.extension;
 
-import javax.swing.Icon;
-
+import com.intellij.openapi.module.Module;
 import org.consulo.java.platform.JavaPlatformIcons;
 import org.consulo.module.extension.ModuleExtensionProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.module.Module;
+
+import javax.swing.*;
 
 /**
  * @author VISTALL

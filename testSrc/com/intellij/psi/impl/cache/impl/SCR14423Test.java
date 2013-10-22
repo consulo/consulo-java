@@ -122,7 +122,8 @@ public class SCR14423Test extends PsiTestCase {
 
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(myModule);
         final ModifiableRootModel modifiableModel = moduleRootManager.getModifiableModel();
-        JavaMutableModuleExtensionImpl javaModuleExtension = (JavaMutableModuleExtensionImpl)modifiableModel.getExtension(JavaModuleExtensionImpl.class);
+        JavaMutableModuleExtensionImpl
+          javaModuleExtension = (JavaMutableModuleExtensionImpl)modifiableModel.getExtension(JavaModuleExtensionImpl.class);
         assert javaModuleExtension != null;
         javaModuleExtension.getInheritableSdk().set((String) null, null);
         modifiableModel.commit();

@@ -49,7 +49,7 @@ public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierL
   }
 
   private AnnotatedElementsSearch() {
-    super("org.consulo.java.platform");
+    super("org.consulo.java");
   }
 
   private static Query<PsiModifierListOwner> createDelegateQuery(PsiClass annotationClass,

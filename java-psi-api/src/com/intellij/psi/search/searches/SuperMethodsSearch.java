@@ -64,7 +64,7 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
   }
 
   private SuperMethodsSearch() {
-    super("org.consulo.java.platform");
+    super("org.consulo.java");
   }
 
   public static Query<MethodSignatureBackedByPsiMethod> search(final PsiMethod derivedMethod, @Nullable final PsiClass psiClass, boolean checkBases, boolean allowStaticMethod) {

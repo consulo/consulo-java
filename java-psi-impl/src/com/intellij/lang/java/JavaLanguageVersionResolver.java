@@ -1,8 +1,5 @@
 package com.intellij.lang.java;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageVersion;
 import com.intellij.lang.LanguageVersionResolver;
@@ -12,6 +9,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author VISTALL

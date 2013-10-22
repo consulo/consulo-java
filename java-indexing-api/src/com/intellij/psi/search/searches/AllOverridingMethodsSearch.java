@@ -53,7 +53,7 @@ public class AllOverridingMethodsSearch
   }
 
   private AllOverridingMethodsSearch() {
-    super("org.consulo.java.platform");
+    super("org.consulo.java");
   }
 
   public static Query<Pair<PsiMethod, PsiMethod>> search(final PsiClass aClass, SearchScope scope) {

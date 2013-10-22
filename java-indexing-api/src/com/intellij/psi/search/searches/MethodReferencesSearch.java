@@ -69,7 +69,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
   }
 
   private MethodReferencesSearch() {
-    super("org.consulo.java.platform");
+    super("org.consulo.java");
   }
 
   public static Query<PsiReference> search(final PsiMethod method, SearchScope scope, final boolean strictSignatureSearch) {

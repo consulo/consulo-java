@@ -139,7 +139,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
   }
 
   private ClassInheritorsSearch() {
-    super("org.consulo.java.platform");
+    super("org.consulo.java");
   }
 
   public static Query<PsiClass> search(@NotNull final PsiClass aClass,

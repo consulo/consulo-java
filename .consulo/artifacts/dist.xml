@@ -30,6 +30,8 @@
             <element id="module-production-resource-output" name="java-psi-impl" />
             <element id="module-production-resource-output" name="java-intention-power-pack" />
             <element id="module-production-resource-output" name="java-impl" />
+            <element id="module-production-resource-output" name="java-compiler-impl" />
+            <element id="module-production-resource-output" name="java-analysis-impl" />
           </element>
           <element id="zip-archive" name="java-rt.jar">
             <element id="module-output" name="java-rt" />

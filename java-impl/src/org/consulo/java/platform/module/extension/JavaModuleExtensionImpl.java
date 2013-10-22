@@ -15,22 +15,22 @@
  */
 package org.consulo.java.platform.module.extension;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.openapi.projectRoots.SdkType;
+import com.intellij.pom.java.LanguageLevel;
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.module.extension.ModuleInheritableNamedPointer;
 import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.pom.java.LanguageLevel;
 
 /**
  * @author VISTALL
  * @since 10:02/19.05.13
  */
-public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl>
-{
+public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl>
+  implements JavaModuleExtension<JavaModuleExtensionImpl> {
   private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
 
   protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
@@ -82,6 +82,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
     super.loadStateImpl(element);
 
     myLanguageLevel.fromXml(element);
-    mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.MODULE_DIR.name()));
+    mySpecialDirLocation =
+      SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.MODULE_DIR.name()));
   }
 }

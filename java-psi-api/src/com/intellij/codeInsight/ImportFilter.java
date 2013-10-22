@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Eugene.Kudelevsky
  */
 public abstract class ImportFilter {
-  public static final ExtensionPointName<ImportFilter> EP_NAME = new ExtensionPointName<ImportFilter>("org.consulo.java.platform.importFilter");
+  public static final ExtensionPointName<ImportFilter> EP_NAME = new ExtensionPointName<ImportFilter>("org.consulo.java.importFilter");
 
   public abstract boolean shouldUseFullyQualifiedName(@NotNull String classQualifiedName);
 

@@ -15,10 +15,10 @@
  */
 package com.intellij.openapi.module;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.pom.java.LanguageLevel;
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NotNull;
 
 public class EffectiveLanguageLevelUtil {
   @NotNull

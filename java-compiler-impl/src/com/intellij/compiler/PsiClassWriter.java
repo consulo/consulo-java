@@ -15,9 +15,6 @@
  */
 package com.intellij.compiler;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.asm4.ClassWriter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -29,6 +26,9 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.ClassUtil;
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.asm4.ClassWriter;
 
 /**
  * @author yole

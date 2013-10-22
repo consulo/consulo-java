@@ -68,7 +68,7 @@ public class DirectClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass
   }
 
   private DirectClassInheritorsSearch() {
-    super("org.consulo.java.platform");
+    super("org.consulo.java");
   }
 
   public static Query<PsiClass> search(final PsiClass aClass) {

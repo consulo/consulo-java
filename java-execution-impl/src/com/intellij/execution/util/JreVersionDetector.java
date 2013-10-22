@@ -22,8 +22,6 @@
  */
 package com.intellij.execution.util;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.openapi.module.Module;
@@ -31,6 +29,8 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
+import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.jetbrains.annotations.Nullable;
 
 public class JreVersionDetector {
   private String myLastAlternativeJrePath = null; //awful hack
@@ -40,7 +40,7 @@ public class JreVersionDetector {
   public boolean isModuleJre50Configured(final ModuleBasedConfiguration configuration) {
     final Module module = configuration.getConfigurationModule().getModule();
     if (module != null && !module.isDisposed()) {
-      final Sdk sdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
+      final Sdk sdk = ModuleUtil.getSdk(module, JavaModuleExtensionImpl.class);
       return isJre50(sdk);
     }
 

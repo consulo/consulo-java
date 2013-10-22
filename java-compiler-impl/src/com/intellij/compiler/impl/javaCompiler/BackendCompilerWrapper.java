@@ -15,42 +15,52 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import com.intellij.compiler.CompilerEncodingService;
-import com.intellij.compiler.CompilerException;
-import com.intellij.compiler.JavaSdkUtil;
-import com.intellij.compiler.OutputParser;
+import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.compiler.*;
+import com.intellij.compiler.cache.Cache;
+import com.intellij.compiler.cache.JavaDependencyCache;
+import com.intellij.compiler.cache.JavaMakeUtil;
+import com.intellij.compiler.cache.SymbolTable;
+import com.intellij.compiler.classParsing.AnnotationConstantValue;
+import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.make.CacheCorruptedException;
+import com.intellij.compiler.make.impl.CompositeDependencyCache;
+import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ContentFolderType;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.roots.*;
+import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileVisitor;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.GlobalSearchScopes;
 import com.intellij.util.Chunk;
+import com.intellij.util.cls.ClsFormatException;
 import gnu.trove.THashMap;
-import org.consulo.compiler.CompilerPathsManager;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.asm4.ClassReader;
+import org.jetbrains.asm4.ClassWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +83,7 @@ public class BackendCompilerWrapper {
   private final CompileContextEx myCompileContext;
   private final List<VirtualFile> myFilesToCompile;
   private final TranslatingCompiler.OutputSink mySink;
+  private final TranslatingCompiler myTranslatingCompiler;
   private final Chunk<Module> myChunk;
   private final Project myProject;
   private final Map<Module, VirtualFile> myModuleToTempDirMap = new THashMap<Module, VirtualFile>();
@@ -85,10 +96,11 @@ public class BackendCompilerWrapper {
   private volatile String myModuleName = null;
   private boolean myForceCompileTestsSeparately = false;
 
-  public BackendCompilerWrapper(Chunk<Module> chunk, @NotNull final Project project,
+  public BackendCompilerWrapper(TranslatingCompiler translatingCompiler, Chunk<Module> chunk, @NotNull final Project project,
                                 @NotNull List<VirtualFile> filesToCompile,
                                 @NotNull CompileContextEx compileContext,
                                 @NotNull BackendCompiler compiler, TranslatingCompiler.OutputSink sink) {
+    myTranslatingCompiler = translatingCompiler;
     myChunk = chunk;
     myProject = project;
     myCompiler = compiler;
@@ -310,7 +322,7 @@ public class BackendCompilerWrapper {
   }
 
   private void saveTestData() {
-   /* ApplicationManager.getApplication().runReadAction(new Runnable() {
+    /*ApplicationManager.getApplication().runReadAction(new Runnable() {
       public void run() {
         for (VirtualFile file : myFilesToCompile) {
           CompilerManagerImpl.addCompiledPath(file.getPath());
@@ -369,14 +381,6 @@ public class BackendCompilerWrapper {
     }).booleanValue()) {
       return; // should not invoke javac with empty sources list
     }
-
-    /*ModuleType moduleType = ModuleType.get(chunk.getModules()[0]);
-    if ((chunk.getJdk() == null || !(chunk.getJdk().getSdkType() instanceof JavaSdkType)) &&
-        !(moduleType instanceof JavaModuleType || moduleType.createModuleBuilder() instanceof JavaModuleBuilder)) {
-      // TODO
-      // don't try to compile non-java type module
-      return;
-    }         */
 
     int exitValue = 0;
     try {
@@ -607,28 +611,30 @@ public class BackendCompilerWrapper {
                                     final FileTypeManager typeManager,
                                     final VirtualFile sourceRoot,
                                     final String packagePrefix, final List<File> filesToRefresh, final Map<String, Collection<TranslatingCompiler.OutputItem>> results) throws CacheCorruptedException {
-   /* final Ref<CacheCorruptedException> exRef = new Ref<CacheCorruptedException>(null);
+    final Ref<CacheCorruptedException> exRef = new Ref<CacheCorruptedException>(null);
     final ModuleFileIndex fileIndex = ModuleRootManager.getInstance(module).getFileIndex();
     final GlobalSearchScope srcRootScope = GlobalSearchScope.moduleScope(module).intersectWith(
       GlobalSearchScopes.directoryScope(myProject, sourceRoot, true));
 
+    final Collection<FileType> registeredInputTypes = CompilerManager.getInstance(myProject).getRegisteredInputTypes(myTranslatingCompiler);
+
     final ContentIterator contentIterator = new ContentIterator() {
       public boolean processFile(final VirtualFile child) {
-        /*try {
+        try {
           if (child.isValid()) {
-            if (!child.isDirectory() && myCompiler.getCompilableFileTypes().contains(child.getFileType())) {
+            if (!child.isDirectory() && registeredInputTypes.contains(child.getFileType())) {
               updateOutputItemsList(outputDir, child, sourceRoot, packagePrefix, filesToRefresh, results, srcRootScope);
             }
           }
           return true;
         }
         catch (CacheCorruptedException e) {
-          exRef.set(e);  */
-          //return false;  /*
-      //  }   */
-  //    }
- //   };
-  /*  if (fileIndex.isInContent(from)) {
+          exRef.set(e);
+          return false;
+        }
+      }
+    };
+    if (fileIndex.isInContent(from)) {
       // use file index for iteration to handle 'inner modules' and excludes properly
       fileIndex.iterateContentUnderDirectory(from, contentIterator);
     }
@@ -643,24 +649,10 @@ public class BackendCompilerWrapper {
           return true;
         }
       });
-    }     */
-    /*final CacheCorruptedException exc = exRef.get();
+    }
+    final CacheCorruptedException exc = exRef.get();
     if (exc != null) {
       throw exc;
-    } */
-
-    VirtualFile compilerOutput =
-      CompilerPathsManager.getInstance(myProject).getCompilerOutput(module, ContentFolderType.PRODUCTION);//FIXME [VISTALL] ??
-
-    try {
-      String canonicalPath = compilerOutput.getCanonicalPath();
-      if(FileUtil.pathsEqual(outputDir, canonicalPath)) {
-        return;
-      }
-      FileUtil.copyDir(new File(outputDir), new File(canonicalPath));
-    }
-    catch (IOException e) {
-      throw new CacheCorruptedException(e);
     }
   }
 
@@ -678,12 +670,14 @@ public class BackendCompilerWrapper {
     paths.add(new CompiledClass(classQName, relativePathToSource, pathToClass));
   }
 
-  /*private void updateOutputItemsList(final String outputDir, final VirtualFile srcFile,
+  private void updateOutputItemsList(final String outputDir, final VirtualFile srcFile,
                                      VirtualFile sourceRoot,
                                      final String packagePrefix, final List<File> filesToRefresh,
                                      Map<String, Collection<TranslatingCompiler.OutputItem>> results,
                                      final GlobalSearchScope srcRootScope) throws CacheCorruptedException {
-    final Cache newCache = myCompileContext.getDependencyCache().getNewClassesCache();
+    CompositeDependencyCache dependencyCache = myCompileContext.getDependencyCache();
+    JavaDependencyCache child = dependencyCache.findChild(JavaDependencyCache.class);
+    final Cache newCache = child.getNewClassesCache();
     final Set<CompiledClass> paths = myFileNameToSourceMap.get(srcFile.getName());
     if (paths == null || paths.isEmpty()) {
       return;
@@ -697,7 +691,7 @@ public class BackendCompilerWrapper {
 
       boolean pathsEquals = FileUtil.pathsEqual(filePath, cc.relativePathToSource);
       if (!pathsEquals) {
-        final String qName = myCompileContext.getDependencyCache().resolve(cc.qName);
+        final String qName = child.resolve(cc.qName);
         if (qName != null) {
           pathsEquals = ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
             public Boolean compute() {
@@ -733,7 +727,7 @@ public class BackendCompilerWrapper {
           if (PACKAGE_ANNOTATION_FILE_NAME.equals(srcFile.getName())) {
             myProcessedPackageInfos.add(srcFile);
           }
-          if (CompilerConfiguration.MAKE_ENABLED) {
+          if (CompilerManager.MAKE_ENABLED) {
             newCache.setPath(cc.qName, realLocation.getSecond());
           }
           if (LOG.isDebugEnabled()) {
@@ -749,7 +743,7 @@ public class BackendCompilerWrapper {
         }
       }
     }
-  }      */
+  }
 
   /**
    *
@@ -909,18 +903,18 @@ public class BackendCompilerWrapper {
     }
 
     private void processPath(FileObject fileObject, Project project) throws CacheCorruptedException {
-   /*   File file = fileObject.getFile();
+      File file = fileObject.getFile();
       final String path = file.getPath();
       try {
-        if (CompilerConfiguration.MAKE_ENABLED) {
+        if (CompilerManager.MAKE_ENABLED) {
           byte[] fileContent = fileObject.getContent();
           // the file is assumed to exist!
-          final DependencyCache dependencyCache = myCompileContext.getDependencyCache();
+          final JavaDependencyCache dependencyCache = myCompileContext.getDependencyCache().findChild(JavaDependencyCache.class);
           final int newClassQName = dependencyCache.reparseClassFile(file, fileContent);
           final Cache newClassesCache = dependencyCache.getNewClassesCache();
           final String sourceFileName = newClassesCache.getSourceFileName(newClassQName);
           final String qName = dependencyCache.resolve(newClassQName);
-          String relativePathToSource = "/" + MakeUtil.createRelativePathToSource(qName, sourceFileName);
+          String relativePathToSource = "/" + JavaMakeUtil.createRelativePathToSource(qName, sourceFileName);
           putName(sourceFileName, newClassQName, relativePathToSource, path);
           boolean haveToInstrument = myAddNotNullAssertions && hasNotNullAnnotations(newClassesCache, dependencyCache.getSymbolTable(), newClassQName, project);
 
@@ -929,9 +923,7 @@ public class BackendCompilerWrapper {
               ClassReader reader = new ClassReader(fileContent, 0, fileContent.length);
               ClassWriter writer = new PsiClassWriter(myProject, myIsJdk16);
 
-              final NotNullVerifyingInstrumenter instrumenter = new NotNullVerifyingInstrumenter(writer);
-              reader.accept(instrumenter, 0);
-              if (instrumenter.isModification()) {
+              if (NotNullVerifyingInstrumenter.processClassFile(reader, writer)) {
                 fileObject = new FileObject(file, writer.toByteArray());
               }
             }
@@ -949,7 +941,7 @@ public class BackendCompilerWrapper {
           final int slashIndex = _path.lastIndexOf('/');
           final String sourceFileName = _path.substring(slashIndex + 1, tailIndex) + ".java";
           String relativePathToSource = _path.substring(myOutputDir.length(), tailIndex) + ".java";
-          putName(sourceFileName, 0 , relativePathToSource.startsWith("/")? relativePathToSource : "/" + relativePathToSource, path);
+          putName(sourceFileName, 0 /*doesn't matter here*/ , relativePathToSource.startsWith("/")? relativePathToSource : "/" + relativePathToSource, path);
         }
       }
       catch (ClsFormatException e) {
@@ -965,11 +957,11 @@ public class BackendCompilerWrapper {
       finally {
         myStatistics.incClassesCount();
         updateStatistics();
-      }  */
+      }
     }
   }
 
- /* private static boolean hasNotNullAnnotations(final Cache cache, final SymbolTable symbolTable, final int className, Project project) throws CacheCorruptedException {
+  private static boolean hasNotNullAnnotations(final Cache cache, final SymbolTable symbolTable, final int className, Project project) throws CacheCorruptedException {
     final NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
     final List<String> notNulls = manager.getNotNulls();
     for (MethodInfo methodId : cache.getMethods(className)) {
@@ -988,7 +980,7 @@ public class BackendCompilerWrapper {
       }
     }
     return false;
-  }    */
+  }
 
   private static boolean isJdk6(final Sdk jdk) {
     return jdk != null && JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);

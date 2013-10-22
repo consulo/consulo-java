@@ -20,6 +20,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.newvfs.FileAttribute;
@@ -67,6 +68,9 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 
   @Override
   public LanguageLevel getImmediateValue(Project project, VirtualFile file) {
+    if(file == null) {
+      return null;
+    }
     final Module moduleForFile = ModuleUtil.findModuleForFile(file, project);
     if(moduleForFile == null) {
       return null;
@@ -85,6 +89,11 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   @Override
   public boolean acceptsFile(VirtualFile file) {
     return false;
+  }
+
+  @Override
+  public boolean acceptsDirectory(@NotNull VirtualFile file, @NotNull Project project) {
+    return ProjectFileIndex.SERVICE.getInstance(project).isInSourceContent(file);
   }
 
   private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);

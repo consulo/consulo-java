@@ -15,9 +15,24 @@
  */
 package com.intellij.psi.impl;
 
+import gnu.trove.THashSet;
+import gnu.trove.TObjectHashingStrategy;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.java.stubs.index.JavaFieldNameIndex;
 import com.intellij.psi.impl.java.stubs.index.JavaMethodNameIndex;
 import com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex;
@@ -32,18 +47,7 @@ import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.HashSet;
-import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.indexing.IdFilter;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectHashingStrategy;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 public class PsiShortNamesCacheImpl extends PsiShortNamesCache {
   private final PsiManagerEx myManager;
