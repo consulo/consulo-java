@@ -1,0 +1,1 @@
+Initial code was get for IntelliJ IDEA Community Edition. Github repo : github.com/JetBrains/intellij-community
