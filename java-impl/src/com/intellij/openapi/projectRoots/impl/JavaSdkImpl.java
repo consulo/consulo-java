@@ -15,6 +15,27 @@
  */
 package com.intellij.openapi.projectRoots.impl;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.Icon;
+
+import org.consulo.java.platform.JavaPlatformIcons;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.util.ExecUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JarArchiveFileType;
@@ -23,28 +44,28 @@ import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.projectRoots.*;
+import com.intellij.openapi.projectRoots.AdditionalDataConfigurable;
+import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.openapi.projectRoots.JdkUtil;
+import com.intellij.openapi.projectRoots.JdkVersionUtil;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkAdditionalData;
+import com.intellij.openapi.projectRoots.SdkModel;
+import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.*;
+import com.intellij.openapi.vfs.JarFileSystem;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
-import org.consulo.java.platform.JavaPlatformIcons;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.FileFilter;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Eugene Zhuravlev
@@ -376,7 +397,7 @@ public class JavaSdkImpl extends JavaSdk {
     VirtualFile jarFile = JarArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(path);
 
     if(jarFile == null) {
-      path = FileUtil.toSystemIndependentName(PathManager.getHomePath()) + "/java/lib/jdk-annotations.jar";
+      path = FileUtil.toSystemIndependentName(PathManager.getPluginsPath()) + "/java/lib/jdk-annotations.jar";
       jarFile = JarArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(path);
     }
 
