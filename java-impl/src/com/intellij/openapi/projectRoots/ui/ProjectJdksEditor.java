@@ -15,6 +15,11 @@
  */
 package com.intellij.openapi.projectRoots.ui;
 
+import java.awt.Component;
+
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -27,12 +32,10 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Disposer;
 
-import javax.swing.*;
-import java.awt.*;
-
 /**
  * @author MYakovlev
  */
+@Deprecated // use SingleSdkEditor
 public class ProjectJdksEditor extends DialogWrapper {
   private ProjectSdksConfigurable myConfigurable;
   private Sdk myProjectJdk;
