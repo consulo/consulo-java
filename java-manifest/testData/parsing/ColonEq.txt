@@ -1,0 +1,11 @@
+ManifestFile:ColonEq.MF
+  SectionImpl [SECTION]
+    HeaderImpl [HEADER]
+      PsiElement(ManifestTokenType: HEADER_NAME_TOKEN)('MyTestHeader')
+      PsiElement(ManifestTokenType: COLON_TOKEN)(':')
+      PsiElement(ManifestTokenType: SIGNIFICANT_SPACE_TOKEN)(' ')
+      ClauseImpl [CLAUSE]
+        HeaderValuePartImpl [HEADER_VALUE_PART]
+          PsiElement(ManifestTokenType: HEADER_VALUE_PART_TOKEN)('git')
+          PsiElement(ManifestTokenType: COLON_TOKEN)(':')
+          PsiElement(ManifestTokenType: HEADER_VALUE_PART_TOKEN)('//test.url')

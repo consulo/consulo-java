@@ -39,6 +39,10 @@
           <element id="zip-archive" name="jdk-annotations.jar">
             <element id="dir-copy" path="$PROJECT_DIR$/jdkAnnotations" />
           </element>
+          <element id="zip-archive" name="java-manifest.jar">
+            <element id="module-output" name="java-manifest" />
+            <element id="module-production-resource-output" name="java-manifest" />
+          </element>
         </element>
       </element>
     </root>

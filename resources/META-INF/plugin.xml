@@ -27,6 +27,7 @@
   <xi:include href="/META-INF/GenerateToString.xml" xpointer="xpointer(/idea-plugin/*)" />
   <xi:include href="/META-INF/InspectionGadgets.xml" xpointer="xpointer(/idea-plugin/*)" />
   <xi:include href="/META-INF/IntentionPowerPack.xml" xpointer="xpointer(/idea-plugin/*)" />
+  <xi:include href="/META-INF/Manifest.xml" xpointer="xpointer(/idea-plugin/*)" />
 
   <actions>
     <group id="JavaGenerateGroup1">
@@ -401,7 +402,11 @@
   </project-components>
 
   <extensionPoints>
-    <extensionPoint name="augmentProvider" interface="com.intellij.psi.augment.PsiAugmentProvider"/>
+	<extensionPoint name="manifest.headerParser" beanClass="org.osmorc.manifest.lang.headerparser.HeaderParserEP">
+		<with attribute="implementationClass" implements="org.osmorc.manifest.lang.headerparser.HeaderParser"/>
+	</extensionPoint>
+
+	<extensionPoint name="augmentProvider" interface="com.intellij.psi.augment.PsiAugmentProvider"/>
 
     <extensionPoint name="allOverridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
     <extensionPoint name="annotatedElementsSearch" interface="com.intellij.util.QueryExecutor"/>

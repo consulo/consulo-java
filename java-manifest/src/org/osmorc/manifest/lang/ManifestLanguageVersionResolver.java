@@ -1,0 +1,45 @@
+package org.osmorc.manifest.lang;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.Language;
+import com.intellij.lang.LanguageVersion;
+import com.intellij.lang.LanguageVersionResolver;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+
+/**
+ * @author VISTALL
+ * @since 22:03/24.06.13
+ */
+public class ManifestLanguageVersionResolver implements LanguageVersionResolver
+{
+	@NotNull
+	@Override
+	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable PsiElement element)
+	{
+		if(element == null)
+		{
+			return ManifestLanguageVersion.Manifest;
+		}
+		final PsiFile containingFile = element.getContainingFile();
+		if(containingFile == null)
+		{
+			return ManifestLanguageVersion.Manifest;
+		}
+		return getLanguageVersion(language, element.getProject(), containingFile.getVirtualFile());
+	}
+
+	@NotNull
+	@Override
+	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile)
+	{
+		if(virtualFile == null)
+		{
+			return ManifestLanguageVersion.Manifest;
+		}
+		return virtualFile.getFileType() == BndFileType.INSTANCE ? ManifestLanguageVersion.Bnd : ManifestLanguageVersion.Manifest;
+	}
+}
