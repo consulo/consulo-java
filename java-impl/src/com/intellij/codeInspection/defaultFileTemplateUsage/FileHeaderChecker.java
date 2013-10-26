@@ -15,10 +15,27 @@
  */
 package com.intellij.codeInspection.defaultFileTemplateUsage;
 
+import gnu.trove.TIntObjectHashMap;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.CodeInsightUtil;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -31,30 +48,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.util.IncorrectOperationException;
-import gnu.trove.TIntObjectHashMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Alexey
  */
 public class FileHeaderChecker {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.defaultFileTemplateUsage.FileHeaderChecker");
-  @NonNls
-  public static final String FILE_HEADER_TEMPLATE_NAME = "Java File Header";
+
 
   static ProblemDescriptor checkFileHeader(@NotNull final PsiFile file, final InspectionManager manager, boolean onTheFly) {
     TIntObjectHashMap<String> offsetToProperty = new TIntObjectHashMap<String>();
     Pattern pattern = getTemplatePattern(FileTemplateManager.getInstance()
-      .getDefaultTemplate(FILE_HEADER_TEMPLATE_NAME),
+      .getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME),
                                          file.getProject(), offsetToProperty
     );
     Matcher matcher = pattern.matcher(file.getText());
@@ -107,7 +112,7 @@ public class FileHeaderChecker {
 
   private static LocalQuickFix[] createQuickFix(final Matcher matcher,
                                                 final TIntObjectHashMap<String> offsetToProperty) {
-    final FileTemplate template = FileTemplateManager.getInstance().getPattern(FILE_HEADER_TEMPLATE_NAME);
+    final FileTemplate template = FileTemplateManager.getInstance().getPattern(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
 
     final ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix() {
       @Override

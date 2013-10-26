@@ -15,10 +15,28 @@
  */
 package com.intellij.platform.templates;
 
+import gnu.trove.TIntObjectHashMap;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.codeInspection.defaultFileTemplateUsage.FileHeaderChecker;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.util.projectWizard.ProjectTemplateFileProcessor;
 import com.intellij.ide.util.projectWizard.ProjectTemplateParameterFactory;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -48,18 +66,6 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.io.ZipUtil;
 import com.intellij.util.ui.UIUtil;
-import gnu.trove.TIntObjectHashMap;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * @author Dmitry Avdeev
@@ -253,7 +259,7 @@ public class SaveProjectAsTemplateAction extends AnAction {
   public static String getEncodedContent(VirtualFile virtualFile,
                                           Project project,
                                           Map<String, String> parameters) throws IOException {
-    final FileTemplate template = FileTemplateManager.getInstance().getDefaultTemplate(FileHeaderChecker.FILE_HEADER_TEMPLATE_NAME);
+    final FileTemplate template = FileTemplateManager.getInstance().getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
     final String templateText = template.getText();
     final Pattern pattern = FileHeaderChecker.getTemplatePattern(template, project, new TIntObjectHashMap<String>());
     String text = VfsUtilCore.loadText(virtualFile);
