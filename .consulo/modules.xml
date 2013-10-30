@@ -153,6 +153,7 @@
         <orderEntry type="sourceFolder" forTests="false" />
         <orderEntry type="module" module-name="java-debugger-api" />
         <orderEntry type="module" module-name="java-execution-impl" />
+        <orderEntry type="module" module-name="java-impl" />
       </module>
       <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl">
         <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />

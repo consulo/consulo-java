@@ -500,7 +500,7 @@
                     interface="com.intellij.openapi.compiler.util.InspectionValidator"
                     area="CONSULO_PROJECT"/>
 
-    <extensionPoint name="javaExpressionSurrounder"
+    <extensionPoint name="expressionSurrounder"
                     interface="com.intellij.codeInsight.generation.surroundWith.JavaExpressionSurrounder"/>
 
     <extensionPoint name="unscrambleSupport" interface="com.intellij.unscramble.UnscrambleSupport"/>
@@ -600,7 +600,9 @@
   <extensions defaultExtensionNs="org.consulo.java">
     <allClassesSearch implementation="com.intellij.psi.impl.search.AllClassesSearchExecutor"/>
 
-    <superMethodsSearch implementation="com.intellij.psi.impl.search.MethodSuperSearcher"/>
+	<expressionSurrounder implementation="com.intellij.debugger.codeinsight.JavaWithRuntimeCastSurrounder"/>
+
+	<superMethodsSearch implementation="com.intellij.psi.impl.search.MethodSuperSearcher"/>
     <annotatedElementsSearch implementation="com.intellij.psi.impl.search.AnnotatedElementsSearcher"/>
     <annotatedPackagesSearch implementation="com.intellij.psi.impl.search.AnnotatedPackagesSearcher"/>
     <directClassInheritorsSearch implementation="com.intellij.psi.impl.search.JavaDirectInheritorsSearcher"/>
@@ -635,8 +637,6 @@
 
     <constructorBodyGenerator language="JAVA"
                               implementationClass="com.intellij.codeInsight.generation.JavaConstructorBodyWithSuperCallGenerator"/>
-
-    <javaExpressionSurrounder implementation="com.intellij.debugger.codeinsight.JavaWithRuntimeCastSurrounder"/>
 
     <refactoring.moveAllClassesInFileHandler
         implementation="com.intellij.refactoring.move.moveClassesOrPackages.MoveJavaClassesInFileHandler" id="java"/>
