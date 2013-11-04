@@ -28,7 +28,7 @@ import com.intellij.psi.util.PropertyUtil;
  * Date: 3/4/13
  */
 public abstract class GetterSetterPrototypeProvider {
-  public static final ExtensionPointName<GetterSetterPrototypeProvider> EP_NAME = ExtensionPointName.create("com.intellij.getterSetterProvider");
+  public static final ExtensionPointName<GetterSetterPrototypeProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.getterSetterProvider");
   public abstract boolean canGeneratePrototypeFor(PsiField field);
   public abstract PsiMethod[] generateGetters(PsiField field);
   public abstract PsiMethod[] generateSetters(PsiField field);
