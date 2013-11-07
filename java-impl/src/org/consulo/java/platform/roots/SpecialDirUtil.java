@@ -15,19 +15,20 @@
  */
 package org.consulo.java.platform.roots;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.roots.ContentFolderScopes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.vcsUtil.VcsUtil;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author VISTALL
@@ -48,19 +49,19 @@ public class SpecialDirUtil {
         return module.getModuleDirPath() + File.separator + name;
       case SOURCE_DIR:
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        final VirtualFile[] sourceRoots = moduleRootManager.getSourceRoots(false);
-        if(sourceRoots.length == 0) {
+        final VirtualFile[] contentFolders = moduleRootManager.getContentFolderFiles(ContentFolderScopes.all(false));
+        if(contentFolders.length == 0) {
           return null;
         }
 
-        for(VirtualFile virtualFile : sourceRoots) {
+        for(VirtualFile virtualFile : contentFolders) {
           final VirtualFile child = virtualFile.findChild(name);
           if(child != null) {
             return child.getPath();
           }
         }
 
-        return sourceRoots[0].getPath() + File.separator + name;
+        return contentFolders[0].getPath() + File.separator + name;
     }
     return null;
   }
@@ -83,7 +84,7 @@ public class SpecialDirUtil {
         return Collections.singletonList(virtualFile);
       case SOURCE_DIR:
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        final VirtualFile[] sourceRoots = moduleRootManager.getSourceRoots(false);
+        final VirtualFile[] sourceRoots = moduleRootManager.getContentFolderFiles(ContentFolderScopes.all(false));
         if(sourceRoots.length == 0) {
           return Collections.emptyList();
         }
