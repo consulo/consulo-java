@@ -16,11 +16,18 @@
 package com.intellij.ide.util.projectWizard;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.JavaSdkType;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ContentFolderType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
@@ -30,13 +37,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JavaModuleBuilder extends ModuleBuilder implements SourcePathsBuilder {
   private String myCompilerOutputPath;
@@ -90,7 +90,7 @@ public class JavaModuleBuilder extends ModuleBuilder implements SourcePathsBuild
           final VirtualFile sourceRoot = LocalFileSystem.getInstance()
             .refreshAndFindFileByPath(FileUtil.toSystemIndependentName(first));
           if (sourceRoot != null) {
-            contentEntry.addFolder(sourceRoot, ContentFolderType.PRODUCTION);
+            contentEntry.addFolder(sourceRoot, ProductionContentFolderTypeProvider.getInstance());
           }
         }
       }

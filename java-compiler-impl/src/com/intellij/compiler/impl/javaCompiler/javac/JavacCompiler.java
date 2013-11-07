@@ -15,6 +15,24 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.JavaCompilerUtil;
 import com.intellij.compiler.JavaSdkUtil;
@@ -28,12 +46,15 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.*;
+import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.openapi.projectRoots.JavaSdkType;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.projectRoots.impl.MockSdkWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Computable;
@@ -44,11 +65,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.*;
-import java.util.*;
 
 public class JavacCompiler extends ExternalCompiler {
   @NonNls public static final String TESTS_EXTERNAL_COMPILER_HOME_PROPERTY_NAME = "tests.external.compiler.home";
@@ -396,7 +412,7 @@ public class JavacCompiler extends ExternalCompiler {
     if (isAnnotationProcessingMode) {
       commandLine.add("-s");
       commandLine.add(outputPath.replace('/', File.separatorChar));
-      final String moduleOutputPath = CompilerPaths.getModuleOutputPath(chunk.getModules()[0], false);
+      final String moduleOutputPath = CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0], false);
       if (moduleOutputPath != null) {
         commandLine.add("-d");
         commandLine.add(moduleOutputPath.replace('/', File.separatorChar));

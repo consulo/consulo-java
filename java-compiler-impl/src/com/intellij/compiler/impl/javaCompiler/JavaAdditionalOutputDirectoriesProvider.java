@@ -15,6 +15,11 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
+import java.util.Arrays;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
 import com.intellij.compiler.impl.AdditionalOutputDirectoriesProvider;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.openapi.compiler.CompilerPaths;
@@ -24,10 +29,6 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 
 /**
  * @author VISTALL
@@ -71,7 +72,7 @@ public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutput
     }
 
 
-    final String path = CompilerPaths.getModuleOutputPath(module, false);
+    final String path = CompilerPathsImpl.getModuleOutputPath(module, false);
     if (path == null) {
       return null;
     }

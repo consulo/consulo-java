@@ -15,6 +15,13 @@
  */
 package com.intellij.testIntegration.createTest;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.roots.ContentFolderScopes;
+import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -25,19 +32,24 @@ import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.ContentEntry;
+import com.intellij.openapi.roots.ContentFolder;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testIntegration.TestFramework;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class CreateTestAction extends PsiElementBaseIntentionAction {
 
@@ -144,7 +156,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
 
     final ContentEntry[] entries = ModuleRootManager.getInstance(srcModule).getContentEntries();
     for (ContentEntry entry : entries) {
-      for (ContentFolder sourceFolder : entry.getFolders(ContentFolderType.TEST)) {
+      for (ContentFolder sourceFolder : entry.getFolders(ContentFolderScopes.of(TestContentFolderTypeProvider.getInstance()))) {
         final VirtualFile sourceFolderFile = sourceFolder.getFile();
         if (sourceFolderFile != null) {
           testFolders.add(sourceFolderFile);

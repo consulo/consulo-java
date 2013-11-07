@@ -15,74 +15,91 @@
  */
 package org.consulo.java.platform.module.extension;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.pom.java.LanguageLevel;
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.module.extension.ModuleInheritableNamedPointer;
 import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.roots.ContentFoldersSupport;
+import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
+import org.mustbe.consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
+import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
+import org.mustbe.consulo.roots.impl.TestResourceContentFolderTypeProvider;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.openapi.projectRoots.SdkType;
+import com.intellij.pom.java.LanguageLevel;
 
 /**
  * @author VISTALL
  * @since 10:02/19.05.13
  */
-public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl>
-  implements JavaModuleExtension<JavaModuleExtensionImpl> {
-  private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
+@ContentFoldersSupport(value = {
+		ProductionContentFolderTypeProvider.class,
+		ProductionResourceContentFolderTypeProvider.class,
+		TestContentFolderTypeProvider.class,
+		TestResourceContentFolderTypeProvider.class
+})
+public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl>
+{
+	private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
+	protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
+	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.MODULE_DIR;
 
-  protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
-  protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.MODULE_DIR;
+	public JavaModuleExtensionImpl(@NotNull String id, @NotNull Module module)
+	{
+		super(id, module);
+		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(module.getProject(), id);
+	}
 
-  public JavaModuleExtensionImpl(@NotNull String id, @NotNull Module module) {
-    super(id, module);
-    myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(module.getProject(), id);
-  }
+	@Override
+	public void commit(@NotNull JavaModuleExtensionImpl mutableModuleExtension)
+	{
+		super.commit(mutableModuleExtension);
 
-  @Override
-  public void commit(@NotNull JavaModuleExtensionImpl mutableModuleExtension) {
-    super.commit(mutableModuleExtension);
+		myLanguageLevel.set(mutableModuleExtension.getInheritableLanguageLevel());
+		mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
+	}
 
-    myLanguageLevel.set(mutableModuleExtension.getInheritableLanguageLevel());
-    mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
-  }
+	@NotNull
+	public LanguageLevel getLanguageLevel()
+	{
+		return myLanguageLevel.get();
+	}
 
-  @NotNull
-  public LanguageLevel getLanguageLevel() {
-    return myLanguageLevel.get();
-  }
+	@NotNull
+	public SpecialDirLocation getSpecialDirLocation()
+	{
+		return mySpecialDirLocation;
+	}
 
-  @NotNull
-  public SpecialDirLocation getSpecialDirLocation() {
-    return mySpecialDirLocation;
-  }
+	@NotNull
+	public ModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel()
+	{
+		return myLanguageLevel;
+	}
 
-  @NotNull
-  public ModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
-    return myLanguageLevel;
-  }
+	@Override
+	protected Class<? extends SdkType> getSdkTypeClass()
+	{
+		return JavaSdk.class;
+	}
 
-  @Override
-  protected Class<? extends SdkType> getSdkTypeClass() {
-    return JavaSdk.class;
-  }
+	@Override
+	protected void getStateImpl(@NotNull Element element)
+	{
+		super.getStateImpl(element);
 
-  @Override
-  protected void getStateImpl(@NotNull Element element) {
-    super.getStateImpl(element);
+		myLanguageLevel.toXml(element);
+		element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+	}
 
-    myLanguageLevel.toXml(element);
-    element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
-  }
+	@Override
+	protected void loadStateImpl(@NotNull Element element)
+	{
+		super.loadStateImpl(element);
 
-  @Override
-  protected void loadStateImpl(@NotNull Element element) {
-    super.loadStateImpl(element);
-
-    myLanguageLevel.fromXml(element);
-    mySpecialDirLocation =
-      SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.MODULE_DIR.name()));
-  }
+		myLanguageLevel.fromXml(element);
+		mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.MODULE_DIR.name()));
+	}
 }

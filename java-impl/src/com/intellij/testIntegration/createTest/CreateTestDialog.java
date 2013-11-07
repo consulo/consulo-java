@@ -15,6 +15,29 @@
  */
 package com.intellij.testIntegration.createTest;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.roots.ContentFolderScopes;
+import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
@@ -38,13 +61,18 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ContentFolder;
-import com.intellij.openapi.roots.ContentFolderType;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragment;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMember;
 import com.intellij.refactoring.PackageWrapper;
 import com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
 import com.intellij.refactoring.ui.MemberSelectionTable;
@@ -54,19 +82,11 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.testIntegration.TestFramework;
 import com.intellij.testIntegration.TestIntegrationUtils;
-import com.intellij.ui.*;
+import com.intellij.ui.EditorTextField;
+import com.intellij.ui.RecentsManager;
+import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
+import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.*;
-import java.util.List;
 
 public class CreateTestDialog extends DialogWrapper {
   private static final String RECENTS_KEY = "CreateTestDialog.RecentsKey";
@@ -481,7 +501,7 @@ public class CreateTestDialog extends DialogWrapper {
   private PsiDirectory chooseDefaultDirectory(String packageName) {
     List<PsiDirectory> dirs = new ArrayList<PsiDirectory>();
     for (ContentEntry e : ModuleRootManager.getInstance(myTargetModule).getContentEntries()) {
-      for (ContentFolder f : e.getFolders(ContentFolderType.TEST)) {
+      for (ContentFolder f : e.getFolders(ContentFolderScopes.of(TestContentFolderTypeProvider.getInstance()))) {
         final VirtualFile file = f.getFile();
         if (file != null) {
           final PsiDirectory dir = PsiManager.getInstance(myProject).findDirectory(file);

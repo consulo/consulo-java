@@ -16,10 +16,28 @@
 
 package org.intellij.plugins.intelliLang.pattern.compiler;
 
+import java.io.DataInput;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.consulo.compiler.CompilerPathsManager;
+import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.asm4.ClassReader;
+import org.jetbrains.asm4.ClassWriter;
+import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.PsiClassWriter;
 import com.intellij.lang.StdLanguages;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.*;
+import com.intellij.openapi.compiler.ClassInstrumentingCompiler;
+import com.intellij.openapi.compiler.CompileContext;
+import com.intellij.openapi.compiler.CompileScope;
+import com.intellij.openapi.compiler.CompilerMessageCategory;
+import com.intellij.openapi.compiler.ValidityState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -29,7 +47,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ContentFolderType;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
@@ -41,19 +58,6 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.util.Processor;
-import org.consulo.compiler.CompilerPathsManager;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.asm4.ClassReader;
-import org.jetbrains.asm4.ClassWriter;
-
-import java.io.DataInput;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Based on NotNullVerifyingCompiler, kindly provided by JetBrains for reference.
@@ -115,7 +119,7 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
       final boolean jdk6 = jdk != null && JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
 
       final CompilerPathsManager compilerPathsManager = CompilerPathsManager.getInstance(project);
-      final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(module, ContentFolderType.PRODUCTION);
+      final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(module, ProductionContentFolderTypeProvider.getInstance());
       if (compilerOutputPath != null) {
         final String packageName = srcFile.getPackageName();
         final VirtualFile packageDir =

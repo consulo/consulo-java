@@ -20,22 +20,26 @@
  */
 package com.intellij.compiler.cache;
 
-import com.intellij.compiler.classParsing.*;
+import org.consulo.compiler.CompilerPathsManager;
+import org.consulo.lombok.annotations.Logger;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
+import com.intellij.compiler.classParsing.AnnotationConstantValue;
+import com.intellij.compiler.classParsing.AnnotationNameValuePair;
+import com.intellij.compiler.classParsing.ConstantValue;
+import com.intellij.compiler.classParsing.ConstantValueArray;
+import com.intellij.compiler.classParsing.EnumConstantValue;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.make.MakeUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.ContentFolderType;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.cls.ClsUtil;
-import org.consulo.compiler.CompilerPathsManager;
-import org.consulo.lombok.annotations.Logger;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 @Logger
 public class JavaMakeUtil extends MakeUtil {
@@ -267,7 +271,7 @@ public class JavaMakeUtil extends MakeUtil {
   public static String getModuleOutputDirPath(final Module module) {
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
       public String compute() {
-        final String url = CompilerPathsManager.getInstance(module.getProject()).getCompilerOutputUrl(module, ContentFolderType.PRODUCTION);
+        final String url = CompilerPathsManager.getInstance(module.getProject()).getCompilerOutputUrl(module, ProductionContentFolderTypeProvider.getInstance());
         if (url == null) {
           return null;
         }
