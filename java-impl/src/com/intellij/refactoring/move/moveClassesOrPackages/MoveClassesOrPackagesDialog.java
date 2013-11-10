@@ -15,6 +15,20 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -29,10 +43,20 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pass;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiModifier;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.*;
+import com.intellij.refactoring.HelpID;
+import com.intellij.refactoring.JavaRefactoringSettings;
+import com.intellij.refactoring.MoveDestination;
+import com.intellij.refactoring.PackageWrapper;
+import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.move.MoveCallback;
 import com.intellij.refactoring.move.MoveClassesOrPackagesCallback;
 import com.intellij.refactoring.move.MoveHandler;
@@ -48,14 +72,6 @@ import com.intellij.ui.ReferenceEditorWithBrowseButton;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   @NonNls private static final String RECENTS_KEY = "MoveClassesOrPackagesDialog.RECENTS_KEY";

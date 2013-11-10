@@ -1909,6 +1909,8 @@
     <orderRootTypeEditor key="JAVA_ANNOTATIONS"
                          implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
 	<pathMacroExpendableProtocol protocol="jar" />
+
+	<psi.directoryMethodProxy implementation="com.intellij.psi.impl.file.JavaPsiDirectoryMethodProxy" />
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.copyright">

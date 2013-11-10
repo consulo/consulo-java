@@ -15,14 +15,19 @@
  */
 package com.intellij.psi.impl.file;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiBundle;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiDirectoryContainer;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.impl.PsiManagerImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yole
@@ -36,7 +41,8 @@ public class PsiJavaDirectoryFactory extends PsiDirectoryFactory {
 
   @Override
   public PsiDirectory createDirectory(@NotNull final VirtualFile file) {
-    return new PsiJavaDirectoryImpl(myManager, file);
+    //return new PsiJavaDirectoryImpl(myManager, file);
+	return null;
   }
 
   @Override
