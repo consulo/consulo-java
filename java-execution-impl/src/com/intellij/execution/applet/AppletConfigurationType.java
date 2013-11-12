@@ -15,6 +15,11 @@
  */
 package com.intellij.execution.applet;
 
+import javax.swing.Icon;
+
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.module.extension.ModuleExtensionHelper;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
 import com.intellij.execution.configurations.ConfigurationFactory;
@@ -25,53 +30,68 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+public class AppletConfigurationType implements ConfigurationType
+{
+	private final ConfigurationFactory myFactory;
 
-public class AppletConfigurationType implements ConfigurationType {
-  private final ConfigurationFactory myFactory;
+	public AppletConfigurationType()
+	{
+		myFactory = new ConfigurationFactoryEx(this)
+		{
+			@Override
+			public RunConfiguration createTemplateConfiguration(Project project)
+			{
+				return new AppletConfiguration("", project, this);
+			}
 
-  /**reflection*/
-  AppletConfigurationType() {
-    myFactory = new ConfigurationFactoryEx(this) {
-      public RunConfiguration createTemplateConfiguration(Project project) {
-        return new AppletConfiguration("", project, this);
-      }
+			@Override
+			public boolean isApplicable(@NotNull Project project)
+			{
+				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
+			}
 
-      @Override
-      public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {
-        ((ModuleBasedConfiguration)configuration).onNewConfigurationCreated();
-      }
-    };
-  }
+			@Override
+			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration)
+			{
+				((ModuleBasedConfiguration) configuration).onNewConfigurationCreated();
+			}
+		};
+	}
 
-  public String getDisplayName() {
-    return ExecutionBundle.message("applet.configuration.name");
-  }
+	@Override
+	public String getDisplayName()
+	{
+		return ExecutionBundle.message("applet.configuration.name");
+	}
 
-  public String getConfigurationTypeDescription() {
-    return ExecutionBundle.message("applet.configuration.description");
-  }
+	@Override
+	public String getConfigurationTypeDescription()
+	{
+		return ExecutionBundle.message("applet.configuration.description");
+	}
 
-  public Icon getIcon() {
-    return AllIcons.RunConfigurations.Applet;
-  }
+	@Override
+	public Icon getIcon()
+	{
+		return AllIcons.RunConfigurations.Applet;
+	}
 
-  public ConfigurationFactory[] getConfigurationFactories() {
-    return new ConfigurationFactory[]{myFactory};
-  }
+	@Override
+	public ConfigurationFactory[] getConfigurationFactories()
+	{
+		return new ConfigurationFactory[]{myFactory};
+	}
 
+	@Override
+	@NotNull
+	public String getId()
+	{
+		return "Applet";
+	}
 
-
-
-
-  @NotNull
-  public String getId() {
-    return "Applet";
-  }
-
-  public static AppletConfigurationType getInstance() {
-    return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), AppletConfigurationType.class);
-  }
+	public static AppletConfigurationType getInstance()
+	{
+		return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), AppletConfigurationType.class);
+	}
 }

@@ -20,6 +20,12 @@
  */
 package com.intellij.execution.remote;
 
+import javax.swing.Icon;
+
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.module.extension.ModuleExtensionHelper;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
@@ -28,53 +34,69 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+public class RemoteConfigurationType implements ConfigurationType
+{
+	private final ConfigurationFactory myFactory;
 
-public class RemoteConfigurationType implements ConfigurationType {
-  private final ConfigurationFactory myFactory;
+	public RemoteConfigurationType()
+	{
+		myFactory = new ConfigurationFactory(this)
+		{
+			@Override
+			public RunConfiguration createTemplateConfiguration(Project project)
+			{
+				return new RemoteConfiguration(project, this);
+			}
 
-  /**reflection*/
-  public RemoteConfigurationType() {
-    myFactory = new ConfigurationFactory(this) {
-      public RunConfiguration createTemplateConfiguration(Project project) {
-        return new RemoteConfiguration(project, this);
-      }
+			@Override
+			public boolean isApplicable(@NotNull Project project)
+			{
+				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
+			}
+		};
+	}
 
-    };
-  }
+	@Override
+	public String getDisplayName()
+	{
+		return ExecutionBundle.message("remote.debug.configuration.display.name");
+	}
 
-  public String getDisplayName() {
-    return ExecutionBundle.message("remote.debug.configuration.display.name");
-  }
+	@Override
+	public String getConfigurationTypeDescription()
+	{
+		return ExecutionBundle.message("remote.debug.configuration.description");
+	}
 
-  public String getConfigurationTypeDescription() {
-    return ExecutionBundle.message("remote.debug.configuration.description");
-  }
+	@Override
+	public Icon getIcon()
+	{
+		return AllIcons.RunConfigurations.Remote;
+	}
 
-  public Icon getIcon() {
-    return AllIcons.RunConfigurations.Remote;
-  }
+	@Override
+	public ConfigurationFactory[] getConfigurationFactories()
+	{
+		return new ConfigurationFactory[]{myFactory};
+	}
 
-  public ConfigurationFactory[] getConfigurationFactories() {
-    return new ConfigurationFactory[]{myFactory};
-  }
+	@NotNull
+	public ConfigurationFactory getFactory()
+	{
+		return myFactory;
+	}
 
-  @NotNull
-  public ConfigurationFactory getFactory() {
-    return myFactory;
-  }
+	@Override
+	@NotNull
+	public String getId()
+	{
+		return "Remote";
+	}
 
-  @NotNull
-  public String getId() {
-    return "Remote";
-  }
-
-  @Nullable
-  public static RemoteConfigurationType getInstance() {
-    return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), RemoteConfigurationType.class);
-  }
-
+	@Nullable
+	public static RemoteConfigurationType getInstance()
+	{
+		return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), RemoteConfigurationType.class);
+	}
 }

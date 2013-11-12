@@ -15,6 +15,13 @@
  */
 package com.intellij.execution.application;
 
+import javax.swing.Icon;
+
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.module.extension.ModuleExtensionHelper;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
 import com.intellij.execution.configurations.ConfigurationFactory;
@@ -29,78 +36,102 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+public class ApplicationConfigurationType implements ConfigurationType
+{
+	private final ConfigurationFactory myFactory;
 
-public class ApplicationConfigurationType implements ConfigurationType {
-  private final ConfigurationFactory myFactory;
+	public ApplicationConfigurationType()
+	{
+		myFactory = new ConfigurationFactoryEx(this)
+		{
+			@Override
+			public RunConfiguration createTemplateConfiguration(Project project)
+			{
+				return new ApplicationConfiguration("", project, ApplicationConfigurationType.this);
+			}
+
+			@Override
+			public boolean isApplicable(@NotNull Project project)
+			{
+				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
+			}
+
+			@Override
+			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration)
+			{
+				((ModuleBasedConfiguration) configuration).onNewConfigurationCreated();
+			}
+		};
+	}
+
+	@Override
+	public String getDisplayName()
+	{
+		return JavaCoreBundle.message("application.configuration.name");
+	}
+
+	@Override
+	public String getConfigurationTypeDescription()
+	{
+		return JavaCoreBundle.message("application.configuration.description");
+	}
+
+	@Override
+	public Icon getIcon()
+	{
+		return AllIcons.RunConfigurations.Application;
+	}
+
+	@Override
+	public ConfigurationFactory[] getConfigurationFactories()
+	{
+		return new ConfigurationFactory[]{myFactory};
+	}
+
+	@Nullable
+	public static PsiClass getMainClass(PsiElement element)
+	{
+		while(element != null)
+		{
+			if(element instanceof PsiClass)
+			{
+				final PsiClass aClass = (PsiClass) element;
+				if(PsiMethodUtil.findMainInClass(aClass) != null)
+				{
+					return aClass;
+				}
+			}
+			else if(element instanceof PsiJavaFile)
+			{
+				final PsiJavaFile javaFile = (PsiJavaFile) element;
+				final PsiClass[] classes = javaFile.getClasses();
+				for(PsiClass aClass : classes)
+				{
+					if(PsiMethodUtil.findMainInClass(aClass) != null)
+					{
+						return aClass;
+					}
+				}
+			}
+			element = element.getParent();
+		}
+		return null;
+	}
 
 
-  /**reflection*/
-  public ApplicationConfigurationType() {
-    myFactory = new ConfigurationFactoryEx(this) {
-      public RunConfiguration createTemplateConfiguration(Project project) {
-        return new ApplicationConfiguration("", project, ApplicationConfigurationType.this);
-      }
+	@Override
+	@NotNull
+	@NonNls
+	public String getId()
+	{
+		return "JavaApplication";
+	}
 
-      @Override
-      public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {
-        ((ModuleBasedConfiguration)configuration).onNewConfigurationCreated();
-      }
-    };
-  }
-
-  public String getDisplayName() {
-    return JavaCoreBundle.message("application.configuration.name");
-  }
-
-  public String getConfigurationTypeDescription() {
-    return JavaCoreBundle.message("application.configuration.description");
-  }
-
-  public Icon getIcon() {
-    return AllIcons.RunConfigurations.Application;
-  }
-
-  public ConfigurationFactory[] getConfigurationFactories() {
-    return new ConfigurationFactory[]{myFactory};
-  }
-
-  @Nullable
-  public static PsiClass getMainClass(PsiElement element) {
-    while (element != null) {
-      if (element instanceof PsiClass) {
-        final PsiClass aClass = (PsiClass)element;
-        if (PsiMethodUtil.findMainInClass(aClass) != null){
-          return aClass;
-        }
-      } else if (element instanceof PsiJavaFile) {
-        final PsiJavaFile javaFile = (PsiJavaFile)element;
-        final PsiClass[] classes = javaFile.getClasses();
-        for (PsiClass aClass : classes) {
-          if (PsiMethodUtil.findMainInClass(aClass) != null) {
-            return aClass;
-          }
-        }
-      }
-      element = element.getParent();
-    }
-    return null;
-  }
-
-
-  @NotNull
-  @NonNls
-  public String getId() {
-    return "JavaApplication";
-  }
-
-  @Nullable
-  public static ApplicationConfigurationType getInstance() {
-    return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), ApplicationConfigurationType.class);
-  }
+	@Nullable
+	public static ApplicationConfigurationType getInstance()
+	{
+		return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), ApplicationConfigurationType.class);
+	}
 
 }
