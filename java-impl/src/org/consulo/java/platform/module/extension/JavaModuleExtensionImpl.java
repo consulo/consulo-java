@@ -44,7 +44,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 {
 	private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
 	protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
-	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.MODULE_DIR;
+	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
 
 	public JavaModuleExtensionImpl(@NotNull String id, @NotNull Module module)
 	{
