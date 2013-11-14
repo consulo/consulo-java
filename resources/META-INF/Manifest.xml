@@ -23,16 +23,6 @@
 		<manifest.headerParser key="Manifest-Version" implementationClass="org.osmorc.manifest.lang.headerparser.impl.SimpleHeaderParser"/>
 
 		<!--TODO [VISTALL] this is list of futures - that need replace to other plugins-->
-		<!--[JavaFX] JavaFX futures-->
-		<manifest.headerParser key="JavaFX-Application-Class" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="JavaFX-Version" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="JavaFX-Class-Path" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="Main-Class" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="implementation-vendor" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="implementation-title" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="implementation-version" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="JavaFX-Preloader-Class" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
-		<manifest.headerParser key="JavaFX-Fallback-Class" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
 
 		<!--[SpringDM] Spring futures-->
 		<manifest.headerParser key="Spring-Context" implementationClass="org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser"/>
