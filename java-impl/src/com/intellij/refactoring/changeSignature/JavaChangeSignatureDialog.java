@@ -15,8 +15,33 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import static com.intellij.refactoring.changeSignature.ChangeSignatureHandler.REFACTORING_NAME;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CustomShortcutSet;
 import com.intellij.openapi.application.ApplicationManager;
@@ -26,7 +51,6 @@ import com.intellij.openapi.editor.colors.EditorFontType;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.ValidationInfo;
@@ -49,32 +73,24 @@ import com.intellij.refactoring.ui.VisibilityPanelBase;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.refactoring.util.RefactoringMessageUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
-import com.intellij.ui.*;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.EditorTextField;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.TableColumnAnimator;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.table.TableView;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.*;
+import com.intellij.util.Consumer;
+import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.PlatformIcons;
+import com.intellij.util.TextFieldCompletionProvider;
+import com.intellij.util.VisibilityUtil;
 import com.intellij.util.ui.DialogUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.table.JBListTable;
 import com.intellij.util.ui.table.JBTableRow;
 import com.intellij.util.ui.table.JBTableRowEditor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static com.intellij.refactoring.changeSignature.ChangeSignatureHandler.REFACTORING_NAME;
 
 /**
  * @author Konstantin Bulenkov
@@ -195,7 +211,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
     final JPanel panel = ToolbarDecorator.createDecorator(table).addExtraAction(myPropExceptionsButton).createPanel();
     panel.setBorder(IdeBorderFactory.createEmptyBorder());
 
-    myExceptionsModel.addTableModelListener(mySignatureUpdater);
+    myExceptionsModel.addTableModelListener(getSignatureUpdater());
 
     final ArrayList<Pair<String, JPanel>> result = new ArrayList<Pair<String, JPanel>>();
     final String message = RefactoringBundle.message("changeSignature.exceptions.panel.border.title");
@@ -205,7 +221,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 
   @Override
   protected LanguageFileType getFileType() {
-    return StdFileTypes.JAVA;
+    return JavaFileType.INSTANCE;
   }
 
   @Override
@@ -294,13 +310,13 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         setLayout(new BorderLayout());
         final Document document = PsiDocumentManager.getInstance(getProject()).getDocument(item.typeCodeFragment);
         myTypeEditor = new EditorTextField(document, getProject(), getFileType());
-        myTypeEditor.addDocumentListener(mySignatureUpdater);
+        myTypeEditor.addDocumentListener(getSignatureUpdater());
         myTypeEditor.setPreferredWidth(t.getWidth() / 2);
         myTypeEditor.addDocumentListener(new RowEditorChangeListener(0));
         add(createLabeledPanel("Type:", myTypeEditor), BorderLayout.WEST);
 
         myNameEditor = new EditorTextField(item.parameter.getName(), getProject(), getFileType());
-        myNameEditor.addDocumentListener(mySignatureUpdater);
+        myNameEditor.addDocumentListener(getSignatureUpdater());
         myNameEditor.addDocumentListener(new RowEditorChangeListener(1));
         add(createLabeledPanel("Name:", myNameEditor), BorderLayout.CENTER);
         new TextFieldCompletionProvider() {

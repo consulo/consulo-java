@@ -15,6 +15,22 @@
  */
 package com.intellij.openapi.project.impl.convertors;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.highlighter.ModuleFileType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -23,18 +39,10 @@ import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.impl.ProjectRootUtil;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.vfs.*;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import com.intellij.openapi.vfs.ArchiveFileSystem;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 
 /**
  * @author max, dsl
@@ -363,13 +371,9 @@ public class Convertor34 {
 
     void processJdkRoot(Element root);
 
-    void processOutputRoot(Element root);
-
     void processExcludedOutputRoot(Element root);
 
     void processLibraryRoot(Element root);
-
-    void processEjbRoot(Element root);
   }
 
   private static abstract class EmptyRootProcessor implements RootElementProcessor {
@@ -384,22 +388,12 @@ public class Convertor34 {
     }
 
     @Override
-    public void processOutputRoot(Element root) {
-      cannotProcess(root);
-    }
-
-    @Override
     public void processExcludedOutputRoot(Element root) {
       cannotProcess(root);
     }
 
     @Override
     public void processLibraryRoot(Element root) {
-      cannotProcess(root);
-    }
-
-    @Override
-    public void processEjbRoot(Element root) {
       cannotProcess(root);
     }
 
@@ -419,21 +413,6 @@ public class Convertor34 {
     LOG.assertTrue(type != null);
     if (ProjectRootUtil.SIMPLE_ROOT.equals(type)) {
       processor.processSimpleRoot(root);
-    }
-    else if (ProjectRootUtil.OUTPUT_ROOT.equals(type)) {
-      processor.processOutputRoot(root);
-    }
-    else if (ProjectRootUtil.JDK_ROOT.equals(type)) {
-      processor.processJdkRoot(root);
-    }
-    else if (ProjectRootUtil.EXCLUDED_OUTPUT.equals(type)) {
-      processor.processExcludedOutputRoot(root);
-    }
-    else if (ProjectRootUtil.LIBRARY_ROOT.equals(type)) {
-      processor.processLibraryRoot(root);
-    }
-    else if (ProjectRootUtil.EJB_ROOT.equals(type)) {
-      processor.processEjbRoot(root);
     }
     else if (ProjectRootUtil.COMPOSITE_ROOT.equals(type)) {
       final List children = root.getChildren("root");
@@ -599,11 +578,6 @@ public class Convertor34 {
       }
 
       @Override
-      public void processEjbRoot(Element root) {
-        // todo[cdr,dsl] implement conversion of EJB roots
-      }
-
-      @Override
       protected String classId() {
         return "ProjectRootProcessor";
       }
@@ -651,11 +625,6 @@ public class Convertor34 {
       }
 
       @Override
-      public void processEjbRoot(Element root) {
-        // todo[cdr,dsl] implement conversion of EJB roots
-      }
-
-      @Override
       protected String classId() {
         return "SourceRootProcessor";
       }
@@ -672,11 +641,6 @@ public class Convertor34 {
             myExcludeFolders.add(url);
           }
         }
-      }
-
-      @Override
-      public void processEjbRoot(Element root) {
-        // todo[cdr,dsl] implement conversion of EJB roots
       }
 
       @Override
@@ -731,20 +695,8 @@ public class Convertor34 {
       }
 
       @Override
-      public void processEjbRoot(Element root) {
-        // todo[cdr,dsl] implement conversion of EJB roots
-      }
-
-      @Override
       protected String classId() {
         return "ClassPathProcessor";
-      }
-
-      @Override
-      public void processOutputRoot(Element root) {
-        final Element orderEntry = new Element("orderEntry");
-        orderEntry.setAttribute("type", "sourceFolder");
-        myModuleRootManager.addContent(orderEntry);
       }
     }
   }
@@ -784,12 +736,6 @@ public class Convertor34 {
       newRoot.setAttribute("url", url);
       myTargetElement.addContent(newRoot);
     }
-
-    @Override
-    public void processEjbRoot(Element root) {
-      // todo[cdr,dsl] implement conversion of EJB roots
-    }
-
     @Override
     protected String classId() {
       return "SimpleRootProcessor";
