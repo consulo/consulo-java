@@ -15,6 +15,14 @@
  */
 package com.intellij.refactoring.extractSuperclass;
 
+import java.awt.BorderLayout;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -25,7 +33,14 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pass;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
 import com.intellij.refactoring.MoveDestination;
 import com.intellij.refactoring.PackageWrapper;
 import com.intellij.refactoring.RefactoringBundle;
@@ -35,11 +50,6 @@ import com.intellij.refactoring.util.RefactoringMessageUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.ui.EditorComboBox;
 import com.intellij.ui.components.JBLabel;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
 
 /**
  * @author dsl
@@ -148,7 +158,7 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
     myTargetDirectory = myTargetDirectory != null ? ApplicationManager.getApplication().runWriteAction(new Computable<PsiDirectory>() {
       @Override
       public PsiDirectory compute() {
-        return moveDestination.getTargetDirectory(myTargetDirectory);
+        return moveDestination.getTargetDirectory(getTargetDirectory());
       }
     }) : null;
 
