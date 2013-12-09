@@ -52,156 +52,206 @@ import com.intellij.util.IncorrectOperationException;
 /**
  * @author Alexey
  */
-public class FileHeaderChecker {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.defaultFileTemplateUsage.FileHeaderChecker");
+public class FileHeaderChecker
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.defaultFileTemplateUsage.FileHeaderChecker");
 
+	// abcdfghdjsjd kfkdjekr dfhakdjfk dkfkjgk dfjgjfkg ekfk fkgkvv ggkk eefkgjkdd jfkkkssl dfghgk gkhller hhksl lfflgl
+	static ProblemDescriptor checkFileHeader(@NotNull final PsiFile file, final InspectionManager manager, boolean onTheFly)
+	{
+		TIntObjectHashMap<String> offsetToProperty = new TIntObjectHashMap<String>();
+		Pattern pattern = getTemplatePattern(FileTemplateManager.getInstance().getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME),
+				file.getProject(), offsetToProperty);
+		Matcher matcher = pattern.matcher(file.getViewProvider().getContents());
+		if(matcher.matches())
+		{
+			final int startOffset = matcher.start(1);
+			final int endOffset = matcher.end(1);
+			final Ref<PsiDocComment> docComment = new Ref<PsiDocComment>();
+			file.accept(new JavaRecursiveElementWalkingVisitor()
+			{
+				@Override
+				public void visitElement(PsiElement element)
+				{
+					if(docComment.get() != null)
+					{
+						return;
+					}
+					TextRange range = element.getTextRange();
+					if(!range.contains(startOffset) && !range.contains(endOffset))
+					{
+						return;
+					}
+					super.visitElement(element);
+				}
 
-  static ProblemDescriptor checkFileHeader(@NotNull final PsiFile file, final InspectionManager manager, boolean onTheFly) {
-    TIntObjectHashMap<String> offsetToProperty = new TIntObjectHashMap<String>();
-    Pattern pattern = getTemplatePattern(FileTemplateManager.getInstance()
-      .getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME),
-                                         file.getProject(), offsetToProperty
-    );
-    Matcher matcher = pattern.matcher(file.getText());
-    if (matcher.matches()) {
-      final int startOffset = matcher.start(1);
-      final int endOffset = matcher.end(1);
-      final Ref<PsiDocComment> docComment = new Ref<PsiDocComment>();
-      file.accept(new JavaRecursiveElementWalkingVisitor(){
-        @Override public void visitElement(PsiElement element) {
-          if (docComment.get() != null) return;
-          TextRange range = element.getTextRange();
-          if (!range.contains(startOffset) && !range.contains(endOffset)) return;
-          super.visitElement(element);
-        }
-        @Override public void visitDocComment(PsiDocComment comment) {
-          docComment.set(comment);
-        }
-      });
-      PsiDocComment element = docComment.get();
-      if (element == null) return null;
-      LocalQuickFix[] quickFix = createQuickFix(matcher, offsetToProperty);
-      final String description = InspectionsBundle.message("default.file.template.description");
-      return manager.createProblemDescriptor(element, description, onTheFly, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
-    }
-    return null;
-  }
+				@Override
+				public void visitDocComment(PsiDocComment comment)
+				{
+					docComment.set(comment);
+				}
+			});
+			PsiDocComment element = docComment.get();
+			if(element == null)
+			{
+				return null;
+			}
+			LocalQuickFix[] quickFix = createQuickFix(matcher, offsetToProperty);
+			final String description = InspectionsBundle.message("default.file.template.description");
+			return manager.createProblemDescriptor(element, description, onTheFly, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+		}
+		return null;
+	}
 
-  public static Pattern getTemplatePattern(FileTemplate template, Project project, TIntObjectHashMap<String> offsetToProperty) {
-    String templateText = template.getText().trim();
-    String regex = templateToRegex(templateText, offsetToProperty, project);
-    regex = StringUtil.replace(regex, "with", "(?:with|by)");
-    regex = ".*("+regex+").*";
-    return Pattern.compile(regex, Pattern.DOTALL);
-  }
+	public static Pattern getTemplatePattern(FileTemplate template, Project project, TIntObjectHashMap<String> offsetToProperty)
+	{
+		String templateText = template.getText().trim();
+		String regex = templateToRegex(templateText, offsetToProperty, project);
+		regex = StringUtil.replace(regex, "with", "(?:with|by)");
+		regex = ".*(" + regex + ").*";
+		return Pattern.compile(regex, Pattern.DOTALL);
+	}
 
-  private static Properties computeProperties(final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty) {
-    Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
-    int[] offsets = offsetToProperty.keys();
-    Arrays.sort(offsets);
+	private static Properties computeProperties(final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty)
+	{
+		Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
+		int[] offsets = offsetToProperty.keys();
+		Arrays.sort(offsets);
 
-    for (int i = 0; i < offsets.length; i++) {
-      final int offset = offsets[i];
-      String propName = offsetToProperty.get(offset);
-      int groupNum = i + 2; // first group is whole doc comment
-      String propValue = matcher.group(groupNum);
-      properties.put(propName, propValue);
-    }
-    return properties;
-  }
+		for(int i = 0; i < offsets.length; i++)
+		{
+			final int offset = offsets[i];
+			String propName = offsetToProperty.get(offset);
+			int groupNum = i + 2; // first group is whole doc comment
+			String propValue = matcher.group(groupNum);
+			properties.put(propName, propValue);
+		}
+		return properties;
+	}
 
-  private static LocalQuickFix[] createQuickFix(final Matcher matcher,
-                                                final TIntObjectHashMap<String> offsetToProperty) {
-    final FileTemplate template = FileTemplateManager.getInstance().getPattern(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
+	private static LocalQuickFix[] createQuickFix(final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty)
+	{
+		final FileTemplate template = FileTemplateManager.getInstance().getPattern(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
 
-    final ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix() {
-      @Override
-      public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
-        PsiElement element = descriptor.getPsiElement();
-        if (element == null || !element.isValid()) return;
-        if (!CodeInsightUtil.preparePsiElementsForWrite(element)) return;
-        String newText;
-        try {
-          newText = template.getText(computeProperties(matcher, offsetToProperty));
-        }
-        catch (IOException e) {
-          LOG.error(e);
-          return;
-        }
-        try {
-          int offset = element.getTextRange().getStartOffset();
-          PsiFile psiFile = element.getContainingFile();
-          if (psiFile == null) return;
-          PsiDocumentManager documentManager = PsiDocumentManager.getInstance(psiFile.getProject());
-          Document document = documentManager.getDocument(psiFile);
-          if (document == null) return;
+		final ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix()
+		{
+			@Override
+			public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+			{
+				PsiElement element = descriptor.getPsiElement();
+				if(element == null || !element.isValid())
+				{
+					return;
+				}
+				if(!CodeInsightUtil.preparePsiElementsForWrite(element))
+				{
+					return;
+				}
+				String newText;
+				try
+				{
+					newText = template.getText(computeProperties(matcher, offsetToProperty));
+				}
+				catch(IOException e)
+				{
+					LOG.error(e);
+					return;
+				}
+				try
+				{
+					int offset = element.getTextRange().getStartOffset();
+					PsiFile psiFile = element.getContainingFile();
+					if(psiFile == null)
+					{
+						return;
+					}
+					PsiDocumentManager documentManager = PsiDocumentManager.getInstance(psiFile.getProject());
+					Document document = documentManager.getDocument(psiFile);
+					if(document == null)
+					{
+						return;
+					}
 
-          element.delete();
-          documentManager.doPostponedOperationsAndUnblockDocument(document);
-          documentManager.commitDocument(document);
+					element.delete();
+					documentManager.doPostponedOperationsAndUnblockDocument(document);
+					documentManager.commitDocument(document);
 
-          document.insertString(offset, newText);
-        }
-        catch (IncorrectOperationException e) {
-          LOG.error(e);
-        }
-        catch (IllegalStateException e) {
-          LOG.error("Cannot create doc comment from text: '" + newText + "'", e);
-        }
-      }
-    };
-    final LocalQuickFix editFileTemplateFix = DefaultFileTemplateUsageInspection.createEditFileTemplateFix(template, replaceTemplateFix);
-    if (template.isDefault()) {
-      return new LocalQuickFix[]{editFileTemplateFix};
-    }
-    return new LocalQuickFix[]{replaceTemplateFix,editFileTemplateFix};
-  }
+					document.insertString(offset, newText);
+				}
+				catch(IncorrectOperationException e)
+				{
+					LOG.error(e);
+				}
+				catch(IllegalStateException e)
+				{
+					LOG.error("Cannot create doc comment from text: '" + newText + "'", e);
+				}
+			}
+		};
+		final LocalQuickFix editFileTemplateFix = DefaultFileTemplateUsageInspection.createEditFileTemplateFix(template, replaceTemplateFix);
+		if(template.isDefault())
+		{
+			return new LocalQuickFix[]{editFileTemplateFix};
+		}
+		return new LocalQuickFix[]{
+				replaceTemplateFix,
+				editFileTemplateFix
+		};
+	}
 
-  private static String templateToRegex(final String text, TIntObjectHashMap<String> offsetToProperty, Project project) {
-    String regex = text;
-    @NonNls Collection<String> properties = new ArrayList<String>((Collection)FileTemplateManager.getInstance().getDefaultProperties(project).keySet());
-    properties.add("PACKAGE_NAME");
+	private static String templateToRegex(final String text, TIntObjectHashMap<String> offsetToProperty, Project project)
+	{
+		String regex = text;
+		@NonNls Collection<String> properties = new ArrayList<String>((Collection) FileTemplateManager.getInstance().getDefaultProperties(project)
+				.keySet());
+		properties.add("PACKAGE_NAME");
 
-    regex = escapeRegexChars(regex);
-    // first group is a whole file header
-    int groupNumber = 1;
-    for (String name : properties) {
-      String escaped = escapeRegexChars("${"+name+"}");
-      boolean first = true;
-      for (int i = regex.indexOf(escaped); i!=-1 && i<regex.length(); i = regex.indexOf(escaped,i+1)) {
-        String replacement = first ? "(.*)" : "\\" + groupNumber;
-        final int delta = escaped.length() - replacement.length();
-        int[] offs = offsetToProperty.keys();
-        for (int off : offs) {
-          if (off > i) {
-            String prop = offsetToProperty.remove(off);
-            offsetToProperty.put(off - delta, prop);
-          }
-        }
-        offsetToProperty.put(i, name);
-        regex = regex.substring(0,i) + replacement + regex.substring(i+escaped.length());
-        if (first) {
-          groupNumber++;
-          first = false;
-        }
-      }
-    }
-    return regex;
-  }
+		regex = escapeRegexChars(regex);
+		// first group is a whole file header
+		int groupNumber = 1;
+		for(String name : properties)
+		{
+			String escaped = escapeRegexChars("${" + name + "}");
+			boolean first = true;
+			for(int i = regex.indexOf(escaped); i != -1 && i < regex.length(); i = regex.indexOf(escaped, i + 1))
+			{
+				String replacement = first ? "(.*)" : "\\" + groupNumber;
+				final int delta = escaped.length() - replacement.length();
+				int[] offs = offsetToProperty.keys();
+				for(int off : offs)
+				{
+					if(off > i)
+					{
+						String prop = offsetToProperty.remove(off);
+						offsetToProperty.put(off - delta, prop);
+					}
+				}
+				offsetToProperty.put(i, name);
+				regex = regex.substring(0, i) + replacement + regex.substring(i + escaped.length());
+				if(first)
+				{
+					groupNumber++;
+					first = false;
+				}
+			}
+		}
+		return regex;
+	}
 
-  private static String escapeRegexChars(String regex) {
-    regex = StringUtil.replace(regex,"|", "\\|");
-    regex = StringUtil.replace(regex,".", "\\.");
-    regex = StringUtil.replace(regex,"*", "\\*");
-    regex = StringUtil.replace(regex,"+", "\\+");
-    regex = StringUtil.replace(regex,"?", "\\?");
-    regex = StringUtil.replace(regex,"$", "\\$");
-    regex = StringUtil.replace(regex,"(", "\\(");
-    regex = StringUtil.replace(regex,")", "\\)");
-    regex = StringUtil.replace(regex,"[", "\\[");
-    regex = StringUtil.replace(regex,"]", "\\]");
-    regex = StringUtil.replace(regex,"{", "\\{");
-    regex = StringUtil.replace(regex,"}", "\\}");
-    return regex;
-  }
+	private static String escapeRegexChars(String regex)
+	{
+		regex = StringUtil.replace(regex, "|", "\\|");
+		regex = StringUtil.replace(regex, ".", "\\.");
+		regex = StringUtil.replace(regex, "*", "\\*");
+		regex = StringUtil.replace(regex, "+", "\\+");
+		regex = StringUtil.replace(regex, "?", "\\?");
+		regex = StringUtil.replace(regex, "$", "\\$");
+		regex = StringUtil.replace(regex, "(", "\\(");
+		regex = StringUtil.replace(regex, ")", "\\)");
+		regex = StringUtil.replace(regex, "[", "\\[");
+		regex = StringUtil.replace(regex, "]", "\\]");
+		regex = StringUtil.replace(regex, "{", "\\{");
+		regex = StringUtil.replace(regex, "}", "\\}");
+		return regex;
+	}
 }

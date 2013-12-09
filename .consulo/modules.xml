@@ -54,7 +54,6 @@
       <module name="java-psi-api" dirurl="file://$PROJECT_DIR$/java-psi-api">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
         <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
-        <extension id="lombok" />
         <content url="file://$MODULE_DIR$">
           <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
           <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -121,7 +120,6 @@
       <module name="java-compiler-impl" dirurl="file://$PROJECT_DIR$/java-compiler-impl">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
         <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
-        <extension id="lombok" />
         <content url="file://$MODULE_DIR$">
           <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
           <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
