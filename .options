@@ -1,0 +1,7 @@
+<options>
+	<dep>consulo-intelliLang</dep>
+	<dep>consulo-properties</dep>
+	<dep>consulo-regexp</dep>
+	<dep>consulo-spellchecker</dep>
+	<dep>consulo-xml</dep>
+</options>
