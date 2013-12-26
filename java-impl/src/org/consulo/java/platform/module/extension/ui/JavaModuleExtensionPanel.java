@@ -15,6 +15,22 @@
  */
 package org.consulo.java.platform.module.extension.ui;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
+import org.consulo.java.platform.module.extension.SpecialDirLocation;
+import org.consulo.module.extension.ModuleExtension;
+import org.consulo.module.extension.ModuleExtensionWithSdk;
+import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
+import org.consulo.module.extension.ui.ModuleExtensionWithSdkPanel;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -23,17 +39,6 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.ui.ColoredListCellRendererWrapper;
 import com.intellij.ui.SimpleTextAttributes;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
-import org.consulo.java.platform.module.extension.SpecialDirLocation;
-import org.consulo.module.extension.*;
-import org.consulo.module.extension.ui.ModuleExtensionWithSdkPanel;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 /**
  * @author VISTALL
@@ -142,18 +147,13 @@ public class JavaModuleExtensionPanel extends JPanel {
   }
 
   public void insertModuleItems() {
-    final ModuleExtensionProvider provider = ModuleExtensionProviderEP.findProvider(myMutableModuleExtension.getId());
-    if (provider == null) {
-      return;
-    }
-
     for (Module module : ModuleManager.getInstance(myMutableModuleExtension.getModule().getProject()).getModules()) {
       // dont add self module
       if (module == myMutableModuleExtension.getModule()) {
         continue;
       }
 
-      final ModuleExtension extension = ModuleUtilCore.getExtension(module, provider.getImmutableClass());
+      final ModuleExtension extension = ModuleUtilCore.getExtension(module, myMutableModuleExtension.getId());
       if (extension instanceof ModuleExtensionWithSdk) {
         final ModuleExtensionWithSdk sdkExtension = (ModuleExtensionWithSdk)extension;
         // recursive depend
