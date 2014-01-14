@@ -15,13 +15,13 @@
  */
 package org.consulo.java.platform.module.extension;
 
-import com.intellij.openapi.module.Module;
+import javax.swing.Icon;
+
 import org.consulo.java.platform.JavaPlatformIcons;
 import org.consulo.module.extension.ModuleExtensionProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
+import com.intellij.openapi.module.Module;
 
 /**
  * @author VISTALL
@@ -39,12 +39,6 @@ public class JavaModuleExtensionProvider implements
   @Override
   public String getName() {
     return "Java";
-  }
-
-  @NotNull
-  @Override
-  public Class<JavaModuleExtensionImpl> getImmutableClass() {
-    return JavaModuleExtensionImpl.class;
   }
 
   @NotNull
