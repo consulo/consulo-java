@@ -69,7 +69,7 @@ public class JavaCompilerConfigurable implements Configurable
 
 		panel.add(myComboBox);
 
-		myNotNullAssertion = new JCheckBox(JavaCompilerBundle.message("add.notnull.assertions"));
+		myNotNullAssertion = new JCheckBox(JavaCompilerBundle.message("add.notnull.assertions"), myCompilerConfiguration.isAddNotNullAssertions());
 		panel.add(myNotNullAssertion);
 
 		myTargetOptionsComponent = new TargetOptionsComponent(myProject);
