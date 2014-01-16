@@ -117,7 +117,7 @@ public class JavaCompilerConfigurable implements Configurable
 	public void reset()
 	{
 		myComboBox.setSelectedItem(myCompilerConfiguration.getActiveCompiler());
-		myNotNullAssertion.setSelected(myNotNullAssertion.isSelected());
+		myNotNullAssertion.setSelected(myCompilerConfiguration.isAddNotNullAssertions());
 
 		myTargetOptionsComponent.setProjectBytecodeTargetLevel(myCompilerConfiguration.getProjectBytecodeTarget());
 		myTargetOptionsComponent.setModuleTargetLevels(myCompilerConfiguration.getModulesBytecodeTargetMap());
