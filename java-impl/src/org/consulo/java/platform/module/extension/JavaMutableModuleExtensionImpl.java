@@ -15,18 +15,18 @@
  */
 package org.consulo.java.platform.module.extension;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.pom.java.LanguageLevel;
-import lombok.NonNull;
+import javax.swing.JComponent;
+
 import org.consulo.java.platform.module.extension.ui.JavaModuleExtensionPanel;
 import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.pom.java.LanguageLevel;
+import lombok.NonNull;
 
 /**
  * @author VISTALL
@@ -34,12 +34,9 @@ import javax.swing.*;
  */
 public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl
   implements MutableModuleExtensionWithSdk<JavaModuleExtensionImpl> {
-  @NotNull
-  private final JavaModuleExtensionImpl myModuleExtension;
 
-  public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull Module module, @NotNull JavaModuleExtensionImpl moduleExtension) {
+  public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull Module module) {
     super(id, module);
-    myModuleExtension = moduleExtension;
   }
 
   @Nullable
@@ -64,24 +61,19 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl
   }
 
   @Override
-  public boolean isModified() {
-    if(isModifiedImpl(myModuleExtension)) {
+  public boolean isModified(@NotNull JavaModuleExtensionImpl javaModuleExtension) {
+    if(isModifiedImpl(javaModuleExtension)) {
       return true;
     }
 
-    if(!myLanguageLevel.equals(myModuleExtension.getInheritableLanguageLevel())) {
+    if(!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel())) {
       return true;
     }
 
-    if(!mySpecialDirLocation.equals(myModuleExtension.getSpecialDirLocation())) {
+    if(!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation())) {
       return true;
     }
     return false;
-  }
-
-  @Override
-  public void commit() {
-    myModuleExtension.commit(this);
   }
 
   @NotNull

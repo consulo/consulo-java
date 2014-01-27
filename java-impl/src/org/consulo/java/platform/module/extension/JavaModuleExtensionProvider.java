@@ -49,7 +49,7 @@ public class JavaModuleExtensionProvider implements
 
   @NotNull
   @Override
-  public JavaMutableModuleExtensionImpl createMutable(@NotNull String id, @NotNull Module module, @NotNull JavaModuleExtensionImpl javaModuleExtension) {
-    return new JavaMutableModuleExtensionImpl(id, module, javaModuleExtension);
+  public JavaMutableModuleExtensionImpl createMutable(@NotNull String id, @NotNull Module module) {
+    return new JavaMutableModuleExtensionImpl(id, module);
   }
 }
