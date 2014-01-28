@@ -15,26 +15,27 @@
  */
 package com.intellij.ide.util.projectWizard;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.CommonBundle;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.projectRoots.SdkTypeId;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.ui.configuration.SdkComboBox;
 import com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Condition;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author Dmitry Avdeev
@@ -69,19 +70,19 @@ public class SdkSettingsStep extends ModuleWizardStep {
     });
 
     if (project != null) {
-      Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
+     /* Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
       if (sdk != null && moduleBuilder.isSuitableSdkType(sdk.getSdkType())) {
         // use project SDK
         return;
-      }
+      }*/
     }
     else {
       // set default project SDK
-      Project defaultProject = ProjectManager.getInstance().getDefaultProject();
+     /* Project defaultProject = ProjectManager.getInstance().getDefaultProject();
       Sdk sdk = ProjectRootManager.getInstance(defaultProject).getProjectSdk();
       if (sdk != null && sdkFilter.value(sdk.getSdkType())) {
         mySdkComboBox.setSelectedSdk(sdk);
-      }
+      }         */
     }
 
     String value = component.getValue(selectedJdkProperty);
@@ -114,10 +115,10 @@ public class SdkSettingsStep extends ModuleWizardStep {
       myWizardContext.setProjectJdk(jdk);
     }
     else {
-      Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
+    /*  Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
       if (sdk == null || !myModuleBuilder.isSuitableSdkType(sdk.getSdkType())) {
         myModuleBuilder.setModuleJdk(mySdkComboBox.getSelectedSdk());
-      } // else, inherit project jdk
+      } */// else, inherit project jdk
     }
   }
 

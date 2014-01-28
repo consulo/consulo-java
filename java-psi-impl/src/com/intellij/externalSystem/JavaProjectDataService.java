@@ -15,6 +15,11 @@
  */
 package com.intellij.externalSystem;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.externalSystem.model.DataNode;
 import com.intellij.openapi.externalSystem.model.Key;
 import com.intellij.openapi.externalSystem.service.project.manage.ProjectDataService;
@@ -27,11 +32,6 @@ import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Denis Zhdanov
@@ -59,7 +59,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
     JavaSdkVersion version = projectData.getJdkVersion();
     JavaSdk javaSdk = JavaSdk.getInstance();
     ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
-    Sdk sdk = rootManager.getProjectSdk();
+   /* Sdk sdk = rootManager.getProjectSdk();
     if (sdk instanceof JavaSdk) {
       JavaSdkVersion currentVersion = javaSdk.getVersion(sdk);
       if (currentVersion == null || !currentVersion.isAtLeast(version)) {
@@ -73,7 +73,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
           }
         }
       }
-    }
+    }    */
     // Language level.
     setLanguageLevel(projectData.getLanguageLevel(), project, synchronous);
   }
