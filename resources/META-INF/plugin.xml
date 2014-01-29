@@ -936,7 +936,9 @@
     <lang.foldingBuilder language="JAVA" implementationClass="com.intellij.codeInsight.daemon.impl.actions.SuppressWarningsFoldingBuilder"/>
 
     <externalProjectDataService implementation="com.intellij.externalSystem.JavaProjectDataService"/>
-    <daemon.highlightInfoFilter implementation="com.intellij.debugger.engine.evaluation.DebuggerHighlightFilter"/>
+	<programRunner implementation="com.intellij.openapi.externalSystem.service.execution.ExternalSystemTaskDebugRunner"/>
+
+	<daemon.highlightInfoFilter implementation="com.intellij.debugger.engine.evaluation.DebuggerHighlightFilter"/>
 
 
     <editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.AttachSourcesNotificationProvider"/>
