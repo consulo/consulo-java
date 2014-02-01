@@ -1913,6 +1913,13 @@
 	<pathMacroExpendableProtocol protocol="jar" />
 
 	<psi.directoryMethodProxy implementation="com.intellij.psi.impl.file.JavaPsiDirectoryMethodProxy" />
+
+	<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.AnnotationsRootFilter" />
+	<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaClassesRootFilter" />
+	<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavadocRootDetector" />
+	<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaJarRootFilter" />
+	<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaSourceDirectoryRootFilter" />
+	<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaSourceRootDetector" />
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.copyright">

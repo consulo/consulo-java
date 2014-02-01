@@ -15,6 +15,15 @@
  */
 package com.intellij.openapi.roots.ui.configuration;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.library.JavaSourceRootDetector;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.ui.OrderRoot;
@@ -23,11 +32,6 @@ import com.intellij.openapi.roots.libraries.ui.impl.LibraryRootsDetectorImpl;
 import com.intellij.openapi.roots.libraries.ui.impl.RootDetectionUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 /**
  * This utility class contains utility methods for selecting paths.
@@ -35,15 +39,6 @@ import java.util.List;
  * @author Constantine.Plotnikov
  */
 public class PathUIUtils {
-  public static final RootDetector JAVA_SOURCE_ROOT_DETECTOR = new RootDetector(OrderRootType.SOURCES, false, "sources") {
-    @NotNull
-    @Override
-    public Collection<VirtualFile> detectRoots(@NotNull VirtualFile rootCandidate,
-                                               @NotNull ProgressIndicator progressIndicator) {
-      return JavaVfsSourceRootDetectionUtil.suggestRoots(rootCandidate, progressIndicator);
-    }
-  };
-
   private PathUIUtils() {
   }
 
@@ -57,7 +52,7 @@ public class PathUIUtils {
    */
   public static VirtualFile[] scanAndSelectDetectedJavaSourceRoots(Component parentComponent, final VirtualFile[] rootCandidates) {
     final List<OrderRoot> orderRoots = RootDetectionUtil.detectRoots(Arrays.asList(rootCandidates), parentComponent, null,
-                                                                     new LibraryRootsDetectorImpl(Collections.singletonList(JAVA_SOURCE_ROOT_DETECTOR)),
+                                                                     new LibraryRootsDetectorImpl(Collections.singletonList(new JavaSourceRootDetector())),
                                                                      new OrderRootType[0]);
     final List<VirtualFile> result = new ArrayList<VirtualFile>();
     for (OrderRoot root : orderRoots) {
