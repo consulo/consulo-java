@@ -15,6 +15,10 @@
  */
 package org.consulo.java.roots;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.consulo.module.extension.ModuleExtension;
+import org.consulo.module.extension.ModuleExtensionChangeListener;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -22,10 +26,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.newvfs.persistent.FSRecords;
 import com.intellij.pom.java.LanguageLevel;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.module.extension.ModuleExtension;
-import org.consulo.module.extension.ModuleExtensionChangeListener;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author VISTALL
@@ -36,15 +36,15 @@ public class LanguageVersionKeyDropper {
     if(ApplicationManager.getApplication().isInternal()) {
       return;
     }
-    project.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener() {
+    project.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener.Adapter() {
       @Override
-      public void extensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension) {
-        if(!(oldExtension instanceof JavaModuleExtensionImpl)) {
+      public void afterExtensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension) {
+        if(!(oldExtension instanceof JavaModuleExtension)) {
           return;
         }
 
-        LanguageLevel oldLevel = ((JavaModuleExtensionImpl)oldExtension).getLanguageLevel();
-        LanguageLevel newLevel = ((JavaModuleExtensionImpl)newExtension).getLanguageLevel();
+        LanguageLevel oldLevel = ((JavaModuleExtension)oldExtension).getLanguageLevel();
+        LanguageLevel newLevel = ((JavaModuleExtension)newExtension).getLanguageLevel();
 
         if(oldLevel == newLevel) {
           return;

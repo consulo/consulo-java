@@ -15,6 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
+import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.consulo.module.extension.ModuleExtension;
+import org.consulo.module.extension.ModuleExtensionChangeListener;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ProjectTopics;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.lang.java.JavaLanguage;
@@ -33,10 +37,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.module.extension.ModuleExtension;
-import org.consulo.module.extension.ModuleExtensionChangeListener;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Danila Ponomarenko
@@ -54,9 +54,9 @@ public class SetupSDKNotificationProvider extends EditorNotifications.Provider<E
         notifications.updateAllNotifications();
       }
     });
-    myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener() {
+    myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener.Adapter() {
       @Override
-      public void extensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension) {
+      public void afterExtensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension) {
         notifications.updateAllNotifications();
       }
     });
