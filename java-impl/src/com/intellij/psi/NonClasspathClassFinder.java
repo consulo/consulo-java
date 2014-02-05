@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -334,7 +333,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 	public static GlobalSearchScope addNonClasspathScope(Project project, GlobalSearchScope base)
 	{
 		GlobalSearchScope scope = base;
-		for(PsiElementFinder finder : Extensions.getExtensions(EP_NAME, project))
+		for(PsiElementFinder finder : EP_NAME.getExtensions(project))
 		{
 			if(finder instanceof NonClasspathClassFinder)
 			{
