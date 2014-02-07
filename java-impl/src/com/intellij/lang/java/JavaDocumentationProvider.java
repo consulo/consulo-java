@@ -16,6 +16,13 @@
 
 package com.intellij.lang.java;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.documentation.DocumentationManager;
 import com.intellij.codeInsight.documentation.PlatformDocumentationUtil;
@@ -53,13 +60,6 @@ import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Maxim.Mossienko
@@ -669,7 +669,7 @@ public class JavaDocumentationProvider implements CodeDocumentationProvider, Ext
     if (module == null) {
       final IVirtualFileSystem fs = virtualFile.getFileSystem();
       if (fs instanceof ArchiveFileSystem) {
-        final VirtualFile jar = ((ArchiveFileSystem)fs).getVirtualFileForJar(virtualFile);
+        final VirtualFile jar = ((ArchiveFileSystem)fs).getVirtualFileForArchive(virtualFile);
         if (jar != null) {
           module = fileIndex.getModuleForFile(jar);
         }

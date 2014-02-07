@@ -16,6 +16,15 @@
 
 package com.intellij.openapi.roots.libraries;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.LibraryOrderEntry;
@@ -23,17 +32,9 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.vfs.ArchiveEntry;
 import com.intellij.openapi.vfs.ArchiveFile;
+import com.intellij.openapi.vfs.ArchiveFileSystem;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 public class JarVersionDetectionUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.roots.libraries.JarVersionDetectionUtil");
@@ -100,8 +101,8 @@ public class JarVersionDetectionUtil {
       for (OrderEntry library : ModuleRootManager.getInstance(module).getOrderEntries()) {
         if (library instanceof LibraryOrderEntry) {
           VirtualFile file = LibrariesHelper.getInstance().findJarByClass(((LibraryOrderEntry)library).getLibrary(), detectionClass);
-          if (file != null && file.getFileSystem() instanceof JarFileSystem) {
-            return ((JarFileSystem)file.getFileSystem()).getJarFile(file);
+          if (file != null && file.getFileSystem() instanceof ArchiveFileSystem) {
+            return ((ArchiveFileSystem)file.getFileSystem()).getArchiveWrapperFile(file);
           }
         }
       }
