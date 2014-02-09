@@ -15,6 +15,22 @@
  */
 package com.intellij.codeInsight.javadoc;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
@@ -41,18 +57,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.regex.Pattern;
 
 public class JavaDocInfoGenerator {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.javadoc.JavaDocInfoGenerator");
@@ -409,7 +413,9 @@ public class JavaDocInfoGenerator {
   private static PsiDocComment getDocComment(final PsiDocCommentOwner docOwner) {
     PsiElement navElement = docOwner.getNavigationElement();
     if (!(navElement instanceof PsiDocCommentOwner)) {
-      throw new AssertionError("Wrong navElement: " + navElement + "; original = " + docOwner + " of class " + docOwner.getClass());
+      // throw new AssertionError("Wrong navElement: " + navElement + "; original = " + docOwner + " of class " + docOwner.getClass());
+      // we need return null - when nav element is not doc owner. For example - method created by annotation, and on click u navigate to annotation
+      return null;
     }
     PsiDocComment comment = ((PsiDocCommentOwner)navElement).getDocComment();
     if (comment == null) { //check for non-normalized fields
