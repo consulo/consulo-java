@@ -15,6 +15,14 @@
  */
 package com.intellij.codeInsight.completion;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.Icon;
+
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
@@ -34,125 +42,136 @@ import com.intellij.ui.RowIcon;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 
-import javax.swing.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
 /**
  * @author peter
  */
-public class JavaGenerateMemberCompletionContributor {
-  static final Key<Boolean> GENERATE_ELEMENT = Key.create("GENERATE_ELEMENT");
+public class JavaGenerateMemberCompletionContributor
+{
+	static final Key<Boolean> GENERATE_ELEMENT = Key.create("GENERATE_ELEMENT");
 
-  public static void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
-    if (parameters.getCompletionType() != CompletionType.BASIC && parameters.getCompletionType() != CompletionType.SMART) {
-      return;
-    }
+	public static void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result)
+	{
+		if(parameters.getCompletionType() != CompletionType.BASIC && parameters.getCompletionType() != CompletionType.SMART)
+		{
+			return;
+		}
 
-    PsiElement position = parameters.getPosition();
-    if (psiElement(PsiIdentifier.class).withParents(PsiJavaCodeReferenceElement.class, PsiTypeElement.class, PsiClass.class).
-      andNot(JavaCompletionData.AFTER_DOT).
-      andNot(psiElement().afterLeaf(psiElement().inside(PsiModifierList.class))).accepts(position)) {
-      final PsiClass parent = CompletionUtil.getOriginalElement((PsiClass)position.getParent().getParent().getParent());
-      if (parent != null) {
-        Set<MethodSignature> addedSignatures = ContainerUtil.newHashSet();
-        addGetterSetterElements(result, parent, addedSignatures);
-        addSuperSignatureElements(parent, true, result, addedSignatures);
-        addSuperSignatureElements(parent, false, result, addedSignatures);
-      }
-    }
+		PsiElement position = parameters.getPosition();
+		if(psiElement(PsiIdentifier.class).withParents(PsiJavaCodeReferenceElement.class, PsiTypeElement.class, PsiClass.class).
+				andNot(JavaCompletionData.AFTER_DOT).
+				andNot(psiElement().afterLeaf(psiElement().inside(PsiModifierList.class))).accepts(position))
+		{
+			final PsiClass parent = CompletionUtil.getOriginalElement((PsiClass) position.getParent().getParent().getParent());
+			if(parent != null)
+			{
+				Set<MethodSignature> addedSignatures = ContainerUtil.newHashSet();
+				addGetterSetterElements(result, parent, addedSignatures);
+				addSuperSignatureElements(parent, true, result, addedSignatures);
+				addSuperSignatureElements(parent, false, result, addedSignatures);
+			}
+		}
 
-  }
+	}
 
-  private static void addGetterSetterElements(CompletionResultSet result, PsiClass parent, Set<MethodSignature> addedSignatures) {
-    List<PsiMethod> prototypes = ContainerUtil.newArrayList();
-    for (PsiField field : parent.getFields()) {
-      if (!(field instanceof PsiEnumConstant)) {
-        prototypes.add(GenerateMembersUtil.generateGetterPrototype(field));
-        prototypes.add(GenerateMembersUtil.generateSetterPrototype(field));
-      }
-    }
-    for (final PsiMethod prototype : prototypes) {
-      if (parent.findMethodBySignature(prototype, false) == null && addedSignatures.add(prototype.getSignature(PsiSubstitutor.EMPTY))) {
-        Icon icon = IconDescriptorUpdaters.getIcon(prototype, Iconable.ICON_FLAG_VISIBILITY);
-        result.addElement(createGenerateMethodElement(prototype, PsiSubstitutor.EMPTY, icon, "", new InsertHandler<LookupElement>() {
-          @Override
-          public void handleInsert(InsertionContext context, LookupElement item) {
-            removeLookupString(context);
+	private static void addGetterSetterElements(CompletionResultSet result, PsiClass parent, Set<MethodSignature> addedSignatures)
+	{
+		List<PsiMethod> prototypes = ContainerUtil.newArrayList();
+		for(PsiField field : parent.getFields())
+		{
+			if(!(field instanceof PsiEnumConstant))
+			{
+				prototypes.add(GenerateMembersUtil.generateGetterPrototype(field));
+				prototypes.add(GenerateMembersUtil.generateSetterPrototype(field));
+			}
+		}
+		for(final PsiMethod prototype : prototypes)
+		{
+			if(parent.findMethodBySignature(prototype, false) == null && addedSignatures.add(prototype.getSignature(PsiSubstitutor.EMPTY)))
+			{
+				Icon icon = IconDescriptorUpdaters.getIcon(prototype, Iconable.ICON_FLAG_VISIBILITY);
+				result.addElement(createGenerateMethodElement(prototype, PsiSubstitutor.EMPTY, icon, "", new InsertHandler<LookupElement>()
+				{
+					@Override
+					public void handleInsert(InsertionContext context, LookupElement item)
+					{
+						removeLookupString(context);
 
-            insertGenerationInfos(context, Arrays.asList(new PsiGenerationInfo<PsiMethod>(prototype)));
-          }
-        }));
-      }
-    }
-  }
+						insertGenerationInfos(context, Arrays.asList(new PsiGenerationInfo<PsiMethod>(prototype)));
+					}
+				}));
+			}
+		}
+	}
 
-  private static void removeLookupString(InsertionContext context) {
-    context.getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
-    context.commitDocument();
-  }
+	private static void removeLookupString(InsertionContext context)
+	{
+		context.getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
+		context.commitDocument();
+	}
 
-  private static void addSuperSignatureElements(final PsiClass parent, boolean implemented, CompletionResultSet result, Set<MethodSignature> addedSignatures) {
-    for (CandidateInfo candidate : OverrideImplementExploreUtil.getMethodsToOverrideImplement(parent, implemented)) {
-      PsiMethod baseMethod = (PsiMethod)candidate.getElement();
-      assert baseMethod != null;
-      PsiClass baseClass = baseMethod.getContainingClass();
-      PsiSubstitutor substitutor = candidate.getSubstitutor();
-      if (!baseMethod.isConstructor() && baseClass != null && addedSignatures.add(baseMethod.getSignature(substitutor))) {
-        result.addElement(createOverridingLookupElement(parent, implemented, baseMethod, baseClass, substitutor));
-      }
-    }
-  }
+	private static void addSuperSignatureElements(final PsiClass parent, boolean implemented, CompletionResultSet result,
+			Set<MethodSignature> addedSignatures)
+	{
+		for(CandidateInfo candidate : OverrideImplementExploreUtil.getMethodsToOverrideImplement(parent, implemented))
+		{
+			PsiMethod baseMethod = (PsiMethod) candidate.getElement();
+			assert baseMethod != null;
+			PsiClass baseClass = baseMethod.getContainingClass();
+			PsiSubstitutor substitutor = candidate.getSubstitutor();
+			if(!baseMethod.isConstructor() && baseClass != null && addedSignatures.add(baseMethod.getSignature(substitutor)))
+			{
+				result.addElement(createOverridingLookupElement(parent, implemented, baseMethod, baseClass, substitutor));
+			}
+		}
+	}
 
-  private static LookupElementBuilder createOverridingLookupElement(final PsiClass parent,
-                                                                    boolean implemented,
-                                                                    final PsiMethod baseMethod,
-                                                                    PsiClass baseClass, PsiSubstitutor substitutor) {
+	private static LookupElementBuilder createOverridingLookupElement(final PsiClass parent, boolean implemented, final PsiMethod baseMethod,
+			PsiClass baseClass, PsiSubstitutor substitutor)
+	{
 
-    RowIcon icon = new RowIcon(2);
-    icon.setIcon(IconDescriptorUpdaters.getIcon(baseMethod, 0), 0);
-    icon.setIcon(implemented ? AllIcons.Gutter.ImplementingMethod : AllIcons.Gutter.OverridingMethod, 1);
+		RowIcon icon = new RowIcon(2);
+		icon.setIcon(IconDescriptorUpdaters.getIcon(baseMethod, 0), 0);
+		icon.setIcon(implemented ? AllIcons.Gutter.ImplementingMethod : AllIcons.Gutter.OverridingMethod, 1);
 
-    return createGenerateMethodElement(baseMethod, substitutor, icon, baseClass.getName(), new InsertHandler<LookupElement>() {
-      @Override
-      public void handleInsert(InsertionContext context, LookupElement item) {
-        removeLookupString(context);
+		return createGenerateMethodElement(baseMethod, substitutor, icon, baseClass.getName(), new InsertHandler<LookupElement>()
+		{
+			@Override
+			public void handleInsert(InsertionContext context, LookupElement item)
+			{
+				removeLookupString(context);
 
-        List<PsiMethod> prototypes = OverrideImplementUtil.overrideOrImplementMethod(parent, baseMethod, false);
-        insertGenerationInfos(context, OverrideImplementUtil.convert2GenerationInfos(prototypes));
-      }
-    });
-  }
+				List<PsiMethod> prototypes = OverrideImplementUtil.overrideOrImplementMethod(parent, baseMethod, false);
+				insertGenerationInfos(context, OverrideImplementUtil.convert2GenerationInfos(prototypes));
+			}
+		});
+	}
 
-  private static void insertGenerationInfos(InsertionContext context, List<PsiGenerationInfo<PsiMethod>> infos) {
-    List<PsiGenerationInfo<PsiMethod>> newInfos = GenerateMembersUtil
-      .insertMembersAtOffset(context.getFile(), context.getStartOffset(), infos);
-    if (!newInfos.isEmpty()) {
-      newInfos.get(0).positionCaret(context.getEditor(), true);
-    }
-  }
+	private static void insertGenerationInfos(InsertionContext context, List<PsiGenerationInfo<PsiMethod>> infos)
+	{
+		List<PsiGenerationInfo<PsiMethod>> newInfos = GenerateMembersUtil.insertMembersAtOffset(context.getFile(), context.getStartOffset(), infos);
+		if(!newInfos.isEmpty())
+		{
+			newInfos.get(0).positionCaret(context.getEditor(), true);
+		}
+	}
 
-  private static LookupElementBuilder createGenerateMethodElement(PsiMethod prototype,
-                                                                  PsiSubstitutor substitutor,
-                                                                  Icon icon,
-                                                                  String typeText, InsertHandler<LookupElement> insertHandler) {
-    String methodName = prototype.getName();
+	private static LookupElementBuilder createGenerateMethodElement(PsiMethod prototype, PsiSubstitutor substitutor, Icon icon, String typeText,
+			InsertHandler<LookupElement> insertHandler)
+	{
+		String methodName = prototype.getName();
 
-    String visibility = VisibilityUtil.getVisibilityModifier(prototype.getModifierList());
-    String modifiers = (visibility == PsiModifier.PACKAGE_LOCAL ? "" : visibility + " ");
+		String visibility = VisibilityUtil.getVisibilityModifier(prototype.getModifierList());
+		String modifiers = (visibility == PsiModifier.PACKAGE_LOCAL ? "" : visibility + " ");
 
-    PsiType type = substitutor.substitute(prototype.getReturnType());
-    String signature = modifiers + (type == null ? "" : type.getPresentableText() + " ") + methodName;
+		PsiType type = substitutor.substitute(prototype.getReturnType());
+		String signature = modifiers + (type == null ? "" : type.getPresentableText() + " ") + methodName;
 
-    String parameters = PsiFormatUtil.formatMethod(prototype, substitutor, PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_NAME);
+		String parameters = PsiFormatUtil.formatMethod(prototype, substitutor, PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_NAME);
 
-    LookupElementBuilder element = LookupElementBuilder.create(prototype, signature).withLookupString(methodName).
-      withLookupString(signature).withInsertHandler(insertHandler).
-      appendTailText(parameters, false).appendTailText(" {...}", true).withTypeText(typeText).withIcon(icon);
-    element.putUserData(GENERATE_ELEMENT, true);
-    return element;
-  }
+		LookupElementBuilder element = LookupElementBuilder.create(prototype, signature).withLookupString(methodName).
+				withLookupString(signature).withInsertHandler(insertHandler).
+				appendTailText(parameters, false).appendTailText(" {...}", true).withTypeText(typeText).withIcon(icon);
+		element.putUserData(GENERATE_ELEMENT, true);
+		return element;
+	}
 }
