@@ -25,9 +25,9 @@ import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.TestResourceContentFolderTypeProvider;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.SdkType;
+import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -46,10 +46,10 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
 	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
 
-	public JavaModuleExtensionImpl(@NotNull String id, @NotNull Module module)
+	public JavaModuleExtensionImpl(@NotNull String id, @NotNull ModifiableRootModel rootModel)
 	{
-		super(id, module);
-		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(module.getProject(), id);
+		super(id, rootModel);
+		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(rootModel.getProject(), id);
 	}
 
 	@Override

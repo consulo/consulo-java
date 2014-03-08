@@ -22,11 +22,9 @@ import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.pom.java.LanguageLevel;
-import lombok.NonNull;
 
 /**
  * @author VISTALL
@@ -35,13 +33,13 @@ import lombok.NonNull;
 public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl
   implements MutableModuleExtensionWithSdk<JavaModuleExtensionImpl> {
 
-  public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull Module module) {
-    super(id, module);
+  public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull ModifiableRootModel rootModel) {
+    super(id, rootModel);
   }
 
   @Nullable
   @Override
-  public JComponent createConfigurablePanel(@NonNull ModifiableRootModel rootModel, @Nullable Runnable updateOnCheck) {
+  public JComponent createConfigurablePanel( @Nullable Runnable updateOnCheck) {
     return new JavaModuleExtensionPanel(this, updateOnCheck);
   }
 

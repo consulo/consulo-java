@@ -1906,7 +1906,11 @@
 
     <packaging.artifactType implementation="com.intellij.packaging.impl.artifacts.JarArtifactType" order="after zip-artifact"/>
     <packaging.elementType implementation="com.intellij.packaging.impl.elements.JarArchiveElementType" order="after zip-archive-element" />
-    <moduleExtensionProvider key="java" implementationClass="org.consulo.java.platform.module.extension.JavaModuleExtensionProvider" />
+    <moduleExtensionProvider key="java"
+							 icon="/icons/java.png"
+							 name="Java"
+							 immutableClass="org.consulo.java.platform.module.extension.JavaModuleExtensionImpl"
+							 mutableClass="org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl" />
     <orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
     <orderRootTypeEditor key="JAVA_ANNOTATIONS"
                          implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
