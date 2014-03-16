@@ -28,6 +28,7 @@
   <xi:include href="/META-INF/InspectionGadgets.xml" xpointer="xpointer(/idea-plugin/*)" />
   <xi:include href="/META-INF/IntentionPowerPack.xml" xpointer="xpointer(/idea-plugin/*)" />
   <xi:include href="/META-INF/Manifest.xml" xpointer="xpointer(/idea-plugin/*)" />
+  <xi:include href="/META-INF/PostfixTemplates.xml" xpointer="xpointer(/idea-plugin/*)" />
 
   <actions>
     <group id="JavaGenerateGroup1">

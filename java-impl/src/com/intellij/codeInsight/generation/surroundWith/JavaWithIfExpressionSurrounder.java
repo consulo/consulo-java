@@ -16,6 +16,7 @@
  */
 package com.intellij.codeInsight.generation.surroundWith;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.openapi.editor.Editor;
@@ -24,9 +25,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
-class JavaWithIfExpressionSurrounder extends JavaExpressionSurrounder{
+public class JavaWithIfExpressionSurrounder extends JavaExpressionSurrounder{
   @Override
   public boolean isApplicable(PsiExpression expr) {
     PsiType type = expr.getType();

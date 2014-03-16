@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,70 +13,75 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.codeInsight.generation.surroundWith;
+package com.intellij.codeInsight.template.postfix.templates;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.guess.GuessManager;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.ExpressionContext;
-import com.intellij.codeInsight.template.PsiTypeResult;
-import com.intellij.codeInsight.template.Result;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.*;
+import com.intellij.codeInsight.template.postfix.util.Aliases;
+import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiConditionalExpression;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPolyadicExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NotNull;
 
-public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
-  @NonNls private static final String TYPE_TEMPLATE_VARIABLE = "type";
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-  @Override
-  public boolean isApplicable(PsiExpression expr) {
-    return true;
+@Aliases(".inst")
+public class InstanceofExpressionPostfixTemplate extends PostfixTemplate {
+  public InstanceofExpressionPostfixTemplate() {
+    super("instanceof", "Surrounds expression with instanceof", "expr instanceof SomeType ? ((SomeType) expr). : null");
   }
 
   @Override
-  public TextRange surroundExpression(final Project project, final Editor editor, PsiExpression expr) throws IncorrectOperationException {
+  public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
+    return PostfixTemplatesUtils.isNotPrimitiveTypeExpression(getTopmostExpression(context));
+  }
+
+  @Override
+  public void expand(@NotNull PsiElement context, @NotNull Editor editor) {
+    PsiExpression expression = getTopmostExpression(context);
+    if (!PostfixTemplatesUtils.isNotPrimitiveTypeExpression(expression)) return;
+    surroundExpression(context.getProject(), editor, expression);
+  }
+
+  private static void surroundExpression(@NotNull Project project, @NotNull Editor editor, @NotNull PsiExpression expr) throws IncorrectOperationException {
     assert expr.isValid();
     PsiType[] types = GuessManager.getInstance(project).guessTypeToCast(expr);
     final boolean parenthesesNeeded = expr instanceof PsiPolyadicExpression ||
                                       expr instanceof PsiConditionalExpression ||
                                       expr instanceof PsiAssignmentExpression;
     String exprText = parenthesesNeeded ? "(" + expr.getText() + ")" : expr.getText();
-    final Template template = generateTemplate(project, exprText, types);
+    Template template = generateTemplate(project, exprText, types);
     TextRange range;
     if (expr.isPhysical()) {
       range = expr.getTextRange();
-    } else {
-      final RangeMarker rangeMarker = expr.getUserData(ElementToWorkOn.TEXT_RANGE);
-      if (rangeMarker == null) return null;
+    }
+    else {
+      RangeMarker rangeMarker = expr.getUserData(ElementToWorkOn.TEXT_RANGE);
+      if (rangeMarker == null) {
+        PostfixTemplatesUtils.showErrorHint(project, editor);
+        return;
+      }
       range = new TextRange(rangeMarker.getStartOffset(), rangeMarker.getEndOffset());
     }
     editor.getDocument().deleteString(range.getStartOffset(), range.getEndOffset());
     editor.getCaretModel().moveToOffset(range.getStartOffset());
     editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
     TemplateManager.getInstance(project).startTemplate(editor, template);
-    return null;
   }
 
-  private static Template generateTemplate(Project project, String exprText, final PsiType[] suggestedTypes) {
-    final TemplateManager templateManager = TemplateManager.getInstance(project);
-    final Template template = templateManager.createTemplate("", "");
+  private static Template generateTemplate(Project project, String exprText, PsiType[] suggestedTypes) {
+    TemplateManager templateManager = TemplateManager.getInstance(project);
+    Template template = templateManager.createTemplate("", "");
     template.setToReformat(true);
 
     Set<LookupElement> itemSet = new LinkedHashSet<LookupElement>();
@@ -84,7 +89,6 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
       itemSet.add(PsiTypeLookupItem.createLookupItem(type, null));
     }
     final LookupElement[] lookupItems = itemSet.toArray(new LookupElement[itemSet.size()]);
-
     final Result result = suggestedTypes.length > 0 ? new PsiTypeResult(suggestedTypes[0], project) : null;
 
     Expression expr = new Expression() {
@@ -103,16 +107,17 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
         return null;
       }
     };
-    template.addTextSegment("((");
-    template.addVariable(TYPE_TEMPLATE_VARIABLE, expr, expr, true);
+
+    template.addTextSegment(exprText);
+    template.addTextSegment(" instanceof ");
+    String type = "type";
+    template.addVariable(type, expr, expr, true);
+    template.addTextSegment(" ? ((");
+    template.addVariableSegment(type);
     template.addTextSegment(")" + exprText + ")");
     template.addEndVariable();
+    template.addTextSegment(" : null;");
 
     return template;
-  }
-
-  @Override
-  public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.cast.template");
   }
 }
