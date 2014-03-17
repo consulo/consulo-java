@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger.impl;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.DebuggerPanelsManager;
@@ -29,8 +31,6 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings> {
   @Override
@@ -106,7 +106,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
   @Override
   public void patch(JavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException {
     doPatch(javaParameters, settings);
-    runCustomPatchers(javaParameters, Executor.EXECUTOR_EXTENSION_NAME.findExtension(DefaultDebugExecutor.class), runProfile);
+    runCustomPatchers(javaParameters, Executor.EP_NAME.findExtension(DefaultDebugExecutor.class), runProfile);
   }
 
   private static RemoteConnection doPatch(final JavaParameters javaParameters, final RunnerSettings settings) throws ExecutionException {
