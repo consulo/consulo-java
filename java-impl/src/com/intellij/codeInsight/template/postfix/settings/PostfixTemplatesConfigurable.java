@@ -80,7 +80,7 @@ public class PostfixTemplatesConfigurable implements SearchableConfigurable, Edi
   @NotNull
   @Override
   public String getId() {
-    return "reference.settingsdialog.IDE.editor.postfix.templates";
+    return "reference.settingsdialog.IDE.editor.java.postfix.completion";
   }
 
   @Nullable
@@ -92,7 +92,7 @@ public class PostfixTemplatesConfigurable implements SearchableConfigurable, Edi
   @Nls
   @Override
   public String getDisplayName() {
-    return "Postfix Templates";
+    return "Java Postfix Completion";
   }
 
   @Nullable
