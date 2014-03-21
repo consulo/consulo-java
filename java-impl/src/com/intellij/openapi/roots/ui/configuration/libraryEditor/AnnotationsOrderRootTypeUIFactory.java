@@ -20,6 +20,8 @@
  */
 package com.intellij.openapi.roots.ui.configuration.libraryEditor;
 
+import javax.swing.Icon;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
@@ -28,23 +30,24 @@ import com.intellij.openapi.projectRoots.ui.SdkPathEditor;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.ui.OrderRootTypeUIFactory;
 
-import javax.swing.*;
+public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory
+{
+	@Override
+	public Icon getIcon()
+	{
+		return AllIcons.Modules.Annotation;
+	}
 
-public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
+	@Override
+	public String getNodeText()
+	{
+		return ProjectBundle.message("sdk.configure.annotations.tab");
+	}
 
-  @Override
-  public Icon getIcon() {
-    return AllIcons.Modules.Annotation;
-  }
-
-  @Override
-  public String getNodeText() {
-    return ProjectBundle.message("sdk.configure.annotations.tab");
-  }
-
-  @Override
-  public SdkPathEditor createPathEditor(Sdk sdk) {
-    return new SdkPathEditor(ProjectBundle.message("sdk.configure.annotations.tab"), AnnotationOrderRootType.getInstance(),
-                             new FileChooserDescriptor(false, true, true, false, true, false));
-  }
+	@Override
+	public SdkPathEditor createPathEditor(Sdk sdk)
+	{
+		return new SdkPathEditor(ProjectBundle.message("sdk.configure.annotations.tab"), AnnotationOrderRootType.getInstance(),
+				new FileChooserDescriptor(false, true, true, false, true, false));
+	}
 }

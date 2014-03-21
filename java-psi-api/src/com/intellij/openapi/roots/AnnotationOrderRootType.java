@@ -18,20 +18,21 @@ package com.intellij.openapi.roots;
 /**
  * @author yole
  */
-public class AnnotationOrderRootType extends PersistentOrderRootType {
-  /**
-   * @return External annotations path
-   */
-  public static OrderRootType getInstance() {
-    return getOrderRootType(AnnotationOrderRootType.class);
-  }
+public class AnnotationOrderRootType extends PersistentOrderRootType
+{
+	public static OrderRootType getInstance()
+	{
+		return getOrderRootType(AnnotationOrderRootType.class);
+	}
 
-  public AnnotationOrderRootType() {
-    super("JAVA_ANNOTATIONS", "javaAnnotationsPath");
-  }
+	public AnnotationOrderRootType()
+	{
+		super("JAVA_ANNOTATIONS", "javaAnnotationsPath");
+	}
 
-  @Override
-  public boolean skipWriteIfEmpty() {
-    return true;
-  }
+	@Override
+	public boolean skipWriteIfEmpty()
+	{
+		return true;
+	}
 }
