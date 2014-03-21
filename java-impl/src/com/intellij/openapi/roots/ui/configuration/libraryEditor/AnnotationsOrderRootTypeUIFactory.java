@@ -48,6 +48,6 @@ public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory
 	public SdkPathEditor createPathEditor(Sdk sdk)
 	{
 		return new SdkPathEditor(ProjectBundle.message("sdk.configure.annotations.tab"), AnnotationOrderRootType.getInstance(),
-				new FileChooserDescriptor(false, true, true, false, true, false));
+				new FileChooserDescriptor(false, true, true, false, true, false), sdk);
 	}
 }
