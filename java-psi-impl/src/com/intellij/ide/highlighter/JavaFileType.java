@@ -15,17 +15,16 @@
  */
 package com.intellij.ide.highlighter;
 
-import com.intellij.debugger.engine.FileTypeWithJvmDebugging;
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-
-public class JavaFileType extends LanguageFileType implements FileTypeWithJvmDebugging {
+public class JavaFileType extends LanguageFileType {
   @NonNls public static final String DEFAULT_EXTENSION = "java";
   @NonNls public static final String DOT_DEFAULT_EXTENSION = ".java";
   public static final JavaFileType INSTANCE = new JavaFileType();

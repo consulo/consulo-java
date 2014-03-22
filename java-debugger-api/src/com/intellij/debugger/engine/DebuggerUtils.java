@@ -37,7 +37,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
@@ -701,13 +700,13 @@ public abstract class DebuggerUtils
 
 	public abstract PsiClass chooseClassDialog(String title, Project project);
 
-	public static boolean supportsJVMDebugging(FileType type)
-	{
-		return type instanceof FileTypeWithJvmDebugging;
-	}
-
 	public static boolean supportsJVMDebugging(PsiFile file)
 	{
+		if(file.getFileType() instanceof FileTypeWithJvmDebugging)
+		{
+			return true;
+		}
+
 		final JVMDebugProvider[] providers = Extensions.getExtensions(JVMDebugProvider.EP_NAME);
 		for(JVMDebugProvider provider : providers)
 		{

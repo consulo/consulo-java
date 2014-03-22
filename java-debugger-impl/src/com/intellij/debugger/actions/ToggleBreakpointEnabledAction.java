@@ -15,23 +15,24 @@
  */
 package com.intellij.debugger.actions;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.breakpoints.BreakpointManager;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.Nullable;
 
 public class ToggleBreakpointEnabledAction extends AnAction {
 
+  @Override
   public void actionPerformed(AnActionEvent e) {
     final Project project = e.getData(CommonDataKeys.PROJECT);
     Breakpoint breakpoint = findBreakpoint(project);
@@ -52,6 +53,7 @@ public class ToggleBreakpointEnabledAction extends AnAction {
     return manager.findBreakpoint(editor.getDocument(), offset, null);
   }
 
+  @Override
   public void update(AnActionEvent event){
     final Presentation presentation = event.getPresentation();
     Project project = event.getData(CommonDataKeys.PROJECT);
@@ -71,10 +73,7 @@ public class ToggleBreakpointEnabledAction extends AnAction {
       return;
     }
 
-    FileTypeManager fileTypeManager = FileTypeManager.getInstance();
-    final VirtualFile virtualFile = file.getVirtualFile();
-    FileType fileType = virtualFile != null ? virtualFile.getFileType() : null;
-    if (DebuggerUtils.supportsJVMDebugging(fileType) || DebuggerUtils.supportsJVMDebugging(file)) {
+    if (DebuggerUtils.supportsJVMDebugging(file)) {
       Breakpoint breakpoint = findBreakpoint(project);
       if (breakpoint == null) {
         presentation.setEnabled(false);

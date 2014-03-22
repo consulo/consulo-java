@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger.actions;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.folding.impl.actions.ExpandRegionAction;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -34,18 +36,16 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.xdebugger.impl.actions.DebuggerActionHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ToggleLineBreakpointActionHandler extends DebuggerActionHandler {
 
   private final boolean myTemporary;
 
   public ToggleLineBreakpointActionHandler(boolean temporary) {
-
     myTemporary = temporary;
   }
 
+  @Override
   public boolean isEnabled(@NotNull final Project project, final AnActionEvent event) {
     PlaceInDocument place = getPlace(project, event);
     if (place != null) {
@@ -55,7 +55,7 @@ public class ToggleLineBreakpointActionHandler extends DebuggerActionHandler {
 
       VirtualFile file = FileDocumentManager.getInstance().getFile(document);
       PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-      if (DebuggerUtils.supportsJVMDebugging(file.getFileType()) || DebuggerUtils.supportsJVMDebugging(psiFile)) {
+      if (DebuggerUtils.supportsJVMDebugging(psiFile)) {
         final BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager();
         return breakpointManager.findBreakpoint(document, offset, LineBreakpoint.CATEGORY) != null ||
                    LineBreakpoint.canAddLineBreakpoint(project, document, line);
@@ -65,6 +65,7 @@ public class ToggleLineBreakpointActionHandler extends DebuggerActionHandler {
     return false;
   }
 
+  @Override
   public void perform(@NotNull final Project project, final AnActionEvent event) {
     PlaceInDocument place = getPlace(project, event);
     if(place == null) {
@@ -110,11 +111,13 @@ public class ToggleLineBreakpointActionHandler extends DebuggerActionHandler {
       if (file != null) {
         final Editor editor1 = editor;
         return new PlaceInDocument() {
-          public Document getDocument() {
+          @Override
+		  public Document getDocument() {
             return document;
           }
 
-          public int getOffset() {
+          @Override
+		  public int getOffset() {
             return editor1.getCaretModel().getOffset();
           }
         };
