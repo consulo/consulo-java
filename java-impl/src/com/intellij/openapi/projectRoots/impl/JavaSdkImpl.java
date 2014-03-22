@@ -60,6 +60,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
@@ -426,6 +427,8 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			sdkModificator.addRoot(sources, OrderRootType.SOURCES);
 		}
+		addJavaFxSources(jdkHome, sdkModificator);
+
 		if(docs != null)
 		{
 			sdkModificator.addRoot(docs, OrderRootType.DOCUMENTATION);
@@ -580,6 +583,7 @@ public class JavaSdkImpl extends JavaSdk
 		File jdkHomeFile = new File(home);
 		addClasses(jdkHomeFile, sdkModificator, isJre);
 		addSources(jdkHomeFile, sdkModificator);
+		addJavaFxSources(jdkHomeFile, sdkModificator);
 		addDocs(jdkHomeFile, sdkModificator);
 		sdkModificator.commitChanges();
 
@@ -610,6 +614,21 @@ public class JavaSdkImpl extends JavaSdk
 		}
 
 		return result;
+	}
+
+	private static void addJavaFxSources(File file, SdkModificator sdkModificator)
+	{
+		VirtualFile fileByIoFile = LocalFileSystem.getInstance().findFileByIoFile(new File(file, "javafx-src.zip"));
+		if(fileByIoFile == null)
+		{
+			return;
+		}
+		VirtualFile archiveRootForLocalFile = ArchiveVfsUtil.getArchiveRootForLocalFile(fileByIoFile);
+		if(archiveRootForLocalFile == null)
+		{
+			return;
+		}
+		sdkModificator.addRoot(archiveRootForLocalFile, OrderRootType.SOURCES);
 	}
 
 	private static void addSources(File file, SdkModificator sdkModificator)
