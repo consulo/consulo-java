@@ -15,15 +15,17 @@
  */
 package com.intellij.openapi.roots;
 
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.DeprecationInfo;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Dmitry Avdeev
  */
 @Deprecated
+@DeprecationInfo(value = "Use JavaModuleExtension.getInheritableSdk", until = "1.0")
 public abstract class LanguageLevelProjectExtension {
 
   public static LanguageLevelProjectExtension getInstance(Project project) {
