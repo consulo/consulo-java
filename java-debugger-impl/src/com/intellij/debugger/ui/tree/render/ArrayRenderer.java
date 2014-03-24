@@ -15,6 +15,12 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -29,7 +35,6 @@ import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.NodeDescriptorFactory;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
@@ -42,12 +47,6 @@ import com.sun.jdi.ArrayReference;
 import com.sun.jdi.ArrayType;
 import com.sun.jdi.Type;
 import com.sun.jdi.Value;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
 
 /**
  * User: lex
@@ -196,8 +195,7 @@ public class ArrayRenderer extends NodeRendererImpl{
 
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(node.getProject()).getElementFactory();
     try {
-      LanguageLevel languageLevel = LanguageLevelProjectExtension.getInstance(node.getProject()).getLanguageLevel();
-      return elementFactory.createExpressionFromText("this[" + descriptor.getIndex() + "]", elementFactory.getArrayClass(languageLevel));
+      return elementFactory.createExpressionFromText("this[" + descriptor.getIndex() + "]", elementFactory.getArrayClass(LanguageLevel.HIGHEST));
     }
     catch (IncorrectOperationException e) {
       LOG.error(e);

@@ -17,7 +17,6 @@ package com.intellij.openapi.roots;
 
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.DeprecationInfo;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 
@@ -29,7 +28,7 @@ import com.intellij.pom.java.LanguageLevel;
 public abstract class LanguageLevelProjectExtension {
 
   public static LanguageLevelProjectExtension getInstance(Project project) {
-    return ServiceManager.getService(project, LanguageLevelProjectExtension.class);
+    return null;
   }
 
   @NotNull

@@ -25,12 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
@@ -876,14 +877,9 @@ public final class PsiUtil extends PsiUtilCore {
       }
     }
 
+	JavaModuleExtension extension = ModuleUtilCore.getExtension(element, JavaModuleExtension.class);
 
-    return getLanguageLevel(element.getProject());
-  }
-
-  @NotNull
-  public static LanguageLevel getLanguageLevel(@NotNull Project project) {
-    LanguageLevelProjectExtension instance = LanguageLevelProjectExtension.getInstance(project);
-    return instance != null ? instance.getLanguageLevel() : LanguageLevel.HIGHEST;
+	return extension == null ? LanguageLevel.HIGHEST : extension.getLanguageLevel();
   }
 
   public static boolean isInstantiatable(@NotNull PsiClass clazz) {
