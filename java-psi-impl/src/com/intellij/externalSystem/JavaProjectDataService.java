@@ -18,6 +18,7 @@ package com.intellij.externalSystem;
 import java.util.Collection;
 import java.util.List;
 
+import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.externalSystem.model.DataNode;
@@ -25,14 +26,16 @@ import com.intellij.openapi.externalSystem.model.Key;
 import com.intellij.openapi.externalSystem.service.project.manage.ProjectDataService;
 import com.intellij.openapi.externalSystem.util.DisposeAwareProjectChange;
 import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
+import lombok.val;
 
 /**
  * @author Denis Zhdanov
@@ -48,39 +51,45 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 	}
 
 	@Override
-	public void importData(@NotNull Collection<DataNode<JavaProjectData>> toImport, @NotNull Project project, boolean synchronous)
+	public void importData(@NotNull Collection<DataNode<JavaProjectData>> toImport, @NotNull final Project project, boolean synchronous)
 	{
-		if(!ExternalSystemApiUtil.isNewProjectConstruction())
-		{
-			return;
-		}
 		if(toImport.size() != 1)
 		{
 			throw new IllegalArgumentException(String.format("Expected to get a single project but got %d: %s", toImport.size(), toImport));
 		}
 		JavaProjectData projectData = toImport.iterator().next().getData();
 
-		// JDK.
-		JavaSdkVersion version = projectData.getJdkVersion();
-		JavaSdk javaSdk = JavaSdk.getInstance();
-		ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
-   /* Sdk sdk = rootManager.getProjectSdk();
-	if (sdk instanceof JavaSdk) {
-      JavaSdkVersion currentVersion = javaSdk.getVersion(sdk);
-      if (currentVersion == null || !currentVersion.isAtLeast(version)) {
-        Sdk newJdk = findJdk(version);
-        if (newJdk != null) {
-          rootManager.setProjectSdk(sdk);
-          LanguageLevel level = version.getMaxLanguageLevel();
-          LanguageLevelProjectExtension ext = LanguageLevelProjectExtension.getInstance(project);
-          if (level.compareTo(ext.getLanguageLevel()) < 0) {
-            ext.setLanguageLevel(level);
-          }
-        }
-      }
-    }    */
-		// Language level.
-		setLanguageLevel(projectData.getLanguageLevel(), project, synchronous);
+		val jdk = findJdk(projectData.getJdkVersion());
+		val languageLevel = projectData.getLanguageLevel();
+
+		ExternalSystemApiUtil.executeProjectChangeAction(synchronous, new DisposeAwareProjectChange(project)
+		{
+			@Override
+			public void execute()
+			{
+				ModuleManager moduleManager = ModuleManager.getInstance(project);
+
+				for(Module module : moduleManager.getModules())
+				{
+					if(module.isDisposed())
+					{
+						continue;
+					}
+					ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
+
+					ModifiableRootModel modifiableModel = moduleRootManager.getModifiableModel();
+
+					JavaMutableModuleExtensionImpl e = modifiableModel.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class);
+					e.setEnabled(true);
+					if(jdk != null)
+					{
+						e.getInheritableSdk().set(null, jdk);
+					}
+					e.getInheritableLanguageLevel().set(null, languageLevel);
+					modifiableModel.commit();
+				}
+			}
+		});
 	}
 
 	@Nullable
@@ -107,23 +116,5 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 	@Override
 	public void removeData(@NotNull Collection<? extends Project> toRemove, @NotNull Project project, boolean synchronous)
 	{
-	}
-
-	@SuppressWarnings("MethodMayBeStatic")
-	public void setLanguageLevel(@NotNull final LanguageLevel languageLevel, @NotNull Project project, boolean synchronous)
-	{
-		final LanguageLevelProjectExtension languageLevelExtension = LanguageLevelProjectExtension.getInstance(project);
-		if(languageLevelExtension.getLanguageLevel().isAtLeast(languageLevel))
-		{
-			return;
-		}
-		ExternalSystemApiUtil.executeProjectChangeAction(synchronous, new DisposeAwareProjectChange(project)
-		{
-			@Override
-			public void execute()
-			{
-				languageLevelExtension.setLanguageLevel(languageLevel);
-			}
-		});
 	}
 }
