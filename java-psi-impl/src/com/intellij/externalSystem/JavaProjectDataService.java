@@ -80,7 +80,11 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 					ModifiableRootModel modifiableModel = moduleRootManager.getModifiableModel();
 
 					JavaMutableModuleExtensionImpl e = modifiableModel.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class);
-					e.setEnabled(true);
+					if(!e.isEnabled())
+					{
+						e.setEnabled(true);
+						modifiableModel.addModuleExtensionSdkEntry(e);
+					}
 					if(jdk != null)
 					{
 						e.getInheritableSdk().set(null, jdk);
