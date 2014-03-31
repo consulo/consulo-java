@@ -79,8 +79,9 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		return myLanguageLevel;
 	}
 
+	@NotNull
 	@Override
-	protected Class<? extends SdkType> getSdkTypeClass()
+	public Class<? extends SdkType> getSdkTypeClass()
 	{
 		return JavaSdk.class;
 	}

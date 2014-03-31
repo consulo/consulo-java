@@ -15,32 +15,35 @@
  */
 package org.consulo.java.platform.psi.impl;
 
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.file.PsiPackageImpl;
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.psi.PsiPackage;
 import org.consulo.psi.PsiPackageManager;
 import org.consulo.psi.PsiPackageSupportProvider;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.file.PsiPackageImpl;
 
 /**
  * @author VISTALL
  * @since 8:43/20.05.13
  */
-public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider {
-  @NotNull
-  @Override
-  public Class<? extends ModuleExtension> getSupportedModuleExtensionClass() {
-    return JavaModuleExtension.class;
-  }
+public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider
+{
+	@Override
+	public boolean isSupported(@NotNull ModuleExtension moduleExtension)
+	{
+		return moduleExtension instanceof JavaModuleExtension;
+	}
 
-  @NotNull
-  @Override
-  public PsiPackage createPackage(@NotNull PsiManager psiManager,
-                                  @NotNull PsiPackageManager packageManager,
-                                  @NotNull Class<? extends ModuleExtension> extensionClass,
-                                  @NotNull String packageName) {
-    return new PsiPackageImpl(psiManager, packageManager, extensionClass, packageName);
-  }
+	@NotNull
+	@Override
+	public PsiPackage createPackage(
+			@NotNull PsiManager psiManager,
+			@NotNull PsiPackageManager packageManager,
+			@NotNull Class<? extends ModuleExtension> extensionClass,
+			@NotNull String packageName)
+	{
+		return new PsiPackageImpl(psiManager, packageManager, extensionClass, packageName);
+	}
 }
