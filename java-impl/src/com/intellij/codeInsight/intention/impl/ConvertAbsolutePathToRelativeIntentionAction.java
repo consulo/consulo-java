@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,90 +15,91 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author spleaner
  */
-public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionAction {
+public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionAction
+{
 
-  protected boolean isConvertToRelative() {
-    return true;
-  }
+	protected boolean isConvertToRelative()
+	{
+		return true;
+	}
 
-  @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-    final PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
-    final FileReference fileReference = reference == null ? null : findFileReference(reference);
+	@Override
+	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	{
+		final int offset = editor.getCaretModel().getOffset();
+		final PsiElement element = file.findElementAt(offset);
+		if(element == null || element instanceof PsiWhiteSpace)
+		{
+			return false;
+		}
 
-    if (fileReference != null) {
-      final FileReferenceSet set = fileReference.getFileReferenceSet();
-      final FileReference lastReference = set.getLastReference();
-      return set.couldBeConvertedTo(isConvertToRelative()) && lastReference != null &&
-             (!isConvertToRelative() && !set.isAbsolutePathReference() || isConvertToRelative() && set.isAbsolutePathReference()) &&
-             lastReference.resolve() != null;
-    }
+		final PsiReference reference = file.findReferenceAt(offset);
+		final FileReference fileReference = reference == null ? null : FileReference.findFileReference(reference);
 
-    return false;
-  }
+		if(fileReference != null)
+		{
+			final FileReferenceSet set = fileReference.getFileReferenceSet();
+			final FileReference lastReference = set.getLastReference();
+			return set.couldBeConvertedTo(isConvertToRelative()) && lastReference != null &&
+					(!isConvertToRelative() && !set.isAbsolutePathReference() || isConvertToRelative() && set.isAbsolutePathReference()) &&
+					lastReference.resolve() != null;
+		}
 
-  @Nullable
-  private static FileReference findFileReference(@NotNull final PsiReference original) {
-    if (original instanceof PsiMultiReference) {
-      final PsiMultiReference multiReference = (PsiMultiReference)original;
-      for (PsiReference reference : multiReference.getReferences()) {
-        if (reference instanceof FileReference) {
-          return (FileReference)reference;
-        }
-      }
-    }
-    else if (original instanceof FileReferenceOwner) {
-      final FileReference fileReference = ((FileReferenceOwner)original).getLastFileReference();
-      if (fileReference != null) {
-        return fileReference;
-      }
-    }
+		return false;
+	}
 
-    return null;
-  }
+	@Override
+	@NotNull
+	public String getFamilyName()
+	{
+		return "Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute");
+	}
 
-  @Override
-  @NotNull
-  public String getFamilyName() {
-    return "Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute");
-  }
+	@Override
+	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	{
+		if(!FileModificationService.getInstance().prepareFileForWrite(file))
+		{
+			return;
+		}
 
-  @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
+		final PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
+		final FileReference fileReference = reference == null ? null : FileReference.findFileReference(reference);
+		if(fileReference != null)
+		{
+			final FileReference lastReference = fileReference.getFileReferenceSet().getLastReference();
+			if(lastReference != null)
+			{
+				lastReference.bindToElement(lastReference.resolve(), !isConvertToRelative());
+			}
+		}
+	}
 
-    final PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
-    final FileReference fileReference = reference == null ? null : findFileReference(reference);
-    if (fileReference != null) {
-      final FileReference lastReference = fileReference.getFileReferenceSet().getLastReference();
-      if (lastReference != null) lastReference.bindToElement(lastReference.resolve(), !isConvertToRelative());
-    }
-  }
+	@NotNull
+	@Override
+	public String getText()
+	{
+		return "Convert path to " + (isConvertToRelative() ? "relative" : "absolute");
+	}
 
-  @NotNull
-  @Override
-  public String getText() {
-    return "Convert path to " + (isConvertToRelative() ? "relative" : "absolute");
-  }
-
-  @Override
-  public boolean startInWriteAction() {
-    return true;
-  }
+	@Override
+	public boolean startInWriteAction()
+	{
+		return true;
+	}
 }
