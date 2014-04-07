@@ -15,19 +15,26 @@
  */
 package com.intellij.ide.fileTemplates;
 
+import java.util.Map;
+
 import com.intellij.core.JavaCoreBundle;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiPackageStatement;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.file.JavaDirectoryServiceImpl;
 import com.intellij.util.IncorrectOperationException;
-
-import java.util.Map;
 
 /**
  * @author yole
@@ -38,7 +45,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
                                                 String content,
                                                 boolean reformat,
                                                 String extension) throws IncorrectOperationException {
-    if (extension == null) extension = StdFileTypes.JAVA.getDefaultExtension();
+    if (extension == null) extension = JavaFileType.INSTANCE.getDefaultExtension();
     final String name = "myClass" + "." + extension;
     final FileType type = FileTypeRegistry.getInstance().getFileTypeByFileName(name);
     final PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(name, type, content);
@@ -84,7 +91,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
   }
 
   static void hackAwayEmptyPackage(PsiJavaFile file, FileTemplate template, Map<String, Object> props) throws IncorrectOperationException {
-    if (!template.isTemplateOfType(StdFileTypes.JAVA)) return;
+    if (!template.isTemplateOfType(JavaFileType.INSTANCE)) return;
 
     String packageName = (String)props.get(FileTemplate.ATTRIBUTE_PACKAGE_NAME);
     if(packageName == null || packageName.length() == 0 || packageName.equals(FileTemplate.ATTRIBUTE_PACKAGE_NAME)){
@@ -97,7 +104,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
 
   public boolean handlesTemplate(final FileTemplate template) {
     FileType fileType = FileTypeManagerEx.getInstanceEx().getFileTypeByExtension(template.getExtension());
-    return fileType.equals(StdFileTypes.JAVA);
+    return fileType.equals(JavaFileType.INSTANCE);
   }
 
   public PsiElement createFromTemplate(final Project project, final PsiDirectory directory, final String fileName, FileTemplate template,

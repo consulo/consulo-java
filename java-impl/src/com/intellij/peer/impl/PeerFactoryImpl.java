@@ -15,7 +15,17 @@
  */
 package com.intellij.peer.impl;
 
+import java.awt.Graphics;
+
+import javax.swing.JList;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
+
 import com.intellij.ide.IconDescriptorUpdaters;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.ui.SplitterProportionsDataImpl;
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.openapi.components.ServiceManager;
@@ -25,7 +35,6 @@ import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.fileChooser.FileSystemTreeFactory;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -37,12 +46,19 @@ import com.intellij.openapi.ui.SplitterProportionsData;
 import com.intellij.openapi.vcs.FileStatusFactory;
 import com.intellij.openapi.vcs.actions.VcsContextFactory;
 import com.intellij.peer.PeerFactory;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragmentFactory;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpressionCodeFragment;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiSubstitutor;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.search.scope.packageSet.PackageSetFactory;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.ui.*;
-import com.intellij.ui.TextComponent;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.errorView.ErrorViewFactory;
 import com.intellij.ui.treeStructure.treetable.TreeTable;
@@ -52,12 +68,6 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.Convertor;
 import com.intellij.util.ui.Table;
 import com.intellij.util.ui.UIUtil;
-
-import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreePath;
-import java.awt.*;
 
 public class PeerFactoryImpl extends PeerFactory {
   private final UIHelper myUIHelper = new MyUIHelper();
@@ -177,7 +187,7 @@ public class PeerFactoryImpl extends PeerFactory {
       final PsiExpressionCodeFragment fragment =
         JavaCodeFragmentFactory.getInstance(project).createExpressionCodeFragment(text, context, type, true);
       final Document document = PsiDocumentManager.getInstance(project).getDocument(fragment);
-      return new EditorTextField(document, project, StdFileTypes.JAVA);
+      return new EditorTextField(document, project, JavaFileType.INSTANCE);
     }
 
     public PackageChooser createPackageChooser(String title, Project project) {

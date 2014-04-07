@@ -19,10 +19,12 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.formatting.Block;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
@@ -35,8 +37,6 @@ import com.intellij.psi.formatter.PsiBasedFormattingModel;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.XmlElementType;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormattingModel {
   private static final Logger LOG =
@@ -66,7 +66,7 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
     }
 
     if (leafElement != null && leafElement.getTextRange().equals(textRange) && ShiftIndentInsideHelper.mayShiftIndentInside(leafElement)) {
-      return new ShiftIndentInsideHelper(StdFileTypes.JAVA, myProject).shiftIndentInside(leafElement, shift).getTextRange();
+      return new ShiftIndentInsideHelper(JavaFileType.INSTANCE, myProject).shiftIndentInside(leafElement, shift).getTextRange();
     } else {
       return textRange;
     }

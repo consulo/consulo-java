@@ -1,9 +1,25 @@
 package com.intellij.util.xml.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.FixedSizeButton;
 import com.intellij.openapi.util.Conditions;
@@ -13,11 +29,6 @@ import com.intellij.ui.EditorTextField;
 import com.intellij.ui.JavaReferenceEditorUtil;
 import com.intellij.ui.UIBundle;
 import com.intellij.util.ui.AbstractTableCellEditor;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.EventObject;
 
 /**
  * @author peter
@@ -48,7 +59,7 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
 
   public final Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
     final Document document = JavaReferenceEditorUtil.createDocument(value == null ? "" : (String)value, myProject, true);
-    myEditor = new EditorTextField(document, myProject, StdFileTypes.JAVA){
+    myEditor = new EditorTextField(document, myProject, JavaFileType.INSTANCE){
       protected boolean shouldHaveBorder() {
         return false;
       }

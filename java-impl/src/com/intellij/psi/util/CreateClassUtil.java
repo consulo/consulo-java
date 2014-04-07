@@ -15,12 +15,24 @@
  */
 package com.intellij.psi.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaCreateFromTemplateHandler;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.DirectoryChooserUtil;
 import com.intellij.ide.util.PackageUtil;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -28,23 +40,18 @@ import com.intellij.openapi.roots.impl.DirectoryIndex;
 import com.intellij.openapi.roots.impl.DirectoryInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.text.StringTokenizer;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * author: lesya
@@ -69,7 +76,7 @@ public class CreateClassUtil {
     final Project project = directoryRoot.getProject();
     try {
       final PsiDirectory directory = createParentDirectories(directoryRoot, className);
-      final PsiFile psiFile = directory.findFile(className + "." + StdFileTypes.JAVA.getDefaultExtension());
+      final PsiFile psiFile = directory.findFile(className + "." + JavaFileType.INSTANCE.getDefaultExtension());
       if (psiFile != null) {
         psiFile.delete();
       }

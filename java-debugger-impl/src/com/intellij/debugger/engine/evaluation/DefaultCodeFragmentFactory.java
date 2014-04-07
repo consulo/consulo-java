@@ -15,6 +15,9 @@
  */
 package com.intellij.debugger.engine.evaluation;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionService;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
@@ -25,17 +28,20 @@ import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.ui.DebuggerExpressionComboBox;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragment;
+import com.intellij.psi.JavaCodeFragmentFactory;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiType;
 import com.intellij.util.PairFunction;
 import com.intellij.util.concurrency.Semaphore;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Eugene Zhuravlev
@@ -123,7 +129,7 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory {
   }
 
   public LanguageFileType getFileType() {
-    return StdFileTypes.JAVA;
+    return JavaFileType.INSTANCE;
   }
 
   @Override

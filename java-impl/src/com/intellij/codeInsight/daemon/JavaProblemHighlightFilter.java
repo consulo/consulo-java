@@ -15,25 +15,25 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import org.consulo.java.platform.util.JavaProjectRootsUtil;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import org.consulo.java.platform.util.JavaProjectRootsUtil;
-import org.jetbrains.annotations.NotNull;
 
 
 public class JavaProblemHighlightFilter extends ProblemHighlightFilter {
   @Override
   public boolean shouldHighlight(@NotNull PsiFile psiFile) {
-    return psiFile.getFileType() != StdFileTypes.JAVA || !JavaProjectRootsUtil.isOutsideSourceRoot(psiFile);
+    return psiFile.getFileType() != JavaFileType.INSTANCE || !JavaProjectRootsUtil.isOutsideSourceRoot(psiFile);
   }
 
   @Override
   public boolean shouldProcessInBatch(@NotNull PsiFile psiFile) {
     final boolean shouldHighlight = shouldHighlightFile(psiFile);
     if (shouldHighlight) {
-      if (psiFile.getFileType() == StdFileTypes.JAVA) {
+      if (psiFile.getFileType() == JavaFileType.INSTANCE) {
         final VirtualFile virtualFile = psiFile.getVirtualFile();
         if (virtualFile != null && ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex().isInLibrarySource(virtualFile)) {
           return false;

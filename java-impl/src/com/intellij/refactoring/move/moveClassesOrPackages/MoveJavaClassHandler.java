@@ -15,19 +15,19 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Maxim.Medvedev
@@ -134,7 +134,7 @@ public class MoveJavaClassHandler implements MoveClassHandler {
   public String getName(PsiClass clazz) {
     final PsiFile file = clazz.getContainingFile();
     if (!(file instanceof PsiJavaFile)) return null;
-    return ((PsiJavaFile)file).getClasses().length > 1 ? clazz.getName() + "." + StdFileTypes.JAVA.getDefaultExtension() : file.getName();
+    return ((PsiJavaFile)file).getClasses().length > 1 ? clazz.getName() + "." + JavaFileType.INSTANCE.getDefaultExtension() : file.getName();
   }
 
   @Override

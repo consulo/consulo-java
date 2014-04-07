@@ -15,10 +15,12 @@
  */
 package com.intellij.debugger.engine.evaluation;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.DebuggerEditorImpl;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.util.text.StringUtil;
@@ -26,8 +28,6 @@ import com.intellij.psi.JavaCodeFragment;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionCodeFragment;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class TextWithImportsImpl implements TextWithImports{
 
@@ -43,7 +43,7 @@ public final class TextWithImportsImpl implements TextWithImports{
     if(containingFile instanceof PsiExpressionCodeFragment) {
       myText = text;
       myImports = ((JavaCodeFragment)containingFile).importsToString();
-      myFileType = StdFileTypes.JAVA;
+      myFileType = JavaFileType.INSTANCE;
     }
     else {
       Trinity<String, String, FileType> trinity = parseExternalForm(text);

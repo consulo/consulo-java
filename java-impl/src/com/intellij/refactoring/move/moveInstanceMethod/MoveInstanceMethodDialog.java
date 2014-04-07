@@ -15,11 +15,35 @@
  */
 package com.intellij.refactoring.move.moveInstanceMethod;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.VerticalFlowLayout;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiVariable;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.move.MoveInstanceMembersUtil;
@@ -28,16 +52,6 @@ import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.TitledSeparator;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author ven
@@ -119,7 +133,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
       panel.add(new TitledSeparator(text, null));
 
       String suggestedName = MoveInstanceMethodHandler.suggestParameterNameForThisClass(aClass);
-      final EditorTextField field = new EditorTextField(suggestedName, getProject(), StdFileTypes.JAVA);
+      final EditorTextField field = new EditorTextField(suggestedName, getProject(), JavaFileType.INSTANCE);
       field.setMinimumSize(new Dimension(field.getPreferredSize()));
       myOldClassParameterNameFields.put(aClass, field);
       panel.add(field);

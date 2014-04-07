@@ -15,11 +15,12 @@
  */
 package com.intellij.ide;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.IndentOptionsEditor;
 import com.intellij.application.options.JavaIndentOptionsEditor;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
@@ -29,7 +30,6 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.LocalTimeCounter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author rvishnyakov
@@ -64,7 +64,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   @Override
   public PsiFile createFileFromText(final Project project, final String text) {
     final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText(
-      "sample.java", StdFileTypes.JAVA, text, LocalTimeCounter.currentTime(), true, false
+      "sample.java", JavaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), true, false
     );
     file.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.HIGHEST);
     return file;

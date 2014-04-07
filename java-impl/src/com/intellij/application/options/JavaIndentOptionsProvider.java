@@ -15,14 +15,14 @@
  */
 package com.intellij.application.options;
 
+import org.jetbrains.annotations.NonNls;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.FileTypeIndentOptionsProvider;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
-import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author yole
@@ -33,7 +33,7 @@ public class JavaIndentOptionsProvider implements FileTypeIndentOptionsProvider 
   }
 
   public FileType getFileType() {
-    return StdFileTypes.JAVA;
+    return JavaFileType.INSTANCE;
   }
 
   public IndentOptionsEditor createOptionsEditor() {

@@ -15,17 +15,18 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.javaCompiler.FileObject;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.fileTypes.StdFileTypes;
-
-import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Eugene Zhuravlev              
@@ -54,7 +55,7 @@ public class FilePathActionJavac extends JavacParserAction {
     final String name = index >= 0 ? filePath.substring(index + 1) : filePath;
 
     final FileType fileType = FileTypeManager.getInstance().getFileTypeByFileName(name);
-    if (StdFileTypes.JAVA.equals(fileType)) {
+    if (fileType == JavaFileType.INSTANCE) {
       callback.fileProcessed(filePath);
       callback.setProgressText(CompilerBundle.message("progress.parsing.file", name));
     }

@@ -15,11 +15,16 @@
  */
 package com.intellij.openapi.roots.ui.configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.projectWizard.importSources.JavaSourceRootDetectionUtil;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.util.SystemInfo;
@@ -28,11 +33,6 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class JavaVfsSourceRootDetectionUtil {
   private JavaVfsSourceRootDetectionUtil() {}
@@ -70,7 +70,7 @@ public class JavaVfsSourceRootDetectionUtil {
           }
           else {
             FileType type = typeManager.getFileTypeByFileName(file.getName());
-            if (StdFileTypes.JAVA == type) {
+            if (type == JavaFileType.INSTANCE) {
               VirtualFile root = suggestRootForJavaFile(file);
               if (root != null) {
                 foundDirectories.add(root);

@@ -15,13 +15,36 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+import javax.swing.border.LineBorder;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupManager;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragment;
+import com.intellij.psi.JavaCodeFragmentFactory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiEllipsisType;
+import com.intellij.psi.PsiExpressionCodeFragment;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeCodeFragment;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.refactoring.ui.JavaCodeFragmentTableCellEditor;
 import com.intellij.refactoring.ui.RefactoringDialog;
@@ -31,19 +54,6 @@ import com.intellij.ui.ColoredTableCellRenderer;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.ui.ColumnInfo;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class JavaParameterTableModel extends ParameterTableModelBase<ParameterInfoImpl, ParameterTableModelItemBase<ParameterInfoImpl>> {
   private final Project myProject;
@@ -54,7 +64,7 @@ public class JavaParameterTableModel extends ParameterTableModelBase<ParameterIn
     this(typeContext, defaultValueContext,
          new JavaTypeColumn(typeContext.getProject()),
          new JavaNameColumn(typeContext.getProject()),
-         new DefaultValueColumn<ParameterInfoImpl, ParameterTableModelItemBase<ParameterInfoImpl>>(typeContext.getProject(), StdFileTypes.JAVA) {
+         new DefaultValueColumn<ParameterInfoImpl, ParameterTableModelItemBase<ParameterInfoImpl>>(typeContext.getProject(), JavaFileType.INSTANCE) {
            @Override
            public TableCellEditor doCreateEditor(ParameterTableModelItemBase<ParameterInfoImpl> item) {
              return new EditorWithExpectedType(typeContext);
@@ -173,7 +183,7 @@ public class JavaParameterTableModel extends ParameterTableModelBase<ParameterIn
 
   public static class JavaTypeColumn extends TypeColumn<ParameterInfoImpl, ParameterTableModelItemBase<ParameterInfoImpl>> {
     public JavaTypeColumn(Project project) {
-      super(project, StdFileTypes.JAVA);
+      super(project, JavaFileType.INSTANCE);
     }
 
     @Override

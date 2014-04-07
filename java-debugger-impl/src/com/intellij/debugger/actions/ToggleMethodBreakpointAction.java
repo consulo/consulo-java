@@ -20,13 +20,20 @@
  */
 package com.intellij.debugger.actions;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.breakpoints.BreakpointManager;
 import com.intellij.debugger.ui.breakpoints.MethodBreakpoint;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -39,7 +46,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.text.CharArrayUtil;
-import org.jetbrains.annotations.Nullable;
 
 public class ToggleMethodBreakpointAction extends AnAction {
 
@@ -115,7 +121,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
         if (file != null) {
           final VirtualFile virtualFile = file.getVirtualFile();
           FileType fileType = virtualFile != null ? virtualFile.getFileType() : null;
-          if (StdFileTypes.JAVA == fileType || StdFileTypes.CLASS  == fileType) {
+          if (fileType == JavaFileType.INSTANCE || StdFileTypes.CLASS  == fileType) {
             method = findMethod(project, editor);
           }
         }

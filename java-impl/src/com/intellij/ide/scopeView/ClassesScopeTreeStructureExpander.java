@@ -15,6 +15,20 @@
  */
 package com.intellij.ide.scopeView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JTree;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.PsiClassChildrenSource;
 import com.intellij.ide.scopeView.nodes.ClassNode;
@@ -28,16 +42,15 @@ import com.intellij.packageDependencies.ui.DependencyNodeComparator;
 import com.intellij.packageDependencies.ui.DirectoryNode;
 import com.intellij.packageDependencies.ui.FileNode;
 import com.intellij.packageDependencies.ui.PackageDependenciesNode;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMethod;
 import com.intellij.util.ui.tree.TreeUtil;
-
-import javax.swing.*;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.tree.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * User: anna
@@ -66,7 +79,7 @@ public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpa
           final PsiElement file = fileNode.getPsiElement();
           if (file instanceof PsiJavaFile) {
             final VirtualFile virtualFile = ((PsiJavaFile)file).getVirtualFile();
-            if (virtualFile == null || (virtualFile.getFileType() != StdFileTypes.JAVA && virtualFile.getFileType() != StdFileTypes.CLASS)) {
+            if (virtualFile == null || (virtualFile.getFileType() != JavaFileType.INSTANCE && virtualFile.getFileType() != StdFileTypes.CLASS)) {
               return;
             }
             final PsiClass[] psiClasses = ((PsiJavaFile)file).getClasses();

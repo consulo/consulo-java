@@ -15,20 +15,24 @@
  */
 package com.intellij.application.options;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.codeStyle.OptionTreeWithPreviewPanel;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author max
@@ -163,7 +167,7 @@ public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel {
 
   @NotNull
   protected final FileType getFileType() {
-    return StdFileTypes.JAVA;
+    return JavaFileType.INSTANCE;
   }
 
   public boolean setPanelLanguage(Language language) {

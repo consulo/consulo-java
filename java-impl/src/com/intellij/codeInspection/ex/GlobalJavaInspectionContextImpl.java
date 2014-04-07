@@ -43,10 +43,10 @@ import com.intellij.codeInspection.reference.RefJavaManager;
 import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.codeInspection.reference.RefMethod;
 import com.intellij.codeInspection.ui.InspectionToolPresentation;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.StdLanguages;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -222,7 +222,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
     final SearchScope searchScope = new GlobalSearchScope(refManager.getProject()) {
       @Override
       public boolean contains(VirtualFile file) {
-        return !scope.contains(file) || file.getFileType() != StdFileTypes.JAVA;
+        return !scope.contains(file) || file.getFileType() != JavaFileType.INSTANCE;
       }
 
       @Override

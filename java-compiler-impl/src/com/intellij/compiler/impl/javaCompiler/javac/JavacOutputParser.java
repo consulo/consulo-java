@@ -15,12 +15,20 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.OutputParser;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -28,21 +36,13 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.rt.compiler.JavacResourcesReader;
 import com.intellij.util.StringBuilderSpinAllocator;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class JavacOutputParser extends OutputParser {
   private final int myTabSize;
   @NonNls private String WARNING_PREFIX = "warning:"; // default value
 
   public JavacOutputParser(Project project) {
-    myTabSize = CodeStyleSettingsManager.getSettings(project).getTabSize(StdFileTypes.JAVA);
+    myTabSize = CodeStyleSettingsManager.getSettings(project).getTabSize(JavaFileType.INSTANCE);
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       // emulate patterns setup if 'embedded' javac is used (javac is started not via JavacRunner)
       addJavacPattern(JavacResourcesReader.MSG_PARSING_STARTED + JavacResourcesReader.CATEGORY_VALUE_DIVIDER + "[parsing started {0}]");

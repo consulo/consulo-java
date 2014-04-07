@@ -1,15 +1,17 @@
 package com.intellij.refactoring.introduceParameter;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.intention.impl.TypeExpression;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.template.Expression;
 import com.intellij.codeInsight.template.ExpressionContext;
 import com.intellij.codeInsight.template.Result;
 import com.intellij.codeInsight.template.TextResult;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
@@ -22,8 +24,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * User: anna
@@ -37,7 +37,7 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
                                        PsiVariable localVariable,
                                        PsiExpression[] occurrences,
                                        TypeSelectorManagerImpl typeSelectorManager, String title) {
-    super(project, InjectedLanguageUtil.getTopLevelEditor(editor), expr, localVariable, occurrences, title, StdFileTypes.JAVA);
+    super(project, InjectedLanguageUtil.getTopLevelEditor(editor), expr, localVariable, occurrences, title, JavaFileType.INSTANCE);
     myTypeSelectorManager = typeSelectorManager;
   }
 

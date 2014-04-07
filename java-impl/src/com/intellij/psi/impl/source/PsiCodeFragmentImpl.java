@@ -15,13 +15,19 @@
  */
 package com.intellij.psi.impl.source;
 
+import java.util.LinkedHashMap;
+import java.util.StringTokenizer;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.openapi.command.undo.BasicUndoableAction;
 import com.intellij.openapi.command.undo.UndoManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -37,12 +43,6 @@ import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.testFramework.LightVirtualFile;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.LinkedHashMap;
-import java.util.StringTokenizer;
 
 public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment, IntentionFilterOwner {
   private final PsiElement myContext;
@@ -111,7 +111,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
   @Override
   @NotNull
   public FileType getFileType() {
-    return StdFileTypes.JAVA;
+    return JavaFileType.INSTANCE;
   }
 
   @Override

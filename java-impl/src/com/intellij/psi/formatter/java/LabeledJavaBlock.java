@@ -15,17 +15,22 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.formatting.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.formatting.Alignment;
+import com.intellij.formatting.Block;
+import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.Indent;
+import com.intellij.formatting.Wrap;
+import com.intellij.formatting.WrapType;
 import com.intellij.formatting.alignment.AlignmentStrategy;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.tree.ElementType;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LabeledJavaBlock extends AbstractJavaBlock{
   public LabeledJavaBlock(final ASTNode node,
@@ -56,7 +61,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock{
   }
 
   private Indent getLabelIndent() {
-    if (mySettings.getRootSettings().getIndentOptions(StdFileTypes.JAVA).LABEL_INDENT_ABSOLUTE) {
+    if (mySettings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).LABEL_INDENT_ABSOLUTE) {
       return Indent.getAbsoluteLabelIndent();
     } else {
       return Indent.getLabelIndent();

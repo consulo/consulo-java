@@ -20,17 +20,24 @@
  */
 package com.intellij.codeEditor.printing;
 
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.Map;
-import java.util.TreeMap;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiReference;
 
 public class HyperlinksToClassesOption extends PrintOption {
   private JCheckBox myCbGenerateHyperlinksToClasses;
@@ -40,7 +47,7 @@ public class HyperlinksToClassesOption extends PrintOption {
   public TreeMap<Integer, PsiReference> collectReferences(PsiFile psiFile, Map<PsiFile, PsiFile> filesMap) {
     if (isGenerateHyperlinksToClasses) {
       FileType fileType = psiFile.getFileType();
-      if (StdFileTypes.JAVA == fileType || StdFileTypes.JSP == fileType) {
+      if (JavaFileType.INSTANCE == fileType || StdFileTypes.JSP == fileType) {
         final TreeMap<Integer, PsiReference> refMap = new TreeMap<Integer, PsiReference>();
         findClassReferences(psiFile, refMap, filesMap, psiFile);
         return refMap;

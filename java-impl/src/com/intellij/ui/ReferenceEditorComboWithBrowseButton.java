@@ -15,17 +15,21 @@
  */
 package com.intellij.ui;
 
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragment;
+import com.intellij.psi.JavaCodeFragmentFactory;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.event.ActionListener;
-import java.util.List;
 
 /**
  * @author ven
@@ -43,7 +47,7 @@ public class ReferenceEditorComboWithBrowseButton extends ComponentWithBrowseBut
                                               @NotNull final Project project,
                                               boolean toAcceptClasses,
                                               final JavaCodeFragment.VisibilityChecker visibilityChecker, final String recentsKey) {
-    super(new EditorComboBox(createDocument(StringUtil.isEmpty(text) ? "" : text, project, toAcceptClasses, visibilityChecker), project, StdFileTypes.JAVA),
+    super(new EditorComboBox(createDocument(StringUtil.isEmpty(text) ? "" : text, project, toAcceptClasses, visibilityChecker), project, JavaFileType.INSTANCE),
           browseActionListener);
     final List<String> recentEntries = RecentsManager.getInstance(project).getRecentEntries(recentsKey);
     if (recentEntries != null) {

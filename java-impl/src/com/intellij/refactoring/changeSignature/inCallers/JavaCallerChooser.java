@@ -15,7 +15,9 @@
  */
 package com.intellij.refactoring.changeSignature.inCallers;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import java.util.Set;
+
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.changeSignature.CallerChooserBase;
@@ -23,12 +25,10 @@ import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.HashSet;
 
-import java.util.Set;
-
 public class JavaCallerChooser extends CallerChooserBase<PsiMethod> {
 
   public JavaCallerChooser(PsiMethod method, Project project, String title, Tree previousTree, Consumer<Set<PsiMethod>> callback) {
-    super(method, project, title, previousTree, "dummy." + StdFileTypes.JAVA.getDefaultExtension(), callback);
+    super(method, project, title, previousTree, "dummy." + JavaFileType.INSTANCE.getDefaultExtension(), callback);
   }
 
   @Override

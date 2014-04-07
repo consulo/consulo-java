@@ -32,6 +32,7 @@ import com.intellij.debugger.ui.breakpoints.FieldBreakpoint;
 import com.intellij.debugger.ui.impl.watch.DebuggerTree;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -254,7 +255,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 			{
 				final VirtualFile virtualFile = file.getVirtualFile();
 				FileType fileType = virtualFile != null ? virtualFile.getFileType() : null;
-				if(StdFileTypes.JAVA == fileType || StdFileTypes.CLASS == fileType)
+				if(fileType == JavaFileType.INSTANCE || StdFileTypes.CLASS == fileType)
 				{
 					final PsiField field = FieldBreakpoint.findField(project, document, editor.getCaretModel().getOffset());
 					if(field != null)

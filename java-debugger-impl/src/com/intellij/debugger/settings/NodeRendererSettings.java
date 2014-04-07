@@ -15,35 +15,53 @@
  */
 package com.intellij.debugger.settings;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.Icon;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.DebugProcess;
-import com.intellij.debugger.engine.evaluation.*;
+import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
+import com.intellij.debugger.engine.evaluation.EvaluateException;
+import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
+import com.intellij.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
+import com.intellij.debugger.engine.evaluation.TextWithImports;
+import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.WatchItemDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.debugger.ui.tree.render.*;
-import com.intellij.debugger.ui.tree.render.Renderer;
-import com.intellij.openapi.components.*;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.*;
+import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
+import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.util.EventDispatcher;
 import com.intellij.util.containers.InternalIterator;
 import com.intellij.util.ui.ColorIcon;
-import com.sun.jdi.*;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.sun.jdi.Field;
+import com.sun.jdi.IntegerValue;
+import com.sun.jdi.ObjectReference;
+import com.sun.jdi.ReferenceType;
+import com.sun.jdi.Value;
 
 /**
  * User: lex
@@ -347,9 +365,9 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
 
   private ExpressionChildrenRenderer createExpressionChildrenRenderer(@NonNls String expressionText, @NonNls String childrenExpandableText) {
     final ExpressionChildrenRenderer childrenRenderer = new ExpressionChildrenRenderer();
-    childrenRenderer.setChildrenExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", StdFileTypes.JAVA));
+    childrenRenderer.setChildrenExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", JavaFileType.INSTANCE));
     if (childrenExpandableText != null) {
-      childrenRenderer.setChildrenExpandable(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, childrenExpandableText, "", StdFileTypes.JAVA));
+      childrenRenderer.setChildrenExpandable(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, childrenExpandableText, "", JavaFileType.INSTANCE));
     }
     return childrenRenderer;
   }
@@ -359,7 +377,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
     if (expressions != null && expressions.length > 0) {
       final ArrayList<Pair<String, TextWithImports>> childrenList = new ArrayList<Pair<String, TextWithImports>>(expressions.length);
       for (final String[] expression : expressions) {
-        childrenList.add(new Pair<String, TextWithImports>(expression[0], new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression[1], "", StdFileTypes.JAVA)));
+        childrenList.add(new Pair<String, TextWithImports>(expression[0], new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression[1], "", JavaFileType.INSTANCE)));
       }
       childrenRenderer.setChildren(childrenList);
     }
@@ -382,7 +400,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
         return evaluated + postfix;
       }
     };
-    labelRenderer.setLabelExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", StdFileTypes.JAVA));
+    labelRenderer.setLabelExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", JavaFileType.INSTANCE));
     return labelRenderer;
   }
 
@@ -398,8 +416,8 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
 
     private MapEntryLabelRenderer() {
       super("java.util.Map$Entry");
-      myKeyExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getKey()", "", StdFileTypes.JAVA));
-      myValueExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getValue()", "", StdFileTypes.JAVA));
+      myKeyExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getKey()", "", JavaFileType.INSTANCE));
+      myValueExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getValue()", "", JavaFileType.INSTANCE));
     }
 
     public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {

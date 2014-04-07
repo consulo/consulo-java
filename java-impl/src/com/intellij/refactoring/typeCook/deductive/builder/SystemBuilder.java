@@ -15,6 +15,11 @@
  */
 package com.intellij.refactoring.typeCook.deductive.builder;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
@@ -33,10 +38,6 @@ import com.intellij.refactoring.typeCook.Util;
 import com.intellij.refactoring.typeCook.deductive.PsiTypeVariableFactory;
 import com.intellij.refactoring.typeCook.deductive.util.VictimCollector;
 import com.intellij.util.containers.HashMap;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -826,7 +827,7 @@ public class SystemBuilder {
     SearchScope scope = helper.getUseScope(element);
     if (scope instanceof GlobalSearchScope) {
       scope =
-        GlobalSearchScope.getScopeRestrictedByFileTypes((GlobalSearchScope)scope, StdFileTypes.JAVA, StdFileTypes.JSP, StdFileTypes.JSPX);
+        GlobalSearchScope.getScopeRestrictedByFileTypes((GlobalSearchScope)scope, JavaFileType.INSTANCE, StdFileTypes.JSP, StdFileTypes.JSPX);
     }
     return scope;
   }

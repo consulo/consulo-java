@@ -20,18 +20,40 @@
  */
 package com.intellij.internal;
 
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.editorActions.SelectWordUtil;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.GenerationInfo;
 import com.intellij.codeInsight.generation.PsiGenerationInfo;
 import com.intellij.ide.IdeView;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.ide.util.PackageUtil;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.LabeledComponent;
@@ -50,16 +72,6 @@ import com.intellij.ui.EditorTextField;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import com.intellij.psi.PsiJavaPackage;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 public class GenerateVisitorByHierarchyAction extends AnAction {
   public GenerateVisitorByHierarchyAction() {
@@ -118,7 +130,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
         final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
         final PsiTypeCodeFragment codeFragment = factory.createTypeCodeFragment("", null, true, JavaCodeFragmentFactory.ALLOW_VOID);
         final Document document = PsiDocumentManager.getInstance(project).getDocument(codeFragment);
-        final EditorTextField editorTextField = new EditorTextField(document, project, StdFileTypes.JAVA);
+        final EditorTextField editorTextField = new EditorTextField(document, project, JavaFileType.INSTANCE);
         labeledComponent.setComponent(editorTextField);
         editorTextField.addDocumentListener(new com.intellij.openapi.editor.event.DocumentAdapter() {
           public void documentChanged(final com.intellij.openapi.editor.event.DocumentEvent e) {

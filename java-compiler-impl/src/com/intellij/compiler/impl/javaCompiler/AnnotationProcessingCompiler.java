@@ -21,6 +21,13 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.consulo.lombok.annotations.Logger;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.CommonBundle;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.ModuleCompilerUtil;
@@ -30,10 +37,14 @@ import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.*;
+import com.intellij.openapi.compiler.CompileContext;
+import com.intellij.openapi.compiler.CompileScope;
+import com.intellij.openapi.compiler.CompilerBundle;
+import com.intellij.openapi.compiler.CompilerManager;
+import com.intellij.openapi.compiler.CompilerMessageCategory;
+import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
@@ -44,13 +55,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
-import org.consulo.lombok.annotations.Logger;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Logger
 public class AnnotationProcessingCompiler implements TranslatingCompiler {
@@ -73,7 +77,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
     if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
       return false;
     }
-    return file.getFileType() == StdFileTypes.JAVA && !isExcludedFromAnnotationProcessing(file, context);
+    return file.getFileType() == JavaFileType.INSTANCE && !isExcludedFromAnnotationProcessing(file, context);
   }
 
   @Override

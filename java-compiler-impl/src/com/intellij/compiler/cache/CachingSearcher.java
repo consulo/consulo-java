@@ -15,7 +15,10 @@
  */
 package com.intellij.compiler.cache;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import java.util.Collection;
+import java.util.Map;
+
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
@@ -24,9 +27,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Query;
 import com.intellij.util.containers.SoftHashMap;
-
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author Eugene Zhuravlev
@@ -46,7 +46,7 @@ public class CachingSearcher {
     Collection<PsiReference> psiReferences = myElementToReferencersMap.get(key);
     if (psiReferences == null) {
       GlobalSearchScope searchScope = GlobalSearchScope.projectScope(myProject);
-      searchScope = GlobalSearchScope.getScopeRestrictedByFileTypes(searchScope, StdFileTypes.JAVA);
+      searchScope = GlobalSearchScope.getScopeRestrictedByFileTypes(searchScope, JavaFileType.INSTANCE);
       final Query<PsiReference> query = ReferencesSearch.search(element, searchScope, ignoreAccessScope);
       psiReferences = query.findAll();
       myElementToReferencersMap.put(key, psiReferences);

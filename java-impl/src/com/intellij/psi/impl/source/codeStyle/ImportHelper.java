@@ -15,11 +15,29 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+import gnu.trove.TObjectIntHashMap;
+import gnu.trove.TObjectIntProcedure;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.consulo.psi.PsiPackage;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.ImportFilter;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
@@ -41,15 +59,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import gnu.trove.TObjectIntHashMap;
-import gnu.trove.TObjectIntProcedure;
-import org.consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 public class ImportHelper{
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.ImportHelper");
@@ -92,9 +101,9 @@ public class ImportHelper{
       for (PsiElement nonImport : nonImports) {
         text.append("\n").append(nonImport.getText());
       }
-      String ext = StdFileTypes.JAVA.getDefaultExtension();
+      String ext = JavaFileType.INSTANCE.getDefaultExtension();
       PsiFileFactory factory = PsiFileFactory.getInstance(file.getProject());
-      final PsiJavaFile dummyFile = (PsiJavaFile)factory.createFileFromText("_Dummy_." + ext, StdFileTypes.JAVA, text);
+      final PsiJavaFile dummyFile = (PsiJavaFile)factory.createFileFromText("_Dummy_." + ext, JavaFileType.INSTANCE, text);
       CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(file.getProject());
       codeStyleManager.reformat(dummyFile);
 

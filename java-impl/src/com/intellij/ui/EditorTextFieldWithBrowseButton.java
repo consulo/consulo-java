@@ -15,12 +15,16 @@
  */
 package com.intellij.ui;
 
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragment;
+import com.intellij.psi.JavaCodeFragmentFactory;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
 
 /**
  * User: anna
@@ -46,7 +50,7 @@ public class EditorTextFieldWithBrowseButton extends ComponentWithBrowseButton<E
   private static EditorTextField createEditorTextField(Project project,
                                                        boolean isClassAccepted,
                                                        JavaCodeFragment.VisibilityChecker visibilityChecker) {
-    return createEditorTextField(project, isClassAccepted, visibilityChecker, StdFileTypes.JAVA);
+    return createEditorTextField(project, isClassAccepted, visibilityChecker, JavaFileType.INSTANCE);
   }
 
   private static EditorTextField createEditorTextField(Project project,

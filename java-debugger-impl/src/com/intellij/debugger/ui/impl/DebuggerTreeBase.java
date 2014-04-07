@@ -20,12 +20,33 @@
  */
 package com.intellij.debugger.ui.impl;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Window;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JToolTip;
+import javax.swing.JWindow;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.ide.dnd.aware.DnDAwareTree;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.JDOMUtil;
@@ -37,16 +58,6 @@ import com.intellij.util.text.StringTokenizer;
 import com.intellij.util.ui.GeometryUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 
 public class DebuggerTreeBase extends DnDAwareTree implements Disposable {
@@ -276,7 +287,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable {
   }
 
   private String prepareToolTipText(String text) {
-    int tabSize = CodeStyleSettingsManager.getSettings(myProject).getTabSize(StdFileTypes.JAVA);
+    int tabSize = CodeStyleSettingsManager.getSettings(myProject).getTabSize(JavaFileType.INSTANCE);
     if (tabSize < 0) {
       tabSize = 0;
     }

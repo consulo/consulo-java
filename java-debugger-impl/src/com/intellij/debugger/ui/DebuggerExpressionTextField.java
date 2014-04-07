@@ -28,8 +28,8 @@ import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.EditorTextField;
@@ -50,7 +50,7 @@ public class DebuggerExpressionTextField extends DebuggerEditorImpl
 	{
 		super(project, context, recentsId, DefaultCodeFragmentFactory.getInstance());
 		myStubField.setEnabled(false);
-		myEditor = new EditorTextField("", project, StdFileTypes.JAVA);
+		myEditor = new EditorTextField("", project, JavaFileType.INSTANCE);
 		setLayout(new BorderLayout());
 		myMainPanel.add(myStubField, STUB);
 		myMainPanel.add(addChooseFactoryLabel(myEditor, false), EDITOR);

@@ -15,7 +15,13 @@
  */
 package com.intellij.openapi.roots.impl;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -28,12 +34,6 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.messages.MessageBus;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 /**
  * @author Gregory.Shrago
@@ -116,7 +116,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
     oStream.close();
 
     for (VirtualFile child : fileOrDir.getChildren()) {
-      if (!child.isDirectory() && StdFileTypes.JAVA.equals(child.getFileType())) {
+      if (!child.isDirectory() && JavaFileType.INSTANCE == child.getFileType()) {
         FileBasedIndex.getInstance().requestReindex(child);
       }
     }

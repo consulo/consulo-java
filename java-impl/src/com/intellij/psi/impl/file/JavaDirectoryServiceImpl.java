@@ -19,14 +19,19 @@
  */
 package com.intellij.psi.impl.file;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.core.CoreJavaDirectoryService;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.fileTemplates.ui.CreateFromTemplateDialog;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.LanguageLevelUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -39,11 +44,6 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Properties;
 
 public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.JavaDirectoryServiceImpl");
@@ -136,7 +136,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
       properties.setProperty(entry.getKey(), entry.getValue());
     }
 
-    String ext = StdFileTypes.JAVA.getDefaultExtension();
+    String ext = JavaFileType.INSTANCE.getDefaultExtension();
     String fileName = name + "." + ext;
 
     PsiElement element;
@@ -173,7 +173,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
   public static void checkCreateClassOrInterface(@NotNull PsiDirectory directory, String name) throws IncorrectOperationException {
     PsiUtil.checkIsIdentifier(directory.getManager(), name);
 
-    String fileName = name + "." + StdFileTypes.JAVA.getDefaultExtension();
+    String fileName = name + "." + JavaFileType.INSTANCE.getDefaultExtension();
     directory.checkCreateFile(fileName);
 
     PsiNameHelper helper = JavaPsiFacade.getInstance(directory.getProject()).getNameHelper();

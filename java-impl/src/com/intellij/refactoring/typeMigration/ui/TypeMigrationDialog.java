@@ -15,13 +15,26 @@
  */
 package com.intellij.refactoring.typeMigration.ui;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.find.FindSettings;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.scopeChooser.ScopeChooserCombo;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -43,14 +56,6 @@ import com.intellij.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.ui.EditorComboBox;
 import com.intellij.util.VisibilityUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * @author anna
@@ -91,7 +96,7 @@ public class TypeMigrationDialog extends RefactoringDialog {
     final PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
     final Document document = documentManager.getDocument(myTypeCodeFragment);
     assert document != null;
-    myToTypeEditor = new EditorComboBox(document, project, StdFileTypes.JAVA);
+    myToTypeEditor = new EditorComboBox(document, project, JavaFileType.INSTANCE);
     final String[] types = getValidTypes(project, root);
     if (types != null) {
       myToTypeEditor.setHistory(types);
