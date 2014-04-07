@@ -20,11 +20,17 @@
  */
 package com.intellij.compiler.cache;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.classParsing.FieldInfo;
 import com.intellij.compiler.impl.ExitException;
 import com.intellij.compiler.impl.ExitStatus;
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -35,14 +41,14 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.*;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.PackageScope;
+import com.intellij.psi.search.PsiElementProcessor;
+import com.intellij.psi.search.PsiSearchHelper;
+import com.intellij.psi.search.SearchScope;
+import com.intellij.psi.search.TextOccurenceProcessor;
+import com.intellij.psi.search.UsageSearchContext;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ChangedConstantsDependencyProcessor {
   private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.make.ChangedConstantsDependencyProcessor");
@@ -314,7 +320,7 @@ public class ChangedConstantsDependencyProcessor {
         if (containingFile == null) {
           return null;
         }
-        return StdLanguages.JAVA.equals(containingFile.getLanguage())? psiClass : null;
+        return JavaLanguage.INSTANCE.equals(containingFile.getLanguage())? psiClass : null;
       }
       element = element.getParent();
     }

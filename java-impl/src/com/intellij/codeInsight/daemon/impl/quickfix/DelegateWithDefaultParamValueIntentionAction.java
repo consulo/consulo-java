@@ -15,6 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -22,7 +29,7 @@ import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.icons.AllIcons;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -36,12 +43,6 @@ import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * User: anna
@@ -51,7 +52,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
   public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
     final PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     if (parameter != null) {
-      if (!parameter.getLanguage().isKindOf(StdLanguages.JAVA)) return false;
+      if (!parameter.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
       final PsiElement declarationScope = parameter.getDeclarationScope();
       if (declarationScope instanceof PsiMethod) {
         final PsiMethod method = (PsiMethod)declarationScope;

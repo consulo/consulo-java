@@ -15,9 +15,18 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -31,11 +40,21 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.scope.processor.VariablesProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.*;
+import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.rename.RenameUtil;
 import com.intellij.refactoring.rename.ResolveSnapshotProvider;
-import com.intellij.refactoring.util.*;
+import com.intellij.refactoring.util.CanonicalTypes;
+import com.intellij.refactoring.util.ConflictsUtil;
+import com.intellij.refactoring.util.FieldConflictsResolver;
+import com.intellij.refactoring.util.MoveRenameUsageInfo;
+import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.refactoring.util.RefactoringUIUtil;
+import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.refactoring.util.usageInfo.DefaultConstructorImplicitUsageInfo;
 import com.intellij.refactoring.util.usageInfo.NoConstructorClassUsageInfo;
 import com.intellij.usageView.UsageInfo;
@@ -44,10 +63,6 @@ import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author Maxim.Medvedev
@@ -58,7 +73,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
   private static boolean isJavaUsage(UsageInfo info) {
     final PsiElement element = info.getElement();
     if (element == null) return false;
-    return element.getLanguage() == StdLanguages.JAVA;
+    return element.getLanguage() == JavaLanguage.INSTANCE;
   }
 
   public UsageInfo[] findUsages(ChangeInfo info) {
@@ -553,7 +568,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
 
 
   public boolean processPrimaryMethod(ChangeInfo changeInfo) {
-    if (!StdLanguages.JAVA.equals(changeInfo.getLanguage()) || !(changeInfo instanceof JavaChangeInfo)) return false;
+    if (!JavaLanguage.INSTANCE.equals(changeInfo.getLanguage()) || !(changeInfo instanceof JavaChangeInfo)) return false;
     final PsiElement element = changeInfo.getMethod();
     LOG.assertTrue(element instanceof PsiMethod);
     if (changeInfo.isGenerateDelegate()) {
@@ -970,7 +985,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
       try {
         PsiMethod prototype;
         final PsiMethod method = myChangeInfo.getMethod();
-        if (!StdLanguages.JAVA.equals(method.getLanguage())) return;
+        if (!JavaLanguage.INSTANCE.equals(method.getLanguage())) return;
         PsiManager manager = method.getManager();
         PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
         final CanonicalTypes.Type returnType = myChangeInfo.getNewReturnType();

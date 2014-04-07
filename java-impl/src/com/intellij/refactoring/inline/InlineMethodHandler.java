@@ -17,7 +17,7 @@
 package com.intellij.refactoring.inline;
 
 import com.intellij.codeInsight.TargetElementUtilBase;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
@@ -36,7 +36,7 @@ class InlineMethodHandler extends JavaInlineActionHandler {
   }
 
   public boolean canInlineElement(PsiElement element) {
-    return element instanceof PsiMethod && element.getNavigationElement() instanceof PsiMethod && element.getLanguage() == StdLanguages.JAVA;
+    return element instanceof PsiMethod && element.getNavigationElement() instanceof PsiMethod && element.getLanguage() == JavaLanguage.INSTANCE;
   }
 
   public void inlineElement(final Project project, Editor editor, PsiElement element) {

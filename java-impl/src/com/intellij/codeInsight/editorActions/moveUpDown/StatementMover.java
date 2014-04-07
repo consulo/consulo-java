@@ -15,9 +15,10 @@
  */
 package com.intellij.codeInsight.editorActions.moveUpDown;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -29,7 +30,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiDocumentManagerImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 class StatementMover extends LineMover {
   private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.editor.actions.moveUpDown.StatementMover");
@@ -209,7 +209,7 @@ class StatementMover extends LineMover {
   private boolean checkMovingInsideOutside(PsiFile file, final Editor editor, LineRange range, @NotNull final MoveInfo info, final boolean down) {
     final int offset = editor.getCaretModel().getOffset();
 
-    PsiElement elementAtOffset = file.getViewProvider().findElementAt(offset, StdLanguages.JAVA);
+    PsiElement elementAtOffset = file.getViewProvider().findElementAt(offset, JavaLanguage.INSTANCE);
     if (elementAtOffset == null) return false;
 
     PsiElement guard = elementAtOffset;
@@ -229,7 +229,7 @@ class StatementMover extends LineMover {
     // cannot move in/outside method/class/initializer/comment
     if (!calcInsertOffset(file, editor, info.toMove, info, down)) return false;
     int insertOffset = down ? getLineStartSafeOffset(editor.getDocument(), info.toMove2.endLine) : editor.getDocument().getLineStartOffset(info.toMove2.startLine);
-    PsiElement elementAtInsertOffset = file.getViewProvider().findElementAt(insertOffset, StdLanguages.JAVA);
+    PsiElement elementAtInsertOffset = file.getViewProvider().findElementAt(insertOffset, JavaLanguage.INSTANCE);
     PsiElement newGuard = elementAtInsertOffset;
     do {
       newGuard = PsiTreeUtil.getParentOfType(newGuard, PsiMethod.class, PsiClassInitializer.class, PsiClass.class, PsiComment.class);

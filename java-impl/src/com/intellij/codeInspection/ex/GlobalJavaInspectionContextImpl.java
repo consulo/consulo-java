@@ -44,7 +44,7 @@ import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.codeInspection.reference.RefMethod;
 import com.intellij.codeInspection.ui.InspectionToolPresentation;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
@@ -422,7 +422,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
       @Override
       public boolean execute(PsiReference reference) {
         AnalysisScope scope = context.getRefManager().getScope();
-        if (scope.contains(reference.getElement()) && reference.getElement().getLanguage() == StdLanguages.JAVA ||
+        if (scope.contains(reference.getElement()) && reference.getElement().getLanguage() == JavaLanguage.INSTANCE ||
             PsiTreeUtil.getParentOfType(reference.getElement(), PsiDocComment.class) != null) {
           return true;
         }

@@ -22,13 +22,16 @@
  */
 package com.intellij.psi.impl.source.tree.injected;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
 import com.intellij.lang.injection.ConcatenationAwareInjector;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
+import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.Extensions;
@@ -40,11 +43,12 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.PsiCommentImpl;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.*;
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlTag;
+import com.intellij.psi.xml.XmlText;
+import com.intellij.psi.xml.XmlTokenType;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
 
 public class MyTestInjector {
   private final PsiManager myPsiManager;
@@ -294,7 +298,7 @@ public class MyTestInjector {
           }
           PsiElement parent = host.getParent();
           if (parent instanceof PsiMethod && ((PsiMethod)parent).getName().equals("xml")) {
-            placesToInject.addPlace(StdLanguages.XML, new TextRange(2,host.getTextLength()-2), null,null);
+            placesToInject.addPlace(XMLLanguage.INSTANCE, new TextRange(2,host.getTextLength()-2), null,null);
             return;
           }
         }
@@ -308,7 +312,7 @@ public class MyTestInjector {
             placesToInject.addPlace(ql, textRangeToInject(host), null, null);
           }
           if ("xml".equals(variable.getName())) {
-            placesToInject.addPlace(StdLanguages.XML, textRangeToInject(host), null, null);
+            placesToInject.addPlace(XMLLanguage.INSTANCE, textRangeToInject(host), null, null);
           }
           if ("js".equals(variable.getName())) { // with prefix/suffix
             placesToInject.addPlace(js, textRangeToInject(host), "function foo(doc,window) {", "}");

@@ -15,12 +15,18 @@
  */
 package com.intellij.psi.impl.light;
 
-import com.intellij.lang.StdLanguages;
-import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.java.JavaLanguage;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.util.IncorrectOperationException;
 
 /**
  * @author Maxim.Medvedev
@@ -41,7 +47,7 @@ public class LightFieldBuilder extends LightVariableBuilder<LightFieldBuilder> i
   }
 
   public LightFieldBuilder(PsiManager manager, @NotNull String name, @NotNull PsiType type) {
-    super(manager, name, type, StdLanguages.JAVA);
+    super(manager, name, type, JavaLanguage.INSTANCE);
   }
 
   public LightFieldBuilder setContainingClass(PsiClass psiClass) {

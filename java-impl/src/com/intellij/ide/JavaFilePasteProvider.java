@@ -15,7 +15,12 @@
  */
 package com.intellij.ide;
 
-import com.intellij.lang.StdLanguages;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
@@ -30,11 +35,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 
 /**
  * @author yole
@@ -136,7 +136,7 @@ public class JavaFilePasteProvider implements PasteProvider {
         // ignore;
       }
       if (text != null) {
-        file = (PsiJavaFile) PsiFileFactory.getInstance(project).createFileFromText("A.java", StdLanguages.JAVA, text);
+        file = (PsiJavaFile) PsiFileFactory.getInstance(project).createFileFromText("A.java", JavaLanguage.INSTANCE, text);
       }
     }
     return file;

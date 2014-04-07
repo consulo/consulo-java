@@ -15,12 +15,28 @@
  */
 package com.intellij.codeInspection.dependencyViolation;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.ide.DataManager;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
@@ -32,15 +48,6 @@ import com.intellij.packageDependencies.ForwardDependenciesBuilder;
 import com.intellij.packageDependencies.ui.DependencyConfigurable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * User: anna
@@ -91,7 +98,7 @@ public class DependencyInspection extends BaseLocalInspectionTool {
   @Nullable
   public ProblemDescriptor[] checkFile(@NotNull final PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly) {
     if (file == null) return null;
-    if (file.getViewProvider().getPsi(StdLanguages.JAVA) == null) return null;
+    if (file.getViewProvider().getPsi(JavaLanguage.INSTANCE) == null) return null;
     final DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
     if (!validationManager.hasRules()) return null;
     if (validationManager.getApplicableRules(file).length == 0) return null;

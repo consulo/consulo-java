@@ -15,9 +15,13 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
+import gnu.trove.TIntArrayList;
+import gnu.trove.TIntProcedure;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -36,10 +40,6 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.MultiMap;
-import gnu.trove.TIntArrayList;
-import gnu.trove.TIntProcedure;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -91,7 +91,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     }
     else {
       PsiElement initializer =
-        ExpressionConverter.getExpression(data.getParameterInitializer().getExpression(), StdLanguages.JAVA, data.getProject());
+        ExpressionConverter.getExpression(data.getParameterInitializer().getExpression(), JavaLanguage.INSTANCE, data.getProject());
       assert initializer instanceof PsiExpression;
       if (initializer instanceof PsiNewExpression) {
         if (!PsiDiamondTypeUtil.canChangeContextForDiamond((PsiNewExpression)initializer, ((PsiNewExpression)initializer).getType())) {

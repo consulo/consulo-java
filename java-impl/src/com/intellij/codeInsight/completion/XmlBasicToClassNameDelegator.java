@@ -17,7 +17,7 @@ package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.Consumer;
@@ -33,7 +33,7 @@ public class XmlBasicToClassNameDelegator extends CompletionContributor {
     PsiFile file = position.getContainingFile();
     if (parameters.getCompletionType() != CompletionType.BASIC ||
         !JavaCompletionContributor.mayStartClassName(result) ||
-        !file.getLanguage().isKindOf(StdLanguages.XML)) {
+        !file.getLanguage().isKindOf(XMLLanguage.INSTANCE)) {
       return;
     }
 

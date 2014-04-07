@@ -15,9 +15,9 @@
  */
 package com.intellij.psi.impl.source.tree;
 
+import java.util.Map;
+
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
@@ -28,8 +28,6 @@ import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.util.IncorrectOperationException;
-
-import java.util.Map;
 
 public class JavaTreeCopyHandler implements TreeCopyHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.JavaTreeCopyHandler");
@@ -123,12 +121,13 @@ public class JavaTreeCopyHandler implements TreeCopyHandler {
   private static final Key<Boolean> ALREADY_ESCAPED = new Key<Boolean>("ALREADY_ESCAPED");
   private static final Key<Boolean> ESCAPEMENT_ENGAGED = new Key<Boolean>("ESCAPEMENT_ENGAGED");
   private static boolean conversionMayApply(ASTNode element) {
-    PsiElement psi = element.getPsi();
+    /*PsiElement psi = element.getPsi();
     if (psi == null || !psi.isValid()) return false;
 
     final PsiFile file = psi.getContainingFile();
     final Language baseLanguage = file.getViewProvider().getBaseLanguage();
-    return baseLanguage == StdLanguages.JSPX && file.getLanguage() != baseLanguage;
+    return baseLanguage == StdLanguages.JSPX && file.getLanguage() != baseLanguage;  */
+	return false;
   }
 
 

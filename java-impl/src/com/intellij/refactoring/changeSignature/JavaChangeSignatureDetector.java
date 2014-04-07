@@ -15,8 +15,10 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -27,8 +29,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * User: anna
@@ -51,7 +51,7 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
         return new RenameChangeInfo(variable, null) {
           @Override
           public Language getLanguage() {
-            return StdLanguages.JAVA;
+            return JavaLanguage.INSTANCE;
           }
         };
       }

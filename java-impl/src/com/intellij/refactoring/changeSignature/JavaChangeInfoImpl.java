@@ -20,18 +20,22 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 class JavaChangeInfoImpl implements JavaChangeInfo {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.JavaChangeInfoImpl");
@@ -322,7 +326,7 @@ class JavaChangeInfoImpl implements JavaChangeInfo {
   }
 
   public Language getLanguage() {
-    return StdLanguages.JAVA;
+    return JavaLanguage.INSTANCE;
   }
 
   public boolean isExceptionSetChanged() {

@@ -15,7 +15,15 @@
  */
 package com.intellij.refactoring.rename;
 
-import com.intellij.lang.StdLanguages;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -39,14 +47,6 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.rename.RenameJavaVariableProcessor");
@@ -134,7 +134,7 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
   }
 
   public void prepareRenaming(final PsiElement element, final String newName, final Map<PsiElement, String> allRenames) {
-    if (element instanceof PsiField && StdLanguages.JAVA.equals(element.getLanguage())) {
+    if (element instanceof PsiField && JavaLanguage.INSTANCE.equals(element.getLanguage())) {
       prepareFieldRenaming((PsiField)element, newName, allRenames);
     }
   }

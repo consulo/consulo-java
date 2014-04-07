@@ -20,17 +20,21 @@
  */
 package com.intellij.refactoring.inlineSuperClass;
 
+import java.util.Collection;
+
 import com.intellij.codeInsight.TargetElementUtilBase;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceList;
 import com.intellij.psi.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.inline.JavaInlineActionHandler;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-
-import java.util.Collection;
 
 public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler {
   public static final String REFACTORING_NAME = "Inline Super Class";
@@ -42,7 +46,7 @@ public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler 
 
   public boolean canInlineElement(PsiElement element) {
     if (!(element instanceof PsiClass)) return false;
-    if (element.getLanguage() != StdLanguages.JAVA) return false;
+    if (element.getLanguage() != JavaLanguage.INSTANCE) return false;
     Collection<PsiClass> inheritors = DirectClassInheritorsSearch.search((PsiClass)element).findAll();
     return inheritors.size() > 0;
   }

@@ -20,18 +20,22 @@
  */
 package com.intellij.ide.navigationToolbar;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.analysis.AnalysisScopeBundle;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.Collections;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.presentation.java.ClassPresentationUtil;
 
 public class JavaNavBarExtension implements NavBarModelExtension{
   public String getPresentableText(final Object object) {
@@ -65,7 +69,7 @@ public class JavaNavBarExtension implements NavBarModelExtension{
       if (file != null && (index.isInSourceContent(file) || index.isInLibraryClasses(file) || index.isInLibrarySource(file))) {
         if (psiElement instanceof PsiJavaFile) {
           final PsiJavaFile psiJavaFile = (PsiJavaFile)psiElement;
-          if (psiJavaFile.getViewProvider().getBaseLanguage() == StdLanguages.JAVA) {
+          if (psiJavaFile.getViewProvider().getBaseLanguage() == JavaLanguage.INSTANCE) {
             final PsiClass[] psiClasses = psiJavaFile.getClasses();
             if (psiClasses.length == 1) {
               return psiClasses[0];

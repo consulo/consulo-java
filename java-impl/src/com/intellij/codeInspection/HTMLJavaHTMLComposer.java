@@ -24,7 +24,7 @@ import com.intellij.codeInspection.lang.HTMLComposerExtension;
 import com.intellij.codeInspection.reference.RefClass;
 import com.intellij.codeInspection.reference.RefMethod;
 import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.Key;
 
 public abstract class HTMLJavaHTMLComposer implements HTMLComposerExtension<HTMLJavaHTMLComposer> {
@@ -63,6 +63,6 @@ public abstract class HTMLJavaHTMLComposer implements HTMLComposerExtension<HTML
 
   @Override
   public Language getLanguage() {
-    return StdLanguages.JAVA;
+    return JavaLanguage.INSTANCE;
   }
 }

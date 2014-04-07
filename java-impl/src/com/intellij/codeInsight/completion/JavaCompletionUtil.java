@@ -15,7 +15,25 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.*;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+
+import gnu.trove.THashSet;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.AutoPopupController;
+import com.intellij.codeInsight.CodeInsightSettings;
+import com.intellij.codeInsight.CodeInsightUtilBase;
+import com.intellij.codeInsight.ExpectedTypeInfo;
+import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.completion.scope.CompletionElement;
 import com.intellij.codeInsight.completion.scope.JavaCompletionProcessor;
@@ -23,7 +41,6 @@ import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.daemon.impl.quickfix.StaticImportMethodFix;
 import com.intellij.codeInsight.guess.GuessManager;
 import com.intellij.codeInsight.lookup.*;
-import com.intellij.lang.StdLanguages;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -39,7 +56,11 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiJavaPatterns;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.*;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.impl.FakePsiElement;
 import com.intellij.psi.impl.light.LightVariableBuilder;
@@ -59,14 +80,6 @@ import com.intellij.util.NullableFunction;
 import com.intellij.util.PairConsumer;
 import com.intellij.util.PairFunction;
 import com.intellij.util.containers.ContainerUtil;
-import gnu.trove.THashSet;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class JavaCompletionUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.JavaCompletionUtil");
@@ -903,9 +916,9 @@ public class JavaCompletionUtil {
   }
 
   public static String escapeXmlIfNeeded(InsertionContext context, String generics) {
-    if (context.getFile().getViewProvider().getBaseLanguage() == StdLanguages.JSPX) {
+    /*if (context.getFile().getViewProvider().getBaseLanguage() == StdLanguages.JSPX) {
       return StringUtil.escapeXml(generics);
-    }
+    }    */
     return generics;
   }
 }

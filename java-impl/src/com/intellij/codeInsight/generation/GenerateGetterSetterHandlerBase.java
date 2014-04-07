@@ -15,8 +15,15 @@
  */
 package com.intellij.codeInsight.generation;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -27,13 +34,6 @@ import com.intellij.psi.PsiField;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHandlerBase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.GenerateGetterSetterHandlerBase");
@@ -43,7 +43,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
       @Override
       @NotNull
       public Collection<EncapsulatableClassMember> fun(PsiClass s) {
-        if (s.getLanguage() != StdLanguages.JAVA) return Collections.emptyList();
+        if (s.getLanguage() != JavaLanguage.INSTANCE) return Collections.emptyList();
         final List<EncapsulatableClassMember> result = new ArrayList<EncapsulatableClassMember>();
         for (PsiField field : s.getFields()) {
           if (!(field instanceof PsiEnumConstant)) {

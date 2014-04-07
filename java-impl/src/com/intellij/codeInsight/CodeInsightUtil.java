@@ -15,11 +15,19 @@
  */
 package com.intellij.codeInsight;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.AllClassesGetter;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.completion.PrefixMatcher;
 import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -44,18 +52,14 @@ import com.intellij.util.Consumer;
 import com.intellij.util.FilteredQuery;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class CodeInsightUtil {
   @Nullable
   public static PsiExpression findExpressionInRange(PsiFile file, int startOffset, int endOffset) {
-    if (!file.getViewProvider().getLanguages().contains(StdLanguages.JAVA)) return null;
+    if (!file.getViewProvider().getLanguages().contains(JavaLanguage.INSTANCE)) return null;
     PsiExpression expression = findElementInRange(file, startOffset, endOffset, PsiExpression.class);
     if (expression == null && findStatementsInRange(file, startOffset, endOffset).length == 0) {
-      PsiElement element2 = file.getViewProvider().findElementAt(endOffset - 1, StdLanguages.JAVA);
+      PsiElement element2 = file.getViewProvider().findElementAt(endOffset - 1, JavaLanguage.INSTANCE);
       if (element2 instanceof PsiJavaToken) {
         final PsiJavaToken token = (PsiJavaToken)element2;
         final IElementType tokenType = token.getTokenType();
@@ -81,7 +85,7 @@ public class CodeInsightUtil {
   }
 
   public static <T extends PsiElement> T findElementInRange(PsiFile file, int startOffset, int endOffset, Class<T> klass) {
-    return CodeInsightUtilBase.findElementInRange(file, startOffset, endOffset, klass, StdLanguages.JAVA);
+    return CodeInsightUtilBase.findElementInRange(file, startOffset, endOffset, klass, JavaLanguage.INSTANCE);
   }
 
   @NotNull
@@ -168,10 +172,10 @@ public class CodeInsightUtil {
   public static Language findJavaOrLikeLanguage(@NotNull final PsiFile file) {
     final Set<Language> languages = file.getViewProvider().getLanguages();
     for (final Language language : languages) {
-      if (language == StdLanguages.JAVA) return language;
+      if (language == JavaLanguage.INSTANCE) return language;
     }
     for (final Language language : languages) {
-      if (language.isKindOf(StdLanguages.JAVA)) return language;
+      if (language.isKindOf(JavaLanguage.INSTANCE)) return language;
     }
     return null;
   }

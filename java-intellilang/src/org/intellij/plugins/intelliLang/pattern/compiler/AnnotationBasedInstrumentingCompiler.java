@@ -31,7 +31,7 @@ import org.jetbrains.asm4.ClassReader;
 import org.jetbrains.asm4.ClassWriter;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.PsiClassWriter;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.ClassInstrumentingCompiler;
 import com.intellij.openapi.compiler.CompileContext;
@@ -95,7 +95,7 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
           // wow, this is a sweet trick... ;)
           searchHelper.processAllFilesWithWord(StringUtil.getShortName(name), scope, new Processor<PsiFile>() {
             public boolean process(PsiFile psifile) {
-              if (StdLanguages.JAVA == psifile.getLanguage() && psifile.getVirtualFile() != null && psifile instanceof PsiJavaFile) {
+              if (JavaLanguage.INSTANCE == psifile.getLanguage() && psifile.getVirtualFile() != null && psifile instanceof PsiJavaFile) {
                 addClassFiles((PsiJavaFile)psifile, result, project);
               }
               return true;

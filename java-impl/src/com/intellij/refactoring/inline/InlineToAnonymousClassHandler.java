@@ -15,8 +15,12 @@
  */
 package com.intellij.refactoring.inline;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.TargetElementUtilBase;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProgressManager;
@@ -34,10 +38,6 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @author yole
@@ -54,7 +54,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler {
   }
 
   public boolean canInlineElement(final PsiElement element) {
-    if (element.getLanguage() != StdLanguages.JAVA) return false;
+    if (element.getLanguage() != JavaLanguage.INSTANCE) return false;
     if (element instanceof PsiMethod) {
       PsiMethod method = (PsiMethod)element;
       if (method.isConstructor() && !InlineMethodHandler.isChainingConstructor(method)) {

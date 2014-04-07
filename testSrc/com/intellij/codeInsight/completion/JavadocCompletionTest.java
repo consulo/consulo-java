@@ -4,7 +4,6 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
-import com.intellij.lang.StdLanguages;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceBase;
@@ -206,7 +205,7 @@ public class JavadocCompletionTest extends LightFixtureCompletionTestCase {
 
   public void testCustomReferenceProvider() throws Exception {
     PsiReferenceRegistrarImpl registrar =
-      (PsiReferenceRegistrarImpl) ReferenceProvidersRegistry.getInstance().getRegistrar(StdLanguages.JAVA);
+      (PsiReferenceRegistrarImpl) ReferenceProvidersRegistry.getInstance().getRegistrar(JavaLanguage.INSTANCE);
     PsiReferenceProvider provider = new PsiReferenceProvider() {
       @Override
       @NotNull

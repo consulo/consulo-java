@@ -15,9 +15,16 @@
  */
 package com.siyeh.ig.jdk;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.LocalSearchScope;
@@ -34,13 +41,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AutoUnboxingInspection extends BaseInspection {
 
@@ -341,7 +341,7 @@ public class AutoUnboxingInspection extends BaseInspection {
   @Override
   public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
     PsiFile psiFile = holder.getFile();
-    if (psiFile.getLanguage() != StdLanguages.JAVA || !PsiUtil.isLanguageLevel5OrHigher(psiFile)) {
+    if (psiFile.getLanguage() != JavaLanguage.INSTANCE || !PsiUtil.isLanguageLevel5OrHigher(psiFile)) {
       return new PsiElementVisitor() {
       };
     }

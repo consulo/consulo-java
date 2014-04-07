@@ -16,12 +16,19 @@
 package com.intellij.refactoring.inline;
 
 import com.intellij.codeInsight.TargetElementUtilBase;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiCompiledElement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiEnumConstant;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtil;
@@ -36,7 +43,7 @@ public class InlineConstantFieldHandler extends JavaInlineActionHandler {
   private static final String REFACTORING_NAME = RefactoringBundle.message("inline.field.title");
 
   public boolean canInlineElement(PsiElement element) {
-    return element instanceof PsiField && StdLanguages.JAVA.equals(element.getLanguage());
+    return element instanceof PsiField && JavaLanguage.INSTANCE.equals(element.getLanguage());
   }
 
   public void inlineElement(Project project, Editor editor, PsiElement element) {
