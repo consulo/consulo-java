@@ -15,6 +15,10 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import java.util.HashMap;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.StackFrameContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
@@ -31,213 +35,266 @@ import com.intellij.debugger.ui.tree.NodeDescriptorFactory;
 import com.intellij.debugger.ui.tree.UserExpressionDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.*;
-import org.jetbrains.annotations.Nullable;
+import com.sun.jdi.ArrayReference;
+import com.sun.jdi.Field;
+import com.sun.jdi.Method;
+import com.sun.jdi.ObjectReference;
+import com.sun.jdi.ReferenceType;
+import com.sun.jdi.Value;
 
-import java.util.HashMap;
+public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.watch.NodeDescriptorFactoryImpl");
+	private DescriptorTree myCurrentHistoryTree = new DescriptorTree(true);
 
-public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.watch.NodeDescriptorFactoryImpl");
-  private DescriptorTree myCurrentHistoryTree = new DescriptorTree(true);
+	private DescriptorTreeSearcher myDescriptorSearcher;
+	private DescriptorTreeSearcher myDisplayDescriptorSearcher;
 
-  private DescriptorTreeSearcher myDescriptorSearcher;
-  private DescriptorTreeSearcher myDisplayDescriptorSearcher;
+	protected final Project myProject;
 
-  protected final Project      myProject;
+	public NodeDescriptorFactoryImpl(Project project)
+	{
+		myProject = project;
+		myDescriptorSearcher = new DescriptorTreeSearcher(new MarkedDescriptorTree());
+		myDisplayDescriptorSearcher = new DisplayDescriptorTreeSearcher(new MarkedDescriptorTree());
+	}
 
-  public NodeDescriptorFactoryImpl(Project project) {
-    myProject = project;
-    myDescriptorSearcher = new DescriptorTreeSearcher(new MarkedDescriptorTree());
-    myDisplayDescriptorSearcher = new DisplayDescriptorTreeSearcher(new MarkedDescriptorTree());
-  }
+	public void dispose()
+	{
+		myCurrentHistoryTree.clear();
+		myDescriptorSearcher.clear();
+		myDisplayDescriptorSearcher.clear();
+	}
 
-  public void dispose() {
-    myCurrentHistoryTree.clear();
-    myDescriptorSearcher.clear();
-    myDisplayDescriptorSearcher.clear();
-  }
+	private <T extends NodeDescriptor> T getDescriptor(NodeDescriptor parent, DescriptorData<T> key)
+	{
+		final T descriptor = key.createDescriptor(myProject);
 
-  private <T extends NodeDescriptor> T getDescriptor(NodeDescriptor parent, DescriptorData<T> key) {
-    final T descriptor = key.createDescriptor(myProject);
+		final T oldDescriptor = findDescriptor(parent, descriptor, key);
 
-    final T oldDescriptor = findDescriptor(parent, descriptor, key);
+		if(oldDescriptor != null && oldDescriptor.getClass() == descriptor.getClass())
+		{
+			descriptor.setAncestor(oldDescriptor);
+		}
+		else
+		{
+			T displayDescriptor = findDisplayDescriptor(parent, descriptor, key.getDisplayKey());
+			if(displayDescriptor != null)
+			{
+				descriptor.displayAs(displayDescriptor);
+			}
+		}
 
-    if(oldDescriptor != null && oldDescriptor.getClass() == descriptor.getClass()) {
-      descriptor.setAncestor(oldDescriptor);
-    }
-    else {
-      T displayDescriptor = findDisplayDescriptor(parent, descriptor, key.getDisplayKey());
-      if(displayDescriptor != null) {
-        descriptor.displayAs(displayDescriptor);
-      }
-    }
+		myCurrentHistoryTree.addChild(parent, descriptor);
 
-    myCurrentHistoryTree.addChild(parent, descriptor);
+		return descriptor;
+	}
 
-    return descriptor;
-  }
+	@Nullable
+	protected <T extends NodeDescriptor> T findDisplayDescriptor(NodeDescriptor parent, T descriptor, DisplayKey<T> key)
+	{
+		return myDisplayDescriptorSearcher.search(parent, descriptor, key);
+	}
 
-  @Nullable
-  protected <T extends NodeDescriptor>T findDisplayDescriptor(NodeDescriptor parent, T descriptor, DisplayKey<T> key) {
-    return myDisplayDescriptorSearcher.search(parent, descriptor, key);
-  }
+	@Nullable
+	protected <T extends NodeDescriptor> T findDescriptor(NodeDescriptor parent, T descriptor, DescriptorData<T> key)
+	{
+		return myDescriptorSearcher.search(parent, descriptor, key);
+	}
 
-  @Nullable
-  protected <T extends NodeDescriptor> T findDescriptor(NodeDescriptor parent, T descriptor, DescriptorData<T> key) {
-    return myDescriptorSearcher.search(parent, descriptor, key);
-  }
+	public DescriptorTree getCurrentHistoryTree()
+	{
+		return myCurrentHistoryTree;
+	}
 
-  public DescriptorTree getCurrentHistoryTree() {
-    return myCurrentHistoryTree;
-  }
+	public void deriveHistoryTree(DescriptorTree tree, final StackFrameContext context)
+	{
 
-  public void deriveHistoryTree(DescriptorTree tree, final StackFrameContext context) {
+		final MarkedDescriptorTree descriptorTree = new MarkedDescriptorTree();
+		final MarkedDescriptorTree displayDescriptorTree = new MarkedDescriptorTree();
 
-    final MarkedDescriptorTree descriptorTree = new MarkedDescriptorTree();
-    final MarkedDescriptorTree displayDescriptorTree = new MarkedDescriptorTree();
+		tree.dfst(new DescriptorTree.DFSTWalker()
+		{
+			@Override
+			public void visit(NodeDescriptor parent, NodeDescriptor child)
+			{
+				final DescriptorData<NodeDescriptor> descriptorData = DescriptorData.getDescriptorData(child);
+				descriptorTree.addChild(parent, child, descriptorData);
+				displayDescriptorTree.addChild(parent, child, descriptorData.getDisplayKey());
+			}
+		});
 
-    tree.dfst(new DescriptorTree.DFSTWalker() {
-      public void visit(NodeDescriptor parent, NodeDescriptor child) {
-        final DescriptorData<NodeDescriptor> descriptorData = DescriptorData.getDescriptorData(child);
-        descriptorTree.addChild(parent, child, descriptorData);
-        displayDescriptorTree.addChild(parent, child, descriptorData.getDisplayKey());
-      }
-    });
+		myDescriptorSearcher = new DescriptorTreeSearcher(descriptorTree);
+		myDisplayDescriptorSearcher = new DisplayDescriptorTreeSearcher(displayDescriptorTree);
 
-    myDescriptorSearcher = new DescriptorTreeSearcher(descriptorTree);
-    myDisplayDescriptorSearcher = new DisplayDescriptorTreeSearcher(displayDescriptorTree);
+		myCurrentHistoryTree = createDescriptorTree(context, tree);
+	}
 
-    myCurrentHistoryTree = createDescriptorTree(context, tree);
-  }
+	private static DescriptorTree createDescriptorTree(final StackFrameContext context, final DescriptorTree fromTree)
+	{
+		int frameCount = -1;
+		int frameIndex = -1;
+		final StackFrameProxy frameProxy = context.getFrameProxy();
+		if(frameProxy != null)
+		{
+			try
+			{
+				final ThreadReferenceProxy threadReferenceProxy = frameProxy.threadProxy();
+				frameCount = threadReferenceProxy.frameCount();
+				frameIndex = frameProxy.getFrameIndex();
+			}
+			catch(EvaluateException e)
+			{
+				// ignored
+			}
+		}
+		final boolean isInitial = !fromTree.frameIdEquals(frameCount, frameIndex);
+		DescriptorTree descriptorTree = new DescriptorTree(isInitial);
+		descriptorTree.setFrameId(frameCount, frameIndex);
+		return descriptorTree;
+	}
 
-  private static DescriptorTree createDescriptorTree(final StackFrameContext context, final DescriptorTree fromTree) {
-    int frameCount = -1;
-    int frameIndex = -1;
-    final StackFrameProxy frameProxy = context.getFrameProxy();
-    if (frameProxy != null) {
-      try {
-        final ThreadReferenceProxy threadReferenceProxy = frameProxy.threadProxy();
-        frameCount = threadReferenceProxy.frameCount();
-        frameIndex = frameProxy.getFrameIndex();
-       }
-       catch (EvaluateException e) {
-         // ignored
-       }
-    }
-    final boolean isInitial = !fromTree.frameIdEquals(frameCount, frameIndex);
-    DescriptorTree descriptorTree = new DescriptorTree(isInitial);
-    descriptorTree.setFrameId(frameCount, frameIndex);
-    return descriptorTree;
-  }
+	@Override
+	public ArrayElementDescriptorImpl getArrayItemDescriptor(NodeDescriptor parent, ArrayReference array, int index)
+	{
+		return getDescriptor(parent, new ArrayItemData(array, index));
+	}
 
-  public ArrayElementDescriptorImpl getArrayItemDescriptor(NodeDescriptor parent, ArrayReference array, int index) {
-    return getDescriptor(parent, new ArrayItemData(array, index));
-  }
+	@Override
+	public FieldDescriptorImpl getFieldDescriptor(NodeDescriptor parent, ObjectReference objRef, Field field)
+	{
+		final DescriptorData<FieldDescriptorImpl> descriptorData;
+		if(objRef == null)
+		{
+			if(!field.isStatic())
+			{
+				LOG.error("Object reference is null for non-static field: " + field);
+			}
+			descriptorData = new StaticFieldData(field);
+		}
+		else
+		{
+			descriptorData = new FieldData(objRef, field);
+		}
+		return getDescriptor(parent, descriptorData);
+	}
 
-  public FieldDescriptorImpl getFieldDescriptor(NodeDescriptor parent, ObjectReference objRef, Field field) {
-    final DescriptorData<FieldDescriptorImpl> descriptorData;
-    if (objRef == null ) {
-      if (!field.isStatic()) {
-        LOG.error("Object reference is null for non-static field: " + field);
-      }
-      descriptorData = new StaticFieldData(field);
-    }
-    else {
-      descriptorData = new FieldData(objRef, field);
-    }
-    return getDescriptor(parent, descriptorData);
-  }
+	@Override
+	public LocalVariableDescriptorImpl getLocalVariableDescriptor(NodeDescriptor parent, LocalVariableProxy local)
+	{
+		return getDescriptor(parent, new LocalData((LocalVariableProxyImpl) local));
+	}
 
-  public LocalVariableDescriptorImpl getLocalVariableDescriptor(NodeDescriptor parent, LocalVariableProxy local) {
-    return getDescriptor(parent, new LocalData((LocalVariableProxyImpl)local));
-  }
+	public ArgumentValueDescriptorImpl getArgumentValueDescriptor(NodeDescriptor parent, int index, Value value, final String name)
+	{
+		return getDescriptor(parent, new ArgValueData(index, value, name));
+	}
 
-  public ArgumentValueDescriptorImpl getArgumentValueDescriptor(NodeDescriptor parent, int index, Value value) {
-    return getDescriptor(parent, new ArgValueData(index, value));
-  }
+	public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, @NotNull StackFrameProxyImpl frameProxy)
+	{
+		return getDescriptor(parent, new StackFrameData(frameProxy));
+	}
 
-  public StackFrameDescriptorImpl getStackFrameDescriptor(NodeDescriptorImpl parent, StackFrameProxyImpl frameProxy) {
-    return getDescriptor(parent, new StackFrameData(frameProxy));
-  }
+	public StaticDescriptorImpl getStaticDescriptor(NodeDescriptorImpl parent, ReferenceType refType)
+	{//static is unique
+		return getDescriptor(parent, new StaticData(refType));
+	}
 
-  public StaticDescriptorImpl getStaticDescriptor(NodeDescriptorImpl parent, ReferenceType refType) {//static is unique
-    return getDescriptor(parent, new StaticData(refType));
-  }
+	public ValueDescriptorImpl getThisDescriptor(NodeDescriptorImpl parent, Value value)
+	{
+		return getDescriptor(parent, new ThisData());
+	}
 
-  public ValueDescriptorImpl getThisDescriptor(NodeDescriptorImpl parent, Value value) {
-    return getDescriptor(parent, new ThisData());
-  }
+	public ValueDescriptorImpl getMethodReturnValueDescriptor(NodeDescriptorImpl parent, Method method, Value value)
+	{
+		return getDescriptor(parent, new MethodReturnValueData(method, value));
+	}
 
-  public ValueDescriptorImpl getMethodReturnValueDescriptor(NodeDescriptorImpl parent, Method method, Value value) {
-    return getDescriptor(parent, new MethodReturnValueData(method, value));
-  }
+	public ValueDescriptorImpl getThrownExceptionObjectDescriptor(NodeDescriptorImpl parent, ObjectReference exceptionObject)
+	{
+		return getDescriptor(parent, new ThrownExceptionValueData(exceptionObject));
+	}
 
-  public ValueDescriptorImpl getThrownExceptionObjectDescriptor(NodeDescriptorImpl parent, ObjectReference exceptionObject) {
-    return getDescriptor(parent, new ThrownExceptionValueData(exceptionObject));
-  }
+	public ThreadDescriptorImpl getThreadDescriptor(NodeDescriptorImpl parent, ThreadReferenceProxyImpl thread)
+	{
+		return getDescriptor(parent, new ThreadData(thread));
+	}
 
-  public ThreadDescriptorImpl getThreadDescriptor(NodeDescriptorImpl parent, ThreadReferenceProxyImpl thread) {
-    return getDescriptor(parent, new ThreadData(thread));
-  }
+	public ThreadGroupDescriptorImpl getThreadGroupDescriptor(NodeDescriptorImpl parent, ThreadGroupReferenceProxyImpl group)
+	{
+		return getDescriptor(parent, new ThreadGroupData(group));
+	}
 
-  public ThreadGroupDescriptorImpl getThreadGroupDescriptor(NodeDescriptorImpl parent, ThreadGroupReferenceProxyImpl group) {
-    return getDescriptor(parent, new ThreadGroupData(group));
-  }
+	@Override
+	public UserExpressionDescriptor getUserExpressionDescriptor(NodeDescriptor parent, final DescriptorData<UserExpressionDescriptor> data)
+	{
+		return getDescriptor(parent, data);
+	}
 
-  public UserExpressionDescriptor getUserExpressionDescriptor(NodeDescriptor parent, final DescriptorData<UserExpressionDescriptor> data) {
-    return getDescriptor(parent, data);
-  }
+	public WatchItemDescriptor getWatchItemDescriptor(NodeDescriptor parent, TextWithImports text, @Nullable Value value)
+	{
+		return getDescriptor(parent, new WatchItemData(text, value));
+	}
 
-  public WatchItemDescriptor getWatchItemDescriptor(NodeDescriptor parent, TextWithImports text, @Nullable Value value){
-    return getDescriptor(parent, new WatchItemData(text, value));
-  }
-  
-  private static class DescriptorTreeSearcher {
-    private final MarkedDescriptorTree myDescriportTree;
+	private static class DescriptorTreeSearcher
+	{
+		private final MarkedDescriptorTree myDescriportTree;
 
-    private final HashMap<NodeDescriptor, NodeDescriptor> mySearchedDescriptors = new HashMap<NodeDescriptor, NodeDescriptor>();
+		private final HashMap<NodeDescriptor, NodeDescriptor> mySearchedDescriptors = new HashMap<NodeDescriptor, NodeDescriptor>();
 
-    public DescriptorTreeSearcher(MarkedDescriptorTree descriportTree) {
-      myDescriportTree = descriportTree;
-    }
+		public DescriptorTreeSearcher(MarkedDescriptorTree descriportTree)
+		{
+			myDescriportTree = descriportTree;
+		}
 
-    @Nullable
-    public <T extends NodeDescriptor> T search(NodeDescriptor parent, T descriptor, DescriptorKey<T> key) {
-      final T result;
-      if(parent == null) {
-        result = myDescriportTree.getChild(null, key);
-      }
-      else {
-        final NodeDescriptor parentDescriptor = getSearched(parent);
-        result = parentDescriptor != null ? myDescriportTree.getChild(parentDescriptor, key) : null;
-      }
-      if(result != null) {
-        mySearchedDescriptors.put(descriptor, result);
-      }
-      return result;
-    }
+		@Nullable
+		public <T extends NodeDescriptor> T search(NodeDescriptor parent, T descriptor, DescriptorKey<T> key)
+		{
+			final T result;
+			if(parent == null)
+			{
+				result = myDescriportTree.getChild(null, key);
+			}
+			else
+			{
+				final NodeDescriptor parentDescriptor = getSearched(parent);
+				result = parentDescriptor != null ? myDescriportTree.getChild(parentDescriptor, key) : null;
+			}
+			if(result != null)
+			{
+				mySearchedDescriptors.put(descriptor, result);
+			}
+			return result;
+		}
 
-    protected NodeDescriptor getSearched(NodeDescriptor parent) {
-      return mySearchedDescriptors.get(parent);
-    }
+		protected NodeDescriptor getSearched(NodeDescriptor parent)
+		{
+			return mySearchedDescriptors.get(parent);
+		}
 
-    public void clear() {
-      mySearchedDescriptors.clear();
-      myDescriportTree.clear();
-    }
-  }
+		public void clear()
+		{
+			mySearchedDescriptors.clear();
+			myDescriportTree.clear();
+		}
+	}
 
-  private class DisplayDescriptorTreeSearcher extends DescriptorTreeSearcher {
-    public DisplayDescriptorTreeSearcher(MarkedDescriptorTree descriportTree) {
-      super(descriportTree);
-    }
+	private class DisplayDescriptorTreeSearcher extends DescriptorTreeSearcher
+	{
+		public DisplayDescriptorTreeSearcher(MarkedDescriptorTree descriportTree)
+		{
+			super(descriportTree);
+		}
 
-    protected NodeDescriptor getSearched(NodeDescriptor parent) {
-      NodeDescriptor searched = super.getSearched(parent);
-      if(searched == null) {
-        return myDescriptorSearcher.getSearched(parent);
-      }
-      return searched;
-    }
-  }
+		@Override
+		protected NodeDescriptor getSearched(NodeDescriptor parent)
+		{
+			NodeDescriptor searched = super.getSearched(parent);
+			if(searched == null)
+			{
+				return myDescriptorSearcher.getSearched(parent);
+			}
+			return searched;
+		}
+	}
 }

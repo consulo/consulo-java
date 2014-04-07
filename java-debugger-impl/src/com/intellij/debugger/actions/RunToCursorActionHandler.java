@@ -27,59 +27,70 @@ import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.xdebugger.impl.actions.DebuggerActionHandler;
 
-public class RunToCursorActionHandler extends DebuggerActionHandler {
-  private final boolean myIgnoreBreakpoints;
+public class RunToCursorActionHandler extends DebuggerActionHandler
+{
+	private final boolean myIgnoreBreakpoints;
 
-  public RunToCursorActionHandler() {
-    this(false);
-  }
+	public RunToCursorActionHandler()
+	{
+		this(false);
+	}
 
-  protected RunToCursorActionHandler(boolean ignoreBreakpoints) {
-    myIgnoreBreakpoints = ignoreBreakpoints;
-  }
+	protected RunToCursorActionHandler(boolean ignoreBreakpoints)
+	{
+		myIgnoreBreakpoints = ignoreBreakpoints;
+	}
 
-  @Override
-  public boolean isEnabled(final @NotNull Project project, final AnActionEvent event) {
-    Editor editor = event.getData(PlatformDataKeys.EDITOR);
+	@Override
+	public boolean isEnabled(final @NotNull Project project, final AnActionEvent event)
+	{
+		Editor editor = event.getData(CommonDataKeys.EDITOR);
+		if(editor == null)
+		{
+			return false;
+		}
 
-    if (editor == null) {
-      return false;
-    }
+		PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+		if(file == null)
+		{
+			return false;
+		}
 
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
-    if (file == null) {
-      return false;
-    }
+		if(DebuggerUtils.isSupportJVMDebugging(file))
+		{
+			DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(project).getContext().getDebuggerSession();
+			return debuggerSession != null && debuggerSession.isPaused();
+		}
 
-    if (DebuggerUtils.supportsJVMDebugging(file)) {
-      DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(project).getContext().getDebuggerSession();
-      return debuggerSession != null && debuggerSession.isPaused();
-    }
+		return false;
+	}
 
-    return false;
-  }
 
-  @Override
-  public void perform(@NotNull final Project project, final AnActionEvent event) {
-    Editor editor = event.getData(PlatformDataKeys.EDITOR);
-    if (editor == null) {
-      return;
-    }
-    DebuggerContextImpl context = DebuggerManagerEx.getInstanceEx(project).getContext();
-    DebugProcessImpl debugProcess = context.getDebugProcess();
-    if (debugProcess == null) {
-      return;
-    }
-    final DebuggerSession session = context.getDebuggerSession();
-    if (session != null) {
-      session.runToCursor(editor.getDocument(), editor.getCaretModel().getLogicalPosition().line, myIgnoreBreakpoints);
-    }
-  }
+	@Override
+	public void perform(@NotNull final Project project, final AnActionEvent event)
+	{
+		Editor editor = event.getData(CommonDataKeys.EDITOR);
+		if(editor == null)
+		{
+			return;
+		}
+		DebuggerContextImpl context = DebuggerManagerEx.getInstanceEx(project).getContext();
+		DebugProcessImpl debugProcess = context.getDebugProcess();
+		if(debugProcess == null)
+		{
+			return;
+		}
+		final DebuggerSession session = context.getDebuggerSession();
+		if(session != null)
+		{
+			session.runToCursor(editor.getDocument(), editor.getCaretModel().getLogicalPosition().line, myIgnoreBreakpoints);
+		}
+	}
 }

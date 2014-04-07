@@ -20,97 +20,108 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import com.intellij.debugger.DebuggerBundle;
-import com.intellij.ide.util.ClassFilter;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.util.ui.DialogUtil;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ExceptionBreakpointPropertiesPanel extends BreakpointPropertiesPanel {
-  private JCheckBox myNotifyCaughtCheckBox;
-  private JCheckBox myNotifyUncaughtCheckBox;
-  private ExceptionBreakpoint myExceptionBreakpoint;
+import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
-  public ExceptionBreakpointPropertiesPanel(Project project, boolean compact) {
-    super(project, ExceptionBreakpoint.CATEGORY, compact);
-  }
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
+import com.intellij.debugger.DebuggerBundle;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.util.ui.DialogUtil;
+import com.intellij.xdebugger.breakpoints.XBreakpoint;
+import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
 
-  protected ClassFilter createClassConditionFilter() {
-    return null;
-  }
+public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>>
+{
+	private JCheckBox myNotifyCaughtCheckBox;
+	private JCheckBox myNotifyUncaughtCheckBox;
+	//private ExceptionBreakpoint myExceptionBreakpoint;
 
-  protected JComponent createSpecialBox() {
+	//public ExceptionBreakpointPropertiesPanel(Project project, boolean compact) {
+	//  super(project, ExceptionBreakpoint.CATEGORY, compact);
+	//}
 
-    myNotifyCaughtCheckBox = new JCheckBox(DebuggerBundle.message("label.exception.breakpoint.properties.panel.caught.exception"));
-    myNotifyUncaughtCheckBox = new JCheckBox(DebuggerBundle.message("label.exception.breakpoint.properties.panel.uncaught.exception"));
-    DialogUtil.registerMnemonic(myNotifyCaughtCheckBox);
-    DialogUtil.registerMnemonic(myNotifyUncaughtCheckBox);
+	//protected ClassFilter createClassConditionFilter() {
+	//  return null;
+	//}
+
+	@NotNull
+	@Override
+	public JComponent getComponent()
+	{
+		myNotifyCaughtCheckBox = new JCheckBox(DebuggerBundle.message("label.exception.breakpoint.properties.panel.caught.exception"));
+		myNotifyUncaughtCheckBox = new JCheckBox(DebuggerBundle.message("label.exception.breakpoint.properties.panel.uncaught.exception"));
+		DialogUtil.registerMnemonic(myNotifyCaughtCheckBox);
+		DialogUtil.registerMnemonic(myNotifyUncaughtCheckBox);
 
 
-    Box notificationsBox = Box.createVerticalBox();
-    JPanel _panel = new JPanel(new BorderLayout());
-    _panel.add(myNotifyCaughtCheckBox, BorderLayout.NORTH);
-    notificationsBox.add(_panel);
-    _panel = new JPanel(new BorderLayout());
-    _panel.add(myNotifyUncaughtCheckBox, BorderLayout.NORTH);
-    notificationsBox.add(_panel);
+		Box notificationsBox = Box.createVerticalBox();
+		JPanel _panel = new JPanel(new BorderLayout());
+		_panel.add(myNotifyCaughtCheckBox, BorderLayout.NORTH);
+		notificationsBox.add(_panel);
+		_panel = new JPanel(new BorderLayout());
+		_panel.add(myNotifyUncaughtCheckBox, BorderLayout.NORTH);
+		notificationsBox.add(_panel);
 
-    _panel = new JPanel(new BorderLayout());
-    JPanel _panel0 = new JPanel(new BorderLayout());
-    _panel0.add(notificationsBox, BorderLayout.CENTER);
-    _panel0.add(Box.createHorizontalStrut(3), BorderLayout.WEST);
-    _panel0.add(Box.createHorizontalStrut(3), BorderLayout.EAST);
-    _panel.add(_panel0, BorderLayout.NORTH);
-    _panel.setBorder(IdeBorderFactory.createTitledBorder(
-      DebuggerBundle.message("label.exception.breakpoint.properties.panel.group.notifications"), true));
+		_panel = new JPanel(new BorderLayout());
+		JPanel _panel0 = new JPanel(new BorderLayout());
+		_panel0.add(notificationsBox, BorderLayout.CENTER);
+		_panel0.add(Box.createHorizontalStrut(3), BorderLayout.WEST);
+		_panel0.add(Box.createHorizontalStrut(3), BorderLayout.EAST);
+		_panel.add(_panel0, BorderLayout.NORTH);
+		_panel.setBorder(IdeBorderFactory.createTitledBorder(DebuggerBundle.message("label.exception.breakpoint.properties.panel.group" +
+				".notifications"), true));
 
-    ActionListener listener = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        if (!myNotifyCaughtCheckBox.isSelected() && !myNotifyUncaughtCheckBox.isSelected()) {
-          Object source = e.getSource();
-          JCheckBox toCheck = null;
-          if (myNotifyCaughtCheckBox.equals(source)) {
-            toCheck = myNotifyUncaughtCheckBox;
-          }
-          else if (myNotifyUncaughtCheckBox.equals(source)) {
-            toCheck = myNotifyCaughtCheckBox;
-          }
-          if (toCheck != null) {
-            toCheck.setSelected(true);
-          }
-        }
-      }
-    };
-    myNotifyCaughtCheckBox.addActionListener(listener);
-    myNotifyUncaughtCheckBox.addActionListener(listener);
-    return _panel;
-  }
+		ActionListener listener = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if(!myNotifyCaughtCheckBox.isSelected() && !myNotifyUncaughtCheckBox.isSelected())
+				{
+					Object source = e.getSource();
+					JCheckBox toCheck = null;
+					if(myNotifyCaughtCheckBox.equals(source))
+					{
+						toCheck = myNotifyUncaughtCheckBox;
+					}
+					else if(myNotifyUncaughtCheckBox.equals(source))
+					{
+						toCheck = myNotifyCaughtCheckBox;
+					}
+					if(toCheck != null)
+					{
+						toCheck.setSelected(true);
+					}
+				}
+			}
+		};
+		myNotifyCaughtCheckBox.addActionListener(listener);
+		myNotifyUncaughtCheckBox.addActionListener(listener);
+		return _panel;
+	}
 
-  protected void updateCheckboxes() {
-    super.updateCheckboxes();
-    myPassCountCheckbox.setEnabled(!(myExceptionBreakpoint instanceof AnyExceptionBreakpoint));
-  }
+	//protected void updateCheckboxes() {
+	//  super.updateCheckboxes();
+	//  myPassCountCheckbox.setEnabled(!(myExceptionBreakpoint instanceof AnyExceptionBreakpoint));
+	//}
 
-  public void initFrom(Breakpoint breakpoint, boolean moreOptionsVisible) {
-    ExceptionBreakpoint exceptionBreakpoint = (ExceptionBreakpoint)breakpoint;
-    myExceptionBreakpoint = exceptionBreakpoint;
-    super.initFrom(breakpoint, moreOptionsVisible);
+	@Override
+	public void loadFrom(@NotNull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	{
+		myNotifyCaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_CAUGHT);
+		myNotifyUncaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_UNCAUGHT);
+	}
 
-    myNotifyCaughtCheckBox.setSelected(exceptionBreakpoint.NOTIFY_CAUGHT);
-    myNotifyUncaughtCheckBox.setSelected(exceptionBreakpoint.NOTIFY_UNCAUGHT);
-  }
-
-  public void saveTo(Breakpoint breakpoint, @NotNull Runnable afterUpdate) {
-    ExceptionBreakpoint exceptionBreakpoint = (ExceptionBreakpoint)breakpoint;
-    exceptionBreakpoint.NOTIFY_CAUGHT = myNotifyCaughtCheckBox.isSelected();
-    exceptionBreakpoint.NOTIFY_UNCAUGHT = myNotifyUncaughtCheckBox.isSelected();
-
-    super.saveTo(breakpoint, afterUpdate);
-  }
+	@Override
+	public void saveTo(@NotNull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	{
+		breakpoint.getProperties().NOTIFY_CAUGHT = myNotifyCaughtCheckBox.isSelected();
+		breakpoint.getProperties().NOTIFY_UNCAUGHT = myNotifyUncaughtCheckBox.isSelected();
+	}
 }

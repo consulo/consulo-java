@@ -30,59 +30,71 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 
-public class ToggleBreakpointEnabledAction extends AnAction {
+public class ToggleBreakpointEnabledAction extends AnAction
+{
 
-  @Override
-  public void actionPerformed(AnActionEvent e) {
-    final Project project = e.getData(CommonDataKeys.PROJECT);
-    Breakpoint breakpoint = findBreakpoint(project);
-    if (breakpoint != null) {
-      final BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager();
-      breakpointManager.setBreakpointEnabled(breakpoint, !breakpoint.ENABLED);
-    }
-  }
+	@Override
+	public void actionPerformed(AnActionEvent e)
+	{
+		final Project project = e.getData(CommonDataKeys.PROJECT);
+		Breakpoint breakpoint = findBreakpoint(project);
+		if(breakpoint != null)
+		{
+			final BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager();
+			breakpointManager.setBreakpointEnabled(breakpoint, !breakpoint.isEnabled());
+		}
+	}
 
-  @Nullable
-  private static Breakpoint findBreakpoint(final Project project) {
-    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-    if(editor == null) {
-      return null;
-    }
-    BreakpointManager manager = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager();
-    int offset = editor.getCaretModel().getOffset();
-    return manager.findBreakpoint(editor.getDocument(), offset, null);
-  }
+	@Nullable
+	private static Breakpoint findBreakpoint(final Project project)
+	{
+		Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+		if(editor == null)
+		{
+			return null;
+		}
+		BreakpointManager manager = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager();
+		int offset = editor.getCaretModel().getOffset();
+		return manager.findBreakpoint(editor.getDocument(), offset, null);
+	}
 
-  @Override
-  public void update(AnActionEvent event){
-    final Presentation presentation = event.getPresentation();
-    Project project = event.getData(CommonDataKeys.PROJECT);
-    if (project == null) {
-      presentation.setEnabled(false);
-      return;
-    }
+	@Override
+	public void update(AnActionEvent event)
+	{
+		final Presentation presentation = event.getPresentation();
+		Project project = event.getData(CommonDataKeys.PROJECT);
+		if(project == null)
+		{
+			presentation.setEnabled(false);
+			return;
+		}
 
-    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-    if (editor == null) {
-      presentation.setEnabled(false);
-      return;
-    }
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
-    if (file == null) {
-      presentation.setEnabled(false);
-      return;
-    }
+		Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+		if(editor == null)
+		{
+			presentation.setEnabled(false);
+			return;
+		}
+		PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+		if(file == null)
+		{
+			presentation.setEnabled(false);
+			return;
+		}
 
-    if (DebuggerUtils.supportsJVMDebugging(file)) {
-      Breakpoint breakpoint = findBreakpoint(project);
-      if (breakpoint == null) {
-        presentation.setEnabled(false);
-        return;
-      }
-      presentation.setEnabled(true);
-    }
-    else {
-      presentation.setEnabled(false);
-    }
-  }
+		if(DebuggerUtils.isSupportJVMDebugging(file))
+		{
+			Breakpoint breakpoint = findBreakpoint(project);
+			if(breakpoint == null)
+			{
+				presentation.setEnabled(false);
+				return;
+			}
+			presentation.setEnabled(true);
+		}
+		else
+		{
+			presentation.setEnabled(false);
+		}
+	}
 }

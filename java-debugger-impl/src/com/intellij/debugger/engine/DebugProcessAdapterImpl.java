@@ -23,58 +23,79 @@ import com.sun.jdi.ThreadReference;
 /**
  * @author lex
  */
-public class DebugProcessAdapterImpl implements DebugProcessListener {
-  //executed in manager thread
-  public final void paused(SuspendContext suspendContext) {
-    paused(((SuspendContextImpl)suspendContext));
-  }
+public class DebugProcessAdapterImpl implements DebugProcessListener
+{
+	//executed in manager thread
+	@Override
+	public final void paused(SuspendContext suspendContext)
+	{
+		paused(((SuspendContextImpl) suspendContext));
+	}
 
-  //executed in manager thread
-  public final void resumed(SuspendContext suspendContext) {
-    resumed(((SuspendContextImpl)suspendContext));
-  }
+	//executed in manager thread
+	@Override
+	public final void resumed(SuspendContext suspendContext)
+	{
+		resumed(((SuspendContextImpl) suspendContext));
+	}
 
-  //executed in manager thread
-  public final void processDetached(DebugProcess process, boolean closedByUser) {
-    processDetached(((DebugProcessImpl)process), closedByUser);
-  }
+	//executed in manager thread
+	@Override
+	public final void processDetached(DebugProcess process, boolean closedByUser)
+	{
+		processDetached(((DebugProcessImpl) process), closedByUser);
+	}
 
-  //executed in manager thread
-  public final void processAttached(DebugProcess process) {
-    processAttached(((DebugProcessImpl)process));
-  }
+	//executed in manager thread
+	@Override
+	public final void processAttached(DebugProcess process)
+	{
+		processAttached(((DebugProcessImpl) process));
+	}
 
-  //executed in manager thread
-  public void connectorIsReady() {
-  }
+	//executed in manager thread
+	@Override
+	public void connectorIsReady()
+	{
+	}
 
-  public void paused(SuspendContextImpl suspendContext) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
+	public void paused(SuspendContextImpl suspendContext)
+	{
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
 
-  //executed in manager thread
-  public void resumed(SuspendContextImpl suspendContext) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
+	//executed in manager thread
+	public void resumed(SuspendContextImpl suspendContext)
+	{
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
 
-  //executed in manager thread
-  public void processDetached(DebugProcessImpl process, boolean closedByUser) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
+	//executed in manager thread
+	public void processDetached(DebugProcessImpl process, boolean closedByUser)
+	{
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
 
-  //executed in manager thread
-  public void processAttached(DebugProcessImpl process) {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
+	//executed in manager thread
+	public void processAttached(DebugProcessImpl process)
+	{
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
 
-  //executed in manager thread
-  public void threadStarted(DebugProcess proc, ThreadReference thread) {
-  }
+	//executed in manager thread
+	@Override
+	public void threadStarted(DebugProcess proc, ThreadReference thread)
+	{
+	}
 
-  //executed in manager thread
-  public void threadStopped(DebugProcess proc, ThreadReference thread) {
-  }
+	//executed in manager thread
+	@Override
+	public void threadStopped(DebugProcess proc, ThreadReference thread)
+	{
+	}
 
-  public void attachException(RunProfileState state, ExecutionException exception, RemoteConnection remoteConnection) {
-  }
+	@Override
+	public void attachException(RunProfileState state, ExecutionException exception, RemoteConnection remoteConnection)
+	{
+	}
 }

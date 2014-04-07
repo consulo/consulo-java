@@ -15,6 +15,17 @@
  */
 package com.intellij.debugger.ui.impl;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.actions.DebuggerActions;
 import com.intellij.debugger.impl.DebuggerContextImpl;
@@ -22,60 +33,155 @@ import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.ui.impl.watch.DebuggerTree;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPopupMenu;
+import com.intellij.openapi.actionSystem.CommonShortcuts;
+import com.intellij.openapi.actionSystem.CustomShortcutSet;
+import com.intellij.openapi.actionSystem.DataProvider;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.AppUIUtil;
 import com.intellij.ui.ScrollPaneFactory;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.util.SystemProperties;
+import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.evaluation.EvaluationMode;
+import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
+import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.impl.frame.XVariablesViewBase;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
+public class VariablesPanel extends DebuggerTreePanel implements DataProvider
+{
+	@NonNls
+	private static final String HELP_ID = "debugging.debugFrame";
 
-public class VariablesPanel extends DebuggerTreePanel implements DataProvider{
+	private static final String TREE = "tree";
+	private static final String X_TREE = "xTree";
+	private final JPanel myCards;
+	private final MyXVariablesView myXTree;
 
-  @NonNls private static final String HELP_ID = "debugging.debugFrame";
+	public VariablesPanel(Project project, DebuggerStateManager stateManager, Disposable parent)
+	{
+		super(project, stateManager);
 
-  public VariablesPanel(Project project, DebuggerStateManager stateManager, Disposable parent) {
-    super(project, stateManager);
-    setBorder(null);
+		setBorder(null);
 
+		final FrameVariablesTree frameTree = getFrameTree();
 
-    final FrameVariablesTree frameTree = getFrameTree();
+		myCards = new JPanel(new CardLayout());
+		myCards.add(frameTree, TREE);
 
-    add(ScrollPaneFactory.createScrollPane(frameTree), BorderLayout.CENTER);
-    registerDisposable(DebuggerAction.installEditAction(frameTree, DebuggerActions.EDIT_NODE_SOURCE));
+		myXTree = new MyXVariablesView(project);
+		registerDisposable(myXTree);
+		myCards.add(myXTree.getTree(), X_TREE);
 
-    overrideShortcut(frameTree, DebuggerActions.COPY_VALUE, CommonShortcuts.getCopy());
-    overrideShortcut(frameTree, DebuggerActions.SET_VALUE, new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0)));
+		JScrollPane pane = ScrollPaneFactory.createScrollPane(myCards);
+		pane.getVerticalScrollBar().setUnitIncrement(10);
+		add(pane, BorderLayout.CENTER);
+		registerDisposable(DebuggerAction.installEditAction(frameTree, DebuggerActions.EDIT_NODE_SOURCE));
 
-    new ValueNodeDnD(myTree, parent);
-  }
+		overrideShortcut(frameTree, DebuggerActions.COPY_VALUE, CommonShortcuts.getCopy());
+		overrideShortcut(frameTree, DebuggerActions.SET_VALUE, new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0)));
 
-  protected DebuggerTree createTreeView() {
-    return new FrameVariablesTree(getProject());
-  }
+		new ValueNodeDnD(myTree, parent);
+	}
 
-  protected void changeEvent(DebuggerContextImpl newContext, int event) {
-    if (event != DebuggerSession.EVENT_THREADS_REFRESH) {
-      super.changeEvent(newContext, event);
-    }
-  }
+	@Override
+	protected DebuggerTree createTreeView()
+	{
+		return new FrameVariablesTree(getProject(), SystemProperties.getBooleanProperty("java.debugger.xTree", true) ? this : null);
+	}
 
-  protected ActionPopupMenu createPopupMenu() {
-    ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(DebuggerActions.FRAME_PANEL_POPUP);
-    return ActionManager.getInstance().createActionPopupMenu(DebuggerActions.FRAME_PANEL_POPUP, group);
-  }
+	@Override
+	protected void changeEvent(DebuggerContextImpl newContext, int event)
+	{
+		if(event != DebuggerSession.EVENT_THREADS_REFRESH)
+		{
+			super.changeEvent(newContext, event);
+		}
+	}
 
-  public Object getData(String dataId) {
-    if (PlatformDataKeys.HELP_ID.is(dataId)) {
-      return HELP_ID;
-    }
-    return super.getData(dataId);
-  }
+	@Override
+	protected ActionPopupMenu createPopupMenu()
+	{
+		ActionGroup group = (ActionGroup) ActionManager.getInstance().getAction(DebuggerActions.FRAME_PANEL_POPUP);
+		return ActionManager.getInstance().createActionPopupMenu(DebuggerActions.FRAME_PANEL_POPUP, group);
+	}
 
+	@Override
+	public Object getData(String dataId)
+	{
+		if(PlatformDataKeys.HELP_ID.is(dataId))
+		{
+			return HELP_ID;
+		}
+		return super.getData(dataId);
+	}
 
-  public FrameVariablesTree getFrameTree() {
-    return (FrameVariablesTree) getTree();
-  }
+	public FrameVariablesTree getFrameTree()
+	{
+		return (FrameVariablesTree) getTree();
+	}
 
+	public void stackChanged(@Nullable final XStackFrame xStackFrame)
+	{
+		AppUIUtil.invokeOnEdt(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				myXTree.stackChanged(xStackFrame);
+				((CardLayout) (myCards.getLayout())).show(myCards, xStackFrame == null ? TREE : X_TREE);
+			}
+		});
+	}
+
+	private static final class MyXVariablesView extends XVariablesViewBase
+	{
+		private XStackFrame myCurrentXStackFrame;
+
+		public MyXVariablesView(@NotNull Project project)
+		{
+			super(project, new XDebuggerEditorsProvider()
+			{
+				@NotNull
+				@Override
+				public FileType getFileType()
+				{
+					throw new UnsupportedOperationException();
+				}
+
+				@NotNull
+				@Override
+				public Document createDocument(
+						@NotNull Project project,
+						@NotNull String text,
+						@Nullable XSourcePosition sourcePosition,
+						@NotNull EvaluationMode mode)
+				{
+					throw new UnsupportedOperationException();
+				}
+			}, null);
+		}
+
+		public void stackChanged(@Nullable XStackFrame stackFrame)
+		{
+			if(myCurrentXStackFrame != null)
+			{
+				saveCurrentTreeState(stackFrame);
+			}
+
+			myCurrentXStackFrame = stackFrame;
+			if(stackFrame == null)
+			{
+				getTree().setSourcePosition(null);
+			}
+			else
+			{
+				buildTreeAndRestoreState(stackFrame);
+			}
+		}
+	}
 }

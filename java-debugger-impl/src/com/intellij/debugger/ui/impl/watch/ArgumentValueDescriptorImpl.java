@@ -15,6 +15,10 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.SourcePosition;
@@ -30,62 +34,217 @@ import com.intellij.util.IncorrectOperationException;
 import com.sun.jdi.PrimitiveValue;
 import com.sun.jdi.Value;
 
-public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl{
-  private final int myIndex;
-  private final Value myValue;
-  private String myName;
-  private boolean myParameterNameCalcutated;
+public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
+{
+	private final int myIndex;
+	private final Value myValue;
+	private String myName;
+	private boolean myParameterNameCalcutated;
+	private final String myDefaultName;
 
-  public ArgumentValueDescriptorImpl(Project project, int index, Value value) {
-    super(project);
-    myIndex = index;
-    myValue = value;
-    myName = "arg" + String.valueOf(index);
-    setLvalue(true);
-  }
+	public ArgumentValueDescriptorImpl(Project project, int index, Value value, String name)
+	{
+		super(project);
+		myIndex = index;
+		myValue = value;
+		myDefaultName = name != null ? name : "arg" + String.valueOf(index);
+		myName = myDefaultName;
+		setLvalue(true);
+	}
 
-  public boolean isPrimitive() {
-    return myValue instanceof PrimitiveValue;
-  }
+	public boolean isPrimitive()
+	{
+		return myValue instanceof PrimitiveValue;
+	}
 
-  public Value calcValue(final EvaluationContextImpl evaluationContext) throws EvaluateException {
-    ApplicationManager.getApplication().runReadAction(new Runnable() {
-      public void run() {
-        final SourcePosition position = ContextUtil.getSourcePosition(evaluationContext);
-        if (position != null) {
-          final PsiMethod method = PsiTreeUtil.getParentOfType(position.getElementAt(), PsiMethod.class);
-          if (method != null) {
-            final PsiParameterList params = method.getParameterList();
-            if (myIndex < params.getParametersCount()) {
-              final PsiParameter param = params.getParameters()[myIndex];
-              myName = param.getName();
-              myParameterNameCalcutated = true;
-            }
-          }
-        }
-      }
-    });
-    return myValue;
-  }
+	public Value calcValue(final EvaluationContextImpl evaluationContext) throws EvaluateException
+	{
+		ApplicationManager.getApplication().runReadAction(new Runnable()
+		{
+			public void run()
+			{
+				final SourcePosition position = ContextUtil.getSourcePosition(evaluationContext);
+				if(position != null)
+				{
+					final PsiMethod method = PsiTreeUtil.getParentOfType(position.getElementAt(), PsiMethod.class);
+					if(method != null)
+					{
+						final PsiParameterList params = method.getParameterList();
+						if(myIndex < params.getParametersCount())
+						{
+							final PsiParameter param = params.getParameters()[myIndex];
+							myName = param.getName();
+							myParameterNameCalcutated = true;
+						}
+						else
+						{
+							// treat myIndex as a variable slot index
+							final PsiCodeBlock body = method.getBody();
+							if(body != null)
+							{
+								final StringBuilder nameBuilder = new StringBuilder();
+								try
+								{
+									final int startSlot = params.getParametersCount() + (method.hasModifierProperty(PsiModifier.STATIC) ? 0 : 1);
+									body.accept(new LocalVariableNameFinder(startSlot, nameBuilder));
+								}
+								finally
+								{
+									myName = nameBuilder.length() > 0 ? myDefaultName + ": " + nameBuilder.toString() : myDefaultName;
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+		return myValue;
+	}
 
-  public String getName() {
-    return myName;
-  }
+	public String getName()
+	{
+		return myName;
+	}
 
-  public String calcValueName() {
-    return getName();
-  }
+	public String calcValueName()
+	{
+		return getName();
+	}
 
-  public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException {
-    if (!myParameterNameCalcutated) {
-      return null;
-    }
-    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
-    try {
-      return elementFactory.createExpressionFromText(getName(), PositionUtil.getContextElement(context));
-    }
-    catch (IncorrectOperationException e) {
-      throw new EvaluateException(DebuggerBundle.message("error.invalid.local.variable.name", getName()), e);
-    }
-  }
+	public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException
+	{
+		if(!myParameterNameCalcutated)
+		{
+			return null;
+		}
+		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
+		try
+		{
+			return elementFactory.createExpressionFromText(getName(), PositionUtil.getContextElement(context));
+		}
+		catch(IncorrectOperationException e)
+		{
+			throw new EvaluateException(DebuggerBundle.message("error.invalid.local.variable.name", getName()), e);
+		}
+	}
+
+	private class LocalVariableNameFinder extends JavaRecursiveElementVisitor
+	{
+		private final int myStartSlot;
+		private final StringBuilder myNameBuilder;
+		private final Set<String> myVisitedNames = new HashSet<String>();
+		private int myCurrentSlotIndex;
+		private final Stack<Integer> myIndexStack;
+
+		public LocalVariableNameFinder(int startSlot, StringBuilder nameBuilder)
+		{
+			myStartSlot = startSlot;
+			myNameBuilder = nameBuilder;
+			myCurrentSlotIndex = myStartSlot;
+			myIndexStack = new Stack<Integer>();
+		}
+
+		@Override
+		public void visitLocalVariable(PsiLocalVariable variable)
+		{
+			appendName(variable.getName());
+			final PsiType varType = variable.getType();
+			myCurrentSlotIndex += (varType == PsiType.DOUBLE || varType == PsiType.LONG) ? 2 : 1;
+		}
+
+		public void visitSynchronizedStatement(PsiSynchronizedStatement statement)
+		{
+			appendName("<monitor>");
+			myCurrentSlotIndex++;
+			super.visitSynchronizedStatement(statement);
+		}
+
+		private void appendName(String varName)
+		{
+			if(myCurrentSlotIndex == myIndex && myVisitedNames.add(varName))
+			{
+				if(myNameBuilder.length() != 0)
+				{
+					myNameBuilder.append(" | ");
+				}
+				myNameBuilder.append(varName);
+			}
+		}
+
+		@Override
+		public void visitCodeBlock(PsiCodeBlock block)
+		{
+			myIndexStack.push(myCurrentSlotIndex);
+			try
+			{
+				super.visitCodeBlock(block);
+			}
+			finally
+			{
+				myCurrentSlotIndex = myIndexStack.pop();
+			}
+		}
+
+		@Override
+		public void visitForStatement(PsiForStatement statement)
+		{
+			myIndexStack.push(myCurrentSlotIndex);
+			try
+			{
+				super.visitForStatement(statement);
+			}
+			finally
+			{
+				myCurrentSlotIndex = myIndexStack.pop();
+			}
+		}
+
+		@Override
+		public void visitForeachStatement(PsiForeachStatement statement)
+		{
+			myIndexStack.push(myCurrentSlotIndex);
+			try
+			{
+				super.visitForeachStatement(statement);
+			}
+			finally
+			{
+				myCurrentSlotIndex = myIndexStack.pop();
+			}
+		}
+
+		@Override
+		public void visitCatchSection(PsiCatchSection section)
+		{
+			myIndexStack.push(myCurrentSlotIndex);
+			try
+			{
+				super.visitCatchSection(section);
+			}
+			finally
+			{
+				myCurrentSlotIndex = myIndexStack.pop();
+			}
+		}
+
+		@Override
+		public void visitResourceList(PsiResourceList resourceList)
+		{
+			myIndexStack.push(myCurrentSlotIndex);
+			try
+			{
+				super.visitResourceList(resourceList);
+			}
+			finally
+			{
+				myCurrentSlotIndex = myIndexStack.pop();
+			}
+		}
+
+		@Override
+		public void visitClass(PsiClass aClass)
+		{
+			// skip local and anonymous classes
+		}
+	}
 }

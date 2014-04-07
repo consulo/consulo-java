@@ -200,7 +200,8 @@ public class PositionHighlighter
 
 		public abstract void remove();
 
-		public static ExecutionPointDescription createExecutionPoint(final Editor editor, final int lineIndex)
+		public static ExecutionPointDescription createExecutionPoint(
+				final Editor editor, final int lineIndex)
 		{
 			return new ExecutionPointDescription(editor, lineIndex);
 		}
@@ -302,8 +303,8 @@ public class PositionHighlighter
 					if(((BreakpointWithHighlighter) breakpoint).isVisible() && breakpoint.isValid())
 					{
 						breakpoint.reload();
-						final SourcePosition sourcePosition = ((BreakpointWithHighlighter) breakpoint).getSourcePosition();
-						if(sourcePosition == null || sourcePosition.getLine() != lineIndex)
+						int bptLine = ((BreakpointWithHighlighter) breakpoint).getLineIndex();
+						if(bptLine < 0 || bptLine != lineIndex)
 						{
 							eventsOutOfLine.add(eventDescriptor);
 						}
@@ -546,7 +547,7 @@ public class PositionHighlighter
 			for(Pair<Breakpoint, Event> eventDescriptor : myEventsOutOfLine)
 			{
 				Breakpoint breakpoint = eventDescriptor.getFirst();
-				AnAction viewBreakpointsAction = new ViewBreakpointsAction(breakpoint.getDisplayName(), breakpoint);
+				AnAction viewBreakpointsAction = new ViewBreakpointsAction(breakpoint.getDisplayName(), breakpoint.getXBreakpoint());
 				group.add(viewBreakpointsAction);
 			}
 
@@ -564,7 +565,7 @@ public class PositionHighlighter
 					if(myEventsOutOfLine.size() == 1)
 					{
 						Breakpoint breakpoint = myEventsOutOfLine.get(0).getFirst();
-						breakpoint.ENABLED = !breakpoint.ENABLED;
+						breakpoint.setEnabled(!breakpoint.isEnabled());
 						DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager().fireBreakpointChanged(breakpoint);
 					}
 				}

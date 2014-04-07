@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
@@ -36,12 +37,11 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
@@ -125,7 +125,7 @@ public abstract class DebuggerUtils
 						toStringMethod = findMethod(refType, "toString", "()Ljava/lang/String;");
 						debugProcess.putUserData(TO_STRING_METHOD_KEY, toStringMethod);
 					}
-					catch(Exception e)
+					catch(Exception ignored)
 					{
 						throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.cannot.evaluate.tostring",
 								objRef.referenceType().name()));
@@ -147,13 +147,13 @@ public abstract class DebuggerUtils
 			}
 			throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.unsupported.expression.type"));
 		}
-		catch(ObjectCollectedException e)
+		catch(ObjectCollectedException ignored)
 		{
 			throw EvaluateExceptionUtil.OBJECT_WAS_COLLECTED;
 		}
 	}
 
-	public static final int MAX_DISPLAY_LABEL_LENGTH = 1024/*kb*/ * 1024 /*bytes*/ / 2; // 1 Mb string
+	public static final int MAX_DISPLAY_LABEL_LENGTH = 1024 * 5;
 
 	public static String convertToPresentationString(String str)
 	{
@@ -341,6 +341,11 @@ public abstract class DebuggerUtils
 		return getSuperTypeInt(subType, superType);
 	}
 
+	private static boolean typeEquals(Type type, String typeName)
+	{
+		return type.name().replace('$', '.').equals(typeName.replace('$', '.'));
+	}
+
 	private static Type getSuperTypeInt(Type subType, String superType)
 	{
 		Type result;
@@ -349,7 +354,7 @@ public abstract class DebuggerUtils
 			return null;
 		}
 
-		if(subType.name().equals(superType))
+		if(typeEquals(subType, superType))
 		{
 			return subType;
 		}
@@ -363,10 +368,10 @@ public abstract class DebuggerUtils
 			}
 
 			List ifaces = ((ClassType) subType).allInterfaces();
-			for(Iterator iterator = ifaces.iterator(); iterator.hasNext(); )
+			for(Object iface : ifaces)
 			{
-				InterfaceType interfaceType = (InterfaceType) iterator.next();
-				if(interfaceType.name().equals(superType))
+				InterfaceType interfaceType = (InterfaceType) iface;
+				if(typeEquals(interfaceType, superType))
 				{
 					return interfaceType;
 				}
@@ -377,9 +382,9 @@ public abstract class DebuggerUtils
 		if(subType instanceof InterfaceType)
 		{
 			List ifaces = ((InterfaceType) subType).superinterfaces();
-			for(Iterator iterator = ifaces.iterator(); iterator.hasNext(); )
+			for(Object iface : ifaces)
 			{
-				InterfaceType interfaceType = (InterfaceType) iterator.next();
+				InterfaceType interfaceType = (InterfaceType) iface;
 				result = getSuperType(interfaceType, superType);
 				if(result != null)
 				{
@@ -437,7 +442,8 @@ public abstract class DebuggerUtils
 		final JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(psiManager.getProject());
 		if(getArrayClass(className) != null)
 		{
-			return javaPsiFacade.getElementFactory().getArrayClass(LanguageLevel.HIGHEST);
+			return javaPsiFacade.getElementFactory().getArrayClass(LanguageLevelProjectExtension.getInstance(psiManager.getProject())
+					.getLanguageLevel());
 		}
 		if(project.isDefault())
 		{
@@ -489,7 +495,10 @@ public abstract class DebuggerUtils
 			}
 			final PsiClass aClass = JavaPsiFacade.getInstance(psiManager.getProject()).findClass(className.replace('$', '.'),
 					GlobalSearchScope.allScope(project));
-			return JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory().createType(aClass);
+			if(aClass != null)
+			{
+				return JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory().createType(aClass);
+			}
 		}
 		catch(IncorrectOperationException e)
 		{
@@ -506,9 +515,8 @@ public abstract class DebuggerUtils
 		{
 			throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.empty.code.fragment"));
 		}
-		for(int i = 0; i < children.length; i++)
+		for(PsiElement child : children)
 		{
-			PsiElement child = children[i];
 			if(child instanceof PsiErrorElement)
 			{
 				throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.invalid.expression", child.getText()));
@@ -700,15 +708,10 @@ public abstract class DebuggerUtils
 
 	public abstract PsiClass chooseClassDialog(String title, Project project);
 
-	public static boolean supportsJVMDebugging(PsiFile file)
-	{
-		if(file.getFileType() instanceof FileTypeWithJvmDebugging)
-		{
-			return true;
-		}
 
-		final JVMDebugProvider[] providers = Extensions.getExtensions(JVMDebugProvider.EP_NAME);
-		for(JVMDebugProvider provider : providers)
+	public static boolean isSupportJVMDebugging(@NotNull PsiFile file)
+	{
+		for(JVMDebugProvider provider : JVMDebugProvider.EP_NAME.getExtensions())
 		{
 			if(provider.supportsJVMDebugging(file))
 			{

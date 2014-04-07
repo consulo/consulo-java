@@ -15,28 +15,31 @@
  */
 package com.intellij.debugger.engine.jdi;
 
+import java.util.List;
+
 import com.intellij.debugger.engine.DebugProcess;
 import com.sun.jdi.ReferenceType;
-
-import java.util.List;
 
 /**
  * @author lex
  */
-public interface VirtualMachineProxy {
-  List<ReferenceType> allClasses();
+public interface VirtualMachineProxy
+{
+	List<ReferenceType> allClasses();
 
-  boolean versionHigher(String version);
+	boolean canGetBytecodes();
 
-  boolean canWatchFieldModification();
+	boolean versionHigher(String version);
 
-  boolean canWatchFieldAccess();
+	boolean canWatchFieldModification();
 
-  boolean canInvokeMethods();
+	boolean canWatchFieldAccess();
 
-  DebugProcess getDebugProcess();
+	boolean canInvokeMethods();
 
-  List<ReferenceType> nestedTypes(ReferenceType refType);
+	DebugProcess getDebugProcess();
 
-  List<ReferenceType> classesByName(String s);
+	List<ReferenceType> nestedTypes(ReferenceType refType);
+
+	List<ReferenceType> classesByName(String s);
 }

@@ -20,6 +20,19 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.JComponent;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreePath;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -60,15 +73,6 @@ import com.intellij.ui.TreeSpeedSearch;
 import com.sun.jdi.*;
 import com.sun.jdi.event.Event;
 import com.sun.jdi.event.ExceptionEvent;
-
-import javax.swing.*;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.util.*;
-import java.util.List;
 
 public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvider {
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.watch.DebuggerTree");
@@ -425,7 +429,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
       super(stackNode);
     }
 
-    public final void threadAction() {
+    public void threadAction() {
       try {
         final StackFrameDescriptorImpl stackDescriptor = (StackFrameDescriptorImpl)getNode().getDescriptor();
         final StackFrameProxyImpl frame = stackDescriptor.getFrameProxy();

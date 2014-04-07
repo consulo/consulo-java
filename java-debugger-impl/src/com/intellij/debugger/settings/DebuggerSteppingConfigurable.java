@@ -15,111 +15,145 @@
  */
 package com.intellij.debugger.settings;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.ui.JavaDebuggerSupport;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.classFilter.ClassFilterEditor;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public class DebuggerSteppingConfigurable implements SearchableConfigurable, Configurable.NoScroll
+{
+	private JCheckBox myCbStepInfoFiltersEnabled;
+	private JCheckBox myCbSkipSyntheticMethods;
+	private JCheckBox myCbSkipConstructors;
+	private JCheckBox myCbSkipClassLoaders;
+	private ClassFilterEditor mySteppingFilterEditor;
+	private JCheckBox myCbSkipSimpleGetters;
+	private Project myProject;
 
-public class DebuggerSteppingConfigurable implements SearchableConfigurable, Configurable.NoScroll {
-  private JCheckBox myCbStepInfoFiltersEnabled;
-  private JCheckBox myCbSkipSyntheticMethods;
-  private JCheckBox myCbSkipConstructors;
-  private JCheckBox myCbSkipClassLoaders;
-  private ClassFilterEditor mySteppingFilterEditor;
-  private JCheckBox myCbSkipSimpleGetters;
-  private Project myProject;
+	@Override
+	public void reset()
+	{
+		final DebuggerSettings settings = DebuggerSettings.getInstance();
+		myCbSkipSimpleGetters.setSelected(settings.SKIP_GETTERS);
+		myCbSkipSyntheticMethods.setSelected(settings.SKIP_SYNTHETIC_METHODS);
+		myCbSkipConstructors.setSelected(settings.SKIP_CONSTRUCTORS);
+		myCbSkipClassLoaders.setSelected(settings.SKIP_CLASSLOADERS);
 
-  public void reset() {
-    final DebuggerSettings settings = DebuggerSettings.getInstance();
-    myCbSkipSimpleGetters.setSelected(settings.SKIP_GETTERS);
-    myCbSkipSyntheticMethods.setSelected(settings.SKIP_SYNTHETIC_METHODS);
-    myCbSkipConstructors.setSelected(settings.SKIP_CONSTRUCTORS);
-    myCbSkipClassLoaders.setSelected(settings.SKIP_CLASSLOADERS);
+		myCbStepInfoFiltersEnabled.setSelected(settings.TRACING_FILTERS_ENABLED);
 
-    myCbStepInfoFiltersEnabled.setSelected(settings.TRACING_FILTERS_ENABLED);
-
-    mySteppingFilterEditor.setFilters(settings.getSteppingFilters());
-    mySteppingFilterEditor.setEnabled(settings.TRACING_FILTERS_ENABLED);
+		mySteppingFilterEditor.setFilters(settings.getSteppingFilters());
+		mySteppingFilterEditor.setEnabled(settings.TRACING_FILTERS_ENABLED);
 
 
-  }
+	}
 
-  public void apply() {
-    getSettingsTo(DebuggerSettings.getInstance());
-  }
+	@Override
+	public void apply()
+	{
+		getSettingsTo(DebuggerSettings.getInstance());
+	}
 
-  private void getSettingsTo(DebuggerSettings settings) {
-    settings.SKIP_GETTERS = myCbSkipSimpleGetters.isSelected();
-    settings.SKIP_SYNTHETIC_METHODS = myCbSkipSyntheticMethods.isSelected();
-    settings.SKIP_CONSTRUCTORS = myCbSkipConstructors.isSelected();
-    settings.SKIP_CLASSLOADERS = myCbSkipClassLoaders.isSelected();
-    settings.TRACING_FILTERS_ENABLED = myCbStepInfoFiltersEnabled.isSelected();
+	private void getSettingsTo(DebuggerSettings settings)
+	{
+		settings.SKIP_GETTERS = myCbSkipSimpleGetters.isSelected();
+		settings.SKIP_SYNTHETIC_METHODS = myCbSkipSyntheticMethods.isSelected();
+		settings.SKIP_CONSTRUCTORS = myCbSkipConstructors.isSelected();
+		settings.SKIP_CLASSLOADERS = myCbSkipClassLoaders.isSelected();
+		settings.TRACING_FILTERS_ENABLED = myCbStepInfoFiltersEnabled.isSelected();
 
-    mySteppingFilterEditor.stopEditing();
-    settings.setSteppingFilters(mySteppingFilterEditor.getFilters());
-  }
+		mySteppingFilterEditor.stopEditing();
+		settings.setSteppingFilters(mySteppingFilterEditor.getFilters());
+	}
 
-  public boolean isModified() {
-    final DebuggerSettings currentSettings = DebuggerSettings.getInstance();
-    final DebuggerSettings debuggerSettings = currentSettings.clone();
-    getSettingsTo(debuggerSettings);
-    return !debuggerSettings.equals(currentSettings);
-  }
+	@Override
+	public boolean isModified()
+	{
+		final DebuggerSettings currentSettings = DebuggerSettings.getInstance();
+		final DebuggerSettings debuggerSettings = currentSettings.clone();
+		getSettingsTo(debuggerSettings);
+		return !debuggerSettings.equals(currentSettings);
+	}
 
-  public String getDisplayName() {
-    return DebuggerBundle.message("debugger.stepping.configurable.display.name");
-  }
+	@Override
+	public String getDisplayName()
+	{
+		return DebuggerBundle.message("debugger.stepping.configurable.display.name");
+	}
 
-  @NotNull
-  public String getHelpTopic() {
-    return "reference.idesettings.debugger.stepping";
-  }
+	@Override
+	@NotNull
+	public String getHelpTopic()
+	{
+		return "reference.idesettings.debugger.stepping";
+	}
 
-  @NotNull
-  public String getId() {
-    return getHelpTopic();
-  }
+	@Override
+	@NotNull
+	public String getId()
+	{
+		return getHelpTopic();
+	}
 
-  public Runnable enableSearch(String option) {
-    return null;
-  }
+	@Override
+	public Runnable enableSearch(String option)
+	{
+		return null;
+	}
 
-  public JComponent createComponent() {
-    final JPanel panel = new JPanel(new GridBagLayout());
-    myProject = JavaDebuggerSupport.getCurrentProject();
-    myCbSkipSyntheticMethods = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.synthetic.methods"));
-    myCbSkipConstructors = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.constructors"));
-    myCbSkipClassLoaders = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.classloaders"));
-    myCbSkipSimpleGetters = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.simple.getters"));
-    myCbStepInfoFiltersEnabled = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.step.filters.list.header"));
-    panel.add(myCbSkipSyntheticMethods, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0),0, 0));
-    panel.add(myCbSkipConstructors, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0),0, 0));
-    panel.add(myCbSkipClassLoaders, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0),0, 0));
-    panel.add(myCbSkipSimpleGetters, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0),0, 0));
-    panel.add(myCbStepInfoFiltersEnabled, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(8, 0, 0, 0),0, 0));
+	@Override
+	public JComponent createComponent()
+	{
+		final JPanel panel = new JPanel(new GridBagLayout());
+		myProject = JavaDebuggerSupport.getContextProjectForEditorFieldsInDebuggerConfigurables();
+		myCbSkipSyntheticMethods = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.synthetic.methods"));
+		myCbSkipConstructors = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.constructors"));
+		myCbSkipClassLoaders = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.classloaders"));
+		myCbSkipSimpleGetters = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.simple.getters"));
+		myCbStepInfoFiltersEnabled = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.step.filters.list.header"));
+		panel.add(myCbSkipSyntheticMethods, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		panel.add(myCbSkipConstructors, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		panel.add(myCbSkipClassLoaders, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		panel.add(myCbSkipSimpleGetters, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		panel.add(myCbStepInfoFiltersEnabled, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.NONE, new Insets(8, 0, 0, 0), 0, 0));
 
-    mySteppingFilterEditor = new ClassFilterEditor(myProject, null, "reference.viewBreakpoints.classFilters.newPattern");
-    panel.add(mySteppingFilterEditor, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 0),0, 0));
+		mySteppingFilterEditor = new ClassFilterEditor(myProject, null, "reference.viewBreakpoints.classFilters.newPattern");
+		panel.add(mySteppingFilterEditor, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 5, 0, 0), 0, 0));
 
-    myCbStepInfoFiltersEnabled.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        mySteppingFilterEditor.setEnabled(myCbStepInfoFiltersEnabled.isSelected());
-      }
-    });
-    return panel;
-  }
+		myCbStepInfoFiltersEnabled.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				mySteppingFilterEditor.setEnabled(myCbStepInfoFiltersEnabled.isSelected());
+			}
+		});
+		return panel;
+	}
 
-  public void disposeUIResources() {
-    mySteppingFilterEditor = null;
-    myProject = null;
-  }
+	@Override
+	public void disposeUIResources()
+	{
+		mySteppingFilterEditor = null;
+		myProject = null;
+	}
 
 }

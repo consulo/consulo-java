@@ -15,35 +15,53 @@
  */
 package com.intellij.debugger.impl.descriptors.data;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.impl.watch.ArgumentValueDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import com.sun.jdi.Value;
 
-public class ArgValueData extends DescriptorData<ArgumentValueDescriptorImpl>{
-  private final int myIndex;
-  private final Value myValue;
+public class ArgValueData extends DescriptorData<ArgumentValueDescriptorImpl>
+{
+	private final int myIndex;
+	private final Value myValue;
+	@Nullable
+	private final String myDisplayName;
 
-  public ArgValueData(int index, Value value) {
-    super();
-    myIndex = index;
-    myValue = value;
-  }
+	public ArgValueData(int index, Value value, @Nullable String displayName)
+	{
+		super();
+		myIndex = index;
+		myValue = value;
+		myDisplayName = displayName;
+	}
 
-  protected ArgumentValueDescriptorImpl createDescriptorImpl(Project project) {
-    return new ArgumentValueDescriptorImpl(project, myIndex, myValue);
-  }
+	@Override
+	protected ArgumentValueDescriptorImpl createDescriptorImpl(@NotNull Project project)
+	{
+		return new ArgumentValueDescriptorImpl(project, myIndex, myValue, myDisplayName);
+	}
 
-  public boolean equals(Object object) {
-    if(!(object instanceof ArgValueData)) return false;
+	@Override
+	public boolean equals(Object object)
+	{
+		if(!(object instanceof ArgValueData))
+		{
+			return false;
+		}
 
-    return myIndex == ((ArgValueData)object).myIndex;
-  }
+		return myIndex == ((ArgValueData) object).myIndex;
+	}
 
-  public int hashCode() {
-    return myIndex;
-  }
+	@Override
+	public int hashCode()
+	{
+		return myIndex;
+	}
 
-  public DisplayKey<ArgumentValueDescriptorImpl> getDisplayKey() {
-    return new SimpleDisplayKey<ArgumentValueDescriptorImpl>(myIndex);
-  }
+	@Override
+	public DisplayKey<ArgumentValueDescriptorImpl> getDisplayKey()
+	{
+		return new SimpleDisplayKey<ArgumentValueDescriptorImpl>(myIndex);
+	}
 }

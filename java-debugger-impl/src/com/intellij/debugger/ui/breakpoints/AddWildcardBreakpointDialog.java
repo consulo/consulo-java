@@ -15,52 +15,63 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
-
-import javax.swing.*;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Jan 10, 2006
  */
-public class AddWildcardBreakpointDialog extends DialogWrapper {
-  private JPanel myPanel;
-  private JTextField myClassPatternField;
-  private JTextField myMethodNameField;
+public class AddWildcardBreakpointDialog extends DialogWrapper
+{
+	private JPanel myPanel;
+	private JTextField myClassPatternField;
+	private JTextField myMethodNameField;
 
-  protected AddWildcardBreakpointDialog(Project project) {
-    super(project, true);
-    setTitle("Add Method Breakpoint");
-    init();
-  }
+	public AddWildcardBreakpointDialog(Project project)
+	{
+		super(project, true);
+		setTitle("Add Method Breakpoint");
+		init();
+	}
 
-  protected void doOKAction() {
-    if (getClassPattern().length() == 0) {
-      Messages.showErrorDialog(myPanel, "Class pattern not specified");
-      return;
-    }
-    if (getMethodName().length() == 0) {
-      Messages.showErrorDialog(myPanel, "Method name not specified");
-      return;
-    }
-    super.doOKAction();
-  }
+	protected void doOKAction()
+	{
+		if(getClassPattern().length() == 0)
+		{
+			Messages.showErrorDialog(myPanel, "Class pattern not specified");
+			return;
+		}
+		if(getMethodName().length() == 0)
+		{
+			Messages.showErrorDialog(myPanel, "Method name not specified");
+			return;
+		}
+		super.doOKAction();
+	}
 
-  public JComponent getPreferredFocusedComponent() {
-    return myClassPatternField;
-  }
+	public JComponent getPreferredFocusedComponent()
+	{
+		return myClassPatternField;
+	}
 
-  public String getClassPattern() {
-    return myClassPatternField.getText().trim();
-  }
+	public String getClassPattern()
+	{
+		return myClassPatternField.getText().trim();
+	}
 
-  public String getMethodName() {
-    return myMethodNameField.getText().trim();
-  }
+	public String getMethodName()
+	{
+		return myMethodNameField.getText().trim();
+	}
 
-  protected JComponent createCenterPanel() {
-    return myPanel;
-  }
+	protected JComponent createCenterPanel()
+	{
+		return myPanel;
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,19 @@
  */
 package com.intellij.debugger.ui;
 
+import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.lang.ref.WeakReference;
+import java.util.List;
+
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.CodeFragmentFactoryContextWrapper;
@@ -38,280 +51,352 @@ import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.PsiDocumentManagerBase;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.reference.SoftReference;
 import com.intellij.ui.ClickListener;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.lang.ref.WeakReference;
-import java.util.List;
+import com.intellij.xdebugger.impl.XDebuggerHistoryManager;
 
 /**
  * @author lex
  */
-public abstract class DebuggerEditorImpl extends CompletionEditor{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.DebuggerEditorImpl");
+public abstract class DebuggerEditorImpl extends CompletionEditor
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.DebuggerEditorImpl");
 
-  public static final char SEPARATOR = 13;
+	public static final char SEPARATOR = 13;
 
-  private final Project myProject;
-  private PsiElement myContext;
+	private final Project myProject;
+	private PsiElement myContext;
+	private PsiType myThisType;
 
-  private final String myRecentsId;
+	private final String myRecentsId;
 
-  private final List<DocumentListener> myDocumentListeners = ContainerUtil.createLockFreeCopyOnWriteList();
-  private Document myCurrentDocument;
-  private final JLabel myChooseFactory = new JLabel();
-  private WeakReference<ListPopup> myPopup;
+	private final List<DocumentListener> myDocumentListeners = ContainerUtil.createLockFreeCopyOnWriteList();
+	private Document myCurrentDocument;
+	private final JLabel myChooseFactory = new JLabel();
+	private WeakReference<ListPopup> myPopup;
 
-  private final PsiTreeChangeListener myPsiListener = new PsiTreeChangeAdapter() {
-    public void childRemoved(@NotNull PsiTreeChangeEvent event) {
-      checkContext();
-    }
-    public void childReplaced(@NotNull PsiTreeChangeEvent event) {
-      checkContext();
-    }
-    public void childMoved(@NotNull PsiTreeChangeEvent event) {
-      checkContext();
-    }
-    private void checkContext() {
-      final PsiElement contextElement = getContext();
-      if(contextElement == null || !contextElement.isValid()) {
-        final DebuggerManagerEx manager = DebuggerManagerEx.getInstanceEx(myProject);
-        if (manager == null) {
-          LOG.error("Cannot obtain debugger manager for project " + myProject);
-        }
-        final DebuggerContextImpl context = manager.getContextManager().getContext();
-        final PsiElement newContextElement = PositionUtil.getContextElement(context);
-        setContext(newContextElement != null && newContextElement.isValid()? newContextElement : null);
-      }
-    }
-  };
-  private CodeFragmentFactory myFactory;
-  protected boolean myInitialFactory;
+	private final PsiTreeChangeListener myPsiListener = new PsiTreeChangeAdapter()
+	{
+		@Override
+		public void childRemoved(@NotNull PsiTreeChangeEvent event)
+		{
+			checkContext();
+		}
 
-  public DebuggerEditorImpl(Project project, PsiElement context, String recentsId, final CodeFragmentFactory factory) {
-    myProject = project;
-    myContext = context;
-    myRecentsId = recentsId;
-    PsiManager.getInstance(project).addPsiTreeChangeListener(myPsiListener);
-    setFactory(factory);
-    myInitialFactory = true;
+		@Override
+		public void childReplaced(@NotNull PsiTreeChangeEvent event)
+		{
+			checkContext();
+		}
 
-    setFocusable(false);
+		@Override
+		public void childMoved(@NotNull PsiTreeChangeEvent event)
+		{
+			checkContext();
+		}
 
-    myChooseFactory.setToolTipText("Click to change the language");
-    myChooseFactory.setBorder(new EmptyBorder(0, 3, 0, 3));
-    new ClickListener() {
-      @Override
-      public boolean onClick(MouseEvent e, int clickCount) {
-        ListPopup oldPopup = myPopup != null ? myPopup.get() : null;
-        if (oldPopup != null && !oldPopup.isDisposed()) {
-          oldPopup.cancel();
-          myPopup = null;
-          return true;
-        }
+		private void checkContext()
+		{
+			final PsiElement contextElement = getContext();
+			if(contextElement == null || !contextElement.isValid())
+			{
+				final DebuggerManagerEx manager = DebuggerManagerEx.getInstanceEx(myProject);
+				if(manager == null)
+				{
+					LOG.error("Cannot obtain debugger manager for project " + myProject);
+				}
+				final DebuggerContextImpl context = manager.getContextManager().getContext();
+				final PsiElement newContextElement = PositionUtil.getContextElement(context);
+				setContext(newContextElement != null && newContextElement.isValid() ? newContextElement : null);
+			}
+		}
+	};
+	private CodeFragmentFactory myFactory;
+	protected boolean myInitialFactory;
 
-        if (myContext == null) {
-          return true;
-        }
+	public DebuggerEditorImpl(Project project, PsiElement context, String recentsId, final CodeFragmentFactory factory)
+	{
+		myProject = project;
+		myContext = context;
+		myRecentsId = recentsId;
+		PsiManager.getInstance(project).addPsiTreeChangeListener(myPsiListener);
+		setFactory(factory);
+		myInitialFactory = true;
 
-        ListPopup popup = createLanguagePopup();
-        popup.showUnderneathOf(myChooseFactory);
-        myPopup = new WeakReference<ListPopup>(popup);
-        return true;
-      }
-    }.installOn(myChooseFactory);
-  }
+		setFocusable(false);
 
-  private ListPopup createLanguagePopup() {
-    DefaultActionGroup actions = new DefaultActionGroup();
-    for (final CodeFragmentFactory fragmentFactory : DebuggerUtilsEx.getCodeFragmentFactories(myContext)) {
-      actions.add(new AnAction(fragmentFactory.getFileType().getLanguage().getDisplayName(), null, fragmentFactory.getFileType().getIcon()) {
-        @Override
-        public void actionPerformed(AnActionEvent e) {
-          setFactory(fragmentFactory);
-          setText(getText());
-          IdeFocusManager.getInstance(getProject()).requestFocus(DebuggerEditorImpl.this, true);
-        }
-      });
-    }
+		myChooseFactory.setToolTipText("Click to change the language");
+		myChooseFactory.setBorder(new EmptyBorder(0, 3, 0, 3));
+		new ClickListener()
+		{
+			@Override
+			public boolean onClick(@NotNull MouseEvent e, int clickCount)
+			{
+				ListPopup oldPopup = SoftReference.dereference(myPopup);
+				if(oldPopup != null && !oldPopup.isDisposed())
+				{
+					oldPopup.cancel();
+					myPopup = null;
+					return true;
+				}
 
-    DataContext dataContext = DataManager.getInstance().getDataContext(this);
-    return JBPopupFactory.getInstance().createActionGroupPopup("Choose language", actions, dataContext,
-                                                                          JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
-                                                                          false);
-  }
+				if(myContext == null)
+				{
+					return true;
+				}
 
-  @Override
-  public void setEnabled(boolean enabled) {
-    myChooseFactory.setEnabled(enabled);
-    super.setEnabled(enabled);
-  }
+				ListPopup popup = createLanguagePopup();
+				popup.showUnderneathOf(myChooseFactory);
+				myPopup = new WeakReference<ListPopup>(popup);
+				return true;
+			}
+		}.installOn(myChooseFactory);
+	}
 
-  protected TextWithImports createItem(Document document, Project project) {
-    if (document != null) {
-      PsiDocumentManager.getInstance(project).commitDocument(document);
-      PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
-      if (psiFile != null) {
-        return createText(psiFile.getText(), ((JavaCodeFragment)psiFile).importsToString());
-      }
-    }
+	private ListPopup createLanguagePopup()
+	{
+		DefaultActionGroup actions = new DefaultActionGroup();
+		for(final CodeFragmentFactory fragmentFactory : DebuggerUtilsEx.getCodeFragmentFactories(myContext))
+		{
+			actions.add(new AnAction(fragmentFactory.getFileType().getLanguage().getDisplayName(), null, fragmentFactory.getFileType().getIcon())
+			{
+				@Override
+				public void actionPerformed(AnActionEvent e)
+				{
+					setFactory(fragmentFactory);
+					setText(getText());
+					IdeFocusManager.getInstance(getProject()).requestFocus(DebuggerEditorImpl.this, true);
+				}
+			});
+		}
 
-    return createText("");
-  }
+		DataContext dataContext = DataManager.getInstance().getDataContext(this);
+		return JBPopupFactory.getInstance().createActionGroupPopup("Choose language", actions, dataContext,
+				JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, false);
+	}
 
-  protected TextWithImports createText(String text) {
-    return createText(text, "");
-  }
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		myChooseFactory.setEnabled(enabled);
+		super.setEnabled(enabled);
+	}
 
-  protected abstract TextWithImports createText(String text, String importsString);
+	protected TextWithImports createItem(Document document, Project project)
+	{
+		if(document != null)
+		{
+			PsiDocumentManager.getInstance(project).commitDocument(document);
+			PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+			if(psiFile != null)
+			{
+				return createText(psiFile.getText(), ((JavaCodeFragment) psiFile).importsToString());
+			}
+		}
 
-  public abstract JComponent getPreferredFocusedComponent();
+		return createText("");
+	}
 
-  public void setContext(@Nullable PsiElement context) {
-    myContext = context;
+	protected TextWithImports createText(String text)
+	{
+		return createText(text, "");
+	}
 
-    List<CodeFragmentFactory> factories = DebuggerUtilsEx.getCodeFragmentFactories(context);
-    boolean many = factories.size() > 1;
-    if (myInitialFactory) {
-      myInitialFactory = false;
-      setFactory(factories.get(0));
-      myChooseFactory.setVisible(many);
-    }
-    myChooseFactory.setVisible(myChooseFactory.isVisible() || many);
-    myChooseFactory.setEnabled(many && factories.contains(myFactory));
+	protected abstract TextWithImports createText(String text, String importsString);
 
-    updateEditorUi();
-  }
+	public abstract JComponent getPreferredFocusedComponent();
 
-  @Override
-  public void setText(TextWithImports text) {
-    doSetText(text);
-    updateEditorUi();
-  }
+	@Override
+	public void setContext(@Nullable PsiElement context)
+	{
+		myContext = context;
 
-  protected abstract void doSetText(TextWithImports text);
+		List<CodeFragmentFactory> factories = DebuggerUtilsEx.getCodeFragmentFactories(context);
+		boolean many = factories.size() > 1;
+		if(myInitialFactory)
+		{
+			myInitialFactory = false;
+			setFactory(factories.get(0));
+			myChooseFactory.setVisible(many);
+		}
+		myChooseFactory.setVisible(myChooseFactory.isVisible() || many);
+		myChooseFactory.setEnabled(many && factories.contains(myFactory));
 
-  protected abstract void updateEditorUi();
+		updateEditorUi();
+	}
 
-  public PsiElement getContext() {
-    return myContext;
-  }
+	@Override
+	public void setText(TextWithImports text)
+	{
+		doSetText(text);
+		updateEditorUi();
+	}
 
-  protected Project getProject() {
-    return myProject;
-  }
+	protected abstract void doSetText(TextWithImports text);
 
-  public void requestFocus() {
-    getPreferredFocusedComponent().requestFocus();
-  }
+	protected abstract void updateEditorUi();
 
-  @Nullable
-  protected Document createDocument(TextWithImports item) {
-    LOG.assertTrue(myContext == null || myContext.isValid());
+	@Override
+	public PsiElement getContext()
+	{
+		return myContext;
+	}
 
-    if(item == null) {
-      item = createText("");
-    }
-    JavaCodeFragment codeFragment = getCurrentFactory().createPresentationCodeFragment(item, myContext, getProject());
-    codeFragment.forceResolveScope(GlobalSearchScope.allScope(myProject));
-    if (myContext != null) {
-      final PsiClass contextClass = PsiTreeUtil.getNonStrictParentOfType(myContext, PsiClass.class);
-      if (contextClass != null) {
-        final PsiClassType contextType = JavaPsiFacade.getInstance(codeFragment.getProject()).getElementFactory().createType(contextClass);
-        codeFragment.setThisType(contextType);
-      }
-    }
+	protected Project getProject()
+	{
+		return myProject;
+	}
 
-    if(myCurrentDocument != null) {
-      for (DocumentListener documentListener : myDocumentListeners) {
-        myCurrentDocument.removeDocumentListener(documentListener);
-      }
-    }
+	@Override
+	public void requestFocus()
+	{
+		getPreferredFocusedComponent().requestFocus();
+	}
 
-    myCurrentDocument = PsiDocumentManager.getInstance(getProject()).getDocument(codeFragment);
+	public void setThisType(PsiType thisType)
+	{
+		myThisType = thisType;
+	}
 
-    if (myCurrentDocument != null) {
-      for (DocumentListener documentListener : myDocumentListeners) {
-        myCurrentDocument.addDocumentListener(documentListener);
-      }
-    }
+	@Nullable
+	protected Document createDocument(TextWithImports item)
+	{
+		LOG.assertTrue(myContext == null || myContext.isValid());
 
-    return myCurrentDocument;
-  }
+		if(item == null)
+		{
+			item = createText("");
+		}
+		JavaCodeFragment codeFragment = getCurrentFactory().createPresentationCodeFragment(item, myContext, getProject());
+		codeFragment.forceResolveScope(GlobalSearchScope.allScope(myProject));
+		if(myThisType != null)
+		{
+			codeFragment.setThisType(myThisType);
+		}
+		else if(myContext != null)
+		{
+			final PsiClass contextClass = PsiTreeUtil.getNonStrictParentOfType(myContext, PsiClass.class);
+			if(contextClass != null)
+			{
+				final PsiClassType contextType = JavaPsiFacade.getInstance(codeFragment.getProject()).getElementFactory().createType(contextClass);
+				codeFragment.setThisType(contextType);
+			}
+		}
 
-  public String getRecentsId() {
-    return myRecentsId;
-  }
+		if(myCurrentDocument != null)
+		{
+			for(DocumentListener documentListener : myDocumentListeners)
+			{
+				myCurrentDocument.removeDocumentListener(documentListener);
+			}
+		}
 
-  public void addRecent(TextWithImports text) {
-    if(getRecentsId() != null && text != null && !"".equals(text.getText())){
-      DebuggerRecents.getInstance(getProject()).addRecent(getRecentsId(), text);
-    }
-  }
+		myCurrentDocument = PsiDocumentManager.getInstance(getProject()).getDocument(codeFragment);
 
-  public void addDocumentListener(DocumentListener listener) {
-    myDocumentListeners.add(listener);
-    if(myCurrentDocument != null) {
-      myCurrentDocument.addDocumentListener(listener);
-    }
-  }
+		if(myCurrentDocument != null)
+		{
+			PsiDocumentManagerBase.cachePsi(myCurrentDocument, codeFragment);
+			for(DocumentListener documentListener : myDocumentListeners)
+			{
+				myCurrentDocument.addDocumentListener(documentListener);
+			}
+		}
 
-  public void removeDocumentListener(DocumentListener listener) {
-    myDocumentListeners.remove(listener);
-    if(myCurrentDocument != null) {
-      myCurrentDocument.removeDocumentListener(listener);
-    }
-  }
+		return myCurrentDocument;
+	}
 
-  public void dispose() {
-    PsiManager.getInstance(myProject).removePsiTreeChangeListener(myPsiListener);
-    myCurrentDocument = null;
-  }
+	@Override
+	public String getRecentsId()
+	{
+		return myRecentsId;
+	}
 
-  @NotNull
-  public static CodeFragmentFactory findAppropriateFactory(@NotNull TextWithImports text, @NotNull PsiElement context) {
-    for (CodeFragmentFactory factory : DebuggerUtilsEx.getCodeFragmentFactories(context)) {
-      if (factory.getFileType().equals(text.getFileType())) {
-        return factory;
-      }
-    }
-    return DefaultCodeFragmentFactory.getInstance();
-  }
+	public void addRecent(TextWithImports text)
+	{
+		if(getRecentsId() != null && text != null && !text.isEmpty())
+		{
+			XDebuggerHistoryManager.getInstance(getProject()).addRecentExpression(getRecentsId(), text.getText());
+		}
+	}
 
-  protected void restoreFactory(TextWithImports text) {
-    FileType fileType = text.getFileType();
-    if (fileType == null) return;
-    if (myContext == null) return;
+	public void addDocumentListener(DocumentListener listener)
+	{
+		myDocumentListeners.add(listener);
+		if(myCurrentDocument != null)
+		{
+			myCurrentDocument.addDocumentListener(listener);
+		}
+	}
 
-    setFactory(findAppropriateFactory(text, myContext));
-  }
+	public void removeDocumentListener(DocumentListener listener)
+	{
+		myDocumentListeners.remove(listener);
+		if(myCurrentDocument != null)
+		{
+			myCurrentDocument.removeDocumentListener(listener);
+		}
+	}
 
-  private void setFactory(@NotNull final CodeFragmentFactory factory) {
-    myFactory = factory;
-    Icon icon = getCurrentFactory().getFileType().getIcon();
-    myChooseFactory.setIcon(icon);
-    myChooseFactory.setDisabledIcon(IconLoader.getDisabledIcon(icon));
-  }
+	@Override
+	public void dispose()
+	{
+		PsiManager.getInstance(myProject).removePsiTreeChangeListener(myPsiListener);
+		myCurrentDocument = null;
+	}
 
-  protected CodeFragmentFactory getCurrentFactory() {
-    return myFactory instanceof CodeFragmentFactoryContextWrapper ? myFactory : new CodeFragmentFactoryContextWrapper(myFactory);
-  }
+	@NotNull
+	public static CodeFragmentFactory findAppropriateFactory(@NotNull TextWithImports text, @NotNull PsiElement context)
+	{
+		for(CodeFragmentFactory factory : DebuggerUtilsEx.getCodeFragmentFactories(context))
+		{
+			if(factory.getFileType().equals(text.getFileType()))
+			{
+				return factory;
+			}
+		}
+		return DefaultCodeFragmentFactory.getInstance();
+	}
 
-  protected JPanel addChooseFactoryLabel(JComponent component, boolean top) {
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.add(component, BorderLayout.CENTER);
+	protected void restoreFactory(TextWithImports text)
+	{
+		FileType fileType = text.getFileType();
+		if(fileType == null)
+		{
+			return;
+		}
+		if(myContext == null)
+		{
+			return;
+		}
 
-    JPanel factoryPanel = new JPanel(new BorderLayout());
-    factoryPanel.add(myChooseFactory, top ? BorderLayout.NORTH : BorderLayout.CENTER);
-    panel.add(factoryPanel, BorderLayout.WEST);
-    return panel;
-  }
+		setFactory(findAppropriateFactory(text, myContext));
+	}
+
+	private void setFactory(@NotNull final CodeFragmentFactory factory)
+	{
+		myFactory = factory;
+		Icon icon = getCurrentFactory().getFileType().getIcon();
+		myChooseFactory.setIcon(icon);
+		myChooseFactory.setDisabledIcon(IconLoader.getDisabledIcon(icon));
+	}
+
+	protected CodeFragmentFactory getCurrentFactory()
+	{
+		return myFactory instanceof CodeFragmentFactoryContextWrapper ? myFactory : new CodeFragmentFactoryContextWrapper(myFactory);
+	}
+
+	protected JPanel addChooseFactoryLabel(JComponent component, boolean top)
+	{
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(component, BorderLayout.CENTER);
+
+		JPanel factoryPanel = new JPanel(new BorderLayout());
+		factoryPanel.add(myChooseFactory, top ? BorderLayout.NORTH : BorderLayout.CENTER);
+		panel.add(factoryPanel, BorderLayout.WEST);
+		return panel;
+	}
 }

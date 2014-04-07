@@ -15,80 +15,177 @@
  */
 package com.intellij.debugger.engine;
 
-import com.intellij.debugger.NoDataException;
-import com.intellij.debugger.PositionManager;
-import com.intellij.debugger.SourcePosition;
-import com.intellij.debugger.requests.ClassPrepareRequestor;
-import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.Location;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.request.ClassPrepareRequest;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CompoundPositionManager implements PositionManager{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.CompoundPositionManager");
-  private final ArrayList<PositionManager> myPositionManagers = new ArrayList<PositionManager>();
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.NoDataException;
+import com.intellij.debugger.PositionManager;
+import com.intellij.debugger.SourcePosition;
+import com.intellij.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.debugger.jdi.StackFrameProxyImpl;
+import com.intellij.debugger.requests.ClassPrepareRequestor;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.util.ThreeState;
+import com.intellij.xdebugger.frame.XStackFrame;
+import com.sun.jdi.Location;
+import com.sun.jdi.ReferenceType;
+import com.sun.jdi.request.ClassPrepareRequest;
 
-  public CompoundPositionManager() {
-  }
+public class CompoundPositionManager implements PositionManagerEx
+{
+	private static final Logger LOG = Logger.getInstance(CompoundPositionManager.class);
 
-  public CompoundPositionManager(PositionManager manager) {
-    appendPositionManager(manager);
-  }
+	private final ArrayList<PositionManager> myPositionManagers = new ArrayList<PositionManager>();
 
-  public void appendPositionManager(PositionManager manager) {
-    myPositionManagers.remove(manager);
-    myPositionManagers.add(0, manager);
-  }
+	@SuppressWarnings("UnusedDeclaration")
+	public CompoundPositionManager()
+	{
+	}
 
-  public SourcePosition getSourcePosition(Location location) {
-    for (PositionManager positionManager : myPositionManagers) {
-      try {
-        return positionManager.getSourcePosition(location);
-      }
-      catch (NoDataException ignored) {
-      }
-    }
-    return null;
-  }
+	public CompoundPositionManager(PositionManager manager)
+	{
+		appendPositionManager(manager);
+	}
 
-  @NotNull
-  public List<ReferenceType> getAllClasses(SourcePosition classPosition) {
-    for (PositionManager positionManager : myPositionManagers) {
-      try {
-        return positionManager.getAllClasses(classPosition);
-      }
-      catch (NoDataException ignored) {
-      }
-    }
-    return Collections.emptyList();
-  }
+	public void appendPositionManager(PositionManager manager)
+	{
+		myPositionManagers.remove(manager);
+		myPositionManagers.add(0, manager);
+	}
 
-  @NotNull
-  public List<Location> locationsOfLine(ReferenceType type, SourcePosition position) {
-    for (PositionManager positionManager : myPositionManagers) {
-      try {
-        return positionManager.locationsOfLine(type, position);
-      }
-      catch (NoDataException ignored) {
-      }
-    }
-    return Collections.emptyList();
-  }
+	@Override
+	public SourcePosition getSourcePosition(Location location)
+	{
+		for(PositionManager positionManager : myPositionManagers)
+		{
+			try
+			{
+				return positionManager.getSourcePosition(location);
+			}
+			catch(NoDataException ignored)
+			{
+			}
+			catch(Exception e)
+			{
+				LOG.error(e);
+			}
+		}
+		return null;
+	}
 
-  public ClassPrepareRequest createPrepareRequest(ClassPrepareRequestor requestor, SourcePosition position) {
-    for (PositionManager positionManager : myPositionManagers) {
-      try {
-        return positionManager.createPrepareRequest(requestor, position);
-      }
-      catch (NoDataException ignored) {
-      }
-    }
+	@Override
+	@NotNull
+	public List<ReferenceType> getAllClasses(@NotNull SourcePosition classPosition)
+	{
+		for(PositionManager positionManager : myPositionManagers)
+		{
+			try
+			{
+				return positionManager.getAllClasses(classPosition);
+			}
+			catch(NoDataException ignored)
+			{
+			}
+			catch(Exception e)
+			{
+				LOG.error(e);
+			}
+		}
+		return Collections.emptyList();
+	}
 
-    return null;
-  }
+	@Override
+	@NotNull
+	public List<Location> locationsOfLine(@NotNull ReferenceType type, @NotNull SourcePosition position)
+	{
+		for(PositionManager positionManager : myPositionManagers)
+		{
+			try
+			{
+				return positionManager.locationsOfLine(type, position);
+			}
+			catch(NoDataException ignored)
+			{
+			}
+			catch(Exception e)
+			{
+				LOG.error(e);
+			}
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	public ClassPrepareRequest createPrepareRequest(@NotNull ClassPrepareRequestor requestor, @NotNull SourcePosition position)
+	{
+		for(PositionManager positionManager : myPositionManagers)
+		{
+			try
+			{
+				return positionManager.createPrepareRequest(requestor, position);
+			}
+			catch(NoDataException ignored)
+			{
+			}
+			catch(Exception e)
+			{
+				LOG.error(e);
+			}
+		}
+
+		return null;
+	}
+
+	@Nullable
+	@Override
+	public XStackFrame createStackFrame(@NotNull StackFrameProxyImpl frame, @NotNull DebugProcessImpl debugProcess, @NotNull Location location)
+	{
+		for(PositionManager positionManager : myPositionManagers)
+		{
+			if(positionManager instanceof PositionManagerEx)
+			{
+				try
+				{
+					XStackFrame xStackFrame = ((PositionManagerEx) positionManager).createStackFrame(frame, debugProcess, location);
+					if(xStackFrame != null)
+					{
+						return xStackFrame;
+					}
+				}
+				catch(Throwable e)
+				{
+					LOG.error(e);
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public ThreeState evaluateCondition(
+			@NotNull EvaluationContext context, @NotNull StackFrameProxyImpl frame, @NotNull Location location, @NotNull String expression)
+	{
+		for(PositionManager positionManager : myPositionManagers)
+		{
+			if(positionManager instanceof PositionManagerEx)
+			{
+				try
+				{
+					ThreeState result = ((PositionManagerEx) positionManager).evaluateCondition(context, frame, location, expression);
+					if(result != ThreeState.UNSURE)
+					{
+						return result;
+					}
+				}
+				catch(Throwable e)
+				{
+					LOG.error(e);
+				}
+			}
+		}
+		return ThreeState.UNSURE;
+	}
 }

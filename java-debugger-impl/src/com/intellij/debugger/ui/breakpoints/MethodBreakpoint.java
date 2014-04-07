@@ -20,6 +20,16 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.swing.Icon;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.SourcePosition;
@@ -34,14 +44,23 @@ import com.intellij.debugger.impl.PositionUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.text.CharArrayUtil;
+import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.sun.jdi.AbsentInformationException;
 import com.sun.jdi.Location;
 import com.sun.jdi.Method;
@@ -52,332 +71,425 @@ import com.sun.jdi.event.MethodExitEvent;
 import com.sun.jdi.request.EventRequest;
 import com.sun.jdi.request.MethodEntryRequest;
 import com.sun.jdi.request.MethodExitRequest;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.util.Iterator;
-import java.util.Set;
+public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakpointProperties>
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.MethodBreakpoint");
+	@Nullable
+	private JVMName mySignature;
+	private boolean myIsStatic;
 
-public class MethodBreakpoint extends BreakpointWithHighlighter {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.MethodBreakpoint");
-  public boolean WATCH_ENTRY = true;
-  public boolean WATCH_EXIT  = true;
+	public static final
+	@NonNls
+	Key<MethodBreakpoint> CATEGORY = BreakpointCategory.lookup("method_breakpoints");
 
-  @Nullable private String myMethodName;
-  @Nullable private JVMName mySignature;
-  private boolean myIsStatic;
+	protected MethodBreakpoint(@NotNull Project project, XBreakpoint breakpoint)
+	{
+		super(project, breakpoint);
+	}
 
-  public static final @NonNls Key<MethodBreakpoint> CATEGORY = BreakpointCategory.lookup("method_breakpoints");
+	public boolean isStatic()
+	{
+		return myIsStatic;
+	}
 
-  protected MethodBreakpoint(@NotNull Project project) {
-    super(project);
-  }
+	@NotNull
+	public Key<MethodBreakpoint> getCategory()
+	{
+		return CATEGORY;
+	}
 
-  private MethodBreakpoint(@NotNull Project project, @NotNull RangeHighlighter highlighter) {
-    super(project, highlighter);
-  }
+	@Nullable
+	public PsiMethod getPsiMethod()
+	{
+		Document document = getDocument();
+		if(document == null)
+		{
+			return null;
+		}
+		PsiFile psiFile = PsiDocumentManager.getInstance(myProject).getPsiFile(document);
+		if(psiFile instanceof PsiJavaFile)
+		{
+			int line = getLineIndex();
+			final int offset = CharArrayUtil.shiftForward(document.getCharsSequence(), document.getLineStartOffset(line), " \t");
+			return DebuggerUtilsEx.findPsiMethod(psiFile, offset);
+		}
+		return null;
+	}
 
-  public boolean isStatic() {
-    return myIsStatic;
-  }
+	public boolean isValid()
+	{
+		return super.isValid() && getMethodName() != null;
+	}
 
-  @NotNull
-  public Key<MethodBreakpoint> getCategory() {
-    return CATEGORY;
-  }
+	protected void reload(@NotNull PsiFile psiFile)
+	{
+		setMethodName(null);
+		mySignature = null;
 
-  @Nullable
-  public PsiMethod getPsiMethod() {
-    Document document = getDocument();
-    if(document == null) return null;
-    PsiFile psiFile = PsiDocumentManager.getInstance(myProject).getPsiFile(document);
-    if(psiFile instanceof PsiJavaFile) {
-      int line = getLineIndex();
-      final int offset = CharArrayUtil.shiftForward(document.getCharsSequence(), document.getLineStartOffset(line), " \t");
-      return DebuggerUtilsEx.findPsiMethod(psiFile, offset);
-    }
-    return null;
-  }
+		MethodDescriptor descriptor = getMethodDescriptor(myProject, psiFile, getSourcePosition());
+		if(descriptor != null)
+		{
+			setMethodName(descriptor.methodName);
+			mySignature = descriptor.methodSignature;
+			myIsStatic = descriptor.isStatic;
+		}
+		PsiClass psiClass = getPsiClass();
+		if(psiClass != null)
+		{
+			getProperties().myClassPattern = psiClass.getQualifiedName();
+		}
+		if(myIsStatic)
+		{
+			setInstanceFiltersEnabled(false);
+		}
+	}
 
-  public boolean isValid() {
-    return super.isValid() && myMethodName != null;
-  }
+	protected void createRequestForPreparedClass(@NotNull DebugProcessImpl debugProcess, @NotNull ReferenceType classType)
+	{
+		try
+		{
+			boolean hasMethod = false;
+			for(Iterator iterator = classType.allMethods().iterator(); iterator.hasNext(); )
+			{
+				Method method = (Method) iterator.next();
+				String signature = method.signature();
+				String name = method.name();
 
-  protected void reload(@NotNull PsiFile psiFile) {
-    myMethodName = null;
-    mySignature = null;
+				if(getMethodName().equals(name) && mySignature.getName(debugProcess).equals(signature))
+				{
+					hasMethod = true;
+					break;
+				}
+			}
 
-    MethodDescriptor descriptor = getMethodDescriptor(myProject, psiFile, getSourcePosition());
-    if (descriptor != null) {
-      myMethodName = descriptor.methodName;
-      mySignature = descriptor.methodSignature;
-      myIsStatic = descriptor.isStatic;
-    }
-    if (myIsStatic) {
-      INSTANCE_FILTERS_ENABLED = false;
-    }
-  }
+			if(!hasMethod)
+			{
+				debugProcess.getRequestsManager().setInvalid(this, DebuggerBundle.message("error.invalid.breakpoint.method.not.found",
+						classType.name()));
+				return;
+			}
 
-  protected void createRequestForPreparedClass(@NotNull DebugProcessImpl debugProcess, @NotNull ReferenceType classType) {
-    try {
-      boolean hasMethod = false;
-      for (Iterator iterator = classType.allMethods().iterator(); iterator.hasNext();) {
-        Method method = (Method)iterator.next();
-        String signature = method.signature();
-        String name = method.name();
-
-        if (myMethodName.equals(name) && mySignature.getName(debugProcess).equals(signature)) {
-          hasMethod = true;
-          break;
-        }
-      }
-
-      if(!hasMethod) {
-        debugProcess.getRequestsManager().setInvalid(
-          this, DebuggerBundle.message("error.invalid.breakpoint.method.not.found", classType.name())
-        );
-        return;
-      }
-
-      RequestManagerImpl requestManager = debugProcess.getRequestsManager();
-      if (WATCH_ENTRY) {
-        MethodEntryRequest entryRequest = (MethodEntryRequest)findRequest(debugProcess, MethodEntryRequest.class);
-        if (entryRequest == null) {
-          entryRequest = requestManager.createMethodEntryRequest(this);
-        }
-        else {
-          entryRequest.disable();
-        }
-        //entryRequest.addClassFilter(myClassQualifiedName);
-        // use addClassFilter(ReferenceType) in order to stop on subclasses also!
-        entryRequest.addClassFilter(classType);
-        debugProcess.getRequestsManager().enableRequest(entryRequest);
-      }
-      if (WATCH_EXIT) {
-        MethodExitRequest exitRequest = (MethodExitRequest)findRequest(debugProcess, MethodExitRequest.class);
-        if (exitRequest == null) {
-          exitRequest = requestManager.createMethodExitRequest(this);
-        }
-        else {
-          exitRequest.disable();
-        }
-        //exitRequest.addClassFilter(myClassQualifiedName);
-        exitRequest.addClassFilter(classType);
-        debugProcess.getRequestsManager().enableRequest(exitRequest);
-      }
-    }
-    catch (Exception e) {
-      LOG.debug(e);
-    }
-  }
-
-
-  public String getEventMessage(@NotNull LocatableEvent event) {
-    final Location location = event.location();
-    final String locationQName = location.declaringType().name() + "." + location.method().name();
-    String locationFileName = "";
-    try {
-      locationFileName = location.sourceName();
-    }
-    catch (AbsentInformationException e) {
-      locationFileName = getSourcePosition().getFile().getName();
-    }
-    final int locationLine = location.lineNumber();
-    if (event instanceof MethodEntryEvent) {
-      MethodEntryEvent entryEvent = (MethodEntryEvent)event;
-      final Method method = entryEvent.method();
-      return DebuggerBundle.message(
-        "status.method.entry.breakpoint.reached", 
-        method.declaringType().name() + "." + method.name() + "()",
-        locationQName,
-        locationFileName,
-        locationLine
-      );
-    }
-    if (event instanceof MethodExitEvent) {
-      MethodExitEvent exitEvent = (MethodExitEvent)event;
-      final Method method = exitEvent.method();
-      return DebuggerBundle.message(
-        "status.method.exit.breakpoint.reached", 
-        method.declaringType().name() + "." + method.name() + "()",
-        locationQName,
-        locationFileName,
-        locationLine
-      );
-    }
-    return "";
-  }
-
-  public PsiElement getEvaluationElement() {
-    return getPsiClass();
-  }
-
-  @NotNull
-  protected Icon getDisabledIcon(boolean isMuted) {
-    final Breakpoint master = DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager().findMasterBreakpoint(this);
-    if (isMuted) {
-      return master == null? AllIcons.Debugger.Db_muted_disabled_method_breakpoint : AllIcons.Debugger.Db_muted_dep_method_breakpoint;
-    }
-    else {
-      return master == null? AllIcons.Debugger.Db_disabled_method_breakpoint : AllIcons.Debugger.Db_dep_method_breakpoint;
-    }
-  }
-
-  @NotNull
-  protected Icon getSetIcon(boolean isMuted) {
-    return isMuted? AllIcons.Debugger.Db_muted_method_breakpoint : AllIcons.Debugger.Db_method_breakpoint;
-  }
-
-  @NotNull
-  protected Icon getInvalidIcon(boolean isMuted) {
-    return isMuted? AllIcons.Debugger.Db_muted_invalid_method_breakpoint : AllIcons.Debugger.Db_invalid_method_breakpoint;
-  }
-
-  @NotNull
-  protected Icon getVerifiedIcon(boolean isMuted) {
-    return isMuted? AllIcons.Debugger.Db_muted_verified_method_breakpoint : AllIcons.Debugger.Db_verified_method_breakpoint;
-  }
-
-  @NotNull
-  protected Icon getVerifiedWarningsIcon(boolean isMuted) {
-    return isMuted? AllIcons.Debugger.Db_muted_method_warning_breakpoint : AllIcons.Debugger.Db_method_warning_breakpoint;
-  }
-
-  public String getDisplayName() {
-    final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-    try {
-      if(isValid()) {
-        final String className = getClassName();
-        final boolean classNameExists = className != null && className.length() > 0;
-        if (classNameExists) {
-          buffer.append(className);
-        }
-        if(myMethodName != null) {
-          if (classNameExists) {
-            buffer.append(".");
-          }
-          buffer.append(myMethodName);
-        }
-      }
-      else {
-        buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
-      }
-      return buffer.toString();
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(buffer);
-    }
-  }
-
-  public boolean evaluateCondition(@NotNull EvaluationContextImpl context, @NotNull LocatableEvent event) throws EvaluateException {
-    if (!matchesEvent(event, context.getDebugProcess())) {
-      return false;
-    }
-    return super.evaluateCondition(context, event);
-  }
-
-  public boolean matchesEvent(@NotNull final LocatableEvent event, final DebugProcessImpl process) throws EvaluateException {
-    if (myMethodName == null || mySignature == null) {
-      return false;
-    }
-    final Method method = event.location().method();
-    return method != null && method.name().equals(myMethodName) && method.signature().equals(mySignature.getName(process));
-  }
-
-  @Nullable
-  public static MethodBreakpoint create(@NotNull Project project, @NotNull Document document, int lineIndex) {
-    final MethodBreakpoint breakpoint = new MethodBreakpoint(project, createHighlighter(project, document, lineIndex));
-    return (MethodBreakpoint)breakpoint.init();
-  }
+			RequestManagerImpl requestManager = debugProcess.getRequestsManager();
+			if(isWatchEntry())
+			{
+				MethodEntryRequest entryRequest = (MethodEntryRequest) findRequest(debugProcess, MethodEntryRequest.class);
+				if(entryRequest == null)
+				{
+					entryRequest = requestManager.createMethodEntryRequest(this);
+				}
+				else
+				{
+					entryRequest.disable();
+				}
+				//entryRequest.addClassFilter(myClassQualifiedName);
+				// use addClassFilter(ReferenceType) in order to stop on subclasses also!
+				entryRequest.addClassFilter(classType);
+				debugProcess.getRequestsManager().enableRequest(entryRequest);
+			}
+			if(isWatchExit())
+			{
+				MethodExitRequest exitRequest = (MethodExitRequest) findRequest(debugProcess, MethodExitRequest.class);
+				if(exitRequest == null)
+				{
+					exitRequest = requestManager.createMethodExitRequest(this);
+				}
+				else
+				{
+					exitRequest.disable();
+				}
+				//exitRequest.addClassFilter(myClassQualifiedName);
+				exitRequest.addClassFilter(classType);
+				debugProcess.getRequestsManager().enableRequest(exitRequest);
+			}
+		}
+		catch(Exception e)
+		{
+			LOG.debug(e);
+		}
+	}
 
 
-  public boolean canMoveTo(final SourcePosition position) {
-    return super.canMoveTo(position) && PositionUtil.getPsiElementAt(getProject(), PsiMethod.class, position) != null;
-  }
+	public String getEventMessage(@NotNull LocatableEvent event)
+	{
+		final Location location = event.location();
+		final String locationQName = location.declaringType().name() + "." + location.method().name();
+		String locationFileName = "";
+		try
+		{
+			locationFileName = location.sourceName();
+		}
+		catch(AbsentInformationException e)
+		{
+			locationFileName = getFileName();
+		}
+		final int locationLine = location.lineNumber();
+		if(event instanceof MethodEntryEvent)
+		{
+			MethodEntryEvent entryEvent = (MethodEntryEvent) event;
+			final Method method = entryEvent.method();
+			return DebuggerBundle.message("status.method.entry.breakpoint.reached", method.declaringType().name() + "." + method.name() + "()",
+					locationQName, locationFileName, locationLine);
+		}
+		if(event instanceof MethodExitEvent)
+		{
+			MethodExitEvent exitEvent = (MethodExitEvent) event;
+			final Method method = exitEvent.method();
+			return DebuggerBundle.message("status.method.exit.breakpoint.reached", method.declaringType().name() + "." + method.name() + "()",
+					locationQName, locationFileName, locationLine);
+		}
+		return "";
+	}
 
-  /**
-   * finds FQ method's class name and method's signature
-   */
-  @Nullable
-  private static MethodDescriptor getMethodDescriptor(@NotNull final Project project, @NotNull final PsiFile psiJavaFile, @NotNull final SourcePosition sourcePosition) {
-    final PsiDocumentManager docManager = PsiDocumentManager.getInstance(project);
-    final Document document = docManager.getDocument(psiJavaFile);
-    if(document == null) {
-      return null;
-    }
-    //final int endOffset = document.getLineEndOffset(sourcePosition);
-    final MethodDescriptor descriptor = docManager.commitAndRunReadAction(new Computable<MethodDescriptor>() {
-      @Nullable
-      public MethodDescriptor compute() {
-        //PsiMethod method = DebuggerUtilsEx.findPsiMethod(psiJavaFile, endOffset);
-        PsiMethod method = PositionUtil.getPsiElementAt(project, PsiMethod.class, sourcePosition);
-        if (method == null) {
-          return null;
-        }
-        final int methodOffset = method.getTextOffset();
-        if (methodOffset < 0) {
-          return null;
-        }
-        if (document.getLineNumber(methodOffset) < sourcePosition.getLine()) {
-          return null;
-        }
+	public PsiElement getEvaluationElement()
+	{
+		return getPsiClass();
+	}
 
-        final PsiIdentifier identifier = method.getNameIdentifier();
-        int methodNameOffset = identifier != null? identifier.getTextOffset() : methodOffset;
-        final MethodDescriptor descriptor =
-          new MethodDescriptor();
-        //noinspection HardCodedStringLiteral
-        descriptor.methodName = method.isConstructor() ? "<init>" : method.getName();
-        try {
-          descriptor.methodSignature = JVMNameUtil.getJVMSignature(method);
-          descriptor.isStatic = method.hasModifierProperty(PsiModifier.STATIC);
-        }
-        catch (IndexNotReadyException ignored) {
-          return null;
-        }
-        descriptor.methodLine = document.getLineNumber(methodNameOffset);
-        return descriptor;
-      }
-    });
-    if (descriptor == null || descriptor.methodName == null || descriptor.methodSignature == null) {
-      return null;
-    }
-    return descriptor;
-  }
+	@NotNull
+	protected Icon getDisabledIcon(boolean isMuted)
+	{
+		final Breakpoint master = DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager().findMasterBreakpoint(this);
+		if(isMuted)
+		{
+			return master == null ? AllIcons.Debugger.Db_muted_disabled_method_breakpoint : AllIcons.Debugger.Db_muted_dep_method_breakpoint;
+		}
+		else
+		{
+			return master == null ? AllIcons.Debugger.Db_disabled_method_breakpoint : AllIcons.Debugger.Db_dep_method_breakpoint;
+		}
+	}
 
-  @Nullable
-  private EventRequest findRequest(@NotNull DebugProcessImpl debugProcess, Class requestClass) {
-    Set reqSet = debugProcess.getRequestsManager().findRequests(this);
-    for (Iterator iterator = reqSet.iterator(); iterator.hasNext();) {
-      EventRequest eventRequest = (EventRequest) iterator.next();
-      if(eventRequest.getClass().equals(requestClass)) {
-        return eventRequest;
-      }
-    }
+	@NotNull
+	protected Icon getSetIcon(boolean isMuted)
+	{
+		return isMuted ? AllIcons.Debugger.Db_muted_method_breakpoint : AllIcons.Debugger.Db_method_breakpoint;
+	}
 
-    return null;
-  }
+	@NotNull
+	protected Icon getInvalidIcon(boolean isMuted)
+	{
+		return isMuted ? AllIcons.Debugger.Db_muted_invalid_method_breakpoint : AllIcons.Debugger.Db_invalid_method_breakpoint;
+	}
 
-  public String toString() {
-    return getDescription();
-  }
+	@NotNull
+	protected Icon getVerifiedIcon(boolean isMuted)
+	{
+		return isMuted ? AllIcons.Debugger.Db_muted_verified_method_breakpoint : AllIcons.Debugger.Db_verified_method_breakpoint;
+	}
 
-  public boolean isBodyAt(@NotNull Document document, int offset) {
-    PsiFile psiFile = PsiDocumentManager.getInstance(myProject).getPsiFile(document);
-    if(psiFile instanceof PsiJavaFile) {
-      PsiMethod method = DebuggerUtilsEx.findPsiMethod(psiFile, offset);
-      return method == getPsiMethod();
-    }
+	@NotNull
+	protected Icon getVerifiedWarningsIcon(boolean isMuted)
+	{
+		return isMuted ? AllIcons.Debugger.Db_muted_method_warning_breakpoint : AllIcons.Debugger.Db_method_warning_breakpoint;
+	}
 
-    return false;
-  }
+	public String getDisplayName()
+	{
+		final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
+		try
+		{
+			if(isValid())
+			{
+				final String className = getClassName();
+				final boolean classNameExists = className != null && className.length() > 0;
+				if(classNameExists)
+				{
+					buffer.append(className);
+				}
+				if(getMethodName() != null)
+				{
+					if(classNameExists)
+					{
+						buffer.append(".");
+					}
+					buffer.append(getMethodName());
+				}
+			}
+			else
+			{
+				buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
+			}
+			return buffer.toString();
+		}
+		finally
+		{
+			StringBuilderSpinAllocator.dispose(buffer);
+		}
+	}
 
-  private static final class MethodDescriptor {
-    String methodName;
-    JVMName methodSignature;
-    boolean isStatic;
-    int methodLine;
-  }
+	public boolean evaluateCondition(@NotNull EvaluationContextImpl context, @NotNull LocatableEvent event) throws EvaluateException
+	{
+		if(!matchesEvent(event, context.getDebugProcess()))
+		{
+			return false;
+		}
+		return super.evaluateCondition(context, event);
+	}
+
+	public boolean matchesEvent(@NotNull final LocatableEvent event, final DebugProcessImpl process) throws EvaluateException
+	{
+		if(getMethodName() == null || mySignature == null)
+		{
+			return false;
+		}
+		final Method method = event.location().method();
+		return method != null && method.name().equals(getMethodName()) && method.signature().equals(mySignature.getName(process));
+	}
+
+	@Nullable
+	public static MethodBreakpoint create(@NotNull Project project, XBreakpoint xBreakpoint)
+	{
+		final MethodBreakpoint breakpoint = new MethodBreakpoint(project, xBreakpoint);
+		return (MethodBreakpoint) breakpoint.init();
+	}
+
+
+	//public boolean canMoveTo(final SourcePosition position) {
+	//  return super.canMoveTo(position) && PositionUtil.getPsiElementAt(getProject(), PsiMethod.class, position) != null;
+	//}
+
+	/**
+	 * finds FQ method's class name and method's signature
+	 */
+	@Nullable
+	private static MethodDescriptor getMethodDescriptor(
+			@NotNull final Project project,
+			@NotNull final PsiFile psiJavaFile,
+			@NotNull final SourcePosition sourcePosition)
+	{
+		final PsiDocumentManager docManager = PsiDocumentManager.getInstance(project);
+		final Document document = docManager.getDocument(psiJavaFile);
+		if(document == null)
+		{
+			return null;
+		}
+		//final int endOffset = document.getLineEndOffset(sourcePosition);
+		final MethodDescriptor descriptor = docManager.commitAndRunReadAction(new Computable<MethodDescriptor>()
+		{
+			@Nullable
+			public MethodDescriptor compute()
+			{
+				//PsiMethod method = DebuggerUtilsEx.findPsiMethod(psiJavaFile, endOffset);
+				PsiMethod method = PositionUtil.getPsiElementAt(project, PsiMethod.class, sourcePosition);
+				if(method == null)
+				{
+					return null;
+				}
+				final int methodOffset = method.getTextOffset();
+				if(methodOffset < 0)
+				{
+					return null;
+				}
+				if(document.getLineNumber(methodOffset) < sourcePosition.getLine())
+				{
+					return null;
+				}
+
+				final PsiIdentifier identifier = method.getNameIdentifier();
+				int methodNameOffset = identifier != null ? identifier.getTextOffset() : methodOffset;
+				final MethodDescriptor descriptor = new MethodDescriptor();
+				//noinspection HardCodedStringLiteral
+				descriptor.methodName = method.isConstructor() ? "<init>" : method.getName();
+				try
+				{
+					descriptor.methodSignature = JVMNameUtil.getJVMSignature(method);
+					descriptor.isStatic = method.hasModifierProperty(PsiModifier.STATIC);
+				}
+				catch(IndexNotReadyException ignored)
+				{
+					return null;
+				}
+				descriptor.methodLine = document.getLineNumber(methodNameOffset);
+				return descriptor;
+			}
+		});
+		if(descriptor == null || descriptor.methodName == null || descriptor.methodSignature == null)
+		{
+			return null;
+		}
+		return descriptor;
+	}
+
+	@Nullable
+	private EventRequest findRequest(@NotNull DebugProcessImpl debugProcess, Class requestClass)
+	{
+		Set reqSet = debugProcess.getRequestsManager().findRequests(this);
+		for(Iterator iterator = reqSet.iterator(); iterator.hasNext(); )
+		{
+			EventRequest eventRequest = (EventRequest) iterator.next();
+			if(eventRequest.getClass().equals(requestClass))
+			{
+				return eventRequest;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public void readExternal(@NotNull Element breakpointNode) throws InvalidDataException
+	{
+		super.readExternal(breakpointNode);
+		try
+		{
+			getProperties().WATCH_ENTRY = Boolean.valueOf(JDOMExternalizerUtil.readField(breakpointNode, "WATCH_ENTRY"));
+		}
+		catch(Exception e)
+		{
+		}
+		try
+		{
+			getProperties().WATCH_EXIT = Boolean.valueOf(JDOMExternalizerUtil.readField(breakpointNode, "WATCH_EXIT"));
+		}
+		catch(Exception e)
+		{
+		}
+	}
+
+	public String toString()
+	{
+		return getDescription();
+	}
+
+	public boolean isBodyAt(@NotNull Document document, int offset)
+	{
+		PsiFile psiFile = PsiDocumentManager.getInstance(myProject).getPsiFile(document);
+		if(psiFile instanceof PsiJavaFile)
+		{
+			PsiMethod method = DebuggerUtilsEx.findPsiMethod(psiFile, offset);
+			return method == getPsiMethod();
+		}
+
+		return false;
+	}
+
+	private boolean isWatchEntry()
+	{
+		return getProperties().WATCH_ENTRY;
+	}
+
+	private boolean isWatchExit()
+	{
+		return getProperties().WATCH_EXIT;
+	}
+
+	@Nullable
+	private String getMethodName()
+	{
+		return getProperties().myMethodName;
+	}
+
+	private void setMethodName(@Nullable String methodName)
+	{
+		getProperties().myMethodName = methodName;
+	}
+
+	private static final class MethodDescriptor
+	{
+		String methodName;
+		JVMName methodSignature;
+		boolean isStatic;
+		int methodLine;
+	}
 }
