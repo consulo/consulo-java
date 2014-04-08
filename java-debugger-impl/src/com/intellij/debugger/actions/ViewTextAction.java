@@ -15,6 +15,14 @@
  */
 package com.intellij.debugger.actions;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
@@ -23,14 +31,10 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.impl.DocumentImpl;
-import com.intellij.openapi.fileTypes.FileTypes;
+import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.EditorTextField;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
 
 /*
  * @author Jeka
@@ -85,7 +89,7 @@ public class ViewTextAction extends BaseValueAction {
   private static class TextViewer extends EditorTextField {
 
     private TextViewer(Project project) {
-      super(createDocument(), project, FileTypes.PLAIN_TEXT, true, false);
+      super(createDocument(), project, PlainTextFileType.INSTANCE, true, false);
     }
 
     private static Document createDocument() {

@@ -27,6 +27,7 @@ import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.breakpoints.BreakpointManager;
 import com.intellij.debugger.ui.breakpoints.MethodBreakpoint;
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -38,7 +39,6 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -121,7 +121,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
         if (file != null) {
           final VirtualFile virtualFile = file.getVirtualFile();
           FileType fileType = virtualFile != null ? virtualFile.getFileType() : null;
-          if (fileType == JavaFileType.INSTANCE || StdFileTypes.CLASS  == fileType) {
+          if (fileType == JavaFileType.INSTANCE || fileType == JavaClassFileType.INSTANCE) {
             method = findMethod(project, editor);
           }
         }

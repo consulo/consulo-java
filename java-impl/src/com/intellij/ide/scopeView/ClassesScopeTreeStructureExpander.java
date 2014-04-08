@@ -28,6 +28,7 @@ import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.PsiClassChildrenSource;
@@ -35,7 +36,6 @@ import com.intellij.ide.scopeView.nodes.ClassNode;
 import com.intellij.ide.scopeView.nodes.FieldNode;
 import com.intellij.ide.scopeView.nodes.MethodNode;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.packageDependencies.ui.DependencyNodeComparator;
@@ -79,7 +79,7 @@ public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpa
           final PsiElement file = fileNode.getPsiElement();
           if (file instanceof PsiJavaFile) {
             final VirtualFile virtualFile = ((PsiJavaFile)file).getVirtualFile();
-            if (virtualFile == null || (virtualFile.getFileType() != JavaFileType.INSTANCE && virtualFile.getFileType() != StdFileTypes.CLASS)) {
+            if (virtualFile == null || (virtualFile.getFileType() != JavaFileType.INSTANCE && virtualFile.getFileType() != JavaClassFileType.INSTANCE)) {
               return;
             }
             final PsiClass[] psiClasses = ((PsiJavaFile)file).getClasses();

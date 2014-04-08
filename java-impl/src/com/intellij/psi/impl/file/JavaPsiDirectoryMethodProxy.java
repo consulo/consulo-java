@@ -16,10 +16,10 @@
 package com.intellij.psi.impl.file;
 
 import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
@@ -36,7 +36,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy
 	public boolean checkCreateFile(@NotNull PsiDirectory psiDirectory,  @NotNull final String name) throws IncorrectOperationException
 	{
 		final FileType type = FileTypeManager.getInstance().getFileTypeByFileName(name);
-		if(type == StdFileTypes.CLASS)
+		if(type == JavaClassFileType.INSTANCE)
 		{
 			throw new IncorrectOperationException("Cannot create class-file");
 		}

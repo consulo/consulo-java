@@ -19,21 +19,21 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.fileTypes.BinaryFileDecompiler;
 import com.intellij.openapi.fileTypes.ContentBasedFileSubstitutor;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
-import org.jetbrains.annotations.NotNull;
 
 public class ClassFileDecompiler implements BinaryFileDecompiler {
   @Override
   @NotNull
   public CharSequence decompile(final VirtualFile file) {
-    assert file.getFileType() == StdFileTypes.CLASS;
+    assert file.getFileType() == JavaClassFileType.INSTANCE;
 
     final Project[] projects = ProjectManager.getInstance().getOpenProjects();
     if (projects.length == 0) return "";

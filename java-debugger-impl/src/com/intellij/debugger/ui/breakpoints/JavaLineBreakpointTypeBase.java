@@ -23,9 +23,9 @@ import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
 import org.jetbrains.java.debugger.breakpoints.JavaBreakpointFiltersPanel;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.debugger.engine.DebuggerUtils;
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -95,12 +95,12 @@ public abstract class JavaLineBreakpointTypeBase<P extends JavaBreakpointPropert
 	{
 		PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
 		// JSPX supports jvm debugging, but not in XHTML files
-		if(psiFile == null || psiFile.getVirtualFile().getFileType() == StdFileTypes.XHTML)
+		if(psiFile == null /*|| psiFile.getVirtualFile().getFileType() == XHtmlFileType.INSTANCE*/)
 		{
 			return false;
 		}
 
-		if(!StdFileTypes.CLASS.equals(psiFile.getFileType()) && !DebuggerUtils.isSupportJVMDebugging(psiFile))
+		if(!JavaClassFileType.INSTANCE.equals(psiFile.getFileType()) && !DebuggerUtils.isSupportJVMDebugging(psiFile))
 		{
 			return false;
 		}

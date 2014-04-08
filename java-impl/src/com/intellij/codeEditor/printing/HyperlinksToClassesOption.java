@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.psi.PsiClass;
@@ -47,7 +46,7 @@ public class HyperlinksToClassesOption extends PrintOption {
   public TreeMap<Integer, PsiReference> collectReferences(PsiFile psiFile, Map<PsiFile, PsiFile> filesMap) {
     if (isGenerateHyperlinksToClasses) {
       FileType fileType = psiFile.getFileType();
-      if (JavaFileType.INSTANCE == fileType || StdFileTypes.JSP == fileType) {
+      if (JavaFileType.INSTANCE == fileType /*|| StdFileTypes.JSP == fileType*/) {
         final TreeMap<Integer, PsiReference> refMap = new TreeMap<Integer, PsiReference>();
         findClassReferences(psiFile, refMap, filesMap, psiFile);
         return refMap;

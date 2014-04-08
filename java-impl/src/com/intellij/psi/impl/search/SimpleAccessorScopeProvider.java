@@ -15,15 +15,19 @@
  */
 package com.intellij.psi.impl.search;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.XHtmlFileType;
+import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 
-public class SimpleAccessorScopeProvider implements CustomPropertyScopeProvider {
-  public SearchScope getScope(final Project project) {
-    return GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(project),
-                                                           StdFileTypes.JSP, StdFileTypes.JSPX,
-                                                           StdFileTypes.XML, StdFileTypes.XHTML);
-  }
+public class SimpleAccessorScopeProvider implements CustomPropertyScopeProvider
+{
+	@Override
+	public SearchScope getScope(final Project project)
+	{
+		return GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(project),
+				//StdFileTypes.JSP, StdFileTypes.JSPX,
+				XmlFileType.INSTANCE, XHtmlFileType.INSTANCE);
+	}
 }
