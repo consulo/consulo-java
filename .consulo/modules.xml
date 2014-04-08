@@ -118,6 +118,7 @@
         <orderEntry type="sourceFolder" forTests="false" />
         <orderEntry type="module" module-name="java-execution-api" />
         <orderEntry type="module" module-name="java-psi-api" />
+        <orderEntry type="library" exploded="" name="jdi" level="project" />
       </module>
       <module name="java-compiler-impl" dirurl="file://$PROJECT_DIR$/java-compiler-impl">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />

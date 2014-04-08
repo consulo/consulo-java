@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jdi">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jdi.jar!/" />
+    </CLASSES>
+    <DOCUMENTATION />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libSrc/jdi-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

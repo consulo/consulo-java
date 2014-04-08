@@ -44,6 +44,7 @@
             <element id="module-output" name="java-manifest" />
             <element id="module-production-resource-output" name="java-manifest" />
           </element>
+          <element id="library" level="project" name="jdi" />
         </element>
       </element>
     </root>
