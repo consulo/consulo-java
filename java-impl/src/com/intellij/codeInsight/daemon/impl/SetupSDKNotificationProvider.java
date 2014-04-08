@@ -41,83 +41,106 @@ import com.intellij.ui.EditorNotifications;
 /**
  * @author Danila Ponomarenko
  */
-public class SetupSDKNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> {
-  private static final Key<EditorNotificationPanel> KEY = Key.create("Setup SDK");
+public class SetupSDKNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel>
+{
+	private static final Key<EditorNotificationPanel> KEY = Key.create("Setup SDK");
 
-  private final Project myProject;
+	private final Project myProject;
 
-  public SetupSDKNotificationProvider(Project project, final EditorNotifications notifications) {
-    myProject = project;
-    myProject.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
-      @Override
-      public void rootsChanged(ModuleRootEvent event) {
-        notifications.updateAllNotifications();
-      }
-    });
-    myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener.Adapter() {
-      @Override
-      public void afterExtensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension) {
-        notifications.updateAllNotifications();
-      }
-    });
-  }
+	public SetupSDKNotificationProvider(Project project, final EditorNotifications notifications)
+	{
+		myProject = project;
+		myProject.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter()
+		{
+			@Override
+			public void rootsChanged(ModuleRootEvent event)
+			{
+				notifications.updateAllNotifications();
+			}
+		});
+		myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener.Adapter()
+		{
+			@Override
+			public void afterExtensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension)
+			{
+				notifications.updateAllNotifications();
+			}
+		});
+	}
 
-  @Override
-  public Key<EditorNotificationPanel> getKey() {
-    return KEY;
-  }
+	@Override
+	public Key<EditorNotificationPanel> getKey()
+	{
+		return KEY;
+	}
 
-  @Override
-  public EditorNotificationPanel createNotificationPanel(VirtualFile file, FileEditor fileEditor) {
-    if (file.getFileType() == JavaClassFileType.INSTANCE) return null;
+	@Override
+	public EditorNotificationPanel createNotificationPanel(VirtualFile file, FileEditor fileEditor)
+	{
+		if(file.getFileType() == JavaClassFileType.INSTANCE)
+		{
+			return null;
+		}
 
-    final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
-    if (psiFile == null) {
-      return null;
-    }
+		final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
+		if(psiFile == null)
+		{
+			return null;
+		}
 
-    if (psiFile.getLanguage() != JavaLanguage.INSTANCE) {
-      return null;
-    }
+		if(psiFile.getLanguage() != JavaLanguage.INSTANCE)
+		{
+			return null;
+		}
 
-    final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
-    if(moduleForPsiElement == null) {
-      return null;
-    }
-    final JavaModuleExtensionImpl extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtensionImpl.class);
-    if(extension == null) {
-      return null;
-    }
+		final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
+		if(moduleForPsiElement == null)
+		{
+			return null;
+		}
+		final JavaModuleExtensionImpl extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtensionImpl.class);
+		if(extension == null)
+		{
+			return null;
+		}
 
-    if(extension.getInheritableSdk().isNull()) {
-      return createPanel(myProject, psiFile);
-    }
-    return null;
-  }
+		if(extension.getInheritableSdk().isNull())
+		{
+			return createPanel(myProject, psiFile);
+		}
+		return null;
+	}
 
-  @NotNull
-  private static EditorNotificationPanel createPanel(final @NotNull Project project, final @NotNull PsiFile file) {
-    final EditorNotificationPanel panel = new EditorNotificationPanel();
-    panel.setText(ProjectBundle.message("module.sdk.not.defined"));
-    panel.createActionLabel(ProjectBundle.message("module.sdk.setup"), new Runnable() {
-      @Override
-      public void run() {
-        final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
-        if(moduleForPsiElement == null) {
-          return;
-        }
+	@NotNull
+	private static EditorNotificationPanel createPanel(final @NotNull Project project, final @NotNull PsiFile file)
+	{
+		final EditorNotificationPanel panel = new EditorNotificationPanel();
+		panel.setText(ProjectBundle.message("module.sdk.not.defined"));
+		panel.createActionLabel(ProjectBundle.message("module.sdk.setup"), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
+				if(moduleForPsiElement == null)
+				{
+					return;
+				}
 
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          @Override
-          public void run() {
-            final Module module = ModuleUtilCore.findModuleForPsiElement(file);
-            if (module != null) {
-              ProjectSettingsService.getInstance(project).openModuleSettings(module);
-            }
-          }
-        });
-      }
-    });
-    return panel;
-  }
+				ApplicationManager.getApplication().runWriteAction(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+						if(module != null)
+						{
+							ProjectSettingsService.getInstance(project).openModuleSettings(module);
+						}
+					}
+				});
+			}
+		});
+		return panel;
+	}
 }

@@ -15,31 +15,37 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
+import java.io.IOException;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.options.Configurable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
+public interface BackendCompiler
+{
+	ExtensionPointName<BackendCompilerEP> EP_NAME = ExtensionPointName.create("org.consulo.java.backendCompiler");
 
-public interface BackendCompiler {
-  ExtensionPointName<BackendCompilerEP> EP_NAME = ExtensionPointName.create("org.consulo.java.backendCompiler");
+	@NotNull
+	String getPresentableName();
 
-  @NotNull String getPresentableName();
-  @NotNull Configurable createConfigurable();
-  @Nullable OutputParser createErrorParser(@NotNull String outputDir, Process process);
-  @Nullable OutputParser createOutputParser(@NotNull String outputDir);
+	@NotNull
+	Configurable createConfigurable();
 
-  boolean checkCompiler(final CompileScope scope);
+	@Nullable
+	OutputParser createErrorParser(@NotNull String outputDir, Process process);
 
-  @NotNull Process launchProcess(
-    @NotNull ModuleChunk chunk,
-    @NotNull String outputDir,
-    @NotNull CompileContext compileContext) throws IOException;
+	@Nullable
+	OutputParser createOutputParser(@NotNull String outputDir);
 
-  void compileFinished();
+	boolean checkCompiler(final CompileScope scope);
+
+	@NotNull
+	Process launchProcess(@NotNull ModuleChunk chunk, @NotNull String outputDir, @NotNull CompileContext compileContext) throws IOException;
+
+	void compileFinished();
 }

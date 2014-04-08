@@ -15,47 +15,60 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
+import java.io.IOException;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
+public abstract class ExternalCompiler implements BackendCompiler
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.ExternalCompiler");
 
-public abstract class ExternalCompiler implements BackendCompiler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.ExternalCompiler");
-  @NotNull
-  public abstract String[] createStartupCommand(ModuleChunk chunk, CompileContext context, String outputPath)
-    throws IOException, IllegalArgumentException;
+	@NotNull
+	public abstract String[] createStartupCommand(
+			ModuleChunk chunk,
+			CompileContext context,
+			String outputPath) throws IOException, IllegalArgumentException;
 
-  @Override
-  @NotNull
-  public Process launchProcess(@NotNull final ModuleChunk chunk, @NotNull final String outputDir, @NotNull final CompileContext compileContext) throws IOException {
-    final String[] commands = createStartupCommand(chunk, compileContext, outputDir);
+	@Override
+	@NotNull
+	public Process launchProcess(
+			@NotNull final ModuleChunk chunk,
+			@NotNull final String outputDir,
+			@NotNull final CompileContext compileContext) throws IOException
+	{
+		final String[] commands = createStartupCommand(chunk, compileContext, outputDir);
 
-    if (LOG.isDebugEnabled()) {
-      @NonNls final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-      try {
-        buf.append("\n===================================Environment:===========================\n");
-        for (String pair : EnvironmentUtil.getEnvironment()) {
-          buf.append("\t").append(pair).append("\n");
-        }
-        buf.append("=============================================================================\n");
-        buf.append("Running compiler: ");
-        for (final String command : commands) {
-          buf.append(" ").append(command);
-        }
+		if(LOG.isDebugEnabled())
+		{
+			@NonNls final StringBuilder buf = StringBuilderSpinAllocator.alloc();
+			try
+			{
+				buf.append("\n===================================Environment:===========================\n");
+				for(String pair : EnvironmentUtil.getEnvironment())
+				{
+					buf.append("\t").append(pair).append("\n");
+				}
+				buf.append("=============================================================================\n");
+				buf.append("Running compiler: ");
+				for(final String command : commands)
+				{
+					buf.append(" ").append(command);
+				}
 
-        LOG.debug(buf.toString());
-      }
-      finally {
-        StringBuilderSpinAllocator.dispose(buf);
-      }
-    }
+				LOG.debug(buf.toString());
+			}
+			finally
+			{
+				StringBuilderSpinAllocator.dispose(buf);
+			}
+		}
 
-    return Runtime.getRuntime().exec(commands);
-  }
+		return Runtime.getRuntime().exec(commands);
+	}
 }

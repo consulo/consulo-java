@@ -15,6 +15,10 @@
  */
 package com.intellij.compiler;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -23,63 +27,73 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
 import com.intellij.util.PathUtil;
 import com.intellij.util.PathsList;
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class JavaSdkUtil {
-  @NonNls public static final String IDEA_PREPEND_RTJAR = "idea.prepend.rtjar";
+public class JavaSdkUtil
+{
+	@NonNls
+	public static final String IDEA_PREPEND_RTJAR = "idea.prepend.rtjar";
 
-  public static void addRtJar(PathsList pathsList) {
-    final String ideaRtJarPath = getIdeaRtJarPath();
-    if (Boolean.getBoolean(IDEA_PREPEND_RTJAR)) {
-      pathsList.addFirst(ideaRtJarPath);
-    }
-    else {
-      pathsList.addTail(ideaRtJarPath);
-    }
-  }
-
-
-  public static String getJunit4JarPath() {
-    try {
-      return PathUtil.getJarPathForClass(Class.forName("org.junit.Test"));
-    }
-    catch (ClassNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  public static String getJunit3JarPath() {
-    try {
-      return PathUtil.getJarPathForClass(Class.forName("junit.runner.TestSuiteLoader")); //junit3 specific class
-    }
-    catch (ClassNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  public static String getIdeaRtJarPath() {
-    return PathUtil.getJarPathForClass(JavacRunner.class);
-  }
+	public static void addRtJar(PathsList pathsList)
+	{
+		final String ideaRtJarPath = getIdeaRtJarPath();
+		if(Boolean.getBoolean(IDEA_PREPEND_RTJAR))
+		{
+			pathsList.addFirst(ideaRtJarPath);
+		}
+		else
+		{
+			pathsList.addTail(ideaRtJarPath);
+		}
+	}
 
 
-  @Nullable
-  public static Sdk getSdkForCompilation(final ModuleChunk chunk) {
-    return getSdkForCompilation(chunk.getModule());
-  }
+	public static String getJunit4JarPath()
+	{
+		try
+		{
+			return PathUtil.getJarPathForClass(Class.forName("org.junit.Test"));
+		}
+		catch(ClassNotFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 
-  @Nullable
-  public static Sdk getSdkForCompilation(@NotNull final Module module) {
-    final JavaModuleExtension extension = ModuleUtil.getExtension(module, JavaModuleExtension.class);
-    return extension != null ? extension.getSdk() : null;
-  }
+	public static String getJunit3JarPath()
+	{
+		try
+		{
+			return PathUtil.getJarPathForClass(Class.forName("junit.runner.TestSuiteLoader")); //junit3 specific class
+		}
+		catch(ClassNotFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 
-  @Nullable
-  public static LanguageLevel getLanguageLevelForCompilation(final ModuleChunk chunk) {
-    final JavaModuleExtension extension = ModuleUtil.getExtension(chunk.getModule(), JavaModuleExtension.class);
-    return extension != null ? extension.getLanguageLevel() : LanguageLevel.HIGHEST;
-  }
+	public static String getIdeaRtJarPath()
+	{
+		return PathUtil.getJarPathForClass(JavacRunner.class);
+	}
 
+
+	@Nullable
+	public static Sdk getSdkForCompilation(final ModuleChunk chunk)
+	{
+		return getSdkForCompilation(chunk.getModule());
+	}
+
+	@Nullable
+	public static Sdk getSdkForCompilation(@NotNull final Module module)
+	{
+		final JavaModuleExtension extension = ModuleUtil.getExtension(module, JavaModuleExtension.class);
+		return extension != null ? extension.getSdk() : null;
+	}
+
+	@Nullable
+	public static LanguageLevel getLanguageLevelForCompilation(final ModuleChunk chunk)
+	{
+		final JavaModuleExtension extension = ModuleUtil.getExtension(chunk.getModule(), JavaModuleExtension.class);
+		return extension != null ? extension.getLanguageLevel() : LanguageLevel.HIGHEST;
+	}
 }
