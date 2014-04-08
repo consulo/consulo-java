@@ -936,7 +936,7 @@
 
 
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.AttachSourcesNotificationProvider"/>
-		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.SetupSDKNotificationProvider"/>
+		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.SetupJDKNotificationProvider"/>
 		<programRunner id="defaultRunRunner" implementation="com.intellij.execution.impl.DefaultJavaProgramRunner"/>
 
 

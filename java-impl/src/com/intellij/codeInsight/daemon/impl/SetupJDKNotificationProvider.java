@@ -15,11 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.module.extension.ModuleExtensionChangeListener;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.ProjectTopics;
+import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
@@ -27,7 +28,6 @@ import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
@@ -37,17 +37,18 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
+import lombok.val;
 
 /**
  * @author Danila Ponomarenko
  */
-public class SetupSDKNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel>
+public class SetupJDKNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel>
 {
-	private static final Key<EditorNotificationPanel> KEY = Key.create("Setup SDK");
+	private static final Key<EditorNotificationPanel> KEY = Key.create("setup.jdk.notifier");
 
 	private final Project myProject;
 
-	public SetupSDKNotificationProvider(Project project, final EditorNotifications notifications)
+	public SetupJDKNotificationProvider(Project project, final EditorNotifications notifications)
 	{
 		myProject = project;
 		myProject.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter()
@@ -98,7 +99,7 @@ public class SetupSDKNotificationProvider extends EditorNotifications.Provider<E
 		{
 			return null;
 		}
-		final JavaModuleExtensionImpl extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtensionImpl.class);
+		final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
 		if(extension == null)
 		{
 			return null;
@@ -114,9 +115,9 @@ public class SetupSDKNotificationProvider extends EditorNotifications.Provider<E
 	@NotNull
 	private static EditorNotificationPanel createPanel(final @NotNull Project project, final @NotNull PsiFile file)
 	{
-		final EditorNotificationPanel panel = new EditorNotificationPanel();
-		panel.setText(ProjectBundle.message("module.sdk.not.defined"));
-		panel.createActionLabel(ProjectBundle.message("module.sdk.setup"), new Runnable()
+		val panel = new EditorNotificationPanel();
+		panel.setText(JavaCoreBundle.message("module.jdk.not.defined"));
+		panel.createActionLabel(JavaCoreBundle.message("module.jdk.setup"), new Runnable()
 		{
 			@Override
 			public void run()
