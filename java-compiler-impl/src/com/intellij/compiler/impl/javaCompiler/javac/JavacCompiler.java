@@ -30,10 +30,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
 import com.intellij.compiler.CompilerIOUtil;
+import com.intellij.compiler.JavaCompilerBundle;
 import com.intellij.compiler.JavaCompilerUtil;
 import com.intellij.compiler.JavaSdkUtil;
 import com.intellij.compiler.OutputParser;
@@ -45,9 +47,9 @@ import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationPr
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -108,50 +110,57 @@ public class JavacCompiler extends ExternalCompiler
 		final Set<Sdk> checkedJdks = new HashSet<Sdk>();
 		for(final Module module : modules)
 		{
-			final Sdk jdk = JavaSdkUtil.getSdkForCompilation(module);
-			if(jdk == null || checkedJdks.contains(jdk))
+			final Sdk javaSdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
+			if(javaSdk == null )
+			{
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()),
+						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				return false;
+			}
+
+			if(checkedJdks.contains(javaSdk))
 			{
 				continue;
 			}
-			checkedJdks.add(jdk);
-			final SdkTypeId sdkType = jdk.getSdkType();
-			if(!(sdkType instanceof JavaSdkType))
-			{
-				continue;
-			}
-			final VirtualFile homeDirectory = jdk.getHomeDirectory();
+
+			checkedJdks.add(javaSdk);
+			final SdkTypeId sdkType = javaSdk.getSdkType();
+			assert sdkType instanceof JavaSdkType;
+
+			final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
 			if(homeDirectory == null)
 			{
-				Messages.showMessageDialog(myProject, CompilerBundle.jdkHomeNotFoundMessage(jdk), CompilerBundle.message("compiler.javac.name"),
-						Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath()),
+						JavaCompilerBundle.message("compiler.javac" +
+						".name"), Messages.getErrorIcon());
 				return false;
 			}
-			final String vmExecutablePath = ((JavaSdkType) sdkType).getVMExecutablePath(jdk);
+			final String vmExecutablePath = ((JavaSdkType) sdkType).getVMExecutablePath(javaSdk);
 			if(vmExecutablePath == null)
 			{
-				Messages.showMessageDialog(myProject, CompilerBundle.message("javac.error.vm.executable.missing", jdk.getName()),
-						CompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.vm.executable.missing", javaSdk.getName()),
+						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
-			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(jdk);
+			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(javaSdk);
 			if(toolsJarPath == null)
 			{
-				Messages.showMessageDialog(myProject, CompilerBundle.message("javac.error.tools.jar.missing", jdk.getName()),
-						CompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()),
+						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
-			final String versionString = jdk.getVersionString();
+			final String versionString = javaSdk.getVersionString();
 			if(versionString == null)
 			{
-				Messages.showMessageDialog(myProject, CompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()),
-						CompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()),
+						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 
 			if(CompilerUtil.isOfVersion(versionString, "1.0"))
 			{
-				Messages.showMessageDialog(myProject, CompilerBundle.message("javac.error.1_0_compilation.not.supported"),
-						CompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"),
+						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
 				return false;
 			}
 		}
@@ -163,7 +172,7 @@ public class JavacCompiler extends ExternalCompiler
 	@NotNull
 	public String getPresentableName()
 	{
-		return CompilerBundle.message("compiler.javac.name");
+		return JavaCompilerBundle.message("compiler.javac.name");
 	}
 
 	@Override
@@ -196,9 +205,7 @@ public class JavacCompiler extends ExternalCompiler
 	@Override
 	@NotNull
 	public String[] createStartupCommand(
-			final ModuleChunk chunk,
-			final CompileContext context,
-			final String outputPath) throws IOException, IllegalArgumentException
+			final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
 	{
 
 		try
@@ -245,7 +252,7 @@ public class JavacCompiler extends ExternalCompiler
 		JavaSdkVersion version = JavaSdk.getInstance().getVersion(jdk);
 		if(versionString == null || version == null || !(jdk.getSdkType() instanceof JavaSdkType))
 		{
-			throw new IllegalArgumentException(CompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
+			throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
 		}
 		final boolean isVersion1_0 = version == JavaSdkVersion.JDK_1_0;
 		final boolean isVersion1_1 = version == JavaSdkVersion.JDK_1_1;
@@ -255,7 +262,7 @@ public class JavacCompiler extends ExternalCompiler
 		final String toolsJarPath = sdkType.getToolsPath(jdk);
 		if(toolsJarPath == null)
 		{
-			throw new IllegalArgumentException(CompilerBundle.message("javac.error.tools.jar.missing", jdk.getName()));
+			throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.tools.jar.missing", jdk.getName()));
 		}
 
 		final String vmExePath = sdkType.getVMExecutablePath(jdk);

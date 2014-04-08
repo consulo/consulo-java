@@ -17,11 +17,10 @@ package com.intellij.compiler;
 
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
@@ -76,24 +75,15 @@ public class JavaSdkUtil
 		return PathUtil.getJarPathForClass(JavacRunner.class);
 	}
 
-
 	@Nullable
 	public static Sdk getSdkForCompilation(final ModuleChunk chunk)
 	{
-		return getSdkForCompilation(chunk.getModule());
-	}
-
-	@Nullable
-	public static Sdk getSdkForCompilation(@NotNull final Module module)
-	{
-		final JavaModuleExtension extension = ModuleUtil.getExtension(module, JavaModuleExtension.class);
-		return extension != null ? extension.getSdk() : null;
+		return ModuleUtilCore.getSdk(chunk.getModule(), JavaModuleExtension.class);
 	}
 
 	@Nullable
 	public static LanguageLevel getLanguageLevelForCompilation(final ModuleChunk chunk)
 	{
-		final JavaModuleExtension extension = ModuleUtil.getExtension(chunk.getModule(), JavaModuleExtension.class);
-		return extension != null ? extension.getLanguageLevel() : LanguageLevel.HIGHEST;
+		return EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(chunk.getModule());
 	}
 }
