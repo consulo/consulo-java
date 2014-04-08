@@ -15,6 +15,13 @@
  */
 package com.intellij.openapi.options.colors.pages;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.colors.InspectionColorSettingsPage;
 import com.intellij.ide.highlighter.JavaFileHighlighter;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -29,12 +36,6 @@ import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.codeStyle.DisplayPriority;
 import com.intellij.psi.codeStyle.DisplayPrioritySortable;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColorSettingsPage, DisplayPrioritySortable {
   private static final AttributesDescriptor[] ourDescriptors = {
@@ -201,6 +202,6 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
 
   @Override
   public DisplayPriority getPriority() {
-    return DisplayPriority.KEY_LANGUAGE_SETTINGS;
+    return DisplayPriority.LANGUAGE_SETTINGS;
   }
 }
