@@ -15,18 +15,17 @@
  */
 package com.intellij.debugger.apiAdapters;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.util.ArrayUtil;
-import consulo.internal.com.sun.jdi.connect.Transport;
-
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import com.intellij.execution.ExecutionException;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.util.ArrayUtil;
+import consulo.internal.com.sun.jdi.connect.Transport;
 
 /**
  * @author max
@@ -37,13 +36,9 @@ public class TransportServiceWrapper {
   private final Object myDelegateObject;
   private final Class myDelegateClass;
   @SuppressWarnings({"HardCodedStringLiteral"})
-  private static final String SOCKET_TRANSPORT_CLASS = SystemInfo.JAVA_VERSION.startsWith("1.4")
-                                                       ? "com.sun.tools.jdi.SocketTransport"
-                                                       : "com.sun.tools.jdi.SocketTransportService";
+  private static final String SOCKET_TRANSPORT_CLASS = "consulo.internal.com.sun.tools.jdi.SocketTransportService";
   @SuppressWarnings({"HardCodedStringLiteral"})
-  private static final String SHMEM_TRANSPORT_CLASS = SystemInfo.JAVA_VERSION.startsWith("1.4")
-                                                      ? "com.sun.tools.jdi.SharedMemoryTransport"
-                                                      : "com.sun.tools.jdi.SharedMemoryTransportService";
+  private static final String SHMEM_TRANSPORT_CLASS = "consulo.internal.com.sun.tools.jdi.SharedMemoryTransportService";
   
   private final Map<String, Object> myListenAddresses = new HashMap<String, Object>();
 
