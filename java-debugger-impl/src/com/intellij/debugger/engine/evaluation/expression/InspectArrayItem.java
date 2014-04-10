@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
-import com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ArrayReference;
 
 /**
  * User: lex

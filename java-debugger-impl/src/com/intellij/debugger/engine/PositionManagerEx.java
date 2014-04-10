@@ -22,7 +22,7 @@ import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.util.ThreeState;
 import com.intellij.xdebugger.frame.XStackFrame;
-import com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Location;
 
 public interface PositionManagerEx extends PositionManager
 {

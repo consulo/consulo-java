@@ -35,8 +35,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Value;
 
 public class UserExpressionDescriptorImpl extends EvaluationDescriptor implements UserExpressionDescriptor{
   private final ValueDescriptorImpl myParentDescriptor;

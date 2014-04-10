@@ -17,7 +17,7 @@ package com.intellij.debugger.impl.descriptors.data;
 
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.Field;
 import org.jetbrains.annotations.NotNull;
 
 public final class StaticFieldData extends DescriptorData<FieldDescriptorImpl>{

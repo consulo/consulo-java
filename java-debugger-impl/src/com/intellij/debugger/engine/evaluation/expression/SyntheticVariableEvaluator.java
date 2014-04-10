@@ -20,8 +20,8 @@ import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.Type;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * @author lex

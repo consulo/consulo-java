@@ -21,7 +21,7 @@ import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * Created by IntelliJ IDEA.

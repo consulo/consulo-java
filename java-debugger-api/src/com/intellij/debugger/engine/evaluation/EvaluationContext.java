@@ -19,8 +19,8 @@ import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.StackFrameContext;
 import com.intellij.debugger.engine.SuspendContext;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.ClassLoaderReference;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ClassLoaderReference;
+import consulo.internal.com.sun.jdi.Value;
 
 public interface EvaluationContext extends StackFrameContext{
   DebugProcess getDebugProcess();

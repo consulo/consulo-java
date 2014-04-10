@@ -28,7 +28,7 @@ import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -29,7 +29,7 @@ import com.intellij.openapi.progress.util.ProgressIndicatorListenerAdapter;
 import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.util.Alarm;
-import com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 

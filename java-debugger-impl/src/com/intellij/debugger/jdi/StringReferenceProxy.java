@@ -19,7 +19,7 @@
  */
 package com.intellij.debugger.jdi;
 
-import com.sun.jdi.StringReference;
+import consulo.internal.com.sun.jdi.StringReference;
 
 public class StringReferenceProxy extends ObjectReferenceProxyImpl{
   private String myStringValue;

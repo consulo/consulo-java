@@ -37,10 +37,10 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.VMDisconnectedException;
-import com.sun.jdi.request.StepRequest;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.request.StepRequest;
 
 public class RequestHint
 {

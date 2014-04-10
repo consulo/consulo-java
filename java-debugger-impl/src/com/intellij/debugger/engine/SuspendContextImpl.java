@@ -24,10 +24,10 @@ import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.HashSet;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ThreadReference;
-import com.sun.jdi.event.EventSet;
-import com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.event.EventSet;
+import consulo.internal.com.sun.jdi.request.EventRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

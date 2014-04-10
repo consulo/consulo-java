@@ -32,13 +32,13 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.ClassNotPreparedException;
-import com.sun.jdi.InternalException;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.request.BreakpointRequest;
+import consulo.internal.com.sun.jdi.ClassNotPreparedException;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.request.BreakpointRequest;
 
 /**
  * @author Eugene Zhuravlev

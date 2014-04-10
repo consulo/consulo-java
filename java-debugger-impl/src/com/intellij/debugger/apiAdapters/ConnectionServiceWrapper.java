@@ -18,10 +18,10 @@ package com.intellij.debugger.apiAdapters;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.ArrayUtil;
-import com.sun.jdi.Bootstrap;
-import com.sun.jdi.VMDisconnectedException;
-import com.sun.jdi.VirtualMachine;
-import com.sun.jdi.VirtualMachineManager;
+import consulo.internal.com.sun.jdi.Bootstrap;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.VirtualMachine;
+import consulo.internal.com.sun.jdi.VirtualMachineManager;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

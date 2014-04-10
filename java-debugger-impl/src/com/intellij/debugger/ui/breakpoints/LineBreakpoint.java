@@ -63,9 +63,9 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.sun.jdi.*;
-import com.sun.jdi.event.LocatableEvent;
-import com.sun.jdi.request.BreakpointRequest;
+import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.request.BreakpointRequest;
 
 public class LineBreakpoint extends BreakpointWithHighlighter
 {

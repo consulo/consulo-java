@@ -17,7 +17,7 @@ package com.intellij.debugger.engine;
 
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.util.Range;
-import com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Location;
 
 public interface MethodFilter
 {

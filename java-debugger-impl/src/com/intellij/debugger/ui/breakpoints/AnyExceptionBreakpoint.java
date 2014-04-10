@@ -30,7 +30,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.Key;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class AnyExceptionBreakpoint extends ExceptionBreakpoint
 {

@@ -43,10 +43,10 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
-import com.sun.jdi.ArrayReference;
-import com.sun.jdi.ArrayType;
-import com.sun.jdi.Type;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ArrayType;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * User: lex

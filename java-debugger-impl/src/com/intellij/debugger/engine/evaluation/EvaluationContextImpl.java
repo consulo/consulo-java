@@ -20,8 +20,8 @@ import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.ClassLoaderReference;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ClassLoaderReference;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.NotNull;
 
 /**

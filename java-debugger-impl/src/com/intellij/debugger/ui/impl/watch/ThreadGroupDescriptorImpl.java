@@ -23,7 +23,7 @@ import com.intellij.debugger.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.debugger.ui.tree.ThreadGroupDescriptor;
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
-import com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
 
 public class ThreadGroupDescriptorImpl extends NodeDescriptorImpl implements ThreadGroupDescriptor{
   private final ThreadGroupReferenceProxyImpl myThreadGroup;

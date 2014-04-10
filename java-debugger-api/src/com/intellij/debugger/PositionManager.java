@@ -15,14 +15,14 @@
  */
 package com.intellij.debugger;
 
-import com.intellij.debugger.requests.ClassPrepareRequestor;
-import com.sun.jdi.Location;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.request.ClassPrepareRequest;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
+import com.intellij.debugger.requests.ClassPrepareRequestor;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 
 /**
  * Manages the correspondence between source positions and bytecode locations during JVM debugging.

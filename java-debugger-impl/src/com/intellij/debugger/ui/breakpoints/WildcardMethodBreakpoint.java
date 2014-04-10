@@ -46,16 +46,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.sun.jdi.AbsentInformationException;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.event.LocatableEvent;
-import com.sun.jdi.event.MethodEntryEvent;
-import com.sun.jdi.event.MethodExitEvent;
-import com.sun.jdi.request.EventRequest;
-import com.sun.jdi.request.MethodEntryRequest;
-import com.sun.jdi.request.MethodExitRequest;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.event.MethodEntryEvent;
+import consulo.internal.com.sun.jdi.event.MethodExitEvent;
+import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
+import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 
 public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointProperties>
 {

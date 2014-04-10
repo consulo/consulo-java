@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.impl.watch.ArgumentValueDescriptorImpl;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 
 public class ArgValueData extends DescriptorData<ArgumentValueDescriptorImpl>
 {

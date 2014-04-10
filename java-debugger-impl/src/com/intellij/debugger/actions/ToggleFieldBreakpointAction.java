@@ -54,8 +54,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.sun.jdi.Field;
-import com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ObjectReference;
 
 /**
  * User: lex

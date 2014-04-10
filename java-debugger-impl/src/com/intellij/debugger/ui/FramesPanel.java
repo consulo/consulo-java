@@ -57,8 +57,8 @@ import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.border.CustomLineBorder;
 import com.intellij.ui.components.panels.Wrapper;
 import com.intellij.util.Alarm;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

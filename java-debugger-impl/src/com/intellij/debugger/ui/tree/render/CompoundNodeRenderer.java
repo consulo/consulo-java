@@ -25,8 +25,8 @@ import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.PsiExpression;
-import com.sun.jdi.Type;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 

@@ -19,7 +19,7 @@
  */
 package com.intellij.debugger.jdi;
 
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

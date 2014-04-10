@@ -49,15 +49,15 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiClass;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.containers.HashMap;
-import com.sun.jdi.ClassType;
-import com.sun.jdi.Field;
-import com.sun.jdi.InterfaceType;
-import com.sun.jdi.InternalException;
-import com.sun.jdi.Location;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.ThreadReference;
-import com.sun.jdi.event.ClassPrepareEvent;
-import com.sun.jdi.request.*;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.InterfaceType;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.event.ClassPrepareEvent;
+import consulo.internal.com.sun.jdi.request.*;
 
 /**
  * @author lex

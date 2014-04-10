@@ -31,7 +31,7 @@ import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.Nullable;
 
 /*

@@ -28,9 +28,9 @@ import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
-import com.sun.jdi.BooleanValue;
-import com.sun.jdi.PrimitiveValue;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.BooleanValue;
+import consulo.internal.com.sun.jdi.PrimitiveValue;
+import consulo.internal.com.sun.jdi.Value;
 
 class UnaryExpressionEvaluator implements Evaluator {
   private final IElementType myOperationType;

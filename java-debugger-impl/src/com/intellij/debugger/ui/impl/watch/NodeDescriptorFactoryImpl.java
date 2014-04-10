@@ -35,12 +35,12 @@ import com.intellij.debugger.ui.tree.NodeDescriptorFactory;
 import com.intellij.debugger.ui.tree.UserExpressionDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.ArrayReference;
-import com.sun.jdi.Field;
-import com.sun.jdi.Method;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Value;
 
 public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 {

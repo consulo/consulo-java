@@ -32,7 +32,7 @@ import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiExpression;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 

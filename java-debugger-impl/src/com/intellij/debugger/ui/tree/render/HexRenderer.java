@@ -22,7 +22,7 @@ import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiExpression;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.NonNls;
 
 /**

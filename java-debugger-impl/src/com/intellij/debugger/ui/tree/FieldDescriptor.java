@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.ui.tree;
 
-import com.sun.jdi.Field;
-import com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ObjectReference;
 
 public interface FieldDescriptor extends NodeDescriptor{
   Field           getField();

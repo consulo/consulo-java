@@ -17,8 +17,8 @@ package com.intellij.debugger.requests;
 
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.sun.jdi.request.ClassPrepareRequest;
-import com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
+import consulo.internal.com.sun.jdi.request.EventRequest;
 
 public interface RequestManager {
   void callbackOnPrepareClasses(ClassPrepareRequestor requestor, String classOrPatternToBeLoaded);

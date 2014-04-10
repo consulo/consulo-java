@@ -26,9 +26,9 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
-import com.sun.jdi.ArrayReference;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.Value;
 
 public class ArrayElementDescriptorImpl extends ValueDescriptorImpl implements ArrayElementDescriptor{
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.watch.ArrayElementDescriptorImpl");

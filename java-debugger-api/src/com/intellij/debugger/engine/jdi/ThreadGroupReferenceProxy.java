@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine.jdi;
 
-import com.sun.jdi.ThreadGroupReference;
+import consulo.internal.com.sun.jdi.ThreadGroupReference;
 
 public interface ThreadGroupReferenceProxy extends ObjectReferenceProxy{
   ThreadGroupReference getThreadGroupReference();

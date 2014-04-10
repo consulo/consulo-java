@@ -48,7 +48,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 public abstract class DebuggerUtils
 {

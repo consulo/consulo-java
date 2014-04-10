@@ -21,7 +21,7 @@ import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.xdebugger.impl.actions.DebuggerActionHandler;
-import com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.request.EventRequest;
 import org.jetbrains.annotations.NotNull;
 
 public class PauseActionHandler extends DebuggerActionHandler {

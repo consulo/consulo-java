@@ -27,9 +27,9 @@ import com.intellij.debugger.ui.tree.NodeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.containers.HashMap;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ReferenceType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;

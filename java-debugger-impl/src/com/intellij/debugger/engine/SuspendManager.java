@@ -16,8 +16,8 @@
 package com.intellij.debugger.engine;
 
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.event.EventSet;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.event.EventSet;
 
 import java.util.List;
 

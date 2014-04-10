@@ -84,11 +84,11 @@ import com.intellij.util.text.CharArrayUtil;
 import com.intellij.util.ui.tree.TreeModelAdapter;
 import com.intellij.xdebugger.XDebuggerBundle;
 import com.intellij.xdebugger.frame.XStackFrame;
-import com.sun.jdi.AbsentInformationException;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.Value;
 
 public class FrameVariablesTree extends DebuggerTree
 {

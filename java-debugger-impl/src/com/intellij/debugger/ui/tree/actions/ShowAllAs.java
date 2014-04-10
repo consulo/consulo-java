@@ -25,7 +25,7 @@ import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 import java.util.Enumeration;
 

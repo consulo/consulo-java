@@ -18,7 +18,7 @@ package com.intellij.debugger.impl.descriptors.data;
 import com.intellij.debugger.ui.impl.watch.ArrayElementDescriptorImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ArrayReference;
 import org.jetbrains.annotations.NotNull;
 
 public final class ArrayItemData extends DescriptorData<ArrayElementDescriptorImpl>{

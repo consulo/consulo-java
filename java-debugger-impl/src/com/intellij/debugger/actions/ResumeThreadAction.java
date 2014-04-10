@@ -25,7 +25,7 @@ import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ThreadDescriptorImpl;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.request.EventRequest;
 
 /**
  * User: lex

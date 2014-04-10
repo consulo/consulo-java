@@ -67,9 +67,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.xdebugger.impl.actions.ViewBreakpointsAction;
 import com.intellij.xdebugger.ui.DebuggerColors;
-import com.sun.jdi.event.Event;
-import com.sun.jdi.event.LocatableEvent;
-import com.sun.jdi.event.MethodEntryEvent;
+import consulo.internal.com.sun.jdi.event.Event;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.event.MethodEntryEvent;
 
 /**
  * Created by IntelliJ IDEA.

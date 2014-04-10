@@ -24,8 +24,8 @@ import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.DebuggerBundle;
-import com.sun.jdi.BooleanValue;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.BooleanValue;
+import consulo.internal.com.sun.jdi.Value;
 
 class ConditionalExpressionEvaluator implements Evaluator {
   private final Evaluator myConditionEvaluator;

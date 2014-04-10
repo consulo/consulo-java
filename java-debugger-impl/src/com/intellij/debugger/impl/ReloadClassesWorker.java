@@ -28,7 +28,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.ui.MessageCategory;
 import com.intellij.util.ui.UIUtil;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;

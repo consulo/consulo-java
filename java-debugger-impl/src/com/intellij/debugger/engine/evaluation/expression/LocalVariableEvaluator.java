@@ -31,7 +31,7 @@ import com.intellij.debugger.ui.impl.watch.LocalVariableDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 import java.util.List;
 

@@ -29,7 +29,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.rt.debugger.BatchEvaluatorServer;
 import com.intellij.util.containers.HashMap;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -45,12 +45,12 @@ import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.ui.TextTransferable;
 import com.intellij.xdebugger.frame.XStackFrame;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import com.sun.jdi.AbsentInformationException;
-import com.sun.jdi.InternalException;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 /**
  * Nodes of this type cannot be updated, because StackFrame objects become invalid as soon as VM has been resumed

@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.tree;
 
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 public interface StaticDescriptor extends NodeDescriptor{
   ReferenceType getType();

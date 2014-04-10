@@ -31,9 +31,9 @@ import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLocalVariable;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Value;
 
 import java.util.HashMap;
 import java.util.Iterator;

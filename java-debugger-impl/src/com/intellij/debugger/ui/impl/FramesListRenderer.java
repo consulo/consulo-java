@@ -25,7 +25,7 @@ import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.xdebugger.ui.DebuggerColors;
-import com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.Method;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;

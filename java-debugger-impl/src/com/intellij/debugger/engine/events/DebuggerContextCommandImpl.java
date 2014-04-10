@@ -21,7 +21,7 @@ import com.intellij.debugger.engine.SuspendManagerUtil;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
 
 public abstract class DebuggerContextCommandImpl extends SuspendContextCommandImpl {
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.events.DebuggerContextCommandImpl");

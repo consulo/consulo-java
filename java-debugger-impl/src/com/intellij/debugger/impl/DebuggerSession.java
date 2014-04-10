@@ -74,10 +74,10 @@ import com.intellij.util.Alarm;
 import com.intellij.xdebugger.AbstractDebuggerSession;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
 import com.intellij.xdebugger.impl.evaluate.quick.common.ValueLookupManager;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.ThreadReference;
-import com.sun.jdi.event.Event;
-import com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.event.Event;
+import consulo.internal.com.sun.jdi.request.EventRequest;
 
 public class DebuggerSession implements AbstractDebuggerSession
 {

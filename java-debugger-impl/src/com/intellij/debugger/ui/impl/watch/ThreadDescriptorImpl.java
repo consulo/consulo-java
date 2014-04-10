@@ -28,8 +28,8 @@ import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.debugger.ui.tree.ThreadDescriptor;
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.icons.AllIcons;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ThreadReference;
 
 import javax.swing.*;
 

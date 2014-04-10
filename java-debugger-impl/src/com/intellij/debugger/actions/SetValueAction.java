@@ -44,7 +44,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.util.IJSwingUtilities;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 import javax.swing.*;
 

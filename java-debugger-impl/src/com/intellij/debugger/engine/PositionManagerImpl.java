@@ -31,10 +31,10 @@ import com.intellij.openapi.util.Trinity;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
-import com.sun.jdi.AbsentInformationException;
-import com.sun.jdi.Location;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.request.ClassPrepareRequest;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

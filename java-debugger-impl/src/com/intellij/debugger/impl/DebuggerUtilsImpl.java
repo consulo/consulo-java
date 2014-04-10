@@ -37,7 +37,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.net.NetUtils;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 import org.jdom.Element;
 
 import java.io.IOException;

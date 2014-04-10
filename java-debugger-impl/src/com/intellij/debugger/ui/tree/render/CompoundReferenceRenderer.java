@@ -19,8 +19,8 @@ import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.CommonClassNames;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Type;
 import org.jetbrains.annotations.NotNull;
 
 public class CompoundReferenceRenderer extends CompoundNodeRenderer{

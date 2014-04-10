@@ -28,7 +28,7 @@ import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ArrayElementDescriptorImpl;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 class ArrayAccessEvaluator implements Evaluator {
   private final Evaluator myArrayReferenceEvaluator;

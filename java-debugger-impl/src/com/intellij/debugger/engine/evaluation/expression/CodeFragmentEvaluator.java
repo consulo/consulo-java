@@ -21,7 +21,7 @@ import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.HashMap;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 
 import java.util.Map;
 

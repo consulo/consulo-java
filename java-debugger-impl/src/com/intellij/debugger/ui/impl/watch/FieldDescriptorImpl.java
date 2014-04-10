@@ -36,7 +36,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.NotNull;
 
 public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDescriptor{

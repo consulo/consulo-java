@@ -38,9 +38,9 @@ import com.intellij.debugger.engine.jdi.VirtualMachineProxy;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.HashMap;
-import com.sun.jdi.*;
-import com.sun.jdi.event.EventQueue;
-import com.sun.jdi.request.EventRequestManager;
+import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.event.EventQueue;
+import consulo.internal.com.sun.jdi.request.EventRequestManager;
 
 public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 {

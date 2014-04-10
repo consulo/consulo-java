@@ -31,8 +31,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.sun.jdi.PrimitiveValue;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.PrimitiveValue;
+import consulo.internal.com.sun.jdi.Value;
 
 public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
 {

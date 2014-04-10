@@ -46,7 +46,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.xdebugger.impl.XDebuggerHistoryManager;
 import com.intellij.xdebugger.impl.breakpoints.ui.DefaultConditionComboBoxPanel;
-import com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
 
 /*
  * Not used any more, since move to xBreakpoints

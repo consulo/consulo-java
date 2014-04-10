@@ -68,14 +68,14 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.impl.XDebuggerHistoryManager;
 import com.intellij.xdebugger.impl.breakpoints.ui.DefaultLogExpressionComboBoxPanel;
-import com.sun.jdi.BooleanValue;
-import com.sun.jdi.Location;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.VMDisconnectedException;
-import com.sun.jdi.Value;
-import com.sun.jdi.VoidValue;
-import com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.BooleanValue;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.VoidValue;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
 
 /*
  * Class Breakpoint

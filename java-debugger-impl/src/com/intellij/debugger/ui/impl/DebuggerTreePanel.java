@@ -32,7 +32,7 @@ import com.intellij.openapi.wm.ex.IdeFocusTraversalPolicy;
 import com.intellij.ui.PopupHandler;
 import com.intellij.util.Alarm;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
-import com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 
 import javax.swing.*;
 import java.awt.*;

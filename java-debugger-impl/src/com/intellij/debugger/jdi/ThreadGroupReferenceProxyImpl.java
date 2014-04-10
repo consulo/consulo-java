@@ -21,8 +21,8 @@ package com.intellij.debugger.jdi;
 
 import com.intellij.debugger.engine.jdi.ThreadGroupReferenceProxy;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.ThreadGroupReference;
-import com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.ThreadGroupReference;
+import consulo.internal.com.sun.jdi.ThreadReference;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;

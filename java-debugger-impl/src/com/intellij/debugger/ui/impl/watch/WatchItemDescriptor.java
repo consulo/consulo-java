@@ -30,7 +30,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.Nullable;
 
 /**

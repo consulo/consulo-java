@@ -36,7 +36,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.Field;
 
 public class InspectAction extends DebuggerAction {
   public void actionPerformed(AnActionEvent e) {

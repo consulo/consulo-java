@@ -51,17 +51,17 @@ import com.intellij.util.Processor;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.sun.jdi.AbsentInformationException;
-import com.sun.jdi.Field;
-import com.sun.jdi.Location;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.event.AccessWatchpointEvent;
-import com.sun.jdi.event.LocatableEvent;
-import com.sun.jdi.event.ModificationWatchpointEvent;
-import com.sun.jdi.request.AccessWatchpointRequest;
-import com.sun.jdi.request.ModificationWatchpointRequest;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.event.AccessWatchpointEvent;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.event.ModificationWatchpointEvent;
+import consulo.internal.com.sun.jdi.request.AccessWatchpointRequest;
+import consulo.internal.com.sun.jdi.request.ModificationWatchpointRequest;
 
 
 /*

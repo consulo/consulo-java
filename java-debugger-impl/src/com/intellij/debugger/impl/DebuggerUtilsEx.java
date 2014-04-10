@@ -74,16 +74,16 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.SmartList;
-import com.sun.jdi.CharValue;
-import com.sun.jdi.ClassType;
-import com.sun.jdi.InterfaceType;
-import com.sun.jdi.Method;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.StringReference;
-import com.sun.jdi.ThreadReference;
-import com.sun.jdi.Value;
-import com.sun.jdi.event.Event;
-import com.sun.jdi.event.EventSet;
+import consulo.internal.com.sun.jdi.CharValue;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.InterfaceType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.StringReference;
+import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.event.Event;
+import consulo.internal.com.sun.jdi.event.EventSet;
 
 public abstract class DebuggerUtilsEx extends DebuggerUtils
 {

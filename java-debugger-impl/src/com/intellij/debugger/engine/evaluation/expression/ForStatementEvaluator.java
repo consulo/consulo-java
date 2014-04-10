@@ -19,7 +19,7 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.openapi.util.Comparing;
-import com.sun.jdi.BooleanValue;
+import consulo.internal.com.sun.jdi.BooleanValue;
 
 /**
  * @author lex

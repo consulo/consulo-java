@@ -27,8 +27,8 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiFile;
-import com.sun.jdi.*;
-import com.sun.jdi.request.ClassPrepareRequest;
+import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

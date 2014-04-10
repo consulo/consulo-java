@@ -17,10 +17,10 @@ package com.intellij.debugger.engine;
 
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.InternalException;
-import com.sun.jdi.ObjectCollectedException;
-import com.sun.jdi.event.EventSet;
-import com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.event.EventSet;
+import consulo.internal.com.sun.jdi.request.EventRequest;
 
 import java.util.*;
 

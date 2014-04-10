@@ -27,7 +27,7 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Location;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

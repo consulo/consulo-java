@@ -39,7 +39,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.impl.actions.MarkObjectActionHandler;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

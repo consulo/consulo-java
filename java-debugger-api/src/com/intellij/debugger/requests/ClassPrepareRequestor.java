@@ -16,7 +16,7 @@
 package com.intellij.debugger.requests;
 
 import com.intellij.debugger.engine.DebugProcess;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 /**
  * Created by IntelliJ IDEA.

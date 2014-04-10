@@ -18,7 +18,7 @@ package com.intellij.debugger.engine;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfileState;
-import com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.ThreadReference;
 
 /**
  * @author lex

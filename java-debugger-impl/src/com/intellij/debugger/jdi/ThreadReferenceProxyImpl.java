@@ -19,16 +19,26 @@
  */
 package com.intellij.debugger.jdi;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ListIterator;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.*;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
+import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.InvalidStackFrameException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.StackFrame;
+import consulo.internal.com.sun.jdi.ThreadGroupReference;
+import consulo.internal.com.sun.jdi.ThreadReference;
 
 public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl implements ThreadReferenceProxy {
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.jdi.ThreadReferenceProxyImpl");

@@ -33,7 +33,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.NotNull;
 
 public class LocalVariableDescriptorImpl extends ValueDescriptorImpl implements LocalVariableDescriptor {

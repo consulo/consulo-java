@@ -15,6 +15,7 @@
  */
 package com.intellij.debugger.codeinsight;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.EvaluatingComputable;
@@ -32,13 +33,20 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.sun.jdi.ClassType;
-import com.sun.jdi.InterfaceType;
-import com.sun.jdi.Type;
-import com.sun.jdi.Value;
-import org.jetbrains.annotations.Nullable;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.InterfaceType;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * @author peter

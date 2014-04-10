@@ -17,7 +17,7 @@ package com.intellij.debugger.impl.descriptors.data;
 
 import com.intellij.debugger.ui.impl.watch.ThrownExceptionValueDescriptorImpl;
 import com.intellij.openapi.project.Project;
-import com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ObjectReference;
 import org.jetbrains.annotations.NotNull;
 
 public final class ThrownExceptionValueData extends DescriptorData<ThrownExceptionValueDescriptorImpl>{

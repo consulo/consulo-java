@@ -83,13 +83,13 @@ import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase;
 import com.intellij.xdebugger.impl.breakpoints.XBreakpointManagerImpl;
 import com.intellij.xdebugger.impl.breakpoints.XDependentBreakpointManager;
 import com.intellij.xdebugger.impl.breakpoints.XLineBreakpointImpl;
-import com.sun.jdi.InternalException;
-import com.sun.jdi.ThreadReference;
-import com.sun.jdi.request.BreakpointRequest;
-import com.sun.jdi.request.EventRequest;
-import com.sun.jdi.request.EventRequestManager;
-import com.sun.jdi.request.MethodEntryRequest;
-import com.sun.jdi.request.MethodExitRequest;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.request.BreakpointRequest;
+import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.request.EventRequestManager;
+import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
+import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 
 public class BreakpointManager
 {

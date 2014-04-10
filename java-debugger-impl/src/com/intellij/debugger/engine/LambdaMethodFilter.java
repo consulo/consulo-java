@@ -24,8 +24,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiStatement;
 import com.intellij.util.Range;
-import com.sun.jdi.Location;
-import com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.Method;
 
 /**
  * @author Eugene Zhuravlev

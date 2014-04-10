@@ -16,8 +16,8 @@
 package com.intellij.debugger.engine.evaluation;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.InvocationException;
-import com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.InvocationException;
+import consulo.internal.com.sun.jdi.ObjectReference;
 import org.jetbrains.annotations.Nullable;
 
 public class EvaluateException extends Exception {

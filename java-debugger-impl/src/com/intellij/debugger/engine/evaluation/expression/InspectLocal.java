@@ -16,7 +16,7 @@
 package com.intellij.debugger.engine.evaluation.expression;
 
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
-import com.sun.jdi.LocalVariable;
+import consulo.internal.com.sun.jdi.LocalVariable;
 
 /**
  * User: lex

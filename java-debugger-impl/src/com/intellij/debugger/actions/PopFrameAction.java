@@ -32,9 +32,9 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.sun.jdi.InvalidStackFrameException;
-import com.sun.jdi.NativeMethodException;
-import com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.InvalidStackFrameException;
+import consulo.internal.com.sun.jdi.NativeMethodException;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import org.jetbrains.annotations.Nullable;
 
 public class PopFrameAction extends DebuggerAction {

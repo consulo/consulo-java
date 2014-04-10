@@ -18,7 +18,7 @@ package com.intellij.debugger.impl.descriptors.data;
 import com.intellij.debugger.ui.impl.watch.StaticDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 import org.jetbrains.annotations.NotNull;
 
 public final class StaticData extends DescriptorData<StaticDescriptorImpl>{

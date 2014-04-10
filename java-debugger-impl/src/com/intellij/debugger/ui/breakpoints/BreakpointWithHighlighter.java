@@ -63,7 +63,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpointManager;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.ui.DebuggerColors;
 import com.intellij.xml.util.XmlStringUtil;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 /**
  * User: lex

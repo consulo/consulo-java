@@ -17,7 +17,7 @@ package com.intellij.debugger.impl;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

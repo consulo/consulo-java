@@ -39,7 +39,7 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

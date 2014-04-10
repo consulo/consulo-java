@@ -26,9 +26,9 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import com.sun.jdi.InconsistentDebugInfoException;
-import com.sun.jdi.InvalidStackFrameException;
-import com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.InconsistentDebugInfoException;
+import consulo.internal.com.sun.jdi.InvalidStackFrameException;
+import consulo.internal.com.sun.jdi.ObjectReference;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

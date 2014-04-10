@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.Method;
 
 import java.util.HashMap;
 import java.util.Map;

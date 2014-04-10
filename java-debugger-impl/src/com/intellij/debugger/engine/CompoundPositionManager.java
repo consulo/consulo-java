@@ -30,9 +30,9 @@ import com.intellij.debugger.requests.ClassPrepareRequestor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.ThreeState;
 import com.intellij.xdebugger.frame.XStackFrame;
-import com.sun.jdi.Location;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.request.ClassPrepareRequest;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 
 public class CompoundPositionManager implements PositionManagerEx
 {

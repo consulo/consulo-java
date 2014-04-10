@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.ui.tree;
 
-import com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ArrayReference;
 
 public interface ArrayElementDescriptor extends NodeDescriptor{
   ArrayReference getArray();

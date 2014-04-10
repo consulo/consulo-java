@@ -16,7 +16,7 @@
 package com.intellij.debugger.engine.evaluation;
 
 import com.intellij.debugger.DebuggerBundle;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 /**
  * @author lex

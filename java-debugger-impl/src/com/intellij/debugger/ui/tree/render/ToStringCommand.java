@@ -20,7 +20,7 @@ import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.SuspendContext;
 import com.intellij.debugger.engine.managerThread.SuspendContextCommand;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * User: lex

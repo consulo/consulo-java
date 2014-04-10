@@ -27,8 +27,8 @@ import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.tree.StaticDescriptor;
 import com.intellij.debugger.ui.tree.render.ClassRenderer;
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
-import com.sun.jdi.Field;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class StaticDescriptorImpl extends NodeDescriptorImpl implements StaticDescriptor{
 

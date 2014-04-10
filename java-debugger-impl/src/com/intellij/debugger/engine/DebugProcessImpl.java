@@ -101,28 +101,28 @@ import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
-import com.sun.jdi.*;
-import com.sun.jdi.connect.AttachingConnector;
-import com.sun.jdi.connect.Connector;
-import com.sun.jdi.connect.IllegalConnectorArgumentsException;
-import com.sun.jdi.connect.ListeningConnector;
-import com.sun.jdi.connect.VMStartException;
-import com.sun.jdi.request.EventRequest;
-import com.sun.jdi.request.EventRequestManager;
-import com.sun.jdi.request.StepRequest;
+import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.connect.AttachingConnector;
+import consulo.internal.com.sun.jdi.connect.Connector;
+import consulo.internal.com.sun.jdi.connect.IllegalConnectorArgumentsException;
+import consulo.internal.com.sun.jdi.connect.ListeningConnector;
+import consulo.internal.com.sun.jdi.connect.VMStartException;
+import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.request.EventRequestManager;
+import consulo.internal.com.sun.jdi.request.StepRequest;
 
 public abstract class DebugProcessImpl extends UserDataHolderBase implements DebugProcess
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.DebugProcessImpl");
 
 	@NonNls
-	private static final String SOCKET_ATTACHING_CONNECTOR_NAME = "com.sun.jdi.SocketAttach";
+	private static final String SOCKET_ATTACHING_CONNECTOR_NAME = "consulo.internal.com.sun.jdi.SocketAttach";
 	@NonNls
-	private static final String SHMEM_ATTACHING_CONNECTOR_NAME = "com.sun.jdi.SharedMemoryAttach";
+	private static final String SHMEM_ATTACHING_CONNECTOR_NAME = "consulo.internal.com.sun.jdi.SharedMemoryAttach";
 	@NonNls
-	private static final String SOCKET_LISTENING_CONNECTOR_NAME = "com.sun.jdi.SocketListen";
+	private static final String SOCKET_LISTENING_CONNECTOR_NAME = "consulo.internal.com.sun.jdi.SocketListen";
 	@NonNls
-	private static final String SHMEM_LISTENING_CONNECTOR_NAME = "com.sun.jdi.SharedMemoryListen";
+	private static final String SHMEM_LISTENING_CONNECTOR_NAME = "consulo.internal.com.sun.jdi.SharedMemoryListen";
 
 	private final Project myProject;
 	private final RequestManagerImpl myRequestManager;

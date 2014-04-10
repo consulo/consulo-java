@@ -29,10 +29,10 @@ import com.intellij.debugger.engine.evaluation.EvaluateRuntimeException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.ClassType;
-import com.sun.jdi.Method;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;

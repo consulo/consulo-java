@@ -19,10 +19,10 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.jdi.LocalVariableProxy;
 import com.intellij.openapi.util.Comparing;
-import com.sun.jdi.ClassNotLoadedException;
-import com.sun.jdi.IncompatibleThreadStateException;
-import com.sun.jdi.LocalVariable;
-import com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.ClassNotLoadedException;
+import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
+import consulo.internal.com.sun.jdi.LocalVariable;
+import consulo.internal.com.sun.jdi.Type;
 
 public class LocalVariableProxyImpl extends JdiProxy implements LocalVariableProxy {
   private final StackFrameProxyImpl myFrame;

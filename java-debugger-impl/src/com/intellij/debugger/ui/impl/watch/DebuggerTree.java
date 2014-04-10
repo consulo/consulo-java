@@ -70,9 +70,9 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
-import com.sun.jdi.*;
-import com.sun.jdi.event.Event;
-import com.sun.jdi.event.ExceptionEvent;
+import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.event.Event;
+import consulo.internal.com.sun.jdi.event.ExceptionEvent;
 
 public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvider {
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.watch.DebuggerTree");

@@ -20,10 +20,10 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.containers.HashMap;
-import com.sun.jdi.ClassType;
-import com.sun.jdi.Method;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

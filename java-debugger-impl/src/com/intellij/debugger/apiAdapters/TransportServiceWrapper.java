@@ -19,7 +19,7 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.ArrayUtil;
-import com.sun.jdi.connect.Transport;
+import consulo.internal.com.sun.jdi.connect.Transport;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;

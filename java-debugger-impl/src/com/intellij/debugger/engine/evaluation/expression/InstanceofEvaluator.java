@@ -29,7 +29,7 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiType;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 import java.util.LinkedList;
 import java.util.List;

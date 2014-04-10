@@ -41,15 +41,15 @@ import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.sun.jdi.InternalException;
-import com.sun.jdi.ThreadReference;
-import com.sun.jdi.VMDisconnectedException;
-import com.sun.jdi.VirtualMachine;
-import com.sun.jdi.event.*;
-import com.sun.jdi.request.EventRequest;
-import com.sun.jdi.request.EventRequestManager;
-import com.sun.jdi.request.ThreadDeathRequest;
-import com.sun.jdi.request.ThreadStartRequest;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.internal.com.sun.jdi.VirtualMachine;
+import consulo.internal.com.sun.jdi.event.*;
+import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.internal.com.sun.jdi.request.EventRequestManager;
+import consulo.internal.com.sun.jdi.request.ThreadDeathRequest;
+import consulo.internal.com.sun.jdi.request.ThreadStartRequest;
 
 /**
  * @author lex

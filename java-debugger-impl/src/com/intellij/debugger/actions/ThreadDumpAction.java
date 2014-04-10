@@ -37,7 +37,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.unscramble.ThreadDumpParser;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.util.SmartList;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 import gnu.trove.TIntObjectHashMap;
 
 import java.util.ArrayList;

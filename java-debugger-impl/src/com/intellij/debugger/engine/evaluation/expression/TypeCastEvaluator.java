@@ -26,10 +26,10 @@ import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
-import com.sun.jdi.BooleanValue;
-import com.sun.jdi.CharValue;
-import com.sun.jdi.PrimitiveValue;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.BooleanValue;
+import consulo.internal.com.sun.jdi.CharValue;
+import consulo.internal.com.sun.jdi.PrimitiveValue;
+import consulo.internal.com.sun.jdi.Value;
 
 public class TypeCastEvaluator implements Evaluator {
   private final Evaluator myOperandEvaluator;

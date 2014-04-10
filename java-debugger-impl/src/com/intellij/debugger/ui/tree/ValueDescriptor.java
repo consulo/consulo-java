@@ -20,7 +20,7 @@ import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.psi.PsiExpression;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

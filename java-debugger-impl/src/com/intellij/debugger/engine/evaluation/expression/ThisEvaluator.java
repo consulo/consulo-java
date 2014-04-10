@@ -24,9 +24,9 @@ import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.sun.jdi.Field;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

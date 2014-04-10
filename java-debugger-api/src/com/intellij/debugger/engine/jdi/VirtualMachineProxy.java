@@ -18,7 +18,7 @@ package com.intellij.debugger.engine.jdi;
 import java.util.List;
 
 import com.intellij.debugger.engine.DebugProcess;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 /**
  * @author lex

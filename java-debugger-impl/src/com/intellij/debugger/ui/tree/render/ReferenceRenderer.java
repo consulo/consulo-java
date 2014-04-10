@@ -20,8 +20,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.CommonClassNames;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Type;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 

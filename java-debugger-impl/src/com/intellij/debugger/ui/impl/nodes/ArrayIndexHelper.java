@@ -23,7 +23,7 @@ package com.intellij.debugger.ui.impl.nodes;
 import com.intellij.debugger.ui.tree.render.ArrayRenderer;
 import com.intellij.debugger.ui.tree.render.ArrayRenderer;
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ArrayReference;
 
 public class ArrayIndexHelper {
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.impl.nodes.ArrayIndexHelper");

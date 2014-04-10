@@ -17,7 +17,7 @@ package com.intellij.debugger.engine.requests;
 
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.requests.Requestor;
-import com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
 
 /**
  * Created by IntelliJ IDEA.

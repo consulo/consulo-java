@@ -18,8 +18,8 @@ package com.intellij.debugger.impl.descriptors.data;
 import com.intellij.debugger.ui.impl.watch.MethodReturnValueDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
-import com.sun.jdi.Method;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

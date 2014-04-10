@@ -21,7 +21,7 @@ import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.psi.PsiExpression;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 
 public interface ChildrenRenderer extends Renderer {
   void buildChildren(Value value, ChildrenBuilder  builder, EvaluationContext evaluationContext);

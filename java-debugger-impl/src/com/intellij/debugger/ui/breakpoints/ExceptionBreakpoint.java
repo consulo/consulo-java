@@ -47,13 +47,13 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.sun.jdi.AbsentInformationException;
-import com.sun.jdi.Location;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.event.ExceptionEvent;
-import com.sun.jdi.event.LocatableEvent;
-import com.sun.jdi.request.ExceptionRequest;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.event.ExceptionEvent;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.request.ExceptionRequest;
 
 public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointProperties>
 {

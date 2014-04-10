@@ -57,11 +57,11 @@ import com.intellij.psi.CommonClassNames;
 import com.intellij.util.EventDispatcher;
 import com.intellij.util.containers.InternalIterator;
 import com.intellij.util.ui.ColorIcon;
-import com.sun.jdi.Field;
-import com.sun.jdi.IntegerValue;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.IntegerValue;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * User: lex

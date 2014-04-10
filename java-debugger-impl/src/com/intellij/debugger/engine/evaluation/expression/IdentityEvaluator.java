@@ -17,7 +17,7 @@ package com.intellij.debugger.engine.evaluation.expression;
 
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
 * @author Eugene Zhuravlev

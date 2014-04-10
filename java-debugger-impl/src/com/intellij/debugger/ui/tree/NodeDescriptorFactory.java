@@ -19,9 +19,9 @@ import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.jdi.LocalVariableProxy;
 import com.intellij.debugger.ui.impl.watch.UserExpressionDescriptorImpl;
 import com.intellij.debugger.impl.descriptors.data.DescriptorData;
-import com.sun.jdi.ArrayReference;
-import com.sun.jdi.Field;
-import com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ObjectReference;
 
 /**
  * creates descriptors

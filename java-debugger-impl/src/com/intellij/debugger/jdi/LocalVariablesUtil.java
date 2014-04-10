@@ -26,10 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.sun.jdi.InternalException;
-import com.sun.jdi.StackFrame;
-import com.sun.jdi.Value;
-import com.sun.jdi.VirtualMachine;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.StackFrame;
+import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.VirtualMachine;
 
 /**
  * From JDI sources:

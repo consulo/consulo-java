@@ -29,7 +29,7 @@ import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
-import com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.*;
 
 class BinaryExpressionEvaluator implements Evaluator {
   private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.evaluation.expression.BinaryExpressionEvaluator");

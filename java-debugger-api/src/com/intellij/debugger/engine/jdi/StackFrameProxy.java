@@ -16,9 +16,9 @@
 package com.intellij.debugger.engine.jdi;
 
 import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.sun.jdi.ClassLoaderReference;
-import com.sun.jdi.Location;
-import com.sun.jdi.StackFrame;
+import consulo.internal.com.sun.jdi.ClassLoaderReference;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.StackFrame;
 
 public interface StackFrameProxy extends ObjectReferenceProxy{
   StackFrame getStackFrame() throws EvaluateException;

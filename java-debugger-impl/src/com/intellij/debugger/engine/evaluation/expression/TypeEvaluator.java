@@ -26,7 +26,7 @@ import com.intellij.debugger.engine.JVMName;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class TypeEvaluator implements Evaluator {
   private final JVMName myTypeName;

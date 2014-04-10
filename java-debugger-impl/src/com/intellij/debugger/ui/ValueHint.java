@@ -47,9 +47,9 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.xdebugger.impl.evaluate.quick.common.AbstractValueHint;
 import com.intellij.xdebugger.impl.evaluate.quick.common.AbstractValueHintTreeComponent;
 import com.intellij.xdebugger.impl.evaluate.quick.common.ValueHintType;
-import com.sun.jdi.Method;
-import com.sun.jdi.PrimitiveValue;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.PrimitiveValue;
+import consulo.internal.com.sun.jdi.Value;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

@@ -28,8 +28,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.sun.jdi.PrimitiveValue;
-import com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.PrimitiveValue;
+import consulo.internal.com.sun.jdi.Value;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
