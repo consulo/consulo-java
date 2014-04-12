@@ -99,11 +99,11 @@ public class LocalVariablesUtil
 		boolean success = false;
 		try
 		{
-			ourSlotInfoClass = Class.forName("com.sun.tools.jdi.JDWP$StackFrame$GetValues$SlotInfo");
+			ourSlotInfoClass = Class.forName("consulo.internal.com.sun.tools.jdi.JDWP$StackFrame$GetValues$SlotInfo");
 			slotInfoConstructor = ourSlotInfoClass.getDeclaredConstructor(int.class, byte.class);
 			slotInfoConstructor.setAccessible(true);
 
-			ourGetValuesClass = Class.forName("com.sun.tools.jdi.JDWP$StackFrame$GetValues");
+			ourGetValuesClass = Class.forName("consulo.internal.com.sun.tools.jdi.JDWP$StackFrame$GetValues");
 			ourEnqueueMethod = findMethod(ourGetValuesClass, "enqueueCommand");
 			ourEnqueueMethod.setAccessible(true);
 			ourWaitForReplyMethod = findMethod(ourGetValuesClass, "waitForReply");
