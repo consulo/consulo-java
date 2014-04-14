@@ -15,6 +15,12 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
@@ -22,7 +28,12 @@ import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiCompiledElement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiInvalidElementAccessException;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import com.intellij.psi.impl.PsiElementBase;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
@@ -32,12 +43,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class ClsElementImpl extends PsiElementBase implements PsiCompiledElement {
   public static final Key<PsiCompiledElement> COMPILED_ELEMENT = Key.create("COMPILED_ELEMENT");
@@ -96,7 +101,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
       return PsiElement.EMPTY_ARRAY;
     }
 
-    List<PsiElement> list = ContainerUtil.newArrayListWithExpectedSize(children.length);
+    List<PsiElement> list = ContainerUtil.newArrayListWithCapacity(children.length);
     for (PsiElement child : children) {
       if (child != null) {
         list.add(child);

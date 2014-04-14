@@ -24,7 +24,21 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInspection.dataFlow.instructions.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EmptyStackException;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInspection.dataFlow.instructions.BranchingInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.ConditionalGotoInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.EmptyInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.GosubInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.GotoInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.Instruction;
+import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.openapi.application.ApplicationManager;
@@ -37,11 +51,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
-import com.intellij.util.containers.MultiMapBasedOnSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class DataFlowRunner {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.DataFlowRunner");
@@ -138,8 +147,8 @@ public class DataFlowRunner {
         queue.offer(new DfaInstructionState(myInstructions[0], initialState));
       }
 
-      MultiMapBasedOnSet<BranchingInstruction, DfaMemoryState> processedStates = new MultiMapBasedOnSet<BranchingInstruction, DfaMemoryState>();
-      MultiMapBasedOnSet<BranchingInstruction, DfaMemoryState> incomingStates = new MultiMapBasedOnSet<BranchingInstruction, DfaMemoryState>();
+      MultiMap<BranchingInstruction, DfaMemoryState> processedStates = MultiMap.createSet();
+      MultiMap<BranchingInstruction, DfaMemoryState> incomingStates = MultiMap.createSet();
 
       WorkingTimeMeasurer measurer = new WorkingTimeMeasurer(shouldCheckTimeLimit() ? ourTimeLimit : ourTimeLimit * 42);
       int count = 0;

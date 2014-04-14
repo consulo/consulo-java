@@ -15,10 +15,43 @@
  */
 package com.intellij.codeInspection.java15api;
 
+import gnu.trove.THashSet;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.Reference;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
-import com.intellij.ide.ui.ListCellRendererWrapper;
+import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.codeInspection.FileCheckingInspection;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
@@ -33,22 +66,8 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.reference.SoftReference;
+import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.util.ui.UIUtil;
-import gnu.trove.THashSet;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.*;
-import java.lang.ref.Reference;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author max
@@ -181,7 +200,7 @@ public class Java15APIUsageInspection extends BaseJavaBatchLocalInspectionTool {
       cModel.addElement(level);
     }
     llCombo.setSelectedItem(myEffectiveLanguageLevel != null ? myEffectiveLanguageLevel : LanguageLevel.JDK_1_3);
-    llCombo.setRenderer(new ListCellRendererWrapper(llCombo) {
+    llCombo.setRenderer(new ListCellRendererWrapper() {
       @Override
       public void customize(JList list, Object value, int index, boolean selected, boolean hasFocus) {
         if (value instanceof LanguageLevel) {

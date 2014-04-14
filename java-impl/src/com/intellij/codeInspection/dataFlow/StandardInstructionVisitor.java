@@ -15,8 +15,33 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInspection.dataFlow.instructions.*;
-import com.intellij.codeInspection.dataFlow.value.*;
+import gnu.trove.THashSet;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInspection.dataFlow.instructions.AssignInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.BinopInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.CheckReturnValueInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.FieldReferenceInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.InstanceofInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.Instruction;
+import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.PushInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.TypeCastInstruction;
+import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
+import com.intellij.codeInspection.dataFlow.value.DfaRelationValue;
+import com.intellij.codeInspection.dataFlow.value.DfaTypeValue;
+import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
+import com.intellij.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
+import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
@@ -25,12 +50,6 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FactoryMap;
 import com.intellij.util.containers.MultiMap;
-import com.intellij.util.containers.MultiMapBasedOnSet;
-import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author peter
@@ -39,7 +58,7 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   private static final Object ANY_VALUE = new Object();
   private final Set<BinopInstruction> myReachable = new THashSet<BinopInstruction>();
   private final Set<BinopInstruction> myCanBeNullInInstanceof = new THashSet<BinopInstruction>();
-  private final MultiMap<PushInstruction, Object> myPossibleVariableValues = new MultiMapBasedOnSet<PushInstruction, Object>();
+  private final MultiMap<PushInstruction, Object> myPossibleVariableValues = MultiMap.createSet();
   private final Set<PsiElement> myNotToReportReachability = new THashSet<PsiElement>();
   private final Set<InstanceofInstruction> myUsefulInstanceofs = new THashSet<InstanceofInstruction>();
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")

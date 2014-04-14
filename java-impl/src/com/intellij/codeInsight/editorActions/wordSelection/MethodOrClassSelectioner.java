@@ -15,17 +15,24 @@
  */
 package com.intellij.codeInsight.editorActions.wordSelection;
 
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.util.containers.CollectionFactory;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.java.JavaLanguage;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.PsiTypeParameterList;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.util.containers.ContainerUtil;
 
 /**
  *
@@ -40,7 +47,7 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
 
   @Override
   public List<TextRange> select(PsiElement e, CharSequence editorText, int cursorOffset, Editor editor) {
-    List<TextRange> result = CollectionFactory.arrayList(e.getTextRange());
+    List<TextRange> result = ContainerUtil.newArrayList(e.getTextRange());
     result.addAll(expandToWholeLinesWithBlanks(editorText, e.getTextRange()));
 
     PsiElement firstChild = e.getFirstChild();
