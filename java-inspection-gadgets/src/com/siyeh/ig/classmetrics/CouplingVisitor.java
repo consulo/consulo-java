@@ -15,17 +15,17 @@
  */
 package com.siyeh.ig.classmetrics;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.LibraryUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashSet;
-import java.util.Set;
 
 class CouplingVisitor extends JavaRecursiveElementVisitor {
   private boolean m_inClass = false;
@@ -179,7 +179,7 @@ class CouplingVisitor extends JavaRecursiveElementVisitor {
         return;
       }
     }
-    if (StringUtil.startsWithConcatenationOf(baseTypeName, qualifiedName, ".")) {
+    if (StringUtil.startsWithConcatenation(baseTypeName, qualifiedName, ".")) {
       return;
     }
     m_dependencies.add(baseTypeName);
