@@ -474,7 +474,7 @@ public class JavaSdkImpl extends JavaSdk
 		sdkModificator.commitChanges();
 	}
 
-	public static void attachJdkAnnotations(@NotNull SdkModificator modificator)
+	public static boolean attachJdkAnnotations(@NotNull SdkModificator modificator)
 	{
 		IdeaPluginDescriptor plugin = PluginManager.getPlugin(((PluginClassLoader) JavaSdkImpl.class.getClassLoader()).getPluginId());
 		assert plugin != null;
@@ -488,12 +488,13 @@ public class JavaSdkImpl extends JavaSdk
 		if(jarFile == null)
 		{
 			LOG.error("jdk annotations not found in: " + absolutePath);
-			return;
+			return false;
 		}
 
 		OrderRootType annoType = AnnotationOrderRootType.getInstance();
 		modificator.removeRoot(jarFile, annoType);
 		modificator.addRoot(jarFile, annoType);
+		return true;
 	}
 
 	private final Map<String, String> myCachedVersionStrings = new HashMap<String, String>();

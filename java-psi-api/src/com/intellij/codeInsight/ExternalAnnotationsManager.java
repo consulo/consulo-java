@@ -20,57 +20,66 @@
  */
 package com.intellij.codeInsight;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NotNullLazyKey;
-import com.intellij.psi.*;
-import com.intellij.util.messages.Topic;
+import java.util.List;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.NotNullLazyKey;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.PsiNameValuePair;
+import com.intellij.util.messages.Topic;
 
-import java.util.List;
+public abstract class ExternalAnnotationsManager
+{
+	@NonNls
+	public static final String ANNOTATIONS_XML = "annotations.xml";
 
-public abstract class ExternalAnnotationsManager {
-  @NonNls public static final String ANNOTATIONS_XML = "annotations.xml";
+	public static final Topic<ExternalAnnotationsListener> TOPIC = Topic.create("external annotations", ExternalAnnotationsListener.class);
 
-  public static final Topic<ExternalAnnotationsListener> TOPIC = Topic.create("external annotations", ExternalAnnotationsListener.class);
+	public enum AnnotationPlace
+	{
+		IN_CODE,
+		EXTERNAL,
+		NOWHERE
+	}
 
-  public enum AnnotationPlace {
-    IN_CODE,
-    EXTERNAL,
-    NOWHERE
-  }
+	private static final NotNullLazyKey<ExternalAnnotationsManager, Project> INSTANCE_KEY = ServiceManager.createLazyKey(ExternalAnnotationsManager
+			.class);
 
-  private static final NotNullLazyKey<ExternalAnnotationsManager, Project> INSTANCE_KEY = ServiceManager.createLazyKey(ExternalAnnotationsManager.class);
+	public static ExternalAnnotationsManager getInstance(@NotNull Project project)
+	{
+		return INSTANCE_KEY.getValue(project);
+	}
 
-  public static ExternalAnnotationsManager getInstance(@NotNull Project project) {
-    return INSTANCE_KEY.getValue(project);
-  }
+	@Nullable
+	public abstract PsiAnnotation findExternalAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
 
-  @Nullable
-  public abstract PsiAnnotation findExternalAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
+	// Method used in Kotlin plugin
+	public abstract boolean isExternalAnnotationWritable(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
 
-  // Method used in Kotlin plugin
-  public abstract boolean isExternalAnnotationWritable(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
+	@Nullable
+	public abstract PsiAnnotation[] findExternalAnnotations(@NotNull PsiModifierListOwner listOwner);
 
-  @Nullable
-  public abstract PsiAnnotation[] findExternalAnnotations(@NotNull PsiModifierListOwner listOwner);
+	public abstract void annotateExternally(
+			@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQName, @NotNull PsiFile fromFile,
+			@Nullable PsiNameValuePair[] value);
 
-  public abstract void annotateExternally(@NotNull PsiModifierListOwner listOwner,
-                                          @NotNull String annotationFQName,
-                                          @NotNull PsiFile fromFile,
-                                          @Nullable PsiNameValuePair[] value);
+	public abstract boolean deannotate(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
 
-  public abstract boolean deannotate(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
+	// Method used in Kotlin plugin when it is necessary to leave external annotation, but modify its arguments
+	public abstract boolean editExternalAnnotation(
+			@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN, @Nullable PsiNameValuePair[] value);
 
-  // Method used in Kotlin plugin when it is necessary to leave external annotation, but modify its arguments
-  public abstract boolean editExternalAnnotation(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN,
-                                                 @Nullable PsiNameValuePair[] value);
+	public abstract AnnotationPlace chooseAnnotationsPlace(@NotNull PsiElement element);
 
-  public abstract AnnotationPlace chooseAnnotationsPlace(@NotNull PsiElement element);
+	@Nullable
+	public abstract List<PsiFile> findExternalAnnotationsFiles(@NotNull PsiModifierListOwner listOwner);
 
-  @Nullable
-  public abstract List<PsiFile> findExternalAnnotationsFiles(@NotNull PsiModifierListOwner listOwner);
-
+	public abstract void dropCache();
 }
