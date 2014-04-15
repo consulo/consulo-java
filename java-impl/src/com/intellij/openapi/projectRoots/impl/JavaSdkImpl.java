@@ -38,8 +38,10 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.util.ExecUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JarArchiveFileType;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.openapi.actionSystem.DataKey;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
@@ -474,18 +476,18 @@ public class JavaSdkImpl extends JavaSdk
 
 	public static void attachJdkAnnotations(@NotNull SdkModificator modificator)
 	{
-		String path = FileUtil.toSystemIndependentName(PathManager.getPreInstalledPluginsPath()) + "/java/lib/jdk-annotations.jar";
-		VirtualFile jarFile = JarArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(path);
+		IdeaPluginDescriptor plugin = PluginManager.getPlugin(((PluginClassLoader) JavaSdkImpl.class.getClassLoader()).getPluginId());
+		assert plugin != null;
+
+		File javaPluginPath = plugin.getPath();
+
+		String absolutePath = new File(javaPluginPath, "lib/jdk-annotations.jar").getAbsolutePath();
+
+		VirtualFile jarFile = JarArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(absolutePath);
 
 		if(jarFile == null)
 		{
-			path = FileUtil.toSystemIndependentName(PathManager.getPluginsPath()) + "/java/lib/jdk-annotations.jar";
-			jarFile = JarArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(path);
-		}
-
-		if(jarFile == null)
-		{
-			LOG.error("jdk annotations not found in: " + path);
+			LOG.error("jdk annotations not found in: " + absolutePath);
 			return;
 		}
 
