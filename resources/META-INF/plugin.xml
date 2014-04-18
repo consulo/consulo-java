@@ -394,10 +394,6 @@
 			<option name="workspace" value="true"/>
 			<loadForDefaultProject/>
 		</component>
-
-		<component>
-			<implementation-class>com.intellij.ide.palette.impl.PaletteManager</implementation-class>
-		</component>
 	</project-components>
 
 	<extensionPoints>
