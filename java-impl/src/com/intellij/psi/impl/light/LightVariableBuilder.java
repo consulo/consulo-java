@@ -1,17 +1,25 @@
 package com.intellij.psi.impl.light;
 
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.originInfo.OriginInfoAwareElement;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.navigation.NavigationItem;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.PsiVariable;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 /**
  * @author peter
@@ -104,11 +112,6 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
   @Override
   public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException("setName is not implemented yet in com.intellij.psi.impl.light.LightVariableBuilder");
-  }
-
-  @Override
-  public PsiType getTypeNoResolve() {
-    return getType();
   }
 
   public T setBaseIcon(Icon baseIcon) {

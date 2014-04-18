@@ -776,7 +776,7 @@ public class SystemBuilder {
               final PsiClass castClass = castResult.getElement();
 
               if (operandClass != null && castClass != null) {
-                if (InheritanceUtil.isCorrectDescendant(operandClass, castClass, true)) {
+                if (InheritanceUtil.isInheritorOrSelf(operandClass, castClass, true)) {
                   system.addSubtypeConstraint(operandType, castType);
                 }
               }

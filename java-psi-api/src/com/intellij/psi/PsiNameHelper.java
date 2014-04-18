@@ -15,15 +15,15 @@
  */
 package com.intellij.psi;
 
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import static com.intellij.util.ObjectUtils.notNull;
 
 import java.util.regex.Pattern;
 
-import static com.intellij.util.ObjectUtils.notNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ArrayUtil;
 
 /**
  * Service for validating and parsing Java identifiers.
@@ -139,11 +139,6 @@ public abstract class PsiNameHelper {
     }
 
     return buffer.toString();
-  }
-
-  /** deprecated use {@link #getPresentableText(String, PsiAnnotation[], PsiType[])} (to remove in IDEA 13) */
-  public static String getPresentableText(@Nullable String referenceName, @NotNull PsiType[] typeParameters) {
-    return getPresentableText(referenceName, PsiAnnotation.EMPTY_ARRAY, typeParameters);
   }
 
   @NotNull

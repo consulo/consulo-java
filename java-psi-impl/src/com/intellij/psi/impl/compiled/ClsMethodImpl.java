@@ -15,6 +15,10 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.extensions.Extensions;
@@ -34,10 +38,6 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.MethodSignatureUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAnnotationMethod {
   private PsiTypeElement myReturnType = null;
@@ -319,11 +319,6 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
   @NotNull
   public SearchScope getUseScope() {
     return PsiImplUtil.getMemberUseScope(this);
-  }
-
-  @Override
-  public PsiType getReturnTypeNoResolve() {
-    return getReturnType();
   }
 
   @Override

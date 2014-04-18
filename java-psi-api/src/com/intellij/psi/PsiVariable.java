@@ -15,11 +15,11 @@
  */
 package com.intellij.psi;
 
-import com.intellij.pom.PomRenameableTarget;
-import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.pom.PomRenameableTarget;
+import com.intellij.util.IncorrectOperationException;
 
 /**
  * Represents a Java local variable, method parameter or field.
@@ -89,7 +89,4 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
 
   @Override
   PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException;
-
-  /** @deprecated use {@link #getType()} (to remove in IDEA 13) */
-  PsiType getTypeNoResolve();
 }

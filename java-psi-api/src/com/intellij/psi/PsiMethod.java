@@ -15,16 +15,16 @@
  */
 package com.intellij.psi;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.pom.PomRenameableTarget;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Represents a Java method or constructor.
@@ -200,7 +200,4 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
 
   @NotNull
   HierarchicalMethodSignature getHierarchicalMethodSignature();
-
-  /** @deprecated use {@link #getReturnType()} (to remove in IDEA 13) */
-  PsiType getReturnTypeNoResolve();
 }

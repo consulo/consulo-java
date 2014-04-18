@@ -15,12 +15,19 @@
  */
 package com.intellij.psi.impl.light;
 
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.java.JavaLanguage;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.IncorrectOperationException;
 
 /**
  * @author max
@@ -67,16 +74,6 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
   @Override
   public PsiJavaCodeReferenceElement getInnermostComponentReferenceElement() {
     return null;
-  }
-
-  @Override
-  public PsiAnnotationOwner getOwner(PsiAnnotation annotation) {
-    return this;
-  }
-
-  @Override
-  public PsiType getTypeNoResolve(@NotNull PsiElement context) {
-    return getType();
   }
 
   @Override

@@ -15,6 +15,13 @@
  */
 package com.intellij.psi.util;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
@@ -24,13 +31,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author max
@@ -513,12 +513,6 @@ public class RedundantCastUtil {
       }
     });
     return result.get().booleanValue();
-  }
-
-  /** @deprecated use {@link #isTypeCastSemantic(PsiTypeCastExpression)} (to remove in IDEA 14) */
-  @SuppressWarnings({"UnusedDeclaration", "SpellCheckingInspection"})
-  public static boolean isTypeCastSemantical(PsiTypeCastExpression typeCast) {
-    return isTypeCastSemantic(typeCast);
   }
 
   public static boolean isTypeCastSemantic(PsiTypeCastExpression typeCast) {

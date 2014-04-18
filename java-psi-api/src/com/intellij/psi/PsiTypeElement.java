@@ -15,9 +15,9 @@
  */
 package com.intellij.psi;
 
-import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.util.ArrayFactory;
 
 /**
  * Represents the occurrence of a type in Java source code, for example, as a return
@@ -53,10 +53,4 @@ public interface PsiTypeElement extends PsiElement,PsiAnnotationOwner {
    */
   @Nullable
   PsiJavaCodeReferenceElement getInnermostComponentReferenceElement();
-
-  /** @deprecated use {@link PsiAnnotation#getOwner()} (to remove in IDEA 13) */
-  PsiAnnotationOwner getOwner(PsiAnnotation annotation);
-
-  /** @deprecated use {@link #getType()} (to remove in IDEA 13) */
-  PsiType getTypeNoResolve(@NotNull PsiElement context);
 }

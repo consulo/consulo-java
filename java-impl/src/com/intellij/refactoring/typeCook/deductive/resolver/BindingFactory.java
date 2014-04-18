@@ -15,6 +15,14 @@
  */
 package com.intellij.refactoring.typeCook.deductive.resolver;
 
+import gnu.trove.TIntObjectHashMap;
+import gnu.trove.TObjectProcedure;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -30,13 +38,6 @@ import com.intellij.refactoring.typeCook.deductive.builder.Constraint;
 import com.intellij.refactoring.typeCook.deductive.builder.ReductionSystem;
 import com.intellij.refactoring.typeCook.deductive.builder.Subtype;
 import com.intellij.util.IncorrectOperationException;
-import gnu.trove.TIntObjectHashMap;
-import gnu.trove.TObjectProcedure;
-
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Set;
 
 /**
  * @author db
@@ -431,10 +432,10 @@ public class BindingFactory {
               return direction;
             }
             else {
-              if (InheritanceUtil.isCorrectDescendant(xClass, yClass, true)) {
+              if (InheritanceUtil.isInheritorOrSelf(xClass, yClass, true)) {
                 return Binding.BETTER;
               }
-              else if (InheritanceUtil.isCorrectDescendant(yClass, xClass, true)) {
+              else if (InheritanceUtil.isInheritorOrSelf(yClass, xClass, true)) {
                 return Binding.WORSE;
               }
 

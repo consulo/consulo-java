@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.light;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.navigation.ItemPresentation;
@@ -27,9 +30,6 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author ven
@@ -241,10 +241,5 @@ public class LightMethod extends LightElement implements PsiMethod {
   @Override
   public PsiElement getContext() {
     return getContainingClass();
-  }
-
-  @Override
-  public PsiType getReturnTypeNoResolve() {
-    return getReturnType();
   }
 }

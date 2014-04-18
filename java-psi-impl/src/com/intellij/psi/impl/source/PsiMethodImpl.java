@@ -15,6 +15,10 @@
  */
 package com.intellij.psi.impl.source;
 
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
@@ -41,10 +45,6 @@ import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Map;
 
 public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements PsiMethod, Queryable {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiMethodImpl");
@@ -181,11 +181,6 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
   @Override
   @NotNull public PsiTypeParameter[] getTypeParameters() {
     return PsiImplUtil.getTypeParameters(this);
-  }
-
-  @Override
-  public PsiType getReturnTypeNoResolve() {
-    return getReturnType();
   }
 
   @Override

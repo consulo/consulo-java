@@ -15,6 +15,19 @@
  */
 package com.intellij.refactoring.util;
 
+import gnu.trove.THashMap;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
@@ -56,15 +69,9 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.PackageWrapper;
 import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
-import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.HashSet;
-import gnu.trove.THashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class RefactoringUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.RefactoringUtil");
@@ -745,12 +752,6 @@ public class RefactoringUtil {
     LOG.assertTrue(arrayInitializer != null);
     arrayInitializer.replace(initializer);
     return result;
-  }
-
-  /** @deprecated use {@linkplain #makeMethodAbstract(com.intellij.psi.PsiClass, com.intellij.psi.PsiMethod)} (to remove in IDEA 13) */
-  @SuppressWarnings("UnusedDeclaration")
-  public static void abstractizeMethod(PsiClass targetClass, PsiMethod method) throws IncorrectOperationException {
-    makeMethodAbstract(targetClass, method);
   }
 
   public static void makeMethodAbstract(@NotNull PsiClass targetClass, @NotNull PsiMethod method) throws IncorrectOperationException {

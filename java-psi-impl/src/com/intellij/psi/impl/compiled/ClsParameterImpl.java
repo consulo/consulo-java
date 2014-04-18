@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
@@ -29,8 +31,6 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> implements PsiParameter {
   private PsiTypeElement myType = null;
@@ -251,11 +251,6 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   @NotNull
   public SearchScope getUseScope() {
     return new LocalSearchScope(getDeclarationScope());
-  }
-
-  @Override
-  public PsiType getTypeNoResolve() {
-    return getType();
   }
 
   @Override

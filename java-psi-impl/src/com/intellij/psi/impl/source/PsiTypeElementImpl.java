@@ -15,6 +15,11 @@
  */
 package com.intellij.psi.impl.source;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -31,11 +36,6 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeElement {
   private volatile PsiType myCachedType = null;
@@ -184,11 +184,6 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
   }
 
   @Override
-  public PsiType getTypeNoResolve(@NotNull PsiElement context) {
-    return getType();
-  }
-
-  @Override
   public PsiJavaCodeReferenceElement getInnermostComponentReferenceElement() {
     TreeElement firstChildNode = getFirstChildNode();
     if (firstChildNode == null) return null;
@@ -198,11 +193,6 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
     else {
       return getReferenceElement();
     }
-  }
-
-  @Override
-  public PsiAnnotationOwner getOwner(@NotNull PsiAnnotation annotation) {
-    return this;
   }
 
   @Nullable

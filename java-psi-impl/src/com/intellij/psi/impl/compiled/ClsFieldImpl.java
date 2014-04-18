@@ -219,11 +219,6 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
   }
 
   @Override
-  public PsiType getTypeNoResolve() {
-    return getType(); //todo?
-  }
-
-  @Override
   public String toString() {
     return "PsiField:" + getName();
   }

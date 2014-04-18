@@ -15,12 +15,15 @@
  */
 package com.intellij.psi.impl.source.tree;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTFactory;
-import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.source.DummyHolder;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
@@ -28,7 +31,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.CharTable;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class SourceUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.tree.SourceUtil");
@@ -64,18 +66,6 @@ public class SourceUtil {
   @NotNull
   public static String getReferenceText(@NotNull LighterAST tree, @NotNull LighterASTNode node) {
     return LightTreeUtil.toFilteredString(tree, node, REF_FILTER);
-  }
-
-  /** @deprecated use {@link AstBufferUtil#getTextSkippingWhitespaceComments(ASTNode)} (to remove in IDEA 13) */
-  @SuppressWarnings("UnusedDeclaration")
-  public static String getTextSkipWhiteSpaceAndComments(ASTNode element) {
-    return AstBufferUtil.getTextSkippingWhitespaceComments(element);
-  }
-
-  /** @deprecated use {@link LightTreeUtil#toFilteredString(LighterAST, LighterASTNode, TokenSet)} (to remove in IDEA 13) */
-  @SuppressWarnings("UnusedDeclaration")
-  public static String getTextSkipWhiteSpaceAndComments(LighterAST tree, LighterASTNode node) {
-    return LightTreeUtil.toFilteredString(tree, node, ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET);
   }
 
   public static TreeElement addParenthToReplacedChild(@NotNull IElementType parenthType,

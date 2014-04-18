@@ -15,14 +15,14 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement {
   static final char VARIANCE_NONE = '\0';
@@ -143,16 +143,6 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
   @Override
   public PsiJavaCodeReferenceElement getInnermostComponentReferenceElement() {
     return null;
-  }
-
-  @Override
-  public PsiAnnotationOwner getOwner(PsiAnnotation annotation) {
-    return this; //todo
-  }
-
-  @Override
-  public PsiType getTypeNoResolve(@NotNull PsiElement context) {
-    return getType();
   }
 
   private PsiType calculateType() {

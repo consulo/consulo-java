@@ -15,23 +15,19 @@
  */
 package com.intellij.psi.util;
 
-import com.intellij.psi.*;
-import com.intellij.util.Processor;
 import gnu.trove.THashSet;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.*;
+import com.intellij.util.Processor;
+
 public class InheritanceUtil {
   private InheritanceUtil() { }
-
-  /** @deprecated Use {@link PsiClass#isInheritor(com.intellij.psi.PsiClass, boolean)} instead (to remove in IDEA 13) */
-  public static boolean isInheritor(@NotNull PsiClass candidateClass, @NotNull PsiClass baseClass, boolean checkDeep) {
-    return candidateClass.isInheritor(baseClass, checkDeep);
-  }
 
   /**
    * @param aClass     a class to check.
@@ -43,11 +39,6 @@ public class InheritanceUtil {
     if (aClass == null || baseClass == null) return false;
     PsiManager manager = aClass.getManager();
     return manager.areElementsEquivalent(baseClass, aClass) || aClass.isInheritor(baseClass, checkDeep);
-  }
-
-  /** @deprecated use {@linkplain #isInheritorOrSelf(com.intellij.psi.PsiClass, com.intellij.psi.PsiClass, boolean) (to remove in IDEA 13)} */
-  public static boolean isCorrectDescendant(@Nullable PsiClass aClass, @Nullable PsiClass baseClass, boolean checkDeep) {
-    return isInheritorOrSelf(aClass, baseClass, checkDeep);
   }
 
   public static boolean processSupers(@Nullable PsiClass aClass, boolean includeSelf, @NotNull Processor<PsiClass> superProcessor) {

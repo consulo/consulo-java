@@ -422,8 +422,6 @@
 
 		<extensionPoint name="variableTypeCalculator" interface="com.intellij.codeInsight.template.macro.VariableTypeCalculator"/>
 
-		<extensionPoint name="paletteItemProvider" area="CONSULO_PROJECT" interface="com.intellij.ide.palette.PaletteItemProvider"/>
-
 		<extensionPoint name="testPatcher" interface="com.intellij.execution.JavaTestPatcher"/>
 		<extensionPoint name="exceptionFilter" interface="com.intellij.execution.filters.ExceptionFilterFactory"/>
 		<extensionPoint name="programPatcher"
@@ -1885,8 +1883,6 @@
 
 		<applicationService serviceInterface="com.intellij.ide.util.projectWizard.ProjectWizardStepFactory"
 							serviceImplementation="com.intellij.ide.util.projectWizard.ProjectWizardStepFactoryImpl"/>
-
-		<applicationService serviceInterface="com.intellij.peer.PeerFactory" serviceImplementation="com.intellij.peer.impl.PeerFactoryImpl"/>
 		<applicationService serviceInterface="com.intellij.openapi.roots.libraries.LibrariesHelper"
 							serviceImplementation="com.intellij.openapi.roots.libraries.LibrariesHelperImpl"/>
 

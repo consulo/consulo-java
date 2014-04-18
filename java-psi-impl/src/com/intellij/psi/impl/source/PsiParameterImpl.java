@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.source;
 
+import java.util.Arrays;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
@@ -33,9 +36,6 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
 
 public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> implements PsiParameter {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiParameterImpl");
@@ -141,11 +141,6 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
     else {
       return JavaSharedImplUtil.getType(typeElement, getParameterIdentifier());
     }
-  }
-
-  @Override
-  public PsiType getTypeNoResolve() {
-    return getType();
   }
 
   private boolean isLambdaParameter() {

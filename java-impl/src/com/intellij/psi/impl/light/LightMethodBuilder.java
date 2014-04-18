@@ -15,6 +15,12 @@
  */
 package com.intellij.psi.impl.light;
 
+import java.util.List;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.originInfo.OriginInfoAwareElement;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -30,11 +36,6 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.List;
 
 /**
  * @author peter
@@ -372,12 +373,6 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
     }
 
     return getContainingFile();
-  }
-
-  @Override
-  @Nullable
-  public PsiType getReturnTypeNoResolve() {
-    return getReturnType();
   }
 
   @Override

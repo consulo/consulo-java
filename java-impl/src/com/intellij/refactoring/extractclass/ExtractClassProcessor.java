@@ -15,6 +15,16 @@
  */
 package com.intellij.refactoring.extractclass;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.PackageUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -57,10 +67,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
   private static final Logger logger = Logger.getInstance("com.siyeh.rpp.extractclass.ExtractClassProcessor");
@@ -768,7 +774,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     final PsiManager manager = aClass.getManager();
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final PsiClass cloneable = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.lang.Cloneable", scope);
-    if (!InheritanceUtil.isCorrectDescendant(aClass, cloneable, true)) {
+	  if (!InheritanceUtil.isInheritorOrSelf(aClass, cloneable, true)) {
       return false;
     }
     final PsiMethod[] methods = aClass.findMethodsByName("clone", false);
@@ -787,7 +793,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
     final PsiManager manager = aClass.getManager();
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final PsiClass serializable = JavaPsiFacade.getInstance(manager.getProject()).findClass("java.io.Serializable", scope);
-    if (!InheritanceUtil.isCorrectDescendant(aClass, serializable, true)) {
+	  if (!InheritanceUtil.isInheritorOrSelf(aClass, serializable, true)) {
       return false;
     }
     final PsiMethod[] methods = aClass.findMethodsByName("writeObject", false);
