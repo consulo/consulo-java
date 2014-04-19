@@ -15,6 +15,21 @@
  */
 package com.intellij.ide.util.projectWizard;
 
+import static com.intellij.openapi.components.StorageScheme.DIRECTORY_BASED;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.File;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.highlighter.ModuleFileType;
 import com.intellij.ide.highlighter.ProjectFileType;
@@ -25,14 +40,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import org.jetbrains.annotations.NonNls;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.util.List;
-
-import static com.intellij.openapi.components.StorageScheme.DIRECTORY_BASED;
 
 /**
  * @author Eugene Zhuravlev
@@ -52,7 +59,7 @@ public class ProjectNameStep extends ModuleWizardStep {
     myPanel = new JPanel(new GridBagLayout());
     myPanel.setBorder(BorderFactory.createEtchedBorder());
 
-    ApplicationInfo info = ApplicationManager.getApplication().getComponent(ApplicationInfo.class);
+    ApplicationInfo info = ApplicationInfo.getInstance();
     String appName = info.getVersionName();
     myPanel.add(new JLabel(IdeBundle.message("label.please.enter.project.name", appName, wizardContext.getPresentationName())),
                 new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(8, 10, 8, 10), 0, 0));
