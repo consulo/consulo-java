@@ -112,7 +112,7 @@ public class SdkSettingsStep extends ModuleWizardStep {
     Project project = myWizardContext.getProject();
     if (project == null) {
       Sdk jdk = mySdkComboBox.getSelectedSdk();
-      myWizardContext.setProjectJdk(jdk);
+     // myWizardContext.setProjectJdk(jdk);
     }
     else {
     /*  Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();

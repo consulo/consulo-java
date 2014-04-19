@@ -15,8 +15,6 @@
  */
 package com.intellij.ide.util.projectWizard;
 
-import static com.intellij.openapi.components.StorageScheme.DIRECTORY_BASED;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,10 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.IdeBundle;
-import com.intellij.ide.highlighter.ModuleFileType;
-import com.intellij.ide.highlighter.ProjectFileType;
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ConfigurationException;
@@ -124,29 +119,19 @@ public class ProjectNameStep extends ModuleWizardStep {
 
     boolean shouldContinue = true;
 
-    final String path = myWizardContext.isCreatingNewProject() && myWizardContext.getProjectStorageFormat() == DIRECTORY_BASED
-                        ? getProjectFileDirectory() + "/" + Project.DIRECTORY_STORE_FOLDER : getProjectFilePath();
+    final String path = getProjectFileDirectory() + "/" + Project.DIRECTORY_STORE_FOLDER;
     final File projectFile = new File(path);
     if (projectFile.exists()) {
       final String title = myWizardContext.isCreatingNewProject()
                            ? IdeBundle.message("title.new.project")
                            : IdeBundle.message("title.add.module");
-      final String message = myWizardContext.isCreatingNewProject() && myWizardContext.getProjectStorageFormat() == DIRECTORY_BASED
-                             ? IdeBundle.message("prompt.overwrite.project.folder",
-                                                 Project.DIRECTORY_STORE_FOLDER, projectFile.getParentFile().getAbsolutePath())
-                             : IdeBundle.message("prompt.overwrite.project.file",
-                                                 projectFile.getAbsolutePath(), myWizardContext.getPresentationName());
+      final String message = IdeBundle.message("prompt.overwrite.project.folder",
+                                                 Project.DIRECTORY_STORE_FOLDER, projectFile.getParentFile().getAbsolutePath());
       int answer = Messages.showYesNoDialog(message, title, Messages.getQuestionIcon());
-      shouldContinue = answer == 0;
+      shouldContinue = answer == Messages.OK;
     }
 
     return shouldContinue;
-  }
-
-  @NonNls
-  public String getProjectFilePath() {
-    return getProjectFileDirectory() + "/" + myNamePathComponent.getNameValue()/*myTfProjectName.getText().trim()*/ +
-      (myWizardContext.getProject() == null ? ProjectFileType.DOT_DEFAULT_EXTENSION : ModuleFileType.DOT_DEFAULT_EXTENSION);
   }
 
   public String getProjectFileDirectory() {

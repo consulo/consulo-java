@@ -22,6 +22,17 @@
  */
 package com.intellij.ide.util.projectWizard;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ConfigurationException;
@@ -30,9 +41,6 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ui.configuration.ProjectSdksConfigurable;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.MultiLineLabelUI;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author Eugene Zhuravlev
@@ -75,7 +83,7 @@ public class ProjectJdkStep extends ModuleWizardStep {
   }
 
   public void updateDataModel() {
-    myContext.setProjectJdk(getJdk());
+
   }
 
 
