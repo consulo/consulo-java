@@ -36,7 +36,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.util.ExecUtil;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
@@ -87,14 +86,14 @@ public class JavaSdkImpl extends JavaSdk
 
 	public JavaSdkImpl()
 	{
-		super(ProjectBundle.message("sdk.java.name"));
+		super("JDK");
 	}
 
 	@NotNull
 	@Override
 	public String getPresentableName()
 	{
-		return getName();
+		return ProjectBundle.message("sdk.java.name");
 	}
 
 	@Override
@@ -103,20 +102,12 @@ public class JavaSdkImpl extends JavaSdk
 		return JavaPlatformIcons.Java;
 	}
 
-	@Nullable
-	@Override
-	public Icon getGroupIcon()
-	{
-		return AllIcons.Nodes.PpJdk;
-	}
-
 	@NotNull
 	@Override
 	public String getHelpTopic()
 	{
 		return "reference.project.structure.sdk.java";
 	}
-
 
 	@NonNls
 	@Override
@@ -518,23 +509,6 @@ public class JavaSdkImpl extends JavaSdk
 		}
 
 		return versionString;
-	}
-
-	@Override
-	@NotNull
-	public String getComponentName()
-	{
-		return getName();
-	}
-
-	@Override
-	public void initComponent()
-	{
-	}
-
-	@Override
-	public void disposeComponent()
-	{
 	}
 
 	@Override

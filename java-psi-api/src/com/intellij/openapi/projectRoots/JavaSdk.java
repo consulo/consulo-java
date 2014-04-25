@@ -15,21 +15,20 @@
  */
 package com.intellij.openapi.projectRoots;
 
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.projectRoots.impl.SdkVersionUtil;
+import java.io.File;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.projectRoots.impl.SdkVersionUtil;
 
-import java.io.File;
-
-public abstract class JavaSdk extends SdkType implements JavaSdkType, ApplicationComponent {
+public abstract class JavaSdk extends SdkType implements JavaSdkType {
   public JavaSdk(@NonNls String name) {
     super(name);
   }
 
   public static JavaSdk getInstance() {
-    return findInstance(JavaSdk.class);
+    return EP_NAME.findExtension(JavaSdk.class);
   }
 
   public final Sdk createJdk(@NotNull String jdkName, @NotNull String jreHome) {
