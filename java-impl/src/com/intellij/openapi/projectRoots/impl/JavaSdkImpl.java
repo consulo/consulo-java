@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.Icon;
 
-import org.consulo.java.platform.JavaPlatformIcons;
+import org.mustbe.consulo.java.JavaIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -99,7 +99,7 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public Icon getIcon()
 	{
-		return JavaPlatformIcons.Java;
+		return JavaIcons.Java;
 	}
 
 	@NotNull

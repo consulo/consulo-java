@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Consulo.org
+ * Copyright 2013-2014 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.consulo.java.platform;
+package org.mustbe.consulo.java;
+
+import javax.swing.Icon;
 
 import com.intellij.openapi.util.IconLoader;
-
-import javax.swing.*;
 
 /**
  * @author VISTALL
  * @since 13:59/19.05.13
  */
-public interface JavaPlatformIcons {
-  Icon Java = IconLoader.findIcon("/icons/java.png");
+public interface JavaIcons
+{
+	Icon Java = IconLoader.findIcon("/icons/java.png");
 }
