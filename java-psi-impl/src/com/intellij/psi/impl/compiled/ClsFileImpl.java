@@ -283,8 +283,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	public void appendMirrorText(final int indentLevel, @NotNull final StringBuilder buffer)
 	{
 		buffer.append("\n");
-		buffer.append("  // IntelliJ API Decompiler stub source generated from a class file\n");
-		buffer.append("  // Implementation of methods is not available\n");
+		buffer.append(PsiBundle.message("psi.decompiled.text.header"));
 		buffer.append("\n");
 
 		appendText(getPackageStatement(), 0, buffer, "\n\n");
