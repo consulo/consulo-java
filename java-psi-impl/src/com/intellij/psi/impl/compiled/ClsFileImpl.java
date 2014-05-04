@@ -440,11 +440,6 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		return myViewProvider;
 	}
 
-	@Override
-	public void subtreeChanged()
-	{
-	}
-
 	public static String decompile(PsiManager manager, VirtualFile file)
 	{
 		ClsFileImpl psiFile = null;
