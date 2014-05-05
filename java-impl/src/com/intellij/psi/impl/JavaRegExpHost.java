@@ -15,18 +15,18 @@
  */
 package com.intellij.psi.impl;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.intellij.lang.regexp.DefaultRegExpPropertiesProvider;
+import org.intellij.lang.regexp.RegExpLanguageHost;
+import org.intellij.lang.regexp.psi.RegExpGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.intellij.lang.regexp.DefaultRegExpPropertiesProvider;
-import org.intellij.lang.regexp.RegExpLanguageHost;
-import org.intellij.lang.regexp.psi.RegExpGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yole
@@ -64,7 +64,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     if (group.isRubyNamedGroup()) {
       final Module module = ModuleUtilCore.findModuleForPsiElement(group);
       if (module != null) {
-        final Sdk sdk = ModuleUtil.getSdk(module, JavaModuleExtensionImpl.class);
+        final Sdk sdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
         if (sdk != null) {
           final JavaSdkVersion version = JavaSdk.getInstance().getVersion(sdk);
           return version != null && version.isAtLeast(JavaSdkVersion.JDK_1_7);

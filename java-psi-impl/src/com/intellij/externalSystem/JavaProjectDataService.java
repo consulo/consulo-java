@@ -18,7 +18,7 @@ package com.intellij.externalSystem;
 import java.util.Collection;
 import java.util.List;
 
-import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
+import org.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.externalSystem.model.DataNode;
@@ -79,7 +79,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 
 					ModifiableRootModel modifiableModel = moduleRootManager.getModifiableModel();
 
-					JavaMutableModuleExtensionImpl e = modifiableModel.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class);
+					JavaMutableModuleExtension<?> e = modifiableModel.getExtensionWithoutCheck("java");
 					if(!e.isEnabled())
 					{
 						e.setEnabled(true);

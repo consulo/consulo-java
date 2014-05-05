@@ -16,6 +16,12 @@
 
 package com.intellij.ide.actions;
 
+import java.util.Map;
+
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.consulo.module.extension.ModuleExtension;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
@@ -29,100 +35,116 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.module.extension.ModuleExtension;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * The standard "New Class" action.
  *
  * @since 5.1
  */
-public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClass> {
-  public CreateClassAction() {
-    super(JavaCoreBundle.message("action.NewClass.text"), JavaCoreBundle.message("action.create.new.class.description"), PlatformIcons.CLASS_ICON, true);
-  }
+public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClass>
+{
+	public CreateClassAction()
+	{
+		super(JavaCoreBundle.message("action.NewClass.text"), JavaCoreBundle.message("action.create.new.class.description"),
+				PlatformIcons.CLASS_ICON, true);
+	}
 
-  @Override
-  protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-    builder
-      .setTitle(JavaCoreBundle.message("action.create.new.class"))
-      .addKind("Class", PlatformIcons.CLASS_ICON, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME)
-      .addKind("Interface", PlatformIcons.INTERFACE_ICON, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
+	@Override
+	protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder)
+	{
+		builder.setTitle(JavaCoreBundle.message("action.create.new.class")).addKind("Class", PlatformIcons.CLASS_ICON,
+				JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME).addKind("Interface", PlatformIcons.INTERFACE_ICON,
+				JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
 
-    Module module = ModuleUtilCore.findModuleForPsiElement(directory);
-    assert module != null;
-    JavaModuleExtensionImpl moduleExtension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtensionImpl.class);
+		Module module = ModuleUtilCore.findModuleForPsiElement(directory);
+		assert module != null;
+		JavaModuleExtension moduleExtension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtension.class);
 
-    assert moduleExtension != null;
-    if (moduleExtension.getLanguageLevel().isAtLeast(LanguageLevel.JDK_1_5)) {
-      builder.addKind("Enum", PlatformIcons.ENUM_ICON, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
-      builder.addKind("Annotation", PlatformIcons.ANNOTATION_TYPE_ICON, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
-    }
-    
-    for (FileTemplate template : FileTemplateManager.getInstance().getAllTemplates()) {
-      final JavaCreateFromTemplateHandler handler = new JavaCreateFromTemplateHandler();
-      if (handler.handlesTemplate(template) && JavaCreateFromTemplateHandler.canCreate(directory)) {
-        builder.addKind(template.getName(), JavaFileType.INSTANCE.getIcon(), template.getName());
-      }
-    }
-    
-    builder.setValidator(new InputValidatorEx() {
-      @Override
-      public String getErrorText(String inputString) {
-        if (inputString.length() > 0 && !JavaPsiFacade.getInstance(project).getNameHelper().isQualifiedName(inputString)) {
-          return "This is not a valid Java qualified name";
-        }
-        return null;
-      }
+		assert moduleExtension != null;
+		if(moduleExtension.getLanguageLevel().isAtLeast(LanguageLevel.JDK_1_5))
+		{
+			builder.addKind("Enum", PlatformIcons.ENUM_ICON, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
+			builder.addKind("Annotation", PlatformIcons.ANNOTATION_TYPE_ICON, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
+		}
 
-      @Override
-      public boolean checkInput(String inputString) {
-        return true;
-      }
+		for(FileTemplate template : FileTemplateManager.getInstance().getAllTemplates())
+		{
+			final JavaCreateFromTemplateHandler handler = new JavaCreateFromTemplateHandler();
+			if(handler.handlesTemplate(template) && JavaCreateFromTemplateHandler.canCreate(directory))
+			{
+				builder.addKind(template.getName(), JavaFileType.INSTANCE.getIcon(), template.getName());
+			}
+		}
 
-      @Override
-      public boolean canClose(String inputString) {
-        return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
-      }
-    });
-  }
+		builder.setValidator(new InputValidatorEx()
+		{
+			@Override
+			public String getErrorText(String inputString)
+			{
+				if(inputString.length() > 0 && !JavaPsiFacade.getInstance(project).getNameHelper().isQualifiedName(inputString))
+				{
+					return "This is not a valid Java qualified name";
+				}
+				return null;
+			}
 
-  @Nullable
-  @Override
-  protected Class<? extends ModuleExtension> getModuleExtensionClass() {
-    return JavaModuleExtensionImpl.class;
-  }
+			@Override
+			public boolean checkInput(String inputString)
+			{
+				return true;
+			}
 
-  @Override
-  protected String getErrorTitle() {
-    return JavaCoreBundle.message("title.cannot.create.class");
-  }
+			@Override
+			public boolean canClose(String inputString)
+			{
+				return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
+			}
+		});
+	}
 
-  @Override
-  protected String getActionName(PsiDirectory directory, String newName, String templateName) {
-    return JavaCoreBundle.message("progress.creating.class", StringUtil.getQualifiedName(JavaDirectoryService.getInstance().getPackage(directory).getQualifiedName(), newName));
-  }
+	@Nullable
+	@Override
+	protected Class<? extends ModuleExtension> getModuleExtensionClass()
+	{
+		return JavaModuleExtension.class;
+	}
 
-  protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException {
-    return JavaDirectoryService.getInstance().createClass(dir, className, templateName, true);
-  }
+	@Override
+	protected String getErrorTitle()
+	{
+		return JavaCoreBundle.message("title.cannot.create.class");
+	}
 
-  @Override
-  protected PsiElement getNavigationElement(@NotNull PsiClass createdElement) {
-    return createdElement.getLBrace();
-  }
+	@Override
+	protected String getActionName(PsiDirectory directory, String newName, String templateName)
+	{
+		return JavaCoreBundle.message("progress.creating.class", StringUtil.getQualifiedName(JavaDirectoryService.getInstance().getPackage
+				(directory).getQualifiedName(), newName));
+	}
 
-  @Override
-  protected void postProcess(PsiClass createdElement, String templateName, Map<String, String> customProperties) {
-    super.postProcess(createdElement, templateName, customProperties);
+	protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException
+	{
+		return JavaDirectoryService.getInstance().createClass(dir, className, templateName, true);
+	}
 
-    moveCaretAfterNameIdentifier(createdElement);
-  }
+	@Override
+	protected PsiElement getNavigationElement(@NotNull PsiClass createdElement)
+	{
+		return createdElement.getLBrace();
+	}
+
+	@Override
+	protected void postProcess(PsiClass createdElement, String templateName, Map<String, String> customProperties)
+	{
+		super.postProcess(createdElement, templateName, customProperties);
+
+		moveCaretAfterNameIdentifier(createdElement);
+	}
 }

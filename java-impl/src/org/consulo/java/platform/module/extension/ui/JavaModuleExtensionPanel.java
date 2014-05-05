@@ -24,8 +24,8 @@ import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.consulo.java.platform.module.extension.SpecialDirLocation;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.module.extension.ModuleExtensionWithSdk;
@@ -45,7 +45,7 @@ import com.intellij.ui.SimpleTextAttributes;
  * @since 15:23/19.05.13
  */
 public class JavaModuleExtensionPanel extends JPanel {
-  private final JavaMutableModuleExtensionImpl myMutableModuleExtension;
+  private final JavaMutableModuleExtension myMutableModuleExtension;
   private final Runnable myClasspathStateUpdater;
   private ComboBox myLanguageLevelComboBox;
   private ModuleExtensionWithSdkPanel myModuleExtensionWithSdkPanel;
@@ -53,7 +53,7 @@ public class JavaModuleExtensionPanel extends JPanel {
   private JRadioButton myModuleDirRadioButton;
   private JRadioButton mySourceDirRadioButton;
 
-  public JavaModuleExtensionPanel(JavaMutableModuleExtensionImpl mutableModuleExtension, Runnable classpathStateUpdater) {
+  public JavaModuleExtensionPanel(JavaMutableModuleExtension<?> mutableModuleExtension, Runnable classpathStateUpdater) {
     myMutableModuleExtension = mutableModuleExtension;
     myClasspathStateUpdater = classpathStateUpdater;
 
@@ -94,7 +94,7 @@ public class JavaModuleExtensionPanel extends JPanel {
           setIcon(AllIcons.Nodes.Module);
           append(((Module)value).getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
 
-          final JavaModuleExtensionImpl extension = ModuleUtilCore.getExtension((Module)value, JavaModuleExtensionImpl.class);
+          final JavaModuleExtension extension = ModuleUtilCore.getExtension((Module)value, JavaModuleExtension.class);
           if (extension != null) {
             final LanguageLevel languageLevel = extension.getLanguageLevel();
             append("(" + languageLevel.getShortText() + ")", SimpleTextAttributes.GRAY_ATTRIBUTES);

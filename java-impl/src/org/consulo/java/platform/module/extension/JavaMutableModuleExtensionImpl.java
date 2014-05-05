@@ -17,8 +17,8 @@ package org.consulo.java.platform.module.extension;
 
 import javax.swing.JComponent;
 
+import org.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.consulo.java.platform.module.extension.ui.JavaModuleExtensionPanel;
-import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,53 +30,63 @@ import com.intellij.pom.java.LanguageLevel;
  * @author VISTALL
  * @since 12:39/19.05.13
  */
-public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl
-  implements MutableModuleExtensionWithSdk<JavaModuleExtensionImpl> {
+public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>
+{
+	public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	{
+		super(id, rootModel);
+	}
 
-  public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull ModifiableRootModel rootModel) {
-    super(id, rootModel);
-  }
+	@Nullable
+	@Override
+	public JComponent createConfigurablePanel(@Nullable Runnable updateOnCheck)
+	{
+		return new JavaModuleExtensionPanel(this, updateOnCheck);
+	}
 
-  @Nullable
-  @Override
-  public JComponent createConfigurablePanel( @Nullable Runnable updateOnCheck) {
-    return new JavaModuleExtensionPanel(this, updateOnCheck);
-  }
+	@Override
+	public void setEnabled(boolean val)
+	{
+		myIsEnabled = val;
+	}
 
-  @Override
-  public void setEnabled(boolean val) {
-    myIsEnabled = val;
-  }
+	@Override
+	@NotNull
+	public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel()
+	{
+		return myLanguageLevel;
+	}
 
-  @Override
-  @NotNull
-  public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
-    return myLanguageLevel;
-  }
+	@Override
+	public void setSpecialDirLocation(@NotNull SpecialDirLocation specialDirLocation)
+	{
+		mySpecialDirLocation = specialDirLocation;
+	}
 
-  public void setSpecialDirLocation(SpecialDirLocation specialDirLocation) {
-    mySpecialDirLocation = specialDirLocation;
-  }
+	@Override
+	public boolean isModified(@NotNull JavaModuleExtensionImpl javaModuleExtension)
+	{
+		if(isModifiedImpl(javaModuleExtension))
+		{
+			return true;
+		}
 
-  @Override
-  public boolean isModified(@NotNull JavaModuleExtensionImpl javaModuleExtension) {
-    if(isModifiedImpl(javaModuleExtension)) {
-      return true;
-    }
+		if(!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel()))
+		{
+			return true;
+		}
 
-    if(!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel())) {
-      return true;
-    }
+		if(!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation()))
+		{
+			return true;
+		}
+		return false;
+	}
 
-    if(!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation())) {
-      return true;
-    }
-    return false;
-  }
-
-  @NotNull
-  @Override
-  public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk() {
-    return (MutableModuleInheritableNamedPointer<Sdk>)super.getInheritableSdk();
-  }
+	@NotNull
+	@Override
+	public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk()
+	{
+		return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();
+	}
 }

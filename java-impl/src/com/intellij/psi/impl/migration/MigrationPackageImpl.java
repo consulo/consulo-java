@@ -15,11 +15,11 @@
  */
 package com.intellij.psi.impl.migration;
 
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.impl.file.PsiPackageImpl;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.impl.file.PsiPackageImpl;
 
 /**
  * @author dsl
@@ -28,7 +28,7 @@ public class MigrationPackageImpl extends PsiPackageImpl {
   private final PsiMigrationImpl myMigration;
 
   public MigrationPackageImpl(PsiMigrationImpl migration, String qualifiedName) {
-    super(migration.getManager(), PsiPackageManager.getInstance(migration.getManager().getProject()), JavaModuleExtensionImpl.class, qualifiedName);
+    super(migration.getManager(), PsiPackageManager.getInstance(migration.getManager().getProject()), JavaModuleExtension.class, qualifiedName);
     myMigration = migration;
   }
 

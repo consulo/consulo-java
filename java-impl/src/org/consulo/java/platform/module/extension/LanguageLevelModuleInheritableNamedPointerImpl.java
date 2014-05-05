@@ -15,6 +15,7 @@
  */
 package org.consulo.java.platform.module.extension;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;
 import org.consulo.util.pointers.NamedPointer;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 	@Override
 	public String getItemNameFromModule(@NotNull Module module)
 	{
-		final JavaModuleExtensionImpl extension = (JavaModuleExtensionImpl) ModuleUtilCore.getExtension(module, myExtensionId);
+		final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
 		if(extension != null)
 		{
 			return extension.getLanguageLevel().getName();
@@ -51,7 +52,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 	@Override
 	public LanguageLevel getItemFromModule(@NotNull Module module)
 	{
-		final JavaModuleExtensionImpl extension = (JavaModuleExtensionImpl) ModuleUtilCore.getExtension(module, myExtensionId);
+		final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
 		if(extension != null)
 		{
 			return extension.getLanguageLevel();

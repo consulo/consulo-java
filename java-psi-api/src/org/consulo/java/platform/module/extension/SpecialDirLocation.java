@@ -19,7 +19,8 @@ package org.consulo.java.platform.module.extension;
  * @author VISTALL
  * @since 18:40/05.07.13
  */
-public enum SpecialDirLocation {
-  MODULE_DIR,
-  SOURCE_DIR
+public enum SpecialDirLocation
+{
+	MODULE_DIR,
+	SOURCE_DIR
 }

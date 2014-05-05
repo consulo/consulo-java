@@ -15,6 +15,10 @@
  */
 package com.intellij.openapi.roots.impl;
 
+import java.util.Set;
+
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.internal.statistic.AbstractApplicationUsagesCollector;
 import com.intellij.internal.statistic.beans.GroupDescriptor;
 import com.intellij.internal.statistic.beans.UsageDescriptor;
@@ -25,36 +29,39 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesCollector
+{
+	public static final String GROUP_ID = "language-level";
 
-public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesCollector {
-  public static final String GROUP_ID = "language-level";
-
-  @NotNull
-  @Override
-  public GroupDescriptor getGroupId() {
-    return GroupDescriptor.create(GROUP_ID, GroupDescriptor.HIGHER_PRIORITY);
-  }
+	@NotNull
+	@Override
+	public GroupDescriptor getGroupId()
+	{
+		return GroupDescriptor.create(GROUP_ID, GroupDescriptor.HIGHER_PRIORITY);
+	}
 
 
-  @NotNull
-  public Set<UsageDescriptor> getProjectUsages(@NotNull Project project) {
+	@NotNull
+	public Set<UsageDescriptor> getProjectUsages(@NotNull Project project)
+	{
 
-    final Set<String> languageLevels = new HashSet<String>();
-    for (Module module : ModuleManager.getInstance(project).getModules()) {
-      JavaModuleExtensionImpl extension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtensionImpl.class);
-      if(extension != null) {
-        languageLevels.add(extension.getLanguageLevel().toString());
-      }
-    }
-    return ContainerUtil.map2Set(languageLevels, new Function<String, UsageDescriptor>() {
-      @Override
-      public UsageDescriptor fun(String languageLevel) {
-        return new UsageDescriptor(languageLevel, 1);
-      }
-    });
-  }
+		final Set<String> languageLevels = new HashSet<String>();
+		for(Module module : ModuleManager.getInstance(project).getModules())
+		{
+			JavaModuleExtension extension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtension.class);
+			if(extension != null)
+			{
+				languageLevels.add(extension.getLanguageLevel().toString());
+			}
+		}
+		return ContainerUtil.map2Set(languageLevels, new Function<String, UsageDescriptor>()
+		{
+			@Override
+			public UsageDescriptor fun(String languageLevel)
+			{
+				return new UsageDescriptor(languageLevel, 1);
+			}
+		});
+	}
 }

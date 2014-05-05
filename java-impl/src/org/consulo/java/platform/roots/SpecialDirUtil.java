@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.roots.ContentFolderScopes;
@@ -39,7 +39,7 @@ public class SpecialDirUtil {
 
   @Nullable
   public static String getSpecialDirLocation(@NotNull Module module, @NotNull String name) {
-    final JavaModuleExtensionImpl extension = ModuleUtilCore.getExtension(module, JavaModuleExtensionImpl.class);
+    final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return null;
     }
@@ -68,7 +68,7 @@ public class SpecialDirUtil {
 
   @NotNull
   public static List<VirtualFile> collectSpecialDirs(@NotNull Module module, @NotNull String name) {
-    final JavaModuleExtensionImpl extension = ModuleUtilCore.getExtension(module, JavaModuleExtensionImpl.class);
+    final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return Collections.emptyList();
     }

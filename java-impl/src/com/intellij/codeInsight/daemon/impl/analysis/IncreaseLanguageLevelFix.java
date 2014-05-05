@@ -15,6 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.consulo.java.module.extension.JavaMutableModuleExtension;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
@@ -32,10 +36,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author cdr
@@ -85,7 +85,7 @@ public class IncreaseLanguageLevelFix implements IntentionAction {
   }
 
   public static boolean isLanguageLevelAcceptable(Module module, final LanguageLevel level) {
-    return isJdkSupportsLevel(ModuleUtilCore.getSdk(module, JavaModuleExtensionImpl.class), level);
+    return isJdkSupportsLevel(ModuleUtilCore.getSdk(module, JavaModuleExtension.class), level);
   }
 
   @Override
@@ -97,13 +97,13 @@ public class IncreaseLanguageLevelFix implements IntentionAction {
       return;
     }
 
-    JavaModuleExtensionImpl extension = ModuleUtilCore.getExtension(module, JavaModuleExtensionImpl.class);
+    JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if (extension == null) {
       return;
     }
 
     final ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
-    JavaMutableModuleExtensionImpl mutableModuleExtension = rootModel.getExtension(JavaMutableModuleExtensionImpl.class);
+	  JavaMutableModuleExtension mutableModuleExtension = rootModel.getExtension(JavaMutableModuleExtension.class);
 
     assert mutableModuleExtension != null;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Consulo.org
+ * Copyright 2013-2014 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.consulo.java.module.extension;
 
 import org.consulo.java.platform.module.extension.SpecialDirLocation;
-import org.consulo.module.extension.ModuleExtensionWithSdk;
+import org.consulo.module.extension.MutableModuleExtensionWithSdk;
+import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
  * @author VISTALL
- * @since 1:24/21.10.13
+ * @since 05.05.14
  */
-public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends ModuleExtensionWithSdk<T>
+public interface JavaMutableModuleExtension<T extends JavaModuleExtension<T>> extends MutableModuleExtensionWithSdk<T>, JavaModuleExtension<T>
 {
 	@NotNull
-	LanguageLevel getLanguageLevel();
+	MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel();
 
-	@NotNull
-	SpecialDirLocation getSpecialDirLocation();
+	void setSpecialDirLocation(@NotNull SpecialDirLocation location);
 }

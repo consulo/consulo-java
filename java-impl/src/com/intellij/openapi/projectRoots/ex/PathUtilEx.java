@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -45,7 +45,7 @@ public class PathUtilEx {
   private static final Function<Module, Sdk> MODULE_JDK = new Function<Module, Sdk>() {
     @Override
     public Sdk fun(Module module) {
-      return ModuleUtilCore.getSdk(module, JavaModuleExtensionImpl.class);
+      return ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     }
   };
   private static final Convertor<Sdk, String> JDK_VERSION = new Convertor<Sdk, String>() {

@@ -20,6 +20,9 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -36,9 +39,6 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class ReplaceAddAllArrayToCollectionFix implements IntentionAction {
   private final PsiMethodCallExpression myMethodCall;
@@ -65,7 +65,7 @@ public class ReplaceAddAllArrayToCollectionFix implements IntentionAction {
 
     final Module module = ModuleUtilCore.findModuleForPsiElement(file);
     if (module == null) return false;
-    final Sdk jdk = ModuleUtil.getSdk(module, JavaModuleExtensionImpl.class);
+    final Sdk jdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
     if (jdk == null || !JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5)) return false;
 
     final PsiReferenceExpression expression = myMethodCall.getMethodExpression();
