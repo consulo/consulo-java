@@ -17,9 +17,11 @@ package com.intellij.compiler;
 
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.pom.java.LanguageLevel;
@@ -76,9 +78,20 @@ public class JavaSdkUtil
 	}
 
 	@Nullable
+	public static Sdk getSdkForCompilation(@NotNull final Module module)
+	{
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+		if(extension == null)
+		{
+			return null;
+		}
+		return extension.getSdkForCompilation();
+	}
+
+	@Nullable
 	public static Sdk getSdkForCompilation(final ModuleChunk chunk)
 	{
-		return ModuleUtilCore.getSdk(chunk.getModule(), JavaModuleExtension.class);
+		return getSdkForCompilation(chunk.getModule());
 	}
 
 	@Nullable

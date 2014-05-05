@@ -115,7 +115,7 @@ public class JavacCompiler extends ExternalCompiler
 			{
 				continue;
 			}
-			final Sdk javaSdk = extension.getSdk();
+			final Sdk javaSdk = JavaSdkUtil.getSdkForCompilation(module);
 			if(javaSdk == null )
 			{
 				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()),
