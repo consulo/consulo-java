@@ -19,6 +19,7 @@ import org.consulo.java.platform.module.extension.SpecialDirLocation;
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.pom.java.LanguageLevel;
 
@@ -36,4 +37,10 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 
 	@Nullable
 	Sdk getSdkForCompilation();
+
+	@NotNull
+	String getCompilationClasspath(@NotNull ModuleChunk moduleChunk);
+
+	@NotNull
+	String getCompilationBootClasspath(@NotNull ModuleChunk moduleChunk);
 }

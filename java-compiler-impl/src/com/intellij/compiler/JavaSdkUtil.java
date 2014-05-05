@@ -95,6 +95,28 @@ public class JavaSdkUtil
 	}
 
 	@Nullable
+	public static String getCompilationClasspath(final ModuleChunk moduleChunk)
+	{
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
+		if(extension == null)
+		{
+			return null;
+		}
+		return extension.getCompilationClasspath(moduleChunk);
+	}
+
+	@Nullable
+	public static String getCompilationBootClasspath(final ModuleChunk moduleChunk)
+	{
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
+		if(extension == null)
+		{
+			return null;
+		}
+		return extension.getCompilationBootClasspath(moduleChunk);
+	}
+
+	@Nullable
 	public static LanguageLevel getLanguageLevelForCompilation(final ModuleChunk chunk)
 	{
 		return EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(chunk.getModule());

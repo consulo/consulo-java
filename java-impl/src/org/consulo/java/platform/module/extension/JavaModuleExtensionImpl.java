@@ -21,6 +21,7 @@ import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
@@ -69,6 +70,20 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	public Sdk getSdkForCompilation()
 	{
 		return getSdk();
+	}
+
+	@NotNull
+	@Override
+	public String getCompilationClasspath(@NotNull ModuleChunk moduleChunk)
+	{
+		return moduleChunk.getCompilationClasspath(JavaSdk.getInstance());
+	}
+
+	@NotNull
+	@Override
+	public String getCompilationBootClasspath(@NotNull ModuleChunk moduleChunk)
+	{
+		return moduleChunk.getCompilationBootClasspath(JavaSdk.getInstance());
 	}
 
 	@NotNull
