@@ -20,12 +20,9 @@ import org.consulo.module.extension.ModuleInheritableNamedPointer;
 import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.roots.ContentFoldersSupport;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestResourceContentFolderTypeProvider;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.pom.java.LanguageLevel;
@@ -34,12 +31,6 @@ import com.intellij.pom.java.LanguageLevel;
  * @author VISTALL
  * @since 10:02/19.05.13
  */
-@ContentFoldersSupport(value = {
-		ProductionContentFolderTypeProvider.class,
-		ProductionResourceContentFolderTypeProvider.class,
-		TestContentFolderTypeProvider.class,
-		TestResourceContentFolderTypeProvider.class
-})
 public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl>
 {
 	private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
@@ -71,6 +62,13 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	public SpecialDirLocation getSpecialDirLocation()
 	{
 		return mySpecialDirLocation;
+	}
+
+	@Nullable
+	@Override
+	public Sdk getSdkForCompilation()
+	{
+		return getSdk();
 	}
 
 	@NotNull

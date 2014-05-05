@@ -1906,6 +1906,7 @@
 		<orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
 		<orderRootTypeEditor key="JAVA_ANNOTATIONS"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
+		<contentFolderSupportPatcher implementation="org.consulo.java.platform.module.extension.JavaContentFolderSupportPatcher" />
 		<pathMacroExpendableProtocol protocol="jar"/>
 
 		<psi.directoryMethodProxy implementation="com.intellij.psi.impl.file.JavaPsiDirectoryMethodProxy"/>
