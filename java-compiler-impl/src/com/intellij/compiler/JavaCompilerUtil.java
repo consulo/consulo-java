@@ -15,17 +15,17 @@
  */
 package com.intellij.compiler;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.execution.configurations.ParametersList;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author VISTALL
@@ -33,105 +33,160 @@ import java.util.List;
  *        <p/>
  *        This class is split part of {com.intellij.compiler.impl.CompilerUtil}
  */
-public class JavaCompilerUtil {
-  public static void addTargetCommandLineSwitch(final ModuleChunk chunk, final List<String> commandLine) {
-    String optionValue = null;
+public class JavaCompilerUtil
+{
+	public static void addTargetCommandLineSwitch(final ModuleChunk chunk, final ParametersList parametersList)
+	{
+		String optionValue = null;
 
-    JavaCompilerConfiguration compilerConfiguration = JavaCompilerConfiguration.getInstance(chunk.getProject());
-    final Module[] modules = chunk.getModules();
-    for (Module module : modules) {
-      final String moduleTarget = compilerConfiguration.getBytecodeTargetLevel(module);
-      if (moduleTarget == null) {
-        continue;
-      }
-      if (optionValue == null) {
-        optionValue = moduleTarget;
-      }
-      else {
-        if (moduleTarget.compareTo(optionValue) < 0) {
-          optionValue = moduleTarget; // use the lower possible target among modules that form the chunk
-        }
-      }
-    }
-    if (optionValue != null) {
-      commandLine.add("-target");
-      commandLine.add(optionValue);
-    }
-  }
+		JavaCompilerConfiguration compilerConfiguration = JavaCompilerConfiguration.getInstance(chunk.getProject());
+		final Module[] modules = chunk.getModules();
+		for(Module module : modules)
+		{
+			final String moduleTarget = compilerConfiguration.getBytecodeTargetLevel(module);
+			if(moduleTarget == null)
+			{
+				continue;
+			}
+			if(optionValue == null)
+			{
+				optionValue = moduleTarget;
+			}
+			else
+			{
+				if(moduleTarget.compareTo(optionValue) < 0)
+				{
+					optionValue = moduleTarget; // use the lower possible target among modules that form the chunk
+				}
+			}
+		}
+		if(optionValue != null)
+		{
+			parametersList.add("-target");
+			parametersList.add(optionValue);
+		}
+	}
 
-  public static void addSourceCommandLineSwitch(final Sdk jdk, LanguageLevel chunkLanguageLevel, @NonNls final List<String> commandLine) {
-    final String versionString = jdk.getVersionString();
-    if (StringUtil.isEmpty(versionString)) {
-      throw new IllegalArgumentException(CompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
-    }
+	public static void addSourceCommandLineSwitch(final Sdk jdk, LanguageLevel chunkLanguageLevel, @NonNls final ParametersList parametersList)
+	{
+		final String versionString = jdk.getVersionString();
+		if(StringUtil.isEmpty(versionString))
+		{
+			throw new IllegalArgumentException(CompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
+		}
 
-    final LanguageLevel applicableLanguageLevel = getApplicableLanguageLevel(versionString, chunkLanguageLevel);
-    if (applicableLanguageLevel.equals(LanguageLevel.JDK_1_8)) {
-      commandLine.add("-source");
-      commandLine.add("8");
-    }
-    else if (applicableLanguageLevel.equals(LanguageLevel.JDK_1_7)) {
-      commandLine.add("-source");
-      commandLine.add("1.7");
-    }
-    else if (applicableLanguageLevel.equals(LanguageLevel.JDK_1_6)) {
-      commandLine.add("-source");
-      commandLine.add("1.6");
-    }
-    else if (applicableLanguageLevel.equals(LanguageLevel.JDK_1_5)) {
-      commandLine.add("-source");
-      commandLine.add("1.5");
-    }
-    else if (applicableLanguageLevel.equals(LanguageLevel.JDK_1_4)) {
-      commandLine.add("-source");
-      commandLine.add("1.4");
-    }
-    else if (applicableLanguageLevel.equals(LanguageLevel.JDK_1_3)) {
-      if (!(isOfVersion(versionString, "1.3") || isOfVersion(versionString, "1.2") || isOfVersion(versionString, "1.1"))) {
-        //noinspection HardCodedStringLiteral
-        commandLine.add("-source");
-        commandLine.add("1.3");
-      }
-    }
-  }
+		final LanguageLevel applicableLanguageLevel = getApplicableLanguageLevel(versionString, chunkLanguageLevel);
+		if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_8))
+		{
+			parametersList.add("-source");
+			parametersList.add("8");
+		}
+		else if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_7))
+		{
+			parametersList.add("-source");
+			parametersList.add("1.7");
+		}
+		else if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_6))
+		{
+			parametersList.add("-source");
+			parametersList.add("1.6");
+		}
+		else if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_5))
+		{
+			parametersList.add("-source");
+			parametersList.add("1.5");
+		}
+		else if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_4))
+		{
+			parametersList.add("-source");
+			parametersList.add("1.4");
+		}
+		else if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_3))
+		{
+			if(!(isOfVersion(versionString, "1.3") || isOfVersion(versionString, "1.2") || isOfVersion(versionString, "1.1")))
+			{
+				//noinspection HardCodedStringLiteral
+				parametersList.add("-source");
+				parametersList.add("1.3");
+			}
+		}
+	}
+
+	public static void addLocaleOptions(final ParametersList parametersList, final boolean launcherUsed)
+	{
+		// need to specify default encoding so that javac outputs messages in 'correct' language
+		//noinspection HardCodedStringLiteral
+		parametersList.add((launcherUsed ? "-J" : "") + "-D" + CharsetToolkit.FILE_ENCODING_PROPERTY + "=" + CharsetToolkit.getDefaultSystemCharset()
+				.name());
+		// javac's VM should use the same default locale that IDEA uses in order for javac to print messages in 'correct' language
+		//noinspection HardCodedStringLiteral
+		final String lang = System.getProperty("user.language");
+		if(lang != null)
+		{
+			//noinspection HardCodedStringLiteral
+			parametersList.add((launcherUsed ? "-J" : "") + "-Duser.language=" + lang);
+		}
+		//noinspection HardCodedStringLiteral
+		final String country = System.getProperty("user.country");
+		if(country != null)
+		{
+			//noinspection HardCodedStringLiteral
+			parametersList.add((launcherUsed ? "-J" : "") + "-Duser.country=" + country);
+		}
+		//noinspection HardCodedStringLiteral
+		final String region = System.getProperty("user.region");
+		if(region != null)
+		{
+			//noinspection HardCodedStringLiteral
+			parametersList.add((launcherUsed ? "-J" : "") + "-Duser.region=" + region);
+		}
+	}
 
 
-  //todo[nik] rewrite using JavaSdkVersion#getMaxLanguageLevel
-  @NotNull
-  public static LanguageLevel getApplicableLanguageLevel(String versionString, @NotNull LanguageLevel languageLevel) {
-    final boolean is8OrNewer = isOfVersion(versionString, "1.8") || isOfVersion(versionString, "8.0");
-    final boolean is7OrNewer = is8OrNewer || isOfVersion(versionString, "1.7") || isOfVersion(versionString, "7.0");
-    final boolean is6OrNewer = is7OrNewer || isOfVersion(versionString, "1.6") || isOfVersion(versionString, "6.0");
-    final boolean is5OrNewer = is6OrNewer || isOfVersion(versionString, "1.5") || isOfVersion(versionString, "5.0");
-    final boolean is4OrNewer = is5OrNewer || isOfVersion(versionString, "1.4");
-    final boolean is3OrNewer = is4OrNewer || isOfVersion(versionString, "1.3");
-    final boolean is2OrNewer = is3OrNewer || isOfVersion(versionString, "1.2");
-    final boolean is1OrNewer = is2OrNewer || isOfVersion(versionString, "1.0") || isOfVersion(versionString, "1.1");
+	//todo[nik] rewrite using JavaSdkVersion#getMaxLanguageLevel
+	@NotNull
+	public static LanguageLevel getApplicableLanguageLevel(String versionString, @NotNull LanguageLevel languageLevel)
+	{
+		final boolean is8OrNewer = isOfVersion(versionString, "1.8") || isOfVersion(versionString, "8.0");
+		final boolean is7OrNewer = is8OrNewer || isOfVersion(versionString, "1.7") || isOfVersion(versionString, "7.0");
+		final boolean is6OrNewer = is7OrNewer || isOfVersion(versionString, "1.6") || isOfVersion(versionString, "6.0");
+		final boolean is5OrNewer = is6OrNewer || isOfVersion(versionString, "1.5") || isOfVersion(versionString, "5.0");
+		final boolean is4OrNewer = is5OrNewer || isOfVersion(versionString, "1.4");
+		final boolean is3OrNewer = is4OrNewer || isOfVersion(versionString, "1.3");
+		final boolean is2OrNewer = is3OrNewer || isOfVersion(versionString, "1.2");
+		final boolean is1OrNewer = is2OrNewer || isOfVersion(versionString, "1.0") || isOfVersion(versionString, "1.1");
 
-    if (!is1OrNewer) {
-      // unknown jdk version, cannot say anything about the corresponding language level, so leave it unchanged
-      return languageLevel;
-    }
-    // now correct the language level to be not higher than jdk used to compile
-    if (LanguageLevel.JDK_1_8.equals(languageLevel) && !is8OrNewer) {
-      languageLevel = LanguageLevel.JDK_1_7;
-    }
-    if (LanguageLevel.JDK_1_7.equals(languageLevel) && !is7OrNewer) {
-      languageLevel = LanguageLevel.JDK_1_6;
-    }
-    if (LanguageLevel.JDK_1_6.equals(languageLevel) && !is6OrNewer) {
-      languageLevel = LanguageLevel.JDK_1_5;
-    }
-    if (LanguageLevel.JDK_1_5.equals(languageLevel) && !is5OrNewer) {
-      languageLevel = LanguageLevel.JDK_1_4;
-    }
-    if (LanguageLevel.JDK_1_4.equals(languageLevel) && !is4OrNewer) {
-      languageLevel = LanguageLevel.JDK_1_3;
-    }
-    return languageLevel;
-  }
+		if(!is1OrNewer)
+		{
+			// unknown jdk version, cannot say anything about the corresponding language level, so leave it unchanged
+			return languageLevel;
+		}
+		// now correct the language level to be not higher than jdk used to compile
+		if(LanguageLevel.JDK_1_8.equals(languageLevel) && !is8OrNewer)
+		{
+			languageLevel = LanguageLevel.JDK_1_7;
+		}
+		if(LanguageLevel.JDK_1_7.equals(languageLevel) && !is7OrNewer)
+		{
+			languageLevel = LanguageLevel.JDK_1_6;
+		}
+		if(LanguageLevel.JDK_1_6.equals(languageLevel) && !is6OrNewer)
+		{
+			languageLevel = LanguageLevel.JDK_1_5;
+		}
+		if(LanguageLevel.JDK_1_5.equals(languageLevel) && !is5OrNewer)
+		{
+			languageLevel = LanguageLevel.JDK_1_4;
+		}
+		if(LanguageLevel.JDK_1_4.equals(languageLevel) && !is4OrNewer)
+		{
+			languageLevel = LanguageLevel.JDK_1_3;
+		}
+		return languageLevel;
+	}
 
-  public static boolean isOfVersion(String versionString, String checkedVersion) {
-    return versionString.contains(checkedVersion);
-  }
+	public static boolean isOfVersion(String versionString, String checkedVersion)
+	{
+		return versionString.contains(checkedVersion);
+	}
 }

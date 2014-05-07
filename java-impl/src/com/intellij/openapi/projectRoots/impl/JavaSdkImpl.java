@@ -35,6 +35,7 @@ import org.mustbe.consulo.java.JavaIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.util.ExecUtil;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
@@ -151,14 +152,9 @@ public class JavaSdkImpl extends JavaSdk
 	}
 
 	@Override
-	public String getVMExecutablePath(Sdk sdk)
+	public void setupCommandLine(@NotNull GeneralCommandLine commandLine, @NotNull Sdk sdk)
 	{
-	/*
-    if ("64".equals(System.getProperty("sun.arch.data.model"))) {
-      return getBinPath(sdk) + File.separator + System.getProperty("os.arch") + File.separator + VM_EXE_NAME;
-    }
-    */
-		return getBinPath(sdk) + File.separator + VM_EXE_NAME;
+		commandLine.setExePath(getBinPath(sdk) + File.separator + VM_EXE_NAME);
 	}
 
 	private static String getConvertedHomePath(Sdk sdk)

@@ -20,6 +20,8 @@ import java.io.IOException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.ModuleChunk;
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.EnvironmentUtil;
@@ -30,7 +32,7 @@ public abstract class ExternalCompiler implements BackendCompiler
 	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.ExternalCompiler");
 
 	@NotNull
-	public abstract String[] createStartupCommand(
+	public abstract GeneralCommandLine createStartupCommand(
 			ModuleChunk chunk,
 			CompileContext context,
 			String outputPath) throws IOException, IllegalArgumentException;
@@ -42,7 +44,7 @@ public abstract class ExternalCompiler implements BackendCompiler
 			@NotNull final String outputDir,
 			@NotNull final CompileContext compileContext) throws IOException
 	{
-		final String[] commands = createStartupCommand(chunk, compileContext, outputDir);
+		final GeneralCommandLine commandLine = createStartupCommand(chunk, compileContext, outputDir);
 
 		if(LOG.isDebugEnabled())
 		{
@@ -55,11 +57,7 @@ public abstract class ExternalCompiler implements BackendCompiler
 					buf.append("\t").append(pair).append("\n");
 				}
 				buf.append("=============================================================================\n");
-				buf.append("Running compiler: ");
-				for(final String command : commands)
-				{
-					buf.append(" ").append(command);
-				}
+				buf.append("Running compiler: ").append(commandLine);
 
 				LOG.debug(buf.toString());
 			}
@@ -69,6 +67,13 @@ public abstract class ExternalCompiler implements BackendCompiler
 			}
 		}
 
-		return Runtime.getRuntime().exec(commands);
+		try
+		{
+			return commandLine.createProcess();
+		}
+		catch(ExecutionException e)
+		{
+			throw new IOException(e);
+		}
 	}
 }

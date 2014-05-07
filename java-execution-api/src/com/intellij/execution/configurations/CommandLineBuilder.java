@@ -19,6 +19,7 @@
  */
 package com.intellij.execution.configurations;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.openapi.application.ApplicationManager;
@@ -28,7 +29,6 @@ import com.intellij.openapi.projectRoots.JdkUtil;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.util.Computable;
-import org.jetbrains.annotations.NotNull;
 
 public class CommandLineBuilder {
   private CommandLineBuilder() { }
@@ -76,15 +76,11 @@ public class CommandLineBuilder {
               throw new CantRunException(ExecutionBundle.message("run.configuration.error.no.jdk.specified"));
             }
 
-            final String exePath = ((JavaSdkType)sdkType).getVMExecutablePath(jdk);
-            if (exePath == null) {
-              throw new CantRunException(ExecutionBundle.message("run.configuration.cannot.find.vm.executable"));
-            }
             if (javaParameters.getMainClass() == null) {
               throw new CantRunException(ExecutionBundle.message("main.class.is.not.specified.error.message"));
             }
 
-            return JdkUtil.setupJVMCommandLine(exePath, javaParameters, forceDynamicClasspath);
+            return JdkUtil.setupJVMCommandLine(jdk, javaParameters, forceDynamicClasspath);
           }
           catch (CantRunException e) {
             throw new RuntimeException(e);
