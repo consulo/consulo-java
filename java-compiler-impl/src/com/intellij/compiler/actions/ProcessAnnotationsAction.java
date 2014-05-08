@@ -15,6 +15,12 @@
  */
 package com.intellij.compiler.actions;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.compiler.impl.FileSetCompileScope;
 import com.intellij.compiler.impl.ModuleCompileScope;
@@ -23,9 +29,14 @@ import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.compiler.impl.resourceCompiler.ResourceCompiler;
 import com.intellij.idea.ActionsBundle;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerFilter;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
@@ -33,181 +44,221 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.Nullable;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+public class ProcessAnnotationsAction extends CompileActionBase
+{
+	@Override
+	protected void doAction(DataContext dataContext, Project project)
+	{
+		final Module module = LangDataKeys.MODULE_CONTEXT.getData(dataContext);
+		final Condition<com.intellij.openapi.compiler.Compiler> filter = new Condition<com.intellij.openapi.compiler.Compiler>()
+		{
+			@Override
+			public boolean value(com.intellij.openapi.compiler.Compiler compiler)
+			{
+				// EclipseLink CanonicalModelProcessor reads input from output hence adding ResourcesCompiler
+				return compiler instanceof AnnotationProcessingCompiler || compiler instanceof ResourceCompiler;
+			}
+		};
+		if(module != null)
+		{
+			CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false), filter, null);
+		}
+		else
+		{
+			final FileSetCompileScope scope = getCompilableFiles(project, PlatformDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext));
+			if(scope != null)
+			{
+				CompilerManager.getInstance(project).make(scope, filter, null);
+			}
+		}
+	}
 
-public class ProcessAnnotationsAction extends CompileActionBase {
+	@Override
+	public void update(AnActionEvent event)
+	{
+		super.update(event);
+		Presentation presentation = event.getPresentation();
+		if(!presentation.isEnabled())
+		{
+			return;
+		}
+		DataContext dataContext = event.getDataContext();
+		presentation.setVisible(false);
 
-  @Override
-  protected void doAction(DataContext dataContext, Project project) {
-    final Module module = LangDataKeys.MODULE_CONTEXT.getData(dataContext);
-    final CompilerFilter filter = new CompilerFilter() {
-      @Override
-      public boolean acceptCompiler(com.intellij.openapi.compiler.Compiler compiler) {
-        // EclipseLink CanonicalModelProcessor reads input from output hence adding ResourcesCompiler
-        return compiler instanceof AnnotationProcessingCompiler || compiler instanceof ResourceCompiler;
-      }
-    };
-    if (module != null) {
-      CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false), filter, null);
-    }
-    else {
-      final FileSetCompileScope scope = getCompilableFiles(project, PlatformDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext));
-      if (scope != null) {
-        CompilerManager.getInstance(project).make(scope, filter, null);
-      }
-    }
-  }
+		Project project = CommonDataKeys.PROJECT.getData(dataContext);
+		if(project == null)
+		{
+			presentation.setEnabled(false);
+			return;
+		}
 
-  @Override
-  public void update(AnActionEvent event) {
-    super.update(event);
-    Presentation presentation = event.getPresentation();
-    if (!presentation.isEnabled()) {
-      return;
-    }
-    DataContext dataContext = event.getDataContext();
-    presentation.setVisible(false);
+		if(CompilerWorkspaceConfiguration.getInstance(project).useOutOfProcessBuild())
+		{
+			presentation.setEnabled(false);
+			return;
+		}
 
-    Project project = CommonDataKeys.PROJECT.getData(dataContext);
-    if (project == null) {
-      presentation.setEnabled(false);
-      return;
-    }
+		final JavaCompilerConfiguration compilerConfiguration = JavaCompilerConfiguration.getInstance(project);
 
-    if (CompilerWorkspaceConfiguration.getInstance(project).useOutOfProcessBuild()) {
-      presentation.setEnabled(false);
-      return;
-    }
-    
-    final JavaCompilerConfiguration compilerConfiguration = JavaCompilerConfiguration.getInstance(project);
-    
-    final Module module = LangDataKeys.MODULE.getData(dataContext);
-    final Module moduleContext = LangDataKeys.MODULE_CONTEXT.getData(dataContext);
+		final Module module = LangDataKeys.MODULE.getData(dataContext);
+		final Module moduleContext = LangDataKeys.MODULE_CONTEXT.getData(dataContext);
 
-    if (module == null) {
-      presentation.setEnabled(false);
-      return;
-    }
-    final AnnotationProcessingConfiguration profile = compilerConfiguration.getAnnotationProcessingConfiguration(module);
-    if (!profile.isEnabled() || (!profile.isObtainProcessorsFromClasspath() && profile.getProcessors().isEmpty())) {
-      presentation.setEnabled(false);
-      return;
-    }
+		if(module == null)
+		{
+			presentation.setEnabled(false);
+			return;
+		}
+		final AnnotationProcessingConfiguration profile = compilerConfiguration.getAnnotationProcessingConfiguration(module);
+		if(!profile.isEnabled() || (!profile.isObtainProcessorsFromClasspath() && profile.getProcessors().isEmpty()))
+		{
+			presentation.setEnabled(false);
+			return;
+		}
 
-    presentation.setVisible(true);
-    presentation.setText(createPresentationText(""), true);
-    final FileSetCompileScope scope = getCompilableFiles(project, PlatformDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext));
-    if (moduleContext == null && scope == null) {
-      presentation.setEnabled(false);
-      return;
-    }
+		presentation.setVisible(true);
+		presentation.setText(createPresentationText(""), true);
+		final FileSetCompileScope scope = getCompilableFiles(project, PlatformDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext));
+		if(moduleContext == null && scope == null)
+		{
+			presentation.setEnabled(false);
+			return;
+		}
 
-    String elementDescription = null;
-    if (moduleContext != null) {
-      elementDescription = CompilerBundle.message("action.compile.description.module", moduleContext.getName());
-    }
-    else {
-      PsiJavaPackage aPackage = null;
-      final Collection<VirtualFile> files = scope.getRootFiles();
-      if (files.size() == 1) {
-        final PsiDirectory directory = PsiManager.getInstance(project).findDirectory(files.iterator().next());
-        if (directory != null) {
-          aPackage = JavaDirectoryService.getInstance().getPackage(directory);
-        }
-      }
-      else {
-        PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
-        if (element instanceof PsiJavaPackage) {
-          aPackage = (PsiJavaPackage)element;
-        }
-      }
+		String elementDescription = null;
+		if(moduleContext != null)
+		{
+			elementDescription = CompilerBundle.message("action.compile.description.module", moduleContext.getName());
+		}
+		else
+		{
+			PsiJavaPackage aPackage = null;
+			final Collection<VirtualFile> files = scope.getRootFiles();
+			if(files.size() == 1)
+			{
+				final PsiDirectory directory = PsiManager.getInstance(project).findDirectory(files.iterator().next());
+				if(directory != null)
+				{
+					aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+				}
+			}
+			else
+			{
+				PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+				if(element instanceof PsiJavaPackage)
+				{
+					aPackage = (PsiJavaPackage) element;
+				}
+			}
 
-      if (aPackage != null) {
-        String name = aPackage.getQualifiedName();
-        if (name.length() == 0) {
-          //noinspection HardCodedStringLiteral
-          name = "<default>";
-        }
-        elementDescription = "'" + name + "'";
-      }
-      else if (files.size() == 1) {
-        final VirtualFile file = files.iterator().next();
-        FileType fileType = file.getFileType();
-        if (CompilerManager.getInstance(project).isCompilableFileType(fileType)) {
-          elementDescription = "'" + file.getName() + "'";
-        }
-        else {
-          if (!ActionPlaces.MAIN_MENU.equals(event.getPlace())) {
-            // the action should be invisible in popups for non-java files
-            presentation.setEnabled(false);
-            presentation.setVisible(false);
-            return;
-          }
-        }
-      }
-      else {
-        elementDescription = CompilerBundle.message("action.compile.description.selected.files");
-      }
-    }
+			if(aPackage != null)
+			{
+				String name = aPackage.getQualifiedName();
+				if(name.length() == 0)
+				{
+					//noinspection HardCodedStringLiteral
+					name = "<default>";
+				}
+				elementDescription = "'" + name + "'";
+			}
+			else if(files.size() == 1)
+			{
+				final VirtualFile file = files.iterator().next();
+				FileType fileType = file.getFileType();
+				if(CompilerManager.getInstance(project).isCompilableFileType(fileType))
+				{
+					elementDescription = "'" + file.getName() + "'";
+				}
+				else
+				{
+					if(!ActionPlaces.MAIN_MENU.equals(event.getPlace()))
+					{
+						// the action should be invisible in popups for non-java files
+						presentation.setEnabled(false);
+						presentation.setVisible(false);
+						return;
+					}
+				}
+			}
+			else
+			{
+				elementDescription = CompilerBundle.message("action.compile.description.selected.files");
+			}
+		}
 
-    if (elementDescription == null) {
-      presentation.setEnabled(false);
-      return;
-    }
+		if(elementDescription == null)
+		{
+			presentation.setEnabled(false);
+			return;
+		}
 
-    presentation.setText(createPresentationText(elementDescription), true);
-    presentation.setEnabled(true);
-  }
+		presentation.setText(createPresentationText(elementDescription), true);
+		presentation.setEnabled(true);
+	}
 
-  private static String createPresentationText(final String elementDescription) {
-    int length = elementDescription.length();
-    String target = length > 23 ? (StringUtil.startsWithChar(elementDescription, '\'') ? "'..." : "...") + elementDescription.substring(length - 20, length) : elementDescription;
-    return MessageFormat.format(ActionsBundle.actionText(StringUtil.isEmpty(target)? "RunAPT" : "RunAPT.1"), target);
-  }
+	private static String createPresentationText(final String elementDescription)
+	{
+		int length = elementDescription.length();
+		String target = length > 23 ? (StringUtil.startsWithChar(elementDescription, '\'') ? "'..." : "...") + elementDescription.substring(length -
+				20, length) : elementDescription;
+		return MessageFormat.format(ActionsBundle.actionText(StringUtil.isEmpty(target) ? "RunAPT" : "RunAPT.1"), target);
+	}
 
-  @Nullable
-  private static FileSetCompileScope getCompilableFiles(Project project, VirtualFile[] files) {
-    if (files == null || files.length == 0) {
-      return null;
-    }
-    final PsiManager psiManager = PsiManager.getInstance(project);
-    final FileTypeManager typeManager = FileTypeManager.getInstance();
-    final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-    final CompilerManager compilerManager = CompilerManager.getInstance(project);
-    final List<VirtualFile> filesToCompile = new ArrayList<VirtualFile>();
-    final List<Module> affectedModules = new ArrayList<Module>();
-    for (final VirtualFile file : files) {
-      if (!fileIndex.isInSourceContent(file)) {
-        continue;
-      }
-      if (!file.isInLocalFileSystem()) {
-        continue;
-      }
-      if (file.isDirectory()) {
-        final PsiDirectory directory = psiManager.findDirectory(file);
-        if (directory == null || JavaDirectoryService.getInstance().getPackage(directory) == null) {
-          continue;
-        }
-      }
-      else {
-        FileType fileType = file.getFileType();
-        if (!(compilerManager.isCompilableFileType(fileType))) {
-          continue;
-        }
-      }
-      filesToCompile.add(file);
-      ContainerUtil.addIfNotNull(fileIndex.getModuleForFile(file), affectedModules);
-    }
-    if (filesToCompile.isEmpty()) return null;
-    return new FileSetCompileScope(filesToCompile, affectedModules.toArray(new Module[affectedModules.size()]));
-  }
+	@Nullable
+	private static FileSetCompileScope getCompilableFiles(Project project, VirtualFile[] files)
+	{
+		if(files == null || files.length == 0)
+		{
+			return null;
+		}
+		final PsiManager psiManager = PsiManager.getInstance(project);
+		final FileTypeManager typeManager = FileTypeManager.getInstance();
+		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+		final CompilerManager compilerManager = CompilerManager.getInstance(project);
+		final List<VirtualFile> filesToCompile = new ArrayList<VirtualFile>();
+		final List<Module> affectedModules = new ArrayList<Module>();
+		for(final VirtualFile file : files)
+		{
+			if(!fileIndex.isInSourceContent(file))
+			{
+				continue;
+			}
+			if(!file.isInLocalFileSystem())
+			{
+				continue;
+			}
+			if(file.isDirectory())
+			{
+				final PsiDirectory directory = psiManager.findDirectory(file);
+				if(directory == null || JavaDirectoryService.getInstance().getPackage(directory) == null)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				FileType fileType = file.getFileType();
+				if(!(compilerManager.isCompilableFileType(fileType)))
+				{
+					continue;
+				}
+			}
+			filesToCompile.add(file);
+			ContainerUtil.addIfNotNull(fileIndex.getModuleForFile(file), affectedModules);
+		}
+		if(filesToCompile.isEmpty())
+		{
+			return null;
+		}
+		return new FileSetCompileScope(filesToCompile, affectedModules.toArray(new Module[affectedModules.size()]));
+	}
 }
