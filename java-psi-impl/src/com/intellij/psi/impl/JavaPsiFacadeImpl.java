@@ -17,14 +17,7 @@ package com.intellij.psi.impl;
 
 import gnu.trove.THashSet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.psi.PsiPackageManager;
@@ -186,7 +179,29 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@Override
 	public PsiJavaPackage findPackage(@NotNull String qualifiedName)
 	{
+		for(PsiElementFinder elementFinder : myElementFinders)
+		{
+			PsiJavaPackage aPackage = elementFinder.findPackage(qualifiedName);
+			if(aPackage != null)
+			{
+				return aPackage;
+			}
+		}
 		return (PsiJavaPackage) myPackageManager.findPackage(qualifiedName, JavaModuleExtension.class);
+	}
+
+	@Override
+	@NotNull
+	public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
+	{
+		LinkedHashSet<PsiJavaPackage> result = new LinkedHashSet<PsiJavaPackage>();
+		for(PsiElementFinder finder : filteredFinders())
+		{
+			PsiJavaPackage[] packages = finder.getSubPackages(psiPackage, scope);
+			ContainerUtil.addAll(result, packages);
+		}
+
+		return result.toArray(new PsiJavaPackage[result.size()]);
 	}
 
 	@NotNull
@@ -256,9 +271,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	}
 
 	public boolean processPackageDirectories(
-			@NotNull PsiJavaPackage psiPackage,
-			@NotNull GlobalSearchScope scope,
-			@NotNull Processor<PsiDirectory> consumer)
+			@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope, @NotNull Processor<PsiDirectory> consumer)
 	{
 		for(PsiElementFinder finder : filteredFinders())
 		{
@@ -305,27 +318,38 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 			return myFileManager.findClasses(qualifiedName, scope);
 		}
 
-  /*  @Override
-	@NotNull
-    public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope) {
-      final Map<String, PsiJavaPackage> packagesMap = new HashMap<String, PsiJavaPackage>();
-      final String qualifiedName = psiPackage.getQualifiedName();
-      for (PsiDirectory dir : psiPackage.getDirectories(scope)) {
-        PsiDirectory[] subDirs = dir.getSubdirectories();
-        for (PsiDirectory subDir : subDirs) {
-          final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(subDir);
-          if (aPackage != null) {
-            final String subQualifiedName = aPackage.getQualifiedName();
-            if (subQualifiedName.startsWith(qualifiedName) && !packagesMap.containsKey(subQualifiedName)) {
-              packagesMap.put(aPackage.getQualifiedName(), aPackage);
-            }
-          }
-        }
-      }
+		@Override
+		public PsiJavaPackage findPackage(@NotNull String qualifiedName)
+		{
+			return (PsiJavaPackage) PsiPackageManager.getInstance(getProject()).findPackage(qualifiedName, JavaModuleExtension.class);
+		}
 
-      packagesMap.remove(qualifiedName);    // avoid SOE caused by returning a package as a subpackage of itself
-      return packagesMap.values().toArray(new PsiJavaPackage[packagesMap.size()]);
-    } */
+		@Override
+		@NotNull
+		public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
+		{
+			final Map<String, PsiJavaPackage> packagesMap = new HashMap<String, PsiJavaPackage>();
+			final String qualifiedName = psiPackage.getQualifiedName();
+			for(PsiDirectory dir : psiPackage.getDirectories(scope))
+			{
+				PsiDirectory[] subDirs = dir.getSubdirectories();
+				for(PsiDirectory subDir : subDirs)
+				{
+					final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(subDir);
+					if(aPackage != null)
+					{
+						final String subQualifiedName = aPackage.getQualifiedName();
+						if(subQualifiedName.startsWith(qualifiedName) && !packagesMap.containsKey(subQualifiedName))
+						{
+							packagesMap.put(aPackage.getQualifiedName(), aPackage);
+						}
+					}
+				}
+			}
+
+			packagesMap.remove(qualifiedName);    // avoid SOE caused by returning a package as a subpackage of itself
+			return packagesMap.values().toArray(new PsiJavaPackage[packagesMap.size()]);
+		}
 
 		@Override
 		@NotNull
@@ -433,9 +457,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 
 		@Override
 		public boolean processPackageDirectories(
-				@NotNull PsiJavaPackage psiPackage,
-				@NotNull final GlobalSearchScope scope,
-				@NotNull final Processor<PsiDirectory> consumer)
+				@NotNull PsiJavaPackage psiPackage, @NotNull final GlobalSearchScope scope, @NotNull final Processor<PsiDirectory> consumer)
 		{
 			final PsiManager psiManager = PsiManager.getInstance(getProject());
 			return DirectoryIndex.getInstance(getProject()).getDirectoriesByPackageName(psiPackage.getQualifiedName(),

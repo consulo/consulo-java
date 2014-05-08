@@ -15,6 +15,17 @@
  */
 package com.intellij.psi.impl.file;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import org.consulo.module.extension.ModuleExtension;
+import org.consulo.psi.PsiPackage;
+import org.consulo.psi.PsiPackageManager;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.scope.JavaCompletionHints;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -29,22 +40,16 @@ import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.*;
+import com.intellij.psi.util.CachedValue;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.containers.ContainerUtil;
-import org.consulo.module.extension.ModuleExtension;
-import org.consulo.psi.PsiPackage;
-import org.consulo.psi.PsiPackageManager;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Queryable {
   public static boolean DEBUG = false;
@@ -144,13 +149,13 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   @Override
   @NotNull
   public PsiJavaPackage[] getSubPackages() {
-    return (PsiJavaPackage[])super.getSubPackages();
+    return getFacade().getSubPackages(this, allScope());
   }
 
   @Override
   @NotNull
   public PsiJavaPackage[] getSubPackages(@NotNull GlobalSearchScope scope) {
-    return (PsiJavaPackage[])super.getSubPackages(scope);
+	return getFacade().getSubPackages(this, scope);
   }
 
   @Override

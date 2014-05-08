@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.consulo.java.module.extension.JavaModuleExtension;
-import org.consulo.psi.PsiPackage;
 import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -291,7 +290,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 
 	@NotNull
 	@Override
-	public PsiPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
+	public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
 	{
 		final List<VirtualFile> classRoots = getClassRoots(scope);
 		if(classRoots.isEmpty())
@@ -299,7 +298,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 			return super.getSubPackages(psiPackage, scope);
 		}
 
-		List<PsiPackage> result = new ArrayList<PsiPackage>();
+		List<PsiJavaPackage> result = new ArrayList<PsiJavaPackage>();
 		for(final VirtualFile classRoot : classRoots)
 		{
 			if(scope.contains(classRoot))
@@ -318,7 +317,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 				}
 			}
 		}
-		return result.toArray(new PsiPackage[result.size()]);
+		return result.toArray(new PsiJavaPackage[result.size()]);
 	}
 
 	@NotNull

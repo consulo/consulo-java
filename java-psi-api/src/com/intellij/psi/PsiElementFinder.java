@@ -85,9 +85,9 @@ public abstract class PsiElementFinder
 	 * @see PsiPackage#getSubPackages(GlobalSearchScope)
 	 */
 	@NotNull
-	public PsiPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
+	public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
 	{
-		return PsiPackage.EMPTY_ARRAY;
+		return PsiJavaPackage.EMPTY_ARRAY;
 	}
 
 	/**
