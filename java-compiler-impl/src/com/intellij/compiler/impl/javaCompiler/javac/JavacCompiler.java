@@ -116,8 +116,8 @@ public class JavacCompiler extends ExternalCompiler
 			{
 				continue;
 			}
-			final Sdk javaSdk = JavaSdkUtil.getSdkForCompilation(module);
-			if(javaSdk == null )
+			final Sdk javaSdk = JavaCompilerUtil.getSdkForCompilation(module);
+			if(javaSdk == null)
 			{
 				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()),
 						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
@@ -137,8 +137,7 @@ public class JavacCompiler extends ExternalCompiler
 			if(homeDirectory == null)
 			{
 				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath()),
-						JavaCompilerBundle.message("compiler.javac" +
-						".name"), Messages.getErrorIcon());
+						JavaCompilerBundle.message("compiler.javac" + ".name"), Messages.getErrorIcon());
 				return false;
 			}
 			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(javaSdk);
@@ -216,7 +215,7 @@ public class JavacCompiler extends ExternalCompiler
 				{
 					try
 					{
-						return createStartupCommand(chunk, outputPath, JavacCompilerConfiguration.getInstance(myProject),
+						return createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject),
 								JavaCompilerConfiguration.getInstance(myProject).isAnnotationProcessorsEnabled());
 					}
 					catch(IOException e)
@@ -241,6 +240,7 @@ public class JavacCompiler extends ExternalCompiler
 	private GeneralCommandLine createStartupCommand(
 			final ModuleChunk chunk,
 			final String outputPath,
+			final CompileContext compileContext,
 			JpsJavaCompilerOptions javacOptions,
 			final boolean annotationProcessorsEnabled) throws IOException
 	{
@@ -303,7 +303,8 @@ public class JavacCompiler extends ExternalCompiler
 			parametersList.add(JAVAC_MAIN_CLASS_OLD);
 		}
 
-		addCommandLineOptions(chunk, parametersList, outputPath, jdk, isVersion1_0, isVersion1_1, myTempFiles, true, true, myAnnotationProcessorMode);
+		addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, isVersion1_0, isVersion1_1, myTempFiles, true, true,
+				myAnnotationProcessorMode);
 
 		parametersList.addAll(additionalOptions);
 
@@ -446,6 +447,7 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	public static void addCommandLineOptions(
+			CompileContext compileContext,
 			ModuleChunk chunk,
 			@NonNls ParametersList commandLine,
 			String outputPath,
@@ -458,14 +460,14 @@ public class JavacCompiler extends ExternalCompiler
 			boolean isAnnotationProcessingMode) throws IOException
 	{
 
-		LanguageLevel languageLevel = JavaSdkUtil.getLanguageLevelForCompilation(chunk);
+		LanguageLevel languageLevel = JavaCompilerUtil.getLanguageLevelForCompilation(chunk);
 		JavaCompilerUtil.addSourceCommandLineSwitch(jdk, languageLevel, commandLine);
 		JavaCompilerUtil.addTargetCommandLineSwitch(chunk, commandLine);
 
 		commandLine.add("-verbose");
 
-		final String cp = JavaSdkUtil.getCompilationClasspath(chunk);
-		final String bootCp = JavaSdkUtil.getCompilationBootClasspath(chunk);
+		final String cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
+		final String bootCp = JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk);
 
 		final String classPath;
 		if(version1_0 || version1_1)
@@ -555,7 +557,7 @@ public class JavacCompiler extends ExternalCompiler
 
 	private Sdk getJdkForStartupCommand(final ModuleChunk chunk)
 	{
-		final Sdk jdk = JavaSdkUtil.getSdkForCompilation(chunk);
+		final Sdk jdk = JavaCompilerUtil.getSdkForCompilation(chunk);
 		if(ApplicationManager.getApplication().isUnitTestMode() && JavacCompilerConfiguration.getInstance(myProject).isTestsUseExternalCompiler())
 		{
 			final String jdkHomePath = getTestsExternalCompilerHome();

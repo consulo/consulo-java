@@ -15,8 +15,36 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
+import gnu.trove.THashMap;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.asm4.ClassReader;
+import org.jetbrains.asm4.ClassWriter;
 import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.compiler.*;
+import com.intellij.compiler.CompilerEncodingService;
+import com.intellij.compiler.CompilerException;
+import com.intellij.compiler.JavaCompilerUtil;
+import com.intellij.compiler.OutputParser;
+import com.intellij.compiler.PsiClassWriter;
 import com.intellij.compiler.cache.Cache;
 import com.intellij.compiler.cache.JavaDependencyCache;
 import com.intellij.compiler.cache.JavaMakeUtil;
@@ -31,7 +59,12 @@ import com.intellij.compiler.make.impl.CompositeDependencyCache;
 import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.*;
+import com.intellij.openapi.compiler.CompileContext;
+import com.intellij.openapi.compiler.CompilerBundle;
+import com.intellij.openapi.compiler.CompilerManager;
+import com.intellij.openapi.compiler.CompilerMessageCategory;
+import com.intellij.openapi.compiler.JavaSourceTransformingCompiler;
+import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
@@ -41,8 +74,16 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.*;
-import com.intellij.openapi.util.*;
+import com.intellij.openapi.roots.ContentIterator;
+import com.intellij.openapi.roots.ModuleFileIndex;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -55,21 +96,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopes;
 import com.intellij.util.Chunk;
 import com.intellij.util.cls.ClsFormatException;
-import gnu.trove.THashMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.asm4.ClassReader;
-import org.jetbrains.asm4.ClassWriter;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * @author Eugene Zhuravlev
@@ -386,7 +412,7 @@ public class BackendCompilerWrapper {
     try {
       final Process process = myCompiler.launchProcess(chunk, outputDir, myCompileContext);
       final long compilationStart = System.currentTimeMillis();
-      final ClassParsingThread classParsingThread = new ClassParsingThread(isJdk6(JavaSdkUtil.getSdkForCompilation(chunk)), outputDir);
+      final ClassParsingThread classParsingThread = new ClassParsingThread(isJdk6(JavaCompilerUtil.getSdkForCompilation(chunk)), outputDir);
       final Future<?> classParsingThreadFuture = ApplicationManager.getApplication().executeOnPooledThread(classParsingThread);
 
       OutputParser errorParser = myCompiler.createErrorParser(outputDir, process);

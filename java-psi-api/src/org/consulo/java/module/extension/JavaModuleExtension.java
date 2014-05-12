@@ -20,6 +20,7 @@ import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
+import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.pom.java.LanguageLevel;
 
@@ -39,8 +40,8 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 	Sdk getSdkForCompilation();
 
 	@NotNull
-	String getCompilationClasspath(@NotNull ModuleChunk moduleChunk);
+	String getCompilationClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk);
 
 	@NotNull
-	String getCompilationBootClasspath(@NotNull ModuleChunk moduleChunk);
+	String getCompilationBootClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk);
 }

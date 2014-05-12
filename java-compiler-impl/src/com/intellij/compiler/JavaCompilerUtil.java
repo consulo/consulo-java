@@ -15,13 +15,18 @@
  */
 package com.intellij.compiler;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.execution.configurations.ParametersList;
+import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerBundle;
+import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
@@ -188,5 +193,51 @@ public class JavaCompilerUtil
 	public static boolean isOfVersion(String versionString, String checkedVersion)
 	{
 		return versionString.contains(checkedVersion);
+	}
+
+
+	@Nullable
+	public static Sdk getSdkForCompilation(@NotNull final Module module)
+	{
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+		if(extension == null)
+		{
+			return null;
+		}
+		return extension.getSdkForCompilation();
+	}
+
+	@Nullable
+	public static Sdk getSdkForCompilation(final ModuleChunk chunk)
+	{
+		return getSdkForCompilation(chunk.getModule());
+	}
+
+	@Nullable
+	public static String getCompilationClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
+	{
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
+		if(extension == null)
+		{
+			return null;
+		}
+		return extension.getCompilationClasspath(compileContext, moduleChunk);
+	}
+
+	@Nullable
+	public static String getCompilationBootClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
+	{
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
+		if(extension == null)
+		{
+			return null;
+		}
+		return extension.getCompilationBootClasspath(compileContext, moduleChunk);
+	}
+
+	@Nullable
+	public static LanguageLevel getLanguageLevelForCompilation(final ModuleChunk chunk)
+	{
+		return EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(chunk.getModule());
 	}
 }

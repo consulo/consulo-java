@@ -22,6 +22,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
+import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
@@ -74,14 +75,14 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 	@NotNull
 	@Override
-	public String getCompilationClasspath(@NotNull ModuleChunk moduleChunk)
+	public String getCompilationClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
 	{
 		return moduleChunk.getCompilationClasspath(JavaSdk.getInstance());
 	}
 
 	@NotNull
 	@Override
-	public String getCompilationBootClasspath(@NotNull ModuleChunk moduleChunk)
+	public String getCompilationBootClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
 	{
 		return moduleChunk.getCompilationBootClasspath(JavaSdk.getInstance());
 	}
