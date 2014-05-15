@@ -179,7 +179,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@Override
 	public PsiJavaPackage findPackage(@NotNull String qualifiedName)
 	{
-		for(PsiElementFinder elementFinder : myElementFinders)
+		for(PsiElementFinder elementFinder : filteredFinders())
 		{
 			PsiJavaPackage aPackage = elementFinder.findPackage(qualifiedName);
 			if(aPackage != null)
