@@ -15,6 +15,9 @@
  */
 package com.intellij.debugger.actions;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JVMNameUtil;
@@ -29,175 +32,246 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiClass;
-import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
+import consulo.internal.com.sun.jdi.ArrayType;
+import consulo.internal.com.sun.jdi.ClassNotLoadedException;
+import consulo.internal.com.sun.jdi.ClassNotPreparedException;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
 
-import java.util.List;
+public class JumpToObjectAction extends DebuggerAction
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.actions.JumpToObjectAction");
 
-public class JumpToObjectAction extends DebuggerAction{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.actions.JumpToObjectAction");
-  public void actionPerformed(AnActionEvent e) {
-    DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
-    if(selectedNode == null) {
-      return;
-    }
+	@Override
+	public void actionPerformed(AnActionEvent e)
+	{
+		DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
+		if(selectedNode == null)
+		{
+			return;
+		}
 
-    final NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
-    if(!(descriptor instanceof ValueDescriptor)) {
-      return;
-    }
+		final NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
+		if(!(descriptor instanceof ValueDescriptor))
+		{
+			return;
+		}
 
-    DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-    final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
-    if(debugProcess == null) {
-      return;
-    }
+		DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+		final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
+		if(debugProcess == null)
+		{
+			return;
+		}
 
-    debugProcess.getManagerThread().schedule(new NavigateCommand(debuggerContext, (ValueDescriptor)descriptor, debugProcess, e));
-  }
+		debugProcess.getManagerThread().schedule(new NavigateCommand(debuggerContext, (ValueDescriptor) descriptor, debugProcess, e));
+	}
 
-  public void update(final AnActionEvent e) {
-    if(!isFirstStart(e)) {
-      return;
-    }
+	@Override
+	public void update(final AnActionEvent e)
+	{
+		if(!isFirstStart(e))
+		{
+			return;
+		}
 
-    final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
-    final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
-    if(debugProcess == null) {
-      e.getPresentation().setVisible(false);
-      return;
-    }
+		final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
+		final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
+		if(debugProcess == null)
+		{
+			e.getPresentation().setVisible(false);
+			return;
+		}
 
-    DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
-    if(selectedNode == null) {
-      e.getPresentation().setVisible(false);
-      return;
-    }
+		DebuggerTreeNodeImpl selectedNode = getSelectedNode(e.getDataContext());
+		if(selectedNode == null)
+		{
+			e.getPresentation().setVisible(false);
+			return;
+		}
 
-    final NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
-    if (descriptor instanceof ValueDescriptor) {
-      debugProcess.getManagerThread().schedule(new EnableCommand(debuggerContext, (ValueDescriptor)descriptor, debugProcess, e));
-    }
-    else {
-      e.getPresentation().setVisible(false);
-    }
-  }
+		final NodeDescriptorImpl descriptor = selectedNode.getDescriptor();
+		if(descriptor instanceof ValueDescriptor)
+		{
+			debugProcess.getManagerThread().schedule(new EnableCommand(debuggerContext, (ValueDescriptor) descriptor, debugProcess, e));
+		}
+		else
+		{
+			e.getPresentation().setVisible(false);
+		}
+	}
 
-  private SourcePosition calcPosition(final ValueDescriptor descriptor, final DebugProcessImpl debugProcess) throws ClassNotLoadedException {
-    final Value value = descriptor.getValue();
-    if(value == null) {
-      return null;
-    }
+	private static SourcePosition calcPosition(final ValueDescriptor descriptor, final DebugProcessImpl debugProcess) throws ClassNotLoadedException
+	{
+		final Value value = descriptor.getValue();
+		if(value == null)
+		{
+			return null;
+		}
 
-    Type type = value.type();
-    if(type == null) {
-      return null;
-    }
+		Type type = value.type();
+		if(type == null)
+		{
+			return null;
+		}
 
-    try {
-      if(type instanceof ArrayType) {
-        type = ((ArrayType)type).componentType();
-      }
-      if(type instanceof ClassType) {
-        final ClassType clsType = (ClassType)type;
-        final List<Location> locations = clsType.allLineLocations();
-        if(locations.size() > 0) {
-          final Location location = locations.get(0);
-          return ApplicationManager.getApplication().runReadAction(new Computable<SourcePosition>() {
-            public SourcePosition compute() {
-              SourcePosition position = debugProcess.getPositionManager().getSourcePosition(location);
-              // adjust position for non-anonymous classes
-              if (clsType.name().indexOf("$") < 0) {
-                final PsiClass classAt = position != null? JVMNameUtil.getClassAt(position) : null;
-                if (classAt != null) {
-                  final SourcePosition classPosition = SourcePosition.createFromElement(classAt);
-                  if (classPosition != null) {
-                    position = classPosition;
-                  }
-                }
-              }
-              return position;
-            }
-          });
-        }
-      }
-    }
-    catch (ClassNotPreparedException e) {
-      LOG.debug(e);
-    }
-    catch (AbsentInformationException e) {
-      LOG.debug(e);
-    }
-    return null;
-  }
+		try
+		{
+			if(type instanceof ArrayType)
+			{
+				type = ((ArrayType) type).componentType();
+			}
+			if(type instanceof ClassType)
+			{
+				final ClassType clsType = (ClassType) type;
+				final List<Location> locations = clsType.allLineLocations();
+				if(locations.size() > 0)
+				{
+					final Location location = locations.get(0);
+					return ApplicationManager.getApplication().runReadAction(new Computable<SourcePosition>()
+					{
+						@Override
+						public SourcePosition compute()
+						{
+							SourcePosition position = debugProcess.getPositionManager().getSourcePosition(location);
+							// adjust position for non-anonymous classes
+							if(clsType.name().indexOf('$') < 0)
+							{
+								final PsiClass classAt = JVMNameUtil.getClassAt(position);
+								if(classAt != null)
+								{
+									final SourcePosition classPosition = SourcePosition.createFromElement(classAt);
+									if(classPosition != null)
+									{
+										position = classPosition;
+									}
+								}
+							}
+							return position;
+						}
+					});
+				}
+			}
+		}
+		catch(ClassNotPreparedException e)
+		{
+			LOG.debug(e);
+		}
+		catch(AbsentInformationException e)
+		{
+			LOG.debug(e);
+		}
+		return null;
+	}
 
-  private class NavigateCommand extends SourcePositionCommand {
-    public NavigateCommand(final DebuggerContextImpl debuggerContext, final ValueDescriptor descriptor, final DebugProcessImpl debugProcess, final AnActionEvent e) {
-      super(debuggerContext, descriptor, debugProcess, e);
-    }
-    protected NavigateCommand createRetryCommand() {
-      return new NavigateCommand(myDebuggerContext, myDescriptor, myDebugProcess, myActionEvent);
-    }
-    protected void doAction(final SourcePosition sourcePosition) {
-      if (sourcePosition != null) {
-        sourcePosition.navigate(true);
-      }
-    }
-  }
+	public static class NavigateCommand extends SourcePositionCommand
+	{
+		public NavigateCommand(
+				final DebuggerContextImpl debuggerContext,
+				final ValueDescriptor descriptor,
+				final DebugProcessImpl debugProcess,
+				final AnActionEvent e)
+		{
+			super(debuggerContext, descriptor, debugProcess, e);
+		}
 
-  private class EnableCommand extends SourcePositionCommand {
-    public EnableCommand(final DebuggerContextImpl debuggerContext, final ValueDescriptor descriptor, final DebugProcessImpl debugProcess, final AnActionEvent e) {
-      super(debuggerContext, descriptor, debugProcess, e);
-    }
-    protected EnableCommand createRetryCommand() {
-      return new EnableCommand(myDebuggerContext, myDescriptor, myDebugProcess, myActionEvent);
-    }
-    protected void doAction(final SourcePosition sourcePosition) {
-      enableAction(myActionEvent, sourcePosition != null);
-    }
-  }
+		@Override
+		protected NavigateCommand createRetryCommand()
+		{
+			return new NavigateCommand(myDebuggerContext, myDescriptor, myDebugProcess, myActionEvent);
+		}
 
-  public abstract class SourcePositionCommand extends SuspendContextCommandImpl {
-    protected final DebuggerContextImpl myDebuggerContext;
-    protected final ValueDescriptor myDescriptor;
-    protected final DebugProcessImpl myDebugProcess;
-    protected final AnActionEvent myActionEvent;
+		@Override
+		protected void doAction(final SourcePosition sourcePosition)
+		{
+			if(sourcePosition != null)
+			{
+				sourcePosition.navigate(true);
+			}
+		}
+	}
 
-    public SourcePositionCommand(final DebuggerContextImpl debuggerContext,
-                                 final ValueDescriptor descriptor,
-                                 final DebugProcessImpl debugProcess,
-                                 final AnActionEvent actionEvent) {
-      super(debuggerContext.getSuspendContext());
-      myDebuggerContext = debuggerContext;
-      myDescriptor = descriptor;
-      myDebugProcess = debugProcess;
-      myActionEvent = actionEvent;
-    }
+	private static class EnableCommand extends SourcePositionCommand
+	{
+		public EnableCommand(
+				final DebuggerContextImpl debuggerContext,
+				final ValueDescriptor descriptor,
+				final DebugProcessImpl debugProcess,
+				final AnActionEvent e)
+		{
+			super(debuggerContext, descriptor, debugProcess, e);
+		}
 
-    public final void contextAction() throws Exception {
-      try {
-        doAction(calcPosition(myDescriptor, myDebugProcess));
-      }
-      catch (ClassNotLoadedException ex) {
-        final String className = ex.className();
-        if (loadClass(className) != null) {
-          myDebugProcess.getManagerThread().schedule(createRetryCommand());
-        }
-      }
-    }
+		@Override
+		protected EnableCommand createRetryCommand()
+		{
+			return new EnableCommand(myDebuggerContext, myDescriptor, myDebugProcess, myActionEvent);
+		}
 
-    protected abstract SourcePositionCommand createRetryCommand();
+		@Override
+		protected void doAction(final SourcePosition sourcePosition)
+		{
+			enableAction(myActionEvent, sourcePosition != null);
+		}
+	}
 
-    protected abstract void doAction(SourcePosition sourcePosition);
+	public abstract static class SourcePositionCommand extends SuspendContextCommandImpl
+	{
+		protected final DebuggerContextImpl myDebuggerContext;
+		protected final ValueDescriptor myDescriptor;
+		protected final DebugProcessImpl myDebugProcess;
+		protected final AnActionEvent myActionEvent;
 
-    private ReferenceType loadClass(final String className) {
-      final EvaluationContextImpl eContext = myDebuggerContext.createEvaluationContext();
-      try {
-        return myDebugProcess.loadClass(eContext, className, eContext.getClassLoader());
-      }
-      catch(Throwable ignored) {
-      }
-      return null;
-    }
-  }
+		public SourcePositionCommand(
+				final DebuggerContextImpl debuggerContext,
+				final ValueDescriptor descriptor,
+				final DebugProcessImpl debugProcess,
+				final AnActionEvent actionEvent)
+		{
+			super(debuggerContext.getSuspendContext());
+			myDebuggerContext = debuggerContext;
+			myDescriptor = descriptor;
+			myDebugProcess = debugProcess;
+			myActionEvent = actionEvent;
+		}
+
+		@Override
+		public final void contextAction() throws Exception
+		{
+			try
+			{
+				doAction(calcPosition(myDescriptor, myDebugProcess));
+			}
+			catch(ClassNotLoadedException ex)
+			{
+				final String className = ex.className();
+				if(loadClass(className) != null)
+				{
+					myDebugProcess.getManagerThread().schedule(createRetryCommand());
+				}
+			}
+		}
+
+		protected abstract SourcePositionCommand createRetryCommand();
+
+		protected abstract void doAction(@Nullable SourcePosition sourcePosition);
+
+		private ReferenceType loadClass(final String className)
+		{
+			final EvaluationContextImpl eContext = myDebuggerContext.createEvaluationContext();
+			try
+			{
+				return myDebugProcess.loadClass(eContext, className, eContext.getClassLoader());
+			}
+			catch(Throwable ignored)
+			{
+			}
+			return null;
+		}
+	}
 
 }

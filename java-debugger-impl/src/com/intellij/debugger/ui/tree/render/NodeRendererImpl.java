@@ -15,70 +15,100 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import javax.swing.Icon;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import org.jdom.Element;
-
-import javax.swing.*;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Feb 9, 2005
  */
-public abstract class NodeRendererImpl implements NodeRenderer{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.NodeRendererImpl");
-  protected BasicRendererProperties myProperties = new BasicRendererProperties();
+public abstract class NodeRendererImpl implements NodeRenderer
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.NodeRendererImpl");
+	protected BasicRendererProperties myProperties = new BasicRendererProperties();
 
-  protected NodeRendererImpl() {
-    //noinspection HardCodedStringLiteral
-    myProperties.setName("unnamed");
-  }
+	protected NodeRendererImpl()
+	{
+		this("unnamed");
+	}
 
-  public String getName() {
-    return myProperties.getName();
-  }
+	protected NodeRendererImpl(@NotNull String presentableName)
+	{
+		myProperties.setName(presentableName);
+	}
 
-  public void setName(String name) {
-    myProperties.setName(name);
-  }
+	public String getName()
+	{
+		return myProperties.getName();
+	}
 
-  public boolean isEnabled() {
-    return myProperties.isEnabled();
-  }
+	public void setName(String name)
+	{
+		myProperties.setName(name);
+	}
 
-  public void setEnabled(boolean enabled) {
-    myProperties.setEnabled(enabled);
-  }
+	public boolean isEnabled()
+	{
+		return myProperties.isEnabled();
+	}
 
-  public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
-    return null;
-  }
+	public void setEnabled(boolean enabled)
+	{
+		myProperties.setEnabled(enabled);
+	}
 
-  public NodeRendererImpl clone() {
-    try {
-      final NodeRendererImpl cloned = (NodeRendererImpl)super.clone();
-      cloned.myProperties = myProperties.clone();
-      return cloned;
-    }
-    catch (CloneNotSupportedException e) {
-      LOG.error(e);
-    }
-    return null;
-  }
+	public Icon calcValueIcon(
+			ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+	{
+		return null;
+	}
 
-  public void readExternal(Element element) throws InvalidDataException {
-    myProperties.readExternal(element);
-  }
+	public NodeRendererImpl clone()
+	{
+		try
+		{
+			final NodeRendererImpl cloned = (NodeRendererImpl) super.clone();
+			cloned.myProperties = myProperties.clone();
+			return cloned;
+		}
+		catch(CloneNotSupportedException e)
+		{
+			LOG.error(e);
+		}
+		return null;
+	}
 
-  public void writeExternal(Element element) throws WriteExternalException {
-    myProperties.writeExternal(element);
-  }
+	public void readExternal(Element element) throws InvalidDataException
+	{
+		myProperties.readExternal(element);
+	}
 
-  public String toString() {
-    return getName();
-  }
+	public void writeExternal(Element element) throws WriteExternalException
+	{
+		myProperties.writeExternal(element);
+	}
+
+	public String toString()
+	{
+		return getName();
+	}
+
+	@Nullable
+	public String getIdLabel(Value value, DebugProcess process)
+	{
+		return value instanceof ObjectReference ? ValueDescriptorImpl.getIdLabel((ObjectReference) value) : null;
+	}
 }

@@ -15,40 +15,49 @@
  */
 package com.intellij.debugger.impl;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.ui.impl.watch.ThreadDescriptorImpl;
 import com.intellij.openapi.application.ApplicationManager;
-import org.jetbrains.annotations.NotNull;
 
-public class DebuggerContextUtil {
-  public static void setStackFrame(DebuggerStateManager manager, final StackFrameProxyImpl stackFrame) {
-    ApplicationManager.getApplication().assertIsDispatchThread();
-    final DebuggerContextImpl context = manager.getContext();
-    if(context == null) {
-      return;
-    }
+public class DebuggerContextUtil
+{
+	public static void setStackFrame(DebuggerStateManager manager, final StackFrameProxyImpl stackFrame)
+	{
+		ApplicationManager.getApplication().assertIsDispatchThread();
+		final DebuggerContextImpl context = manager.getContext();
+		if(context == null)
+		{
+			return;
+		}
 
-    final DebuggerSession session = context.getDebuggerSession();
-    final DebuggerContextImpl newContext = DebuggerContextImpl.createDebuggerContext(session, context.getSuspendContext(), stackFrame.threadProxy(), stackFrame);
+		final DebuggerSession session = context.getDebuggerSession();
+		final DebuggerContextImpl newContext = DebuggerContextImpl.createDebuggerContext(session, context.getSuspendContext(),
+				stackFrame.threadProxy(), stackFrame);
 
-    manager.setState(newContext, session != null? session.getState() : DebuggerSession.STATE_DISPOSED, DebuggerSession.EVENT_REFRESH, null);
-  }
+		manager.setState(newContext, session != null ? session.getState() : DebuggerSession.STATE_DISPOSED, DebuggerSession.EVENT_REFRESH, null);
+	}
 
-  public static void setThread(DebuggerStateManager contextManager, ThreadDescriptorImpl item) {
-    ApplicationManager.getApplication().assertIsDispatchThread();
-    final DebuggerContextImpl context = contextManager.getContext();
-    if(context == null) {
-      return;
-    }
+	public static void setThread(DebuggerStateManager contextManager, ThreadDescriptorImpl item)
+	{
+		ApplicationManager.getApplication().assertIsDispatchThread();
+		final DebuggerContextImpl context = contextManager.getContext();
+		if(context == null)
+		{
+			return;
+		}
 
-    final DebuggerSession session = context.getDebuggerSession();
-    final DebuggerContextImpl newContext = DebuggerContextImpl.createDebuggerContext(session, item.getSuspendContext(), item.getThreadReference(), null);
+		final DebuggerSession session = context.getDebuggerSession();
+		final DebuggerContextImpl newContext = DebuggerContextImpl.createDebuggerContext(session, item.getSuspendContext(),
+				item.getThreadReference(), null);
 
-    contextManager.setState(newContext, session != null? session.getState() : DebuggerSession.STATE_DISPOSED, DebuggerSession.EVENT_CONTEXT, null);
-  }
+		contextManager.setState(newContext, session != null ? session.getState() : DebuggerSession.STATE_DISPOSED, DebuggerSession.EVENT_CONTEXT,
+				null);
+	}
 
-  public static DebuggerContextImpl createDebuggerContext(@NotNull DebuggerSession session, SuspendContextImpl suspendContext){
-    return DebuggerContextImpl.createDebuggerContext(session, suspendContext, suspendContext != null ? suspendContext.getThread() : null, null);
-  }
+	public static DebuggerContextImpl createDebuggerContext(@NotNull DebuggerSession session, SuspendContextImpl suspendContext)
+	{
+		return DebuggerContextImpl.createDebuggerContext(session, suspendContext, suspendContext != null ? suspendContext.getThread() : null, null);
+	}
 }

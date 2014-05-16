@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,6 +101,8 @@ import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.XDebuggerManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.AttachingConnector;
 import consulo.internal.com.sun.jdi.connect.Connector;
@@ -212,6 +214,11 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 							if(session != null && session.isAttached())
 							{
 								session.refresh(true);
+								XDebugSession xDebugSession = getXDebugSession();
+								if(xDebugSession != null)
+								{
+									xDebugSession.rebuildViews();
+								}
 							}
 						}
 					});
@@ -233,7 +240,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		{
 			return null;
 		}
-		return new Pair<Method, Value>(method, watcher.getLastMethodReturnValue());
+		return Pair.create(method, watcher.getLastMethodReturnValue());
 	}
 
 	public void setWatchMethodReturnValuesEnabled(boolean enabled)
@@ -966,7 +973,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 				}
 				finally
 				{
-					setBreakpointsMuted(false);
+					if(DebuggerSettings.getInstance().UNMUTE_ON_STOP)
+					{
+						setBreakpointsMuted(false);
+					}
 					if(vm != null)
 					{
 						try
@@ -1922,7 +1932,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		public ResumeCommand(SuspendContextImpl suspendContext)
 		{
 			super(suspendContext);
-			final ThreadReferenceProxyImpl contextThread = mySession.getContextManager().getContext().getThreadProxy();
+			final ThreadReferenceProxyImpl contextThread = getDebuggerContext().getThreadProxy();
 			myContextThread = contextThread != null ? contextThread : (suspendContext != null ? suspendContext.getThread() : null);
 		}
 
@@ -2431,7 +2441,8 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
 	public SuspendContextCommandImpl createPopFrameCommand(DebuggerContextImpl context, StackFrameProxyImpl stackFrame)
 	{
-		final SuspendContextImpl contextByThread = SuspendManagerUtil.findContextByThread(context.getDebugProcess().getSuspendManager(), stackFrame.threadProxy());
+		final SuspendContextImpl contextByThread = SuspendManagerUtil.findContextByThread(context.getDebugProcess().getSuspendManager(),
+				stackFrame.threadProxy());
 		return new PopFrameCommand(contextByThread, stackFrame);
 	}
 
@@ -2466,10 +2477,27 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		}
 	}
 
+	public DebuggerContextImpl getDebuggerContext()
+	{
+		return mySession.getContextManager().getContext();
+	}
+
+	@Nullable
+	public XDebugSession getXDebugSession()
+	{
+		return XDebuggerManager.getInstance(myProject).getDebugSession(getExecutionResult().getExecutionConsole());
+	}
+
+	@Nullable
+	public JavaDebugProcess getXdebugProcess()
+	{
+		XDebugSession session = getXDebugSession();
+		return session != null ? (JavaDebugProcess) session.getDebugProcess() : null;
+	}
 
 	public boolean areBreakpointsMuted()
 	{
-		return myBreakpointsMuted.get();
+		XDebugSession session = getXDebugSession();
+		return session != null && session.areBreakpointsMuted();
 	}
 }
-

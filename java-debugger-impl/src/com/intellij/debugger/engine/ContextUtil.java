@@ -15,6 +15,9 @@
  */
 package com.intellij.debugger.engine;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.jdi.StackFrameProxy;
@@ -24,123 +27,154 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiDeclarationStatement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiResolveHelper;
+import com.intellij.psi.PsiStatement;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.StringBuilderSpinAllocator;
 import consulo.internal.com.sun.jdi.Location;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+public class ContextUtil
+{
+	public static final Key<Boolean> IS_JSP_IMPLICIT = new Key<Boolean>("JspImplicit");
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.PositionUtil");
 
-public class ContextUtil {
-  public static final Key<Boolean> IS_JSP_IMPLICIT = new Key<Boolean>("JspImplicit");
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.PositionUtil");
+	@Nullable
+	public static SourcePosition getSourcePosition(@Nullable final StackFrameContext context)
+	{
+		if(context == null)
+		{
+			return null;
+		}
+		DebugProcessImpl debugProcess = (DebugProcessImpl) context.getDebugProcess();
+		if(debugProcess == null)
+		{
+			return null;
+		}
+		final StackFrameProxy frameProxy = context.getFrameProxy();
+		if(frameProxy == null)
+		{
+			return null;
+		}
+		Location location = null;
+		try
+		{
+			location = frameProxy.location();
+		}
+		catch(Throwable e)
+		{
+			LOG.debug(e);
+		}
+		final CompoundPositionManager positionManager = debugProcess.getPositionManager();
+		if(positionManager == null)
+		{
+			// process already closed
+			return null;
+		}
+		try
+		{
+			return positionManager.getSourcePosition(location);
+		}
+		catch(IndexNotReadyException ignored)
+		{
+			return null;
+		}
+	}
 
-  @Nullable
-  public static SourcePosition getSourcePosition(final StackFrameContext context) {
-    if (context == null) {
-      return null;
-    }
-    DebugProcessImpl debugProcess = (DebugProcessImpl)context.getDebugProcess();
-    if(debugProcess == null) {
-      return null;
-    }
-    final StackFrameProxy frameProxy = context.getFrameProxy();
-    if(frameProxy == null) {
-      return null;
-    }
-    Location location = null;
-    try {
-      location = frameProxy.location();
-    }
-    catch (Throwable th) {
-      LOG.debug(th);
-    }
-    final CompoundPositionManager positionManager = debugProcess.getPositionManager();
-    if (positionManager == null) {
-      // process already closed
-      return null;
-    }
-    try {
-      return positionManager.getSourcePosition(location);
-    } catch (IndexNotReadyException e) {
-      return null;
-    }
-  }
+	@Nullable
+	public static PsiElement getContextElement(final StackFrameContext context)
+	{
+		return getContextElement(context, getSourcePosition(context));
+	}
 
-  @Nullable
-  public static PsiElement getContextElement(final StackFrameContext context) {
-    return getContextElement(context, getSourcePosition(context));
-  }
+	@Nullable
+	protected static PsiElement getContextElement(final StackFrameContext context, final SourcePosition position)
+	{
+		if(LOG.isDebugEnabled())
+		{
+			final SourcePosition sourcePosition = getSourcePosition(context);
+			LOG.assertTrue(Comparing.equal(sourcePosition, position));
+		}
 
-  @Nullable
-  protected static PsiElement getContextElement(final StackFrameContext context, final SourcePosition position) {
-    if(LOG.isDebugEnabled()) {
-      final SourcePosition sourcePosition = getSourcePosition(context);
-      LOG.assertTrue(Comparing.equal(sourcePosition, position));
-    }
+		final PsiElement element = getContextElement(position);
 
-    final PsiElement element = getContextElement(position);
+		if(element == null)
+		{
+			return null;
+		}
 
-    if(element == null) {
-      return null;
-    }
+		final StackFrameProxyImpl frameProxy = (StackFrameProxyImpl) context.getFrameProxy();
 
-    final StackFrameProxyImpl frameProxy = (StackFrameProxyImpl)context.getFrameProxy();
+		if(frameProxy == null)
+		{
+			return element;
+		}
 
-    if(frameProxy == null) {
-      return element;
-    }
+		final StringBuilder buf = StringBuilderSpinAllocator.alloc();
+		try
+		{
+			List<LocalVariableProxyImpl> list = frameProxy.visibleVariables();
 
-    final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-    try {
-      List<LocalVariableProxyImpl> list = frameProxy.visibleVariables();
+			PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(element.getProject()).getResolveHelper();
+			buf.append('{');
+			for(LocalVariableProxyImpl localVariable : list)
+			{
+				final String varName = localVariable.name();
+				if(resolveHelper.resolveReferencedVariable(varName, element) == null)
+				{
+					buf.append(localVariable.getVariable().typeName()).append(" ").append(varName).append(";");
+				}
+			}
+			buf.append('}');
 
-      PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(element.getProject()).getResolveHelper();
-      buf.append('{');
-      for (LocalVariableProxyImpl localVariable : list) {
-        final String varName = localVariable.name();
-        if (resolveHelper.resolveReferencedVariable(varName, element) == null) {
-          buf.append(localVariable.getVariable().typeName()).append(" ").append(varName).append(";");
-        }
-      }
-      buf.append('}');
+			if(buf.length() <= 2)
+			{
+				return element;
+			}
+			final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(element.getProject()).getElementFactory();
+			final PsiCodeBlock codeBlockFromText = elementFactory.createCodeBlockFromText(buf.toString(), element);
 
-      if (buf.length() <= 2) {
-        return element;
-      }
-      final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(element.getProject()).getElementFactory();
-      final PsiCodeBlock codeBlockFromText = elementFactory.createCodeBlockFromText(buf.toString(), element);
+			final PsiStatement[] statements = codeBlockFromText.getStatements();
+			for(PsiStatement statement : statements)
+			{
+				if(statement instanceof PsiDeclarationStatement)
+				{
+					PsiDeclarationStatement declStatement = (PsiDeclarationStatement) statement;
+					PsiElement[] declaredElements = declStatement.getDeclaredElements();
+					for(PsiElement declaredElement : declaredElements)
+					{
+						declaredElement.putUserData(IS_JSP_IMPLICIT, Boolean.TRUE);
+					}
+				}
+			}
+			return codeBlockFromText;
+		}
+		catch(IncorrectOperationException ignored)
+		{
+			return element;
+		}
+		catch(EvaluateException ignored)
+		{
+			return element;
+		}
+		finally
+		{
+			StringBuilderSpinAllocator.dispose(buf);
+		}
+	}
 
-      final PsiStatement[] statements = codeBlockFromText.getStatements();
-      for (PsiStatement statement : statements) {
-        if (statement instanceof PsiDeclarationStatement) {
-          PsiDeclarationStatement declStatement = (PsiDeclarationStatement)statement;
-          PsiElement[] declaredElements = declStatement.getDeclaredElements();
-          for (PsiElement declaredElement : declaredElements) {
-            declaredElement.putUserData(IS_JSP_IMPLICIT, Boolean.TRUE);
-          }
-        }
-      }
-      return codeBlockFromText;
-    }
-    catch (IncorrectOperationException e) {
-      return element;
-    }
-    catch (EvaluateException e) {
-      return element;
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(buf);
-    }
-  }
+	@Nullable
+	public static PsiElement getContextElement(@Nullable SourcePosition position)
+	{
+		return position == null ? null : position.getElementAt();
+	}
 
-  @Nullable
-  public static PsiElement getContextElement(final SourcePosition position) {
-    return position == null ? null :position.getElementAt();
-  }
-
-  public static boolean isJspImplicit(PsiElement element) {
-    return Boolean.TRUE.equals(element.getUserData(IS_JSP_IMPLICIT));
-  }
+	public static boolean isJspImplicit(PsiElement element)
+	{
+		return Boolean.TRUE.equals(element.getUserData(IS_JSP_IMPLICIT));
+	}
 }

@@ -33,6 +33,7 @@
             <element id="module-production-resource-output" name="java-compiler-impl" />
             <element id="module-production-resource-output" name="java-analysis-impl" />
             <element id="module-production-resource-output" name="java-psi-api" />
+            <element id="module-production-resource-output" name="java-debugger-api" />
           </element>
           <element id="zip-archive" name="java-rt.jar">
             <element id="module-output" name="java-rt" />

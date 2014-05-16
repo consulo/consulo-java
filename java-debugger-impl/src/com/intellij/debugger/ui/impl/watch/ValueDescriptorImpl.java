@@ -15,23 +15,33 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.Patches;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
+import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.debugger.settings.NodeRendererSettings;
+import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.debugger.ui.tree.render.ClassRenderer;
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
+import com.intellij.debugger.ui.tree.render.NodeRendererImpl;
 import com.intellij.debugger.ui.tree.render.Renderer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -40,428 +50,564 @@ import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements ValueDescriptor
+{
+	protected final Project myProject;
 
-public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements ValueDescriptor{
-  protected final Project myProject;
+	NodeRenderer myRenderer = null;
 
-  NodeRenderer myRenderer = null;
+	NodeRenderer myAutoRenderer = null;
 
-  NodeRenderer myAutoRenderer = null;
+	private Value myValue;
+	private EvaluateException myValueException;
+	protected EvaluationContextImpl myStoredEvaluationContext = null;
 
-  private Value myValue;
-  private EvaluateException myValueException;
-  protected EvaluationContextImpl myStoredEvaluationContext = null;
+	private String myValueText;
+	private String myValueLabel;
+	@Nullable
+	private Icon myValueIcon;
 
-  private String myValueLabel;
-  @Nullable
-  private Icon myValueIcon;
+	protected boolean myIsNew = true;
+	private boolean myIsDirty = false;
+	private boolean myIsLvalue = false;
+	private boolean myIsExpandable;
 
-  protected boolean myIsNew = true;
-  private boolean myIsDirty = false;
-  private boolean myIsLvalue = false;
-  private boolean myIsExpandable;
+	private boolean myShowIdLabel = true;
 
-  private boolean myShowIdLabel = true;
+	protected ValueDescriptorImpl(Project project, Value value)
+	{
+		myProject = project;
+		myValue = value;
+	}
 
-  protected ValueDescriptorImpl(Project project, Value value) {
-    myProject = project;
-    myValue = value;
-  }
+	protected ValueDescriptorImpl(Project project)
+	{
+		myProject = project;
+	}
 
-  protected ValueDescriptorImpl(Project project) {
-    myProject = project;
-  }
+	@Override
+	public boolean isArray()
+	{
+		return myValue instanceof ArrayReference;
+	}
 
-  public boolean isArray() { 
-    return myValue instanceof ArrayReference; 
-  }
-  
-  public boolean isDirty() { 
-    return myIsDirty; 
-  }
-  
-  public boolean isLvalue() { 
-    return myIsLvalue; 
-  }
-  
-  public boolean isNull() { 
-    return myValue == null; 
-  }
+	public boolean isDirty()
+	{
+		return myIsDirty;
+	}
 
-  @Override
-  public boolean isString() {
-    return myValue instanceof StringReference;
-  }
+	@Override
+	public boolean isLvalue()
+	{
+		return myIsLvalue;
+	}
 
-  public boolean isPrimitive() {
-    return myValue instanceof PrimitiveValue; 
-  }
-  
-  public boolean isValueValid() {
-    return myValueException == null;
-  }
+	@Override
+	public boolean isNull()
+	{
+		return myValue == null;
+	}
 
-  public boolean isShowIdLabel() {
-    return myShowIdLabel;
-  }
+	@Override
+	public boolean isString()
+	{
+		return myValue instanceof StringReference;
+	}
 
-  public void setShowIdLabel(boolean showIdLabel) {
-    myShowIdLabel = showIdLabel;
-  }
+	@Override
+	public boolean isPrimitive()
+	{
+		return myValue instanceof PrimitiveValue;
+	}
 
-  public Value getValue() {
-    // the following code makes sense only if we do not use ObjectReference.enableCollection() / disableCollection()
-    // to keep temporary objects
-    if (Patches.IBM_JDK_DISABLE_COLLECTION_BUG && myStoredEvaluationContext != null && !myStoredEvaluationContext.getSuspendContext().isResumed() &&
-        myValue instanceof ObjectReference && VirtualMachineProxyImpl.isCollected((ObjectReference)myValue)) {
+	public boolean isValueValid()
+	{
+		return myValueException == null;
+	}
 
-      final Semaphore semaphore = new Semaphore();
-      semaphore.down();
-      myStoredEvaluationContext.getDebugProcess().getManagerThread().invoke(new SuspendContextCommandImpl(myStoredEvaluationContext.getSuspendContext()) {
-        public void contextAction() throws Exception {
-          // re-setting the context will cause value recalculation
-          try {
-            setContext(myStoredEvaluationContext);
-          }
-          finally {
-            semaphore.up();
-          }
-        }
-      });
-      semaphore.waitFor();
-    }
-    
-    return myValue; 
-  }
-  
-  public boolean isExpandable() {
-    return myIsExpandable;
-  }
+	public boolean isShowIdLabel()
+	{
+		return myShowIdLabel;
+	}
 
-  public abstract Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException;
+	public void setShowIdLabel(boolean showIdLabel)
+	{
+		myShowIdLabel = showIdLabel;
+	}
 
-  public final void setContext(EvaluationContextImpl evaluationContext) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    if (Patches.IBM_JDK_DISABLE_COLLECTION_BUG) {
-      myStoredEvaluationContext = evaluationContext;
-    }
-    Value value;
-    try {
-      value = calcValue(evaluationContext);
+	@Override
+	public Value getValue()
+	{
+		// the following code makes sense only if we do not use ObjectReference.enableCollection() / disableCollection()
+		// to keep temporary objects
+		if(Patches.IBM_JDK_DISABLE_COLLECTION_BUG)
+		{
+			final EvaluationContextImpl evalContext = myStoredEvaluationContext;
+			if(evalContext != null && !evalContext.getSuspendContext().isResumed() &&
+					myValue instanceof ObjectReference && VirtualMachineProxyImpl.isCollected((ObjectReference) myValue))
+			{
 
-      if(!myIsNew) {
-        try {
-          if (myValue instanceof DoubleValue && Double.isNaN(((DoubleValue)myValue).doubleValue())) {
-            myIsDirty = !(value instanceof DoubleValue);
-          }
-          else if (myValue instanceof FloatValue && Float.isNaN(((FloatValue)myValue).floatValue())) {
-            myIsDirty = !(value instanceof FloatValue);
-          }
-          else {
-            myIsDirty = (value == null) ? myValue != null : !value.equals(myValue);
-          }
-        }
-        catch (ObjectCollectedException e) {
-          myIsDirty = true;
-        }
-      }
-      myValue = value;
-      myValueException = null;
-    }
-    catch (EvaluateException e) {
-      myValueException = e;
-      myValue = getTargetExceptionWithStackTraceFilled(evaluationContext, e);
-      myIsExpandable = false;
-    }
+				final Semaphore semaphore = new Semaphore();
+				semaphore.down();
+				evalContext.getDebugProcess().getManagerThread().invoke(new SuspendContextCommandImpl(evalContext.getSuspendContext())
+				{
+					@Override
+					public void contextAction() throws Exception
+					{
+						// re-setting the context will cause value recalculation
+						try
+						{
+							setContext(myStoredEvaluationContext);
+						}
+						finally
+						{
+							semaphore.up();
+						}
+					}
 
-    myIsNew = false;
-  }
+					@Override
+					protected void commandCancelled()
+					{
+						semaphore.up();
+					}
+				});
+				semaphore.waitFor();
+			}
+		}
 
-  @Nullable
-  private static ObjectReference getTargetExceptionWithStackTraceFilled(final EvaluationContextImpl evaluationContext, EvaluateException ex){
-    final ObjectReference exceptionObj = ex.getExceptionFromTargetVM();
-    if (exceptionObj != null && evaluationContext != null) {
-      try {
-        final ReferenceType refType = exceptionObj.referenceType();
-        final List<Method> methods = refType.methodsByName("getStackTrace", "()[Ljava/lang/StackTraceElement;");
-        if (methods.size() > 0) {
-          final DebugProcessImpl process = evaluationContext.getDebugProcess();
-          process.invokeMethod(evaluationContext, exceptionObj, methods.get(0), Collections.emptyList());
-          
-          // print to console as well
-          
-          final Field traceField = refType.fieldByName("stackTrace");
-          final Value trace = traceField != null? exceptionObj.getValue(traceField) : null; 
-          if (trace instanceof ArrayReference) {
-            final ArrayReference traceArray = (ArrayReference)trace;
-            final Type componentType = ((ArrayType)traceArray.referenceType()).componentType();
-            if (componentType instanceof ClassType) {
-              process.printToConsole(DebuggerUtils.getValueAsString(evaluationContext, exceptionObj));
-              process.printToConsole("\n");
-              for (Value stackElement : traceArray.getValues()) {
-                process.printToConsole("\tat ");
-                process.printToConsole(DebuggerUtils.getValueAsString(evaluationContext, stackElement));
-                process.printToConsole("\n");
-              }
-            }
-          }
-        }
-      }
-      catch (EvaluateException ignored) {
-      }
-      catch (ClassNotLoadedException ignored) {
-      }
-      catch (Throwable e) {
-        LOG.info(e); // catch all exceptions to ensure the method returns gracefully
-      }
-    }
-    return exceptionObj;
-  }
+		return myValue;
+	}
 
-  public void setAncestor(NodeDescriptor oldDescriptor) {
-    super.setAncestor(oldDescriptor);
-    myIsNew = false;
-    myValue = ((ValueDescriptorImpl)oldDescriptor).getValue();
-  }
+	@Override
+	public boolean isExpandable()
+	{
+		return myIsExpandable;
+	}
 
-  protected void setLvalue(boolean value) {
-    myIsLvalue = value;
-  }
+	public abstract Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException;
 
-  protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener){
-    DebuggerManagerThreadImpl.assertIsManagerThread();
+	@Override
+	public final void setContext(EvaluationContextImpl evaluationContext)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		myStoredEvaluationContext = evaluationContext;
+		Value value;
+		try
+		{
+			value = calcValue(evaluationContext);
 
-    final NodeRenderer renderer = getRenderer(context.getDebugProcess());
+			if(!myIsNew)
+			{
+				try
+				{
+					if(myValue instanceof DoubleValue && Double.isNaN(((DoubleValue) myValue).doubleValue()))
+					{
+						myIsDirty = !(value instanceof DoubleValue);
+					}
+					else if(myValue instanceof FloatValue && Float.isNaN(((FloatValue) myValue).floatValue()))
+					{
+						myIsDirty = !(value instanceof FloatValue);
+					}
+					else
+					{
+						myIsDirty = (value == null) ? myValue != null : !value.equals(myValue);
+					}
+				}
+				catch(ObjectCollectedException ignored)
+				{
+					myIsDirty = true;
+				}
+			}
+			myValue = value;
+			myValueException = null;
+		}
+		catch(EvaluateException e)
+		{
+			myValueException = e;
+			myValue = getTargetExceptionWithStackTraceFilled(evaluationContext, e);
+			myIsExpandable = false;
+		}
 
-    final EvaluateException valueException = myValueException;
-    myIsExpandable = (valueException == null || valueException.getExceptionFromTargetVM() != null) && renderer.isExpandable(getValue(), context, this);
+		myIsNew = false;
+	}
 
-    try {
-      setValueIcon(renderer.calcValueIcon(this, context, labelListener));
-    }
-    catch (EvaluateException e) {
-      LOG.info(e);
-      setValueIcon(null);
-    }
+	@Nullable
+	private static ObjectReference getTargetExceptionWithStackTraceFilled(final EvaluationContextImpl evaluationContext, EvaluateException ex)
+	{
+		final ObjectReference exceptionObj = ex.getExceptionFromTargetVM();
+		if(exceptionObj != null && evaluationContext != null)
+		{
+			try
+			{
+				final ReferenceType refType = exceptionObj.referenceType();
+				final List<Method> methods = refType.methodsByName("getStackTrace", "()[Ljava/lang/StackTraceElement;");
+				if(methods.size() > 0)
+				{
+					final DebugProcessImpl process = evaluationContext.getDebugProcess();
+					process.invokeMethod(evaluationContext, exceptionObj, methods.get(0), Collections.emptyList());
 
-    String label;
-    if (valueException == null) {
-      try {
-        label = renderer.calcLabel(this, context, labelListener);
-      }
-      catch (EvaluateException e) {
-        label = setValueLabelFailed(e);
-      }
-    }
-    else {
-      label = setValueLabelFailed(valueException);
-    }
+					// print to console as well
 
-    return setValueLabel(label);
-  }
+					final Field traceField = refType.fieldByName("stackTrace");
+					final Value trace = traceField != null ? exceptionObj.getValue(traceField) : null;
+					if(trace instanceof ArrayReference)
+					{
+						final ArrayReference traceArray = (ArrayReference) trace;
+						final Type componentType = ((ArrayType) traceArray.referenceType()).componentType();
+						if(componentType instanceof ClassType)
+						{
+							process.printToConsole(DebuggerUtils.getValueAsString(evaluationContext, exceptionObj));
+							process.printToConsole("\n");
+							for(Value stackElement : traceArray.getValues())
+							{
+								process.printToConsole("\tat ");
+								process.printToConsole(DebuggerUtils.getValueAsString(evaluationContext, stackElement));
+								process.printToConsole("\n");
+							}
+						}
+					}
+				}
+			}
+			catch(EvaluateException ignored)
+			{
+			}
+			catch(ClassNotLoadedException ignored)
+			{
+			}
+			catch(Throwable e)
+			{
+				LOG.info(e); // catch all exceptions to ensure the method returns gracefully
+			}
+		}
+		return exceptionObj;
+	}
 
-  private String getCustomLabel(String label) {
-    //translate only strings in quotes
-    final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-    try {
-      final Value value = getValue();
-      if(isShowIdLabel() && value instanceof ObjectReference) {
-        final String idLabel = getIdLabel((ObjectReference)value);
-        if(!label.startsWith(idLabel)) {
-          buf.append(idLabel);
-        }
-      }
-      if(label == null) {
-        //noinspection HardCodedStringLiteral
-        buf.append("null");
-      }
-      else {
-        buf.append(label);
-      }
-      return buf.toString();
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(buf);
-    }
-  }
+	@Override
+	public void setAncestor(NodeDescriptor oldDescriptor)
+	{
+		super.setAncestor(oldDescriptor);
+		myIsNew = false;
+		myValue = ((ValueDescriptorImpl) oldDescriptor).getValue();
+	}
+
+	protected void setLvalue(boolean value)
+	{
+		myIsLvalue = value;
+	}
+
+	@Override
+	protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+
+		final NodeRenderer renderer = getRenderer(context.getDebugProcess());
+
+		final EvaluateException valueException = myValueException;
+		myIsExpandable = (valueException == null || valueException.getExceptionFromTargetVM() != null) && renderer.isExpandable(getValue(), context,
+				this);
+
+		try
+		{
+			setValueIcon(renderer.calcValueIcon(this, context, labelListener));
+		}
+		catch(EvaluateException e)
+		{
+			LOG.info(e);
+			setValueIcon(null);
+		}
+
+		String label;
+		if(valueException == null)
+		{
+			try
+			{
+				label = renderer.calcLabel(this, context, labelListener);
+			}
+			catch(EvaluateException e)
+			{
+				label = setValueLabelFailed(e);
+			}
+		}
+		else
+		{
+			label = setValueLabelFailed(valueException);
+		}
+
+		return setValueLabel(label);
+	}
+
+	private String getCustomLabel(String label)
+	{
+		//translate only strings in quotes
+		String customLabel = null;
+		final Value value = getValue();
+		if(isShowIdLabel())
+		{
+			Renderer lastRenderer = getLastRenderer();
+			final EvaluationContextImpl evalContext = myStoredEvaluationContext;
+			final String idLabel = evalContext != null && lastRenderer != null && !evalContext.getSuspendContext().isResumed() ? ((NodeRendererImpl)
+					lastRenderer).getIdLabel(value, evalContext.getDebugProcess()) : null;
+			if(idLabel != null && !label.startsWith(idLabel))
+			{
+				customLabel = idLabel;
+			}
+		}
+		final String originalLabel = label == null ? "null" : label;
+		return customLabel == null ? originalLabel : customLabel + originalLabel;
+	}
 
 
-  public String setValueLabel(String label) {
-    final String customLabel = getCustomLabel(label);
-    myValueLabel = customLabel;
-    return setLabel(calcValueName() + " = " + customLabel);
-  }
+	@Override
+	public String setValueLabel(String label)
+	{
+		myValueText = label;
+		final String customLabel = getCustomLabel(label);
+		myValueLabel = customLabel;
+		return setLabel(calcValueName() + " = " + customLabel);
+	}
 
-  public String setValueLabelFailed(EvaluateException e) {
-    final String label = setFailed(e);
-    setValueLabel(label);
-    return label;
-  }
+	@Override
+	public String setValueLabelFailed(EvaluateException e)
+	{
+		final String label = setFailed(e);
+		setValueLabel(label);
+		return label;
+	}
 
-  public Icon setValueIcon(Icon icon) {
-    return myValueIcon = icon;
-  }
+	@Override
+	public Icon setValueIcon(Icon icon)
+	{
+		return myValueIcon = icon;
+	}
 
-  @Nullable
-  public Icon getValueIcon() {
-    return myValueIcon;
-  }
+	@Nullable
+	public Icon getValueIcon()
+	{
+		return myValueIcon;
+	}
 
-  public abstract String calcValueName();
+	public abstract String calcValueName();
 
-  public void displayAs(NodeDescriptor descriptor) {
-    if (descriptor instanceof ValueDescriptorImpl) {
-      ValueDescriptorImpl valueDescriptor = (ValueDescriptorImpl)descriptor;
-      myRenderer = valueDescriptor.myRenderer;
-    }
-    super.displayAs(descriptor);
-  }
+	@Override
+	public void displayAs(NodeDescriptor descriptor)
+	{
+		if(descriptor instanceof ValueDescriptorImpl)
+		{
+			ValueDescriptorImpl valueDescriptor = (ValueDescriptorImpl) descriptor;
+			myRenderer = valueDescriptor.myRenderer;
+		}
+		super.displayAs(descriptor);
+	}
 
-  public Renderer getLastRenderer() {
-    return myRenderer != null ? myRenderer: myAutoRenderer;
-  }
+	public Renderer getLastRenderer()
+	{
+		return myRenderer != null ? myRenderer : myAutoRenderer;
+	}
 
-  @Nullable
-  public Type getType() {
-    Value value = getValue();
-    return value != null ? value.type() : null;
-  }
+	@Nullable
+	public Type getType()
+	{
+		Value value = getValue();
+		return value != null ? value.type() : null;
+	}
 
-  public NodeRenderer getRenderer (DebugProcessImpl debugProcess) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    Type type = getType();
-    if(type != null && myRenderer != null && myRenderer.isApplicable(type)) {
-      return myRenderer;
-    }
+	public NodeRenderer getRenderer(DebugProcessImpl debugProcess)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		Type type = getType();
+		if(type != null && myRenderer != null && myRenderer.isApplicable(type))
+		{
+			return myRenderer;
+		}
 
-    myAutoRenderer = debugProcess.getAutoRenderer(this);
-    return myAutoRenderer;
-  }
+		myAutoRenderer = debugProcess.getAutoRenderer(this);
+		return myAutoRenderer;
+	}
 
-  public void setRenderer(NodeRenderer renderer) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    myRenderer = renderer;
-    myAutoRenderer = null;
-  }
+	public void setRenderer(NodeRenderer renderer)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		myRenderer = renderer;
+		myAutoRenderer = null;
+	}
 
-  //returns expression that evaluates tree to this descriptor
-  public PsiExpression getTreeEvaluation(DebuggerTreeNodeImpl debuggerTreeNode, DebuggerContextImpl context) throws EvaluateException {
-    if(debuggerTreeNode.getParent() != null && debuggerTreeNode.getParent().getDescriptor() instanceof ValueDescriptor) {
-      final NodeDescriptorImpl descriptor = debuggerTreeNode.getParent().getDescriptor();
-      final ValueDescriptorImpl vDescriptor = ((ValueDescriptorImpl)descriptor);
-      final PsiExpression parentEvaluation = vDescriptor.getTreeEvaluation(debuggerTreeNode.getParent(), context);
+	//returns expression that evaluates tree to this descriptor
+	public PsiExpression getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException
+	{
+		if(value.getParent() != null)
+		{
+			final NodeDescriptorImpl descriptor = value.getParent().getDescriptor();
+			final ValueDescriptorImpl vDescriptor = ((ValueDescriptorImpl) descriptor);
+			final PsiExpression parentEvaluation = vDescriptor.getTreeEvaluation(value.getParent(), context);
 
-      if (parentEvaluation == null) {
-        return null;
-      }
+			if(parentEvaluation == null)
+			{
+				return null;
+			}
 
-      return DebuggerTreeNodeExpression.substituteThis(
-        vDescriptor.getRenderer(context.getDebugProcess()).getChildValueExpression(debuggerTreeNode, context),
-        parentEvaluation, vDescriptor.getValue()
-      );
-    }
+			return DebuggerTreeNodeExpression.substituteThis(vDescriptor.getRenderer(context.getDebugProcess()).getChildValueExpression(new
+					DebuggerTreeNodeMock(value), context), parentEvaluation, vDescriptor.getValue());
+		}
 
-    return getDescriptorEvaluation(context);
-  }
+		return getDescriptorEvaluation(context);
+	}
 
-  //returns expression that evaluates descriptor value
-  //use 'this' to reference parent node
-  //for ex. FieldDescriptorImpl should return
-  //this.fieldName
-  public abstract PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException;
+	private static class DebuggerTreeNodeMock implements DebuggerTreeNode
+	{
+		private final JavaValue value;
 
-  public static String getIdLabel(ObjectReference objRef) {
-    StringBuilder buf = StringBuilderSpinAllocator.alloc();
-    try {
-      final ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
-      final boolean showConcreteType =
-        !classRenderer.SHOW_DECLARED_TYPE ||
-        (!(objRef instanceof StringReference) && !(objRef instanceof ClassObjectReference) && !isEnumConstant(objRef));
-      if (showConcreteType || classRenderer.SHOW_OBJECT_ID) {
-        buf.append('{');
-        if (showConcreteType) {
-          buf.append(classRenderer.renderTypeName(objRef.type().name()));
-        }
-        if (classRenderer.SHOW_OBJECT_ID) {
-          buf.append('@');
-          if(ApplicationManager.getApplication().isUnitTestMode()) {
-            //noinspection HardCodedStringLiteral
-            buf.append("uniqueID");
-          }
-          else {
-            buf.append(objRef.uniqueID());
-          }
-        }
-        buf.append('}');
-      }
+		public DebuggerTreeNodeMock(JavaValue value)
+		{
+			this.value = value;
+		}
 
-      if (objRef instanceof ArrayReference) {
-        int idx = buf.indexOf("[");
-        if(idx >= 0) {
-          buf.insert(idx + 1, Integer.toString(((ArrayReference)objRef).length()));
-        }
-      }
+		@Override
+		public DebuggerTreeNode getParent()
+		{
+			return new DebuggerTreeNodeMock(value.getParent());
+		}
 
-      return buf.toString();
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(buf);
-    }
-  }
+		@Override
+		public ValueDescriptorImpl getDescriptor()
+		{
+			return value.getDescriptor();
+		}
 
-  private static boolean isEnumConstant(final ObjectReference objRef) {
-    final Type type = objRef.type();
-    return type instanceof ClassType && ((ClassType)type).isEnum();
-  }
+		@Override
+		public Project getProject()
+		{
+			return value.getProject();
+		}
 
-  public boolean canSetValue() {
-    return !myIsSynthetic && isLvalue();
-  }
+		@Override
+		public void setRenderer(NodeRenderer renderer)
+		{
+		}
+	}
 
-  public String getValueLabel() {
-    return myValueLabel;
-  }
+	//returns expression that evaluates descriptor value
+	//use 'this' to reference parent node
+	//for ex. FieldDescriptorImpl should return
+	//this.fieldName
+	@Override
+	public abstract PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException;
 
-  //Context is set to null
-  public void clear() {
-    super.clear();
-    setValueLabel("");
-    myIsExpandable = false;
-  }
+	public static String getIdLabel(ObjectReference objRef)
+	{
+		StringBuilder buf = StringBuilderSpinAllocator.alloc();
+		try
+		{
+			final ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
+			final boolean showConcreteType = !classRenderer.SHOW_DECLARED_TYPE || (!(objRef instanceof StringReference) && !(objRef instanceof
+					ClassObjectReference) && !isEnumConstant(objRef));
+			if(showConcreteType || classRenderer.SHOW_OBJECT_ID)
+			{
+				buf.append('{');
+				if(showConcreteType)
+				{
+					buf.append(classRenderer.renderTypeName(objRef.type().name()));
+				}
+				if(classRenderer.SHOW_OBJECT_ID)
+				{
+					buf.append('@');
+					if(ApplicationManager.getApplication().isUnitTestMode())
+					{
+						//noinspection HardCodedStringLiteral
+						buf.append("uniqueID");
+					}
+					else
+					{
+						buf.append(objRef.uniqueID());
+					}
+				}
+				buf.append('}');
+			}
 
-  @Nullable
-  public ValueMarkup getMarkup(final DebugProcess debugProcess) {
-    final Value value = getValue();
-    if (value instanceof ObjectReference) {
-      final ObjectReference objRef = (ObjectReference)value;
-      final Map<ObjectReference, ValueMarkup> map = getMarkupMap(debugProcess);
-      if (map != null) {
-        return map.get(objRef);
-      }
-    }
-    return null;
-  }
+			if(objRef instanceof ArrayReference)
+			{
+				int idx = buf.indexOf("[");
+				if(idx >= 0)
+				{
+					buf.insert(idx + 1, Integer.toString(((ArrayReference) objRef).length()));
+				}
+			}
 
-  public void setMarkup(final DebugProcess debugProcess, @Nullable final ValueMarkup markup) {
-    final Value value = getValue();
-    if (value instanceof ObjectReference) {
-      final Map<ObjectReference, ValueMarkup> map = getMarkupMap(debugProcess);
-      if (map != null) {
-        final ObjectReference objRef = (ObjectReference)value;
-        if (markup != null) {
-          map.put(objRef, markup);
-        }
-        else {
-          map.remove(objRef);
-        }
-      }
-    }
-  }
+			return buf.toString();
+		}
+		finally
+		{
+			StringBuilderSpinAllocator.dispose(buf);
+		}
+	}
+
+	private static boolean isEnumConstant(final ObjectReference objRef)
+	{
+		final Type type = objRef.type();
+		return type instanceof ClassType && ((ClassType) type).isEnum();
+	}
+
+	public boolean canSetValue()
+	{
+		return !myIsSynthetic && isLvalue();
+	}
+
+	public String getValueLabel()
+	{
+		return myValueLabel;
+	}
+
+	public String getValueText()
+	{
+		return myValueText;
+	}
+
+	//Context is set to null
+	@Override
+	public void clear()
+	{
+		super.clear();
+		setValueLabel("");
+		myIsExpandable = false;
+	}
+
+	@Override
+	@Nullable
+	public ValueMarkup getMarkup(final DebugProcess debugProcess)
+	{
+		final Value value = getValue();
+		if(value instanceof ObjectReference)
+		{
+			final ObjectReference objRef = (ObjectReference) value;
+			final Map<ObjectReference, ValueMarkup> map = getMarkupMap(debugProcess);
+			if(map != null)
+			{
+				return map.get(objRef);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void setMarkup(final DebugProcess debugProcess, @Nullable final ValueMarkup markup)
+	{
+		final Value value = getValue();
+		if(value instanceof ObjectReference)
+		{
+			final Map<ObjectReference, ValueMarkup> map = getMarkupMap(debugProcess);
+			if(map != null)
+			{
+				final ObjectReference objRef = (ObjectReference) value;
+				if(markup != null)
+				{
+					map.put(objRef, markup);
+				}
+				else
+				{
+					map.remove(objRef);
+				}
+			}
+		}
+	}
 
 }

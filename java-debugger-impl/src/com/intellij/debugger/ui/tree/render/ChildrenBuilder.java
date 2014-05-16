@@ -15,16 +15,22 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-import com.intellij.debugger.ui.tree.*;
-
 import java.util.List;
 
-public interface ChildrenBuilder {
-  NodeDescriptorFactory  getDescriptorManager();
+import com.intellij.debugger.ui.tree.DebuggerTreeNode;
+import com.intellij.debugger.ui.tree.NodeDescriptorFactory;
+import com.intellij.debugger.ui.tree.NodeManager;
+import com.intellij.debugger.ui.tree.ValueDescriptor;
 
-  NodeManager getNodeManager();
-    
-  ValueDescriptor getParentDescriptor();
+public interface ChildrenBuilder
+{
+	NodeDescriptorFactory getDescriptorManager();
 
-  void setChildren(List<DebuggerTreeNode> children);
+	NodeManager getNodeManager();
+
+	ValueDescriptor getParentDescriptor();
+
+	void setChildren(List<DebuggerTreeNode> children);
+
+	void setRemaining(int remaining);
 }

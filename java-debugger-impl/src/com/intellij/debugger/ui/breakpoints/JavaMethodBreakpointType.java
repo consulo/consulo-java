@@ -126,6 +126,7 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 		return new JavaMethodBreakpointProperties();
 	}
 
+	@NotNull
 	@Override
 	public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint)
 	{

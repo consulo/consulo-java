@@ -19,116 +19,153 @@
  */
 package com.intellij.debugger.ui.impl;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
+
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.ui.impl.watch.DebuggerTree;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.actionSystem.ActionPopupMenu;
+import com.intellij.openapi.actionSystem.CustomShortcutSet;
+import com.intellij.openapi.actionSystem.DataKey;
+import com.intellij.openapi.actionSystem.DataProvider;
+import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.ex.IdeFocusTraversalPolicy;
 import com.intellij.ui.PopupHandler;
-import com.intellij.util.Alarm;
+import com.intellij.util.SingleAlarm;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
+public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements DataProvider, Disposable
+{
+	public static final DataKey<DebuggerTreePanel> DATA_KEY = DataKey.create("DebuggerPanel");
 
-public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements DataProvider {
-  public static final DataKey<DebuggerTreePanel> DATA_KEY = DataKey.create("DebuggerPanel");
-  
-  private final Alarm myRebuildAlarm = new Alarm(Alarm.ThreadToUse.SWING_THREAD);
-  protected DebuggerTree myTree;
+	private final SingleAlarm myRebuildAlarm = new SingleAlarm(new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			try
+			{
+				final DebuggerContextImpl context = getContext();
+				if(context.getDebuggerSession() != null)
+				{
+					getTree().rebuild(context);
+				}
+			}
+			catch(VMDisconnectedException ignored)
+			{
+			}
 
-  public DebuggerTreePanel(Project project, DebuggerStateManager stateManager) {
-    super(project, stateManager);
-    myTree = createTreeView();
+		}
+	}, 100);
 
-    final PopupHandler popupHandler = new PopupHandler() {
-      public void invokePopup(Component comp, int x, int y) {
-        ActionPopupMenu popupMenu = createPopupMenu();
-        if (popupMenu != null) {
-          myTree.myTipManager.registerPopup(popupMenu.getComponent()).show(comp, x, y);
-        }
-      }
-    };
-    myTree.addMouseListener(popupHandler);
+	protected DebuggerTree myTree;
 
-    setFocusTraversalPolicy(new IdeFocusTraversalPolicy() {
-      public Component getDefaultComponentImpl(Container focusCycleRoot) {
-        return myTree;
-      }
-    });
+	public DebuggerTreePanel(Project project, DebuggerStateManager stateManager)
+	{
+		super(project, stateManager);
+		myTree = createTreeView();
 
-    registerDisposable(new Disposable() {
-      public void dispose() {
-        myTree.removeMouseListener(popupHandler);
-      }
-    });
+		final PopupHandler popupHandler = new PopupHandler()
+		{
+			@Override
+			public void invokePopup(Component comp, int x, int y)
+			{
+				ActionPopupMenu popupMenu = createPopupMenu();
+				if(popupMenu != null)
+				{
+					myTree.myTipManager.registerPopup(popupMenu.getComponent()).show(comp, x, y);
+				}
+			}
+		};
+		myTree.addMouseListener(popupHandler);
 
-    final Shortcut[] shortcuts = KeymapManager.getInstance().getActiveKeymap().getShortcuts("ToggleBookmark");
-    final CustomShortcutSet shortcutSet = shortcuts.length > 0? new CustomShortcutSet(shortcuts) : new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
-    overrideShortcut(myTree, XDebuggerActions.MARK_OBJECT, shortcutSet);
-  }
+		setFocusTraversalPolicy(new IdeFocusTraversalPolicy()
+		{
+			@Override
+			public Component getDefaultComponentImpl(Container focusCycleRoot)
+			{
+				return myTree;
+			}
+		});
 
-  protected abstract DebuggerTree createTreeView();
+		registerDisposable(new Disposable()
+		{
+			@Override
+			public void dispose()
+			{
+				myTree.removeMouseListener(popupHandler);
+			}
+		});
+
+		final Shortcut[] shortcuts = KeymapManager.getInstance().getActiveKeymap().getShortcuts("ToggleBookmark");
+		final CustomShortcutSet shortcutSet = shortcuts.length > 0 ? new CustomShortcutSet(shortcuts) : new CustomShortcutSet(KeyStroke.getKeyStroke
+				(KeyEvent.VK_F11, 0));
+		overrideShortcut(myTree, XDebuggerActions.MARK_OBJECT, shortcutSet);
+	}
+
+	protected abstract DebuggerTree createTreeView();
+
+	@Override
+	protected void rebuild(int event)
+	{
+		myRebuildAlarm.cancelAndRequest();
+	}
+
+	@Override
+	public void dispose()
+	{
+		Disposer.dispose(myRebuildAlarm);
+		try
+		{
+			super.dispose();
+		}
+		finally
+		{
+			final DebuggerTree tree = myTree;
+			if(tree != null)
+			{
+				Disposer.dispose(tree);
+			}
+			// prevent mem leak from inside Swing
+			myTree = null;
+		}
+	}
 
 
-  protected void rebuild(int event) {
-    myRebuildAlarm.cancelAllRequests();
-    myRebuildAlarm.addRequest(new Runnable() {
-      public void run() {
-        try {
-          final DebuggerContextImpl context = getContext();
-          if(context.getDebuggerSession() != null) {
-            getTree().rebuild(context);
-          }
-        }
-        catch (VMDisconnectedException e) {
-          // ignored
-        }
-      }
-    }, 100, ModalityState.NON_MODAL);
-  }
+	protected abstract ActionPopupMenu createPopupMenu();
 
-  public void dispose() {
-    Disposer.dispose(myRebuildAlarm);
-    try {
-      super.dispose();
-    }
-    finally {
-      final DebuggerTree tree = myTree;
-      if (tree != null) {
-        Disposer.dispose(tree);
-      }
-      // prevent mem leak from inside Swing
-      myTree = null;
-    }
-  }
+	public final DebuggerTree getTree()
+	{
+		return myTree;
+	}
 
+	public void clear()
+	{
+		myTree.removeAllChildren();
+	}
 
-  protected abstract ActionPopupMenu createPopupMenu();
+	@Override
+	public Object getData(String dataId)
+	{
+		if(DATA_KEY.is(dataId))
+		{
+			return this;
+		}
+		return null;
+	}
 
-  public final DebuggerTree getTree() {
-    return myTree;
-  }
-
-  public void clear() {
-    myTree.removeAllChildren();
-  }
-
-  public Object getData(String dataId) {
-    if (DebuggerTreePanel.DATA_KEY.is(dataId)) {
-      return this;
-    }
-    return null;
-  }
-
-  public void requestFocus() {
-    getTree().requestFocus();
-  }
+	@Override
+	public void requestFocus()
+	{
+		getTree().requestFocus();
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.debugger.ui.tree;
+package com.intellij.debugger.engine;
 
-import com.intellij.debugger.ui.tree.render.NodeRenderer;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.extensions.ExtensionPointName;
 
-public interface DebuggerTreeNode
+/**
+ * @author egor
+ */
+public interface JavaBreakpointHandlerFactory
 {
-	DebuggerTreeNode getParent();
+	ExtensionPointName<JavaBreakpointHandlerFactory> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.javaBreakpointHandlerFactory");
 
-	NodeDescriptor getDescriptor();
-
-	Project getProject();
-
-	void setRenderer(NodeRenderer renderer);
+	JavaBreakpointHandler createHandler(DebugProcessImpl process);
 }

@@ -482,6 +482,8 @@
 		<extensionPoint name="debugger.positionManagerFactory"
 						interface="com.intellij.debugger.PositionManagerFactory"
 						area="CONSULO_PROJECT"/>
+		<extensionPoint name="debugger.javaBreakpointHandlerFactory"
+						interface="com.intellij.debugger.engine.JavaBreakpointHandlerFactory" />
 		<extensionPoint name="debugger.jvmSmartStepIntoHandler"
 						interface="com.intellij.debugger.actions.JvmSmartStepIntoHandler"/>
 

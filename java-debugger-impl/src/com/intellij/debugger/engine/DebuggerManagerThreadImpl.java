@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.engine.managerThread.DebuggerCommand;
@@ -30,208 +32,279 @@ import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.util.Alarm;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
 
 /**
  * @author lex
  */
-public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerCommandImpl> implements DebuggerManagerThread, Disposable {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.DebuggerManagerThreadImpl");
-  public static final int COMMAND_TIMEOUT = 3000;
-  private static final int RESTART_TIMEOUT = 500;
-  private volatile boolean myDisposed;
+public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerCommandImpl> implements DebuggerManagerThread, Disposable
+{
+	private static final Logger LOG = Logger.getInstance(DebuggerManagerThreadImpl.class);
+	public static final int COMMAND_TIMEOUT = 3000;
 
-  DebuggerManagerThreadImpl(@NotNull Disposable parent) {
-    Disposer.register(parent, this);
-  }
+	private volatile boolean myDisposed;
 
-  public void dispose() {
-    myDisposed = true;
-  }
+	DebuggerManagerThreadImpl(@NotNull Disposable parent)
+	{
+		Disposer.register(parent, this);
+	}
 
-  @TestOnly
-  public static DebuggerManagerThreadImpl createTestInstance(@NotNull Disposable parent) {
-    return new DebuggerManagerThreadImpl(parent);
-  }
+	@Override
+	public void dispose()
+	{
+		myDisposed = true;
+	}
 
-  public static boolean isManagerThread() {
-    return currentThread() instanceof DebuggerManagerThreadImpl;
-  }
+	@TestOnly
+	public static DebuggerManagerThreadImpl createTestInstance(@NotNull Disposable parent)
+	{
+		return new DebuggerManagerThreadImpl(parent);
+	}
 
-  public static void assertIsManagerThread() {
-    LOG.assertTrue(isManagerThread(), "Should be invoked in manager thread, use DebuggerManagerThreadImpl.getInstance(..).invoke...");
-  }
+	public static boolean isManagerThread()
+	{
+		return currentThread() instanceof DebuggerManagerThreadImpl;
+	}
 
-  public void invokeAndWait(DebuggerCommandImpl managerCommand) {
-    LOG.assertTrue(!ApplicationManager.getApplication().isDispatchThread());
-    LOG.assertTrue(!(currentThread() instanceof DebuggerManagerThreadImpl),
-                   "Should be invoked outside manager thread, use DebuggerManagerThreadImpl.getInstance(..).invoke...");
-    super.invokeAndWait(managerCommand);
-  }
+	public static void assertIsManagerThread()
+	{
+		LOG.assertTrue(isManagerThread(), "Should be invoked in manager thread, use DebuggerManagerThreadImpl.getInstance(..).invoke...");
+	}
 
-  public void invoke(DebuggerCommandImpl managerCommand) {
-    if (currentThread() instanceof DebuggerManagerThreadImpl) {
-      processEvent(managerCommand);
-    }
-    else {
-      schedule(managerCommand);
-    }
-  }
+	@Override
+	public void invokeAndWait(DebuggerCommandImpl managerCommand)
+	{
+		LOG.assertTrue(!isManagerThread(), "Should be invoked outside manager thread, use DebuggerManagerThreadImpl.getInstance(..).invoke...");
+		super.invokeAndWait(managerCommand);
+	}
 
-  public boolean pushBack(DebuggerCommandImpl managerCommand) {
-    final boolean pushed = super.pushBack(managerCommand);
-    if (!pushed) {
-      managerCommand.notifyCancelled();
-    }
-    return pushed;
-  }
+	public void invoke(DebuggerCommandImpl managerCommand)
+	{
+		if(currentThread() instanceof DebuggerManagerThreadImpl)
+		{
+			processEvent(managerCommand);
+		}
+		else
+		{
+			schedule(managerCommand);
+		}
+	}
 
-  public boolean schedule(DebuggerCommandImpl managerCommand) {
-    final boolean scheduled = super.schedule(managerCommand);
-    if (!scheduled) {
-      managerCommand.notifyCancelled();
-    }
-    return scheduled;
-  }
+	@Override
+	public boolean pushBack(DebuggerCommandImpl managerCommand)
+	{
+		final boolean pushed = super.pushBack(managerCommand);
+		if(!pushed)
+		{
+			managerCommand.notifyCancelled();
+		}
+		return pushed;
+	}
 
-  /**
-   * waits COMMAND_TIMEOUT milliseconds
-   * if worker thread is still processing the same command
-   * calls terminateCommand
-   */
-  public void terminateAndInvoke(DebuggerCommandImpl command, int terminateTimeout) {
-    final DebuggerCommandImpl currentCommand = myEvents.getCurrentEvent();
+	@Override
+	public boolean schedule(DebuggerCommandImpl managerCommand)
+	{
+		final boolean scheduled = super.schedule(managerCommand);
+		if(!scheduled)
+		{
+			managerCommand.notifyCancelled();
+		}
+		return scheduled;
+	}
 
-    invoke(command);
+	/**
+	 * waits COMMAND_TIMEOUT milliseconds
+	 * if worker thread is still processing the same command
+	 * calls terminateCommand
+	 */
+	public void terminateAndInvoke(DebuggerCommandImpl command, int terminateTimeout)
+	{
+		final DebuggerCommandImpl currentCommand = myEvents.getCurrentEvent();
 
-    if (currentCommand != null) {
-      final Alarm alarm = new Alarm(Alarm.ThreadToUse.SHARED_THREAD);
-      alarm.addRequest(new Runnable() {
-        public void run() {
-          try {
-            if (currentCommand == myEvents.getCurrentEvent()) {
-              // if current command is still in progress, cancel it
-              getCurrentRequest().interrupt();
-              try {
-                getCurrentRequest().join();
-              }
-              catch (InterruptedException ignored) {
-              }
-              catch (Exception e) {
-                throw new RuntimeException(e);
-              }
-              finally {
-                if (!myDisposed) {
-                  startNewWorkerThread();
-                }
-              }
-            }
-          }
-          finally {
-            Disposer.dispose(alarm);
-          }
-        }
-      }, terminateTimeout);
-    }
-  }
+		invoke(command);
 
-
-  public void processEvent(@NotNull DebuggerCommandImpl managerCommand) {
-    assertIsManagerThread();
-    try {
-      if(myEvents.isClosed()) {
-        managerCommand.notifyCancelled();
-      }
-      else {
-        managerCommand.run();
-      }
-    }
-    catch (VMDisconnectedException e) {
-      LOG.debug(e);
-    }
-    catch (RuntimeException e) {
-      throw e;
-    }
-    catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-    catch (Exception e) {
-      LOG.error(e);
-    }
-  }
-
-  public void startProgress(final DebuggerCommandImpl command, final ProgressWindowWithNotification progressWindow) {
-    progressWindow.addListener(new ProgressIndicatorListenerAdapter() {
-      public void cancelled() {
-        command.release();
-      }
-    });
-
-    ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
-      public void run() {
-        ProgressManager.getInstance().runProcess(new Runnable() {
-          public void run() {
-            invokeAndWait(command);
-          }
-        }, progressWindow);
-      }
-    });
-  }
+		if(currentCommand != null)
+		{
+			final Alarm alarm = new Alarm(Alarm.ThreadToUse.SHARED_THREAD);
+			alarm.addRequest(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						if(currentCommand == myEvents.getCurrentEvent())
+						{
+							// if current command is still in progress, cancel it
+							getCurrentRequest().requestStop();
+							try
+							{
+								getCurrentRequest().join();
+							}
+							catch(InterruptedException ignored)
+							{
+							}
+							catch(Exception e)
+							{
+								throw new RuntimeException(e);
+							}
+							finally
+							{
+								if(!myDisposed)
+								{
+									startNewWorkerThread();
+								}
+							}
+						}
+					}
+					finally
+					{
+						Disposer.dispose(alarm);
+					}
+				}
+			}, terminateTimeout);
+		}
+	}
 
 
-  public void startLongProcessAndFork(Runnable process) {
-    startNewWorkerThread();
+	@Override
+	public void processEvent(@NotNull DebuggerCommandImpl managerCommand)
+	{
+		assertIsManagerThread();
+		try
+		{
+			if(myEvents.isClosed())
+			{
+				managerCommand.notifyCancelled();
+			}
+			else
+			{
+				managerCommand.run();
+			}
+		}
+		catch(VMDisconnectedException e)
+		{
+			LOG.debug(e);
+		}
+		catch(RuntimeException e)
+		{
+			throw e;
+		}
+		catch(InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch(Exception e)
+		{
+			LOG.error(e);
+		}
+	}
 
-    try {
-      process.run();
-    }
-    finally {
-      final WorkerThreadRequest request = getCurrentThreadRequest();
+	public void startProgress(final DebuggerCommandImpl command, final ProgressWindowWithNotification progressWindow)
+	{
+		progressWindow.addListener(new ProgressIndicatorListenerAdapter()
+		{
+			@Override
+			public void cancelled()
+			{
+				command.release();
+			}
+		});
 
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("Switching back to " + request);
-      }
+		ApplicationManager.getApplication().executeOnPooledThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				ProgressManager.getInstance().runProcess(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						invokeAndWait(command);
+					}
+				}, progressWindow);
+			}
+		});
+	}
 
-      super.invokeAndWait(new DebuggerCommandImpl() {
-        protected void action() throws Exception {
-          switchToRequest(request);
-        }
 
-        protected void commandCancelled() {
-          if (LOG.isDebugEnabled()) {
-            LOG.debug("Event queue was closed, killing request");
-          }
-          request.interrupt();
-        }
-      });
-    }
-  }
+	public void startLongProcessAndFork(Runnable process)
+	{
+		assertIsManagerThread();
+		startNewWorkerThread();
 
-  public void invokeCommand(final DebuggerCommand command) {
-    if(command instanceof SuspendContextCommand) {
-      SuspendContextCommand suspendContextCommand = (SuspendContextCommand)command;
-      schedule(new SuspendContextCommandImpl((SuspendContextImpl)suspendContextCommand.getSuspendContext()) {
-          public void contextAction() throws Exception {
-            command.action();
-          }
+		try
+		{
+			process.run();
+		}
+		finally
+		{
+			final WorkerThreadRequest request = getCurrentThreadRequest();
 
-          protected void commandCancelled() {
-            command.commandCancelled();
-          }
-        });
-    }
-    else {
-      schedule(new DebuggerCommandImpl() {
-        protected void action() throws Exception {
-          command.action();
-        }
+			if(LOG.isDebugEnabled())
+			{
+				LOG.debug("Switching back to " + request);
+			}
 
-        protected void commandCancelled() {
-          command.commandCancelled();
-        }
-      });
-    }
+			super.invokeAndWait(new DebuggerCommandImpl()
+			{
+				@Override
+				protected void action() throws Exception
+				{
+					switchToRequest(request);
+				}
 
-  }
+				@Override
+				protected void commandCancelled()
+				{
+					if(LOG.isDebugEnabled())
+					{
+						LOG.debug("Event queue was closed, killing request");
+					}
+					request.requestStop();
+				}
+			});
+		}
+	}
+
+	@Override
+	public void invokeCommand(final DebuggerCommand command)
+	{
+		if(command instanceof SuspendContextCommand)
+		{
+			SuspendContextCommand suspendContextCommand = (SuspendContextCommand) command;
+			schedule(new SuspendContextCommandImpl((SuspendContextImpl) suspendContextCommand.getSuspendContext())
+			{
+				@Override
+				public void contextAction() throws Exception
+				{
+					command.action();
+				}
+
+				@Override
+				protected void commandCancelled()
+				{
+					command.commandCancelled();
+				}
+			});
+		}
+		else
+		{
+			schedule(new DebuggerCommandImpl()
+			{
+				@Override
+				protected void action() throws Exception
+				{
+					command.action();
+				}
+
+				@Override
+				protected void commandCancelled()
+				{
+					command.commandCancelled();
+				}
+			});
+		}
+
+	}
 }

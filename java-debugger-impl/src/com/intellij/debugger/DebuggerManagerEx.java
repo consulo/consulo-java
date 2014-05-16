@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger;
 
+import java.util.Collection;
+
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerManagerListener;
@@ -29,30 +31,34 @@ import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.project.Project;
 
-import java.util.Collection;
+public abstract class DebuggerManagerEx extends DebuggerManager
+{
+	public static DebuggerManagerEx getInstanceEx(Project project)
+	{
+		return (DebuggerManagerEx) DebuggerManager.getInstance(project);
+	}
 
-public abstract class DebuggerManagerEx extends DebuggerManager {
-  public static DebuggerManagerEx getInstanceEx(Project project) {
-    return (DebuggerManagerEx)DebuggerManager.getInstance(project);
-  }
-  public abstract BreakpointManager  getBreakpointManager();
+	public abstract BreakpointManager getBreakpointManager();
 
-  public abstract Collection<DebuggerSession> getSessions();
-  public abstract DebuggerSession getSession(DebugProcess debugProcess);
+	public abstract Collection<DebuggerSession> getSessions();
 
-  public abstract DebuggerContextImpl getContext();
-  public abstract DebuggerStateManager getContextManager();
+	public abstract DebuggerSession getSession(DebugProcess debugProcess);
 
-  public abstract void addDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
-  public abstract void removeDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
+	public abstract DebuggerContextImpl getContext();
 
-  public abstract DebuggerSession attachVirtualMachine(Executor executor, 
-                                                       ProgramRunner runner,
-                                                       ModuleRunProfile profile,
-                                                       RunProfileState state,
-                                                       RemoteConnection connection,
-                                                       boolean pollConnection
-  ) throws ExecutionException;
+	public abstract DebuggerStateManager getContextManager();
 
-  public abstract DebuggerSession attachVirtualMachine(DebugEnvironment environment) throws ExecutionException;
+	public abstract void addDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
+
+	public abstract void removeDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
+
+	public abstract DebuggerSession attachVirtualMachine(
+			Executor executor,
+			ProgramRunner runner,
+			ModuleRunProfile profile,
+			RunProfileState state,
+			RemoteConnection connection,
+			boolean pollConnection) throws ExecutionException;
+
+	public abstract DebuggerSession attachVirtualMachine(DebugEnvironment environment) throws ExecutionException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -213,7 +213,7 @@ public class FrameVariablesTree extends DebuggerTree
 				}
 				else
 				{
-					final Map<String, LocalVariableProxyImpl> visibleVariables = getVisibleVariables(stackDescriptor);
+					final Map<String, LocalVariableProxyImpl> visibleVariables = getVisibleVariables(stackDescriptor.getFrameProxy());
 					final EvaluationContextImpl evalContext = debuggerContext.createEvaluationContext();
 					final Pair<Set<String>, Set<TextWithImports>> usedVars = ApplicationManager.getApplication().runReadAction(new
 																																	   Computable<Pair<Set<String>, Set<TextWithImports>>>()
@@ -293,8 +293,7 @@ public class FrameVariablesTree extends DebuggerTree
 		}
 	}
 
-	private static List<DecompiledLocalVariable> collectVariablesFromBytecode(final StackFrameProxy frame,
-			int argumentCount) throws EvaluateException
+	public static List<DecompiledLocalVariable> collectVariablesFromBytecode(final StackFrameProxy frame, int argumentCount) throws EvaluateException
 	{
 		if(!frame.getVirtualMachine().canGetBytecodes())
 		{
@@ -358,9 +357,8 @@ public class FrameVariablesTree extends DebuggerTree
 		return Collections.emptyList();
 	}
 
-	private static Map<String, LocalVariableProxyImpl> getVisibleVariables(final StackFrameDescriptorImpl stackDescriptor) throws EvaluateException
+	public static Map<String, LocalVariableProxyImpl> getVisibleVariables(final StackFrameProxyImpl frame) throws EvaluateException
 	{
-		final StackFrameProxyImpl frame = stackDescriptor.getFrameProxy();
 		final Map<String, LocalVariableProxyImpl> vars = new HashMap<String, LocalVariableProxyImpl>();
 		for(LocalVariableProxyImpl localVariableProxy : frame.visibleVariables())
 		{
@@ -412,7 +410,7 @@ public class FrameVariablesTree extends DebuggerTree
 		return true;
 	}
 
-	private static Pair<Set<String>, Set<TextWithImports>> findReferencedVars(
+	public static Pair<Set<String>, Set<TextWithImports>> findReferencedVars(
 			final Set<String> visibleVars,
 			final SourcePosition position,
 			EvaluationContextImpl evalContext)
@@ -420,19 +418,19 @@ public class FrameVariablesTree extends DebuggerTree
 		final int line = position.getLine();
 		if(line < 0)
 		{
-			return new Pair<Set<String>, Set<TextWithImports>>(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
+			return Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
 		}
 		final PsiFile positionFile = position.getFile();
 		if(!positionFile.getLanguage().isKindOf(JavaLanguage.INSTANCE))
 		{
-			return new Pair<Set<String>, Set<TextWithImports>>(visibleVars, Collections.<TextWithImports>emptySet());
+			return Pair.create(visibleVars, Collections.<TextWithImports>emptySet());
 		}
 
 		final VirtualFile vFile = positionFile.getVirtualFile();
 		final Document doc = vFile != null ? FileDocumentManager.getInstance().getDocument(vFile) : null;
 		if(doc == null || doc.getLineCount() == 0 || line > (doc.getLineCount() - 1))
 		{
-			return new Pair<Set<String>, Set<TextWithImports>>(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
+			return Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
 		}
 
 		final TextRange limit = calculateLimitRange(positionFile, doc, line);
@@ -484,7 +482,7 @@ public class FrameVariablesTree extends DebuggerTree
 				//noinspection unchecked
 				if(element instanceof PsiCompiledElement)
 				{
-					return new Pair<Set<String>, Set<TextWithImports>>(visibleVars, Collections.<TextWithImports>emptySet());
+					return Pair.create(visibleVars, Collections.<TextWithImports>emptySet());
 				}
 				else
 				{
@@ -494,11 +492,11 @@ public class FrameVariablesTree extends DebuggerTree
 							vars, position, evalContext);
 					element.accept(variablesCollector);
 
-					return new Pair<Set<String>, Set<TextWithImports>>(vars, expressions);
+					return Pair.create(vars, expressions);
 				}
 			}
 		}
-		return new Pair<Set<String>, Set<TextWithImports>>(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
+		return Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
 	}
 
 	private static TextRange calculateLimitRange(final PsiFile file, final Document doc, final int line)

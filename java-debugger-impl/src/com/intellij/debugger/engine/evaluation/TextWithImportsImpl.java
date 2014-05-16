@@ -28,100 +28,186 @@ import com.intellij.psi.JavaCodeFragment;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionCodeFragment;
 import com.intellij.psi.PsiFile;
+import com.intellij.xdebugger.XExpression;
+import com.intellij.xdebugger.evaluation.EvaluationMode;
+import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
+import com.intellij.xdebugger.impl.ui.XDebuggerEditorBase;
 
-public final class TextWithImportsImpl implements TextWithImports{
+public final class TextWithImportsImpl implements TextWithImports
+{
 
-  private final CodeFragmentKind myKind;
-  private String myText;
-  private final FileType myFileType;
-  private final String myImports;
+	private final CodeFragmentKind myKind;
+	private String myText;
+	private final FileType myFileType;
+	private final String myImports;
 
-  public TextWithImportsImpl (PsiExpression expression) {
-    myKind = CodeFragmentKind.EXPRESSION;
-    final String text = expression.getText();
-    PsiFile containingFile = expression.getContainingFile();
-    if(containingFile instanceof PsiExpressionCodeFragment) {
-      myText = text;
-      myImports = ((JavaCodeFragment)containingFile).importsToString();
-      myFileType = JavaFileType.INSTANCE;
-    }
-    else {
-      Trinity<String, String, FileType> trinity = parseExternalForm(text);
-      myText = trinity.first;
-      myImports = trinity.second;
-      myFileType = trinity.third;
-    }
-  }
+	public TextWithImportsImpl(PsiExpression expression)
+	{
+		myKind = CodeFragmentKind.EXPRESSION;
+		final String text = expression.getText();
+		PsiFile containingFile = expression.getContainingFile();
+		if(containingFile instanceof PsiExpressionCodeFragment)
+		{
+			myText = text;
+			myImports = ((JavaCodeFragment) containingFile).importsToString();
+			myFileType = JavaFileType.INSTANCE;
+		}
+		else
+		{
+			Trinity<String, String, FileType> trinity = parseExternalForm(text);
+			myText = trinity.first;
+			myImports = trinity.second;
+			myFileType = trinity.third;
+		}
+	}
 
-  public TextWithImportsImpl (CodeFragmentKind kind, @NotNull String text, @NotNull String imports, @Nullable FileType fileType) {
-    myKind = kind;
-    myText = text;
-    myImports = imports;
-    myFileType = fileType;
-  }
+	public TextWithImportsImpl(CodeFragmentKind kind, @NotNull String text, @NotNull String imports, @Nullable FileType fileType)
+	{
+		myKind = kind;
+		myText = text;
+		myImports = imports;
+		myFileType = fileType;
+	}
 
-  public TextWithImportsImpl(CodeFragmentKind kind, @NotNull String text) {
-    myKind = kind;
-    Trinity<String, String, FileType> trinity = parseExternalForm(text);
-    myText = trinity.first;
-    myImports = trinity.second;
-    myFileType = trinity.third;
-  }
+	public TextWithImportsImpl(CodeFragmentKind kind, @NotNull String text)
+	{
+		myKind = kind;
+		Trinity<String, String, FileType> trinity = parseExternalForm(text);
+		myText = trinity.first;
+		myImports = trinity.second;
+		myFileType = trinity.third;
+	}
 
-  private static Trinity<String, String, FileType> parseExternalForm(String s) {
-    String[] split = s.split(String.valueOf(DebuggerEditorImpl.SEPARATOR));
-    return Trinity.create(split[0], split.length > 1 ? split[1] : "", split.length > 2 ? FileTypeManager.getInstance().getStdFileType(split[2]) : null);
-  }
+	private static Trinity<String, String, FileType> parseExternalForm(String s)
+	{
+		String[] split = s.split(String.valueOf(DebuggerEditorImpl.SEPARATOR));
+		return Trinity.create(split[0], split.length > 1 ? split[1] : "", split.length > 2 ? FileTypeManager.getInstance().getStdFileType(split[2])
+				: null);
+	}
 
-  public CodeFragmentKind getKind() {
-    return myKind;
-  }
+	@Override
+	public CodeFragmentKind getKind()
+	{
+		return myKind;
+	}
 
-  public String getText() {
-    return myText;
-  }
+	@Override
+	public String getText()
+	{
+		return myText;
+	}
 
-  public @NotNull String getImports() {
-    return myImports;
-  }
+	@Override
+	public
+	@NotNull
+	String getImports()
+	{
+		return myImports;
+	}
 
-  public boolean equals(Object object) {
-    if(!(object instanceof TextWithImportsImpl)) {
-      return false;
-    }
-    TextWithImportsImpl item = ((TextWithImportsImpl)object);
-    return Comparing.equal(item.myText, myText) && Comparing.equal(item.myImports, myImports);
-  }
+	public boolean equals(Object object)
+	{
+		if(!(object instanceof TextWithImportsImpl))
+		{
+			return false;
+		}
+		TextWithImportsImpl item = ((TextWithImportsImpl) object);
+		return Comparing.equal(item.myText, myText) && Comparing.equal(item.myImports, myImports);
+	}
 
-  public String toString() {
-    return getText();
-  }
+	public String toString()
+	{
+		return getText();
+	}
 
-  public String toExternalForm() {
-    String result = myText;
-    if (StringUtil.isNotEmpty(myImports) || myFileType != null) {
-      result += DebuggerEditorImpl.SEPARATOR + myImports;
-    }
-    if (myFileType != null) {
-      result += DebuggerEditorImpl.SEPARATOR + myFileType.getName();
-    }
-    return result;
-  }
+	@Override
+	public String toExternalForm()
+	{
+		String result = myText;
+		if(StringUtil.isNotEmpty(myImports) || myFileType != null)
+		{
+			result += DebuggerEditorImpl.SEPARATOR + myImports;
+		}
+		if(myFileType != null)
+		{
+			result += DebuggerEditorImpl.SEPARATOR + myFileType.getName();
+		}
+		return result;
+	}
 
-  public int hashCode() {
-    return myText.hashCode();
-  }
+	public int hashCode()
+	{
+		return myText.hashCode();
+	}
 
-  public boolean isEmpty() {
-    final String text = getText();
-    return text == null || "".equals(text.trim());
-  }
+	@Override
+	public boolean isEmpty()
+	{
+		return StringUtil.isEmptyOrSpaces(getText());
+	}
 
-  public void setText(String newText) {
-    myText = newText;
-  }
+	@Override
+	public void setText(String newText)
+	{
+		myText = newText;
+	}
 
-  public FileType getFileType() {
-    return myFileType;
-  }
+	@Override
+	public FileType getFileType()
+	{
+		return myFileType;
+	}
+
+	@Nullable
+	public static XExpression toXExpression(TextWithImports text)
+	{
+		if(!text.getText().isEmpty())
+		{
+			return new XExpressionImpl(text.getText(), XDebuggerEditorBase.getFileTypeLanguage(text.getFileType()),
+					StringUtil.nullize(text.getImports()), getMode(text.getKind()));
+		}
+		return null;
+	}
+
+	private static EvaluationMode getMode(CodeFragmentKind kind)
+	{
+		switch(kind)
+		{
+			case EXPRESSION:
+				return EvaluationMode.EXPRESSION;
+			case CODE_BLOCK:
+				return EvaluationMode.CODE_FRAGMENT;
+		}
+		throw new IllegalStateException("Unknown kind " + kind);
+	}
+
+	private static CodeFragmentKind getKind(EvaluationMode mode)
+	{
+		switch(mode)
+		{
+			case EXPRESSION:
+				return CodeFragmentKind.EXPRESSION;
+			case CODE_FRAGMENT:
+				return CodeFragmentKind.CODE_BLOCK;
+		}
+		throw new IllegalStateException("Unknown mode " + mode);
+	}
+
+	public static TextWithImports fromXExpression(@Nullable XExpression expression)
+	{
+		if(expression == null)
+		{
+			return null;
+		}
+
+		if(expression.getCustomInfo() == null && expression.getLanguage() == null)
+		{
+			return new TextWithImportsImpl(getKind(expression.getMode()), expression.getExpression());
+		}
+		else
+		{
+			return new TextWithImportsImpl(getKind(expression.getMode()), expression.getExpression(), StringUtil.notNullize(expression.getCustomInfo
+					()), expression.getLanguage() != null ? expression.getLanguage().getAssociatedFileType() : null);
+		}
+	}
 }

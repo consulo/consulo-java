@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/*
+ * Class Breakpoint
+ * @author Jeka
+ */
 package com.intellij.debugger.ui.breakpoints;
 
 import java.util.List;
@@ -38,7 +42,6 @@ import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.SuspendContext;
 import com.intellij.debugger.engine.SuspendContextImpl;
-import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -63,10 +66,12 @@ import com.intellij.ui.AppUIUtil;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.ThreeState;
+import com.intellij.xdebugger.XExpression;
 import com.intellij.xdebugger.breakpoints.SuspendPolicy;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.impl.XDebuggerHistoryManager;
+import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
 import com.intellij.xdebugger.impl.breakpoints.ui.DefaultLogExpressionComboBoxPanel;
 import consulo.internal.com.sun.jdi.BooleanValue;
 import consulo.internal.com.sun.jdi.Location;
@@ -77,36 +82,22 @@ import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.VoidValue;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 
-/*
- * Class Breakpoint
- * @author Jeka
- */
 public abstract class Breakpoint<P extends JavaBreakpointProperties> implements FilteredRequestor, ClassPrepareRequestor
 {
+	public static Key<Breakpoint> DATA_KEY = Key.create("JavaBreakpoint");
+
 	final XBreakpoint<P> myXBreakpoint;
 	protected final Project myProject;
 
-	//private boolean ENABLED = true;
-	//private boolean LOG_ENABLED = false;
-	//private boolean LOG_EXPRESSION_ENABLED = false;
-	//private boolean REMOVE_AFTER_HIT = false;
-	//private TextWithImports  myLogMessage; // an expression to be evaluated and printed
 	@NonNls
 	private static final String LOG_MESSAGE_OPTION_NAME = "LOG_MESSAGE";
 	public static final Breakpoint[] EMPTY_ARRAY = new Breakpoint[0];
 	protected boolean myCachedVerifiedState = false;
-	//private TextWithImportsImpl myLogMessage;
 
 	protected Breakpoint(@NotNull Project project, XBreakpoint<P> xBreakpoint)
 	{
-		//super(project);
 		myProject = project;
 		myXBreakpoint = xBreakpoint;
-		//myLogMessage = new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "");
-		//noinspection AbstractMethodCallInConstructor
-		//final BreakpointDefaults defaults = DebuggerManagerEx.getInstanceEx(project).getBreakpointManager().getBreakpointDefaults(getCategory());
-		//SUSPEND_POLICY = defaults.getSuspendPolicy();
-		//CONDITION_ENABLED = defaults.isConditionEnabled();
 	}
 
 	public Project getProject()
@@ -551,7 +542,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	public void readExternal(Element parentNode) throws InvalidDataException
 	{
-
 		FilteredRequestorImpl requestor = new FilteredRequestorImpl(myProject);
 		requestor.readTo(parentNode, this);
 		try
@@ -573,11 +563,11 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			String logMessage = JDOMExternalizerUtil.readField(parentNode, LOG_MESSAGE_OPTION_NAME);
 			if(logMessage != null && !logMessage.isEmpty())
 			{
-				TextWithImportsImpl text = new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, logMessage);
-				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(DefaultLogExpressionComboBoxPanel.HISTORY_KEY, text.getText());
+				XExpressionImpl expression = XExpressionImpl.fromText(logMessage);
+				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(DefaultLogExpressionComboBoxPanel.HISTORY_KEY, expression);
 				if(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")))
 				{
-					setLogMessage(text);
+					myXBreakpoint.setLogExpressionObject(expression);
 				}
 			}
 		}
@@ -593,27 +583,17 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		}
 	}
 
-	//@Override
-	//public void writeExternal(Element parentNode) throws WriteExternalException {
-	//super.writeExternal(parentNode);
-	//JDOMExternalizerUtil.writeField(parentNode, LOG_MESSAGE_OPTION_NAME, getLogMessage().toExternalForm());
-	//}
-
-	//public void setLogMessage(TextWithImports logMessage) {
-	//  myLogMessage = logMessage;
-	//}
-
 	@Nullable
 	public abstract PsiElement getEvaluationElement();
 
 	protected TextWithImports getLogMessage()
 	{
-		return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, myXBreakpoint.getLogExpression());
+		return TextWithImportsImpl.fromXExpression(myXBreakpoint.getLogExpressionObject());
 	}
 
 	protected TextWithImports getCondition()
 	{
-		return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, myXBreakpoint.getCondition());
+		return TextWithImportsImpl.fromXExpression(myXBreakpoint.getConditionExpression());
 	}
 
 	public boolean isEnabled()
@@ -638,8 +618,8 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	protected boolean isLogExpressionEnabled()
 	{
-		String expression = myXBreakpoint.getLogExpression();
-		if(expression == null || expression.isEmpty())
+		XExpression expression = myXBreakpoint.getLogExpressionObject();
+		if(expression == null || expression.getExpression().isEmpty())
 		{
 			return false;
 		}
@@ -787,22 +767,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		myXBreakpoint.setSuspendPolicy(transformSuspendPolicy(policy));
 	}
 
-	protected void setLogMessage(@Nullable TextWithImports logMessage)
-	{
-		if(logMessage != null && !logMessage.getText().isEmpty())
-		{
-			myXBreakpoint.setLogExpression(logMessage.toExternalForm());
-		}
-		else
-		{
-			myXBreakpoint.setLogExpression(null);
-		}
-	}
-
 	protected boolean isConditionEnabled()
 	{
-		String condition = myXBreakpoint.getCondition();
-		if(condition == null || condition.isEmpty())
+		XExpression condition = myXBreakpoint.getConditionExpression();
+		if(condition == null || condition.getExpression().isEmpty())
 		{
 			return false;
 		}
@@ -811,14 +779,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	public void setCondition(@Nullable TextWithImports condition)
 	{
-		if(condition != null && !condition.getText().isEmpty())
-		{
-			myXBreakpoint.setCondition(condition.toExternalForm());
-		}
-		else
-		{
-			myXBreakpoint.setCondition(null);
-		}
+		myXBreakpoint.setConditionExpression(TextWithImportsImpl.toXExpression(condition));
 	}
 
 	protected void addInstanceFilter(long l)

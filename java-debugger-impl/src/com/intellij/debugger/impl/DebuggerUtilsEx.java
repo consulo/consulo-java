@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
+import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -57,6 +58,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
@@ -64,6 +66,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDocumentManager;
@@ -72,8 +75,11 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.SmartList;
+import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.impl.XSourcePositionImpl;
 import consulo.internal.com.sun.jdi.CharValue;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
@@ -493,7 +499,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 			final Requestor requestor = requestManager.findRequestor(event.request());
 			if(requestor instanceof Breakpoint)
 			{
-				eventDescriptors.add(new Pair<Breakpoint, Event>((Breakpoint) requestor, event));
+				eventDescriptors.add(Pair.create((Breakpoint) requestor, event));
 			}
 		}
 		return eventDescriptors;
@@ -802,5 +808,21 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		}
 	}
 
+	public static String prepareValueText(String text, Project project)
+	{
+		text = StringUtil.unquoteString(text);
+		text = StringUtil.unescapeStringCharacters(text);
+		int tabSize = CodeStyleSettingsManager.getSettings(project).getTabSize(StdFileTypes.JAVA);
+		if(tabSize < 0)
+		{
+			tabSize = 0;
+		}
+		return text.replace("\t", StringUtil.repeat(" ", tabSize));
+	}
 
+	@Nullable
+	public static XSourcePosition toXSourcePosition(@NotNull SourcePosition position)
+	{
+		return XSourcePositionImpl.create(position.getFile().getVirtualFile(), position.getLine());
+	}
 }
