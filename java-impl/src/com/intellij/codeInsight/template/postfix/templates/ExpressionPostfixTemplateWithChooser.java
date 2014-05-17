@@ -15,10 +15,7 @@
  */
 package com.intellij.codeInsight.template.postfix.templates;
 
-import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.template.postfix.util.PostfixTemplatesUtils;
+import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.codeInsight.unwrap.ScopeHighlighter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -33,13 +30,22 @@ import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.refactoring.IntroduceTargetChooser;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * @author ignatov
  */
 public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTemplate {
-  protected ExpressionPostfixTemplateWithChooser(@NotNull String name, @NotNull String description, @NotNull String example) {
-    super(name, description, example);
+  protected ExpressionPostfixTemplateWithChooser(@NotNull String name, @NotNull String example) {
+    super(name, example);
+  }
+
+  protected ExpressionPostfixTemplateWithChooser(@NotNull String name,
+                                                 @NotNull String key,
+                                                 @NotNull String example) {
+    super(name, key, example);
   }
 
   @Override
@@ -75,19 +81,22 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
           }
         },
         new PsiExpressionTrimRenderer.RenderFunction(),
-        "Expressions", 0, ScopeHighlighter.NATURAL_RANGER);
+        "Expressions", 0, ScopeHighlighter.NATURAL_RANGER
+      );
     }
   }
 
   @NotNull
   protected List<PsiExpression> getExpressions(@NotNull PsiElement context, @NotNull Document document, final int offset) {
-    List<PsiExpression> expressions = ContainerUtil.filter(IntroduceVariableBase.collectExpressions(context.getContainingFile(), document, offset - 1, false), 
+    List<PsiExpression> expressions = ContainerUtil.filter(IntroduceVariableBase.collectExpressions(context.getContainingFile(), document,
+                                                                                                    Math.max(offset - 1, 0), false),
                                                            new Condition<PsiExpression>() {
                                                              @Override
                                                              public boolean value(PsiExpression expression) {
                                                                return expression.getTextRange().getEndOffset() == offset;
                                                              }
-                                                           });
+                                                           }
+    );
     return ContainerUtil.filter(expressions.isEmpty() ? maybeTopmostExpression(context) : expressions, getTypeCondition());
   }
 
@@ -99,7 +108,7 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
 
   @NotNull
   private static List<PsiExpression> maybeTopmostExpression(@NotNull PsiElement context) {
-    PsiExpression expression = getTopmostExpression(context);
+    PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     PsiType type = expression != null ? expression.getType() : null;
     if (type == null || PsiType.VOID.equals(type)) return ContainerUtil.emptyList();
     return ContainerUtil.createMaybeSingletonList(expression);
