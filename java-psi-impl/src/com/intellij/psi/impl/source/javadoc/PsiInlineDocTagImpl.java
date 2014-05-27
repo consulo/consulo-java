@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElement;
@@ -32,91 +33,122 @@ import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
-public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlineDocTag, Constants {
-  private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(
-    DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF);
-  private static final TokenSet VALUE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
-    JAVA_CODE_REFERENCE, DOC_TAG_VALUE_TOKEN, DOC_COMMENT_DATA, DOC_INLINE_TAG, DOC_REFERENCE_HOLDER, WHITE_SPACE, DOC_COMMENT_BAD_CHARACTER));
+public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlineDocTag, Constants
+{
+	private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF);
+	private static final TokenSet VALUE_NO_WHITESPACE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
+			JAVA_CODE_REFERENCE, DOC_TAG_VALUE_TOKEN, DOC_COMMENT_DATA, DOC_INLINE_TAG, DOC_REFERENCE_HOLDER, DOC_COMMENT_BAD_CHARACTER));
+	private static final TokenSet VALUE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
+			JAVA_CODE_REFERENCE, DOC_TAG_VALUE_TOKEN, WHITE_SPACE, DOC_COMMENT_DATA, DOC_INLINE_TAG, DOC_REFERENCE_HOLDER, DOC_COMMENT_BAD_CHARACTER));
 
-  public PsiInlineDocTagImpl() {
-    super(DOC_INLINE_TAG);
-  }
+	public PsiInlineDocTagImpl()
+	{
+		super(DOC_INLINE_TAG);
+	}
 
-  @Override
-  public PsiDocComment getContainingComment() {
-    ASTNode scope = getTreeParent();
-    while (scope.getElementType() != JavaDocElementType.DOC_COMMENT) {
-      scope = scope.getTreeParent();
-    }
-    return (PsiDocComment)SourceTreeToPsiMap.treeElementToPsi(scope);
-  }
+	@Override
+	public PsiDocComment getContainingComment()
+	{
+		ASTNode scope = getTreeParent();
+		while(scope.getElementType() != JavaDocElementType.DOC_COMMENT)
+		{
+			scope = scope.getTreeParent();
+		}
+		return (PsiDocComment) SourceTreeToPsiMap.treeElementToPsi(scope);
+	}
 
-  @Override
-  public PsiElement getNameElement() {
-    return findPsiChildByType(DOC_TAG_NAME);
-  }
+	@Override
+	public PsiElement getNameElement()
+	{
+		return findPsiChildByType(DOC_TAG_NAME);
+	}
 
-  @Override
-  public PsiElement[] getDataElements() {
-    return getChildrenAsPsiElements(VALUE_BIT_SET, PsiElement.ARRAY_FACTORY);
-  }
+	@Override
+	public PsiElement[] getDataElements()
+	{
+		return getChildrenAsPsiElements(VALUE_BIT_SET, PsiElement.ARRAY_FACTORY);
+	}
 
-  @Override
-  public PsiDocTagValue getValueElement() {
-    return (PsiDocTagValue)findPsiChildByType(TAG_VALUE_BIT_SET);
-  }
+	@Override
+	public PsiDocTagValue getValueElement()
+	{
+		return (PsiDocTagValue) findPsiChildByType(TAG_VALUE_BIT_SET);
+	}
 
-  @Override
-  public String getName() {
-    final PsiElement nameElement = getNameElement();
-    if (nameElement == null) return "";
-    return nameElement.getText().substring(1);
-  }
+	@NotNull
+	public PsiElement[] getDataElementsIgnoreWhitespaces()
+	{
+		return getChildrenAsPsiElements(VALUE_NO_WHITESPACE_BIT_SET, PsiElement.ARRAY_FACTORY);
+	}
 
-  @Override
-  public int getChildRole(ASTNode child) {
-    assert child.getTreeParent() == this : child.getTreeParent();
-    IElementType i = child.getElementType();
-    if (i == DOC_TAG_NAME) {
-      return ChildRole.DOC_TAG_NAME;
-    }
-    else if (i == JavaDocElementType.DOC_COMMENT || i == DOC_INLINE_TAG) {
-      return ChildRole.DOC_CONTENT;
-    }
-    else if (i == DOC_INLINE_TAG_START) {
-      return ChildRole.DOC_INLINE_TAG_START;
-    }
-    else if (i == DOC_INLINE_TAG_END) {
-      return ChildRole.DOC_INLINE_TAG_END;
-    }
-    else if (TAG_VALUE_BIT_SET.contains(i)) {
-      return ChildRole.DOC_TAG_VALUE;
-    }
-    else {
-      return ChildRoleBase.NONE;
-    }
-  }
+	@NotNull
+	@Override
+	public String getName()
+	{
+		final PsiElement nameElement = getNameElement();
+		if(nameElement == null)
+		{
+			return "";
+		}
+		return nameElement.getText().substring(1);
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitInlineDocTag(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public int getChildRole(ASTNode child)
+	{
+		assert child.getTreeParent() == this : child.getTreeParent();
+		IElementType i = child.getElementType();
+		if(i == DOC_TAG_NAME)
+		{
+			return ChildRole.DOC_TAG_NAME;
+		}
+		else if(i == JavaDocElementType.DOC_COMMENT || i == DOC_INLINE_TAG)
+		{
+			return ChildRole.DOC_CONTENT;
+		}
+		else if(i == DOC_INLINE_TAG_START)
+		{
+			return ChildRole.DOC_INLINE_TAG_START;
+		}
+		else if(i == DOC_INLINE_TAG_END)
+		{
+			return ChildRole.DOC_INLINE_TAG_END;
+		}
+		else if(TAG_VALUE_BIT_SET.contains(i))
+		{
+			return ChildRole.DOC_TAG_VALUE;
+		}
+		else
+		{
+			return ChildRoleBase.NONE;
+		}
+	}
 
-  public String toString() {
-    PsiElement nameElement = getNameElement();
-    return "PsiInlineDocTag:" + (nameElement != null ? nameElement.getText() : null);
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitInlineDocTag(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @Override
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
-    PsiImplUtil.setName(getNameElement(), name);
-    return this;
-  }
+	@Override
+	public String toString()
+	{
+		PsiElement nameElement = getNameElement();
+		return "PsiInlineDocTag:" + (nameElement != null ? nameElement.getText() : null);
+	}
+
+	@Override
+	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	{
+		PsiImplUtil.setName(getNameElement(), name);
+		return this;
+	}
 }
