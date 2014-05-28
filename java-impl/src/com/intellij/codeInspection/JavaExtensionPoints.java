@@ -15,13 +15,21 @@
  */
 package com.intellij.codeInspection;
 
-import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInspection.reference.EntryPoint;
+import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.openapi.util.Condition;
+import com.intellij.psi.PsiElement;
 
 /**
  * @author VISTALL
  * @since 10:38/21.05.13
  */
-public interface JavaExtensionPoints {
-  @NonNls String DEAD_CODE_TOOL = "org.consulo.java.deadCode";
+public interface JavaExtensionPoints
+{
+	@NotNull
+	ExtensionPointName<EntryPoint> DEAD_CODE_EP_NAME = ExtensionPointName.create("org.consulo.java.deadCode");
 
+	@NotNull
+	ExtensionPointName<Condition<PsiElement>> CANT_BE_STATIC_EP_NAME = ExtensionPointName.create("org.consulo.java.cantBeStatic");
 }

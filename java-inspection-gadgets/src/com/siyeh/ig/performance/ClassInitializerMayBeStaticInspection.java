@@ -14,87 +14,98 @@
  * limitations under the License.
  */
 
-/*
- * @author max
- */
 package com.siyeh.ig.performance;
 
-import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.extensions.ExtensionsArea;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInspection.JavaExtensionPoints;
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassInitializer;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
-public class ClassInitializerMayBeStaticInspection extends BaseInspection {
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+/**
+ * @author max
+ */
+public class ClassInitializerMayBeStaticInspection extends BaseInspection
+{
+	@Override
+	public boolean isEnabledByDefault()
+	{
+		return true;
+	}
 
-  @NotNull
-  protected String buildErrorString(Object... infos) {
-    return InspectionGadgetsBundle.message(
-      "class.initializer.may.be.static.problem.descriptor");
-  }
+	@Override
+	@NotNull
+	protected String buildErrorString(Object... infos)
+	{
+		return InspectionGadgetsBundle.message("class.initializer.may.be.static.problem.descriptor");
+	}
 
-  @Override
-  protected InspectionGadgetsFix buildFix(Object... infos) {
-    return new ChangeModifierFix(PsiModifier.STATIC);
-  }
+	@Override
+	protected InspectionGadgetsFix buildFix(Object... infos)
+	{
+		return new ChangeModifierFix(PsiModifier.STATIC);
+	}
 
-  @Nls
-  @NotNull
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.initializer.may.be.static.display.name");
-  }
+	@Override
+	@Nls
+	@NotNull
+	public String getDisplayName()
+	{
+		return InspectionGadgetsBundle.message("class.initializer.may.be.static.display.name");
+	}
 
-  @Override
-  public BaseInspectionVisitor buildVisitor() {
-    return new ClassInitializerCanBeStaticVisitor();
-  }
+	@Override
+	public BaseInspectionVisitor buildVisitor()
+	{
+		return new ClassInitializerCanBeStaticVisitor();
+	}
 
-  private static class ClassInitializerCanBeStaticVisitor extends BaseInspectionVisitor {
-    @Override
-    public void visitClassInitializer(PsiClassInitializer initializer) {
-      if (initializer.hasModifierProperty(PsiModifier.STATIC)) return;
+	private static class ClassInitializerCanBeStaticVisitor extends BaseInspectionVisitor
+	{
+		@Override
+		public void visitClassInitializer(PsiClassInitializer initializer)
+		{
+			if(initializer.hasModifierProperty(PsiModifier.STATIC))
+			{
+				return;
+			}
 
-      final PsiClass containingClass =
-        ClassUtils.getContainingClass(initializer);
-      if (containingClass == null) {
-        return;
-      }
-      final ExtensionsArea rootArea = Extensions.getRootArea();
-      final ExtensionPoint<Condition<PsiElement>> extensionPoint = rootArea.getExtensionPoint(
-        "com.intellij.cantBeStatic");
-      final Condition<PsiElement>[] addins = extensionPoint.getExtensions();
-      for (Condition<PsiElement> addin : addins) {
-        if (addin.value(initializer)) {
-          return;
-        }
-      }
-      final PsiElement scope = containingClass.getScope();
-      if (!(scope instanceof PsiJavaFile) &&
-          !containingClass.hasModifierProperty(PsiModifier.STATIC)) {
-        return;
-      }
+			final PsiClass containingClass = ClassUtils.getContainingClass(initializer);
+			if(containingClass == null)
+			{
+				return;
+			}
+			for(Condition<PsiElement> addin : JavaExtensionPoints.CANT_BE_STATIC_EP_NAME.getExtensions())
+			{
+				if(addin.value(initializer))
+				{
+					return;
+				}
+			}
+			final PsiElement scope = containingClass.getScope();
+			if(!(scope instanceof PsiJavaFile) && !containingClass.hasModifierProperty(PsiModifier.STATIC))
+			{
+				return;
+			}
 
-      final MethodReferenceVisitor visitor =
-        new MethodReferenceVisitor(initializer);
-      initializer.accept(visitor);
-      if (!visitor.areReferencesStaticallyAccessible()) {
-        return;
-      }
+			final MethodReferenceVisitor visitor = new MethodReferenceVisitor(initializer);
+			initializer.accept(visitor);
+			if(!visitor.areReferencesStaticallyAccessible())
+			{
+				return;
+			}
 
-      registerClassInitializerError(initializer);
-    }
-  }
+			registerClassInitializerError(initializer);
+		}
+	}
 }

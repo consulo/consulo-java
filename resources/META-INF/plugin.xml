@@ -401,6 +401,7 @@
 		</extensionPoint>
 
 		<extensionPoint name="augmentProvider" interface="com.intellij.psi.augment.PsiAugmentProvider"/>
+		<extensionPoint name="cantBeStatic" interface="com.intellij.openapi.util.Condition" />
 
 		<extensionPoint name="allOverridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="annotatedElementsSearch" interface="com.intellij.util.QueryExecutor"/>
