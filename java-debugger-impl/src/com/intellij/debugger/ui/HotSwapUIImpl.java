@@ -15,8 +15,21 @@
  */
 package com.intellij.debugger.ui;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.swing.JCheckBox;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.CommonBundle;
-import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -46,12 +59,6 @@ import com.intellij.util.PairFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.messages.MessageBusConnection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * User: lex
@@ -147,8 +154,7 @@ public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent {
       return;
     }
 
-    final boolean isOutOfProcessMode = CompilerWorkspaceConfiguration.getInstance(myProject).useOutOfProcessBuild();
-    final boolean shouldPerformScan = !isOutOfProcessMode || generatedPaths == null;
+    final boolean shouldPerformScan = true;
 
     final HotSwapProgressImpl findClassesProgress;
     if (shouldPerformScan) {
@@ -169,7 +175,7 @@ public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent {
       public void run() {
         final Map<DebuggerSession, Map<String, HotSwapFile>> modifiedClasses;
         if (shouldPerformScan) {
-          modifiedClasses = scanForModifiedClassesWithProgress(sessions, findClassesProgress, !isOutOfProcessMode);
+          modifiedClasses = scanForModifiedClassesWithProgress(sessions, findClassesProgress, true);
         }
         else {
           final List<DebuggerSession> toScan = new ArrayList<DebuggerSession>();
@@ -183,7 +189,7 @@ public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent {
             modifiedClasses.putAll(HotSwapManager.findModifiedClasses(toUseGenerated, generatedPaths));
           }
           if (!toScan.isEmpty()) {
-            modifiedClasses.putAll(scanForModifiedClassesWithProgress(toScan, findClassesProgress, !isOutOfProcessMode));
+            modifiedClasses.putAll(scanForModifiedClassesWithProgress(toScan, findClassesProgress, true));
           }
         }
 

@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
-import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.compiler.impl.FileSetCompileScope;
 import com.intellij.compiler.impl.ModuleCompileScope;
 import com.intellij.compiler.impl.javaCompiler.AnnotationProcessingCompiler;
@@ -97,12 +96,6 @@ public class ProcessAnnotationsAction extends CompileActionBase
 
 		Project project = CommonDataKeys.PROJECT.getData(dataContext);
 		if(project == null)
-		{
-			presentation.setEnabled(false);
-			return;
-		}
-
-		if(CompilerWorkspaceConfiguration.getInstance(project).useOutOfProcessBuild())
 		{
 			presentation.setEnabled(false);
 			return;
