@@ -54,12 +54,14 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
 	}
 
+	@Override
 	@NotNull
 	public LanguageLevel getLanguageLevel()
 	{
 		return myLanguageLevel.get();
 	}
 
+	@Override
 	@NotNull
 	public SpecialDirLocation getSpecialDirLocation()
 	{
