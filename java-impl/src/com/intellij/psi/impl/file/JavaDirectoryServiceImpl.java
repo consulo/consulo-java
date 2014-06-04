@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-/*
- * @author max
- */
 package com.intellij.psi.impl.file;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.core.CoreJavaDirectoryService;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -32,187 +30,212 @@ import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.fileTemplates.ui.CreateFromTemplateDialog;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.module.LanguageLevelUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiBundle;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
-public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.JavaDirectoryServiceImpl");
+/**
+ * @author max
+ */
+public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.JavaDirectoryServiceImpl");
 
-  @Override
-  public PsiJavaPackage getPackage(@NotNull PsiDirectory dir) {
-    ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(dir.getProject()).getFileIndex();
-    String packageName = projectFileIndex.getPackageNameByDirectory(dir.getVirtualFile());
-    if (packageName == null) return null;
-    return JavaPsiFacade.getInstance(dir.getProject()).findPackage(packageName);
-  }
+	@Override
+	public PsiJavaPackage getPackage(@NotNull PsiDirectory dir)
+	{
+		ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(dir.getProject()).getFileIndex();
+		String packageName = projectFileIndex.getPackageNameByDirectory(dir.getVirtualFile());
+		if(packageName == null)
+		{
+			return null;
+		}
+		return JavaPsiFacade.getInstance(dir.getProject()).findPackage(packageName);
+	}
 
-  @Override
-  @NotNull
-  public PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
-    return createClassFromTemplate(dir, name, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
-  }
+	@Override
+	@NotNull
+	public PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException
+	{
+		return createClassFromTemplate(dir, name, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
+	}
 
-  @Override
-  @NotNull
-  public PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String templateName) throws IncorrectOperationException {
-    return createClassFromTemplate(dir, name, templateName);
-  }
+	@Override
+	@NotNull
+	public PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String templateName) throws IncorrectOperationException
+	{
+		return createClassFromTemplate(dir, name, templateName);
+	}
 
-  @Override
-  public PsiClass createClass(@NotNull PsiDirectory dir,
-                              @NotNull String name,
-                              @NotNull String templateName,
-                              boolean askForUndefinedVariables) throws IncorrectOperationException {
-    return createClass(dir, name, templateName, askForUndefinedVariables, Collections.<String, String>emptyMap());
-  }
+	@Override
+	public PsiClass createClass(
+			@NotNull PsiDirectory dir,
+			@NotNull String name,
+			@NotNull String templateName,
+			boolean askForUndefinedVariables) throws IncorrectOperationException
+	{
+		return createClass(dir, name, templateName, askForUndefinedVariables, Collections.<String, String>emptyMap());
+	}
 
-  @Override
-  public PsiClass createClass(@NotNull PsiDirectory dir,
-                              @NotNull String name,
-                              @NotNull String templateName,
-                              boolean askForUndefinedVariables, @NotNull final Map<String, String> additionalProperties) throws IncorrectOperationException {
-    return createClassFromTemplate(dir, name, templateName, askForUndefinedVariables, additionalProperties);
-  }
+	@Override
+	public PsiClass createClass(
+			@NotNull PsiDirectory dir,
+			@NotNull String name,
+			@NotNull String templateName,
+			boolean askForUndefinedVariables,
+			@NotNull final Map<String, String> additionalProperties) throws IncorrectOperationException
+	{
+		return createClassFromTemplate(dir, name, templateName, askForUndefinedVariables, additionalProperties);
+	}
 
-  @Override
-  @NotNull
-  public PsiClass createInterface(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
-    String templateName = JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME;
-    PsiClass someClass = createClassFromTemplate(dir, name, templateName);
-    if (!someClass.isInterface()) {
-      throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
-    }
-    return someClass;
-  }
+	@Override
+	@NotNull
+	public PsiClass createInterface(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException
+	{
+		String templateName = JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME;
+		PsiClass someClass = createClassFromTemplate(dir, name, templateName);
+		if(!someClass.isInterface())
+		{
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+		}
+		return someClass;
+	}
 
-  @Override
-  @NotNull
-  public PsiClass createEnum(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
-    String templateName = JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME;
-    PsiClass someClass = createClassFromTemplate(dir, name, templateName);
-    if (!someClass.isEnum()) {
-      throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
-    }
-    return someClass;
-  }
+	@Override
+	@NotNull
+	public PsiClass createEnum(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException
+	{
+		String templateName = JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME;
+		PsiClass someClass = createClassFromTemplate(dir, name, templateName);
+		if(!someClass.isEnum())
+		{
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+		}
+		return someClass;
+	}
 
-  @Override
-  @NotNull
-  public PsiClass createAnnotationType(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
-    String templateName = JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME;
-    PsiClass someClass = createClassFromTemplate(dir, name, templateName);
-    if (!someClass.isAnnotationType()) {
-      throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
-    }
-    return someClass;
-  }
+	@Override
+	@NotNull
+	public PsiClass createAnnotationType(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException
+	{
+		String templateName = JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME;
+		PsiClass someClass = createClassFromTemplate(dir, name, templateName);
+		if(!someClass.isAnnotationType())
+		{
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+		}
+		return someClass;
+	}
 
-  private static PsiClass createClassFromTemplate(@NotNull PsiDirectory dir, String name, String templateName) throws IncorrectOperationException {
-    return createClassFromTemplate(dir, name, templateName, false, Collections.<String, String>emptyMap());
-  }
+	private static PsiClass createClassFromTemplate(@NotNull PsiDirectory dir, String name, String templateName) throws IncorrectOperationException
+	{
+		return createClassFromTemplate(dir, name, templateName, false, Collections.<String, String>emptyMap());
+	}
 
-  private static PsiClass createClassFromTemplate(@NotNull PsiDirectory dir,
-                                                  String name,
-                                                  String templateName,
-                                                  boolean askToDefineVariables, @NotNull Map<String, String> additionalProperties) throws IncorrectOperationException {
-    //checkCreateClassOrInterface(dir, name);
+	private static PsiClass createClassFromTemplate(
+			@NotNull PsiDirectory dir,
+			String name,
+			String templateName,
+			boolean askToDefineVariables,
+			@NotNull Map<String, String> additionalProperties) throws IncorrectOperationException
+	{
+		//checkCreateClassOrInterface(dir, name);
 
-    FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
+		FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
 
-    Properties defaultProperties = FileTemplateManager.getInstance().getDefaultProperties(dir.getProject());
-    Properties properties = new Properties(defaultProperties);
-    properties.setProperty(FileTemplate.ATTRIBUTE_NAME, name);
-    for (Map.Entry<String, String> entry : additionalProperties.entrySet()) {
-      properties.setProperty(entry.getKey(), entry.getValue());
-    }
+		Properties defaultProperties = FileTemplateManager.getInstance().getDefaultProperties(dir.getProject());
+		Properties properties = new Properties(defaultProperties);
+		properties.setProperty(FileTemplate.ATTRIBUTE_NAME, name);
+		for(Map.Entry<String, String> entry : additionalProperties.entrySet())
+		{
+			properties.setProperty(entry.getKey(), entry.getValue());
+		}
 
-    String ext = JavaFileType.INSTANCE.getDefaultExtension();
-    String fileName = name + "." + ext;
+		String ext = JavaFileType.INSTANCE.getDefaultExtension();
+		String fileName = name + "." + ext;
 
-    PsiElement element;
-    try {
-      element = askToDefineVariables ? new CreateFromTemplateDialog(dir.getProject(), dir, template, null, properties).create()
-                                     : FileTemplateUtil.createFromTemplate(template, fileName, properties, dir);
-    }
-    catch (IncorrectOperationException e) {
-      throw e;
-    }
-    catch (Exception e) {
-      LOG.error(e);
-      return null;
-    }
-    if (element == null) return null;
-    final PsiJavaFile file = (PsiJavaFile)element.getContainingFile();
-    PsiClass[] classes = file.getClasses();
-    if (classes.length < 1) {
-      throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
-    }
-    return classes[0];
-  }
+		PsiElement element;
+		try
+		{
+			element = askToDefineVariables ? new CreateFromTemplateDialog(dir.getProject(), dir, template, null,
+					properties).create() : FileTemplateUtil.createFromTemplate(template, fileName, properties, dir);
+		}
+		catch(IncorrectOperationException e)
+		{
+			throw e;
+		}
+		catch(Exception e)
+		{
+			LOG.error(e);
+			return null;
+		}
+		if(element == null)
+		{
+			return null;
+		}
+		final PsiJavaFile file = (PsiJavaFile) element.getContainingFile();
+		PsiClass[] classes = file.getClasses();
+		if(classes.length < 1)
+		{
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+		}
+		return classes[0];
+	}
 
-  private static String getIncorrectTemplateMessage(String templateName) {
-    return PsiBundle.message("psi.error.incorroect.class.template.message",
-                             FileTemplateManager.getInstance().internalTemplateToSubject(templateName), templateName);
-  }
+	private static String getIncorrectTemplateMessage(String templateName)
+	{
+		return PsiBundle.message("psi.error.incorroect.class.template.message", FileTemplateManager.getInstance().internalTemplateToSubject
+				(templateName), templateName);
+	}
 
-  @Override
-  public void checkCreateClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException {
-    checkCreateClassOrInterface(dir, name);
-  }
+	@Override
+	public void checkCreateClass(@NotNull PsiDirectory dir, @NotNull String name) throws IncorrectOperationException
+	{
+		checkCreateClassOrInterface(dir, name);
+	}
 
-  public static void checkCreateClassOrInterface(@NotNull PsiDirectory directory, String name) throws IncorrectOperationException {
-    PsiUtil.checkIsIdentifier(directory.getManager(), name);
+	public static void checkCreateClassOrInterface(@NotNull PsiDirectory directory, String name) throws IncorrectOperationException
+	{
+		PsiUtil.checkIsIdentifier(directory.getManager(), name);
 
-    String fileName = name + "." + JavaFileType.INSTANCE.getDefaultExtension();
-    directory.checkCreateFile(fileName);
+		String fileName = name + "." + JavaFileType.INSTANCE.getDefaultExtension();
+		directory.checkCreateFile(fileName);
 
-    PsiNameHelper helper = JavaPsiFacade.getInstance(directory.getProject()).getNameHelper();
-    PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
-    String qualifiedName = aPackage == null ? null : aPackage.getQualifiedName();
-    if (!StringUtil.isEmpty(qualifiedName) && !helper.isQualifiedName(qualifiedName)) {
-      throw new IncorrectOperationException("Cannot create class in invalid package: '"+qualifiedName+"'");
-    }
-  }
+		PsiNameHelper helper = JavaPsiFacade.getInstance(directory.getProject()).getNameHelper();
+		PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+		String qualifiedName = aPackage == null ? null : aPackage.getQualifiedName();
+		if(!StringUtil.isEmpty(qualifiedName) && !helper.isQualifiedName(qualifiedName))
+		{
+			throw new IncorrectOperationException("Cannot create class in invalid package: '" + qualifiedName + "'");
+		}
+	}
 
-  @Override
-  public boolean isSourceRoot(@NotNull PsiDirectory dir) {
-    final VirtualFile file = dir.getVirtualFile();
-    final VirtualFile sourceRoot = ProjectRootManager.getInstance(dir.getProject()).getFileIndex().getSourceRootForFile(file);
-    return file.equals(sourceRoot);
-  }
+	@Override
+	public boolean isSourceRoot(@NotNull PsiDirectory dir)
+	{
+		final VirtualFile file = dir.getVirtualFile();
+		final VirtualFile sourceRoot = ProjectRootManager.getInstance(dir.getProject()).getFileIndex().getSourceRootForFile(file);
+		return file.equals(sourceRoot);
+	}
 
-  private static final Key<LanguageLevel> LANG_LEVEL_IN_DIRECTORY = new Key<LanguageLevel>("LANG_LEVEL_IN_DIRECTORY");
-  @Override
-  public LanguageLevel getLanguageLevel(@NotNull PsiDirectory dir) {
-    synchronized (PsiLock.LOCK) {
-      LanguageLevel level = dir.getUserData(LANG_LEVEL_IN_DIRECTORY);
-      if (level == null) {
-        level = getLanguageLevelInner(dir);
-        dir.putUserData(LANG_LEVEL_IN_DIRECTORY, level);
-      }
-      return level;
-    }
-  }
-
-  private static LanguageLevel getLanguageLevelInner(@NotNull PsiDirectory dir) {
-    final VirtualFile virtualFile = dir.getVirtualFile();
-    final Project project = dir.getProject();
-    final Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
-    if (module != null) {
-      return LanguageLevelUtil.getEffectiveLanguageLevel(module);
-    }
-
-    return LanguageLevel.HIGHEST;
-  }
-
+	@Override
+	public LanguageLevel getLanguageLevel(@NotNull PsiDirectory dir)
+	{
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(dir, JavaModuleExtension.class);
+		return extension == null ? LanguageLevel.HIGHEST : extension.getLanguageLevel();
+	}
 }
