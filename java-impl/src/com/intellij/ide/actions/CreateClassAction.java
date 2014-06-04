@@ -28,10 +28,10 @@ import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaCreateFromTemplateHandler;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
@@ -65,10 +65,9 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 
 		Module module = ModuleUtilCore.findModuleForPsiElement(directory);
 		assert module != null;
-		JavaModuleExtension moduleExtension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtension.class);
+		LanguageLevel languageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
 
-		assert moduleExtension != null;
-		if(moduleExtension.getLanguageLevel().isAtLeast(LanguageLevel.JDK_1_5))
+		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_5))
 		{
 			builder.addKind("Enum", PlatformIcons.ENUM_ICON, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
 			builder.addKind("Annotation", PlatformIcons.ANNOTATION_TYPE_ICON, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);

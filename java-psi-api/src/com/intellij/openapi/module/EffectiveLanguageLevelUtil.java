@@ -15,16 +15,18 @@
  */
 package com.intellij.openapi.module;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.pom.java.LanguageLevel;
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.pom.java.LanguageLevel;
 
-public class EffectiveLanguageLevelUtil {
-  @NotNull
-  public static LanguageLevel getEffectiveLanguageLevel(@NotNull final Module module) {
-    ApplicationManager.getApplication().assertReadAccessAllowed();
-    final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
-    return extension == null ? LanguageLevel.HIGHEST : extension.getLanguageLevel();
-  }
+public class EffectiveLanguageLevelUtil
+{
+	@NotNull
+	public static LanguageLevel getEffectiveLanguageLevel(@NotNull final Module module)
+	{
+		ApplicationManager.getApplication().assertReadAccessAllowed();
+		final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+		return extension == null ? LanguageLevel.HIGHEST : extension.getLanguageLevel();
+	}
 }

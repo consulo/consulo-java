@@ -24,7 +24,6 @@ import gnu.trove.THashSet;
 
 import java.util.Set;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -39,6 +38,7 @@ import com.intellij.codeInspection.ProblemDescriptionsProcessor;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.codeInspection.reference.RefModule;
 import com.intellij.codeInspection.unnecessaryModuleDependency.UnnecessaryModuleDependencyInspection;
+import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -76,16 +76,14 @@ public class InconsistentLanguageLevelInspection extends GlobalInspectionTool {
 
 
     for (Module module : modules) {
-      LanguageLevel languageLevel = ModuleUtilCore.getExtension(module, JavaModuleExtension.class).getLanguageLevel();
+      LanguageLevel languageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
 
-      LOGGER.assertTrue(languageLevel != null);
       final RefModule refModule = globalContext.getRefManager().getRefModule(module);
       for (OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries()) {
         if (!(entry instanceof ModuleOrderEntry)) continue;
         final Module dependantModule = ((ModuleOrderEntry)entry).getModule();
         if (dependantModule == null) continue;
-        LanguageLevel dependantLanguageLevel = ModuleUtilCore.getExtension(dependantModule, JavaModuleExtension.class).getLanguageLevel();
-        LOGGER.assertTrue(dependantLanguageLevel != null);
+        LanguageLevel dependantLanguageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(dependantModule);
         if (languageLevel.compareTo(dependantLanguageLevel) < 0) {
           final CommonProblemDescriptor problemDescriptor = manager.createProblemDescriptor(
             "Inconsistent language level settings: module " + module.getName() + " with language level " + languageLevel +
