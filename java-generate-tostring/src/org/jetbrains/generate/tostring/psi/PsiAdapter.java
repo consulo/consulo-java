@@ -15,6 +15,8 @@
  */
 package org.jetbrains.generate.tostring.psi;
 
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.generate.tostring.util.GenerateToStringStringUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -27,8 +29,6 @@ import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.generate.tostring.util.StringUtil;
 
 /**
  * Basic PSI Adapter with common function that works in all supported versions of IDEA.
@@ -59,7 +59,7 @@ public class PsiAdapter {
     }
 
     // name must NOT have any lowercase character
-    return !StringUtil.hasLowerCaseChar(field.getName());
+    return !GenerateToStringStringUtil.hasLowerCaseChar(field.getName());
   }
 
   /**
@@ -299,7 +299,7 @@ public class PsiAdapter {
       return importStatementOnDemand.substring(0, importStatementOnDemand.length() - 2);
     }
     else {
-      boolean hasClassname = StringUtil.hasUpperCaseChar(importStatementOnDemand);
+      boolean hasClassname = GenerateToStringStringUtil.hasUpperCaseChar(importStatementOnDemand);
 
       if (hasClassname) {
         // extract packagename part

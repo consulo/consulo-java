@@ -16,7 +16,7 @@
 package org.jetbrains.generate.tostring.template;
 
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.generate.tostring.util.StringUtil;
+import org.jetbrains.generate.tostring.util.GenerateToStringStringUtil;
 
 import java.io.Serializable;
 
@@ -89,7 +89,7 @@ public class TemplateResource implements Serializable {
   @Nullable
   private static String getMethodBody(String template) {
     String signature = getMethodSignature(template);
-    String s = StringUtil.after(template, signature);
+    String s = GenerateToStringStringUtil.after(template, signature);
 
     if (s == null) {
       return null;
@@ -110,7 +110,7 @@ public class TemplateResource implements Serializable {
   }
 
   private static String getMethodSignature(String template) {
-    String s = StringUtil.after(template, "*/").trim();
+    String s = GenerateToStringStringUtil.after(template, "*/").trim();
 
     StringBuffer signature = new StringBuffer();
 
@@ -136,7 +136,7 @@ public class TemplateResource implements Serializable {
    */
   public String getTargetMethodName() {
     String s = getMethodSignature();
-    s = StringUtil.before(s, "(");
+    s = GenerateToStringStringUtil.before(s, "(");
     int i = s.lastIndexOf(" ");
     return s.substring(i).trim();
   }
