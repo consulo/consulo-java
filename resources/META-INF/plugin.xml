@@ -1778,7 +1778,6 @@
 		<methodHierarchyProvider language="JAVA" implementationClass="com.intellij.ide.hierarchy.method.JavaMethodHierarchyProvider"/>
 		<typeHierarchyProvider language="JAVA" implementationClass="com.intellij.ide.hierarchy.type.JavaTypeHierarchyProvider"/>
 
-		<optionsApplicabilityFilter implementation="com.intellij.application.options.JavaOptionsApplicabilityFilter"/>
 
 		<templateCompletionProcessor implementation="com.intellij.codeInsight.template.macro.JavaTemplateCompletionProcessor"/>
 
