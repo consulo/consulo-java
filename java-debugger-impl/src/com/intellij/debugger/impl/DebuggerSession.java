@@ -31,6 +31,7 @@ import com.intellij.debugger.engine.ContextUtil;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessAdapterImpl;
 import com.intellij.debugger.engine.DebugProcessImpl;
+import com.intellij.debugger.engine.JavaDebugProcess;
 import com.intellij.debugger.engine.MethodFilter;
 import com.intellij.debugger.engine.StackFrameContext;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -72,6 +73,9 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.util.Alarm;
 import com.intellij.xdebugger.AbstractDebuggerSession;
+import com.intellij.xdebugger.XDebugProcess;
+import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
 import com.intellij.xdebugger.impl.evaluate.quick.common.ValueLookupManager;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
@@ -393,10 +397,16 @@ public class DebuggerSession implements AbstractDebuggerSession
 
 	public void dispose()
 	{
-		ApplicationManager.getApplication().assertIsDispatchThread();
 		getProcess().dispose();
-		getContextManager().setState(SESSION_EMPTY_CONTEXT, STATE_DISPOSED, EVENT_DISPOSE, null);
 		Disposer.dispose(myUpdateAlarm);
+		DebuggerInvocationUtil.invokeLater(getProject(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				getContextManager().setState(SESSION_EMPTY_CONTEXT, STATE_DISPOSED, EVENT_DISPOSE, null);
+			}
+		});
 	}
 
 	// ManagerCommands
@@ -831,7 +841,8 @@ public class DebuggerSession implements AbstractDebuggerSession
 				{
 					if(context != getSuspendContext())
 					{
-						getContextManager().setState(DebuggerContextUtil.createDebuggerContext(DebuggerSession.this, context), STATE_PAUSED, EVENT_REFRESH, null);
+						getContextManager().setState(DebuggerContextUtil.createDebuggerContext(DebuggerSession.this, context), STATE_PAUSED,
+								EVENT_REFRESH, null);
 					}
 				}
 			});
@@ -843,4 +854,17 @@ public class DebuggerSession implements AbstractDebuggerSession
 		return Registry.is("debugger.enable.breakpoints.during.evaluation");
 	}
 
+	@Nullable
+	public XDebugSession getXDebugSession()
+	{
+		for(XDebugSession xDebugSession : XDebuggerManager.getInstance(getProject()).getDebugSessions())
+		{
+			XDebugProcess process = xDebugSession.getDebugProcess();
+			if(process instanceof JavaDebugProcess && ((JavaDebugProcess) process).getDebuggerSession() == this)
+			{
+				return xDebugSession;
+			}
+		}
+		return null;
+	}
 }

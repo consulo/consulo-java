@@ -72,7 +72,7 @@ public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvid
 					if(field.isStatic())
 					{
 						final FieldDescriptorImpl fieldDescriptor = myNodeManager.getFieldDescriptor(myStaticDescriptor, null, field);
-						children.add(new JavaValue(fieldDescriptor, myEvaluationContext, myNodeManager));
+						children.add(JavaValue.create(fieldDescriptor, myEvaluationContext, myNodeManager));
 						//final DebuggerTreeNodeImpl node = myNodeManager.createNode(fieldDescriptor, myEvaluationContext);
 						//myChildren.add(node);
 					}

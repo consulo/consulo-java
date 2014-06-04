@@ -22,7 +22,6 @@ import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
 import com.intellij.debugger.impl.EditorTextProvider;
 import com.intellij.debugger.ui.impl.watch.WatchItemDescriptor;
-import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -74,12 +73,10 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator
 					callback.errorOccurred("Context is not available");
 					return;
 				}
-				descriptor.setContext(evalContext);
-				descriptor.updateRepresentation(evalContext, DescriptorLabelListener.DUMMY_LISTENER);
 				JavaDebugProcess process = myDebugProcess.getXdebugProcess();
 				if(process != null)
 				{
-					callback.evaluated(new JavaValue(descriptor, evalContext, process.getNodeManager()));
+					callback.evaluated(JavaValue.create(descriptor, evalContext, process.getNodeManager()));
 				}
 			}
 		});

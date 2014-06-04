@@ -78,7 +78,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 						{
 							public void run()
 							{
-								XDebugSession xSession = session.getProcess().getXDebugSession();
+								XDebugSession xSession = session.getProcess().getSession().getXDebugSession();
 								if(xSession != null)
 								{
 									DebuggerSessionTab.addThreadDump(project, threads, xSession.getUI(), session);

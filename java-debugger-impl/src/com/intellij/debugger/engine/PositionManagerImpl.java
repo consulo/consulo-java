@@ -81,8 +81,7 @@ public class PositionManagerImpl implements PositionManager
 	}
 
 	public ClassPrepareRequest createPrepareRequest(
-			@NotNull final ClassPrepareRequestor requestor,
-			@NotNull final SourcePosition position) throws NoDataException
+			@NotNull final ClassPrepareRequestor requestor, @NotNull final SourcePosition position) throws NoDataException
 	{
 		final Ref<String> waitPrepareFor = new Ref<String>(null);
 		final Ref<ClassPrepareRequestor> waitRequestor = new Ref<ClassPrepareRequestor>(null);
@@ -350,10 +349,7 @@ public class PositionManagerImpl implements PositionManager
 
 	@Nullable
 	private ReferenceType findNested(
-			final ReferenceType fromClass,
-			final int currentDepth,
-			final PsiClass classToFind,
-			final int requiredDepth,
+			final ReferenceType fromClass, final int currentDepth, final PsiClass classToFind, final int requiredDepth,
 			final SourcePosition position)
 	{
 		final VirtualMachineProxyImpl vmProxy = myDebugProcess.getVirtualMachineProxy();

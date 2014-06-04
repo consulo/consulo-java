@@ -58,6 +58,7 @@ import com.intellij.debugger.ui.impl.tree.TreeBuilder;
 import com.intellij.debugger.ui.impl.tree.TreeBuilderNode;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
+import com.intellij.debugger.ui.tree.render.ArrayRenderer;
 import com.intellij.debugger.ui.tree.render.ChildrenBuilder;
 import com.intellij.debugger.ui.tree.render.ClassRenderer;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
@@ -610,7 +611,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 					myChildren.add(1, myNodeManager.createNode(returnValueDescriptor, evaluationContext));
 				}
 				// add context exceptions
-				for(Pair<Breakpoint, consulo.internal.com.sun.jdi.event.Event> pair : DebuggerUtilsEx.getEventDescriptors(getSuspendContext()))
+				for(Pair<Breakpoint, Event> pair : DebuggerUtilsEx.getEventDescriptors(getSuspendContext()))
 				{
 					final Event debugEvent = pair.getSecond();
 					if(debugEvent instanceof ExceptionEvent)
@@ -655,8 +656,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		}
 
 		protected void buildVariables(
-				final StackFrameDescriptorImpl stackDescriptor,
-				final EvaluationContextImpl evaluationContext) throws EvaluateException
+				final StackFrameDescriptorImpl stackDescriptor, final EvaluationContextImpl evaluationContext) throws EvaluateException
 		{
 			final StackFrameProxyImpl frame = stackDescriptor.getFrameProxy();
 			for(final LocalVariableProxyImpl local : frame.visibleVariables())
@@ -694,8 +694,8 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 					public void run()
 					{
 						node.removeAllChildren();
-						node.add(getNodeFactory().createMessageNode(new MessageDescriptor(DebuggerBundle.message("error.cannot.build.node.children" +
-								".object.collected", message))));
+						node.add(getNodeFactory().createMessageNode(new MessageDescriptor(DebuggerBundle.message("error.cannot.build.node.children"
+								+ ".object.collected", message))));
 						node.childrenChanged(false);
 					}
 				});
@@ -723,6 +723,11 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 
 		@Override
 		public void setRemaining(int remaining)
+		{
+		}
+
+		@Override
+		public void initChildrenArrayRenderer(ArrayRenderer renderer)
 		{
 		}
 

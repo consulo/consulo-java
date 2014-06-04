@@ -74,10 +74,29 @@ public class JavaDebuggerSupport extends DebuggerSupport
 	private final EvaluateActionHandler myEvaluateActionHandler = new EvaluateActionHandler();
 	private final QuickEvaluateActionHandler myQuickEvaluateHandler = new QuickEvaluateActionHandler();
 	private final JavaDebuggerSettingsPanelProvider myDebuggerSettingsPanelProvider = new JavaDebuggerSettingsPanelProvider();
-	private final MuteBreakpointsActionHandler myMuteBreakpointsHandler = new MuteBreakpointsActionHandler();
 	private final DebuggerActionHandler mySmartStepIntoHandler = new JvmSmartStepIntoActionHandler();
 	private final DebuggerActionHandler myAddToWatchedActionHandler = new AddToWatchActionHandler();
 	private final JavaMarkObjectActionHandler myMarkObjectActionHandler = new JavaMarkObjectActionHandler();
+
+	private static final DebuggerToggleActionHandler DISABLED_TOGGLE_HANDLER = new DebuggerToggleActionHandler()
+	{
+		@Override
+		public boolean isEnabled(@NotNull Project project, AnActionEvent event)
+		{
+			return false;
+		}
+
+		@Override
+		public boolean isSelected(@NotNull Project project, AnActionEvent event)
+		{
+			return false;
+		}
+
+		@Override
+		public void setSelected(@NotNull Project project, AnActionEvent event, boolean state)
+		{
+		}
+	};
 
 	@Override
 	@NotNull
@@ -202,7 +221,7 @@ public class JavaDebuggerSupport extends DebuggerSupport
 	@NotNull
 	public DebuggerToggleActionHandler getMuteBreakpointsHandler()
 	{
-		return myMuteBreakpointsHandler;
+		return DISABLED_TOGGLE_HANDLER;
 	}
 
 	@NotNull
