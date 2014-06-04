@@ -15,11 +15,29 @@
  */
 package com.intellij.ide.util.newProjectWizard;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.List;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.highlighter.ModuleFileType;
 import com.intellij.ide.util.BrowseFilesListener;
-import com.intellij.ide.util.newProjectWizard.modes.CreateFromTemplateMode;
 import com.intellij.ide.util.newProjectWizard.modes.WizardMode;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ProjectWizardUtil;
@@ -45,16 +63,6 @@ import com.intellij.ui.HyperlinkAdapter;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.IJSwingUtilities;
 import com.intellij.util.ui.UIUtil;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.List;
 
 public class ProjectNameWithTypeStep extends ProjectNameStep {
   private JEditorPane myModuleDescriptionPane;
@@ -303,7 +311,7 @@ public class ProjectNameWithTypeStep extends ProjectNameStep {
   }
 
   private boolean isCreateFromTemplateMode() {
-    return myMode instanceof CreateFromTemplateMode;
+    return false;
   }
 
   private Dimension calcTypeListPreferredSize(final List<ModuleBuilder> allModuleTypes) {
