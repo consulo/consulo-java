@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaIcons;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -28,7 +29,6 @@ import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.javadoc.JavaDocInfoGenerator;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.actions.ApplyIntentionAction;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
@@ -98,7 +98,7 @@ public class ExternalAnnotationsLineMarkerProvider implements LineMarkerProvider
 				return XmlStringUtil.wrapInHtml(JavaDocInfoGenerator.generateSignature(owner));
 			}
 		};
-		return new LineMarkerInfo<PsiModifierListOwner>(owner, owner.getTextOffset(), AllIcons.Nodes.Annotationtype, Pass.UPDATE_ALL,
+		return new LineMarkerInfo<PsiModifierListOwner>(owner, owner.getTextOffset(), JavaIcons.Gutter.ExtAnnotation, Pass.UPDATE_ALL,
 				annotationsCollector, new MyIconGutterHandler(), GutterIconRenderer.Alignment.LEFT);
 	}
 

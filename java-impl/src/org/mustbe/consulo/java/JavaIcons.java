@@ -25,5 +25,10 @@ import com.intellij.openapi.util.IconLoader;
  */
 public interface JavaIcons
 {
+	interface Gutter
+	{
+		Icon ExtAnnotation = IconLoader.findIcon("/icons/gutter/extAnnotation.png");
+	}
+
 	Icon Java = IconLoader.findIcon("/icons/java.png");
 }
