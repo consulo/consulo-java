@@ -1920,6 +1920,7 @@
 													  implementationClass="com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider"/>
 
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
+		<newModuleBuilder implementation="org.mustbe.consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder" />
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">
