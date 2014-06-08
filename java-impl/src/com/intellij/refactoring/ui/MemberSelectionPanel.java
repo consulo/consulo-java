@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,38 +24,42 @@
  */
 package com.intellij.refactoring.ui;
 
+import java.awt.BorderLayout;
+import java.util.List;
+
+import javax.swing.JScrollPane;
+
+import com.intellij.psi.PsiMember;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SeparatorFactory;
-import com.intellij.ui.TableUtil;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.List;
+public class MemberSelectionPanel extends AbstractMemberSelectionPanel<PsiMember, MemberInfo>
+{
+	private final MemberSelectionTable myTable;
 
-public class MemberSelectionPanel extends JPanel {
-  private final MemberSelectionTable myTable;
+	/**
+	 * @param title if title contains 'm' - it would look and feel as mnemonic
+	 */
+	public MemberSelectionPanel(String title, List<MemberInfo> memberInfo, String abstractColumnHeader)
+	{
+		super();
+		setLayout(new BorderLayout());
 
-  /**
-   * @param title if title contains 'm' - it would look and feel as mnemonic
-   */
-  public MemberSelectionPanel(String title, List<MemberInfo> memberInfo, String abstractColumnHeader) {
-    super();
-    setLayout(new BorderLayout());
+		myTable = createMemberSelectionTable(memberInfo, abstractColumnHeader);
+		JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myTable);
+		add(SeparatorFactory.createSeparator(title, myTable), BorderLayout.NORTH);
+		add(scrollPane, BorderLayout.CENTER);
+	}
 
-    myTable = createMemberSelectionTable(memberInfo, abstractColumnHeader);
-    JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myTable);
-    add(SeparatorFactory.createSeparator(title, myTable), BorderLayout.NORTH);
-    add(scrollPane, BorderLayout.CENTER);
-  }
+	protected MemberSelectionTable createMemberSelectionTable(List<MemberInfo> memberInfo, String abstractColumnHeader)
+	{
+		return new MemberSelectionTable(memberInfo, abstractColumnHeader);
+	}
 
-  protected MemberSelectionTable createMemberSelectionTable(List<MemberInfo> memberInfo, String abstractColumnHeader) {
-    return new MemberSelectionTable(memberInfo, abstractColumnHeader);
-  }
-
-  public MemberSelectionTable getTable() {
-    return myTable;
-  }
+	@Override
+	public MemberSelectionTable getTable()
+	{
+		return myTable;
+	}
 }

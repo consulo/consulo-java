@@ -15,451 +15,447 @@
  */
 package com.intellij.codeInsight.generation.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightSettings;
+import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.generation.GenerateEqualsHelper;
-import com.intellij.ide.wizard.AbstractWizard;
 import com.intellij.ide.wizard.StepAdapter;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.VerticalFlowLayout;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiArrayType;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
+import com.intellij.refactoring.classMembers.AbstractMemberInfoModel;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
-import com.intellij.refactoring.classMembers.MemberInfoChange;
-import com.intellij.refactoring.classMembers.MemberInfoModel;
 import com.intellij.refactoring.classMembers.MemberInfoTooltipManager;
+import com.intellij.refactoring.ui.AbstractMemberSelectionPanel;
 import com.intellij.refactoring.ui.MemberSelectionPanel;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
 
 /**
  * @author dsl
  */
-public class GenerateEqualsWizard extends AbstractWizard {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.ui.GenerateEqualsWizard");
-  private final PsiClass myClass;
+public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass, PsiMember, MemberInfo>
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.ui.GenerateEqualsWizard");
 
-  private final MemberSelectionPanel myEqualsPanel;
-  private final MemberSelectionPanel myHashCodePanel;
-  private final HashMap myFieldsToHashCode;
-  private final MemberSelectionPanel myNonNullPanel;
-  private final HashMap<PsiElement, MemberInfo> myFieldsToNonNull;
+	private static final MyMemberInfoFilter MEMBER_INFO_FILTER = new MyMemberInfoFilter();
 
-  private final int myTestBoxedStep;
-  private final int myEqualsStepCode;
-  private final int myHashcodeStepCode;
+	public static class JavaGenerateEqualsWizardBuilder extends AbstractGenerateEqualsWizard.Builder<PsiClass, PsiMember, MemberInfo>
+	{
+		private final PsiClass myClass;
 
-  private final List<MemberInfo> myClassFields;
-  private static final MyMemberInfoFilter MEMBER_INFO_FILTER = new MyMemberInfoFilter();
+		private final MemberSelectionPanel myEqualsPanel;
+		private final MemberSelectionPanel myHashCodePanel;
+		private final MemberSelectionPanel myNonNullPanel;
+		private final HashMap<PsiMember, MemberInfo> myFieldsToHashCode;
+		private final HashMap<PsiMember, MemberInfo> myFieldsToNonNull;
+		private final List<MemberInfo> myClassFields;
 
+		private JavaGenerateEqualsWizardBuilder(PsiClass aClass, boolean needEquals, boolean needHashCode)
+		{
+			LOG.assertTrue(needEquals || needHashCode);
+			myClass = aClass;
+			myClassFields = MemberInfo.extractClassMembers(myClass, MEMBER_INFO_FILTER, false);
+			for(MemberInfo myClassField : myClassFields)
+			{
+				myClassField.setChecked(true);
+			}
+			if(needEquals)
+			{
+				myEqualsPanel = new MemberSelectionPanel(CodeInsightBundle.message("generate.equals.hashcode.equals.fields.chooser.title"),
+						myClassFields, null);
+				myEqualsPanel.getTable().setMemberInfoModel(new EqualsMemberInfoModel());
+			}
+			else
+			{
+				myEqualsPanel = null;
+			}
+			if(needHashCode)
+			{
+				final List<MemberInfo> hashCodeMemberInfos;
+				if(needEquals)
+				{
+					myFieldsToHashCode = createFieldToMemberInfoMap(true);
+					hashCodeMemberInfos = Collections.emptyList();
+				}
+				else
+				{
+					hashCodeMemberInfos = myClassFields;
+					myFieldsToHashCode = null;
+				}
+				myHashCodePanel = new MemberSelectionPanel(CodeInsightBundle.message("generate.equals.hashcode.hashcode.fields.chooser.title"),
+						hashCodeMemberInfos, null);
+				myHashCodePanel.getTable().setMemberInfoModel(new HashCodeMemberInfoModel());
+				if(needEquals)
+				{
+					updateHashCodeMemberInfos(myClassFields);
+				}
+			}
+			else
+			{
+				myHashCodePanel = null;
+				myFieldsToHashCode = null;
+			}
+			myNonNullPanel = new MemberSelectionPanel(CodeInsightBundle.message("generate.equals.hashcode.non.null.fields.chooser.title"),
+					Collections.<MemberInfo>emptyList(), null);
+			myFieldsToNonNull = createFieldToMemberInfoMap(false);
+			for(final Map.Entry<PsiMember, MemberInfo> entry : myFieldsToNonNull.entrySet())
+			{
+				entry.getValue().setChecked(NullableNotNullManager.isNotNull(entry.getKey()));
+			}
+		}
 
-  public GenerateEqualsWizard(Project project, PsiClass aClass, boolean needEquals, boolean needHashCode) {
-    super(CodeInsightBundle.message("generate.equals.hashcode.wizard.title"), project);
-    LOG.assertTrue(needEquals || needHashCode);
-    myClass = aClass;
+		@Override
+		protected List<MemberInfo> getClassFields()
+		{
+			return myClassFields;
+		}
 
-    myClassFields = MemberInfo.extractClassMembers(myClass, MEMBER_INFO_FILTER, false);
-    for (MemberInfo myClassField : myClassFields) {
-      myClassField.setChecked(true);
-    }
-    int testBoxedStep = 0;
-    if (needEquals) {
-      myEqualsPanel =
-        new MemberSelectionPanel(CodeInsightBundle.message("generate.equals.hashcode.equals.fields.chooser.title"), myClassFields, null);
-      myEqualsPanel.getTable().setMemberInfoModel(new EqualsMemberInfoModel());
-      testBoxedStep+=2;
-    }
-    else {
-      myEqualsPanel = null;
-    }
-    if (needHashCode) {
-      final List<MemberInfo> hashCodeMemberInfos;
-      if (needEquals) {
-        myFieldsToHashCode = createFieldToMemberInfoMap(true);
-        hashCodeMemberInfos = Collections.emptyList();
-      }
-      else {
-        hashCodeMemberInfos = myClassFields;
-        myFieldsToHashCode = null;
-      }
-      myHashCodePanel = new MemberSelectionPanel(CodeInsightBundle.message("generate.equals.hashcode.hashcode.fields.chooser.title"),
-                                                 hashCodeMemberInfos, null);
-      myHashCodePanel.getTable().setMemberInfoModel(new HashCodeMemberInfoModel());
-      if (needEquals) {
-        updateHashCodeMemberInfos(myClassFields);
-      }
-      testBoxedStep++;
-    }
-    else {
-      myHashCodePanel = null;
-      myFieldsToHashCode = null;
-    }
-    myTestBoxedStep=testBoxedStep;
-    myNonNullPanel = new MemberSelectionPanel(CodeInsightBundle.message("generate.equals.hashcode.non.null.fields.chooser.title"),
-                                              Collections.<MemberInfo>emptyList(), null);
-    myFieldsToNonNull = createFieldToMemberInfoMap(false);
-    for (final Map.Entry<PsiElement, MemberInfo> entry : myFieldsToNonNull.entrySet()) {
-      entry.getValue().setChecked(((PsiField)entry.getKey()).getModifierList().findAnnotation(NotNull.class.getName()) != null);
-    }
+		@Override
+		protected HashMap<PsiMember, MemberInfo> getFieldsToHashCode()
+		{
+			return myFieldsToHashCode;
+		}
 
-    final MyTableModelListener listener = new MyTableModelListener();
-    if (myEqualsPanel != null) {
-      myEqualsPanel.getTable().getModel().addTableModelListener(listener);
-      addStep(new InstanceofOptionStep());
-      addStep(new MyStep(myEqualsPanel));
-      myEqualsStepCode = 1;
-    }
-    else {
-      myEqualsStepCode = -1;
-    }
+		@Override
+		protected HashMap<PsiMember, MemberInfo> getFieldsToNonNull()
+		{
+			return myFieldsToNonNull;
+		}
 
-    if (myHashCodePanel != null) {
-      myHashCodePanel.getTable().getModel().addTableModelListener(listener);
-      addStep(new MyStep(myHashCodePanel));
-      myHashcodeStepCode = myEqualsStepCode > 0 ? myEqualsStepCode + 1 : 0;
-    }
-    else {
-      myHashcodeStepCode = -1;
-    }
+		@Override
+		protected AbstractMemberSelectionPanel<PsiMember, MemberInfo> getEqualsPanel()
+		{
+			return myEqualsPanel;
+		}
 
-    addStep(new MyStep(myNonNullPanel));
+		@Override
+		protected AbstractMemberSelectionPanel<PsiMember, MemberInfo> getHashCodePanel()
+		{
+			return myHashCodePanel;
+		}
 
-    init();
-    updateButtons();
-  }
+		@Override
+		protected AbstractMemberSelectionPanel<PsiMember, MemberInfo> getNonNullPanel()
+		{
+			return myNonNullPanel;
+		}
 
-  public PsiField[] getEqualsFields() {
-    if (myEqualsPanel != null) {
-      return memberInfosToFields(myEqualsPanel.getTable().getSelectedMemberInfos());
-    }
-    else {
-      return null;
-    }
-  }
+		@Override
+		protected PsiClass getPsiClass()
+		{
+			return myClass;
+		}
 
-  public PsiField[] getHashCodeFields() {
-    if (myHashCodePanel != null) {
-      return memberInfosToFields(myHashCodePanel.getTable().getSelectedMemberInfos());
-    }
-    else {
-      return null;
-    }
-  }
+		@Override
+		protected void updateHashCodeMemberInfos(Collection<MemberInfo> equalsMemberInfos)
+		{
+			if(myHashCodePanel == null)
+			{
+				return;
+			}
+			List<MemberInfo> hashCodeFields = new ArrayList<MemberInfo>();
 
-  public PsiField[] getNonNullFields() {
-    return memberInfosToFields(myNonNullPanel.getTable().getSelectedMemberInfos());
-  }
+			for(MemberInfo equalsMemberInfo : equalsMemberInfos)
+			{
+				hashCodeFields.add(myFieldsToHashCode.get(equalsMemberInfo.getMember()));
+			}
 
-  private static PsiField[] memberInfosToFields(Collection<MemberInfo> infos) {
-    ArrayList<PsiField> list = new ArrayList<PsiField>();
-    for (MemberInfo info : infos) {
-      list.add((PsiField)info.getMember());
-    }
-    return list.toArray(new PsiField[list.size()]);
-  }
+			myHashCodePanel.getTable().setMemberInfos(hashCodeFields);
+		}
 
-  @Override
-  protected void doNextAction() {
-    if (getCurrentStep() == myEqualsStepCode && myEqualsPanel != null) {
-      equalsFieldsSelected();
-    }
-    else if (getCurrentStep() == myHashcodeStepCode && myHashCodePanel != null) {
-      Collection<MemberInfo> selectedMemberInfos = myEqualsPanel != null ? myEqualsPanel.getTable().getSelectedMemberInfos() 
-                                                                         : myHashCodePanel.getTable().getSelectedMemberInfos();
-      updateNonNullMemberInfos(selectedMemberInfos);
-    }
+		@Override
+		protected void updateNonNullMemberInfos(Collection<MemberInfo> equalsMemberInfos)
+		{
+			final ArrayList<MemberInfo> list = new ArrayList<MemberInfo>();
 
-    super.doNextAction();
-    updateButtons();
-  }
+			for(MemberInfo equalsMemberInfo : equalsMemberInfos)
+			{
+				PsiField field = (PsiField) equalsMemberInfo.getMember();
+				if(!(field.getType() instanceof PsiPrimitiveType))
+				{
+					list.add(myFieldsToNonNull.get(equalsMemberInfo.getMember()));
+				}
+			}
+			myNonNullPanel.getTable().setMemberInfos(list);
+		}
 
-  @Override
-  protected String getHelpID() {
-    return "editing.altInsert.equals";
-  }
+		private HashMap<PsiMember, MemberInfo> createFieldToMemberInfoMap(boolean checkedByDefault)
+		{
+			Collection<MemberInfo> memberInfos = MemberInfo.extractClassMembers(myClass, MEMBER_INFO_FILTER, false);
+			final HashMap<PsiMember, MemberInfo> result = new HashMap<PsiMember, MemberInfo>();
+			for(MemberInfo memberInfo : memberInfos)
+			{
+				memberInfo.setChecked(checkedByDefault);
+				result.put(memberInfo.getMember(), memberInfo);
+			}
+			return result;
+		}
 
-  private void equalsFieldsSelected() {
-    Collection<MemberInfo> selectedMemberInfos = myEqualsPanel.getTable().getSelectedMemberInfos();
-    updateHashCodeMemberInfos(selectedMemberInfos);
-    updateNonNullMemberInfos(selectedMemberInfos);
-  }
+	}
 
-  @Override
-  protected void doOKAction() {
-    if (myEqualsPanel != null) {
-      equalsFieldsSelected();
-    }
-    super.doOKAction();
-  }
+	public GenerateEqualsWizard(Project project, PsiClass aClass, boolean needEquals, boolean needHashCode)
+	{
+		super(project, new JavaGenerateEqualsWizardBuilder(aClass, needEquals, needHashCode));
+	}
 
-  private HashMap<PsiElement, MemberInfo> createFieldToMemberInfoMap(boolean checkedByDefault) {
-    Collection<MemberInfo> memberInfos = MemberInfo.extractClassMembers(myClass, MEMBER_INFO_FILTER, false);
-    final HashMap<PsiElement, MemberInfo> result = new HashMap<PsiElement, MemberInfo>();
-    for (MemberInfo memberInfo : memberInfos) {
-      memberInfo.setChecked(checkedByDefault);
-      result.put(memberInfo.getMember(), memberInfo);
-    }
-    return result;
-  }
+	public PsiField[] getEqualsFields()
+	{
+		if(myEqualsPanel != null)
+		{
+			return memberInfosToFields(myEqualsPanel.getTable().getSelectedMemberInfos());
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-  private void updateHashCodeMemberInfos(Collection<MemberInfo> equalsMemberInfos) {
-    if (myHashCodePanel == null) return;
-    List<MemberInfo> hashCodeFields = new ArrayList<MemberInfo>();
+	public PsiField[] getHashCodeFields()
+	{
+		if(myHashCodePanel != null)
+		{
+			return memberInfosToFields(myHashCodePanel.getTable().getSelectedMemberInfos());
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-    for (MemberInfo equalsMemberInfo : equalsMemberInfos) {
-      hashCodeFields.add((MemberInfo)myFieldsToHashCode.get(equalsMemberInfo.getMember()));
-    }
+	public PsiField[] getNonNullFields()
+	{
+		return memberInfosToFields(myNonNullPanel.getTable().getSelectedMemberInfos());
+	}
 
-    myHashCodePanel.getTable().setMemberInfos(hashCodeFields);
-  }
+	private static PsiField[] memberInfosToFields(Collection<MemberInfo> infos)
+	{
+		ArrayList<PsiField> list = new ArrayList<PsiField>();
+		for(MemberInfo info : infos)
+		{
+			list.add((PsiField) info.getMember());
+		}
+		return list.toArray(new PsiField[list.size()]);
+	}
 
-  private void updateNonNullMemberInfos(Collection<MemberInfo> equalsMemberInfos) {
-    final ArrayList<MemberInfo> list = new ArrayList<MemberInfo>();
+	@Override
+	protected String getHelpID()
+	{
+		return "editing.altInsert.equals";
+	}
 
-    for (MemberInfoBase<PsiMember> equalsMemberInfo : equalsMemberInfos) {
-      PsiField field = (PsiField)equalsMemberInfo.getMember();
-      if (!(field.getType() instanceof PsiPrimitiveType)) {
-        list.add(myFieldsToNonNull.get(equalsMemberInfo.getMember()));
-      }
-    }
-    myNonNullPanel.getTable().setMemberInfos(list);
-  }
+	private void equalsFieldsSelected()
+	{
+		Collection<MemberInfo> selectedMemberInfos = myEqualsPanel.getTable().getSelectedMemberInfos();
+		updateHashCodeMemberInfos(selectedMemberInfos);
+		updateNonNullMemberInfos(selectedMemberInfos);
+	}
 
-  @Override
-  protected int getNextStep(int step) {
-    if (step + 1 == myTestBoxedStep) {
-      for (MemberInfo classField : myClassFields) {
-        if (classField.isChecked()) {
-          PsiField field = (PsiField)classField.getMember();
-          if (!(field.getType() instanceof PsiPrimitiveType)) {
-            return myTestBoxedStep;
-          }
-        }
-      }
-      return step;
-    }
+	@Override
+	protected void doOKAction()
+	{
+		if(myEqualsPanel != null)
+		{
+			equalsFieldsSelected();
+		}
+		super.doOKAction();
+	}
 
-    return super.getNextStep(step);
-  }
+	@Override
+	protected int getNextStep(int step)
+	{
+		if(step + 1 == getNonNullStepCode())
+		{
+			for(MemberInfo classField : myClassFields)
+			{
+				if(classField.isChecked())
+				{
+					PsiField field = (PsiField) classField.getMember();
+					if(!(field.getType() instanceof PsiPrimitiveType))
+					{
+						return getNonNullStepCode();
+					}
+				}
+			}
+			return step;
+		}
 
-  @Override
-  protected boolean canGoNext() {
-    if (getCurrentStep() == myEqualsStepCode) {
-      for (MemberInfo classField : myClassFields) {
-        if (classField.isChecked()) {
-          return true;
-        }
-      }
-      return false;
-    }
+		return super.getNextStep(step);
+	}
 
-    return true;
-  }
+	@Override
+	protected void addSteps()
+	{
+		if(myEqualsPanel != null)
+		{
+			addStep(new InstanceofOptionStep(myClass.hasModifierProperty(PsiModifier.FINAL)));
+		}
+		super.addSteps();
+	}
 
-  @Override
-  public JComponent getPreferredFocusedComponent() {
-    final Component stepComponent = getCurrentStepComponent();
-    if (stepComponent instanceof MemberSelectionPanel) {
-      return ((MemberSelectionPanel)stepComponent).getTable();
-    }
-    else {
-      return null;
-    }
-  }
+	private static class MyMemberInfoFilter implements MemberInfoBase.Filter<PsiMember>
+	{
+		@Override
+		public boolean includeMember(PsiMember element)
+		{
+			return element instanceof PsiField && !element.hasModifierProperty(PsiModifier.STATIC);
+		}
+	}
 
-  private class MyTableModelListener implements TableModelListener {
-    @Override
-    public void tableChanged(TableModelEvent e) {
-      updateButtons();
-    }
-  }
+	private static class EqualsMemberInfoModel extends AbstractMemberInfoModel<PsiMember, MemberInfo>
+	{
+		MemberInfoTooltipManager<PsiMember, MemberInfo> myTooltipManager = new MemberInfoTooltipManager<PsiMember,
+				MemberInfo>(new MemberInfoTooltipManager.TooltipProvider<PsiMember, MemberInfo>()
+		{
+			@Override
+			public String getTooltip(MemberInfo memberInfo)
+			{
+				if(checkForProblems(memberInfo) == OK)
+				{
+					return null;
+				}
+				if(!(memberInfo.getMember() instanceof PsiField))
+				{
+					return CodeInsightBundle.message("generate.equals.hashcode.internal.error");
+				}
+				final PsiType type = ((PsiField) memberInfo.getMember()).getType();
+				if(GenerateEqualsHelper.isNestedArray(type))
+				{
+					return CodeInsightBundle.message("generate.equals.warning.equals.for.nested.arrays.not.supported");
+				}
+				if(GenerateEqualsHelper.isArrayOfObjects(type))
+				{
+					return CodeInsightBundle.message("generate.equals.warning.generated.equals.could.be.incorrect");
+				}
+				return null;
+			}
+		});
 
-  private static class InstanceofOptionStep extends StepAdapter {
-    private final JComponent myPanel;
+		@Override
+		public boolean isMemberEnabled(MemberInfo member)
+		{
+			if(!(member.getMember() instanceof PsiField))
+			{
+				return false;
+			}
+			final PsiType type = ((PsiField) member.getMember()).getType();
+			return !GenerateEqualsHelper.isNestedArray(type);
+		}
 
-    private InstanceofOptionStep() {
-      final JCheckBox checkbox = new NonFocusableCheckBox(CodeInsightBundle.message("generate.equals.hashcode.accept.sublcasses"));
-      checkbox.setSelected(CodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER);
-      checkbox.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-          CodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER = checkbox.isSelected();
-        }
-      });
+		@Override
+		public int checkForProblems(@NotNull MemberInfo member)
+		{
+			if(!(member.getMember() instanceof PsiField))
+			{
+				return ERROR;
+			}
+			final PsiType type = ((PsiField) member.getMember()).getType();
+			if(GenerateEqualsHelper.isNestedArray(type))
+			{
+				return ERROR;
+			}
+			if(GenerateEqualsHelper.isArrayOfObjects(type))
+			{
+				return WARNING;
+			}
+			return OK;
+		}
 
-      myPanel = new JPanel(new VerticalFlowLayout());
-      myPanel.add(checkbox);
-      myPanel.add(new JLabel(CodeInsightBundle.message("generate.equals.hashcode.accept.sublcasses.explanation")));
-    }
+		@Override
+		public String getTooltipText(MemberInfo member)
+		{
+			return myTooltipManager.getTooltip(member);
+		}
+	}
 
-    @Override
-    public JComponent getComponent() {
-      return myPanel;
-    }
+	private static class HashCodeMemberInfoModel extends AbstractMemberInfoModel<PsiMember, MemberInfo>
+	{
+		private final MemberInfoTooltipManager<PsiMember, MemberInfo> myTooltipManager = new MemberInfoTooltipManager<PsiMember,
+				MemberInfo>(new MemberInfoTooltipManager.TooltipProvider<PsiMember, MemberInfo>()
+		{
+			@Override
+			public String getTooltip(MemberInfo memberInfo)
+			{
+				if(isMemberEnabled(memberInfo))
+				{
+					return null;
+				}
+				if(!(memberInfo.getMember() instanceof PsiField))
+				{
+					return CodeInsightBundle.message("generate.equals.hashcode.internal.error");
+				}
+				final PsiType type = ((PsiField) memberInfo.getMember()).getType();
+				if(!(type instanceof PsiArrayType))
+				{
+					return null;
+				}
+				return CodeInsightBundle.message("generate.equals.hashcode.warning.hashcode.for.arrays.is.not.supported");
+			}
+		});
 
-    @Override
-    @Nullable
-    public Icon getIcon() {
-      return null;
-    }
-  }
+		@Override
+		public boolean isMemberEnabled(MemberInfo member)
+		{
+			final PsiMember psiMember = member.getMember();
+			return psiMember instanceof PsiField;
+		}
 
-  private static class MyStep extends StepAdapter {
-    final MemberSelectionPanel myPanel;
+		@Override
+		public String getTooltipText(MemberInfo member)
+		{
+			return myTooltipManager.getTooltip(member);
+		}
+	}
 
-    public MyStep(MemberSelectionPanel panel) {
-      myPanel = panel;
-    }
+	private static class InstanceofOptionStep extends StepAdapter
+	{
+		private final JComponent myPanel;
 
-    @Override
-    public Icon getIcon() {
-      return null;
-    }
+		private InstanceofOptionStep(boolean isFinal)
+		{
+			final JCheckBox checkbox = new NonFocusableCheckBox(CodeInsightBundle.message("generate.equals.hashcode.accept.sublcasses"));
+			checkbox.setSelected(!isFinal && CodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER);
+			checkbox.setEnabled(!isFinal);
+			checkbox.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(@NotNull final ActionEvent M)
+				{
+					CodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER = checkbox.isSelected();
+				}
+			});
 
-    @Override
-    public JComponent getComponent() {
-      return myPanel;
-    }
+			myPanel = new JPanel(new VerticalFlowLayout());
+			myPanel.add(checkbox);
+			myPanel.add(new JLabel(CodeInsightBundle.message("generate.equals.hashcode.accept.sublcasses.explanation")));
+		}
 
-    @Override
-    public JComponent getPreferredFocusedComponent() {
-      return myPanel.getTable();
-    }
-  }
-
-  private static class MyMemberInfoFilter implements MemberInfoBase.Filter<PsiMember> {
-    @Override
-    public boolean includeMember(PsiMember element) {
-      return element instanceof PsiField && !element.hasModifierProperty(PsiModifier.STATIC);
-    }
-  }
-
-
-  private static class EqualsMemberInfoModel implements MemberInfoModel<PsiMember, MemberInfo> {
-    MemberInfoTooltipManager<PsiMember, MemberInfo> myTooltipManager = new MemberInfoTooltipManager<PsiMember, MemberInfo>(new MemberInfoTooltipManager.TooltipProvider<PsiMember, MemberInfo>() {
-      @Override
-      public String getTooltip(MemberInfo memberInfo) {
-        if (checkForProblems(memberInfo) == OK) return null;
-        if (!(memberInfo.getMember() instanceof PsiField)) return CodeInsightBundle.message("generate.equals.hashcode.internal.error");
-        final PsiType type = ((PsiField)memberInfo.getMember()).getType();
-        if (GenerateEqualsHelper.isNestedArray(type)) {
-          return CodeInsightBundle .message("generate.equals.warning.equals.for.nested.arrays.not.supported");
-        }
-        if (GenerateEqualsHelper.isArrayOfObjects(type)) {
-          return CodeInsightBundle.message("generate.equals.warning.generated.equals.could.be.incorrect");
-        }
-        return null;
-      }
-    });
-
-    @Override
-    public boolean isMemberEnabled(MemberInfo member) {
-      if (!(member.getMember() instanceof PsiField)) return false;
-      final PsiType type = ((PsiField)member.getMember()).getType();
-      return !GenerateEqualsHelper.isNestedArray(type);
-    }
-
-    @Override
-    public boolean isCheckedWhenDisabled(MemberInfo member) {
-      return false;
-    }
-
-    @Override
-    public boolean isAbstractEnabled(MemberInfo member) {
-      return false;
-    }
-
-    @Override
-    public boolean isAbstractWhenDisabled(MemberInfo member) {
-      return false;
-    }
-
-    @Override
-    public Boolean isFixedAbstract(MemberInfo member) {
-      return null;
-    }
-
-    @Override
-    public int checkForProblems(@NotNull MemberInfo member) {
-      if (!(member.getMember() instanceof PsiField)) return ERROR;
-      final PsiType type = ((PsiField)member.getMember()).getType();
-      if (GenerateEqualsHelper.isNestedArray(type)) return ERROR;
-      if (GenerateEqualsHelper.isArrayOfObjects(type)) return WARNING;
-      return OK;
-    }
-
-    @Override
-    public void memberInfoChanged(MemberInfoChange<PsiMember, MemberInfo> event) {
-    }
-
-    @Override
-    public String getTooltipText(MemberInfo member) {
-      return myTooltipManager.getTooltip(member);
-    }
-  }
-
-  private static class HashCodeMemberInfoModel implements MemberInfoModel<PsiMember, MemberInfo> {
-    private final MemberInfoTooltipManager<PsiMember, MemberInfo> myTooltipManager = new MemberInfoTooltipManager<PsiMember, MemberInfo>(new MemberInfoTooltipManager.TooltipProvider<PsiMember, MemberInfo>() {
-      @Override
-      public String getTooltip(MemberInfo memberInfo) {
-        if (isMemberEnabled(memberInfo)) return null;
-        if (!(memberInfo.getMember() instanceof PsiField)) return CodeInsightBundle.message("generate.equals.hashcode.internal.error");
-        final PsiType type = ((PsiField)memberInfo.getMember()).getType();
-        if (!(type instanceof PsiArrayType)) return null;
-        return CodeInsightBundle.message("generate.equals.hashcode.warning.hashcode.for.arrays.is.not.supported");
-      }
-    });
-
-    @Override
-    public boolean isMemberEnabled(MemberInfo member) {
-      final PsiMember psiMember = member.getMember();
-      return psiMember instanceof PsiField;
-    }
-
-    @Override
-    public boolean isCheckedWhenDisabled(MemberInfo member) {
-      return false;
-    }
-
-    @Override
-    public boolean isAbstractEnabled(MemberInfo member) {
-      return false;
-    }
-
-    @Override
-    public boolean isAbstractWhenDisabled(MemberInfo member) {
-      return false;
-    }
-
-    @Override
-    public Boolean isFixedAbstract(MemberInfo member) {
-      return null;
-    }
-
-    @Override
-    public int checkForProblems(@NotNull MemberInfo member) {
-      return OK;
-    }
-
-    @Override
-    public void memberInfoChanged(MemberInfoChange<PsiMember, MemberInfo> event) {
-    }
-
-    @Override
-    public String getTooltipText(MemberInfo member) {
-      return myTooltipManager.getTooltip(member);
-    }
-  }
+		@Override
+		public JComponent getComponent()
+		{
+			return myPanel;
+		}
+	}
 }
