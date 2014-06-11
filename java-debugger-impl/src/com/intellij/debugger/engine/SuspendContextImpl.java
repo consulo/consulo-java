@@ -221,6 +221,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myEvaluationContext = evaluationContext;
 	}
 
+	@Override
 	public String toString()
 	{
 		if(myEventSet != null)
@@ -289,7 +290,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		return myExecutionStacks;
 	}
 
-	public void initExecutionStacks()
+	public void initExecutionStacks(ThreadReferenceProxyImpl newThread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		Collection<JavaExecutionStack> res = new ArrayList<JavaExecutionStack>();
@@ -299,5 +300,6 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 			res.add(new JavaExecutionStack(thread, myDebugProcess, thread == myThread));
 		}
 		myExecutionStacks = res.toArray(new JavaExecutionStack[res.size()]);
+		myThread = newThread;
 	}
 }
