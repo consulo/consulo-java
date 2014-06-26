@@ -16,8 +16,8 @@
 <idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<id>org.consulo.java</id>
 	<name>Java</name>
-	<version>1.0</version>
-	<vendor>Consulo</vendor>
+	<version>SNAPHOT</version>
+	<vendor>Jetbrains and others</vendor>
 	<depends optional="true" config-file="com.intellij.regexp.xml">com.intellij.regexp</depends>
 	<depends optional="true" config-file="org.intellij.intellilang.xml">org.intellij.intelliLang</depends>
 	<depends>com.intellij.xml</depends>
