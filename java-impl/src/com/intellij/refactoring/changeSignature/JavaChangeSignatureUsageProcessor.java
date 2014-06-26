@@ -610,7 +610,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
                       ((ParameterInfoImpl)parameter).setDefaultValue(chooser.getDefaultValue());
                     }
                   } else {
-                    return false;
+                    return true;
                   }
                 }
               }
@@ -619,7 +619,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
         }
       }
     }
-    return true;
+    return false;
   }
 
   @Override
