@@ -67,7 +67,7 @@ import com.intellij.util.containers.MultiMap;
 /**
  * @author Maxim.Medvedev
  */
-public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsageProcessor
+public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsageProcessorEx
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.JavaChangeSignatureUsageProcessor");
 

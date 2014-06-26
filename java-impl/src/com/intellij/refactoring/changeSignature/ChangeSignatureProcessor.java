@@ -128,7 +128,8 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 	{
 		for(ChangeSignatureUsageProcessor processor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions())
 		{
-			if(processor.setupDefaultValues(myChangeInfo, refUsages, myProject))
+			if(processor instanceof ChangeSignatureUsageProcessorEx && ((ChangeSignatureUsageProcessorEx) processor).setupDefaultValues
+					(myChangeInfo, refUsages, myProject))
 			{
 				return false;
 			}
