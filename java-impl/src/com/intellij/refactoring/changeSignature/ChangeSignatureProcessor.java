@@ -20,6 +20,14 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -28,7 +36,11 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.*;
+import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.psi.util.MethodSignature;
+import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.rename.RenameUtil;
 import com.intellij.refactoring.ui.ConflictsDialog;
@@ -39,242 +51,271 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.ChangeSignatureProcessor");
 
-public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.ChangeSignatureProcessor");
+	public ChangeSignatureProcessor(Project project, PsiMethod method, final boolean generateDelegate,
+			@PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, @NotNull ParameterInfoImpl[] parameterInfo)
+	{
+		this(project, method, generateDelegate, newVisibility, newName, newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
+				parameterInfo, null, null, null);
+	}
 
-  public ChangeSignatureProcessor(Project project,
-                                  PsiMethod method,
-                                  final boolean generateDelegate,
-                                  @PsiModifier.ModifierConstant String newVisibility,
-                                  String newName,
-                                  PsiType newType,
-                                  @NotNull ParameterInfoImpl[] parameterInfo) {
-    this(project, method, generateDelegate, newVisibility, newName,
-         newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
-         parameterInfo, null, null, null);
-  }
+	public ChangeSignatureProcessor(Project project, PsiMethod method, final boolean generateDelegate,
+			@PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, ParameterInfoImpl[] parameterInfo,
+			ThrownExceptionInfo[] exceptionInfos)
+	{
+		this(project, method, generateDelegate, newVisibility, newName, newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
+				parameterInfo, exceptionInfos, null, null);
+	}
 
-  public ChangeSignatureProcessor(Project project,
-                                  PsiMethod method,
-                                  final boolean generateDelegate,
-                                  @PsiModifier.ModifierConstant String newVisibility,
-                                  String newName,
-                                  PsiType newType,
-                                  ParameterInfoImpl[] parameterInfo,
-                                  ThrownExceptionInfo[] exceptionInfos) {
-    this(project, method, generateDelegate, newVisibility, newName,
-         newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
-         parameterInfo, exceptionInfos, null, null);
-  }
+	public ChangeSignatureProcessor(Project project, PsiMethod method, boolean generateDelegate, @PsiModifier.ModifierConstant String newVisibility,
+			String newName, CanonicalTypes.Type newType, @NotNull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
+			Set<PsiMethod> propagateParametersMethods, Set<PsiMethod> propagateExceptionsMethods)
+	{
+		this(project, generateChangeInfo(method, generateDelegate, newVisibility, newName, newType, parameterInfo, thrownExceptions,
+				propagateParametersMethods, propagateExceptionsMethods));
+	}
 
-  public ChangeSignatureProcessor(Project project,
-                                  PsiMethod method,
-                                  boolean generateDelegate,
-                                  @PsiModifier.ModifierConstant String newVisibility,
-                                  String newName,
-                                  CanonicalTypes.Type newType,
-                                  @NotNull ParameterInfoImpl[] parameterInfo,
-                                  ThrownExceptionInfo[] thrownExceptions,
-                                  Set<PsiMethod> propagateParametersMethods,
-                                  Set<PsiMethod> propagateExceptionsMethods) {
-    this(project, generateChangeInfo(method, generateDelegate, newVisibility, newName, newType, parameterInfo, thrownExceptions,
-                                     propagateParametersMethods, propagateExceptionsMethods));
-  }
+	public ChangeSignatureProcessor(Project project, final JavaChangeInfo changeInfo)
+	{
+		super(project, changeInfo);
+		LOG.assertTrue(myChangeInfo.getMethod().isValid());
+	}
 
-  public ChangeSignatureProcessor(Project project, final JavaChangeInfo changeInfo) {
-    super(project, changeInfo);
-    LOG.assertTrue(myChangeInfo.getMethod().isValid());
-  }
+	private static JavaChangeInfo generateChangeInfo(PsiMethod method, boolean generateDelegate, @PsiModifier.ModifierConstant String newVisibility,
+			String newName, CanonicalTypes.Type newType, @NotNull ParameterInfoImpl[] parameterInfo, ThrownExceptionInfo[] thrownExceptions,
+			Set<PsiMethod> propagateParametersMethods, Set<PsiMethod> propagateExceptionsMethods)
+	{
+		Set<PsiMethod> myPropagateParametersMethods = propagateParametersMethods != null ? propagateParametersMethods : new HashSet<PsiMethod>();
+		Set<PsiMethod> myPropagateExceptionsMethods = propagateExceptionsMethods != null ? propagateExceptionsMethods : new HashSet<PsiMethod>();
 
-  private static JavaChangeInfo generateChangeInfo(PsiMethod method,
-                                                   boolean generateDelegate,
-                                                   @PsiModifier.ModifierConstant String newVisibility,
-                                                   String newName,
-                                                   CanonicalTypes.Type newType,
-                                                   @NotNull ParameterInfoImpl[] parameterInfo,
-                                                   ThrownExceptionInfo[] thrownExceptions,
-                                                   Set<PsiMethod> propagateParametersMethods,
-                                                   Set<PsiMethod> propagateExceptionsMethods) {
-    Set<PsiMethod> myPropagateParametersMethods =
-      propagateParametersMethods != null ? propagateParametersMethods : new HashSet<PsiMethod>();
-    Set<PsiMethod> myPropagateExceptionsMethods =
-      propagateExceptionsMethods != null ? propagateExceptionsMethods : new HashSet<PsiMethod>();
+		LOG.assertTrue(method.isValid());
+		if(newVisibility == null)
+		{
+			newVisibility = VisibilityUtil.getVisibilityModifier(method.getModifierList());
+		}
 
-    LOG.assertTrue(method.isValid());
-    if (newVisibility == null) {
-      newVisibility = VisibilityUtil.getVisibilityModifier(method.getModifierList());
-    }
+		return new JavaChangeInfoImpl(newVisibility, method, newName, newType, parameterInfo, thrownExceptions, generateDelegate,
+				myPropagateParametersMethods, myPropagateExceptionsMethods);
+	}
 
-    return new JavaChangeInfoImpl(newVisibility, method, newName, newType, parameterInfo, thrownExceptions, generateDelegate,
-                                  myPropagateParametersMethods, myPropagateExceptionsMethods);
-  }
+	@Override
+	@NotNull
+	protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages)
+	{
+		return new ChangeSignatureViewDescriptor(getChangeInfo().getMethod());
+	}
 
-  @NotNull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
-    return new ChangeSignatureViewDescriptor(getChangeInfo().getMethod());
-  }
+	@Override
+	public JavaChangeInfoImpl getChangeInfo()
+	{
+		return (JavaChangeInfoImpl) super.getChangeInfo();
+	}
 
-  @Override
-  public JavaChangeInfoImpl getChangeInfo() {
-    return (JavaChangeInfoImpl)super.getChangeInfo();
-  }
+	@Override
+	protected void refreshElements(PsiElement[] elements)
+	{
+		boolean condition = elements.length == 1 && elements[0] instanceof PsiMethod;
+		LOG.assertTrue(condition);
+		getChangeInfo().updateMethod((PsiMethod) elements[0]);
+	}
 
-  protected void refreshElements(PsiElement[] elements) {
-    boolean condition = elements.length == 1 && elements[0] instanceof PsiMethod;
-    LOG.assertTrue(condition);
-    getChangeInfo().updateMethod((PsiMethod) elements[0]);
-  }
+	@Override
+	protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages)
+	{
+		for(ChangeSignatureUsageProcessor processor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions())
+		{
+			if(!processor.setupDefaultValues(myChangeInfo, refUsages, myProject))
+			{
+				return false;
+			}
+		}
+		MultiMap<PsiElement, String> conflictDescriptions = new MultiMap<PsiElement, String>();
+		for(ChangeSignatureUsageProcessor usageProcessor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions())
+		{
+			final MultiMap<PsiElement, String> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
+			for(PsiElement key : conflicts.keySet())
+			{
+				Collection<String> collection = conflictDescriptions.get(key);
+				if(collection.size() == 0)
+				{
+					collection = new HashSet<String>();
+				}
+				collection.addAll(conflicts.get(key));
+				conflictDescriptions.put(key, collection);
+			}
+		}
 
-  protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
-    for (ChangeSignatureUsageProcessor processor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
-      if (!processor.setupDefaultValues(myChangeInfo, refUsages, myProject)) return false;
-    }
-    MultiMap<PsiElement, String> conflictDescriptions = new MultiMap<PsiElement, String>();
-    for (ChangeSignatureUsageProcessor usageProcessor : ChangeSignatureUsageProcessor.EP_NAME.getExtensions()) {
-      final MultiMap<PsiElement, String> conflicts = usageProcessor.findConflicts(myChangeInfo, refUsages);
-      for (PsiElement key : conflicts.keySet()) {
-        Collection<String> collection = conflictDescriptions.get(key);
-        if (collection.size() == 0) collection = new HashSet<String>();
-        collection.addAll(conflicts.get(key));
-        conflictDescriptions.put(key, collection);
-      }
-    }
+		final UsageInfo[] usagesIn = refUsages.get();
+		RenameUtil.addConflictDescriptions(usagesIn, conflictDescriptions);
+		Set<UsageInfo> usagesSet = new HashSet<UsageInfo>(Arrays.asList(usagesIn));
+		RenameUtil.removeConflictUsages(usagesSet);
+		if(!conflictDescriptions.isEmpty())
+		{
+			if(ApplicationManager.getApplication().isUnitTestMode())
+			{
+				throw new ConflictsInTestsException(conflictDescriptions.values());
+			}
+			if(myPrepareSuccessfulSwingThreadCallback != null)
+			{
+				ConflictsDialog dialog = prepareConflictsDialog(conflictDescriptions, usagesIn);
+				dialog.show();
+				if(!dialog.isOK())
+				{
+					if(dialog.isShowConflicts())
+					{
+						prepareSuccessful();
+					}
+					return false;
+				}
+			}
+		}
 
-    final UsageInfo[] usagesIn = refUsages.get();
-    RenameUtil.addConflictDescriptions(usagesIn, conflictDescriptions);
-    Set<UsageInfo> usagesSet = new HashSet<UsageInfo>(Arrays.asList(usagesIn));
-    RenameUtil.removeConflictUsages(usagesSet);
-    if (!conflictDescriptions.isEmpty()) {
-      if (ApplicationManager.getApplication().isUnitTestMode()) {
-        throw new ConflictsInTestsException(conflictDescriptions.values());
-      }
-      if (myPrepareSuccessfulSwingThreadCallback != null) {
-        ConflictsDialog dialog = prepareConflictsDialog(conflictDescriptions, usagesIn);
-        dialog.show();
-        if (!dialog.isOK()) {
-          if (dialog.isShowConflicts()) prepareSuccessful();
-          return false;
-        }
-      }
-    }
+		if(myChangeInfo.isReturnTypeChanged())
+		{
+			askToRemoveCovariantOverriders(usagesSet);
+		}
 
-    if (myChangeInfo.isReturnTypeChanged()) {
-      askToRemoveCovariantOverriders(usagesSet);
-    }
+		refUsages.set(usagesSet.toArray(new UsageInfo[usagesSet.size()]));
+		prepareSuccessful();
+		return true;
+	}
 
-    refUsages.set(usagesSet.toArray(new UsageInfo[usagesSet.size()]));
-    prepareSuccessful();
-    return true;
-  }
+	private void askToRemoveCovariantOverriders(Set<UsageInfo> usages)
+	{
+		if(PsiUtil.isLanguageLevel5OrHigher(myChangeInfo.getMethod()))
+		{
+			List<UsageInfo> covariantOverriderInfos = new ArrayList<UsageInfo>();
+			for(UsageInfo usageInfo : usages)
+			{
+				if(usageInfo instanceof OverriderUsageInfo)
+				{
+					final OverriderUsageInfo info = (OverriderUsageInfo) usageInfo;
+					PsiMethod overrider = info.getElement();
+					PsiMethod baseMethod = info.getBaseMethod();
+					PsiSubstitutor substitutor = calculateSubstitutor(overrider, baseMethod);
+					PsiType type;
+					try
+					{
+						type = substitutor.substitute(getChangeInfo().newReturnType.getType(myChangeInfo.getMethod(), myManager));
+					}
+					catch(IncorrectOperationException e)
+					{
+						LOG.error(e);
+						return;
+					}
+					final PsiType overriderType = overrider.getReturnType();
+					if(overriderType != null && type.isAssignableFrom(overriderType))
+					{
+						covariantOverriderInfos.add(usageInfo);
+					}
+				}
+			}
 
-  private void askToRemoveCovariantOverriders(Set<UsageInfo> usages) {
-    if (PsiUtil.isLanguageLevel5OrHigher(myChangeInfo.getMethod())) {
-      List<UsageInfo> covariantOverriderInfos = new ArrayList<UsageInfo>();
-      for (UsageInfo usageInfo : usages) {
-        if (usageInfo instanceof OverriderUsageInfo) {
-          final OverriderUsageInfo info = (OverriderUsageInfo)usageInfo;
-          PsiMethod overrider = info.getElement();
-          PsiMethod baseMethod = info.getBaseMethod();
-          PsiSubstitutor substitutor = calculateSubstitutor(overrider, baseMethod);
-          PsiType type;
-          try {
-            type = substitutor.substitute(getChangeInfo().newReturnType.getType(myChangeInfo.getMethod(), myManager));
-          }
-          catch (IncorrectOperationException e) {
-            LOG.error(e);
-            return;
-          }
-          final PsiType overriderType = overrider.getReturnType();
-          if (overriderType != null && type.isAssignableFrom(overriderType)) {
-            covariantOverriderInfos.add(usageInfo);
-          }
-        }
-      }
+			// to be able to do filtering
+			preprocessCovariantOverriders(covariantOverriderInfos);
 
-      // to be able to do filtering
-      preprocessCovariantOverriders(covariantOverriderInfos);
+			if(!covariantOverriderInfos.isEmpty())
+			{
+				if(ApplicationManager.getApplication().isUnitTestMode() || !isProcessCovariantOverriders())
+				{
+					for(UsageInfo usageInfo : covariantOverriderInfos)
+					{
+						usages.remove(usageInfo);
+					}
+				}
+			}
+		}
+	}
 
-      if (!covariantOverriderInfos.isEmpty()) {
-        if (ApplicationManager.getApplication().isUnitTestMode() || !isProcessCovariantOverriders()) {
-          for (UsageInfo usageInfo : covariantOverriderInfos) {
-            usages.remove(usageInfo);
-          }
-        }
-      }
-    }
-  }
+	protected void preprocessCovariantOverriders(final List<UsageInfo> covariantOverriderInfos)
+	{
+	}
 
-  protected void preprocessCovariantOverriders(final List<UsageInfo> covariantOverriderInfos) {
-  }
+	protected boolean isProcessCovariantOverriders()
+	{
+		return Messages.showYesNoDialog(myProject, RefactoringBundle.message("do.you.want.to.process.overriding.methods.with.covariant.return.type")
+				, JavaChangeSignatureHandler.REFACTORING_NAME, Messages.getQuestionIcon()) == DialogWrapper.OK_EXIT_CODE;
+	}
 
-  protected boolean isProcessCovariantOverriders() {
-    return Messages
-             .showYesNoDialog(myProject, RefactoringBundle.message("do.you.want.to.process.overriding.methods.with.covariant.return.type"),
-                              JavaChangeSignatureHandler.REFACTORING_NAME, Messages.getQuestionIcon()) == DialogWrapper.OK_EXIT_CODE;
-  }
+	public static void makeEmptyBody(final PsiElementFactory factory, final PsiMethod delegate) throws IncorrectOperationException
+	{
+		PsiCodeBlock body = delegate.getBody();
+		if(body != null)
+		{
+			body.replace(factory.createCodeBlock());
+		}
+		else
+		{
+			delegate.add(factory.createCodeBlock());
+		}
+		PsiUtil.setModifierProperty(delegate, PsiModifier.ABSTRACT, false);
+	}
 
-  public static void makeEmptyBody(final PsiElementFactory factory, final PsiMethod delegate) throws IncorrectOperationException {
-    PsiCodeBlock body = delegate.getBody();
-    if (body != null) {
-      body.replace(factory.createCodeBlock());
-    }
-    else {
-      delegate.add(factory.createCodeBlock());
-    }
-    PsiUtil.setModifierProperty(delegate, PsiModifier.ABSTRACT, false);
-  }
+	@Nullable
+	public static PsiCallExpression addDelegatingCallTemplate(final PsiMethod delegate, final String newName) throws IncorrectOperationException
+	{
+		Project project = delegate.getProject();
+		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+		PsiCodeBlock body = delegate.getBody();
+		assert body != null;
+		final PsiCallExpression callExpression;
+		if(delegate.isConstructor())
+		{
+			PsiElement callStatement = factory.createStatementFromText("this();", null);
+			callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
+			callStatement = body.add(callStatement);
+			callExpression = (PsiCallExpression) ((PsiExpressionStatement) callStatement).getExpression();
+		}
+		else
+		{
+			if(PsiType.VOID.equals(delegate.getReturnType()))
+			{
+				PsiElement callStatement = factory.createStatementFromText(newName + "();", null);
+				callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
+				callStatement = body.add(callStatement);
+				callExpression = (PsiCallExpression) ((PsiExpressionStatement) callStatement).getExpression();
+			}
+			else
+			{
+				PsiElement callStatement = factory.createStatementFromText("return " + newName + "();", null);
+				callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
+				callStatement = body.add(callStatement);
+				callExpression = (PsiCallExpression) ((PsiReturnStatement) callStatement).getReturnValue();
+			}
+		}
+		return callExpression;
+	}
 
-  @Nullable
-  public static PsiCallExpression addDelegatingCallTemplate(final PsiMethod delegate, final String newName) throws IncorrectOperationException {
-    Project project = delegate.getProject();
-    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-    PsiCodeBlock body = delegate.getBody();
-    assert body != null;
-    final PsiCallExpression callExpression;
-    if (delegate.isConstructor()) {
-      PsiElement callStatement = factory.createStatementFromText("this();", null);
-      callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
-      callStatement = body.add(callStatement);
-      callExpression = (PsiCallExpression)((PsiExpressionStatement) callStatement).getExpression();
-    } else {
-      if (PsiType.VOID.equals(delegate.getReturnType())) {
-        PsiElement callStatement = factory.createStatementFromText(newName + "();", null);
-        callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
-        callStatement = body.add(callStatement);
-        callExpression = (PsiCallExpression)((PsiExpressionStatement) callStatement).getExpression();
-      }
-      else {
-        PsiElement callStatement = factory.createStatementFromText("return " + newName + "();", null);
-        callStatement = CodeStyleManager.getInstance(project).reformat(callStatement);
-        callStatement = body.add(callStatement);
-        callExpression = (PsiCallExpression)((PsiReturnStatement) callStatement).getReturnValue();
-      }
-    }
-    return callExpression;
-  }
-
-  public static PsiSubstitutor calculateSubstitutor(PsiMethod derivedMethod, PsiMethod baseMethod) {
-    PsiSubstitutor substitutor;
-    if (derivedMethod.getManager().areElementsEquivalent(derivedMethod, baseMethod)) {
-      substitutor = PsiSubstitutor.EMPTY;
-    } else {
-      final PsiClass baseClass = baseMethod.getContainingClass();
-      final PsiClass derivedClass = derivedMethod.getContainingClass();
-      if(baseClass != null && derivedClass != null && InheritanceUtil.isInheritorOrSelf(derivedClass, baseClass, true)) {
-        final PsiSubstitutor superClassSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(baseClass, derivedClass, PsiSubstitutor.EMPTY);
-        final MethodSignature superMethodSignature = baseMethod.getSignature(superClassSubstitutor);
-        final MethodSignature methodSignature = derivedMethod.getSignature(PsiSubstitutor.EMPTY);
-        final PsiSubstitutor superMethodSubstitutor = MethodSignatureUtil.getSuperMethodSignatureSubstitutor(methodSignature, superMethodSignature);
-        substitutor = superMethodSubstitutor != null ? superMethodSubstitutor : superClassSubstitutor;
-      } else {
-        substitutor = PsiSubstitutor.EMPTY;
-      }
-    }
-    return substitutor;
-  }
+	public static PsiSubstitutor calculateSubstitutor(PsiMethod derivedMethod, PsiMethod baseMethod)
+	{
+		PsiSubstitutor substitutor;
+		if(derivedMethod.getManager().areElementsEquivalent(derivedMethod, baseMethod))
+		{
+			substitutor = PsiSubstitutor.EMPTY;
+		}
+		else
+		{
+			final PsiClass baseClass = baseMethod.getContainingClass();
+			final PsiClass derivedClass = derivedMethod.getContainingClass();
+			if(baseClass != null && derivedClass != null && InheritanceUtil.isInheritorOrSelf(derivedClass, baseClass, true))
+			{
+				final PsiSubstitutor superClassSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(baseClass, derivedClass,
+						PsiSubstitutor.EMPTY);
+				final MethodSignature superMethodSignature = baseMethod.getSignature(superClassSubstitutor);
+				final MethodSignature methodSignature = derivedMethod.getSignature(PsiSubstitutor.EMPTY);
+				final PsiSubstitutor superMethodSubstitutor = MethodSignatureUtil.getSuperMethodSignatureSubstitutor(methodSignature,
+						superMethodSignature);
+				substitutor = superMethodSubstitutor != null ? superMethodSubstitutor : superClassSubstitutor;
+			}
+			else
+			{
+				substitutor = PsiSubstitutor.EMPTY;
+			}
+		}
+		return substitutor;
+	}
 }
