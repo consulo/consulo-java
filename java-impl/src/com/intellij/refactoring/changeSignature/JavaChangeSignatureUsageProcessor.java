@@ -742,7 +742,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
 	{
 		if(!(changeInfo instanceof JavaChangeInfo))
 		{
-			return true;
+			return false;
 		}
 		for(UsageInfo usageInfo : refUsages.get())
 		{
