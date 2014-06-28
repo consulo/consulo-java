@@ -25,6 +25,7 @@
 
 	<xi:include href="/META-INF/JvmByteCodeViewer.xml" xpointer="xpointer(/idea-plugin/*)"/>
 	<xi:include href="/META-INF/GenerateToString.xml" xpointer="xpointer(/idea-plugin/*)"/>
+	<xi:include href="/META-INF/Coverage.xml" xpointer="xpointer(/idea-plugin/*)"/>
 	<xi:include href="/META-INF/InspectionGadgets.xml" xpointer="xpointer(/idea-plugin/*)"/>
 	<xi:include href="/META-INF/IntentionPowerPack.xml" xpointer="xpointer(/idea-plugin/*)"/>
 	<xi:include href="/META-INF/Manifest.xml" xpointer="xpointer(/idea-plugin/*)"/>
