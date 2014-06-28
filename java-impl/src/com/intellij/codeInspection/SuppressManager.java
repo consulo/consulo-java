@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  */
 package com.intellij.codeInspection;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiAnnotation;
@@ -27,25 +28,27 @@ import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 
-public abstract class SuppressManager implements BatchSuppressManager {
+public abstract class SuppressManager implements BatchSuppressManager, InspectionSuppressor
+{
+	public static SuppressManager getInstance()
+	{
+		return ServiceManager.getService(SuppressManager.class);
+	}
 
-  public static SuppressManager getInstance() {
-    return ServiceManager.getService(SuppressManager.class);
-  }
+	public static boolean isSuppressedInspectionName(PsiLiteralExpression expression)
+	{
+		PsiAnnotation annotation = PsiTreeUtil.getParentOfType(expression, PsiAnnotation.class, true, PsiCodeBlock.class, PsiField.class);
+		return annotation != null && SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName());
+	}
 
-  public static boolean isSuppressedInspectionName(PsiLiteralExpression expression) {
-    PsiAnnotation annotation = PsiTreeUtil.getParentOfType(expression, PsiAnnotation.class, true, PsiCodeBlock.class, PsiField.class);
-    return annotation != null && SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName());
-  }
+	@NotNull
+	@Override
+	public SuppressQuickFix[] createBatchSuppressActions(@NotNull HighlightDisplayKey key)
+	{
+		return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(key);
+	}
 
-  @NotNull
-  @Override
-  public SuppressQuickFix[] createBatchSuppressActions(@NotNull HighlightDisplayKey key) {
-    return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(key);
-  }
-
-  @NotNull
-  public abstract SuppressIntentionAction[] createSuppressActions(@NotNull HighlightDisplayKey key);
+	@NotNull
+	public abstract SuppressIntentionAction[] createSuppressActions(@NotNull HighlightDisplayKey key);
 }

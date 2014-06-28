@@ -1921,6 +1921,7 @@
 
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
 		<newModuleBuilder implementation="org.mustbe.consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder" />
+		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.codeInspection.SuppressManagerImpl"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">
