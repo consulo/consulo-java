@@ -5,14 +5,13 @@
     <java-sdk name="1.6" />
     <consulo-sdk name="Consulo 1.SNAPSHOT" />
     <artifact name="plugin" />
+    <predefined_log_file id="IDEA_LOG" enabled="true" />
     <RunnerSettings RunnerId="Debug">
       <option name="DEBUG_PORT" value="" />
       <option name="TRANSPORT" value="0" />
       <option name="LOCAL" value="true" />
     </RunnerSettings>
-    <RunnerSettings RunnerId="Run" />
     <ConfigurationWrapper RunnerId="Debug" />
-    <ConfigurationWrapper RunnerId="Run" />
     <method>
       <option name="BuildArtifacts" enabled="true">
         <artifact name="plugin" />

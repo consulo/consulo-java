@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-	<extensions defaultExtensionNs=">org.consulo.java">
+	<extensions defaultExtensionNs="org.consulo.java">
 		<runConfigurationExtension implementation="com.intellij.execution.coverage.CoverageJavaRunConfigurationExtension"/>
 	</extensions>
 
