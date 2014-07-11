@@ -364,15 +364,6 @@
         <orderEntry type="module-library">
           <library>
             <CLASSES>
-              <root url="jar://$MODULE_DIR$/lib/trove4j.jar!/" />
-            </CLASSES>
-            <DOCUMENTATION />
-            <SOURCES />
-          </library>
-        </orderEntry>
-        <orderEntry type="module-library">
-          <library>
-            <CLASSES>
               <root url="jar://$MODULE_DIR$/lib/jacocoagent.jar!/" />
             </CLASSES>
             <DOCUMENTATION />
@@ -391,15 +382,6 @@
         <orderEntry type="module-library">
           <library>
             <CLASSES>
-              <root url="jar://$MODULE_DIR$/lib/asm-all.jar!/" />
-            </CLASSES>
-            <DOCUMENTATION />
-            <SOURCES />
-          </library>
-        </orderEntry>
-        <orderEntry type="module-library">
-          <library>
-            <CLASSES>
               <root url="jar://$MODULE_DIR$/lib/coverage-report.jar!/" />
             </CLASSES>
             <DOCUMENTATION />
@@ -408,6 +390,7 @@
         </orderEntry>
         <orderEntry type="module" module-name="java-impl" />
         <orderEntry type="module" module-name="coverage_rt" />
+        <orderEntry type="library" name="jetbrains-asm5" level="project" />
       </module>
       <module name="coverage_rt" dirurl="file://$PROJECT_DIR$/java-coverage-impl/coverage_rt">
         <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
