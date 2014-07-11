@@ -46,8 +46,6 @@
             <element id="module-output" name="java-manifest" />
             <element id="module-production-resource-output" name="java-manifest" />
           </element>
-          <element id="file-copy" path="$PROJECT_DIR$/lib/jdi.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/asm-all.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/coverage-report-idea.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/coverage-report.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/finder.jar" />
@@ -56,6 +54,9 @@
           <element id="zip-archive" name="coverate_rt.jar">
             <element id="module-output" name="coverage_rt" />
           </element>
+          <element id="library" level="project" name="jdi" />
+          <element id="library" level="project" name="jetbrains-asm5" />
+          <element id="library" level="project" name="instrumentation-util" />
         </element>
       </element>
     </root>

@@ -19,7 +19,7 @@ import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.pattern.compiler.InstrumentationException;
 import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.asm4.*;
+import org.jetbrains.org.objectweb.asm.*;
 
 import java.util.Arrays;
 import java.util.HashMap;

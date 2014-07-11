@@ -15,6 +15,16 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.intellij.plugins.intelliLang.Configuration;
+import org.intellij.plugins.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
+import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
+import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.project.Project;
@@ -28,16 +38,6 @@ import com.intellij.psi.search.searches.AnnotatedMembersSearch;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
-import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
-import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.asm4.ClassWriter;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompiler {
 

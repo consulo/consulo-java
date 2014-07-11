@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.psi.impl.compiled;
+package com.intellij.psi.compiled;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.stubs.PsiFileStub;
+import com.intellij.util.cls.ClsFormatException;
+import com.intellij.util.indexing.FileContent;
 
-/**
- * @author max
- */
-public interface InnerClassSourceStrategy<T>
+public abstract class ClsStubBuilder
 {
-	@Nullable
-	T findInnerClass(String name, T outerClass);
+	/**
+	 * Non-zero positive number expected.
+	 */
+	public abstract int getStubVersion();
 
-	void accept(T innerClass, StubBuildingVisitor<T> visitor);
+	/**
+	 * May return {@code null} for inner or synthetic classes - i.e. those indexed as a part of their parent .class file.
+	 */
+	@Nullable
+	public abstract PsiFileStub<?> buildFileStub(@NotNull FileContent fileContent) throws ClsFormatException;
 }

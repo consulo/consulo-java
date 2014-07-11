@@ -309,7 +309,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase {
     }
     final JavaPsiFacadeEx facade = getJavaFacade();
     if (facade != null) {
-      facade.setAssertOnFileLoadingFilter(myFileTreeAccessFilter); // check repository work
+      facade.setAssertOnFileLoadingFilter(myFileTreeAccessFilter, ); // check repository work
     }
 
     Collection<HighlightInfo> infos = doHighlighting();

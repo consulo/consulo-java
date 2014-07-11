@@ -24,6 +24,7 @@ import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ReadActionProcessor;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.DumbAware;
@@ -561,8 +562,8 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 
 	@TestOnly
 	@Override
-	public void setAssertOnFileLoadingFilter(@NotNull final VirtualFileFilter filter)
+	public void setAssertOnFileLoadingFilter(@NotNull final VirtualFileFilter filter, @NotNull Disposable parentDisposable)
 	{
-		((PsiManagerImpl) PsiManager.getInstance(myProject)).setAssertOnFileLoadingFilter(filter);
+		((PsiManagerImpl) PsiManager.getInstance(myProject)).setAssertOnFileLoadingFilter(filter, parentDisposable);
 	}
 }

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="instrumentation-util">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/instrumentation-util.jar!/" />
+    </CLASSES>
+    <DOCUMENTATION />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libSrc/instrumentation-util-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

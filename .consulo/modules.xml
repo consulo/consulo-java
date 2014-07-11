@@ -85,6 +85,7 @@
         <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
         <orderEntry type="sourceFolder" forTests="false" />
         <orderEntry type="module" module-name="java-psi-api" />
+        <orderEntry type="library" name="jetbrains-asm5" level="project" />
       </module>
       <module name="java-rt" dirurl="file://$PROJECT_DIR$/java-rt">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
@@ -136,6 +137,8 @@
         <orderEntry type="module" module-name="java-psi-impl" />
         <orderEntry type="module" module-name="java-impl" />
         <orderEntry type="module" module-name="java-rt" />
+        <orderEntry type="library" name="jetbrains-asm5" level="project" />
+        <orderEntry type="library" name="instrumentation-util" level="project" />
       </module>
       <module name="java-indexing-impl" dirurl="file://$PROJECT_DIR$/java-indexing-impl">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
@@ -204,6 +207,7 @@
         <orderEntry type="module" module-name="java-indexing-impl" />
         <orderEntry type="module" module-name="java-impl" />
         <orderEntry type="module" module-name="java-execution-api" />
+        <orderEntry type="library" name="jetbrains-asm5" level="project" />
       </module>
       <module name="java-generate-tostring" dirurl="file://$PROJECT_DIR$/java-generate-tostring">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
@@ -238,6 +242,7 @@
         </orderEntry>
         <orderEntry type="module" module-name="java-impl" />
         <orderEntry type="module" module-name="java-compiler-impl" />
+        <orderEntry type="library" name="jetbrains-asm5" level="project" />
       </module>
       <module name="java-intention-power-pack" dirurl="file://$PROJECT_DIR$/java-intention-power-pack">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />

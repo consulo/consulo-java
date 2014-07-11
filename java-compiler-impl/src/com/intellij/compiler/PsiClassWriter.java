@@ -15,6 +15,9 @@
  */
 package com.intellij.compiler;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -26,14 +29,12 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.ClassUtil;
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.asm4.ClassWriter;
 
 /**
  * @author yole
  */
-public class PsiClassWriter extends ClassWriter {
+public class PsiClassWriter extends ClassWriter
+{
   private final Project myProject;
 
   public PsiClassWriter(final Project project, boolean isJava6) {

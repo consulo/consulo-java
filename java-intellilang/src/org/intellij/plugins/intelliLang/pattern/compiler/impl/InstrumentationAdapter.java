@@ -15,14 +15,18 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler.impl;
 
-import org.intellij.plugins.intelliLang.Configuration;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.asm4.*;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.intellij.plugins.intelliLang.Configuration;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.org.objectweb.asm.AnnotationVisitor;
+import org.jetbrains.org.objectweb.asm.Label;
+import org.jetbrains.org.objectweb.asm.MethodVisitor;
+import org.jetbrains.org.objectweb.asm.Opcodes;
+import org.jetbrains.org.objectweb.asm.Type;
 
 class InstrumentationAdapter extends MethodVisitor implements Opcodes {
   @NonNls

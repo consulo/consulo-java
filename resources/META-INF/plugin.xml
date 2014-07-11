@@ -495,8 +495,8 @@
 
 		<extensionPoint name="unscrambleSupport" interface="com.intellij.unscramble.UnscrambleSupport"/>
 
-		<extensionPoint name="clsStubBuilderFactory" interface="com.intellij.psi.impl.compiled.ClsStubBuilderFactory"/>
 		<extensionPoint name="mainMethodProvider" interface="com.intellij.codeInsight.runner.JavaMainMethodProvider"/>
+		<extensionPoint name="psi.classFileDecompiler" interface="com.intellij.psi.compiled.ClassFileDecompilers$Decompiler" />
 
 		<extensionPoint name="debuggerClassFilterProvider" interface="com.intellij.ui.classFilter.DebuggerClassFilterProvider"/>
 		<extensionPoint name="topLevelClassProvider" interface="com.intellij.debugger.engine.TopLevelParentClassProvider"/>
@@ -645,8 +645,6 @@
 
 		<refactoring.introduceParameterMethodUsagesProcessor
 				implementation="com.intellij.refactoring.introduceParameter.JavaIntroduceParameterMethodUsagesProcessor"/>
-
-		<clsStubBuilderFactory implementation="com.intellij.psi.impl.compiled.DefaultClsStubBuilderFactory" order="last"/>
 
 		<testGenerator language="JAVA" implementationClass="com.intellij.testIntegration.createTest.JavaTestGenerator"/>
 

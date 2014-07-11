@@ -34,10 +34,12 @@ import com.intellij.psi.impl.EmptySubstitutorImpl;
 import com.intellij.psi.impl.LanguageConstantExpressionEvaluator;
 import com.intellij.psi.impl.PsiExpressionEvaluator;
 import com.intellij.psi.impl.compiled.ClassFileStubBuilder;
-import com.intellij.psi.impl.compiled.ClsStubBuilderFactory;
-import com.intellij.psi.impl.compiled.DefaultClsStubBuilderFactory;
 import com.intellij.psi.impl.file.PsiPackageImplementationHelper;
-import com.intellij.psi.presentation.java.*;
+import com.intellij.psi.presentation.java.ClassPresentationProvider;
+import com.intellij.psi.presentation.java.FieldPresentationProvider;
+import com.intellij.psi.presentation.java.MethodPresentationProvider;
+import com.intellij.psi.presentation.java.PackagePresentationProvider;
+import com.intellij.psi.presentation.java.VariablePresentationProvider;
 import com.intellij.psi.stubs.BinaryFileStubBuilders;
 
 /**
@@ -57,10 +59,8 @@ public class JavaCoreApplicationEnvironment extends CoreApplicationEnvironment {
     addExplicitExtension(LanguageParserDefinitions.INSTANCE, JavaLanguage.INSTANCE, new JavaParserDefinition());
     addExplicitExtension(LanguageConstantExpressionEvaluator.INSTANCE, JavaLanguage.INSTANCE, new PsiExpressionEvaluator());
 
-    registerExtensionPoint(Extensions.getRootArea(), ClsStubBuilderFactory.EP_NAME, ClsStubBuilderFactory.class);
     registerExtensionPoint(Extensions.getRootArea(), PsiAugmentProvider.EP_NAME, PsiAugmentProvider.class);
     registerExtensionPoint(Extensions.getRootArea(), JavaMainMethodProvider.EP_NAME, JavaMainMethodProvider.class);
-    addExtension(ClsStubBuilderFactory.EP_NAME, new DefaultClsStubBuilderFactory());
 
     myApplication.registerService(PsiPackageImplementationHelper.class, new CorePsiPackageImplementationHelper());
 

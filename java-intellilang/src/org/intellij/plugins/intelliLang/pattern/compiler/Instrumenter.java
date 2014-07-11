@@ -15,10 +15,11 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler;
 
-import org.jetbrains.asm4.ClassVisitor;
-import org.jetbrains.asm4.Opcodes;
+import org.jetbrains.org.objectweb.asm.ClassVisitor;
+import org.jetbrains.org.objectweb.asm.Opcodes;
 
-public abstract class Instrumenter extends ClassVisitor {
+public abstract class Instrumenter extends ClassVisitor
+{
   protected Instrumenter() {
     super(Opcodes.ASM4);
   }
