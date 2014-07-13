@@ -92,6 +92,7 @@ import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.table.JBListTable;
 import com.intellij.util.ui.table.JBTableRow;
 import com.intellij.util.ui.table.JBTableRowEditor;
+import lombok.val;
 
 /**
  * @author Konstantin Bulenkov
@@ -177,12 +178,15 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 		return true;
 	}
 
+	@Override
 	@NotNull
 	protected List<Pair<String, JPanel>> createAdditionalPanels()
 	{
+		val method = myMethod.getMethod();
+
 		// this method is invoked before constructor body
-		myExceptionsModel = new ExceptionsTableModel(myMethod.getMethod().getThrowsList());
-		myExceptionsModel.setTypeInfos(myMethod.getMethod());
+		myExceptionsModel = new ExceptionsTableModel(method.getThrowsList());
+		myExceptionsModel.setTypeInfos(method);
 
 		final JBTable table = new JBTable(myExceptionsModel);
 		table.setStriped(true);
@@ -221,7 +225,8 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 						myExceptionPropagationTree = chooser.get().getTree();
 					}
 				};
-				chooser.set(new JavaCallerChooser(myMethod.getMethod(), myProject, RefactoringBundle.message("changeSignature.exception.caller" +
+
+				chooser.set(new JavaCallerChooser(method, myProject, RefactoringBundle.message("changeSignature.exception.caller" +
 						".chooser"), myExceptionPropagationTree, callback));
 				chooser.get().show();
 			}
@@ -237,6 +242,13 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 		final String message = RefactoringBundle.message("changeSignature.exceptions.panel.border.title");
 		result.add(Pair.create(message, panel));
 		return result;
+	}
+
+	// need change access modifier - due it ill throw access error, from anonym classes
+	@Override
+	public void updateSignature()
+	{
+		super.updateSignature();
 	}
 
 	@Override
