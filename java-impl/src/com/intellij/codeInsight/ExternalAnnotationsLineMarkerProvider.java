@@ -66,7 +66,10 @@ public class ExternalAnnotationsLineMarkerProvider implements LineMarkerProvider
 			final PsiModifierListOwner modifierListOwner = (PsiModifierListOwner) element;
 			final ExternalAnnotationsManager annotationsManager = ExternalAnnotationsManager.getInstance(modifierListOwner.getProject());
 			PsiAnnotation[] externalAnnotations = annotationsManager.findExternalAnnotations(modifierListOwner);
-			if(externalAnnotations != null && externalAnnotations.length > 0)
+			final InferredAnnotationsManager inferredAnnotationsManager = InferredAnnotationsManager.getInstance(modifierListOwner.getProject());
+			PsiAnnotation[] inferredAnnotations = inferredAnnotationsManager.findInferredAnnotations(modifierListOwner);
+
+			if(externalAnnotations != null && externalAnnotations.length > 0 || inferredAnnotations.length > 0)
 			{
 				owner = (PsiModifierListOwner) element;
 			}
@@ -77,6 +80,12 @@ public class ExternalAnnotationsLineMarkerProvider implements LineMarkerProvider
 				{
 					externalAnnotations = annotationsManager.findExternalAnnotations(parameter);
 					if(externalAnnotations != null && externalAnnotations.length > 0)
+					{
+						owner = (PsiMethod) element;
+						break;
+					}
+					inferredAnnotations = inferredAnnotationsManager.findInferredAnnotations(parameter);
+					if(inferredAnnotations.length > 0)
 					{
 						owner = (PsiMethod) element;
 						break;

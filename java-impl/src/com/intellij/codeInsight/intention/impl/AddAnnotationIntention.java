@@ -22,77 +22,85 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.AddAnnotationFix;
 import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
-import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
-public abstract class AddAnnotationIntention extends BaseIntentionAction {
-  @NotNull
-  @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.add.annotation.family");
-  }
+public abstract class AddAnnotationIntention extends BaseIntentionAction
+{
+	@NotNull
+	@Override
+	public String getFamilyName()
+	{
+		return CodeInsightBundle.message("intention.add.annotation.family");
+	}
 
-  @NotNull
-  public abstract Pair<String, String[]> getAnnotations(@NotNull Project project);
+	@NotNull
+	public abstract Pair<String, String[]> getAnnotations(@NotNull Project project);
 
-  // include not in project files
-  @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-    CaretModel caretModel = editor.getCaretModel();
-    int position = caretModel.getOffset();
-    PsiElement element = file.findElementAt(position);
-    return element != null && isAvailable(project, element);
-  }
+	// include not in project files
+	@Override
+	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	{
+		final PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
+		if(owner == null || owner.getManager().isInProject(owner) && !CodeStyleSettingsManager.getSettings(project).USE_EXTERNAL_ANNOTATIONS)
+		{
+			return false;
+		}
+		Pair<String, String[]> annotations = getAnnotations(project);
+		String toAdd = annotations.first;
+		String[] toRemove = annotations.second;
+		if(toRemove.length > 0 && AnnotationUtil.isAnnotated(owner, toRemove[0], false, false))
+		{
+			return false;
+		}
+		setText(AddAnnotationPsiFix.calcText(owner, toAdd));
+		if(AnnotationUtil.isAnnotated(owner, toAdd, false, false))
+		{
+			return false;
+		}
 
-  public boolean isAvailable(@NotNull final Project project, @NotNull final PsiElement element) {
-    if (!element.isValid()) return false;
-    if (!PsiUtil.isLanguageLevel5OrHigher(element)) return false;
-    final PsiModifierListOwner owner;
-    if (!element.getManager().isInProject(element) || CodeStyleSettingsManager.getSettings(project).USE_EXTERNAL_ANNOTATIONS) {
-      owner = AddAnnotationPsiFix.getContainer(element);
-    }
-    else {
-      return false;
-    }
-    if (owner == null) return false;
-    Pair<String, String[]> annotations = getAnnotations(project);
-    String toAdd = annotations.first;
-    String[] toRemove = annotations.second;
-    if (toRemove.length > 0 && AnnotationUtil.isAnnotated(owner, toRemove[0], false, false)) return false;
-    setText(AddAnnotationPsiFix.calcText(owner, toAdd));
-    if (AnnotationUtil.isAnnotated(owner, toAdd, false, false)) return false;
+		if(owner instanceof PsiMethod)
+		{
+			PsiType returnType = ((PsiMethod) owner).getReturnType();
 
-    if (owner instanceof PsiMethod) {
-      PsiType returnType = ((PsiMethod)owner).getReturnType();
+			return returnType != null && !(returnType instanceof PsiPrimitiveType);
+		}
 
-      return returnType != null && !(returnType instanceof PsiPrimitiveType);
-    }
-    return true;
-  }
+		if(owner instanceof PsiClass)
+		{
+			return PsiUtil.isLanguageLevel8OrHigher(owner);
+		}
 
-  @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    CaretModel caretModel = editor.getCaretModel();
-    int position = caretModel.getOffset();
-    PsiElement element = file.findElementAt(position);
+		return true;
+	}
 
-    PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(element);
-    if (owner == null || !owner.isValid()) return;
-    Pair<String, String[]> annotations = getAnnotations(project);
-    String toAdd = annotations.first;
-    String[] toRemove = annotations.second;
-    AddAnnotationFix fix = new AddAnnotationFix(toAdd, owner, toRemove);
-    fix.invoke(project, editor, file);
-  }
+	@Override
+	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	{
+		PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
+		if(owner == null || !owner.isValid())
+		{
+			return;
+		}
+		Pair<String, String[]> annotations = getAnnotations(project);
+		String toAdd = annotations.first;
+		String[] toRemove = annotations.second;
+		AddAnnotationFix fix = new AddAnnotationFix(toAdd, owner, toRemove);
+		fix.invoke(project, editor, file);
+	}
 }

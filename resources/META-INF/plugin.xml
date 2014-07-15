@@ -346,6 +346,9 @@
 		<component>
 			<implementation-class>com.intellij.util.xml.impl.JavaDomApplicationComponent</implementation-class>
 		</component>
+		<component>
+			<implementation-class>com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter</implementation-class>
+		</component>
 	</application-components>
 
 	<project-components>
@@ -1761,6 +1764,8 @@
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex"/>
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaSuperClassNameOccurenceIndex"/>
 
+		<fileBasedIndex implementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
+
 		<stubElementTypeHolder class="com.intellij.psi.impl.java.stubs.JavaStubElementTypes"/>
 
 		<methodNavigationOffsetProvider implementation="com.intellij.codeInsight.navigation.JavaMethodNavigationOffsetProvider"/>
@@ -1861,6 +1866,12 @@
 
 		<projectService serviceInterface="com.intellij.codeInsight.ExternalAnnotationsManager"
 						serviceImplementation="com.intellij.codeInsight.ExternalAnnotationsManagerImpl"/>
+
+		<projectService serviceInterface="com.intellij.codeInsight.InferredAnnotationsManager"
+						serviceImplementation="com.intellij.codeInsight.InferredAnnotationsManagerImpl"/>
+
+		<projectService serviceInterface="com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"
+						serviceImplementation="com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"/>
 
 		<applicationService serviceInterface="com.intellij.psi.impl.file.PsiPackageImplementationHelper"
 							serviceImplementation="com.intellij.psi.impl.file.PsiPackageImplementationHelperImpl"/>

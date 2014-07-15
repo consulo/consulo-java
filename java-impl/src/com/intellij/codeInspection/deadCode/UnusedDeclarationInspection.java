@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -483,11 +483,8 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 	}
 
 	@Override
-	public void runInspection(
-			@NotNull final AnalysisScope scope,
-			@NotNull InspectionManager manager,
-			@NotNull final GlobalInspectionContext globalContext,
-			@NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor)
+	public void runInspection(@NotNull final AnalysisScope scope, @NotNull InspectionManager manager,
+			@NotNull final GlobalInspectionContext globalContext, @NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor)
 	{
 		globalContext.getRefManager().iterate(new RefJavaVisitor()
 		{
@@ -544,7 +541,7 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 
 		if(isAddNonJavaUsedEnabled())
 		{
-			checkForReachables();
+			checkForReachables(globalContext);
 			final StrictUnreferencedFilter strictUnreferencedFilter = new StrictUnreferencedFilter(this, globalContext);
 			ProgressManager.getInstance().runProcess(new Runnable()
 			{
@@ -574,7 +571,7 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 						private void findExternalClassReferences(final RefClass refElement)
 						{
 							PsiClass psiClass = refElement.getElement();
-							String qualifiedName = psiClass.getQualifiedName();
+							String qualifiedName = refElement != null ? psiClass.getQualifiedName() : null;
 							if(qualifiedName != null)
 							{
 								helper.processUsagesInNonJavaFiles(qualifiedName, new PsiNonJavaFileReferenceProcessor()
@@ -597,7 +594,7 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 		myPhase = 1;
 	}
 
-	public boolean isEntryPoint(final RefElement owner)
+	public boolean isEntryPoint(@NotNull RefElement owner)
 	{
 		final PsiElement element = owner.getElement();
 		if(RefUtil.isImplicitUsage(element))
@@ -612,11 +609,14 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 				return true;
 			}
 		}
-		for(EntryPoint extension : myExtensions)
+		if(element != null)
 		{
-			if(extension.isEntryPoint(owner, element))
+			for(EntryPoint extension : myExtensions)
 			{
-				return true;
+				if(extension.isEntryPoint(owner, element))
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -661,16 +661,10 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 		if(element instanceof PsiModifierListOwner)
 		{
 			final EntryPointsManager entryPointsManager = EntryPointsManager.getInstance(project);
-			if(entryPointsManager.isEntryPoint((PsiModifierListOwner) element))
+			if(entryPointsManager.isEntryPoint(element))
 			{
 				return true;
 			}
-			//if (AnnotationUtil
-			//  .checkAnnotatedUsingPatterns((PsiModifierListOwner)element, entryPointsManager.ADDITIONAL_ANNOTATIONS) ||
-			//  AnnotationUtil
-			//  .checkAnnotatedUsingPatterns((PsiModifierListOwner)element, entryPointsManager.getAdditionalAnnotations())) {
-			//  return true;
-			//}
 		}
 		for(EntryPoint extension : myExtensions)
 		{
@@ -711,12 +705,10 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 	}
 
 	@Override
-	public boolean queryExternalUsagesRequests(
-			@NotNull InspectionManager manager,
-			@NotNull GlobalInspectionContext globalContext,
+	public boolean queryExternalUsagesRequests(@NotNull InspectionManager manager, @NotNull GlobalInspectionContext globalContext,
 			@NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor)
 	{
-		checkForReachables();
+		checkForReachables(globalContext);
 		final RefFilter filter = myPhase == 1 ? new StrictUnreferencedFilter(this, globalContext) : new RefUnreachableFilter(this, globalContext);
 		final boolean[] requestAdded = {false};
 
@@ -884,12 +876,12 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 	}
 
 
-	void checkForReachables()
+	void checkForReachables(@NotNull final GlobalInspectionContext context)
 	{
 		CodeScanner codeScanner = new CodeScanner();
 
 		// Cleanup previous reachability information.
-		getContext().getRefManager().iterate(new RefJavaVisitor()
+		context.getRefManager().iterate(new RefJavaVisitor()
 		{
 			@Override
 			public void visitElement(@NotNull RefEntity refEntity)
@@ -897,7 +889,7 @@ public class UnusedDeclarationInspection extends GlobalInspectionTool
 				if(refEntity instanceof RefJavaElement)
 				{
 					final RefJavaElementImpl refElement = (RefJavaElementImpl) refEntity;
-					if(!((GlobalInspectionContextBase) getContext()).isToCheckMember(refElement, UnusedDeclarationInspection.this))
+					if(!((GlobalInspectionContextBase) context).isToCheckMember(refElement, UnusedDeclarationInspection.this))
 					{
 						return;
 					}
