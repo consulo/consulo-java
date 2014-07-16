@@ -20,6 +20,8 @@
 	<vendor>Jetbrains and others</vendor>
 	<depends optional="true" config-file="com.intellij.regexp.xml">com.intellij.regexp</depends>
 	<depends optional="true" config-file="org.intellij.intellilang.xml">org.intellij.intelliLang</depends>
+	<depends optional="true" config-file="Spellchecker.xml">com.intellij.spellchecker</depends>
+	<depends optional="true" config-file="Properties.xml">com.intellij.properties</depends>
 	<depends>com.intellij.xml</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 
@@ -589,6 +591,10 @@
 		<extensionPoint name="codeStyle.referenceAdjuster" beanClass="com.intellij.lang.LanguageExtensionPoint">
 			<with attribute="implementationClass" implements="com.intellij.psi.codeStyle.ReferenceAdjuster"/>
 		</extensionPoint>
+		<extensionPoint name="resourceBundleManager"
+						interface="com.intellij.lang.properties.psi.ResourceBundleManager"
+						area="CONSULO_PROJECT"/>
+		<extensionPoint name="i18nizeHandlerProvider" interface="com.intellij.codeInspection.i18n.I18nizeHandlerProvider"/>
 	</extensionPoints>
 
 	<extensions defaultExtensionNs="org.consulo.java">

@@ -3,7 +3,7 @@
   <component name="ModuleManager">
     <modules>
       <module name="consulo-java" dirurl="file://$PROJECT_DIR$">
-        <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" />
+        <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/dep" />
         <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" />
         <content url="file://$MODULE_DIR$">
           <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -29,6 +29,15 @@
         <orderEntry type="module" module-name="java-psi-impl" />
         <orderEntry type="module" module-name="java-generate-tostring" />
         <orderEntry type="module" module-name="java-manifest" />
+        <orderEntry type="module-library">
+          <library name="consulo:Spellchecker">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/dep/spellchecker/lib/spellchecker.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
       </module>
       <module name="java-compiler-artifact-impl" dirurl="file://$PROJECT_DIR$/java-compiler-artifact-impl">
         <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
@@ -364,6 +373,47 @@
         </content>
         <orderEntry type="module-extension-sdk" extension-id="java" />
         <orderEntry type="sourceFolder" forTests="false" />
+      </module>
+      <module name="java-i18n" dirurl="file://$PROJECT_DIR$/java-i18n">
+        <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+        <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module-library">
+          <library name="consulo:Properties Support">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../dep/properties/lib/properties.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
+        <orderEntry type="module-library">
+          <library name="consulo:Spellchecker">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../dep/spellchecker/lib/spellchecker.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
+        <orderEntry type="module-library">
+          <library name="consulo:XML">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
+              <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
+        <orderEntry type="module" module-name="java-impl" />
       </module>
     </modules>
   </component>
