@@ -69,7 +69,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 	@Override
 	public JarArchivePackagingElement createEmpty(@NotNull Project project)
 	{
-		return new JarArchivePackagingElement(this);
+		return new JarArchivePackagingElement();
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 		path = FileUtil.toSystemIndependentName(path);
 		final String parentPath = PathUtil.getParentPath(path);
 		final String fileName = PathUtil.getFileName(path);
-		final PackagingElement<?> element = new JarArchivePackagingElement(this, fileName);
+		final PackagingElement<?> element = new JarArchivePackagingElement(fileName);
 		return (CompositePackagingElement<?>) PackagingElementFactory.getInstance().createParentDirectories(parentPath, element);
 	}
 }

@@ -15,6 +15,10 @@
  */
 package com.intellij.packaging.impl.elements;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.ant.BuildProperties;
 import com.intellij.compiler.ant.Generator;
 import com.intellij.compiler.ant.Tag;
@@ -24,22 +28,18 @@ import com.intellij.packaging.artifacts.ArtifactType;
 import com.intellij.packaging.elements.AntCopyInstructionCreator;
 import com.intellij.packaging.elements.ArtifactAntGenerationContext;
 import com.intellij.packaging.elements.PackagingElementResolvingContext;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author VISTALL
  * @since 16:05/18.06.13
  */
 public class JarArchivePackagingElement extends ArchivePackagingElement {
-  public JarArchivePackagingElement(@NotNull JarArchiveElementType type) {
-    super(type);
+  public JarArchivePackagingElement() {
+    super(JarArchiveElementType.getInstance());
   }
 
-  public JarArchivePackagingElement(@NotNull JarArchiveElementType type, @NotNull String archiveFileName) {
-    super(type, archiveFileName);
+  public JarArchivePackagingElement(@NotNull String archiveFileName) {
+    super(JarArchiveElementType.getInstance(), archiveFileName);
   }
 
   @Override
