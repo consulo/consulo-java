@@ -15,27 +15,21 @@
  */
 package com.intellij.ide.util;
 
-import com.intellij.openapi.components.ServiceManager;
+import org.consulo.lombok.annotations.ProjectService;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * User: anna
  * Date: Jan 25, 2005
  */
+@ProjectService
 public abstract class TreeClassChooserFactory {
-
-  public static TreeClassChooserFactory getInstance(Project project) {
-    return ServiceManager.getService(project, TreeClassChooserFactory.class);
-  }
-
-
   @NotNull
   public abstract TreeClassChooser createWithInnerClassesScopeChooser(String title,
                                                                       GlobalSearchScope scope,

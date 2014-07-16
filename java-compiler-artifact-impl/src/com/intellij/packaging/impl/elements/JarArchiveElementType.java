@@ -31,9 +31,7 @@ import com.intellij.packaging.elements.CompositePackagingElement;
 import com.intellij.packaging.elements.CompositePackagingElementType;
 import com.intellij.packaging.elements.PackagingElement;
 import com.intellij.packaging.elements.PackagingElementFactory;
-import com.intellij.packaging.impl.ui.properties.JarArchiveElementPropertiesPanel;
 import com.intellij.packaging.ui.ArtifactEditorContext;
-import com.intellij.packaging.ui.PackagingElementPropertiesPanel;
 import com.intellij.util.PathUtil;
 
 /**
@@ -72,12 +70,12 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 		return new JarArchivePackagingElement();
 	}
 
-	@Override
+	/*@Override
 	public PackagingElementPropertiesPanel createElementPropertiesPanel(@NotNull JarArchivePackagingElement element,
 			@NotNull ArtifactEditorContext context)
 	{
 		return new JarArchiveElementPropertiesPanel(element, context);
-	}
+	}    */
 
 	@Override
 	public CompositePackagingElement<?> createComposite(CompositePackagingElement<?> parent, @Nullable String baseName,
