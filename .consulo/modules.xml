@@ -329,15 +329,6 @@
         <orderEntry type="module-library">
           <library>
             <CLASSES>
-              <root url="jar://$MODULE_DIR$/lib/finder.jar!/" />
-            </CLASSES>
-            <DOCUMENTATION />
-            <SOURCES />
-          </library>
-        </orderEntry>
-        <orderEntry type="module-library">
-          <library>
-            <CLASSES>
               <root url="jar://$MODULE_DIR$/lib/jacocoagent.jar!/" />
             </CLASSES>
             <DOCUMENTATION />
