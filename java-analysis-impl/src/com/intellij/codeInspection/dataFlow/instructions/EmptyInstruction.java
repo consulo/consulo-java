@@ -32,24 +32,30 @@ import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.psi.PsiElement;
 
 
-public class EmptyInstruction extends Instruction {
-  @Nullable private final PsiElement myAnchor;
+public class EmptyInstruction extends Instruction
+{
+	@Nullable
+	private final PsiElement myAnchor;
 
-  public EmptyInstruction(@Nullable PsiElement anchor) {
-    myAnchor = anchor;
-  }
+	public EmptyInstruction(@Nullable PsiElement anchor)
+	{
+		myAnchor = anchor;
+	}
 
-  @Nullable
-  public PsiElement getAnchor() {
-    return myAnchor;
-  }
+	@Nullable
+	public PsiElement getAnchor()
+	{
+		return myAnchor;
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitEmptyInstruction(this, runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitEmptyInstruction(this, runner, stateBefore);
+	}
 
-  public String toString() {
-    return "EMPTY";
-  }
+	public String toString()
+	{
+		return "EMPTY";
+	}
 }

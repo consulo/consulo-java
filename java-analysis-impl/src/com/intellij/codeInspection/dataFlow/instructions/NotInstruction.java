@@ -29,14 +29,17 @@ import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 
-public class NotInstruction extends Instruction {
+public class NotInstruction extends Instruction
+{
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitNot(this, runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitNot(this, runner, stateBefore);
+	}
 
-  public String toString() {
-    return "NOT";
-  }
+	public String toString()
+	{
+		return "NOT";
+	}
 }

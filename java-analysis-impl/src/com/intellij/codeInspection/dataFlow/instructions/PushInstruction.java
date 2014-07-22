@@ -34,40 +34,48 @@ import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.psi.PsiExpression;
 
-public class PushInstruction extends Instruction {
-  private final DfaValue myValue;
-  private final PsiExpression myPlace;
-  private final boolean myReferenceRead;
+public class PushInstruction extends Instruction
+{
+	private final DfaValue myValue;
+	private final PsiExpression myPlace;
+	private final boolean myReferenceRead;
 
-  public PushInstruction(@Nullable DfaValue value, PsiExpression place) {
-    this(value, place, false);
-  }
+	public PushInstruction(@Nullable DfaValue value, PsiExpression place)
+	{
+		this(value, place, false);
+	}
 
-  public PushInstruction(@Nullable DfaValue value, PsiExpression place, final boolean isReferenceRead) {
-    myValue = value != null ? value : DfaUnknownValue.getInstance();
-    myPlace = place;
-    myReferenceRead = isReferenceRead;
-  }
+	public PushInstruction(@Nullable DfaValue value, PsiExpression place, final boolean isReferenceRead)
+	{
+		myValue = value != null ? value : DfaUnknownValue.getInstance();
+		myPlace = place;
+		myReferenceRead = isReferenceRead;
+	}
 
-  public boolean isReferenceRead() {
-    return myReferenceRead;
-  }
+	public boolean isReferenceRead()
+	{
+		return myReferenceRead;
+	}
 
-  @NotNull
-  public DfaValue getValue() {
-    return myValue;
-  }
+	@NotNull
+	public DfaValue getValue()
+	{
+		return myValue;
+	}
 
-  public PsiExpression getPlace() {
-    return myPlace;
-  }
+	public PsiExpression getPlace()
+	{
+		return myPlace;
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitPush(this, runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitPush(this, runner, stateBefore);
+	}
 
-  public String toString() {
-    return "PUSH " + myValue;
-  }
+	public String toString()
+	{
+		return "PUSH " + myValue;
+	}
 }

@@ -23,26 +23,32 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author peter
  */
-public class WorkingTimeMeasurer {
-  private final long myTimeLimit;
-  private final long myStart;
-  @Nullable private static final ThreadMXBean ourThreadMXBean;
+public class WorkingTimeMeasurer
+{
+	private final long myTimeLimit;
+	private final long myStart;
+	@Nullable
+	private static final ThreadMXBean ourThreadMXBean;
 
-  static {
-    ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-    ourThreadMXBean = bean.isCurrentThreadCpuTimeSupported() ? bean : null;
-  }
+	static
+	{
+		ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+		ourThreadMXBean = bean.isCurrentThreadCpuTimeSupported() ? bean : null;
+	}
 
-  private static long getCurrentTime() {
-    return ourThreadMXBean != null ? ourThreadMXBean.getCurrentThreadUserTime() : System.nanoTime();
-  }
+	private static long getCurrentTime()
+	{
+		return ourThreadMXBean != null ? ourThreadMXBean.getCurrentThreadUserTime() : System.nanoTime();
+	}
 
-  public WorkingTimeMeasurer(long nanoLimit) {
-    myTimeLimit = nanoLimit;
-    myStart = getCurrentTime();
-  }
+	public WorkingTimeMeasurer(long nanoLimit)
+	{
+		myTimeLimit = nanoLimit;
+		myStart = getCurrentTime();
+	}
 
-  public boolean isTimeOver() {
-    return getCurrentTime() - myStart > myTimeLimit;
-  }
+	public boolean isTimeOver()
+	{
+		return getCurrentTime() - myStart > myTimeLimit;
+	}
 }

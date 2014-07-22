@@ -28,39 +28,48 @@ package com.intellij.codeInspection.dataFlow.instructions;
 import com.intellij.codeInspection.dataFlow.*;
 import com.intellij.psi.PsiElement;
 
-public class ConditionalGotoInstruction extends BranchingInstruction {
-  private ControlFlow.ControlFlowOffset myOffset;
-  private final boolean myIsNegated;
+public class ConditionalGotoInstruction extends BranchingInstruction
+{
+	private ControlFlow.ControlFlowOffset myOffset;
+	private final boolean myIsNegated;
 
-  public ConditionalGotoInstruction(ControlFlow.ControlFlowOffset myOffset, boolean isNegated, PsiElement psiAnchor) {
-    super(psiAnchor);
-    this.myOffset = myOffset;
-    myIsNegated = isNegated;
-  }
+	public ConditionalGotoInstruction(ControlFlow.ControlFlowOffset myOffset, boolean isNegated, PsiElement psiAnchor)
+	{
+		super(psiAnchor);
+		this.myOffset = myOffset;
+		myIsNegated = isNegated;
+	}
 
-  public boolean isNegated() {
-    return myIsNegated;
-  }
+	public boolean isNegated()
+	{
+		return myIsNegated;
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitConditionalGoto(this, runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitConditionalGoto(this, runner, stateBefore);
+	}
 
-  public String toString() {
-    return (isNegated() ? "!":"") + "cond?_goto " + getOffset();
-  }
+	public String toString()
+	{
+		return (isNegated() ? "!" : "") + "cond?_goto " + getOffset();
+	}
 
-  public int getOffset() {
-    return myOffset.getInstructionOffset();
-  }
+	public int getOffset()
+	{
+		return myOffset.getInstructionOffset();
+	}
 
-  public void setOffset(final int offset) {
-    myOffset = new ControlFlow.ControlFlowOffset() {
-      @Override
-      public int getInstructionOffset() {
-        return offset;
-      }
-    };
-  }
+	public void setOffset(final int offset)
+	{
+		myOffset = new ControlFlow.ControlFlowOffset()
+		{
+			@Override
+			public int getInstructionOffset()
+			{
+				return offset;
+			}
+		};
+	}
 }

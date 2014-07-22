@@ -29,110 +29,127 @@ import gnu.trove.TObjectIntHashMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.dataFlow.instructions.FlushVariableInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
-import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiVariable;
 
-public class ControlFlow {
-  private final List<Instruction> myInstructions = new ArrayList<Instruction>();
-  private final TObjectIntHashMap<PsiElement> myElementToStartOffsetMap = new TObjectIntHashMap<PsiElement>();
-  private final TObjectIntHashMap<PsiElement> myElementToEndOffsetMap = new TObjectIntHashMap<PsiElement>();
-  private DfaVariableValue[] myFields;
-  private final DfaValueFactory myFactory;
+public class ControlFlow
+{
+	private final List<Instruction> myInstructions = new ArrayList<Instruction>();
+	private final TObjectIntHashMap<PsiElement> myElementToStartOffsetMap = new TObjectIntHashMap<PsiElement>();
+	private final TObjectIntHashMap<PsiElement> myElementToEndOffsetMap = new TObjectIntHashMap<PsiElement>();
+	private final DfaValueFactory myFactory;
 
-  public ControlFlow(final DfaValueFactory factory) {
-    myFactory = factory;
-  }
+	public ControlFlow(final DfaValueFactory factory)
+	{
+		myFactory = factory;
+	}
 
-  public Instruction[] getInstructions(){
-    return myInstructions.toArray(new Instruction[myInstructions.size()]);
-  }
+	public Instruction[] getInstructions()
+	{
+		return myInstructions.toArray(new Instruction[myInstructions.size()]);
+	}
 
-  public int getInstructionCount() {
-    return myInstructions.size();
-  }
+	public int getInstructionCount()
+	{
+		return myInstructions.size();
+	}
 
-  public ControlFlowOffset getNextOffset() {
-    final int currentSize = myInstructions.size();
-    return new ControlFlowOffset() {
-      @Override
-      public int getInstructionOffset() {
-        return currentSize;
-      }
-    };
-  }
+	public ControlFlowOffset getNextOffset()
+	{
+		final int currentSize = myInstructions.size();
+		return new ControlFlowOffset()
+		{
+			@Override
+			public int getInstructionOffset()
+			{
+				return currentSize;
+			}
+		};
+	}
 
-  public void startElement(PsiElement psiElement) {
-    myElementToStartOffsetMap.put(psiElement, myInstructions.size());
-  }
+	public void startElement(PsiElement psiElement)
+	{
+		myElementToStartOffsetMap.put(psiElement, myInstructions.size());
+	}
 
-  public void finishElement(PsiElement psiElement) {
-    myElementToEndOffsetMap.put(psiElement, myInstructions.size());
-  }
+	public void finishElement(PsiElement psiElement)
+	{
+		myElementToEndOffsetMap.put(psiElement, myInstructions.size());
+	}
 
-  public void addInstruction(Instruction instruction) {
-    instruction.setIndex(myInstructions.size());
-    myInstructions.add(instruction);
-  }
+	public void addInstruction(Instruction instruction)
+	{
+		instruction.setIndex(myInstructions.size());
+		myInstructions.add(instruction);
+	}
 
-  public void removeVariable(PsiVariable variable) {
-    DfaVariableValue var = myFactory.getVarFactory().createVariableValue(variable, false);
-    addInstruction(new FlushVariableInstruction(var));
-  }
+	public void removeVariable(@Nullable PsiVariable variable)
+	{
+		if(variable == null)
+		{
+			return;
+		}
+		addInstruction(new FlushVariableInstruction(myFactory.getVarFactory().createVariableValue(variable, false)));
+	}
 
-  public ControlFlowOffset getStartOffset(final PsiElement element) {
-    return new ControlFlowOffset() {
-      @Override
-      public int getInstructionOffset() {
-        return myElementToStartOffsetMap.get(element);
-      }
-    };
-  }
+	public ControlFlowOffset getStartOffset(final PsiElement element)
+	{
+		return new ControlFlowOffset()
+		{
+			@Override
+			public int getInstructionOffset()
+			{
+				return myElementToStartOffsetMap.get(element);
+			}
+		};
+	}
 
-  public ControlFlowOffset getEndOffset(final PsiElement element) {
-    return new ControlFlowOffset() {
-      @Override
-      public int getInstructionOffset() {
-        return myElementToEndOffsetMap.get(element);
-      }
-    };
-  }
+	public ControlFlowOffset getEndOffset(final PsiElement element)
+	{
+		return new ControlFlowOffset()
+		{
+			@Override
+			public int getInstructionOffset()
+			{
+				return myElementToEndOffsetMap.get(element);
+			}
+		};
+	}
 
-  public DfaVariableValue[] getFields() {
-    return myFields;
-  }
+	@Override
+	public String toString()
+	{
+		StringBuilder result = new StringBuilder();
+		final List<Instruction> instructions = myInstructions;
 
-  public void setFields(DfaVariableValue[] fields) {
-    myFields = fields;
-  }
+		for(int i = 0; i < instructions.size(); i++)
+		{
+			Instruction instruction = instructions.get(i);
+			result.append(Integer.toString(i)).append(": ").append(instruction.toString());
+			result.append("\n");
+		}
+		return result.toString();
+	}
 
+	public interface ControlFlowOffset
+	{
+		int getInstructionOffset();
+	}
 
-  public String toString() {
-    StringBuilder result = new StringBuilder();
-    final List<Instruction> instructions = myInstructions;
-
-    for (int i = 0; i < instructions.size(); i++) {
-      Instruction instruction = instructions.get(i);
-      result.append(Integer.toString(i)).append(": ").append(instruction.toString());
-      result.append("\n");
-    }
-    return result.toString();
-  }
-
-  public interface ControlFlowOffset {
-    int getInstructionOffset();
-  }
-
-  static ControlFlowOffset deltaOffset(final ControlFlowOffset delegate, final int delta) {
-    return new ControlFlowOffset() {
-      @Override
-      public int getInstructionOffset() {
-        return delegate.getInstructionOffset() + delta;
-      }
-    };
-  }
+	static ControlFlowOffset deltaOffset(final ControlFlowOffset delegate, final int delta)
+	{
+		return new ControlFlowOffset()
+		{
+			@Override
+			public int getInstructionOffset()
+			{
+				return delegate.getInstructionOffset() + delta;
+			}
+		};
+	}
 
 }

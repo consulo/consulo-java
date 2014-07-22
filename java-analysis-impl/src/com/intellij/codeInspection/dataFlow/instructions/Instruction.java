@@ -29,20 +29,24 @@ import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 
-public abstract class Instruction {
-  private int myIndex;
+public abstract class Instruction
+{
+	private int myIndex;
 
-  protected final DfaInstructionState[] nextInstruction(DataFlowRunner runner, DfaMemoryState stateBefore) {
-    return new DfaInstructionState[] {new DfaInstructionState(runner.getInstruction(getIndex() + 1), stateBefore)};
-  }
+	protected final DfaInstructionState[] nextInstruction(DataFlowRunner runner, DfaMemoryState stateBefore)
+	{
+		return new DfaInstructionState[]{new DfaInstructionState(runner.getInstruction(getIndex() + 1), stateBefore)};
+	}
 
-  public abstract DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor);
+	public abstract DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor);
 
-  public void setIndex(int index) {
-    myIndex = index;
-  }
+	public void setIndex(int index)
+	{
+		myIndex = index;
+	}
 
-  public int getIndex() {
-    return myIndex;
-  }
+	public int getIndex()
+	{
+		return myIndex;
+	}
 }

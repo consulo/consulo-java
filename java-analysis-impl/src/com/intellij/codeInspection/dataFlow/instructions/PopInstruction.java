@@ -24,20 +24,20 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
+import com.intellij.codeInspection.dataFlow.*;
 
-public class PopInstruction extends Instruction {
+public class PopInstruction extends Instruction
+{
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    stateBefore.pop();
-    return nextInstruction(runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		stateBefore.pop();
+		return nextInstruction(runner, stateBefore);
+	}
 
-  public String toString() {
-    return "POP";
-  }
+	public String toString()
+	{
+		return "POP";
+	}
 }

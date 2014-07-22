@@ -24,29 +24,31 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
+import com.intellij.codeInspection.dataFlow.*;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 
-public class FlushVariableInstruction extends Instruction {
-  private final DfaVariableValue myVariable;
+public class FlushVariableInstruction extends Instruction
+{
+	private final DfaVariableValue myVariable;
 
-  public FlushVariableInstruction(DfaVariableValue expr) {
-    myVariable = expr;
-  }
+	public FlushVariableInstruction(DfaVariableValue expr)
+	{
+		myVariable = expr;
+	}
 
-  public DfaVariableValue getVariable() {
-    return myVariable;
-  }
+	public DfaVariableValue getVariable()
+	{
+		return myVariable;
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitFlushVariable(this, runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitFlushVariable(this, runner, stateBefore);
+	}
 
-  public String toString() {
-    return "FLUSH " + (myVariable != null ? myVariable.toString() : " all fields");
-  }
+	public String toString()
+	{
+		return "FLUSH " + (myVariable != null ? myVariable.toString() : " all fields");
+	}
 }

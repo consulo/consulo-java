@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import static com.intellij.codeInspection.dataFlow.MethodContract.ValueConstraint;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_ASSERTION_ERROR;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_ERROR;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION;
@@ -28,10 +27,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
@@ -48,7 +45,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
@@ -60,30 +56,6 @@ import com.siyeh.ig.numeric.UnnecessaryExplicitNumericCastInspection;
 public class ControlFlowAnalyzer extends JavaElementVisitor
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer");
-	private static final Condition<String> FALSE_GETTERS = parseFalseGetters();
-
-	private static Condition<String> parseFalseGetters()
-	{
-		try
-		{
-			final Pattern pattern = Pattern.compile("java\\.nio\\..*ByteBuffer\\.get.*");
-			return new Condition<String>()
-			{
-				@Override
-				public boolean value(String s)
-				{
-					return pattern.matcher(s).matches();
-				}
-			};
-		}
-		catch(Exception e)
-		{
-			LOG.error(e);
-			//noinspection unchecked
-			return Condition.FALSE;
-		}
-	}
-
 	public static final String ORG_JETBRAINS_ANNOTATIONS_CONTRACT = Contract.class.getName();
 	private boolean myIgnoreAssertions;
 
@@ -269,7 +241,24 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 
 		addInstruction(new AssignInstruction(rExpr));
+
+		flushArrayElementsOnUnknownIndexAssignment(lExpr);
+
 		finishElement(expression);
+	}
+
+	private void flushArrayElementsOnUnknownIndexAssignment(PsiExpression lExpr)
+	{
+		if(lExpr instanceof PsiArrayAccessExpression && myFactory.createValue(lExpr) == null // check for unknown index,
+		// otherwise AssignInstruction will flush only that element
+				)
+		{
+			DfaValue arrayVar = myFactory.createValue(((PsiArrayAccessExpression) lExpr).getArrayExpression());
+			if(arrayVar instanceof DfaVariableValue)
+			{
+				addInstruction(new FlushVariableInstruction((DfaVariableValue) arrayVar));
+			}
+		}
 	}
 
 	private void generateDefaultAssignmentBinOp(PsiExpression lExpr, PsiExpression rExpr, final PsiType exprType)
@@ -801,7 +790,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 											!= null)
 							{
 
-								addInstruction(new PushInstruction(getExpressionDfaValue((PsiReferenceExpression) caseExpression), caseExpression));
+								addInstruction(new PushInstruction(myFactory.createValue(caseExpression), caseExpression));
 								caseValue.accept(this);
 								addInstruction(new BinopInstruction(JavaTokenType.EQEQ, null, caseExpression.getProject()));
 							}
@@ -1267,7 +1256,8 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 			addInstruction(new PopInstruction());
 		}
 
-		pushTypeOrUnknown(arrayExpression);
+		DfaValue toPush = myFactory.createValue(expression);
+		addInstruction(new PushInstruction(toPush != null ? toPush : myFactory.createTypeValue(expression.getType(), Nullness.UNKNOWN), null));
 		finishElement(expression);
 	}
 
@@ -1698,9 +1688,9 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 
 		addConditionalRuntimeThrow();
-		List<MethodContract> contracts = method instanceof PsiMethod ? getMethodContracts((PsiMethod) method) : Collections
-				.<MethodContract>emptyList();
-		addInstruction(new MethodCallInstruction(expression, createChainedVariableValue(expression), contracts));
+		List<MethodContract> contracts = method instanceof PsiMethod ? getMethodCallContracts((PsiMethod) method,
+				expression) : Collections.<MethodContract>emptyList();
+		addInstruction(new MethodCallInstruction(expression, myFactory.createValue(expression), contracts));
 		if(!contracts.isEmpty())
 		{
 			// if a contract resulted in 'fail', handle it
@@ -1735,6 +1725,12 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 			addInstruction(new PushInstruction(myFactory.getConstFactory().getFalse(), null));
 		}
 		finishElement(expression);
+	}
+
+	private static List<MethodContract> getMethodCallContracts(@NotNull final PsiMethod method, @NotNull PsiMethodCallExpression call)
+	{
+		List<MethodContract> contracts = HardcodedContracts.getHardcodedContracts(method, call);
+		return !contracts.isEmpty() ? contracts : getMethodContracts(method);
 	}
 
 	static List<MethodContract> getMethodContracts(@NotNull final PsiMethod method)
@@ -1774,57 +1770,6 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 			});
 		}
 
-		@NonNls String methodName = method.getName();
-
-		PsiClass owner = method.getContainingClass();
-		if(owner != null)
-		{
-			final String className = owner.getQualifiedName();
-			if("java.lang.System".equals(className))
-			{
-				if("exit".equals(methodName))
-				{
-					return Collections.singletonList(new MethodContract(MethodContract.createConstraintArray(paramCount),
-							ValueConstraint.THROW_EXCEPTION));
-				}
-			}
-			else if("junit.framework.Assert".equals(className) || "org.junit.Assert".equals(className) ||
-					"junit.framework.TestCase".equals(className) || "org.testng.Assert".equals(className) || "org.testng.AssertJUnit".equals
-					(className))
-			{
-				boolean testng = className.startsWith("org.testng.");
-				if("fail".equals(methodName))
-				{
-					return Collections.singletonList(new MethodContract(MethodContract.createConstraintArray(paramCount),
-							ValueConstraint.THROW_EXCEPTION));
-				}
-
-				int checkedParam = testng ? 0 : paramCount - 1;
-				ValueConstraint[] constraints = MethodContract.createConstraintArray(paramCount);
-				if("assertTrue".equals(methodName))
-				{
-					constraints[checkedParam] = ValueConstraint.FALSE_VALUE;
-					return Collections.singletonList(new MethodContract(constraints, ValueConstraint.THROW_EXCEPTION));
-				}
-				if("assertFalse".equals(methodName))
-				{
-					constraints[checkedParam] = ValueConstraint.TRUE_VALUE;
-					return Collections.singletonList(new MethodContract(constraints, ValueConstraint.THROW_EXCEPTION));
-				}
-				if("assertNull".equals(methodName))
-				{
-					constraints[checkedParam] = ValueConstraint.NOT_NULL_VALUE;
-					return Collections.singletonList(new MethodContract(constraints, ValueConstraint.THROW_EXCEPTION));
-				}
-				if("assertNotNull".equals(methodName))
-				{
-					constraints[checkedParam] = ValueConstraint.NULL_VALUE;
-					return Collections.singletonList(new MethodContract(constraints, ValueConstraint.THROW_EXCEPTION));
-				}
-				return Collections.emptyList();
-			}
-		}
-
 		return Collections.emptyList();
 	}
 
@@ -1832,23 +1777,6 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 	public static PsiAnnotation findContractAnnotation(PsiMethod method)
 	{
 		return AnnotationUtil.findAnnotation(method, ORG_JETBRAINS_ANNOTATIONS_CONTRACT);
-	}
-
-	private void pushTypeOrUnknown(PsiExpression expr)
-	{
-		PsiType type = expr.getType();
-
-		final DfaValue dfaValue;
-		if(type instanceof PsiClassType)
-		{
-			dfaValue = myFactory.createTypeValue(type, Nullness.UNKNOWN);
-		}
-		else
-		{
-			dfaValue = null;
-		}
-
-		addInstruction(new PushInstruction(dfaValue, null));
 	}
 
 	@Override
@@ -2024,106 +1952,9 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 
 		boolean referenceRead = PsiUtil.isAccessedForReading(expression) && !PsiUtil.isAccessedForWriting(expression);
-		addInstruction(new PushInstruction(getExpressionDfaValue(expression), expression, referenceRead));
+		addInstruction(new PushInstruction(myFactory.createValue(expression), expression, referenceRead));
 
 		finishElement(expression);
-	}
-
-	@Nullable
-	private DfaValue getExpressionDfaValue(PsiReferenceExpression expression)
-	{
-		DfaValue dfaValue = myFactory.createReferenceValue(expression);
-		if(dfaValue == null)
-		{
-			PsiElement resolved = expression.resolve();
-			if(resolved instanceof PsiField)
-			{
-				dfaValue = createDfaValueForAnotherInstanceMemberAccess(expression, (PsiField) resolved);
-			}
-		}
-		return dfaValue;
-	}
-
-	@NotNull
-	private DfaValue createDfaValueForAnotherInstanceMemberAccess(PsiReferenceExpression expression, PsiField field)
-	{
-		DfaValue dfaValue = null;
-		if(expression.getQualifierExpression() != null)
-		{
-			dfaValue = createChainedVariableValue(expression);
-		}
-		if(dfaValue == null)
-		{
-			PsiType type = expression.getType();
-			return myFactory.createTypeValue(type, DfaPsiUtil.getElementNullability(type, field));
-		}
-		return dfaValue;
-	}
-
-	@Nullable
-	private DfaVariableValue createChainedVariableValue(@Nullable PsiExpression expression)
-	{
-		if(expression instanceof PsiParenthesizedExpression)
-		{
-			return createChainedVariableValue(((PsiParenthesizedExpression) expression).getExpression());
-		}
-
-		PsiReferenceExpression refExpr;
-		if(expression instanceof PsiMethodCallExpression)
-		{
-			refExpr = ((PsiMethodCallExpression) expression).getMethodExpression();
-		}
-		else if(expression instanceof PsiReferenceExpression)
-		{
-			refExpr = (PsiReferenceExpression) expression;
-		}
-		else
-		{
-			return null;
-		}
-
-		PsiElement target = refExpr.resolve();
-		PsiModifierListOwner var = getAccessedVariable(target);
-		if(var == null)
-		{
-			return null;
-		}
-
-		if(DfaValueFactory.isEffectivelyUnqualified(refExpr))
-		{
-			return myFactory.getVarFactory().createVariableValue(var, refExpr.getType(), false, null);
-		}
-
-		if(!(var instanceof PsiField) || !var.hasModifierProperty(PsiModifier.TRANSIENT) && !var.hasModifierProperty(PsiModifier.VOLATILE))
-		{
-			DfaVariableValue qualifierValue = createChainedVariableValue(refExpr.getQualifierExpression());
-			if(qualifierValue != null)
-			{
-				return myFactory.getVarFactory().createVariableValue(var, refExpr.getType(), false, qualifierValue);
-			}
-		}
-		return null;
-	}
-
-	@Nullable
-	private static PsiModifierListOwner getAccessedVariable(final PsiElement target)
-	{
-		if(target instanceof PsiVariable)
-		{
-			return (PsiVariable) target;
-		}
-		if(target instanceof PsiMethod)
-		{
-			if(PropertyUtil.isSimplePropertyGetter((PsiMethod) target))
-			{
-				String qName = PsiUtil.getMemberQualifiedName((PsiMethod) target);
-				if(qName == null || !FALSE_GETTERS.value(qName))
-				{
-					return (PsiMethod) target;
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -2166,7 +1997,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 		}
 		else
 		{
-			pushTypeOrUnknown(castExpression);
+			addInstruction(new PushInstruction(myFactory.createTypeValue(castExpression.getType(), Nullness.UNKNOWN), null));
 		}
 
 		final PsiTypeElement typeElement = castExpression.getCastType();

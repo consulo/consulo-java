@@ -32,31 +32,37 @@ import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 
-public class TypeCastInstruction extends Instruction {
-  private final PsiTypeCastExpression myCastExpression;
-  private final PsiExpression myCasted;
-  private final PsiType myCastTo;
+public class TypeCastInstruction extends Instruction
+{
+	private final PsiTypeCastExpression myCastExpression;
+	private final PsiExpression myCasted;
+	private final PsiType myCastTo;
 
-  public TypeCastInstruction(PsiTypeCastExpression castExpression, PsiExpression casted, PsiType castTo) {
-    myCastExpression = castExpression;
-    myCasted = casted;
-    myCastTo = castTo;
-  }
+	public TypeCastInstruction(PsiTypeCastExpression castExpression, PsiExpression casted, PsiType castTo)
+	{
+		myCastExpression = castExpression;
+		myCasted = casted;
+		myCastTo = castTo;
+	}
 
-  public PsiTypeCastExpression getCastExpression() {
-    return myCastExpression;
-  }
+	public PsiTypeCastExpression getCastExpression()
+	{
+		return myCastExpression;
+	}
 
-  public PsiExpression getCasted() {
-    return myCasted;
-  }
+	public PsiExpression getCasted()
+	{
+		return myCasted;
+	}
 
-  public PsiType getCastTo() {
-    return myCastTo;
-  }
+	public PsiType getCastTo()
+	{
+		return myCastTo;
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitTypeCast(this, runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitTypeCast(this, runner, stateBefore);
+	}
 }

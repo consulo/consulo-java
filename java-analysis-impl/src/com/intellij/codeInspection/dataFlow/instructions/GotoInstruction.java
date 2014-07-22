@@ -27,34 +27,42 @@ package com.intellij.codeInspection.dataFlow.instructions;
 import com.intellij.codeInspection.dataFlow.*;
 
 
-public class GotoInstruction extends Instruction {
-  private ControlFlow.ControlFlowOffset myOffset;
+public class GotoInstruction extends Instruction
+{
+	private ControlFlow.ControlFlowOffset myOffset;
 
-  public GotoInstruction(ControlFlow.ControlFlowOffset myOffset) {
-    this.myOffset = myOffset;
-  }
+	public GotoInstruction(ControlFlow.ControlFlowOffset myOffset)
+	{
+		this.myOffset = myOffset;
+	}
 
-  public int getOffset() {
-    return myOffset.getInstructionOffset();
-  }
+	public int getOffset()
+	{
+		return myOffset.getInstructionOffset();
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    Instruction nextInstruction = runner.getInstruction(getOffset());
-    return new DfaInstructionState[]{new DfaInstructionState(nextInstruction, stateBefore)};
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		Instruction nextInstruction = runner.getInstruction(getOffset());
+		return new DfaInstructionState[]{new DfaInstructionState(nextInstruction, stateBefore)};
+	}
 
-  public String toString() {
-    return "GOTO: " + getOffset();
-  }
+	public String toString()
+	{
+		return "GOTO: " + getOffset();
+	}
 
-  public void setOffset(final int offset) {
-    myOffset = new ControlFlow.ControlFlowOffset() {
-      @Override
-      public int getInstructionOffset() {
-        return offset;
-      }
-    };
-  }
+	public void setOffset(final int offset)
+	{
+		myOffset = new ControlFlow.ControlFlowOffset()
+		{
+			@Override
+			public int getInstructionOffset()
+			{
+				return offset;
+			}
+		};
+	}
 
 }

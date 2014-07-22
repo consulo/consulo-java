@@ -566,11 +566,11 @@ public class StandardInstructionVisitor extends InstructionVisitor
 	{
 		if(dfaRight instanceof DfaConstValue && dfaLeft instanceof DfaVariableValue)
 		{
-			PsiType varType = ((DfaVariableValue) dfaLeft).getVariableType();
 			Object value = ((DfaConstValue) dfaRight).getValue();
-			if(varType instanceof PsiPrimitiveType && value instanceof Number)
+			if(value instanceof Number)
 			{
-				DfaInstructionState[] result = checkTypeRanges(instruction, runner, memState, opSign, varType, ((Number) value).longValue());
+				DfaInstructionState[] result = checkComparingWithConstant(instruction, runner, memState, (DfaVariableValue) dfaLeft, opSign,
+						((Number) value).doubleValue());
 				if(result != null)
 				{
 					return result;
@@ -602,15 +602,39 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		return null;
 	}
 
-	private static DfaInstructionState[] checkTypeRanges(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState,
-			IElementType opSign, PsiType varType, long constantValue)
+	@Nullable
+	private static DfaInstructionState[] checkComparingWithConstant(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState,
+			DfaVariableValue var, IElementType opSign, double comparedWith)
 	{
-		long minValue = varType == PsiType.BYTE ? Byte.MIN_VALUE : varType == PsiType.SHORT ? Short.MIN_VALUE : varType == PsiType.INT ? Integer
-				.MIN_VALUE : varType == PsiType.CHAR ? Character.MIN_VALUE : Long.MIN_VALUE;
-		long maxValue = varType == PsiType.BYTE ? Byte.MAX_VALUE : varType == PsiType.SHORT ? Short.MAX_VALUE : varType == PsiType.INT ? Integer
-				.MAX_VALUE : varType == PsiType.CHAR ? Character.MAX_VALUE : Long.MAX_VALUE;
+		DfaConstValue knownConstantValue = memState.getConstantValue(var);
+		Object knownValue = knownConstantValue == null ? null : knownConstantValue.getValue();
+		if(knownValue instanceof Number)
+		{
+			double knownDouble = ((Number) knownValue).doubleValue();
+			return checkComparisonWithKnownRange(instruction, runner, memState, opSign, comparedWith, knownDouble, knownDouble);
+		}
 
-		if(constantValue < minValue || constantValue > maxValue)
+		PsiType varType = var.getVariableType();
+		if(!(varType instanceof PsiPrimitiveType))
+		{
+			return null;
+		}
+
+		double minValue = varType == PsiType.BYTE ? Byte.MIN_VALUE : varType == PsiType.SHORT ? Short.MIN_VALUE : varType == PsiType.INT ? Integer
+				.MIN_VALUE : varType == PsiType.CHAR ? Character.MIN_VALUE : varType == PsiType.LONG ? Long.MIN_VALUE : varType == PsiType.FLOAT ?
+				Float.MIN_VALUE : Double.MIN_VALUE;
+		double maxValue = varType == PsiType.BYTE ? Byte.MAX_VALUE : varType == PsiType.SHORT ? Short.MAX_VALUE : varType == PsiType.INT ? Integer
+				.MAX_VALUE : varType == PsiType.CHAR ? Character.MAX_VALUE : varType == PsiType.LONG ? Long.MAX_VALUE : varType == PsiType.FLOAT ?
+				Float.MAX_VALUE : Double.MAX_VALUE;
+
+		return checkComparisonWithKnownRange(instruction, runner, memState, opSign, comparedWith, minValue, maxValue);
+	}
+
+	@Nullable
+	private static DfaInstructionState[] checkComparisonWithKnownRange(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState,
+			IElementType opSign, double comparedWith, double rangeMin, double rangeMax)
+	{
+		if(comparedWith < rangeMin || comparedWith > rangeMax)
 		{
 			if(opSign == EQEQ)
 			{
@@ -622,28 +646,28 @@ public class StandardInstructionVisitor extends InstructionVisitor
 			}
 		}
 
-		if(opSign == LT && constantValue <= minValue)
+		if(opSign == LT && comparedWith <= rangeMin)
 		{
 			return alwaysFalse(instruction, runner, memState);
 		}
-		if(opSign == LT && constantValue > maxValue)
+		if(opSign == LT && comparedWith > rangeMax)
 		{
 			return alwaysTrue(instruction, runner, memState);
 		}
-		if(opSign == LE && constantValue >= maxValue)
+		if(opSign == LE && comparedWith >= rangeMax)
 		{
 			return alwaysTrue(instruction, runner, memState);
 		}
 
-		if(opSign == GT && constantValue >= maxValue)
+		if(opSign == GT && comparedWith >= rangeMax)
 		{
 			return alwaysFalse(instruction, runner, memState);
 		}
-		if(opSign == GT && constantValue < minValue)
+		if(opSign == GT && comparedWith < rangeMin)
 		{
 			return alwaysTrue(instruction, runner, memState);
 		}
-		if(opSign == GE && constantValue <= minValue)
+		if(opSign == GE && comparedWith <= rangeMin)
 		{
 			return alwaysTrue(instruction, runner, memState);
 		}

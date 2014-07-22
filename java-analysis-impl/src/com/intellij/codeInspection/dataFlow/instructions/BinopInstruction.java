@@ -24,47 +24,69 @@
  */
 package com.intellij.codeInspection.dataFlow.instructions;
 
-import com.intellij.codeInspection.dataFlow.*;
+import static com.intellij.psi.JavaTokenType.EQEQ;
+import static com.intellij.psi.JavaTokenType.GE;
+import static com.intellij.psi.JavaTokenType.GT;
+import static com.intellij.psi.JavaTokenType.INSTANCEOF_KEYWORD;
+import static com.intellij.psi.JavaTokenType.LE;
+import static com.intellij.psi.JavaTokenType.LT;
+import static com.intellij.psi.JavaTokenType.NE;
+import static com.intellij.psi.JavaTokenType.PLUS;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInspection.dataFlow.DataFlowRunner;
+import com.intellij.codeInspection.dataFlow.DfaInstructionState;
+import com.intellij.codeInspection.dataFlow.DfaMemoryState;
+import com.intellij.codeInspection.dataFlow.InstructionVisitor;
+import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import static com.intellij.psi.JavaTokenType.*;
+public class BinopInstruction extends BranchingInstruction
+{
+	private static final TokenSet ourSignificantOperations = TokenSet.create(EQEQ, NE, LT, GT, LE, GE, INSTANCEOF_KEYWORD, PLUS);
+	private final IElementType myOperationSign;
+	private final Project myProject;
 
-public class BinopInstruction extends BranchingInstruction {
-  private static final TokenSet ourSignificantOperations = TokenSet.create(EQEQ, NE, LT, GT, LE, GE, INSTANCEOF_KEYWORD, PLUS);
-  private final IElementType myOperationSign;
-  private final Project myProject;
+	public BinopInstruction(IElementType opSign, @Nullable PsiElement psiAnchor, @NotNull Project project)
+	{
+		super(psiAnchor);
+		myProject = project;
+		myOperationSign = ourSignificantOperations.contains(opSign) ? opSign : null;
+	}
 
-  public BinopInstruction(IElementType opSign, @Nullable PsiElement psiAnchor, @NotNull Project project) {
-    super(psiAnchor);
-    myProject = project;
-    myOperationSign = ourSignificantOperations.contains(opSign) ? opSign : null;
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitBinop(this, runner, stateBefore);
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitBinop(this, runner, stateBefore);
-  }
+	public DfaValue getNonNullStringValue(final DfaValueFactory factory)
+	{
+		PsiElement anchor = getPsiAnchor();
+		Project project = myProject;
+		PsiClassType string = PsiType.getJavaLangString(PsiManager.getInstance(project), anchor == null ? GlobalSearchScope.allScope(project) :
+				anchor.getResolveScope());
+		return factory.createTypeValue(string, Nullness.NOT_NULL);
+	}
 
-  public DfaValue getNonNullStringValue(final DfaValueFactory factory) {
-    PsiElement anchor = getPsiAnchor();
-    Project project = myProject;
-    PsiClassType string = PsiType.getJavaLangString(PsiManager.getInstance(project), anchor == null ? GlobalSearchScope.allScope(project) : anchor.getResolveScope());
-    return factory.createTypeValue(string, Nullness.NOT_NULL);
-  }
+	@Override
+	public String toString()
+	{
+		return "BINOP " + myOperationSign;
+	}
 
-  public String toString() {
-    return "BINOP " + myOperationSign;
-  }
-
-  public IElementType getOperationSign() {
-    return myOperationSign;
-  }
+	public IElementType getOperationSign()
+	{
+		return myOperationSign;
+	}
 }

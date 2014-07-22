@@ -30,23 +30,28 @@ import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.psi.PsiExpression;
 
-public class AssignInstruction extends Instruction {
-  private final PsiExpression myRExpression;
+public class AssignInstruction extends Instruction
+{
+	private final PsiExpression myRExpression;
 
-  public AssignInstruction(PsiExpression RExpression) {
-    myRExpression = RExpression;
-  }
+	public AssignInstruction(PsiExpression RExpression)
+	{
+		myRExpression = RExpression;
+	}
 
-  @Override
-  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
-    return visitor.visitAssign(this, runner, stateBefore);
-  }
+	@Override
+	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
+	{
+		return visitor.visitAssign(this, runner, stateBefore);
+	}
 
-  public PsiExpression getRExpression() {
-    return myRExpression;
-  }
+	public PsiExpression getRExpression()
+	{
+		return myRExpression;
+	}
 
-  public String toString() {
-    return "ASSIGN";
-  }
+	public String toString()
+	{
+		return "ASSIGN";
+	}
 }

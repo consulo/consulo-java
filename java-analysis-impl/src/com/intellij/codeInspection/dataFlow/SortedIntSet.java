@@ -24,48 +24,72 @@ import gnu.trove.TIntArrayList;
  * Time: 6:16:20 PM
  * To change this template use Options | File Templates.
  */
-public class SortedIntSet extends TIntArrayList implements Comparable<SortedIntSet> {
-  public SortedIntSet() {
-  }
+public class SortedIntSet extends TIntArrayList implements Comparable<SortedIntSet>
+{
+	public SortedIntSet()
+	{
+	}
 
-  public SortedIntSet(int[] values) {
-    super(values);
-  }
+	public SortedIntSet(int[] values)
+	{
+		super(values);
+	}
 
-  @Override
-  public void add(int val) {
-    for(int idx = 0; idx < size(); idx++) {
-      int data = get(idx);
-      if (data == val) return;
-      if (data > val) {
-        insert(idx, val);
-        return;
-      }
-    }
-    super.add(val);
-  }
+	@Override
+	public void add(int val)
+	{
+		for(int idx = 0; idx < size(); idx++)
+		{
+			int data = get(idx);
+			if(data == val)
+			{
+				return;
+			}
+			if(data > val)
+			{
+				insert(idx, val);
+				return;
+			}
+		}
+		super.add(val);
+	}
 
-  @Override
-  public void add(int[] vals) {
-    for (int val : vals) {
-      add(val);
-    }
-  }
+	@Override
+	public void add(int[] vals)
+	{
+		for(int val : vals)
+		{
+			add(val);
+		}
+	}
 
-  public void removeValue(int val) {
-    int offset = indexOf(val);
-    if (offset != -1) {
-      remove(offset);
-    }
-  }
+	public void removeValue(int val)
+	{
+		int offset = indexOf(val);
+		if(offset != -1)
+		{
+			remove(offset);
+		}
+	}
 
-  @Override
-  public int compareTo(SortedIntSet t) {
-    if (t == this) return 0;
-    if (t.size() != size()) return size() - t.size();
-    for (int i = 0; i < size(); i++) {
-      if (_data[i] != t._data[i]) return _data[i] - t._data[i];
-    }
-    return 0;
-  }
+	@Override
+	public int compareTo(SortedIntSet t)
+	{
+		if(t == this)
+		{
+			return 0;
+		}
+		if(t.size() != size())
+		{
+			return size() - t.size();
+		}
+		for(int i = 0; i < size(); i++)
+		{
+			if(_data[i] != t._data[i])
+			{
+				return _data[i] - t._data[i];
+			}
+		}
+		return 0;
+	}
 }
