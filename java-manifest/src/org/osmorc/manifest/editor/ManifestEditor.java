@@ -28,6 +28,7 @@ import org.osmorc.manifest.lang.psi.ManifestFile;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -91,7 +92,7 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor
 
 		assert document != null;
 
-		PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+		final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
 
 		assert psiFile instanceof ManifestFile;
 
@@ -142,14 +143,14 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor
 			@Override
 			public void run(AnActionButton anActionButton)
 			{
-				ApplicationManager.getApplication().runWriteAction(new Runnable()
+				new WriteCommandAction.Simple<Object>(project, psiFile)
 				{
 					@Override
 					public void run()
 					{
 						myManifestFile.setHeaderValue("NewKey", "NewValue");
 					}
-				});
+				}.execute();
 			}
 		});
 		decorator.setRemoveAction(new AnActionButtonRunnable()
@@ -272,7 +273,15 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor
 				@Override
 				public void run(AnActionButton anActionButton)
 				{
-					header.addClause("newValue");
+					new WriteCommandAction.Simple<Object>(myProject, myManifestFile)
+					{
+
+						@Override
+						protected void run() throws Throwable
+						{
+							header.addClause("newValue");
+						}
+					}.execute();
 				}
 			});
 			disableActionsIfNeed(valueDecorator);

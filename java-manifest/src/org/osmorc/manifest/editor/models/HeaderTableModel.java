@@ -1,12 +1,12 @@
 package org.osmorc.manifest.editor.models;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.util.ui.ColumnInfo;
-import com.intellij.util.ui.ListTableModel;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.util.ui.ColumnInfo;
+import com.intellij.util.ui.ListTableModel;
 
 /**
  * @author VISTALL
@@ -39,12 +39,12 @@ public class HeaderTableModel extends ListTableModel<Clause> {
       return;
     }
 
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+    new WriteCommandAction.Simple<Object>(myHeader.getProject(), myHeader.getContainingFile()) {
       @Override
       public void run() {
         value.setText((String)aValue);
       }
-    });
+    }.execute();
   }
 
   @Override

@@ -24,6 +24,17 @@
  */
 package org.osmorc.manifest.lang.psi.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.osmorc.manifest.lang.ManifestFileType;
+import org.osmorc.manifest.lang.ManifestTokenType;
+import org.osmorc.manifest.lang.psi.Clause;
+import org.osmorc.manifest.lang.psi.Header;
+import org.osmorc.manifest.lang.psi.ManifestFile;
+import org.osmorc.manifest.lang.psi.Section;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
@@ -32,17 +43,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.osmorc.manifest.lang.ManifestFileType;
-import org.osmorc.manifest.lang.ManifestTokenType;
-import org.osmorc.manifest.lang.psi.Clause;
-import org.osmorc.manifest.lang.psi.Header;
-import org.osmorc.manifest.lang.psi.ManifestFile;
-import org.osmorc.manifest.lang.psi.Section;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
