@@ -1,16 +1,16 @@
 package org.osmorc.manifest.editor.models;
 
+import org.osmorc.manifest.lang.psi.Header;
+import org.osmorc.manifest.lang.psi.ManifestFile;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
-import org.osmorc.manifest.lang.psi.Header;
-import org.osmorc.manifest.lang.psi.ManifestFile;
 
 /**
  * @author VISTALL
  * @since 13:40/05.05.13
  */
-public class FileTableModel extends ListTableModel<String> {
+public class FileTableModel extends ListTableModel<Header> {
   private final ManifestFile myManifestFile;
 
   public FileTableModel(ManifestFile manifestFile) {

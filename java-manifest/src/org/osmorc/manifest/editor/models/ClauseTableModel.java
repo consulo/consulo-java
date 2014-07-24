@@ -1,16 +1,16 @@
 package org.osmorc.manifest.editor.models;
 
+import org.osmorc.manifest.lang.psi.Clause;
+import org.osmorc.manifest.lang.psi.Directive;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
-import org.osmorc.manifest.lang.psi.Clause;
-import org.osmorc.manifest.lang.psi.Directive;
 
 /**
  * @author VISTALL
  * @since 15:16/03.05.13
  */
-public class ClauseTableModel extends ListTableModel<String> {
+public class ClauseTableModel extends ListTableModel<Directive> {
   private Clause myClause;
   private final boolean myIsReadonlyFile;
 
