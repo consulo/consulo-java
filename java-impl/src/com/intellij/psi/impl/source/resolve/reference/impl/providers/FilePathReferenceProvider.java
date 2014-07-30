@@ -15,6 +15,13 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl.providers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -24,153 +31,181 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.HashSet;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 /**
  * @author cdr
  */
-public class FilePathReferenceProvider extends PsiReferenceProvider {
+public class FilePathReferenceProvider extends PsiReferenceProvider
+{
+	private final boolean myEndingSlashNotAllowed;
 
-  private final boolean myEndingSlashNotAllowed;
+	public FilePathReferenceProvider()
+	{
+		this(true);
+	}
 
-  public FilePathReferenceProvider() {
-    this(true);
-  }
+	public FilePathReferenceProvider(boolean endingSlashNotAllowed)
+	{
+		myEndingSlashNotAllowed = endingSlashNotAllowed;
+	}
 
-  public FilePathReferenceProvider(boolean endingSlashNotAllowed) {
-    myEndingSlashNotAllowed = endingSlashNotAllowed;
-  }
+	@NotNull
+	public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft)
+	{
+		return getReferencesByElement(element, text, offset, soft, Module.EMPTY_ARRAY);
+	}
 
-  @NotNull
-  public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft) {
-    return getReferencesByElement(element, text, offset, soft, Module.EMPTY_ARRAY);
-  }
+	@NotNull
+	public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft,
+			final @NotNull Module... forModules)
+	{
+		return new FileReferenceSet(text, element, offset, this, true, myEndingSlashNotAllowed)
+		{
+			@Override
+			protected boolean isSoft()
+			{
+				return soft;
+			}
 
-  @NotNull
-  public PsiReference[] getReferencesByElement(PsiElement element,
-                                               String text,
-                                               int offset,
-                                               final boolean soft,
-                                               final @NotNull Module... forModules) {
-    return new FileReferenceSet(text, element, offset, this, true, myEndingSlashNotAllowed) {
+			@Override
+			public boolean isAbsolutePathReference()
+			{
+				return true;
+			}
 
+			@Override
+			public boolean couldBeConvertedTo(boolean relative)
+			{
+				return !relative;
+			}
 
-      @Override
-      protected boolean isSoft() {
-        return soft;
-      }
+			@Override
+			public boolean absoluteUrlNeedsStartSlash()
+			{
+				final String s = getPathString();
+				return s != null && s.length() > 0 && s.charAt(0) == '/';
+			}
 
-      @Override
-      public boolean isAbsolutePathReference() {
-        return true;
-      }
+			@Override
+			@NotNull
+			public Collection<PsiFileSystemItem> computeDefaultContexts()
+			{
+				Set<PsiFileSystemItem> systemItems = new HashSet<PsiFileSystemItem>();
+				if(forModules.length > 0)
+				{
+					for(Module forModule : forModules)
+					{
+						systemItems.addAll(getRoots(forModule, true));
+					}
+				}
+				else
+				{
+					systemItems.addAll(getRoots(ModuleUtil.findModuleForPsiElement(getElement()), true));
+				}
+				return systemItems;
+			}
 
-      @Override
-      public boolean couldBeConvertedTo(boolean relative) {
-        return !relative;
-      }
+			@Override
+			public FileReference createFileReference(final TextRange range, final int index, final String text)
+			{
+				return FilePathReferenceProvider.this.createFileReference(this, range, index, text);
+			}
 
-      @Override
-      public boolean absoluteUrlNeedsStartSlash() {
-        final String s = getPathString();
-        return s != null && s.length() > 0 && s.charAt(0) == '/';
-      }
+			@Override
+			protected Condition<PsiFileSystemItem> getReferenceCompletionFilter()
+			{
+				return new Condition<PsiFileSystemItem>()
+				{
+					@Override
+					public boolean value(final PsiFileSystemItem element)
+					{
+						return isPsiElementAccepted(element);
+					}
+				};
+			}
+		}.getAllReferences();
+	}
 
-      @Override
-      @NotNull
-      public Collection<PsiFileSystemItem> computeDefaultContexts() {
-        Set<PsiFileSystemItem> systemItems = new HashSet<PsiFileSystemItem>();
-        if (forModules.length > 0) {
-          for (Module forModule : forModules) {
-            systemItems.addAll(getRoots(forModule, true));
-          }
-        } else {
-          systemItems.addAll(getRoots(ModuleUtil.findModuleForPsiElement(getElement()), true));
-        }
-        return systemItems;
-      }
+	@Override
+	public boolean acceptsTarget(@NotNull PsiElement target)
+	{
+		return target instanceof PsiFileSystemItem;
+	}
 
-      @Override
-      public FileReference createFileReference(final TextRange range, final int index, final String text) {
-        return FilePathReferenceProvider.this.createFileReference(this, range, index, text);
-      }
+	protected boolean isPsiElementAccepted(PsiElement element)
+	{
+		return !(element instanceof PsiJavaFile && element instanceof PsiCompiledElement);
+	}
 
-      @Override
-      protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
-        return new Condition<PsiFileSystemItem>() {
-          @Override
-          public boolean value(final PsiFileSystemItem element) {
-            return isPsiElementAccepted(element);
-          }
-        };
-      }
-    }.getAllReferences();
-  }
+	protected FileReference createFileReference(FileReferenceSet referenceSet, final TextRange range, final int index, final String text)
+	{
+		return new FileReference(referenceSet, range, index, text);
+	}
 
-  @Override
-  public boolean acceptsTarget(@NotNull PsiElement target) {
-    return target instanceof PsiFileSystemItem;
-  }
+	@Override
+	@NotNull
+	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
+	{
+		String text = null;
+		if(element instanceof PsiLiteralExpression)
+		{
+			Object value = ((PsiLiteralExpression) element).getValue();
+			if(value instanceof String)
+			{
+				text = (String) value;
+			}
+		}
+		//else if (element instanceof XmlAttributeValue) {
+		//  text = ((XmlAttributeValue)element).getValue();
+		//}
+		if(text == null)
+		{
+			return PsiReference.EMPTY_ARRAY;
+		}
+		return getReferencesByElement(element, text, 1, true);
+	}
 
-  protected boolean isPsiElementAccepted(PsiElement element) {
-    return !(element instanceof PsiJavaFile && element instanceof PsiCompiledElement);
-  }
+	@NotNull
+	public static Collection<PsiFileSystemItem> getRoots(final Module thisModule, boolean includingClasses)
+	{
+		if(thisModule == null)
+		{
+			return Collections.emptyList();
+		}
+		ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(thisModule);
+		List<PsiFileSystemItem> result = new ArrayList<PsiFileSystemItem>();
+		final PsiManager psiManager = PsiManager.getInstance(thisModule.getProject());
+		if(includingClasses)
+		{
+			VirtualFile[] libraryUrls = moduleRootManager.orderEntries().getAllLibrariesAndSdkClassesRoots();
+			for(VirtualFile file : libraryUrls)
+			{
+				PsiDirectory directory = psiManager.findDirectory(file);
+				if(directory != null)
+				{
+					result.add(directory);
+				}
+			}
+		}
 
-  protected FileReference createFileReference(FileReferenceSet referenceSet, final TextRange range, final int index, final String text) {
-    return new FileReference(referenceSet, range, index, text);
-  }
-
-  @Override
-  @NotNull
-  public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context) {
-    String text = null;
-    if (element instanceof PsiLiteralExpression) {
-      Object value = ((PsiLiteralExpression)element).getValue();
-      if (value instanceof String) {
-        text = (String)value;
-      }
-    }
-    //else if (element instanceof XmlAttributeValue) {
-    //  text = ((XmlAttributeValue)element).getValue();
-    //}
-    if (text == null) return PsiReference.EMPTY_ARRAY;
-    return getReferencesByElement(element, text, 1, true);
-  }
-
-  @NotNull
-  public static Collection<PsiFileSystemItem> getRoots(final Module thisModule, boolean includingClasses) {
-    if (thisModule == null) return Collections.emptyList();
-    Set<Module> modules = new com.intellij.util.containers.HashSet<Module>();
-    ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(thisModule);
-    ModuleUtil.getDependencies(thisModule, modules);
-    List<PsiFileSystemItem> result = new ArrayList<PsiFileSystemItem>();
-    final PsiManager psiManager = PsiManager.getInstance(thisModule.getProject());
-    if (includingClasses) {
-      VirtualFile[] libraryUrls = moduleRootManager.orderEntries().getAllLibrariesAndSdkClassesRoots();
-      for (VirtualFile file : libraryUrls) {
-        PsiDirectory directory = psiManager.findDirectory(file);
-        if (directory != null) {
-          result.add(directory);
-        }
-      }
-    }
-
-    VirtualFile[] sourceRoots = moduleRootManager.orderEntries().recursively().withoutSdk().withoutLibraries().getSourceRoots();
-    for (VirtualFile root : sourceRoots) {
-      final PsiDirectory directory = psiManager.findDirectory(root);
-      if (directory != null) {
-        final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
-        if (aPackage != null && aPackage.getName() != null) {
-          // package prefix
-          result.add(PackagePrefixFileSystemItem.create(directory));
-        }
-        else {
-          result.add(directory);
-        }
-      }
-    }
-    return result;
-  }
+		VirtualFile[] sourceRoots = moduleRootManager.orderEntries().recursively().withoutSdk().withoutLibraries().getSourceRoots();
+		for(VirtualFile root : sourceRoots)
+		{
+			final PsiDirectory directory = psiManager.findDirectory(root);
+			if(directory != null)
+			{
+				final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+				if(aPackage != null && aPackage.getName() != null)
+				{
+					// package prefix
+					result.add(PackagePrefixFileSystemItem.create(directory));
+				}
+				else
+				{
+					result.add(directory);
+				}
+			}
+		}
+		return result;
+	}
 }
