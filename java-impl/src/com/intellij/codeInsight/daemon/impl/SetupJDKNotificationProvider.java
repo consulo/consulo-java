@@ -59,10 +59,10 @@ public class SetupJDKNotificationProvider extends EditorNotifications.Provider<E
 				notifications.updateAllNotifications();
 			}
 		});
-		myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener.Adapter()
+		myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener()
 		{
 			@Override
-			public void afterExtensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension)
+			public void beforeExtensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension)
 			{
 				notifications.updateAllNotifications();
 			}
