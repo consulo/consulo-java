@@ -25,13 +25,13 @@ import java.awt.Point;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.impl.DebuggerSession;
-import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.ValueHint;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.xdebugger.impl.evaluate.quick.common.AbstractValueHint;
 import com.intellij.xdebugger.impl.evaluate.quick.common.QuickEvaluateHandler;
 import com.intellij.xdebugger.impl.evaluate.quick.common.ValueHintType;
+import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 
 public class QuickEvaluateActionHandler extends QuickEvaluateHandler
 {
@@ -43,10 +43,7 @@ public class QuickEvaluateActionHandler extends QuickEvaluateHandler
 	}
 
 	@Override
-	public AbstractValueHint createValueHint(
-			@NotNull final Project project,
-			@NotNull final Editor editor,
-			@NotNull final Point point,
+	public AbstractValueHint createValueHint(@NotNull final Project project, @NotNull final Editor editor, @NotNull final Point point,
 			final ValueHintType type)
 	{
 		return ValueHint.createValueHint(project, editor, point, type);
@@ -62,6 +59,6 @@ public class QuickEvaluateActionHandler extends QuickEvaluateHandler
 	@Override
 	public int getValueLookupDelay(final Project project)
 	{
-		return DebuggerSettings.getInstance().VALUE_LOOKUP_DELAY;
+		return XDebuggerSettingsManager.getInstance().getDataViewSettings().getValueLookupDelay();
 	}
 }

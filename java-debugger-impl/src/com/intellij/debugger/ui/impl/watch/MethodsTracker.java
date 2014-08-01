@@ -15,58 +15,76 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
-import consulo.internal.com.sun.jdi.Method;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import consulo.internal.com.sun.jdi.Method;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Dec 13, 2006
  */
-public class MethodsTracker {
-  private final Map<Method, Integer> myMethodToOccurrenceMap = new HashMap<Method, Integer>();
+public class MethodsTracker
+{
+	private final Map<Method, Integer> myMethodToOccurrenceMap = new HashMap<Method, Integer>();
+	private final Map<Integer, MethodOccurrence> myOccurences = new HashMap<Integer, MethodOccurrence>();
 
-  public final class MethodOccurrence {
-    private final Method myMethod;
-    private final int myIndex;
+	public final class MethodOccurrence
+	{
+		private final Method myMethod;
+		private final int myIndex;
 
-    private MethodOccurrence(Method method, int index) {
-      myMethod = method;
-      myIndex = index;
-    }
+		private MethodOccurrence(Method method, int index)
+		{
+			myMethod = method;
+			myIndex = index;
+		}
 
-    public Method getMethod() {
-      return myMethod;
-    }
+		public Method getMethod()
+		{
+			return myMethod;
+		}
 
-    public int getIndex() {
-      return getOccurrenceCount(myMethod) - myIndex;
-    }
+		public int getIndex()
+		{
+			return getOccurrenceCount(myMethod) - myIndex;
+		}
 
-    public boolean isRecursive() {
-      return getOccurrenceCount(myMethod) > 1;
-    }
-  }
+		public boolean isRecursive()
+		{
+			return getOccurrenceCount(myMethod) > 1;
+		}
+	}
 
-  public MethodOccurrence getMethodOccurrence(Method method) {
-    return new MethodOccurrence(method, assignOccurrenceIndex(method));
-  }
+	public MethodOccurrence getMethodOccurrence(int frameIndex, Method method)
+	{
+		MethodOccurrence occurrence = myOccurences.get(frameIndex);
+		if(occurrence == null)
+		{
+			occurrence = new MethodOccurrence(method, assignOccurrenceIndex(method));
+			myOccurences.put(frameIndex, occurrence);
+		}
+		return occurrence;
+	}
 
-  private int getOccurrenceCount(Method method) {
-    if (method == null) {
-      return 0;
-    }
-    final Integer integer = myMethodToOccurrenceMap.get(method);
-    return integer != null? integer.intValue(): 0;
-  }
+	private int getOccurrenceCount(Method method)
+	{
+		if(method == null)
+		{
+			return 0;
+		}
+		final Integer integer = myMethodToOccurrenceMap.get(method);
+		return integer != null ? integer.intValue() : 0;
+	}
 
-  private int assignOccurrenceIndex(Method method) {
-    if (method == null) {
-      return 0;
-    }
-    final int count = getOccurrenceCount(method);
-    myMethodToOccurrenceMap.put(method, count + 1);
-    return count;
-  }
+	private int assignOccurrenceIndex(Method method)
+	{
+		if(method == null)
+		{
+			return 0;
+		}
+		final int count = getOccurrenceCount(method);
+		myMethodToOccurrenceMap.put(method, count + 1);
+		return count;
+	}
 }

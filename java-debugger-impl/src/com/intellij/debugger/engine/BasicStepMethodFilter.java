@@ -28,7 +28,7 @@ import consulo.internal.com.sun.jdi.Method;
  * @author Eugene Zhuravlev
  *         Date: 10/26/13
  */
-public class BasicStepMethodFilter implements MethodFilter
+public class BasicStepMethodFilter implements NamedMethodFilter
 {
 	@NotNull
 	protected final JVMName myDeclaringClassName;
@@ -46,12 +46,14 @@ public class BasicStepMethodFilter implements MethodFilter
 		myCallingExpressionLines = callingExpressionLines;
 	}
 
+	@Override
 	@NotNull
 	public String getMethodName()
 	{
 		return myTargetMethodName;
 	}
 
+	@Override
 	public boolean locationMatches(DebugProcessImpl process, Location location) throws EvaluateException
 	{
 		final Method method = location.method();

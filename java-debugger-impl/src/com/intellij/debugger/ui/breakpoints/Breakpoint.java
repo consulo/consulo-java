@@ -40,6 +40,7 @@ import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessAdapter;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
+import com.intellij.debugger.engine.JavaDebugProcess;
 import com.intellij.debugger.engine.SuspendContext;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -70,9 +71,12 @@ import com.intellij.xdebugger.XExpression;
 import com.intellij.xdebugger.breakpoints.SuspendPolicy;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
+import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.XDebuggerHistoryManager;
+import com.intellij.xdebugger.impl.XDebuggerUtilImpl;
+import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase;
 import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
-import com.intellij.xdebugger.impl.breakpoints.ui.DefaultLogExpressionComboBoxPanel;
+import com.intellij.xdebugger.impl.breakpoints.ui.XBreakpointActionsPanel;
 import consulo.internal.com.sun.jdi.BooleanValue;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -123,7 +127,14 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	 *
 	 * @param debuggerProcess the requesting process
 	 */
-	public abstract void createRequest(DebugProcessImpl debuggerProcess);
+	public abstract void createRequest(DebugProcessImpl debugProcess);
+
+	protected boolean shouldCreateRequest(DebugProcessImpl debugProcess)
+	{
+		JavaDebugProcess process = debugProcess.getXdebugProcess();
+		return process != null && debugProcess.isAttached() && ((XDebugSessionImpl) process.getSession()).isBreakpointActive(myXBreakpoint) &&
+				debugProcess.getRequestsManager().findRequests(this).isEmpty();
+	}
 
 	/**
 	 * Request for creating all needed JPDA requests in the specified VM
@@ -564,11 +575,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			if(logMessage != null && !logMessage.isEmpty())
 			{
 				XExpressionImpl expression = XExpressionImpl.fromText(logMessage);
-				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(DefaultLogExpressionComboBoxPanel.HISTORY_KEY, expression);
-				if(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")))
-				{
-					myXBreakpoint.setLogExpressionObject(expression);
-				}
+				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XBreakpointActionsPanel.LOG_EXPRESSION_HISTORY_ID, expression);
+				myXBreakpoint.setLogExpressionObject(expression);
+				((XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode,
+						"LOG_EXPRESSION_ENABLED")));
 			}
 		}
 		catch(Exception ignored)
@@ -619,7 +629,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	protected boolean isLogExpressionEnabled()
 	{
 		XExpression expression = myXBreakpoint.getLogExpressionObject();
-		if(expression == null || expression.getExpression().isEmpty())
+		if(XDebuggerUtilImpl.isEmptyExpression(expression))
 		{
 			return false;
 		}
@@ -633,23 +643,29 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		{
 			return false;
 		}
-		return getProperties().COUNT_FILTER_ENABLED;
+		return getProperties().isCOUNT_FILTER_ENABLED();
 	}
 
 	public void setCountFilterEnabled(boolean enabled)
 	{
-		getProperties().COUNT_FILTER_ENABLED = enabled;
+		if(getProperties().setCOUNT_FILTER_ENABLED(enabled))
+		{
+			fireBreakpointChanged();
+		}
 	}
 
 	@Override
 	public int getCountFilter()
 	{
-		return getProperties().COUNT_FILTER;
+		return getProperties().getCOUNT_FILTER();
 	}
 
 	public void setCountFilter(int filter)
 	{
-		getProperties().COUNT_FILTER = filter;
+		if(getProperties().setCOUNT_FILTER(filter))
+		{
+			fireBreakpointChanged();
+		}
 	}
 
 	@Override
@@ -659,12 +675,15 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		{
 			return false;
 		}
-		return getProperties().CLASS_FILTERS_ENABLED;
+		return getProperties().isCLASS_FILTERS_ENABLED();
 	}
 
 	public void setClassFiltersEnabled(boolean enabled)
 	{
-		getProperties().CLASS_FILTERS_ENABLED = enabled;
+		if(getProperties().setCLASS_FILTERS_ENABLED(enabled))
+		{
+			fireBreakpointChanged();
+		}
 	}
 
 	@Override
@@ -675,7 +694,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	public void setClassFilters(ClassFilter[] filters)
 	{
-		getProperties().setClassFilters(filters);
+		if(getProperties().setClassFilters(filters))
+		{
+			fireBreakpointChanged();
+		}
 	}
 
 	@Override
@@ -686,7 +708,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	protected void setClassExclusionFilters(ClassFilter[] filters)
 	{
-		getProperties().setClassExclusionFilters(filters);
+		if(getProperties().setClassExclusionFilters(filters))
+		{
+			fireBreakpointChanged();
+		}
 	}
 
 	@Override
@@ -696,12 +721,15 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		{
 			return false;
 		}
-		return getProperties().INSTANCE_FILTERS_ENABLED;
+		return getProperties().isINSTANCE_FILTERS_ENABLED();
 	}
 
 	public void setInstanceFiltersEnabled(boolean enabled)
 	{
-		getProperties().INSTANCE_FILTERS_ENABLED = enabled;
+		if(getProperties().setINSTANCE_FILTERS_ENABLED(enabled))
+		{
+			fireBreakpointChanged();
+		}
 	}
 
 	@Override
@@ -712,7 +740,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	public void setInstanceFilters(InstanceFilter[] filters)
 	{
-		getProperties().setInstanceFilters(filters);
+		if(getProperties().setInstanceFilters(filters))
+		{
+			fireBreakpointChanged();
+		}
 	}
 
 	private static String getSuspendPolicy(XBreakpoint breakpoint)
@@ -770,7 +801,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	protected boolean isConditionEnabled()
 	{
 		XExpression condition = myXBreakpoint.getConditionExpression();
-		if(condition == null || condition.getExpression().isEmpty())
+		if(XDebuggerUtilImpl.isEmptyExpression(condition))
 		{
 			return false;
 		}
@@ -785,5 +816,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	protected void addInstanceFilter(long l)
 	{
 		getProperties().addInstanceFilter(l);
+	}
+
+	protected void fireBreakpointChanged()
+	{
+		((XBreakpointBase) myXBreakpoint).fireBreakpointChanged();
 	}
 }

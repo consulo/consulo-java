@@ -38,7 +38,6 @@ import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.settings.NodeRendererSettings;
-import com.intellij.debugger.settings.ViewsGeneralSettings;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.impl.FrameVariablesTree;
 import com.intellij.debugger.ui.impl.watch.*;
@@ -58,6 +57,7 @@ import com.intellij.xdebugger.frame.XCompositeNode;
 import com.intellij.xdebugger.frame.XStackFrame;
 import com.intellij.xdebugger.frame.XValueChildrenList;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
+import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
@@ -71,57 +71,32 @@ public class JavaStackFrame extends XStackFrame
 
 	private final DebugProcessImpl myDebugProcess;
 	private final XSourcePosition myXSourcePosition;
-	private final SourcePosition mySourcePosition;
 	private final NodeManagerImpl myNodeManager;
 	private final StackFrameDescriptorImpl myDescriptor;
 	private static final JavaFramesListRenderer FRAME_RENDERER = new JavaFramesListRenderer();
 	private JavaDebuggerEvaluator myEvaluator = null;
 
-	public JavaStackFrame(@NotNull StackFrameProxyImpl stackFrameProxy, @NotNull DebugProcessImpl debugProcess, MethodsTracker tracker)
+	public JavaStackFrame(@NotNull StackFrameProxyImpl stackFrameProxy, @NotNull DebugProcessImpl debugProcess, @NotNull MethodsTracker tracker,
+			@NotNull NodeManagerImpl nodeManager)
 	{
 		myDebugProcess = debugProcess;
-		Pair<SourcePosition, XSourcePosition> positions = calcSourcePosition(stackFrameProxy);
-		mySourcePosition = positions.getFirst();
-		myXSourcePosition = positions.getSecond();
-		myNodeManager = debugProcess.getXdebugProcess().getNodeManager();
+		myNodeManager = nodeManager;
 		myDescriptor = new StackFrameDescriptorImpl(stackFrameProxy, tracker);
 		myDescriptor.setContext(null);
 		myDescriptor.updateRepresentation(null, DescriptorLabelListener.DUMMY_LISTENER);
+		myXSourcePosition = ApplicationManager.getApplication().runReadAction(new Computable<XSourcePosition>()
+		{
+			@Override
+			public XSourcePosition compute()
+			{
+				return myDescriptor.getSourcePosition() != null ? DebuggerUtilsEx.toXSourcePosition(myDescriptor.getSourcePosition()) : null;
+			}
+		});
 	}
 
 	public StackFrameDescriptorImpl getDescriptor()
 	{
 		return myDescriptor;
-	}
-
-	private Pair<SourcePosition, XSourcePosition> calcSourcePosition(StackFrameProxyImpl stackFrameProxy)
-	{
-		final CompoundPositionManager positionManager = myDebugProcess.getPositionManager();
-		if(positionManager == null)
-		{
-			// process already closed
-			return null;
-		}
-		Location location = null;
-		try
-		{
-			location = stackFrameProxy.location();
-		}
-		catch(Throwable e)
-		{
-			LOG.info(e);
-		}
-		final Location loc = location;
-		return ApplicationManager.getApplication().runReadAction(new Computable<Pair<SourcePosition, XSourcePosition>>()
-		{
-			@Override
-			public Pair<SourcePosition, XSourcePosition> compute()
-			{
-				SourcePosition position = positionManager.getSourcePosition(loc);
-				XSourcePosition xSourcePosition = position != null ? DebuggerUtilsEx.toXSourcePosition(position) : null;
-				return new Pair<SourcePosition, XSourcePosition>(position, xSourcePosition);
-			}
-		});
 	}
 
 	@Nullable
@@ -174,6 +149,12 @@ public class JavaStackFrame extends XStackFrame
 		myDebugProcess.getManagerThread().schedule(new DebuggerContextCommandImpl(myDebugProcess.getDebuggerContext())
 		{
 			@Override
+			public Priority getPriority()
+			{
+				return Priority.NORMAL;
+			}
+
+			@Override
 			public void threadAction()
 			{
 				XValueChildrenList children = new XValueChildrenList();
@@ -193,7 +174,7 @@ public class JavaStackFrame extends XStackFrame
 					getStackFrameProxy().threadProxy());
 			context = DebuggerContextImpl.createDebuggerContext(myDebugProcess.mySession, threadSuspendContext, getStackFrameProxy().threadProxy(),
 					getStackFrameProxy());
-			context.setPositionCache(mySourcePosition);
+			context.setPositionCache(myDescriptor.getSourcePosition());
 			context.initCaches();
 		}
 		return context;
@@ -232,8 +213,14 @@ public class JavaStackFrame extends XStackFrame
 				}
 			}
 
+			DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
+			if(debugProcess == null)
+			{
+				return;
+			}
+
 			// add last method return value if any
-			final Pair<Method, Value> methodValuePair = debuggerContext.getDebugProcess().getLastExecutedMethod();
+			final Pair<Method, Value> methodValuePair = debugProcess.getLastExecutedMethod();
 			if(methodValuePair != null)
 			{
 				ValueDescriptorImpl returnValueDescriptor = myNodeManager.getMethodReturnValueDescriptor(stackDescriptor,
@@ -258,13 +245,12 @@ public class JavaStackFrame extends XStackFrame
 			final ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
 			if(classRenderer.SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES)
 			{
-				if(thisObjectReference != null && evaluationContext.getDebugProcess().getVirtualMachineProxy().canGetSyntheticAttribute())
+				if(thisObjectReference != null && debugProcess.getVirtualMachineProxy().canGetSyntheticAttribute())
 				{
 					final ReferenceType thisRefType = thisObjectReference.referenceType();
 					if(thisRefType instanceof ClassType && thisRefType.equals(location.declaringType()) && thisRefType.name().contains("$"))
 					{ // makes sense for nested classes only
 						final ClassType clsType = (ClassType) thisRefType;
-						final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
 						final VirtualMachineProxyImpl vm = debugProcess.getVirtualMachineProxy();
 						for(Field field : clsType.fields())
 						{
@@ -321,10 +307,7 @@ public class JavaStackFrame extends XStackFrame
 	}
 
 	// copied from FrameVariablesTree
-	private void buildVariables(
-			DebuggerContextImpl debuggerContext,
-			EvaluationContextImpl evaluationContext,
-			XValueChildrenList children,
+	private void buildVariables(DebuggerContextImpl debuggerContext, EvaluationContextImpl evaluationContext, XValueChildrenList children,
 			XCompositeNode node) throws EvaluateException
 	{
 		boolean myAutoWatchMode = DebuggerSettings.getInstance().AUTO_VARIABLES_MODE;
@@ -340,7 +323,7 @@ public class JavaStackFrame extends XStackFrame
 
 		try
 		{
-			if(!ViewsGeneralSettings.getInstance().ENABLE_AUTO_EXPRESSIONS && !myAutoWatchMode)
+			if(!XDebuggerSettingsManager.getInstance().getDataViewSettings().isAutoExpressions() && !myAutoWatchMode)
 			{
 				// optimization
 				superBuildVariables(evaluationContext, children);
@@ -445,6 +428,6 @@ public class JavaStackFrame extends XStackFrame
 	@Override
 	public Object getEqualityObject()
 	{
-		return getStackFrameProxy().hashCode();
+		return myDescriptor.getMethod();
 	}
 }

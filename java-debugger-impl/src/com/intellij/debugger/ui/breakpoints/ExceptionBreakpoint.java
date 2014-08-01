@@ -31,10 +31,11 @@ import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
+import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
@@ -64,17 +65,19 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 	@NonNls
 	Key<ExceptionBreakpoint> CATEGORY = BreakpointCategory.lookup("exception_breakpoints");
 
-	public ExceptionBreakpoint(Project project, XBreakpoint xBreakpoint)
+	public ExceptionBreakpoint(Project project, XBreakpoint<JavaExceptionBreakpointProperties> xBreakpoint)
 	{
 		super(project, xBreakpoint);
 	}
 
+	@Override
 	public Key<? extends ExceptionBreakpoint> getCategory()
 	{
 		return CATEGORY;
 	}
 
-	protected ExceptionBreakpoint(Project project, String qualifiedName, String packageName, XBreakpoint xBreakpoint)
+	protected ExceptionBreakpoint(Project project, String qualifiedName, String packageName, XBreakpoint<JavaExceptionBreakpointProperties>
+			xBreakpoint)
 	{
 		super(project, xBreakpoint);
 		setQualifiedName(qualifiedName);
@@ -88,7 +91,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		}
 	}
 
-	private String calcPackageName(String qualifiedName)
+	private static String calcPackageName(String qualifiedName)
 	{
 		if(qualifiedName == null)
 		{
@@ -98,33 +101,39 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		return dotIndex >= 0 ? qualifiedName.substring(0, dotIndex) : "";
 	}
 
+	@Override
 	public String getClassName()
 	{
 		return getQualifiedName();
 	}
 
+	@Override
 	public String getPackageName()
 	{
 		return getProperties().myPackageName;
 	}
 
+	@Override
 	public PsiClass getPsiClass()
 	{
 		return PsiDocumentManager.getInstance(myProject).commitAndRunReadAction(new Computable<PsiClass>()
 		{
+			@Override
 			public PsiClass compute()
 			{
-				return getQualifiedName() != null ? DebuggerUtilsEx.findClass(getQualifiedName(), myProject, GlobalSearchScope.allScope(myProject))
-						: null;
+				return getQualifiedName() != null ? DebuggerUtils.findClass(getQualifiedName(), myProject, GlobalSearchScope.allScope(myProject)) :
+						null;
 			}
 		});
 	}
 
+	@Override
 	public String getDisplayName()
 	{
 		return DebuggerBundle.message("breakpoint.exception.breakpoint.display.name", getQualifiedName());
 	}
 
+	@Override
 	public Icon getIcon()
 	{
 		if(!isEnabled())
@@ -135,24 +144,26 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		return AllIcons.Debugger.Db_exception_breakpoint;
 	}
 
+	@Override
 	public void reload()
 	{
 	}
 
+	@Override
 	public void createRequest(final DebugProcessImpl debugProcess)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
-		if(!isEnabled() || !debugProcess.isAttached() || debugProcess.areBreakpointsMuted() || !debugProcess.getRequestsManager().findRequests(this)
-				.isEmpty())
+		if(!shouldCreateRequest(debugProcess))
 		{
 			return;
 		}
 
-		SourcePosition classPosition = PsiDocumentManager.getInstance(myProject).commitAndRunReadAction(new Computable<SourcePosition>()
+		SourcePosition classPosition = ApplicationManager.getApplication().runReadAction(new Computable<SourcePosition>()
 		{
+			@Override
 			public SourcePosition compute()
 			{
-				PsiClass psiClass = DebuggerUtilsEx.findClass(getQualifiedName(), myProject, debugProcess.getSearchScope());
+				PsiClass psiClass = DebuggerUtils.findClass(getQualifiedName(), myProject, debugProcess.getSearchScope());
 
 				return psiClass != null ? SourcePosition.createFromElement(psiClass) : null;
 			}
@@ -212,13 +223,13 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 				exceptionName = exceptionEvent.exception().type().name();
 				threadName = exceptionEvent.thread().name();
 			}
-			catch(Exception e)
+			catch(Exception ignore)
 			{
 			}
 		}
 		final Location location = event.location();
 		final String locationQName = location.declaringType().name() + "." + location.method().name();
-		String locationFileName = "";
+		String locationFileName;
 		try
 		{
 			locationFileName = location.sourceName();
@@ -239,6 +250,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		}
 	}
 
+	@Override
 	public boolean isValid()
 	{
 		return true;
@@ -254,6 +266,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 	//  }
 	//}
 
+	@Override
 	public PsiElement getEvaluationElement()
 	{
 		if(getClassName() == null)
@@ -263,6 +276,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		return JavaPsiFacade.getInstance(myProject).findClass(getClassName(), GlobalSearchScope.allScope(myProject));
 	}
 
+	@Override
 	public void readExternal(Element parentNode) throws InvalidDataException
 	{
 		super.readExternal(parentNode);
@@ -275,14 +289,14 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		{
 			getProperties().NOTIFY_CAUGHT = Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "NOTIFY_CAUGHT"));
 		}
-		catch(Exception e)
+		catch(Exception ignore)
 		{
 		}
 		try
 		{
 			getProperties().NOTIFY_UNCAUGHT = Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "NOTIFY_UNCAUGHT"));
 		}
-		catch(Exception e)
+		catch(Exception ignore)
 		{
 		}
 
@@ -310,12 +324,12 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		return getProperties().myQualifiedName;
 	}
 
-	private void setQualifiedName(String qualifiedName)
+	void setQualifiedName(String qualifiedName)
 	{
 		getProperties().myQualifiedName = qualifiedName;
 	}
 
-	private void setPackageName(String packageName)
+	void setPackageName(String packageName)
 	{
 		getProperties().myPackageName = packageName;
 	}

@@ -73,6 +73,7 @@ import com.intellij.unscramble.ThreadDumpPanel;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.xdebugger.XDebuggerBundle;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
+import com.intellij.xdebugger.impl.settings.XDebuggerSettingsManager;
 import com.intellij.xdebugger.impl.ui.DebuggerSessionTabBase;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
 
@@ -93,8 +94,8 @@ public class DebuggerSessionTab extends DebuggerSessionTabBase implements Dispos
 	private final ThreadsPanel myThreadsPanel;
 	private static final String THREAD_DUMP_CONTENT_PREFIX = "Dump";
 
-	public DebuggerSessionTab(
-			final Project project, final String sessionName, @NotNull final DebugUIEnvironment environment, @NotNull DebuggerSession debuggerSession)
+	public DebuggerSessionTab(final Project project, final String sessionName, @NotNull final DebugUIEnvironment environment,
+			@NotNull DebuggerSession debuggerSession)
 	{
 		super(project, "JavaDebugger", sessionName, debuggerSession.getSearchScope());
 		myDebuggerSession = debuggerSession;
@@ -117,7 +118,7 @@ public class DebuggerSessionTab extends DebuggerSessionTabBase implements Dispos
 						case DebuggerSession.EVENT_DETACHED:
 							myUi.updateActionsNow();
 
-							if(debuggerSettings.HIDE_DEBUGGER_ON_PROCESS_TERMINATION)
+							if(XDebuggerSettingsManager.getInstanceImpl().getGeneralSettings().isHideDebuggerOnProcessTermination())
 							{
 								try
 								{

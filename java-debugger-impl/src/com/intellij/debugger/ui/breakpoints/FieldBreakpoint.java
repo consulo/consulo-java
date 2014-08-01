@@ -213,8 +213,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 	}
 
 	@Override
-	public void createRequestForPreparedClass(
-			DebugProcessImpl debugProcess, ReferenceType refType)
+	public void createRequestForPreparedClass(DebugProcessImpl debugProcess, ReferenceType refType)
 	{
 		VirtualMachineProxy vm = debugProcess.getVirtualMachineProxy();
 		try
@@ -458,7 +457,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
 		return getProperties().WATCH_ACCESS;
 	}
 
-	private void setFieldName(String fieldName)
+	void setFieldName(String fieldName)
 	{
 		getProperties().myFieldName = fieldName;
 	}

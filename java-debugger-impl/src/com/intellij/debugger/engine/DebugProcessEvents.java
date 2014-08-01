@@ -40,6 +40,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
+import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ThreadReference;
@@ -390,6 +392,13 @@ public class DebugProcessEvents extends DebugProcessImpl
 
 			myDebugProcessDispatcher.getMulticaster().processAttached(this);
 
+			// breakpoints should be initialized after all processAttached listeners work
+			XDebugSession session = getSession().getXDebugSession();
+			if(session != null)
+			{
+				session.initBreakpoints();
+			}
+
 			final String addressDisplayName = DebuggerBundle.getAddressDisplayName(getConnection());
 			final String transportName = DebuggerBundle.getTransportName(getConnection());
 			showStatusText(DebuggerBundle.message("status.connected", addressDisplayName, transportName));
@@ -480,9 +489,9 @@ public class DebugProcessEvents extends DebugProcessImpl
 			if(hint != null)
 			{
 				final MethodFilter methodFilter = hint.getMethodFilter();
-				if(methodFilter instanceof BasicStepMethodFilter && !hint.wasStepTargetMethodMatched())
+				if(methodFilter instanceof NamedMethodFilter && !hint.wasStepTargetMethodMatched())
 				{
-					final String message = "Method <b>" + ((BasicStepMethodFilter) methodFilter).getMethodName() + "()</b> has not been called";
+					final String message = "Method <b>" + ((NamedMethodFilter) methodFilter).getMethodName() + "()</b> has not been called";
 					XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(message, MessageType.INFO).notify(project);
 				}
 			}
@@ -554,7 +563,15 @@ public class DebugProcessEvents extends DebugProcessImpl
 				if(requestHit && requestor instanceof Breakpoint)
 				{
 					// if requestor is a breakpoint and this breakpoint was hit, no matter its suspend policy
-					myBreakpointManager.processBreakpointHit((Breakpoint) requestor);
+					XDebugSession session = getSession().getXDebugSession();
+					if(session != null)
+					{
+						XBreakpoint breakpoint = ((Breakpoint) requestor).getXBreakpoint();
+						if(breakpoint != null)
+						{
+							((XDebugSessionImpl) session).processDependencies(breakpoint);
+						}
+					}
 				}
 
 				if(!requestHit || resumePreferred)

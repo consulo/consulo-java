@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,121 +15,109 @@
  */
 package com.intellij.debugger.settings;
 
+import java.awt.BorderLayout;
+
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
-import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurableUi;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.ui.components.panels.VerticalBox;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
+{
+	private JRadioButton myRbSocket;
+	private JRadioButton myRbShmem;
+	private StateRestoringCheckBox myCbForceClassicVM;
+	private JCheckBox myCbDisableJIT;
 
-public class DebuggerLaunchingConfigurable implements Configurable{
-  private JRadioButton myRbSocket;
-  private JRadioButton myRbShmem;
-  private JCheckBox myHideDebuggerCheckBox;
-  private StateRestoringCheckBox myCbForceClassicVM;
-  private JCheckBox myCbDisableJIT;
-  private JCheckBox myFocusAppCheckBox;
+	@Override
+	public void reset(@NotNull DebuggerSettings settings)
+	{
+		if(!SystemInfo.isWindows)
+		{
+			myRbSocket.setSelected(true);
+			myRbShmem.setEnabled(false);
+		}
+		else
+		{
+			if(settings.DEBUGGER_TRANSPORT == DebuggerSettings.SHMEM_TRANSPORT)
+			{
+				myRbShmem.setSelected(true);
+			}
+			else
+			{
+				myRbSocket.setSelected(true);
+			}
+			myRbShmem.setEnabled(true);
+		}
+		myCbForceClassicVM.setSelected(settings.FORCE_CLASSIC_VM);
+		myCbDisableJIT.setSelected(settings.DISABLE_JIT);
+	}
 
-  public void reset() {
-    final DebuggerSettings settings = DebuggerSettings.getInstance();
-    if (!SystemInfo.isWindows) {
-      myRbSocket.setSelected(true);
-      myRbShmem.setEnabled(false);
-    }
-    else {
-      if (settings.DEBUGGER_TRANSPORT == DebuggerSettings.SHMEM_TRANSPORT) {
-        myRbShmem.setSelected(true);
-      }
-      else {
-        myRbSocket.setSelected(true);
-      }
-      myRbShmem.setEnabled(true);
-    }
-    myHideDebuggerCheckBox.setSelected(settings.HIDE_DEBUGGER_ON_PROCESS_TERMINATION);
-    myCbForceClassicVM.setSelected(settings.FORCE_CLASSIC_VM);
-    myCbDisableJIT.setSelected(settings.DISABLE_JIT);
-    myFocusAppCheckBox.setSelected(Registry.is("debugger.mayBringFrameToFrontOnBreakpoint"));
-  }
+	@Override
+	public void apply(@NotNull DebuggerSettings settings)
+	{
+		getSettingsTo(settings);
+	}
 
-  public void apply() {
-    getSettingsTo(DebuggerSettings.getInstance());
-  }
+	private void getSettingsTo(DebuggerSettings settings)
+	{
+		if(myRbShmem.isSelected())
+		{
+			settings.DEBUGGER_TRANSPORT = DebuggerSettings.SHMEM_TRANSPORT;
+		}
+		else
+		{
+			settings.DEBUGGER_TRANSPORT = DebuggerSettings.SOCKET_TRANSPORT;
+		}
+		settings.FORCE_CLASSIC_VM = myCbForceClassicVM.isSelectedWhenSelectable();
+		settings.DISABLE_JIT = myCbDisableJIT.isSelected();
+	}
 
-  private void getSettingsTo(DebuggerSettings settings) {
-    if (myRbShmem.isSelected()) {
-      settings.DEBUGGER_TRANSPORT = DebuggerSettings.SHMEM_TRANSPORT;
-    }
-    else {
-      settings.DEBUGGER_TRANSPORT = DebuggerSettings.SOCKET_TRANSPORT;
-    }
-    settings.HIDE_DEBUGGER_ON_PROCESS_TERMINATION = myHideDebuggerCheckBox.isSelected();
-    settings.FORCE_CLASSIC_VM = myCbForceClassicVM.isSelectedWhenSelectable();
-    settings.DISABLE_JIT = myCbDisableJIT.isSelected();
-    Registry.get("debugger.mayBringFrameToFrontOnBreakpoint").setValue(myFocusAppCheckBox.isSelected());
-  }
+	@Override
+	public boolean isModified(@NotNull DebuggerSettings currentSettings)
+	{
+		DebuggerSettings debuggerSettings = currentSettings.clone();
+		getSettingsTo(debuggerSettings);
+		return !debuggerSettings.equals(currentSettings);
+	}
 
-  public boolean isModified() {
-    final DebuggerSettings currentSettings = DebuggerSettings.getInstance();
-    final DebuggerSettings debuggerSettings = currentSettings.clone();
-    getSettingsTo(debuggerSettings);
-    return !debuggerSettings.equals(currentSettings) || Registry.is("debugger.mayBringFrameToFrontOnBreakpoint") != myFocusAppCheckBox.isSelected();
-  }
+	@NotNull
+	@Override
+	public JComponent getComponent()
+	{
+		myCbForceClassicVM = new StateRestoringCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.force.classic.vm"));
+		myCbDisableJIT = new JCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.disable.jit"));
+		myRbSocket = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.socket"));
+		myRbShmem = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.shmem"));
 
-  public String getDisplayName() {
-    return DebuggerBundle.message("debugger.launching.configurable.display.name");
-  }
+		final ButtonGroup gr = new ButtonGroup();
+		gr.add(myRbSocket);
+		gr.add(myRbShmem);
+		final Box box = Box.createHorizontalBox();
+		box.add(myRbSocket);
+		box.add(myRbShmem);
+		final JPanel transportPanel = new JPanel(new BorderLayout());
+		transportPanel.add(new JLabel(DebuggerBundle.message("label.debugger.launching.configurable.debugger.transport")), BorderLayout.WEST);
+		transportPanel.add(box, BorderLayout.CENTER);
 
-  public String getHelpTopic() {
-    return "reference.idesettings.debugger.launching";
-  }
+		VerticalBox panel = new VerticalBox();
+		panel.setOpaque(false);
+		panel.add(transportPanel);
+		panel.add(myCbForceClassicVM);
+		panel.add(myCbDisableJIT);
 
-  public JComponent createComponent() {
-    myCbForceClassicVM = new StateRestoringCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.force.classic.vm"));
-    myCbDisableJIT = new JCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.disable.jit"));
-    myHideDebuggerCheckBox = new JCheckBox(DebuggerBundle.message("label.debugger.launching.configurable.hide.window"));
-    myRbSocket = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.socket"));
-    myRbShmem = new JRadioButton(DebuggerBundle.message("label.debugger.launching.configurable.shmem"));
-    myFocusAppCheckBox = new JCheckBox(DebuggerBundle.message("label.debugger.focusAppOnBreakpoint"));
-
-    int cbLeftOffset = 0;
-    final Border border = myCbForceClassicVM.getBorder();
-    if (border != null) {
-      final Insets insets = border.getBorderInsets(myCbForceClassicVM);
-      if (insets != null) {
-        cbLeftOffset = insets.left;
-      }
-    }
-
-    final ButtonGroup gr = new ButtonGroup();
-    gr.add(myRbSocket);
-    gr.add(myRbShmem);
-    final Box box = Box.createHorizontalBox();
-    box.add(myRbSocket);
-    box.add(myRbShmem);
-    final JPanel transportPanel = new JPanel(new BorderLayout());
-    transportPanel.add(new JLabel(DebuggerBundle.message("label.debugger.launching.configurable.debugger.transport")), BorderLayout.WEST);
-    transportPanel.add(box, BorderLayout.CENTER);
-
-    VerticalBox panel = new VerticalBox();
-    panel.setOpaque(false);
-    panel.add(transportPanel);
-    panel.add(myCbForceClassicVM);
-    panel.add(myCbDisableJIT);
-    panel.add(myHideDebuggerCheckBox);
-    panel.add(myFocusAppCheckBox);
-
-    JPanel result = new JPanel(new BorderLayout());
-    result.add(panel, BorderLayout.NORTH);
-
-    return result;
-  }
-
-
-  public void disposeUIResources() {
-  }
-
+		JPanel result = new JPanel(new BorderLayout());
+		result.add(panel, BorderLayout.NORTH);
+		return result;
+	}
 }

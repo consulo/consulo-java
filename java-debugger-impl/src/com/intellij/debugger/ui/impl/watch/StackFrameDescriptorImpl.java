@@ -16,7 +16,6 @@
 package com.intellij.debugger.ui.impl.watch;
 
 import java.awt.Color;
-import java.util.Map;
 
 import javax.swing.Icon;
 
@@ -43,7 +42,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.ui.FileColorManager;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.ui.TextTransferable;
+import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.impl.XDebugSessionImpl;
+import com.intellij.xdebugger.impl.frame.XValueMarkers;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.AbsentInformationException;
 import consulo.internal.com.sun.jdi.InternalException;
@@ -67,6 +69,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	private boolean myIsInLibraryContent;
 	private ObjectReference myThisObject;
 	private Color myBackgroundColor;
+	private SourcePosition mySourcePosition;
 
 	private Icon myIcon = AllIcons.Debugger.StackFrame;
 
@@ -79,15 +82,15 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 			myUiIndex = frame.getFrameIndex();
 			myLocation = frame.location();
 			myThisObject = frame.thisObject();
-			myMethodOccurrence = tracker.getMethodOccurrence(myLocation.method());
+			myMethodOccurrence = tracker.getMethodOccurrence(myUiIndex, myLocation.method());
 			myIsSynthetic = DebuggerUtils.isSynthetic(myMethodOccurrence.getMethod());
 			ApplicationManager.getApplication().runReadAction(new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					final SourcePosition position = ContextUtil.getSourcePosition(StackFrameDescriptorImpl.this);
-					final PsiFile file = position != null ? position.getFile() : null;
+					mySourcePosition = ContextUtil.getSourcePosition(StackFrameDescriptorImpl.this);
+					final PsiFile file = mySourcePosition != null ? mySourcePosition.getFile() : null;
 					if(file == null)
 					{
 						myIsInLibraryContent = true;
@@ -108,7 +111,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		{
 			LOG.info(e);
 			myLocation = null;
-			myMethodOccurrence = tracker.getMethodOccurrence(null);
+			myMethodOccurrence = tracker.getMethodOccurrence(0, null);
 			myIsSynthetic = false;
 			myIsInLibraryContent = false;
 		}
@@ -116,7 +119,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		{
 			LOG.info(e);
 			myLocation = null;
-			myMethodOccurrence = tracker.getMethodOccurrence(null);
+			myMethodOccurrence = tracker.getMethodOccurrence(0, null);
 			myIsSynthetic = false;
 			myIsInLibraryContent = false;
 		}
@@ -177,10 +180,18 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	{
 		if(myThisObject != null)
 		{
-			final Map<ObjectReference, ValueMarkup> markupMap = getMarkupMap(myFrame.getVirtualMachine().getDebugProcess());
-			if(markupMap != null)
+			DebugProcess process = myFrame.getVirtualMachine().getDebugProcess();
+			if(process instanceof DebugProcessImpl)
 			{
-				return markupMap.get(myThisObject);
+				XDebugSession session = ((DebugProcessImpl) process).getSession().getXDebugSession();
+				if(session instanceof XDebugSessionImpl)
+				{
+					XValueMarkers<?, ?> markers = ((XDebugSessionImpl) session).getValueMarkers();
+					if(markers != null)
+					{
+						return markers.getAllMarkers().get(myThisObject);
+					}
+				}
 			}
 		}
 		return null;
@@ -323,6 +334,11 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	public Location getLocation()
 	{
 		return myLocation;
+	}
+
+	public SourcePosition getSourcePosition()
+	{
+		return mySourcePosition;
 	}
 
 	private Icon calcIcon()

@@ -24,7 +24,6 @@ import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.actions.DebuggerActions;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
-import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
@@ -39,10 +38,8 @@ import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.impl.ThreadsPanel;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.MessageDescriptor;
-import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.NodeManagerImpl;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
-import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.ui.ExecutionConsole;
 import com.intellij.execution.ui.ExecutionConsoleEx;
@@ -78,6 +75,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
 import com.intellij.xdebugger.frame.XStackFrame;
 import com.intellij.xdebugger.frame.XValueMarkerProvider;
+import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.XDebuggerUtilImpl;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
 import com.intellij.xdebugger.ui.XDebugTabLayouter;
@@ -141,7 +139,7 @@ public class JavaDebugProcess extends XDebugProcess
 										XBreakpoint xBreakpoint = breakpoint.getXBreakpoint();
 										if(xBreakpoint != null)
 										{
-											getSession().breakpointReached(xBreakpoint, null, context);
+											((XDebugSessionImpl) getSession()).breakpointReachedNoProcessing(xBreakpoint, context);
 											return;
 										}
 									}
@@ -159,10 +157,11 @@ public class JavaDebugProcess extends XDebugProcess
 			@Override
 			public DebuggerTreeNodeImpl createNode(final NodeDescriptor descriptor, EvaluationContext evaluationContext)
 			{
-				((NodeDescriptorImpl) descriptor).setContext((EvaluationContextImpl) evaluationContext);
+				// value gathered here is required for correct renderers work. e.g. array renderer
+				//((NodeDescriptorImpl)descriptor).setContext((EvaluationContextImpl)evaluationContext);
 				final DebuggerTreeNodeImpl node = new DebuggerTreeNodeImpl(null, descriptor);
-				((NodeDescriptorImpl) descriptor).updateRepresentation((EvaluationContextImpl) evaluationContext,
-						DescriptorLabelListener.DUMMY_LISTENER);
+				//((NodeDescriptorImpl)descriptor).updateRepresentation((EvaluationContextImpl)evaluationContext,
+				// DescriptorLabelListener.DUMMY_LISTENER);
 				return node;
 			}
 
