@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,85 +15,67 @@
  */
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
-import org.jetbrains.annotations.NonNls;
+import java.util.List;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.util.containers.ContainerUtilRt;
 
 /**
  * Method comment
  *
  * @author Dmitry Skavish
  */
-public class JDMethodComment extends JDParamListOwnerComment {
-  public JDMethodComment(CommentFormatter formatter) {
-    super(formatter);
-  }
+public class JDMethodComment extends JDParamListOwnerComment
+{
+	private String myReturnTag;
+	private List<NameDesc> myThrowsList;
 
-  private String returnTag;
-  private ArrayList<NameDesc> throwsList;
+	public JDMethodComment(@NotNull CommentFormatter formatter)
+	{
+		super(formatter);
+	}
 
-  private static final @NonNls String THROWS_TAG = "@throws ";
-  private static final @NonNls String EXCEPTION_TAG = "@exception ";
+	@Override
+	protected void generateSpecial(@NotNull String prefix, @NotNull StringBuilder sb)
+	{
+		super.generateSpecial(prefix, sb);
 
-  @Override
-  protected void generateSpecial(String prefix, @NonNls StringBuffer sb) {
+		if(myReturnTag != null)
+		{
+			if(myFormatter.getSettings().JD_KEEP_EMPTY_RETURN || !myReturnTag.trim().isEmpty())
+			{
+				JDTag tag = JDTag.RETURN;
+				sb.append(prefix);
+				sb.append(tag.getWithEndWhitespace());
+				sb.append(myFormatter.getParser().formatJDTagDescription(myReturnTag, prefix, true, tag.getDescriptionPrefix(prefix).length()));
+				if(myFormatter.getSettings().JD_ADD_BLANK_AFTER_RETURN)
+				{
+					sb.append(prefix);
+					sb.append('\n');
+				}
+			}
+		}
 
-    super.generateSpecial(prefix, sb);
+		if(myThrowsList != null)
+		{
+			JDTag tag = myFormatter.getSettings().JD_USE_THROWS_NOT_EXCEPTION ? JDTag.THROWS : JDTag.EXCEPTION;
+			generateList(prefix, sb, myThrowsList, tag.getWithEndWhitespace(), myFormatter.getSettings().JD_ALIGN_EXCEPTION_COMMENTS,
+					myFormatter.getSettings().JD_KEEP_EMPTY_EXCEPTION, myFormatter.getSettings().JD_PARAM_DESCRIPTION_ON_NEW_LINE);
+		}
+	}
 
-    if (returnTag != null) {
-      if (returnTag.trim().length() != 0 || myFormatter.getSettings().JD_KEEP_EMPTY_RETURN) {
-        sb.append(prefix);
-        sb.append("@return ");
-        sb.append(myFormatter.getParser().splitIntoCLines(returnTag, prefix + "        ", false));
-        if (myFormatter.getSettings().JD_ADD_BLANK_AFTER_RETURN) {
-          sb.append(prefix);
-          sb.append('\n');
-        }
-      }
-    }
+	public void setReturnTag(@NotNull String returnTag)
+	{
+		this.myReturnTag = returnTag;
+	}
 
-    if (throwsList != null) {
-      String tag = myFormatter.getSettings().JD_USE_THROWS_NOT_EXCEPTION ? THROWS_TAG : EXCEPTION_TAG;
-      generateList(prefix, sb, throwsList, tag,
-                   myFormatter.getSettings().JD_ALIGN_EXCEPTION_COMMENTS,
-                   myFormatter.getSettings().JD_MIN_EXCEPTION_NAME_LENGTH,
-                   myFormatter.getSettings().JD_MAX_EXCEPTION_NAME_LENGTH,
-                   myFormatter.getSettings().JD_KEEP_EMPTY_EXCEPTION,
-                   myFormatter.getSettings().JD_PARAM_DESCRIPTION_ON_NEW_LINE
-      );
-    }
-  }
-
-  public String getReturnTag() {
-    return returnTag;
-  }
-
-  public void setReturnTag(String returnTag) {
-    this.returnTag = returnTag;
-  }
-
-  public void removeThrow(NameDesc nd) {
-    if (throwsList == null) return;
-    throwsList.remove(nd);
-  }
-
-  public ArrayList<NameDesc> getThrowsList() {
-    return throwsList;
-  }
-
-  public void addThrow(String className, String description) {
-    if (throwsList == null) {
-      throwsList = new ArrayList<NameDesc>();
-    }
-    throwsList.add(new NameDesc(className, description));
-  }
-
-  public NameDesc getThrow(String name) {
-    return getNameDesc(name, throwsList);
-  }
-
-  public void setThrowsList(ArrayList<NameDesc> throwsList) {
-    this.throwsList = throwsList;
-  }
-
+	public void addThrow(@NotNull String className, @Nullable String description)
+	{
+		if(myThrowsList == null)
+		{
+			myThrowsList = ContainerUtilRt.newArrayList();
+		}
+		myThrowsList.add(new NameDesc(className, description));
+	}
 }

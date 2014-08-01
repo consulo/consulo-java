@@ -15,61 +15,67 @@
  */
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
-import org.jetbrains.annotations.NonNls;
+import java.util.List;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.util.containers.ContainerUtilRt;
 
 /**
  * Class comment
  *
  * @author Dmitry Skavish
  */
-public class JDClassComment extends JDParamListOwnerComment {
-  public JDClassComment(CommentFormatter formatter) {
-    super(formatter);
-  }
+public class JDClassComment extends JDParamListOwnerComment
+{
+	private List<String> myAuthorsList;
+	private String myVersion;
 
-  private ArrayList authorsList;
-  private String version;
+	public JDClassComment(@NotNull CommentFormatter formatter)
+	{
+		super(formatter);
+	}
 
-  @Override
-  protected void generateSpecial(String prefix, @NonNls StringBuffer sb) {
-    super.generateSpecial(prefix, sb);
-    if (!isNull(authorsList)) {
-      for (Object aAuthorsList : authorsList) {
-        String s = (String)aAuthorsList;
-        sb.append(prefix);
-        sb.append("@author ");
-        sb.append(myFormatter.getParser().splitIntoCLines(s, prefix + "        ", false));
-      }
-    }
-    if (!isNull(version)) {
-      sb.append(prefix);
-      sb.append("@version ");
-      sb.append(myFormatter.getParser().splitIntoCLines(version, prefix + "         ", false));
-    }
-  }
+	@Override
+	protected void generateSpecial(@NotNull String prefix, @NotNull StringBuilder sb)
+	{
+		super.generateSpecial(prefix, sb);
+		if(!isNull(myAuthorsList))
+		{
+			JDTag tag = JDTag.AUTHOR;
+			for(String author : myAuthorsList)
+			{
+				sb.append(prefix);
+				sb.append(tag.getWithEndWhitespace());
+				sb.append(myFormatter.getParser().formatJDTagDescription(author, tag.getDescriptionPrefix(prefix)));
+			}
+		}
+		if(!isNull(myVersion))
+		{
+			sb.append(prefix);
+			JDTag tag = JDTag.VERSION;
+			sb.append(tag.getWithEndWhitespace());
+			sb.append(myFormatter.getParser().formatJDTagDescription(myVersion, tag.getDescriptionPrefix(prefix)));
+		}
+	}
 
-  public void addAuthor(String author) {
-    if (authorsList == null) {
-      authorsList = new ArrayList();
-    }
-    authorsList.add(author);
-  }
+	public void addAuthor(@NotNull String author)
+	{
+		if(myAuthorsList == null)
+		{
+			myAuthorsList = ContainerUtilRt.newArrayList();
+		}
+		myAuthorsList.add(author);
+	}
 
-  public ArrayList getAuthorsList() {
-    return authorsList;
-  }
+	@Nullable
+	public String getVersion()
+	{
+		return myVersion;
+	}
 
-  public void setAuthorsList(ArrayList authorsList) {
-    this.authorsList = authorsList;
-  }
-
-  public String getVersion() {
-    return version;
-  }
-
-  public void setVersion(String version) {
-    this.version = version;
-  }
+	public void setVersion(@NotNull String version)
+	{
+		this.myVersion = version;
+	}
 }

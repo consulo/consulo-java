@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,11 @@
  */
 package com.intellij.psi.impl.source.codeStyle.javadoc;
 
-import org.jetbrains.annotations.NonNls;
+import java.util.List;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.util.containers.ContainerUtilRt;
 
 /**
  * @author max
@@ -26,190 +28,180 @@ import java.util.ArrayList;
 /**
  * @author Dmitry Skavish
  */
-public class JDComment {
-  protected CommentFormatter myFormatter;
+public class JDComment
+{
+	protected final CommentFormatter myFormatter;
 
-  String description;
-  protected ArrayList unknownList;
-  protected ArrayList seeAlsoList;
-  protected String since;
-  String deprecated;
+	private String myDescription;
+	private List<String> myUnknownList;
+	private List<String> mySeeAlsoList;
+	private String mySince;
+	private String myDeprecated;
+	private boolean myMultiLineComment;
 
-  //protected LinkedHashMap xdocTagMap = new LinkedHashMap();
+	public JDComment(@NotNull CommentFormatter formatter)
+	{
+		myFormatter = formatter;
+	}
 
-  public JDComment(CommentFormatter formatter) {
-    myFormatter = formatter;
-  }
+	protected static boolean isNull(@Nullable String s)
+	{
+		return s == null || s.trim().isEmpty();
+	}
 
-  protected static boolean isNull(String s) {
-    return s == null || s.trim().length() == 0;
-  }
+	protected static boolean isNull(@Nullable List<?> l)
+	{
+		return l == null || l.isEmpty();
+	}
 
-  protected static boolean isNull(ArrayList l) {
-    return l == null || l.size() == 0;
-  }
+	public void setMultiLine(boolean value)
+	{
+		myMultiLineComment = value;
+	}
 
-  public String generate(String indent) {
-    final String prefix;
-    if (myFormatter.getSettings().JD_LEADING_ASTERISKS_ARE_ENABLED) {
-      prefix = indent + " * ";
-    } else {
-      prefix = indent;
-    }
+	@Nullable
+	public String generate(@NotNull String indent)
+	{
+		final String prefix;
 
-    @NonNls StringBuffer sb = new StringBuffer();
-//  sb.append("/**\n");
+		if(myFormatter.getSettings().JD_LEADING_ASTERISKS_ARE_ENABLED)
+		{
+			prefix = indent + " * ";
+		}
+		else
+		{
+			prefix = indent;
+		}
 
-    int start = sb.length();
+		StringBuilder sb = new StringBuilder();
+		int start = sb.length();
 
-    if (!isNull(description)) {
-      sb.append(myFormatter.getParser().splitIntoCLines(description, prefix));
+		if(!isNull(myDescription))
+		{
+			sb.append(prefix);
+			sb.append(myFormatter.getParser().formatJDTagDescription(myDescription, prefix));
 
-      if (myFormatter.getSettings().JD_ADD_BLANK_AFTER_DESCRIPTION) {
-        sb.append(prefix);
-        sb.append('\n');
-      }
-    }
+			if(myFormatter.getSettings().JD_ADD_BLANK_AFTER_DESCRIPTION)
+			{
+				sb.append(prefix);
+				sb.append('\n');
+			}
+		}
 
-    generateSpecial(prefix, sb);
+		generateSpecial(prefix, sb);
 
-    if (!isNull(unknownList) && myFormatter.getSettings().JD_KEEP_INVALID_TAGS) {
-      for (Object aUnknownList : unknownList) {
-        String s = (String)aUnknownList;
-        sb.append(myFormatter.getParser().splitIntoCLines(s, prefix));
-      }
-    }
+		if(!isNull(myUnknownList) && myFormatter.getSettings().JD_KEEP_INVALID_TAGS)
+		{
+			for(String aUnknownList : myUnknownList)
+			{
+				sb.append(prefix);
+				sb.append(myFormatter.getParser().formatJDTagDescription(aUnknownList, prefix));
+			}
+		}
 
-    /*
-    if( xdocTagMap.size() > 0 ) {
-    Iterator it = xdocTagMap.values().iterator();
-    while( it.hasNext() ) {
-    ArrayList list = (ArrayList) it.next();
-    for( int i = 0; i<list.size(); i++ ) {
-    XDTag tag = (XDTag) list.get(i);
-    tag.append(sb, prefix);
-    if( myFormatter.getSettings().add_blank_after_xdoclet_tag ) {
-    sb.append(prefix);
-    sb.append('\n');
-    }
-    }
-    }
-    }*/
+		if(!isNull(mySeeAlsoList))
+		{
+			JDTag tag = JDTag.SEE;
+			for(String aSeeAlsoList : mySeeAlsoList)
+			{
+				sb.append(prefix);
+				sb.append(tag.getWithEndWhitespace());
+				StringBuilder tagDescription = myFormatter.getParser().formatJDTagDescription(aSeeAlsoList, prefix, true,
+						tag.getDescriptionPrefix(prefix).length());
+				sb.append(tagDescription);
+			}
+		}
 
-    if (!isNull(seeAlsoList)) {
-      for (Object aSeeAlsoList : seeAlsoList) {
-        String s = (String)aSeeAlsoList;
-        sb.append(prefix);
-        sb.append("@see ");
-        sb.append(myFormatter.getParser().splitIntoCLines(s, prefix + "     ", false));
-      }
-    }
+		if(!isNull(mySince))
+		{
+			JDTag tag = JDTag.SINCE;
+			sb.append(prefix);
+			sb.append(tag.getWithEndWhitespace());
+			StringBuilder tagDescription = myFormatter.getParser().formatJDTagDescription(mySince, prefix, true,
+					tag.getDescriptionPrefix(prefix).length());
+			sb.append(tagDescription);
+		}
 
-    if (!isNull(since)) {
-      sb.append(prefix);
-      sb.append("@since ");
-      sb.append(myFormatter.getParser().splitIntoCLines(since, prefix + "       ", false));
-    }
+		if(myDeprecated != null)
+		{
+			JDTag tag = JDTag.DEPRECATED;
+			sb.append(prefix);
+			sb.append(tag.getWithEndWhitespace());
+			StringBuilder tagDescription = myFormatter.getParser().formatJDTagDescription(myDeprecated, prefix, true,
+					tag.getDescriptionPrefix(prefix).length());
+			sb.append(tagDescription);
+		}
 
-    if (deprecated != null) {
-      sb.append(prefix);
-      sb.append("@deprecated ");
-      sb.append(myFormatter.getParser().splitIntoCLines(deprecated, prefix + "            ", false));
-    }
+		if(sb.length() == start)
+		{
+			return null;
+		}
 
-    if (sb.length() == start) return null;
+		// if it ends with a blank line delete that
+		int nlen = sb.length() - prefix.length() - 1;
+		if(sb.substring(nlen, sb.length()).equals(prefix + "\n"))
+		{
+			sb.delete(nlen, sb.length());
+		}
 
-    // if it ends with a blank line delete that
-    int nlen = sb.length() - prefix.length() - 1;
-    if (sb.substring(nlen, sb.length()).equals(prefix + "\n")) {
-      sb.delete(nlen, sb.length());
-    }
+		if(myMultiLineComment && myFormatter.getSettings().JD_DO_NOT_WRAP_ONE_LINE_COMMENTS || !myFormatter.getSettings()
+				.JD_DO_NOT_WRAP_ONE_LINE_COMMENTS || sb.indexOf("\n") != sb.length() - 1) // If comment has become multiline after formatting - it
+				// must be shown as multiline.
+		// Last symbol is always '\n', so we need to check if there is one more LF symbol before it.
+		{
+			sb.insert(0, "/**\n");
+			sb.append(indent);
+		}
+		else
+		{
+			sb.replace(0, prefix.length(), "/** ");
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		sb.append(" */");
 
-    if( !myFormatter.getSettings().JD_DO_NOT_WRAP_ONE_LINE_COMMENTS ||
-        sb.indexOf("\n") != sb.length()-1 ) {
-      sb.insert(0, "/**\n");
-      sb.append(indent);
-    }
-    else {
-      sb.replace(0, prefix.length(), "/** ");
-      sb.deleteCharAt(sb.length()-1);
-    }
-    sb.append(" */");
+		return sb.toString();
+	}
 
-    return sb.toString();
-  }
+	protected void generateSpecial(@NotNull String prefix, @NotNull StringBuilder sb)
+	{
+	}
 
-  protected void generateSpecial(String prefix, StringBuffer sb) {
-  }
+	public void addSeeAlso(@NotNull String seeAlso)
+	{
+		if(mySeeAlsoList == null)
+		{
+			mySeeAlsoList = ContainerUtilRt.newArrayList();
+		}
+		mySeeAlsoList.add(seeAlso);
+	}
 
-  public void addSeeAlso(String seeAlso) {
-    if (seeAlsoList == null) {
-      seeAlsoList = new ArrayList();
-    }
-    seeAlsoList.add(seeAlso);
-  }
+	public void addUnknownTag(@NotNull String unknownTag)
+	{
+		if(myUnknownList == null)
+		{
+			myUnknownList = ContainerUtilRt.newArrayList();
+		}
+		myUnknownList.add(unknownTag);
+	}
 
-  public void addUnknownTag(String unknownTag) {
-    if (unknownList == null) {
-      unknownList = new ArrayList();
-    }
-    unknownList.add(unknownTag);
-  }
-/*
-    public void addXDocTag( XDTag tag ) {
-        getXdocTagList(tag.getNamespaceDesc()).add(tag);
-    }
+	public void setSince(@Nullable String since)
+	{
+		this.mySince = since;
+	}
 
-    public ArrayList getXdocTagList( String nsName ) {
-        ArrayList list = (ArrayList) xdocTagMap.get(nsName);
-        if( list == null ) {
-            list = new ArrayList();
-            xdocTagMap.put(nsName, list);
-        }
-        return list;
-    }
+	public void setDeprecated(@Nullable String deprecated)
+	{
+		this.myDeprecated = deprecated;
+	}
 
-    public ArrayList getXdocTagList( XDNamespaceDesc desc ) {
-        return getXdocTagList(desc.getName());
-    }
-*/
-  public ArrayList getSeeAlsoList() {
-    return seeAlsoList;
-  }
+	@Nullable
+	public String getDescription()
+	{
+		return myDescription;
+	}
 
-  public void setUnknownList(ArrayList unknownList) {
-    this.unknownList = unknownList;
-  }
-
-  public void setSeeAlsoList(ArrayList seeAlsoList) {
-    this.seeAlsoList = seeAlsoList;
-  }
-
-  public ArrayList getUnknownList() {
-    return unknownList;
-  }
-
-  public String getSince() {
-    return since;
-  }
-
-  public void setSince(String since) {
-    this.since = since;
-  }
-
-  public String getDeprecated() {
-    return deprecated;
-  }
-
-  public void setDeprecated(String deprecated) {
-    this.deprecated = deprecated;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
+	public void setDescription(@Nullable String description)
+	{
+		this.myDescription = description;
+	}
 }
