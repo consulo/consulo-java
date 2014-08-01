@@ -22,7 +22,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.util.text.LineTokenizer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaPsiFacade;
@@ -51,11 +50,11 @@ public class CommentFormatter
 	private final JDParser myParser;
 	private final Project myProject;
 
-	public CommentFormatter(@NotNull Project project)
+	public CommentFormatter(@NotNull PsiElement element)
 	{
-		mySettings = CodeStyleSettingsManager.getSettings(project);
-		myParser = new JDParser(mySettings, LanguageLevelProjectExtension.getInstance(project).getLanguageLevel());
-		myProject = project;
+		mySettings = CodeStyleSettingsManager.getSettings(element.getProject());
+		myParser = new JDParser(mySettings, PsiUtil.getLanguageLevel(element));
+		myProject = element.getProject();
 	}
 
 	public CodeStyleSettings getSettings()

@@ -74,7 +74,7 @@ public class FormatCommentsProcessor implements PreFormatProcessor
 				rangeAnchor = element;
 			}
 			TextRange before = rangeAnchor.getTextRange();
-			new CommentFormatter(project).processComment(element);
+			new CommentFormatter(elementPsi).processComment(element);
 			int deltaRange = rangeAnchor.getTextRange().getLength() - before.getLength();
 			resultTextRange = new TextRange(markedRange.getStartOffset(), markedRange.getEndOffset() + deltaRange);
 		}
