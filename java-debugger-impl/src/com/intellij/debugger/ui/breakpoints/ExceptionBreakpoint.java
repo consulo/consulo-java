@@ -179,6 +179,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		}
 	}
 
+	@Override
 	public void processClassPrepare(DebugProcess process, ReferenceType refType)
 	{
 		DebugProcessImpl debugProcess = (DebugProcessImpl) process;
@@ -202,6 +203,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		}
 	}
 
+	@Override
 	protected ObjectReference getThisObject(SuspendContextImpl context, LocatableEvent event) throws EvaluateException
 	{
 		if(event instanceof ExceptionEvent)
@@ -211,6 +213,7 @@ public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointPrope
 		return super.getThisObject(context, event);    //To change body of overriden methods use Options | File Templates.
 	}
 
+	@Override
 	public String getEventMessage(LocatableEvent event)
 	{
 		String exceptionName = (getQualifiedName() != null) ? getQualifiedName() : "java.lang.Throwable";
