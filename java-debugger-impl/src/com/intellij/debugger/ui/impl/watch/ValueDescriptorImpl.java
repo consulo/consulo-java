@@ -60,6 +60,8 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	NodeRenderer myAutoRenderer = null;
 
 	private Value myValue;
+	private boolean myValueReady;
+
 	private EvaluateException myValueException;
 	protected EvaluationContextImpl myStoredEvaluationContext = null;
 
@@ -79,6 +81,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	{
 		myProject = project;
 		myValue = value;
+		myValueReady = true;
 	}
 
 	protected ValueDescriptorImpl(Project project)
@@ -86,38 +89,52 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		myProject = project;
 	}
 
+	private void assertValueReady()
+	{
+		if(!myValueReady)
+		{
+			LOG.error("Value is not yet calculated for " + getClass());
+		}
+	}
+
 	@Override
 	public boolean isArray()
 	{
+		assertValueReady();
 		return myValue instanceof ArrayReference;
 	}
 
 	public boolean isDirty()
 	{
+		assertValueReady();
 		return myIsDirty;
 	}
 
 	@Override
 	public boolean isLvalue()
 	{
+		assertValueReady();
 		return myIsLvalue;
 	}
 
 	@Override
 	public boolean isNull()
 	{
+		assertValueReady();
 		return myValue == null;
 	}
 
 	@Override
 	public boolean isString()
 	{
+		assertValueReady();
 		return myValue instanceof StringReference;
 	}
 
 	@Override
 	public boolean isPrimitive()
 	{
+		assertValueReady();
 		return myValue instanceof PrimitiveValue;
 	}
 
@@ -176,6 +193,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 			}
 		}
 
+		assertValueReady();
 		return myValue;
 	}
 
@@ -227,6 +245,10 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 			myValueException = e;
 			myValue = getTargetExceptionWithStackTraceFilled(evaluationContext, e);
 			myIsExpandable = false;
+		}
+		finally
+		{
+			myValueReady = true;
 		}
 
 		myIsNew = false;
@@ -288,7 +310,12 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	{
 		super.setAncestor(oldDescriptor);
 		myIsNew = false;
-		myValue = ((ValueDescriptorImpl) oldDescriptor).getValue();
+		ValueDescriptorImpl other = (ValueDescriptorImpl) oldDescriptor;
+		if(other.myValueReady)
+		{
+			myValue = other.getValue();
+			myValueReady = true;
+		}
 	}
 
 	protected void setLvalue(boolean value)
@@ -341,9 +368,9 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	{
 		//translate only strings in quotes
 		String customLabel = null;
-		final Value value = getValue();
-		if(isShowIdLabel())
+		if(isShowIdLabel() && myValueReady)
 		{
+			final Value value = getValue();
 			Renderer lastRenderer = getLastRenderer();
 			final EvaluationContextImpl evalContext = myStoredEvaluationContext;
 			final String idLabel = evalContext != null && lastRenderer != null && !evalContext.getSuspendContext().isResumed() ? ((NodeRendererImpl)
@@ -433,6 +460,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	//returns expression that evaluates tree to this descriptor
+	@Nullable
 	public PsiExpression getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException
 	{
 		if(value.getParent() != null)
@@ -549,7 +577,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 
 	public boolean canSetValue()
 	{
-		return !myIsSynthetic && isLvalue();
+		return myValueReady && !myIsSynthetic && isLvalue();
 	}
 
 	public String getValueLabel()
@@ -610,4 +638,12 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		}
 	}
 
+	public boolean canMark()
+	{
+		if(!myValueReady)
+		{
+			return false;
+		}
+		return getValue() instanceof ObjectReference;
+	}
 }

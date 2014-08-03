@@ -17,7 +17,6 @@ package com.intellij.debugger.ui.tree.render;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -25,6 +24,7 @@ import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.settings.ViewsGeneralSettings;
 import com.intellij.debugger.ui.impl.watch.ArrayElementDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.MessageDescriptor;
@@ -53,161 +53,226 @@ import consulo.internal.com.sun.jdi.Value;
  * Date: Sep 18, 2003
  * Time: 3:07:19 PM
  */
-public class ArrayRenderer extends NodeRendererImpl{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.ArrayRenderer");
-  
-  public static final @NonNls String UNIQUE_ID = "ArrayRenderer";
+public class ArrayRenderer extends NodeRendererImpl
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.ArrayRenderer");
 
-  public int START_INDEX = 0;
-  public int END_INDEX   = 100;
-  public int ENTRIES_LIMIT = 101;
-  private final static String MORE_ELEMENTS = "...";
+	public static final
+	@NonNls
+	String UNIQUE_ID = "ArrayRenderer";
 
-  public ArrayRenderer() {
-    myProperties.setEnabled(true);
-  }
+	public int START_INDEX = 0;
+	public int END_INDEX = 100;
+	public int ENTRIES_LIMIT = 101;
+	private final static String MORE_ELEMENTS = "...";
 
-  public String getUniqueId() {
-    return UNIQUE_ID;
-  }
+	public ArrayRenderer()
+	{
+		myProperties.setEnabled(true);
+	}
 
-  public boolean isEnabled() {
-    return myProperties.isEnabled();
-  }
+	@Override
+	public String getUniqueId()
+	{
+		return UNIQUE_ID;
+	}
 
-  public void setEnabled(boolean enabled) {
-    myProperties.setEnabled(enabled);
-  }
+	@Override
+	public boolean isEnabled()
+	{
+		return myProperties.isEnabled();
+	}
 
-  public @NonNls String getName() {
-    return "Array";
-  }
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		myProperties.setEnabled(enabled);
+	}
 
-  public void setName(String text) {
-    LOG.assertTrue(false);
-  }
+	@Override
+	public
+	@NonNls
+	String getName()
+	{
+		return "Array";
+	}
 
-  public ArrayRenderer clone() {
-    return (ArrayRenderer)super.clone();
-  }
+	@Override
+	public void setName(String text)
+	{
+		LOG.assertTrue(false);
+	}
 
-  public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
-    return ClassRenderer.calcLabel(descriptor);
-  }
+	@Override
+	public ArrayRenderer clone()
+	{
+		return (ArrayRenderer) super.clone();
+	}
 
-  public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    List<DebuggerTreeNode> children = new ArrayList<DebuggerTreeNode>();
-    NodeManagerImpl nodeManager = (NodeManagerImpl)builder.getNodeManager();
-    NodeDescriptorFactory descriptorFactory = builder.getDescriptorManager();
+	@Override
+	public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws
+			EvaluateException
+	{
+		return ClassRenderer.calcLabel(descriptor);
+	}
 
-    ArrayReference array = (ArrayReference)value;
-    if (array.length() > 0) {
-      int added = 0;
+	@Override
+	public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		List<DebuggerTreeNode> children = new ArrayList<DebuggerTreeNode>();
+		NodeManagerImpl nodeManager = (NodeManagerImpl) builder.getNodeManager();
+		NodeDescriptorFactory descriptorFactory = builder.getDescriptorManager();
 
-      if(ENTRIES_LIMIT > END_INDEX - START_INDEX + 1) {
-        ENTRIES_LIMIT = END_INDEX - START_INDEX;
-      }
+		builder.initChildrenArrayRenderer(this);
 
-      if(ENTRIES_LIMIT <= 0) {
-        ENTRIES_LIMIT = 1;
-      }
+		ArrayReference array = (ArrayReference) value;
+		if(array.length() > 0)
+		{
+			int added = 0;
 
-      if(array.length() - 1 >= START_INDEX) {
-        int start = START_INDEX;
-        int end  = array.length() - 1 < END_INDEX   ? array.length() - 1 : END_INDEX;
+			if(ENTRIES_LIMIT > END_INDEX - START_INDEX + 1)
+			{
+				ENTRIES_LIMIT = END_INDEX - START_INDEX;
+			}
 
-        int idx;
+			if(ENTRIES_LIMIT <= 0)
+			{
+				ENTRIES_LIMIT = 1;
+			}
 
-        for (idx = start; idx <= end; idx++) {
-          DebuggerTreeNode arrayItemNode = nodeManager.createNode(descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx), evaluationContext);
+			if(array.length() - 1 >= START_INDEX)
+			{
+				int start = START_INDEX;
+				int end = array.length() - 1 < END_INDEX ? array.length() - 1 : END_INDEX;
 
-          if (ViewsGeneralSettings.getInstance().HIDE_NULL_ARRAY_ELEMENTS && ((ValueDescriptorImpl)arrayItemNode.getDescriptor()).isNull()) continue;
-          if(added >= (ENTRIES_LIMIT  + 1)/ 2) break;
-          children.add(arrayItemNode);
-          added++;
-        }
+				int idx;
 
-        start = idx;
+				for(idx = start; idx <= end; idx++)
+				{
+					DebuggerTreeNode arrayItemNode = nodeManager.createNode(descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(),
+							array, idx), evaluationContext);
 
-        List<DebuggerTreeNode> childrenTail = new ArrayList<DebuggerTreeNode>();
-        for (idx = end; idx >= start; idx--) {
-          DebuggerTreeNode arrayItemNode = nodeManager.createNode(descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx), evaluationContext);
+					if(arrayItemNode == null)
+					{
+						continue;
+					}
+					if(ViewsGeneralSettings.getInstance().HIDE_NULL_ARRAY_ELEMENTS)
+					{
+						// need to init value to be able to ask for null
+						ValueDescriptorImpl descriptor = (ValueDescriptorImpl) arrayItemNode.getDescriptor();
+						descriptor.setContext((EvaluationContextImpl) evaluationContext);
+						if(descriptor.isNull())
+						{
+							continue;
+						}
+					}
+					//if(added >= (ENTRIES_LIMIT  + 1)/ 2) break;
+					children.add(arrayItemNode);
+					added++;
+				}
 
-          if (ViewsGeneralSettings.getInstance().HIDE_NULL_ARRAY_ELEMENTS && ((ValueDescriptorImpl)arrayItemNode.getDescriptor()).isNull()) continue;
-          if(added >= ENTRIES_LIMIT) break;
-          childrenTail.add(arrayItemNode);
-          added++;
-        }
+				start = idx;
 
-        //array is printed in the following way
-        // ...
-        // items1...itemENTRIES_LIMIT/2
-        // ...
-        // itemENTRIES_LIMIT/2+1...itemENTRIES_LIMIT
-        // ...
+				//List<DebuggerTreeNode> childrenTail = new ArrayList<DebuggerTreeNode>();
+				//for (idx = end; idx >= start; idx--) {
+				//  DebuggerTreeNode arrayItemNode = nodeManager.createNode(descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(),
+				// array, idx), evaluationContext);
+				//
+				//  if (arrayItemNode == null) continue;
+				//  if (ViewsGeneralSettings.getInstance().HIDE_NULL_ARRAY_ELEMENTS && ((ValueDescriptorImpl)arrayItemNode.getDescriptor()).isNull()
+				// ) continue;
+				//  if(added >= ENTRIES_LIMIT) break;
+				//  childrenTail.add(arrayItemNode);
+				//  added++;
+				//}
 
-        //when itemENTRIES_LIMIT/2+1...itemENTRIES_LIMIT set is empty, we should not add middle "..." node
-        if(idx >= start && !(ENTRIES_LIMIT == 1 && END_INDEX < array.length())) {
-          children.add(nodeManager.createMessageNode(new MessageDescriptor(MORE_ELEMENTS, MessageDescriptor.SPECIAL)));
-        }
+				//array is printed in the following way
+				// ...
+				// items1...itemENTRIES_LIMIT/2
+				// ...
+				// itemENTRIES_LIMIT/2+1...itemENTRIES_LIMIT
+				// ...
 
-        for (ListIterator<DebuggerTreeNode> iterator = childrenTail.listIterator(childrenTail.size()); iterator.hasPrevious();) {
-          DebuggerTreeNode debuggerTreeNode = iterator.previous();
-          children.add(debuggerTreeNode);
-        }
-      }
+				//when itemENTRIES_LIMIT/2+1...itemENTRIES_LIMIT set is empty, we should not add middle "..." node
+				//if(idx >= start && !(ENTRIES_LIMIT == 1 && END_INDEX < array.length())) {
+				//  children.add(nodeManager.createMessageNode(new MessageDescriptor(MORE_ELEMENTS, MessageDescriptor.SPECIAL)));
+				//}
 
-      if (added == 0) {
-        if(START_INDEX == 0 && array.length() - 1 <= END_INDEX) {
-          children.add(nodeManager.createMessageNode(MessageDescriptor.ALL_ELEMENTS_IN_RANGE_ARE_NULL.getLabel()));
-        }
-        else {
-          children.add(nodeManager.createMessageNode(MessageDescriptor.ALL_ELEMENTS_IN_VISIBLE_RANGE_ARE_NULL.getLabel()));
-        }
-      }
-      else {
-        if(START_INDEX > 0) {
-          children.add(0, nodeManager.createMessageNode(new MessageDescriptor(MORE_ELEMENTS, MessageDescriptor.SPECIAL)));
-        }
+				//for (ListIterator<DebuggerTreeNode> iterator = childrenTail.listIterator(childrenTail.size()); iterator.hasPrevious();) {
+				//  DebuggerTreeNode debuggerTreeNode = iterator.previous();
+				//  children.add(debuggerTreeNode);
+				//}
+			}
 
-        if(END_INDEX < array.length() - 1) {
-          children.add(nodeManager.createMessageNode(new MessageDescriptor(MORE_ELEMENTS, MessageDescriptor.SPECIAL)));
-        }
-      }
-    }
-    builder.setChildren(children);
-  }
+			if(added == 0)
+			{
+				if(START_INDEX == 0 && array.length() - 1 <= END_INDEX)
+				{
+					children.add(nodeManager.createMessageNode(MessageDescriptor.ALL_ELEMENTS_IN_RANGE_ARE_NULL.getLabel()));
+				}
+				else
+				{
+					children.add(nodeManager.createMessageNode(MessageDescriptor.ALL_ELEMENTS_IN_VISIBLE_RANGE_ARE_NULL.getLabel()));
+				}
+			}
+			else
+			{
+				//if(START_INDEX > 0) {
+				//  children.add(0, nodeManager.createMessageNode(new MessageDescriptor(MORE_ELEMENTS, MessageDescriptor.SPECIAL)));
+				//}
 
-  public void readExternal(Element element) throws InvalidDataException {
-    super.readExternal(element);
-    DefaultJDOMExternalizer.readExternal(this, element);
-  }
+				if(END_INDEX < array.length() - 1)
+				{
+					//children.add(nodeManager.createMessageNode(new MessageDescriptor(MORE_ELEMENTS, MessageDescriptor.SPECIAL)));
+					builder.setRemaining(array.length() - END_INDEX);
+				}
+			}
+		}
+		builder.setChildren(children);
+	}
 
-  public void writeExternal(Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    DefaultJDOMExternalizer.writeExternal(this, element);
-  }
+	@Override
+	public void readExternal(Element element) throws InvalidDataException
+	{
+		super.readExternal(element);
+		DefaultJDOMExternalizer.readExternal(this, element);
+	}
 
-  public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) {
-    LOG.assertTrue(node.getDescriptor() instanceof ArrayElementDescriptorImpl, node.getDescriptor().getClass().getName());
-    ArrayElementDescriptorImpl descriptor = (ArrayElementDescriptorImpl)node.getDescriptor();
+	@Override
+	public void writeExternal(Element element) throws WriteExternalException
+	{
+		super.writeExternal(element);
+		DefaultJDOMExternalizer.writeExternal(this, element);
+	}
 
-    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(node.getProject()).getElementFactory();
-    try {
-      return elementFactory.createExpressionFromText("this[" + descriptor.getIndex() + "]", elementFactory.getArrayClass(LanguageLevel.HIGHEST));
-    }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-      return null;
-    }
-  }
+	@Override
+	public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context)
+	{
+		LOG.assertTrue(node.getDescriptor() instanceof ArrayElementDescriptorImpl, node.getDescriptor().getClass().getName());
+		ArrayElementDescriptorImpl descriptor = (ArrayElementDescriptorImpl) node.getDescriptor();
 
-  public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor) {
-    return value instanceof ArrayReference && ((ArrayReference)value).length() > 0;
-  }
+		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(node.getProject()).getElementFactory();
+		try
+		{
+			return elementFactory.createExpressionFromText("this[" + descriptor.getIndex() + "]", elementFactory.getArrayClass(LanguageLevel.HIGHEST));
+		}
+		catch(IncorrectOperationException e)
+		{
+			LOG.error(e);
+			return null;
+		}
+	}
 
-  public boolean isApplicable(Type type) {
-    return (type instanceof ArrayType);
-  }
+	@Override
+	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		return value instanceof ArrayReference && ((ArrayReference) value).length() > 0;
+	}
+
+	@Override
+	public boolean isApplicable(Type type)
+	{
+		return (type instanceof ArrayType);
+	}
 }

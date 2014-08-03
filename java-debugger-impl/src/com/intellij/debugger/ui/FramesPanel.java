@@ -760,15 +760,9 @@ public class FramesPanel extends UpdatableDebuggerView implements DataProvider
 		private final long myTimestamp;
 		private final IndexCounter myCounter;
 
-		public AppendFrameCommand(
-				@NotNull SuspendContextImpl suspendContext,
-				@NotNull StackFrameProxyImpl frame,
-				EvaluationContextImpl evaluationContext,
-				MethodsTracker tracker,
-				int indexToInsert,
-				final boolean isContextFrame,
-				final long timestamp,
-				IndexCounter counter)
+		public AppendFrameCommand(@NotNull SuspendContextImpl suspendContext, @NotNull StackFrameProxyImpl frame,
+				EvaluationContextImpl evaluationContext, MethodsTracker tracker, int indexToInsert, final boolean isContextFrame,
+				final long timestamp, IndexCounter counter)
 		{
 			super(suspendContext);
 			myFrame = frame;
