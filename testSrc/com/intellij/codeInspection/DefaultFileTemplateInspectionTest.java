@@ -3,7 +3,6 @@ package com.intellij.codeInspection;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.defaultFileTemplateUsage.DefaultFileTemplateUsageInspection;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.InspectionTestCase;
 

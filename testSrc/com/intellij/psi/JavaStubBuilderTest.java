@@ -17,7 +17,6 @@ package com.intellij.psi;
 
 import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.application.ex.PathManagerEx;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.DebugUtil;

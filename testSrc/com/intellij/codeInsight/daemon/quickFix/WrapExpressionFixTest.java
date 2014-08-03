@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 
 public class WrapExpressionFixTest extends LightQuickFixTestCase {

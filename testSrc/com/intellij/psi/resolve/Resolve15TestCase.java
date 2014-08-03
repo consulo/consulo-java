@@ -4,7 +4,6 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.ResolveTestCase;

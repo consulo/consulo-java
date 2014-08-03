@@ -1,7 +1,6 @@
 package com.intellij.codeInspection;
 
 import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.InspectionTestCase;
 

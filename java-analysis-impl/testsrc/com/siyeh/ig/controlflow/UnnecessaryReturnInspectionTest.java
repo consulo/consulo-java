@@ -1,7 +1,6 @@
 package com.siyeh.ig.controlflow;
 
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import com.siyeh.ig.IGInspectionTestCase;
 

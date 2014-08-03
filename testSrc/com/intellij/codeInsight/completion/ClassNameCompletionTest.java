@@ -19,7 +19,6 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.TestDataPath;

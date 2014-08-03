@@ -18,7 +18,6 @@ package com.siyeh.ig.dataflow;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.siyeh.ig.IGInspectionTestCase;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 
 public class UnnecessaryLocalVariableInspectionTest extends IGInspectionTestCase {

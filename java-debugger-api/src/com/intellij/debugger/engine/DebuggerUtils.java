@@ -38,10 +38,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
@@ -443,8 +443,7 @@ public abstract class DebuggerUtils
 		final JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(psiManager.getProject());
 		if(getArrayClass(className) != null)
 		{
-			return javaPsiFacade.getElementFactory().getArrayClass(LanguageLevelProjectExtension.getInstance(psiManager.getProject())
-					.getLanguageLevel());
+			return javaPsiFacade.getElementFactory().getArrayClass(LanguageLevel.HIGHEST);
 		}
 		if(project.isDefault())
 		{

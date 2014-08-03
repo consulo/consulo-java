@@ -1,6 +1,5 @@
 package com.siyeh.ig.abstraction;
 
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import com.siyeh.ig.IGInspectionTestCase;
 

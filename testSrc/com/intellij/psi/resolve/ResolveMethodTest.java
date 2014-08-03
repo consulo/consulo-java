@@ -16,7 +16,6 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.infos.MethodCandidateInfo;

@@ -1,7 +1,6 @@
 package com.siyeh.ig.threading;
 
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.siyeh.ig.IGInspectionTestCase;

@@ -9,7 +9,6 @@ import com.intellij.codeInspection.sillyAssignment.SillyAssignmentInspection;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.codeInspection.unneededThrows.RedundantThrowsDeclaration;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.pom.java.LanguageLevel;
 import org.jetbrains.annotations.NotNull;
 
