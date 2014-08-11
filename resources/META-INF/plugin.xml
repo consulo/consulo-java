@@ -368,12 +368,6 @@
 		</component>
 
 		<component>
-			<interface-class>com.intellij.psi.impl.file.impl.JavaFileManager</interface-class>
-			<implementation-class>com.intellij.psi.impl.file.impl.JavaFileManagerImpl</implementation-class>
-			<loadForDefaultProject/>
-		</component>
-
-		<component>
 			<implementation-class>com.intellij.codeInsight.daemon.impl.PostHighlightingPassFactory</implementation-class>
 		</component>
 
@@ -1858,8 +1852,6 @@
 					order="after CreateFromScratchMode"/>
 		<wizardMode implementation="com.intellij.ide.util.newProjectWizard.modes.CreateModuleFromSourcesMode" id="CreateModuleFromSourcesMode"
 					order="after CreateProjectFromSourcesMode"/>
-
-		<projectTemplateParameterFactory implementation="com.intellij.openapi.module.BasePackageParameterFactory"/>
 
 		<projectStructureDetector implementation="com.intellij.ide.util.projectWizard.importSources.impl.JavaProjectStructureDetector"
 								  order="first"/>
