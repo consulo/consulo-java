@@ -18,6 +18,7 @@ package com.intellij.psi;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.DeprecationInfo;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
@@ -111,6 +112,8 @@ public abstract class JavaPsiFacade
 	 * @return the name helper instance.
 	 */
 	@NotNull
+	@Deprecated
+	@DeprecationInfo(value = "Use PsiNameHelper#getInstance(Project)")
 	public abstract PsiNameHelper getNameHelper();
 
 	/**

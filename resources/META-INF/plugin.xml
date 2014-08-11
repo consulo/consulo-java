@@ -1881,6 +1881,12 @@
 		<projectService serviceInterface="com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"
 						serviceImplementation="com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"/>
 
+		<projectService serviceInterface="com.intellij.psi.PsiNameHelper"
+						serviceImplementation="com.intellij.psi.impl.PsiNameHelperImpl" />
+
+		<projectService serviceInterface="com.intellij.psi.impl.file.impl.JavaFileManager"
+						serviceImplementation="com.intellij.psi.impl.file.impl.JavaFileManagerImpl"/>
+
 		<applicationService serviceInterface="com.intellij.psi.impl.file.PsiPackageImplementationHelper"
 							serviceImplementation="com.intellij.psi.impl.file.PsiPackageImplementationHelperImpl"/>
 		<sdkType implementation="com.intellij.openapi.projectRoots.impl.JavaSdkImpl"/>

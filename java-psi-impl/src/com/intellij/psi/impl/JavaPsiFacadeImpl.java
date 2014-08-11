@@ -57,7 +57,6 @@ import com.intellij.util.messages.MessageBus;
 public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 {
 	private PsiElementFinder[] myElementFinders; //benign data race
-	private final PsiNameHelper myNameHelper;
 	private final PsiConstantEvaluationHelper myConstantEvaluationHelper;
 
 	private final Project myProject;
@@ -69,7 +68,6 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	{
 		myProject = project;
 		myFileManager = javaFileManager;
-		myNameHelper = new PsiNameHelperImpl(this);
 		myPackageManager = psiManager;
 		myConstantEvaluationHelper = new PsiConstantEvaluationHelperImpl();
 
@@ -236,7 +234,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@NotNull
 	public PsiNameHelper getNameHelper()
 	{
-		return myNameHelper;
+		return PsiNameHelper.getInstance(myProject);
 	}
 
 	@NotNull

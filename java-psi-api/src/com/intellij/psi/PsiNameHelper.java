@@ -19,6 +19,7 @@ import static com.intellij.util.ObjectUtils.notNull;
 
 import java.util.regex.Pattern;
 
+import org.consulo.lombok.annotations.ProjectService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.pom.java.LanguageLevel;
@@ -30,6 +31,7 @@ import com.intellij.util.ArrayUtil;
  *
  * @see com.intellij.psi.JavaPsiFacade#getNameHelper()
  */
+@ProjectService
 public abstract class PsiNameHelper {
   /**
    * Checks if the specified text is a Java identifier, using the language level of the project

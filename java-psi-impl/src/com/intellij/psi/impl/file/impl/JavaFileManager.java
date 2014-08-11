@@ -19,20 +19,19 @@
  */
 package com.intellij.psi.impl.file.impl;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Collection;
 
-public interface JavaFileManager {
-  @Nullable
-  PsiClass findClass(@NotNull String qName, @NotNull GlobalSearchScope scope);
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.search.GlobalSearchScope;
 
-  PsiClass[] findClasses(@NotNull String qName, @NotNull GlobalSearchScope scope);
+public interface JavaFileManager
+{
+	@Nullable
+	PsiClass findClass(@NotNull String qName, @NotNull GlobalSearchScope scope);
 
-  Collection<String> getNonTrivialPackagePrefixes();
+	PsiClass[] findClasses(@NotNull String qName, @NotNull GlobalSearchScope scope);
 
-  void initialize();
+	Collection<String> getNonTrivialPackagePrefixes();
 }
