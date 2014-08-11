@@ -81,7 +81,12 @@ public class JavaCompilerUtil
 		}
 
 		final LanguageLevel applicableLanguageLevel = getApplicableLanguageLevel(versionString, chunkLanguageLevel);
-		if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_8))
+		if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_9))
+		{
+			parametersList.add("-source");
+			parametersList.add("9");
+		}
+		else if(applicableLanguageLevel.equals(LanguageLevel.JDK_1_8))
 		{
 			parametersList.add("-source");
 			parametersList.add("8");
@@ -152,6 +157,7 @@ public class JavaCompilerUtil
 	@NotNull
 	public static LanguageLevel getApplicableLanguageLevel(String versionString, @NotNull LanguageLevel languageLevel)
 	{
+		final boolean is9OrNewer = isOfVersion(versionString, "1.9") || isOfVersion(versionString, "9.0");
 		final boolean is8OrNewer = isOfVersion(versionString, "1.8") || isOfVersion(versionString, "8.0");
 		final boolean is7OrNewer = is8OrNewer || isOfVersion(versionString, "1.7") || isOfVersion(versionString, "7.0");
 		final boolean is6OrNewer = is7OrNewer || isOfVersion(versionString, "1.6") || isOfVersion(versionString, "6.0");
@@ -167,6 +173,10 @@ public class JavaCompilerUtil
 			return languageLevel;
 		}
 		// now correct the language level to be not higher than jdk used to compile
+		if(LanguageLevel.JDK_1_9.equals(languageLevel) && !is9OrNewer)
+		{
+			languageLevel = LanguageLevel.JDK_1_8;
+		}
 		if(LanguageLevel.JDK_1_8.equals(languageLevel) && !is8OrNewer)
 		{
 			languageLevel = LanguageLevel.JDK_1_7;

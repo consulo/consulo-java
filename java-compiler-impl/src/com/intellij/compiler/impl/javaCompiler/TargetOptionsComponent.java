@@ -321,7 +321,8 @@ public class TargetOptionsComponent extends JPanel
 			"1.5",
 			"1.6",
 			"1.7",
-			"1.8"
+			"1.8",
+			"1.9"
 	};
 	private static final String COMPILER_DEFAULT = "JDK default";
 	private final Project myProject;
