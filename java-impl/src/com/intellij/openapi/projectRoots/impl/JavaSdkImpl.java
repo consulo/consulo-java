@@ -132,6 +132,10 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			return "http://download.java.net/jdk8/docs/api/";
 		}
+		if(version == JavaSdkVersion.JDK_1_9)
+		{
+			return "http://download.java.net/jdk9/docs/api/";
+		}
 		return null;
 	}
 
@@ -401,16 +405,16 @@ public class JavaSdkImpl extends JavaSdk
 		VirtualFile docs = findDocs(jdkHome, "docs/api");
 
 		final SdkModificator sdkModificator = sdk.getSdkModificator();
-		final Set<VirtualFile> previousRoots = new LinkedHashSet<VirtualFile>(Arrays.asList(sdkModificator.getRoots(OrderRootType.CLASSES)));
-		sdkModificator.removeRoots(OrderRootType.CLASSES);
+		final Set<VirtualFile> previousRoots = new LinkedHashSet<VirtualFile>(Arrays.asList(sdkModificator.getRoots(OrderRootType.BINARIES)));
+		sdkModificator.removeRoots(OrderRootType.BINARIES);
 		previousRoots.removeAll(new HashSet<VirtualFile>(classes));
 		for(VirtualFile aClass : classes)
 		{
-			sdkModificator.addRoot(aClass, OrderRootType.CLASSES);
+			sdkModificator.addRoot(aClass, OrderRootType.BINARIES);
 		}
 		for(VirtualFile root : previousRoots)
 		{
-			sdkModificator.addRoot(root, OrderRootType.CLASSES);
+			sdkModificator.addRoot(root, OrderRootType.BINARIES);
 		}
 		if(sources != null)
 		{
@@ -567,7 +571,7 @@ public class JavaSdkImpl extends JavaSdk
 	{
 		for(VirtualFile virtualFile : findClasses(file, isJre))
 		{
-			sdkModificator.addRoot(virtualFile, OrderRootType.CLASSES);
+			sdkModificator.addRoot(virtualFile, OrderRootType.BINARIES);
 		}
 	}
 
@@ -683,7 +687,7 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public boolean isRootTypeApplicable(OrderRootType type)
 	{
-		return type == OrderRootType.CLASSES ||
+		return type == OrderRootType.BINARIES ||
 				type == OrderRootType.SOURCES ||
 				type == OrderRootType.DOCUMENTATION ||
 				type == AnnotationOrderRootType.getInstance();
