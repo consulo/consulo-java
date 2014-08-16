@@ -1,9 +1,32 @@
+/*
+ * Copyright 2000-2013 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.intellij.psi.impl.search;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.QueryExecutorBase;
-import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.SearchRequestCollector;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.UsageSearchContext;
@@ -11,72 +34,103 @@ import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
  */
-public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters> {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.search.MethodUsagesSearcher");
-  public MethodUsagesSearcher() {
-    super(true);
-  }
+public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters>
+{
+	@Override
+	public void processQuery(@NotNull MethodReferencesSearch.SearchParameters p, @NotNull final Processor<PsiReference> consumer)
+	{
+		final PsiMethod method = p.getMethod();
+		final boolean[] isConstructor = new boolean[1];
+		final PsiManager[] psiManager = new PsiManager[1];
+		final String[] methodName = new String[1];
+		final boolean[] isValueAnnotation = new boolean[1];
+		final boolean[] needStrictSignatureSearch = new boolean[1];
+		final boolean strictSignatureSearch = p.isStrictSignatureSearch();
 
-  @Override
-  public void processQuery(@NotNull MethodReferencesSearch.SearchParameters p, @NotNull final Processor<PsiReference> consumer) {
-    final PsiMethod method = p.getMethod();
-    final SearchRequestCollector collector = p.getOptimizer();
+		final PsiClass aClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>()
+		{
+			@Override
+			public PsiClass compute()
+			{
+				PsiClass aClass = method.getContainingClass();
+				if(aClass == null)
+				{
+					return null;
+				}
+				isConstructor[0] = method.isConstructor();
+				psiManager[0] = aClass.getManager();
+				methodName[0] = method.getName();
+				isValueAnnotation[0] = PsiUtil.isAnnotationMethod(method) &&
+						PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.equals(methodName[0]) &&
+						method.getParameterList().getParametersCount() == 0;
+				needStrictSignatureSearch[0] = strictSignatureSearch && (aClass instanceof PsiAnonymousClass || aClass.hasModifierProperty
+						(PsiModifier.FINAL) || method.hasModifierProperty(PsiModifier.STATIC) || method.hasModifierProperty(PsiModifier.FINAL) ||
+						method.hasModifierProperty(PsiModifier.PRIVATE));
+				return aClass;
+			}
+		});
+		if(aClass == null)
+		{
+			return;
+		}
 
-    final SearchScope searchScope = p.getScope();
+		final SearchRequestCollector collector = p.getOptimizer();
 
-    final PsiManager psiManager = method.getManager();
+		final SearchScope searchScope = p.getScope();
 
-    final PsiClass aClass = method.getContainingClass();
-    if (aClass == null) return;
+		if(isConstructor[0])
+		{
+			new ConstructorReferencesSearchHelper(psiManager[0]).
+					processConstructorReferences(consumer, method, aClass, searchScope, !strictSignatureSearch, strictSignatureSearch, collector);
+		}
 
-    final boolean strictSignatureSearch = p.isStrictSignatureSearch();
+		if(isValueAnnotation[0])
+		{
+			Processor<PsiReference> refProcessor = PsiAnnotationMethodReferencesSearcher.createImplicitDefaultAnnotationMethodConsumer(consumer);
+			ReferencesSearch.search(aClass, searchScope).forEach(refProcessor);
+		}
 
-    if (method.isConstructor()) {
-      new ConstructorReferencesSearchHelper(psiManager).
-        processConstructorReferences(consumer, method, searchScope, !strictSignatureSearch, strictSignatureSearch, collector);
-    }
+		if(needStrictSignatureSearch[0])
+		{
+			ReferencesSearch.searchOptimized(method, searchScope, false, collector, consumer);
+			return;
+		}
 
-    if (PsiUtil.isAnnotationMethod(method) &&
-        PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.equals(method.getName()) &&
-        method.getParameterList().getParametersCount() == 0) {
-      ReferencesSearch.search(aClass, p.getScope()).forEach(PsiAnnotationMethodReferencesSearcher.createImplicitDefaultAnnotationMethodConsumer( consumer));
-    }
+		if(StringUtil.isEmpty(methodName[0]))
+		{
+			return;
+		}
 
-    boolean needStrictSignatureSearch = strictSignatureSearch && (aClass instanceof PsiAnonymousClass
-                                                             || aClass.hasModifierProperty(PsiModifier.FINAL)
-                                                             || method.hasModifierProperty(PsiModifier.STATIC)
-                                                             || method.hasModifierProperty(PsiModifier.FINAL)
-                                                             || method.hasModifierProperty(PsiModifier.PRIVATE));
-    if (needStrictSignatureSearch) {
-      ReferencesSearch.searchOptimized(method, searchScope, false, collector, consumer);
-      return;
-    }
+		ApplicationManager.getApplication().runReadAction(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final PsiMethod[] methods = strictSignatureSearch ? new PsiMethod[]{method} : aClass.findMethodsByName(methodName[0], false);
+				SearchScope accessScope = methods[0].getUseScope();
+				for(int i = 1; i < methods.length; i++)
+				{
+					PsiMethod method1 = methods[i];
+					accessScope = accessScope.union(method1.getUseScope());
+				}
 
-    final String textToSearch = method.getName();
-    if (StringUtil.isEmpty(textToSearch)) {
-      return;
-    }
-    final PsiMethod[] methods = strictSignatureSearch ? new PsiMethod[]{method} : aClass.findMethodsByName(textToSearch, false);
+				SearchScope restrictedByAccessScope = searchScope.intersectWith(accessScope);
 
-    SearchScope accessScope = methods[0].getUseScope();
-    for (int i = 1; i < methods.length; i++) {
-      PsiMethod method1 = methods[i];
-      accessScope = accessScope.union(method1.getUseScope());
-    }
+				short searchContext = UsageSearchContext.IN_CODE | UsageSearchContext.IN_COMMENTS | UsageSearchContext.IN_FOREIGN_LANGUAGES;
+				collector.searchWord(methodName[0], restrictedByAccessScope, searchContext, true, method, getTextOccurrenceProcessor(methods,
+						aClass, strictSignatureSearch));
 
-    final SearchScope restrictedByAccess = searchScope.intersectWith(accessScope);
+				SimpleAccessorReferenceSearcher.addPropertyAccessUsages(method, restrictedByAccessScope, collector);
+			}
+		});
+	}
 
-    short searchContext = UsageSearchContext.IN_CODE | UsageSearchContext.IN_COMMENTS | UsageSearchContext.IN_FOREIGN_LANGUAGES;
-    collector.searchWord(textToSearch, restrictedByAccess, searchContext, true,
-                         new MethodTextOccurrenceProcessor(aClass, strictSignatureSearch, methods));
-
-    SimpleAccessorReferenceSearcher.addPropertyAccessUsages(method, restrictedByAccess, collector);
-
-  }
-
+	protected MethodTextOccurrenceProcessor getTextOccurrenceProcessor(PsiMethod[] methods, PsiClass aClass, boolean strictSignatureSearch)
+	{
+		return new MethodTextOccurrenceProcessor(aClass, strictSignatureSearch, methods);
+	}
 }

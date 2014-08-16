@@ -506,19 +506,28 @@ public class PsiClassImplUtil
 		}
 	}
 
-	public static boolean processDeclarationsInEnum(@NotNull PsiScopeProcessor processor,
-			@NotNull ResolveState state,
-			@NotNull ClassInnerStuffCache innerStuffCache) {
+	public static boolean processDeclarationsInEnum(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
+			@NotNull ClassInnerStuffCache innerStuffCache)
+	{
 		ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
-		if (classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.METHOD)) {
+		if(classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.METHOD))
+		{
 			NameHint nameHint = processor.getHint(NameHint.KEY);
-			if ((nameHint == null || VALUES_METHOD.equals(nameHint.getName(state)))) {
+			if((nameHint == null || VALUES_METHOD.equals(nameHint.getName(state))))
+			{
 				PsiMethod method = innerStuffCache.getValuesMethod();
-				if (method != null && !processor.execute(method, ResolveState.initial())) return false;
+				if(method != null && !processor.execute(method, ResolveState.initial()))
+				{
+					return false;
+				}
 			}
-			if ((nameHint == null || VALUE_OF_METHOD.equals(nameHint.getName(state)))) {
+			if((nameHint == null || VALUE_OF_METHOD.equals(nameHint.getName(state))))
+			{
 				PsiMethod method = innerStuffCache.getValueOfMethod();
-				if (method != null && !processor.execute(method, ResolveState.initial())) return false;
+				if(method != null && !processor.execute(method, ResolveState.initial()))
+				{
+					return false;
+				}
 			}
 		}
 
@@ -863,7 +872,7 @@ public class PsiClassImplUtil
 			}
 			PsiSubstitutor finalSubstitutor = obtainFinalSubstitutor(superClass, superTypeResolveResult.getSubstitutor(), aClass,
 					state.get(PsiSubstitutor.KEY), factory, languageLevel);
-			if(!processDeclarationsInClass(superClass, processor, state.put(PsiSubstitutor.KEY, finalSubstitutor), visited, last, place, 
+			if(!processDeclarationsInClass(superClass, processor, state.put(PsiSubstitutor.KEY, finalSubstitutor), visited, last, place,
 					languageLevel, isRaw))
 			{
 				resolved = true;
@@ -1444,7 +1453,8 @@ public class PsiClassImplUtil
 
 		if(class1 instanceof PsiTypeParameter && class2 instanceof PsiTypeParameter)
 		{
-			if(!(Comparing.equal(class1.getName(), class2.getName()) && ((PsiTypeParameter) class1).getIndex() == ((PsiTypeParameter) class2).getIndex()))
+			if(!(Comparing.equal(class1.getName(), class2.getName()) && ((PsiTypeParameter) class1).getIndex() == ((PsiTypeParameter) class2)
+					.getIndex()))
 
 			{
 				return false;

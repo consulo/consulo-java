@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,29 @@
  */
 package com.intellij.codeInsight.highlighting;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiKeyword;
 import com.intellij.codeInsight.TargetElementUtilBase;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiKeyword;
 
 /**
  * @author yole
  */
-public class HighlightExitPointsHandlerFactory implements HighlightUsagesHandlerFactory {
-  @Override
-  public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
-    int offset = TargetElementUtilBase.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
-    PsiElement target = file.findElementAt(offset);
-    if (target instanceof PsiKeyword) {
-      if (PsiKeyword.RETURN.equals(target.getText()) || PsiKeyword.THROW.equals(target.getText())) {
-        return new HighlightExitPointsHandler(editor, file, target);
-      }
-    }
-    return null;
-  }
+public class HighlightExitPointsHandlerFactory implements HighlightUsagesHandlerFactory
+{
+	@Override
+	public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file)
+	{
+		int offset = TargetElementUtilBase.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
+		PsiElement target = file.findElementAt(offset);
+		if(target instanceof PsiKeyword)
+		{
+			if(PsiKeyword.RETURN.equals(target.getText()) || PsiKeyword.THROW.equals(target.getText()))
+			{
+				return new HighlightExitPointsHandler(editor, file, target);
+			}
+		}
+		return null;
+	}
 }
