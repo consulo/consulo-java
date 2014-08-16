@@ -16,8 +16,13 @@
  */
 package com.intellij.codeInsight.daemon.impl.actions;
 
-import com.intellij.application.options.editor.AutoImportOptionsConfigurable;
-import com.intellij.application.options.editor.JavaAutoImportOptions;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
@@ -29,7 +34,11 @@ import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.*;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.LogicalPosition;
+import com.intellij.openapi.editor.RangeMarker;
+import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -43,12 +52,6 @@ import com.intellij.psi.statistics.JavaStatisticsManager;
 import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
-import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddImportAction implements QuestionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.actions.AddImportAction");
@@ -166,12 +169,11 @@ public class AddImportAction implements QuestionAction {
       public void run() {
         if (project.isDisposed()) return;
 
-        final AutoImportOptionsConfigurable configurable = new AutoImportOptionsConfigurable();
+        final JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable();
         ShowSettingsUtil.getInstance().editConfigurable(project, configurable, new Runnable() {
           @Override
           public void run() {
-            final JavaAutoImportOptions options = ContainerUtil.findInstance(configurable.getConfigurables(), JavaAutoImportOptions.class);
-            options.addExcludePackage(prefix);
+			configurable.addExcludePackage(prefix);
           }
         });
       }

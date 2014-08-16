@@ -693,8 +693,16 @@
 
 
 		<errorOptionsProvider instance="com.intellij.profile.codeInspection.ui.JavaErrorOptionsProvider"/>
-		<autoImportOptionsProvider instance="com.intellij.application.options.editor.JavaAutoImportOptions"/>
-		<codeFoldingOptionsProvider instance="com.intellij.application.options.editor.JavaCodeFoldingOptionsProvider"/>
+		<applicationConfigurable
+				id="editor.preferences.import.java"
+				parentId="editor.preferences.import"
+				displayName="Java"
+				instance="com.intellij.application.options.editor.JavaAutoImportConfigurable"/>
+		<applicationConfigurable
+				id="editor.preferences.folding.java"
+				parentId="editor.preferences.folding"
+				displayName="Java"
+				instance="com.intellij.application.options.editor.JavaCodeFoldingConfigurable"/>
 
 		<codeInsight.lineMarkerProvider language="" implementationClass="com.intellij.ui.ColorLineMarkerProvider"/>
 		<!--<expectedTypesProvider implementation="com.intellij.codeInsight.JavaExpectedTypesProvider"/>-->
