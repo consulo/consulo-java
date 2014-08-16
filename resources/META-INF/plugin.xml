@@ -1481,7 +1481,12 @@
 		<quoteHandler fileType="JAVA" className="com.intellij.codeInsight.editorActions.JavaQuoteHandler"/>
 		<typedHandler implementation="com.intellij.codeInsight.editorActions.JavaTypedHandler" id="java"/>
 		<typedHandler implementation="com.intellij.codeInsight.editorActions.JavadocTypedHandler" id="javadoc"/>
-		<editorSmartKeysConfigurable instance="com.intellij.application.options.JavadocOptionsProvider"/>
+		<applicationService serviceInterface="com.intellij.application.options.JavaSmartKeysSettings"
+							serviceImplementation="com.intellij.application.options.JavaSmartKeysSettings" />
+		<applicationConfigurable id="editor.preferences.smartKeys.java"
+								 parentId="editor.preferences.smartKeys"
+								 displayName="Java"
+								 instance="com.intellij.application.options.JavaSmartKeysConfigurable"/>
 
 		<joinLinesHandler implementation="com.intellij.codeInsight.editorActions.LiteralJoinLinesHandler"/>
 		<joinLinesHandler implementation="com.intellij.codeInsight.editorActions.DeclarationJoinLinesHandler"/>
