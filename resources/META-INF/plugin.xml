@@ -1931,7 +1931,7 @@
 								 immutableClass="org.consulo.java.platform.module.extension.JavaModuleExtensionImpl"
 								 mutableClass="org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl"/>
 		<orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
-		<orderRootTypeEditor key="JAVA_ANNOTATIONS"
+		<orderRootTypeEditor key="javaExternalAnnotations"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
 		<contentFolderSupportPatcher implementation="org.consulo.java.platform.module.extension.JavaContentFolderSupportPatcher" />
 		<pathMacroExpendableProtocol protocol="jar"/>

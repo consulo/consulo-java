@@ -15,11 +15,16 @@
  */
 package com.intellij.openapi.roots;
 
+import org.consulo.lombok.annotations.LazyInstance;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author yole
  */
-public class AnnotationOrderRootType extends PersistentOrderRootType
+public class AnnotationOrderRootType extends OrderRootTypeWithConvert
 {
+	@NotNull
+	@LazyInstance
 	public static OrderRootType getInstance()
 	{
 		return getOrderRootType(AnnotationOrderRootType.class);
@@ -27,12 +32,6 @@ public class AnnotationOrderRootType extends PersistentOrderRootType
 
 	public AnnotationOrderRootType()
 	{
-		super("JAVA_ANNOTATIONS", "javaAnnotationsPath");
-	}
-
-	@Override
-	public boolean skipWriteIfEmpty()
-	{
-		return true;
+		super("javaExternalAnnotations", "JAVA_ANNOTATIONS", "javaAnnotationsPath");
 	}
 }
