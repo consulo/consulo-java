@@ -15,11 +15,11 @@
  */
 package com.intellij.util.xml.converters;
 
-import com.intellij.psi.PsiType;
-import com.intellij.util.xml.GenericDomValue;
-import com.intellij.util.xml.DomElement;
-
 import java.util.List;
+
+import com.intellij.psi.PsiType;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.GenericDomValue;
 
 /**
  * @author peter

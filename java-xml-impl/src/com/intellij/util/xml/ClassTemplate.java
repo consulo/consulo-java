@@ -15,11 +15,11 @@
  */
 package com.intellij.util.xml;
 
-import com.intellij.psi.util.ClassKind;
-import org.jetbrains.annotations.NonNls;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import org.jetbrains.annotations.NonNls;
+import com.intellij.psi.util.ClassKind;
 
 /**
  * To be used together with {@link com.intellij.util.xml.ExtendClass}.

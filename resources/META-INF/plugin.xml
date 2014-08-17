@@ -1954,8 +1954,8 @@
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">
-		<updater filetype="JSPX" implementationClass="com.maddyhome.idea.copyright.psi.UpdateJspxFileCopyright$UpdateJspxCopyrightsProvider"/>
-		<updater filetype="JSP" implementationClass="com.maddyhome.idea.copyright.psi.UpdateJspFileCopyright$UpdateJspCopyrightsProvider"/>
+		<!--<updater filetype="JSPX" implementationClass="com.maddyhome.idea.copyright.psi.UpdateJspxFileCopyright$UpdateJspxCopyrightsProvider"/>
+		<updater filetype="JSP" implementationClass="com.maddyhome.idea.copyright.psi.UpdateJspFileCopyright$UpdateJspCopyrightsProvider"/> -->
 		<updater filetype="JAVA" implementationClass="com.maddyhome.idea.copyright.psi.UpdateJavaFileCopyright$UpdateJavaCopyrightsProvider"/>
 	</extensions>
 

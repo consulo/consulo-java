@@ -15,6 +15,10 @@
  */
 package com.intellij.util.xml.impl;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
@@ -25,15 +29,15 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.ReflectionCache;
 import com.intellij.util.SmartList;
-import com.intellij.util.xml.*;
+import com.intellij.util.xml.DomBundle;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.DomUtil;
+import com.intellij.util.xml.ExtendClass;
+import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.highlighting.DomCustomAnnotationChecker;
 import com.intellij.util.xml.highlighting.DomElementAnnotationHolder;
 import com.intellij.util.xml.highlighting.DomElementProblemDescriptor;
 import com.intellij.util.xml.highlighting.DomHighlightingHelper;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author peter

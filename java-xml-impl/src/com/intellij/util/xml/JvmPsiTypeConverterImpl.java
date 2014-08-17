@@ -15,15 +15,22 @@
  */
 package com.intellij.util.xml;
 
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
-import com.intellij.util.containers.BidirectionalMap;
+import java.util.Arrays;
+import java.util.List;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiArrayType;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import com.intellij.util.containers.BidirectionalMap;
 
 /**
  * @author peter

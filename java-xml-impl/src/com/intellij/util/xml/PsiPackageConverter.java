@@ -15,11 +15,15 @@
  */
 package com.intellij.util.xml;
 
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PackageReferenceSet;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.ElementManipulators;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.PackageReferenceSet;
 
 /**
  * @author Konstantin Bulenkov

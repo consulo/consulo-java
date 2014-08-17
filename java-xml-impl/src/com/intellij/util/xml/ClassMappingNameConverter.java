@@ -15,6 +15,12 @@
  */
 package com.intellij.util.xml;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
@@ -24,12 +30,6 @@ import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @see com.intellij.util.xml.MappingClass

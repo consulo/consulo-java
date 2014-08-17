@@ -15,17 +15,22 @@
  */
 package com.intellij.util.xml;
 
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.XmlSuppressableInspectionTool;
 import com.intellij.codeInspection.deprecation.DeprecationInspection;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolvingHint;
+import com.intellij.psi.XmlElementVisitor;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Dmitry Avdeev

@@ -16,21 +16,25 @@
 
 package com.intellij.util.xml.converters.values;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.util.xml.*;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.util.xml.ConvertContext;
+import com.intellij.util.xml.Converter;
+import com.intellij.util.xml.CustomReferenceConverter;
+import com.intellij.util.xml.DomJavaUtil;
+import com.intellij.util.xml.GenericDomValue;
 
 public abstract class ClassValueConverter extends Converter<PsiClass> implements CustomReferenceConverter {
 

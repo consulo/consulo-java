@@ -16,22 +16,33 @@
 
 package com.intellij.util.xml.converters;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.ide.TypePresentationService;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.psi.util.PropertyMemberType;
 import com.intellij.psi.util.PropertyUtil;
-import com.intellij.util.xml.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import com.intellij.util.xml.ConvertContext;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.GenericDomValue;
+import com.intellij.util.xml.GenericValue;
+import com.intellij.util.xml.ResolvingConverter;
 
 /**
  * @author Gregory.Shrago

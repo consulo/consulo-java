@@ -15,12 +15,26 @@
  */
 package com.intellij.util.xml.converters;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Ref;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiType;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
@@ -29,10 +43,6 @@ import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.ResolvingConverter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author peter

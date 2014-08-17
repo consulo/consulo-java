@@ -15,13 +15,22 @@
  */
 package com.intellij.util.xml.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.IntentionFilterOwner;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.impl.source.PsiCodeFragmentImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.EditorTextField;
@@ -31,11 +40,6 @@ import com.intellij.ui.UIBundle;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.ExtendClass;
 import com.intellij.util.xml.GenericDomValue;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author peter

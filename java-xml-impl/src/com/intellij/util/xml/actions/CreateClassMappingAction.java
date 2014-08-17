@@ -15,6 +15,9 @@
  */
 package com.intellij.util.xml.actions;
 
+import java.util.Map;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -23,15 +26,16 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiModifier;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.actions.generate.DomTemplateRunner;
 import com.intellij.util.xml.ui.actions.generate.CreateDomElementAction;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * @author Dmitry Avdeev
