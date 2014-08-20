@@ -32,11 +32,9 @@
           <orderEntry type="module" module-name="java-manifest" />
           <orderEntry type="module-library">
             <library name="consulo:Spellchecker">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/dep/spellchecker/lib/spellchecker.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
         </module-layer>
@@ -279,11 +277,9 @@
           <orderEntry type="sourceFolder" forTests="false" />
           <orderEntry type="module-library">
             <library name="consulo:IntelliLang">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/../dep/intelliLang/lib/intelliLang.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
@@ -307,11 +303,9 @@
           <orderEntry type="module" module-name="java-analysis-impl" exported="" />
           <orderEntry type="module-library">
             <library name="consulo:Regexp">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/../dep/regexp/lib/regexp.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module" module-name="java-indexing-impl" exported="" />
@@ -319,14 +313,12 @@
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="module-library">
             <library name="consulo:XML">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
         </module-layer>
@@ -359,38 +351,30 @@
           <orderEntry type="module" module-name="java-execution-impl" />
           <orderEntry type="module-library">
             <library>
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/lib/jacocoant.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module-library">
             <library>
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/lib/jacocoagent.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module-library">
             <library>
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/lib/coverage-report-idea.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module-library">
             <library>
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/lib/coverage-report.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
@@ -420,32 +404,26 @@
           <orderEntry type="sourceFolder" forTests="false" />
           <orderEntry type="module-library">
             <library name="consulo:Properties Support">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/../dep/properties/lib/properties.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module-library">
             <library name="consulo:Spellchecker">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/../dep/spellchecker/lib/spellchecker.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module-library">
             <library name="consulo:XML">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
@@ -463,14 +441,12 @@
           <orderEntry type="sourceFolder" forTests="false" />
           <orderEntry type="module-library">
             <library name="consulo:XML">
-              <CLASSES>
+              <binaries>
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
                 <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </CLASSES>
-              <DOCUMENTATION />
-              <SOURCES />
+              </binaries>
             </library>
           </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
