@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.actions;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.JavaSuppressionUtil;
 import com.intellij.openapi.project.Project;
@@ -24,50 +26,52 @@ import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ven
  */
-public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCommentFix {
-  private String myAlternativeID;
+public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCommentFix
+{
+	public SuppressParameterFix(@NotNull HighlightDisplayKey key)
+	{
+		this(key.getID());
+	}
 
-  public SuppressParameterFix(@NotNull HighlightDisplayKey key) {
-    this(key.getID());
-    myAlternativeID = HighlightDisplayKey.getAlternativeID(key);
-  }
+	public SuppressParameterFix(String ID)
+	{
+		super(ID, false);
+	}
 
-  public SuppressParameterFix(String ID) {
-    super(ID, false);
-  }
+	@Override
+	@NotNull
+	public String getText()
+	{
+		return "Suppress for parameter";
+	}
 
-  @Override
-  @NotNull
-  public String getText() {
-    return "Suppress for parameter";
-  }
+	@Nullable
+	@Override
+	public PsiElement getContainer(PsiElement context)
+	{
+		PsiParameter psiParameter = PsiTreeUtil.getParentOfType(context, PsiParameter.class, false);
+		return psiParameter != null && JavaSuppressionUtil.canHave15Suppressions(psiParameter) ? psiParameter : null;
+	}
 
-  @Nullable
-  @Override
-  public PsiElement getContainer(PsiElement context) {
-    PsiParameter psiParameter = PsiTreeUtil.getParentOfType(context, PsiParameter.class, false);
-    return psiParameter != null && JavaSuppressionUtil.canHave15Suppressions(psiParameter) ? psiParameter : null;
-  }
+	@Override
+	protected boolean replaceSuppressionComments(PsiElement container)
+	{
+		return false;
+	}
 
-  @Override
-  protected boolean replaceSuppressionComments(PsiElement container) {
-    return false;
-  }
-
-  @Override
-  protected void createSuppression(@NotNull Project project, @NotNull PsiElement element, @NotNull PsiElement cont)
-    throws IncorrectOperationException {
-    PsiModifierListOwner container = (PsiModifierListOwner)cont;
-    final PsiModifierList modifierList = container.getModifierList();
-    if (modifierList != null) {
-      final String id = SuppressFix.getID(container, myAlternativeID);
-      JavaSuppressionUtil.addSuppressAnnotation(project, container, container, id != null ? id : myID);
-    }
-  }
+	@Override
+	protected void createSuppression(@NotNull Project project, @NotNull PsiElement element,
+			@NotNull PsiElement cont) throws IncorrectOperationException
+	{
+		PsiModifierListOwner container = (PsiModifierListOwner) cont;
+		final PsiModifierList modifierList = container.getModifierList();
+		if(modifierList != null)
+		{
+			JavaSuppressionUtil.addSuppressAnnotation(project, container, container, myID);
+		}
+	}
 }
