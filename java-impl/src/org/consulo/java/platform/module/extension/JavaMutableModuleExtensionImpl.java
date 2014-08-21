@@ -23,7 +23,7 @@ import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -32,9 +32,9 @@ import com.intellij.pom.java.LanguageLevel;
  */
 public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>
 {
-	public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	public JavaMutableModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer moduleRootLayer)
 	{
-		super(id, rootModel);
+		super(id, moduleRootLayer);
 	}
 
 	@Nullable

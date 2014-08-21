@@ -26,7 +26,7 @@ import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -39,10 +39,10 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
 	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
 
-	public JavaModuleExtensionImpl(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	public JavaModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer moduleRootLayer)
 	{
-		super(id, rootModel);
-		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(rootModel.getProject(), id);
+		super(id, moduleRootLayer);
+		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer.getProject(), id);
 	}
 
 	@Override
