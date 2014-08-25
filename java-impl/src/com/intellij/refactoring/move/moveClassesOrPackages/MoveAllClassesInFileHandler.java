@@ -15,15 +15,17 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+public abstract class MoveAllClassesInFileHandler
+{
+	public static ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME =
+			new ExtensionPointName<MoveAllClassesInFileHandler>("org.consulo.java.refactoring.moveAllClassesInFileHandler");
 
-public abstract class MoveAllClassesInFileHandler {
-  public static  ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME = new ExtensionPointName<MoveAllClassesInFileHandler>("org.consulo.java.refactoring.moveAllClassesInFileHandler");
-
-  public abstract void processMoveAllClassesInFile(@NotNull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove);
+	public abstract void processMoveAllClassesInFile(@NotNull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove);
 }
