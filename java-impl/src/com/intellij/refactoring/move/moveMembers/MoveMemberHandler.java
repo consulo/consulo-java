@@ -15,50 +15,43 @@
  */
 package com.intellij.refactoring.move.moveMembers;
 
-import com.intellij.lang.LanguageExtension;
-import com.intellij.psi.*;
-import com.intellij.util.containers.MultiMap;
+import java.util.Set;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Set;
+import com.intellij.lang.LanguageExtension;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiReference;
+import com.intellij.util.containers.MultiMap;
 
 /**
  * @author Maxim.Medvedev
  */
-public interface MoveMemberHandler {
-  LanguageExtension<MoveMemberHandler> EP_NAME = new LanguageExtension<MoveMemberHandler>("com.intellij.refactoring.moveMemberHandler");
+public interface MoveMemberHandler
+{
+	LanguageExtension<MoveMemberHandler> EP_NAME = new LanguageExtension<MoveMemberHandler>("org.consulo.java.refactoring.moveMemberHandler");
 
-  @Nullable
-  MoveMembersProcessor.MoveMembersUsageInfo getUsage(@NotNull PsiMember member,
-                                                     @NotNull PsiReference ref,
-                                                     @NotNull Set<PsiMember> membersToMove,
-                                                     @NotNull PsiClass targetClass);
+	@Nullable
+	MoveMembersProcessor.MoveMembersUsageInfo getUsage(@NotNull PsiMember member, @NotNull PsiReference ref, @NotNull Set<PsiMember> membersToMove,
+			@NotNull PsiClass targetClass);
 
-  void checkConflictsOnUsage(@NotNull MoveMembersProcessor.MoveMembersUsageInfo usageInfo,
-                             @Nullable String newVisibility,
-                             @Nullable PsiModifierList modifierListCopy,
-                             @NotNull PsiClass targetClass,
-                             @NotNull Set<PsiMember> membersToMove,
-                             @NotNull MultiMap<PsiElement, String> conflicts);
+	void checkConflictsOnUsage(@NotNull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
+			@Nullable PsiModifierList modifierListCopy, @NotNull PsiClass targetClass, @NotNull Set<PsiMember> membersToMove,
+			@NotNull MultiMap<PsiElement, String> conflicts);
 
-  void checkConflictsOnMember(@NotNull PsiMember member,
-                              @Nullable String newVisibility,
-                              @Nullable PsiModifierList modifierListCopy,
-                              @NotNull PsiClass targetClass,
-                              @NotNull Set<PsiMember> membersToMove,
-                              @NotNull MultiMap<PsiElement, String> conflicts);
+	void checkConflictsOnMember(@NotNull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
+			@NotNull PsiClass targetClass, @NotNull Set<PsiMember> membersToMove, @NotNull MultiMap<PsiElement, String> conflicts);
 
-  @Nullable
-  PsiElement getAnchor(@NotNull PsiMember member, @NotNull PsiClass targetClass, Set<PsiMember> membersToMove);
+	@Nullable
+	PsiElement getAnchor(@NotNull PsiMember member, @NotNull PsiClass targetClass, Set<PsiMember> membersToMove);
 
-  boolean changeExternalUsage(@NotNull MoveMembersOptions options, @NotNull MoveMembersProcessor.MoveMembersUsageInfo usage);
+	boolean changeExternalUsage(@NotNull MoveMembersOptions options, @NotNull MoveMembersProcessor.MoveMembersUsageInfo usage);
 
-  @NotNull
-  PsiMember doMove(@NotNull MoveMembersOptions options,
-                   @NotNull PsiMember member,
-                   @Nullable PsiElement anchor,
-                   @NotNull PsiClass targetClass);
+	@NotNull
+	PsiMember doMove(@NotNull MoveMembersOptions options, @NotNull PsiMember member, @Nullable PsiElement anchor, @NotNull PsiClass targetClass);
 
-  void decodeContextInfo(@NotNull PsiElement scope);
+	void decodeContextInfo(@NotNull PsiElement scope);
 }
