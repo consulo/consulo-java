@@ -526,8 +526,6 @@
 		<extensionPoint name="elementFinder" area="CONSULO_PROJECT" interface="com.intellij.psi.PsiElementFinder"/>
 		<extensionPoint name="java.shortNamesCache" area="CONSULO_PROJECT" interface="com.intellij.psi.search.PsiShortNamesCache"/>
 
-		<extensionPoint name="allowedApiFilter" interface="com.intellij.psi.impl.AllowedApiFilterExtension"/>
-
 		<extensionPoint name="generation.topLevelFactory" beanClass="com.intellij.lang.LanguageExtensionPoint">
 			<with attribute="implementationClass" implements="com.intellij.psi.JVMElementFactoryProvider"/>
 		</extensionPoint>

@@ -18,7 +18,7 @@
 	</extensions>
 
 	<extensionPoints>
-		<extensionPoint qualifiedName="com.intellij.javaCoverageEngineExtension" interface="com.intellij.coverage.JavaCoverageEngineExtension"/>
+		<extensionPoint name="coverageEngineExtension" interface="com.intellij.coverage.JavaCoverageEngineExtension"/>
 	</extensionPoints>
 	<actions>
 		<group id="IDEACoverageMenu" popup="false">

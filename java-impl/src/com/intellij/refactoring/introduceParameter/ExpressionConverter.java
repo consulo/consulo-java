@@ -15,18 +15,18 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
  */
 public abstract class ExpressionConverter {
   public static final LanguageExtension<ExpressionConverter> EP =
-    new LanguageExtension<ExpressionConverter>("com.intellij.expressionConverter");
+    new LanguageExtension<ExpressionConverter>("org.consulo.java.expressionConverter");
 
   protected abstract PsiElement convert(PsiElement expression, Project project);
 

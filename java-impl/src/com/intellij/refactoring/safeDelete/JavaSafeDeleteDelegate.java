@@ -15,20 +15,20 @@
  */
 package com.intellij.refactoring.safeDelete;
 
+import java.util.List;
+
 import com.intellij.lang.LanguageExtension;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReference;
 import com.intellij.usageView.UsageInfo;
 
-import java.util.List;
-
 /**
  * @author Max Medvedev
  */
 public interface JavaSafeDeleteDelegate {
   LanguageExtension<JavaSafeDeleteDelegate> EP =
-    new LanguageExtension<JavaSafeDeleteDelegate>("com.intellij.refactoring.safeDelete.JavaSafeDeleteDelegate");
+    new LanguageExtension<JavaSafeDeleteDelegate>("org.consulo.java.refactoring.safeDelete.JavaSafeDeleteDelegate");
 
   void createUsageInfoForParameter(final PsiReference reference,
                                    final List<UsageInfo> usages,

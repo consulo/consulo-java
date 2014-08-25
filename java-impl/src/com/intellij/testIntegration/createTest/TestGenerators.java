@@ -24,6 +24,6 @@ public class TestGenerators extends LanguageExtension<TestGenerator> {
   public static final TestGenerators INSTANCE = new TestGenerators();
 
   private TestGenerators() {
-    super("com.intellij.testGenerator", new JavaTestGenerator());
+    super("org.consulo.java.testGenerator", new JavaTestGenerator());
   }
 }

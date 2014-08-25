@@ -15,6 +15,11 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -22,17 +27,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.util.NonCodeUsageInfo;
 import com.intellij.usageView.UsageInfo;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Max Medvedev
  */
 public interface MoveClassToInnerHandler {
-  ExtensionPointName<MoveClassToInnerHandler> EP_NAME = new ExtensionPointName<MoveClassToInnerHandler>("com.intellij.refactoring.moveClassToInnerHandler");
+  ExtensionPointName<MoveClassToInnerHandler> EP_NAME =
+		  new ExtensionPointName<MoveClassToInnerHandler>("org.consulo.java.refactoring.moveClassToInnerHandler");
 
   @Nullable
   PsiClass moveClass(@NotNull PsiClass aClass, @NotNull PsiClass targetClass);

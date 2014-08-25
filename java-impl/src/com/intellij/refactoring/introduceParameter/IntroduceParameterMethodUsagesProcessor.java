@@ -21,15 +21,13 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
 
-import java.util.Map;
-
 /**
  * @author Maxim.Medvedev
  *         Date: Apr 17, 2009 5:16:10 PM
  */
 public interface IntroduceParameterMethodUsagesProcessor {
   ExtensionPointName<IntroduceParameterMethodUsagesProcessor> EP_NAME =
-    new ExtensionPointName<IntroduceParameterMethodUsagesProcessor>("com.intellij.refactoring.introduceParameterMethodUsagesProcessor");
+    new ExtensionPointName<IntroduceParameterMethodUsagesProcessor>("org.consulo.java.refactoring.introduceParameterMethodUsagesProcessor");
 
   boolean isMethodUsage(UsageInfo usage);
 
