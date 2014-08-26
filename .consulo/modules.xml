@@ -13,7 +13,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-compiler-artifact-impl" />
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="module" module-name="java-psi-api" />
@@ -49,7 +49,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" />
         </module-layer>
       </module>
@@ -62,7 +62,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" exported="" />
         </module-layer>
       </module>
@@ -77,7 +77,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
         </module-layer>
       </module>
       <module name="java-indexing-api" dirurl="file://$PROJECT_DIR$/java-indexing-api" current-layer="Default">
@@ -89,7 +89,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" exported="" />
         </module-layer>
       </module>
@@ -102,7 +102,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
         </module-layer>
@@ -116,7 +116,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
         </module-layer>
       </module>
       <module name="java-analysis-api" dirurl="file://$PROJECT_DIR$/java-analysis-api" current-layer="Default">
@@ -128,7 +128,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" exported="" />
         </module-layer>
       </module>
@@ -143,7 +143,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="module" module-name="java-psi-api" />
           <orderEntry type="library" exploded="" name="jdi" level="project" />
@@ -160,7 +160,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-rt" />
@@ -178,7 +178,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-indexing-api" exported="" />
           <orderEntry type="module" module-name="java-psi-impl" />
         </module-layer>
@@ -192,7 +192,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-debugger-api" />
           <orderEntry type="module" module-name="java-execution-impl" />
           <orderEntry type="module" module-name="java-impl" />
@@ -207,7 +207,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-execution-api" exported="" />
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-debugger-impl" />
@@ -224,7 +224,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-analysis-api" exported="" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
@@ -242,7 +242,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" exported="" />
           <orderEntry type="module" module-name="java-indexing-impl" />
           <orderEntry type="module" module-name="java-impl" />
@@ -260,7 +260,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-impl" />
         </module-layer>
       </module>
@@ -274,7 +274,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module-library">
             <library name="consulo:IntelliLang">
               <binaries>
@@ -298,7 +298,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-impl" exported="" />
           <orderEntry type="module" module-name="java-analysis-impl" exported="" />
           <orderEntry type="module-library">
@@ -333,7 +333,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-impl" />
         </module-layer>
       </module>
@@ -346,7 +346,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-execution-impl" />
           <orderEntry type="module-library">
@@ -389,7 +389,7 @@
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
           </content>
           <orderEntry type="module-extension-sdk" extension-id="java" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
         </module-layer>
       </module>
       <module name="java-i18n" dirurl="file://$PROJECT_DIR$/java-i18n" current-layer="Default">
@@ -401,7 +401,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module-library">
             <library name="consulo:Properties Support">
               <binaries>
@@ -438,7 +438,7 @@
           </content>
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
-          <orderEntry type="sourceFolder" forTests="false" />
+          <orderEntry type="sourceFolder" />
           <orderEntry type="module-library">
             <library name="consulo:XML">
               <binaries>
