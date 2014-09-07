@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
-import com.intellij.debugger.DefaultDebugEnvironment;
 import com.intellij.debugger.NameMapper;
 import com.intellij.debugger.PositionManager;
 import com.intellij.debugger.PositionManagerFactory;
@@ -48,15 +47,13 @@ import com.intellij.debugger.ui.GetJPDADialog;
 import com.intellij.debugger.ui.breakpoints.BreakpointManager;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.JavaParameters;
-import com.intellij.execution.configurations.ModuleRunProfile;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -259,19 +256,8 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	}
 
 	@Override
-	public DebuggerSession attachVirtualMachine(
-			Executor executor,
-			ProgramRunner runner,
-			ModuleRunProfile profile,
-			RunProfileState state,
-			RemoteConnection remoteConnection,
-			boolean pollConnection) throws ExecutionException
-	{
-		return attachVirtualMachine(new DefaultDebugEnvironment(myProject, executor, runner, profile, state, remoteConnection, pollConnection));
-	}
-
-	@Override
-	public DebuggerSession attachVirtualMachine(DebugEnvironment environment) throws ExecutionException
+	@Nullable
+	public DebuggerSession attachVirtualMachine(@NotNull DebugEnvironment environment) throws ExecutionException
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		final DebugProcessEvents debugProcess = new DebugProcessEvents(myProject);
@@ -306,14 +292,12 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 			}
 
 			@Override
-			public void attachException(
-					final RunProfileState state, final ExecutionException exception, final RemoteConnection remoteConnection)
+			public void attachException(final RunProfileState state, final ExecutionException exception, final RemoteConnection remoteConnection)
 			{
 				debugProcess.removeDebugProcessListener(this);
 			}
 		});
-		final DebuggerSession session = new DebuggerSession(environment.getSessionName(), debugProcess);
-
+		DebuggerSession session = new DebuggerSession(environment.getSessionName(), debugProcess);
 		final ExecutionResult executionResult = session.attach(environment);
 		if(executionResult == null)
 		{
@@ -346,7 +330,8 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 					if(debugProcess != null)
 					{
 						// if current thread is a "debugger manager thread", stop will execute synchronously
-						debugProcess.stop(willBeDestroyed);
+						// it is KillableColoredProcessHandler responsibility to terminate VM
+						debugProcess.stop(willBeDestroyed && !(event.getProcessHandler() instanceof KillableColoredProcessHandler));
 
 						// wait at most 10 seconds: the problem is that debugProcess.stop() can hang if there are troubles in the debuggee
 						// if processWillTerminate() is called from AWT thread debugProcess.waitFor() will block it and the whole app will hang
@@ -361,7 +346,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 		myDispatcher.getMulticaster().sessionCreated(session);
 		return session;
 	}
-
 
 	@Override
 	public DebugProcessImpl getDebugProcess(final ProcessHandler processHandler)
@@ -563,12 +547,8 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	}
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
-	public static RemoteConnection createDebugParameters(
-			final JavaParameters parameters,
-			final boolean debuggerInServerMode,
-			int transport,
-			final String debugPort,
-			boolean checkValidity) throws ExecutionException
+	public static RemoteConnection createDebugParameters(final JavaParameters parameters, final boolean debuggerInServerMode, int transport,
+			final String debugPort, boolean checkValidity) throws ExecutionException
 	{
 		if(checkValidity)
 		{
@@ -726,8 +706,8 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 				version.startsWith("1.0"));
 	}
 
-	public static RemoteConnection createDebugParameters(
-			final JavaParameters parameters, GenericDebuggerRunnerSettings settings, boolean checkValidity) throws ExecutionException
+	public static RemoteConnection createDebugParameters(final JavaParameters parameters, GenericDebuggerRunnerSettings settings,
+			boolean checkValidity) throws ExecutionException
 	{
 		return createDebugParameters(parameters, settings.LOCAL, settings.getTransport(), settings.DEBUG_PORT, checkValidity);
 	}

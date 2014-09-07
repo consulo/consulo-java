@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebugEnvironment;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
-import com.intellij.debugger.DefaultDebugEnvironment;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.ContextUtil;
 import com.intellij.debugger.engine.DebugProcess;
@@ -47,13 +46,10 @@ import com.intellij.debugger.ui.breakpoints.BreakpointWithHighlighter;
 import com.intellij.debugger.ui.breakpoints.LineBreakpoint;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.ModuleRunProfile;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RemoteState;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -228,6 +224,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		ValueLookupManager.getInstance(getProject()).startListening();
 	}
 
+	@NotNull
 	public DebuggerStateManager getContextManager()
 	{
 		return myContextManager;
@@ -291,7 +288,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 			case STATE_DISPOSED:
 				return DebuggerBundle.message("status.debug.stopped");
 		}
-		return myState.myDescription;
+		return null;
 	}
 
 	/* Stepping */
@@ -446,18 +443,6 @@ public class DebuggerSession implements AbstractDebuggerSession
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
 		return getContextManager().getContext().getSuspendContext();
-	}
-
-	@Nullable
-	protected ExecutionResult attach(
-			@NotNull final Executor executor,
-			@NotNull final ProgramRunner runner,
-			final ModuleRunProfile profile,
-			final RunProfileState state,
-			final RemoteConnection remoteConnection,
-			final boolean pollConnection) throws ExecutionException
-	{
-		return attach(new DefaultDebugEnvironment(myDebugProcess.getProject(), executor, runner, profile, state, remoteConnection, pollConnection));
 	}
 
 	@Nullable
@@ -731,7 +716,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 			final String transportName = DebuggerBundle.getTransportName(connection);
 			final String message = DebuggerBundle.message("status.connected", addressDisplayName, transportName);
 
-			process.getExecutionResult().getProcessHandler().notifyTextAvailable(message + "\n", ProcessOutputTypes.SYSTEM);
+			process.printToConsole(message + "\n");
 			DebuggerInvocationUtil.invokeLater(getProject(), new Runnable()
 			{
 				@Override

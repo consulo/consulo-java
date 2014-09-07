@@ -17,6 +17,8 @@ package com.intellij.debugger;
 
 import java.util.Collection;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerManagerListener;
@@ -24,11 +26,6 @@ import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.ui.breakpoints.BreakpointManager;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.ModuleRunProfile;
-import com.intellij.execution.configurations.RemoteConnection;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.project.Project;
 
 public abstract class DebuggerManagerEx extends DebuggerManager
@@ -52,13 +49,6 @@ public abstract class DebuggerManagerEx extends DebuggerManager
 
 	public abstract void removeDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
 
-	public abstract DebuggerSession attachVirtualMachine(
-			Executor executor,
-			ProgramRunner runner,
-			ModuleRunProfile profile,
-			RunProfileState state,
-			RemoteConnection connection,
-			boolean pollConnection) throws ExecutionException;
-
-	public abstract DebuggerSession attachVirtualMachine(DebugEnvironment environment) throws ExecutionException;
+	@Nullable
+	public abstract DebuggerSession attachVirtualMachine(@NotNull DebugEnvironment environment) throws ExecutionException;
 }

@@ -15,157 +15,210 @@
  */
 package com.intellij.debugger.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
+import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.settings.NodeRendererSettings;
-import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.AnSeparator;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbAware;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.xdebugger.frame.XValue;
+import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
+import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 
 /**
  * User: lex
  * Date: Sep 26, 2003
  * Time: 11:05:57 PM
  */
-public class ViewAsGroup extends ActionGroup implements DumbAware {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.actions.ViewAsGroup");
+public class ViewAsGroup extends ActionGroup implements DumbAware
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.actions.ViewAsGroup");
 
-  private AnAction[] myChildren = AnAction.EMPTY_ARRAY;
+	private AnAction[] myChildren = AnAction.EMPTY_ARRAY;
 
-  public ViewAsGroup() {
-    super(null, true);
-  }
+	public ViewAsGroup()
+	{
+		super(null, true);
+	}
 
-  private static class RendererAction extends ToggleAction {
-    private final NodeRenderer myNodeRenderer;
+	private static class RendererAction extends ToggleAction
+	{
+		private final NodeRenderer myNodeRenderer;
 
-    public RendererAction(NodeRenderer nodeRenderer) {
-      super(nodeRenderer.getName());
-      myNodeRenderer = nodeRenderer;
-    }
+		public RendererAction(NodeRenderer nodeRenderer)
+		{
+			super(nodeRenderer.getName());
+			myNodeRenderer = nodeRenderer;
+		}
 
-    public boolean isSelected(AnActionEvent e) {
-      DebuggerTreeNodeImpl[] nodes = DebuggerAction.getSelectedNodes(e.getDataContext());
-      if (nodes == null) {
-        return false;
-      }
-      for (DebuggerTreeNodeImpl node : nodes) {
-        if (node.getDescriptor() instanceof ValueDescriptorImpl) {
-          if (((ValueDescriptorImpl)node.getDescriptor()).getLastRenderer() != myNodeRenderer) {
-            return false;
-          }
-        }
-      }
-      return true;
-    }
+		public boolean isSelected(AnActionEvent e)
+		{
+			XValueNodeImpl node = XDebuggerTreeActionBase.getSelectedNode(e.getDataContext());
+			if(node == null)
+			{
+				return false;
+			}
+			XValue container = node.getValueContainer();
+			if(container instanceof JavaValue)
+			{
+				if(((JavaValue) container).getDescriptor().getLastRenderer() != myNodeRenderer)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 
-    public void setSelected(final AnActionEvent e, final boolean state) {
-      final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
-      final DebuggerTreeNodeImpl[] nodes = DebuggerAction.getSelectedNodes(e.getDataContext());
+		public void setSelected(final AnActionEvent e, final boolean state)
+		{
+			final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
+			final XValueNodeImpl node = XDebuggerTreeActionBase.getSelectedNode(e.getDataContext());
 
-      LOG.assertTrue(debuggerContext != null && nodes != null);
+			LOG.assertTrue(debuggerContext != null && node != null);
 
-      debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
-          public void threadAction() {
-            for (final DebuggerTreeNodeImpl node : nodes) {
-              if (node.getDescriptor() instanceof ValueDescriptorImpl) {
-                final ValueDescriptorImpl valueDescriptor = (ValueDescriptorImpl)node.getDescriptor();
-                if (state) {
-                  valueDescriptor.setRenderer(myNodeRenderer);
-                  node.calcRepresentation();
-                }
-              }
-            }
-          }
-        });
-    }
-  }
+			debuggerContext.getDebugProcess().getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext)
+			{
+				public void threadAction()
+				{
+					XValue container = node.getValueContainer();
+					if(container instanceof JavaValue)
+					{
+						final ValueDescriptorImpl valueDescriptor = ((JavaValue) container).getDescriptor();
+						if(state)
+						{
+							valueDescriptor.setRenderer(myNodeRenderer);
+							DebuggerAction.refreshViews(node);
+							//valueDescriptor.updateRepresentation(debuggerContext.createEvaluationContext(),
+							// DescriptorLabelListener.DUMMY_LISTENER);
+							//container.computePresentation(node, XValuePlace.TREE);
+						}
+					}
+				}
+			});
+		}
+	}
 
-  @NotNull
-  public AnAction[] getChildren(@Nullable final AnActionEvent e) {
-    return myChildren;
-  }
+	@NotNull
+	public AnAction[] getChildren(@Nullable final AnActionEvent e)
+	{
+		return myChildren;
+	}
 
-  private static AnAction [] calcChildren(DebuggerTreeNodeImpl[] nodes) {
-    List<AnAction> renderers = new ArrayList<AnAction>();
+	private static AnAction[] calcChildren(NodeDescriptorImpl[] descriptors)
+	{
+		List<AnAction> renderers = new ArrayList<AnAction>();
 
-    List<NodeRenderer> allRenderers = NodeRendererSettings.getInstance().getAllRenderers();
+		List<NodeRenderer> allRenderers = NodeRendererSettings.getInstance().getAllRenderers();
 
-    boolean anyValueDescriptor = false;
+		boolean anyValueDescriptor = false;
 
-    for (NodeRenderer nodeRenderer : allRenderers) {
-      boolean allApp = true;
+		for(NodeRenderer nodeRenderer : allRenderers)
+		{
+			boolean allApp = true;
 
-      for (DebuggerTreeNodeImpl node : nodes) {
-        NodeDescriptorImpl descriptor = node.getDescriptor();
-        if (descriptor instanceof ValueDescriptorImpl) {
-          anyValueDescriptor = true;
-          ValueDescriptorImpl valueDescriptor = (ValueDescriptorImpl)descriptor;
-          if (valueDescriptor.isValueValid() && !nodeRenderer.isApplicable(valueDescriptor.getType())) {
-            allApp = false;
-            break;
-          }
-        }
-      }
+			for(NodeDescriptorImpl descriptor : descriptors)
+			{
+				if(descriptor instanceof ValueDescriptorImpl)
+				{
+					anyValueDescriptor = true;
+					ValueDescriptorImpl valueDescriptor = (ValueDescriptorImpl) descriptor;
+					if(!valueDescriptor.isValueValid() || !nodeRenderer.isApplicable(valueDescriptor.getType()))
+					{
+						allApp = false;
+						break;
+					}
+				}
+			}
 
-      if (!anyValueDescriptor) {
-        return AnAction.EMPTY_ARRAY;
-      }
+			if(!anyValueDescriptor)
+			{
+				return AnAction.EMPTY_ARRAY;
+			}
 
-      if (allApp) {
-        renderers.add(new RendererAction(nodeRenderer));
-      }
-    }
+			if(allApp)
+			{
+				renderers.add(new RendererAction(nodeRenderer));
+			}
+		}
 
-    List<AnAction> children = new ArrayList<AnAction>();
-    AnAction[] viewAsActions = ((DefaultActionGroup) ActionManager.getInstance().getAction(DebuggerActions.REPRESENTATION_LIST)).getChildren(null);
-    for (AnAction viewAsAction : viewAsActions) {
-      if (viewAsAction instanceof AutoRendererAction) {
-        if (renderers.size() > 1) {
-          viewAsAction.getTemplatePresentation().setVisible(true);
-          children.add(viewAsAction);
-        }
-      }
-      else {
-        children.add(viewAsAction);
-      }
-    }
+		List<AnAction> children = new ArrayList<AnAction>();
+		AnAction[] viewAsActions = ((DefaultActionGroup) ActionManager.getInstance().getAction(DebuggerActions.REPRESENTATION_LIST)).getChildren
+				(null);
+		for(AnAction viewAsAction : viewAsActions)
+		{
+			if(viewAsAction instanceof AutoRendererAction)
+			{
+				if(renderers.size() > 1)
+				{
+					viewAsAction.getTemplatePresentation().setVisible(true);
+					children.add(viewAsAction);
+				}
+			}
+			else
+			{
+				children.add(viewAsAction);
+			}
+		}
 
-    children.add(AnSeparator.getInstance());
-    children.addAll(renderers);
+		if(!children.isEmpty())
+		{
+			children.add(AnSeparator.getInstance());
+		}
+		children.addAll(renderers);
 
-    return children.toArray(new AnAction[children.size()]);
-  }
+		return children.toArray(new AnAction[children.size()]);
+	}
 
-  public void update(final AnActionEvent event) {
-    if(!DebuggerAction.isFirstStart(event)) {
-      return;
-    }
+	public void update(final AnActionEvent event)
+	{
+		if(!DebuggerAction.isFirstStart(event))
+		{
+			return;
+		}
 
-    final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
-    final DebuggerTreeNodeImpl[] selectedNodes = DebuggerAction.getSelectedNodes(event.getDataContext());
+		final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
+		XValueNodeImpl node = XDebuggerTreeActionBase.getSelectedNode(event.getDataContext());
+		if(node == null)
+		{
+			return;
+		}
+		final XValue container = node.getValueContainer();
+		if(!(container instanceof JavaValue))
+		{
+			event.getPresentation().setEnabled(false);
+			return;
+		}
 
-    final DebugProcessImpl process = debuggerContext.getDebugProcess();
-    if (process == null) {
-      event.getPresentation().setEnabled(false);
-      return;
-    }
-    
-    process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
-      public void threadAction() {
-        myChildren = calcChildren(selectedNodes);
-        DebuggerAction.enableAction(event, myChildren.length > 0);
-      }
-    });
-  }
+		final DebugProcessImpl process = debuggerContext.getDebugProcess();
+		if(process == null)
+		{
+			event.getPresentation().setEnabled(false);
+			return;
+		}
+
+		process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext)
+		{
+			public void threadAction()
+			{
+				myChildren = calcChildren(new NodeDescriptorImpl[]{((JavaValue) container).getDescriptor()});
+				DebuggerAction.enableAction(event, myChildren.length > 0);
+			}
+		});
+	}
 }

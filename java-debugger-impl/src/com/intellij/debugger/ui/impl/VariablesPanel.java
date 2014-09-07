@@ -155,10 +155,7 @@ public class VariablesPanel extends DebuggerTreePanel implements DataProvider
 
 				@NotNull
 				@Override
-				public Document createDocument(
-						@NotNull Project project,
-						@NotNull String text,
-						@Nullable XSourcePosition sourcePosition,
+				public Document createDocument(@NotNull Project project, @NotNull String text, @Nullable XSourcePosition sourcePosition,
 						@NotNull EvaluationMode mode)
 				{
 					throw new UnsupportedOperationException();
@@ -182,6 +179,16 @@ public class VariablesPanel extends DebuggerTreePanel implements DataProvider
 			{
 				buildTreeAndRestoreState(stackFrame);
 			}
+		}
+
+		@Override
+		protected void clear()
+		{
+		}
+
+		@Override
+		public void processSessionEvent(@NotNull SessionEvent event)
+		{
 		}
 	}
 }

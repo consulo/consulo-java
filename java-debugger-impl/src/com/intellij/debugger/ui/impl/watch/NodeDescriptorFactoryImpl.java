@@ -66,7 +66,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		myDisplayDescriptorSearcher.clear();
 	}
 
-	private <T extends NodeDescriptor> T getDescriptor(NodeDescriptor parent, DescriptorData<T> key)
+	public <T extends NodeDescriptor> T getDescriptor(NodeDescriptor parent, DescriptorData<T> key)
 	{
 		final T descriptor = key.createDescriptor(myProject);
 
@@ -109,6 +109,11 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 
 	public void deriveHistoryTree(DescriptorTree tree, final StackFrameContext context)
 	{
+		deriveHistoryTree(tree, context.getFrameProxy());
+	}
+
+	public void deriveHistoryTree(DescriptorTree tree, final StackFrameProxy frameProxy)
+	{
 
 		final MarkedDescriptorTree descriptorTree = new MarkedDescriptorTree();
 		final MarkedDescriptorTree displayDescriptorTree = new MarkedDescriptorTree();
@@ -127,14 +132,13 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		myDescriptorSearcher = new DescriptorTreeSearcher(descriptorTree);
 		myDisplayDescriptorSearcher = new DisplayDescriptorTreeSearcher(displayDescriptorTree);
 
-		myCurrentHistoryTree = createDescriptorTree(context, tree);
+		myCurrentHistoryTree = createDescriptorTree(frameProxy, tree);
 	}
 
-	private static DescriptorTree createDescriptorTree(final StackFrameContext context, final DescriptorTree fromTree)
+	private static DescriptorTree createDescriptorTree(final StackFrameProxy frameProxy, final DescriptorTree fromTree)
 	{
 		int frameCount = -1;
 		int frameIndex = -1;
-		final StackFrameProxy frameProxy = context.getFrameProxy();
 		if(frameProxy != null)
 		{
 			try
@@ -238,13 +242,13 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 
 	private static class DescriptorTreeSearcher
 	{
-		private final MarkedDescriptorTree myDescriportTree;
+		private final MarkedDescriptorTree myDescriptorTree;
 
 		private final HashMap<NodeDescriptor, NodeDescriptor> mySearchedDescriptors = new HashMap<NodeDescriptor, NodeDescriptor>();
 
-		public DescriptorTreeSearcher(MarkedDescriptorTree descriportTree)
+		public DescriptorTreeSearcher(MarkedDescriptorTree descriptorTree)
 		{
-			myDescriportTree = descriportTree;
+			myDescriptorTree = descriptorTree;
 		}
 
 		@Nullable
@@ -253,12 +257,12 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 			final T result;
 			if(parent == null)
 			{
-				result = myDescriportTree.getChild(null, key);
+				result = myDescriptorTree.getChild(null, key);
 			}
 			else
 			{
 				final NodeDescriptor parentDescriptor = getSearched(parent);
-				result = parentDescriptor != null ? myDescriportTree.getChild(parentDescriptor, key) : null;
+				result = parentDescriptor != null ? myDescriptorTree.getChild(parentDescriptor, key) : null;
 			}
 			if(result != null)
 			{
@@ -275,15 +279,15 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		public void clear()
 		{
 			mySearchedDescriptors.clear();
-			myDescriportTree.clear();
+			myDescriptorTree.clear();
 		}
 	}
 
 	private class DisplayDescriptorTreeSearcher extends DescriptorTreeSearcher
 	{
-		public DisplayDescriptorTreeSearcher(MarkedDescriptorTree descriportTree)
+		public DisplayDescriptorTreeSearcher(MarkedDescriptorTree descriptorTree)
 		{
-			super(descriportTree);
+			super(descriptorTree);
 		}
 
 		@Override

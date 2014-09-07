@@ -27,7 +27,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.externalSystem.util.ExternalSystemConstants;
-import com.intellij.openapi.project.Project;
 
 /**
  * @author Denis Zhdanov
@@ -35,7 +34,7 @@ import com.intellij.openapi.project.Project;
  */
 public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner
 {
-	private static final Logger LOG = Logger.getInstance("#" + ExternalSystemTaskDebugRunner.class.getName());
+	private static final Logger LOG = Logger.getInstance(ExternalSystemTaskDebugRunner.class);
 
 	@NotNull
 	@Override
@@ -52,8 +51,8 @@ public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner
 
 	@Nullable
 	@Override
-	protected RunContentDescriptor createContentDescriptor(Project project, RunProfileState state, RunContentDescriptor contentToReuse,
-			ExecutionEnvironment env) throws ExecutionException
+	protected RunContentDescriptor createContentDescriptor(@NotNull RunProfileState state, @NotNull ExecutionEnvironment environment) throws
+			ExecutionException
 	{
 		if(state instanceof ExternalSystemRunConfiguration.MyRunnableState)
 		{
@@ -61,7 +60,7 @@ public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner
 			if(port > 0)
 			{
 				RemoteConnection connection = new RemoteConnection(true, "127.0.0.1", String.valueOf(port), true);
-				return attachVirtualMachine(project, state, contentToReuse, env, connection, true);
+				return attachVirtualMachine(state, environment, connection, true);
 			}
 			else
 			{

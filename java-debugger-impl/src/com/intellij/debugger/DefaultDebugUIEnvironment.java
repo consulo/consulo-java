@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,118 +15,69 @@
  */
 package com.intellij.debugger;
 
-import com.intellij.diagnostic.logging.LogFilesManager;
-import com.intellij.diagnostic.logging.OutputFileUtil;
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RemoteConnection;
-import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.runners.RestartAction;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.execution.ui.actions.CloseAction;
 import com.intellij.ide.actions.ContextHelpAction;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.Constraints;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+public class DefaultDebugUIEnvironment implements DebugUIEnvironment
+{
+	private final ExecutionEnvironment myExecutionEnvironment;
+	private final DebugEnvironment myModelEnvironment;
 
-/**
- * Created by IntelliJ IDEA.
- * User: michael.golubev
- */
-public class DefaultDebugUIEnvironment implements DebugUIEnvironment {
+	public DefaultDebugUIEnvironment(@NotNull ExecutionEnvironment environment, RunProfileState state, RemoteConnection remoteConnection,
+			boolean pollConnection)
+	{
+		myExecutionEnvironment = environment;
+		myModelEnvironment = new DefaultDebugEnvironment(environment, state, remoteConnection, pollConnection);
+	}
 
-  private final Project myProject;
-  private final Executor myExecutor;
-  private final ProgramRunner myRunner;
-  private final ExecutionEnvironment myExecutionEnvironment;
-  @Nullable private RunContentDescriptor myReuseContent;
-  private final RunProfile myRunProfile;
-  private final DebugEnvironment myModelEnvironment;
+	@Override
+	public DebugEnvironment getEnvironment()
+	{
+		return myModelEnvironment;
+	}
 
-  public DefaultDebugUIEnvironment(Project project,
-                                   Executor executor,
-                                   ProgramRunner runner,
-                                   ExecutionEnvironment environment,
-                                   RunProfileState state,
-                                   @Nullable RunContentDescriptor reuseContent,
-                                   RemoteConnection remoteConnection,
-                                   boolean pollConnection) {
-    myProject = project;
-    myExecutor = executor;
-    myRunner = runner;
-    myExecutionEnvironment = environment;
-    myRunProfile = environment.getRunProfile();
-    myModelEnvironment = new DefaultDebugEnvironment(project,
-                                                     executor,
-                                                     runner,
-                                                     myRunProfile,
-                                                     state,
-                                                     remoteConnection,
-                                                     pollConnection);
-    myReuseContent = reuseContent;
-    if (myReuseContent != null) {
-      Disposer.register(myReuseContent, new Disposable() {
-        @Override
-        public void dispose() {
-          myReuseContent = null;
-        }
-      });
-    }
-  }
+	@Nullable
+	@Override
+	public RunContentDescriptor getReuseContent()
+	{
+		return myExecutionEnvironment.getContentToReuse();
+	}
 
-  @Override
-  public DebugEnvironment getEnvironment() {
-    return myModelEnvironment;
-  }
+	@Override
+	public Icon getIcon()
+	{
+		return getRunProfile().getIcon();
+	}
 
-  @Nullable
-  @Override
-  public RunContentDescriptor getReuseContent() {
-    return myReuseContent;
-  }
+	@Override
+	public void initActions(RunContentDescriptor content, DefaultActionGroup actionGroup)
+	{
+		Executor executor = myExecutionEnvironment.getExecutor();
+		RestartAction restartAction = new RestartAction(content, myExecutionEnvironment);
+		actionGroup.add(restartAction, Constraints.FIRST);
+		restartAction.registerShortcut(content.getComponent());
 
-  @Override
-  public Icon getIcon() {
-    return myRunProfile.getIcon();
-  }
+		actionGroup.add(new CloseAction(executor, content, myExecutionEnvironment.getProject()));
+		actionGroup.add(new ContextHelpAction(executor.getHelpId()));
+	}
 
-  @Override
-  public void initLogs(RunContentDescriptor content, LogFilesManager logFilesManager) {
-    ProcessHandler processHandler = content.getProcessHandler();
-    if (myRunProfile instanceof RunConfigurationBase) {
-      RunConfigurationBase runConfiguration = (RunConfigurationBase)myRunProfile;
-
-      logFilesManager.registerFileMatcher(runConfiguration);
-
-      logFilesManager.initLogConsoles(runConfiguration, processHandler);
-      OutputFileUtil.attachDumpListener(runConfiguration, processHandler, content.getExecutionConsole());
-    }
-  }
-
-  @Override
-  public void initActions(RunContentDescriptor content, DefaultActionGroup actionGroup) {
-    RestartAction restartAction = new RestartAction(myExecutor,
-                                                    myRunner,
-                                                    content,
-                                                    myExecutionEnvironment);
-    actionGroup.add(restartAction, Constraints.FIRST);
-    restartAction.registerShortcut(content.getComponent());
-
-    actionGroup.add(new CloseAction(myExecutor, content, myProject));
-    actionGroup.add(new ContextHelpAction(myExecutor.getHelpId()));
-  }
-
-  @Override
-  public RunProfile getRunProfile() {
-    return myRunProfile;
-  }
+	@Override
+	@NotNull
+	public RunProfile getRunProfile()
+	{
+		return myExecutionEnvironment.getRunProfile();
+	}
 }

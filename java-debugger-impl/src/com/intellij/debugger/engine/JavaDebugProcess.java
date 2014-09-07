@@ -32,6 +32,7 @@ import com.intellij.debugger.impl.DebuggerContextUtil;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.DebuggerContentInfo;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
@@ -180,22 +181,9 @@ public class JavaDebugProcess extends XDebugProcess
 		session.addSessionListener(new XDebugSessionAdapter()
 		{
 			@Override
-			public void beforeSessionResume()
+			public void sessionPaused()
 			{
-				myJavaSession.getProcess().getManagerThread().schedule(new DebuggerCommandImpl()
-				{
-					@Override
-					protected void action() throws Exception
-					{
-						myNodeManager.setHistoryByContext(getDebuggerStateManager().getContext());
-					}
-
-					@Override
-					public Priority getPriority()
-					{
-						return Priority.NORMAL;
-					}
-				});
+				saveNodeHistory();
 			}
 
 			@Override
@@ -204,8 +192,33 @@ public class JavaDebugProcess extends XDebugProcess
 				XStackFrame frame = session.getCurrentStackFrame();
 				if(frame instanceof JavaStackFrame)
 				{
-					DebuggerContextUtil.setStackFrame(javaSession.getContextManager(), ((JavaStackFrame) frame).getStackFrameProxy());
+					StackFrameProxyImpl frameProxy = ((JavaStackFrame) frame).getStackFrameProxy();
+					DebuggerContextUtil.setStackFrame(javaSession.getContextManager(), frameProxy);
+					saveNodeHistory(frameProxy);
 				}
+			}
+		});
+	}
+
+	public void saveNodeHistory()
+	{
+		saveNodeHistory(getDebuggerStateManager().getContext().getFrameProxy());
+	}
+
+	private void saveNodeHistory(final StackFrameProxyImpl frameProxy)
+	{
+		myJavaSession.getProcess().getManagerThread().invoke(new DebuggerCommandImpl()
+		{
+			@Override
+			protected void action() throws Exception
+			{
+				myNodeManager.setHistoryByContext(frameProxy);
+			}
+
+			@Override
+			public Priority getPriority()
+			{
+				return Priority.NORMAL;
 			}
 		});
 	}
@@ -368,7 +381,8 @@ public class JavaDebugProcess extends XDebugProcess
 	}
 
 	@Override
-	public void registerAdditionalActions(@NotNull DefaultActionGroup leftToolbar, @NotNull DefaultActionGroup topToolbar)
+	public void registerAdditionalActions(@NotNull DefaultActionGroup leftToolbar, @NotNull DefaultActionGroup topToolbar,
+			@NotNull DefaultActionGroup settings)
 	{
 		Constraints beforeRunner = new Constraints(Anchor.BEFORE, "Runner.Layout");
 		leftToolbar.add(AnSeparator.getInstance(), beforeRunner);
@@ -376,18 +390,9 @@ public class JavaDebugProcess extends XDebugProcess
 		leftToolbar.add(ActionManager.getInstance().getAction(DebuggerActions.DUMP_THREADS), beforeRunner);
 		leftToolbar.add(AnSeparator.getInstance(), beforeRunner);
 
-		for(AnAction action : leftToolbar.getChildren(null))
-		{
-			//TODO: maybe introduce API for extra settings?
-			if(action instanceof DefaultActionGroup && "DebuggerSettings".equals(action.getTemplatePresentation().getText()))
-			{
-				DefaultActionGroup settings = (DefaultActionGroup) action;
-				addActionToGroup(settings, XDebuggerActions.AUTO_TOOLTIP);
-				settings.addAction(new AutoVarsSwitchAction(), Constraints.FIRST);
-				settings.addAction(new WatchLastMethodReturnValueAction(), Constraints.FIRST);
-				break;
-			}
-		}
+		addActionToGroup(settings, XDebuggerActions.AUTO_TOOLTIP);
+		settings.addAction(new AutoVarsSwitchAction(), Constraints.FIRST);
+		settings.addAction(new WatchLastMethodReturnValueAction(), Constraints.FIRST);
 	}
 
 	private static class AutoVarsSwitchAction extends ToggleAction

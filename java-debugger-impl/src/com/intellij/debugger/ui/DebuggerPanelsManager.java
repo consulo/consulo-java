@@ -35,17 +35,16 @@ import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ExecutionConsole;
 import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.execution.ui.RunContentListener;
 import com.intellij.execution.ui.RunContentManager;
-import com.intellij.openapi.Disposable;
+import com.intellij.execution.ui.RunContentWithExecutorListener;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugProcessStarter;
 import com.intellij.xdebugger.XDebugSession;
@@ -99,17 +98,23 @@ public class DebuggerPanelsManager implements ProjectComponent
 	}
 
 	@Nullable
-	public RunContentDescriptor attachVirtualMachine(
-			Executor executor,
-			ProgramRunner runner,
-			ExecutionEnvironment environment,
-			RunProfileState state,
-			RunContentDescriptor reuseContent,
-			RemoteConnection remoteConnection,
+	@Deprecated
+	/**
+	 * @deprecated to remove in IDEA 15
+	 */
+	public RunContentDescriptor attachVirtualMachine(Executor executor, @NotNull ProgramRunner runner, @NotNull ExecutionEnvironment environment,
+			RunProfileState state, RunContentDescriptor reuseContent, RemoteConnection remoteConnection,
 			boolean pollConnection) throws ExecutionException
 	{
-		return attachVirtualMachine(new DefaultDebugUIEnvironment(myProject, executor, runner, environment, state, reuseContent, remoteConnection,
-				pollConnection));
+		return attachVirtualMachine(new ExecutionEnvironmentBuilder(environment).executor(executor).runner(runner).contentToReuse(reuseContent)
+				.build(), state, remoteConnection, pollConnection);
+	}
+
+	@Nullable
+	public RunContentDescriptor attachVirtualMachine(@NotNull ExecutionEnvironment environment, RunProfileState state,
+			RemoteConnection remoteConnection, boolean pollConnection) throws ExecutionException
+	{
+		return attachVirtualMachine(new DefaultDebugUIEnvironment(environment, state, remoteConnection, pollConnection));
 	}
 
 	@Nullable
@@ -149,57 +154,55 @@ public class DebuggerPanelsManager implements ProjectComponent
 	}
 
 
+	@Override
 	public void projectOpened()
 	{
-		final RunContentManager contentManager = myExecutionManager.getContentManager();
-		LOG.assertTrue(contentManager != null, "Content manager is null");
-
-		final RunContentListener myContentListener = new RunContentListener()
+		myProject.getMessageBus().connect(myProject).subscribe(RunContentManager.TOPIC, new RunContentWithExecutorListener()
 		{
-			public void contentSelected(RunContentDescriptor descriptor)
+			@Override
+			public void contentSelected(@Nullable RunContentDescriptor descriptor, @NotNull Executor executor)
 			{
-				DebuggerSession session = getSession(myProject, descriptor.getExecutionConsole());
-
-				if(session != null)
+				if(executor == DefaultDebugExecutor.getDebugExecutorInstance())
 				{
-					getContextManager().setState(session.getContextManager().getContext(), session.getState(), DebuggerSession.EVENT_CONTEXT, null);
-				}
-				else
-				{
-					getContextManager().setState(DebuggerContextImpl.EMPTY_CONTEXT, DebuggerSession.STATE_DISPOSED, DebuggerSession.EVENT_CONTEXT,
-							null);
+					DebuggerSession session = descriptor == null ? null : getSession(myProject, descriptor.getExecutionConsole());
+					if(session != null)
+					{
+						getContextManager().setState(session.getContextManager().getContext(), session.getState(), DebuggerSession.EVENT_CONTEXT,
+								null);
+					}
+					else
+					{
+						getContextManager().setState(DebuggerContextImpl.EMPTY_CONTEXT, DebuggerSession.STATE_DISPOSED,
+								DebuggerSession.EVENT_CONTEXT, null);
+					}
 				}
 			}
 
-			public void contentRemoved(RunContentDescriptor descriptor)
+			@Override
+			public void contentRemoved(@Nullable RunContentDescriptor descriptor, @NotNull Executor executor)
 			{
-			}
-		};
-
-		contentManager.addRunContentListener(myContentListener, DefaultDebugExecutor.getDebugExecutorInstance());
-		Disposer.register(myProject, new Disposable()
-		{
-			public void dispose()
-			{
-				contentManager.removeRunContentListener(myContentListener);
 			}
 		});
 	}
 
+	@Override
 	public void projectClosed()
 	{
 	}
 
+	@Override
 	@NotNull
 	public String getComponentName()
 	{
 		return "DebuggerPanelsManager";
 	}
 
+	@Override
 	public void initComponent()
 	{
 	}
 
+	@Override
 	public void disposeComponent()
 	{
 	}
@@ -237,11 +240,11 @@ public class DebuggerPanelsManager implements ProjectComponent
 		DebuggerSessionTab sessionTab = getSessionTab(session);
 		if(sessionTab != null)
 		{
-			sessionTab.toFront();
+			sessionTab.toFront(true);
 		}
 	}
 
-	private DebuggerSession getSession(Project project, ExecutionConsole console)
+	private static DebuggerSession getSession(Project project, ExecutionConsole console)
 	{
 		XDebugSession session = XDebuggerManager.getInstance(project).getDebugSession(console);
 		if(session != null)

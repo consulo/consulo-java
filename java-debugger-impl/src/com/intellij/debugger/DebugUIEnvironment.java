@@ -15,32 +15,29 @@
  */
 package com.intellij.debugger;
 
-import com.intellij.diagnostic.logging.LogFilesManager;
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 /**
  * Created by IntelliJ IDEA.
  * User: michael.golubev
  */
-public interface DebugUIEnvironment {
+public interface DebugUIEnvironment
+{
+	DebugEnvironment getEnvironment();
 
-  DebugEnvironment getEnvironment();
+	@Nullable
+	RunContentDescriptor getReuseContent();
 
-  @Nullable
-  RunContentDescriptor getReuseContent();
+	@Nullable
+	Icon getIcon();
 
-  @Nullable
-  Icon getIcon();
+	void initActions(RunContentDescriptor content, DefaultActionGroup actionGroup);
 
-  void initLogs(RunContentDescriptor content, LogFilesManager logFilesManager);
-
-  void initActions(RunContentDescriptor content, DefaultActionGroup actionGroup);
-
-  @Nullable
-  RunProfile getRunProfile();
+	@Nullable
+	RunProfile getRunProfile();
 }

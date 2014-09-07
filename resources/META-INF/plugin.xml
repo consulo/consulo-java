@@ -170,13 +170,19 @@
 		</action>
 
 		<group id="JavaDebuggerActions">
-			<action id="Debugger.AdjustArrayRange" class="com.intellij.debugger.actions.AdjustArrayRangeAction"/>
 			<action id="Debugger.Inspect" class="com.intellij.debugger.actions.InspectAction"/>
-			<action id="Debugger.ViewText" class="com.intellij.debugger.actions.ViewTextAction"/>
+			<action id="Debugger.CustomizeContextView" class="com.intellij.debugger.actions.CustomizeContextViewAction">
+				<add-to-group group-id="XDebugger.Variables.Tree.Popup" anchor="last"/>
+				<add-to-group group-id="XDebugger.Watches.Tree.Popup" anchor="last"/>
+			</action>
+			<action id="Debugger.ViewText" class="com.intellij.debugger.actions.ViewTextAction">
+				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+			</action>
 			<action id="Debugger.CopyValue" class="com.intellij.debugger.actions.CopyValueAction"/>
 			<action id="Debugger.CompareValueWithClipboard" class="com.intellij.debugger.actions.CompareValueWithClipboardAction"/>
-			<action id="Debugger.CustomizeContextView" class="com.intellij.debugger.actions.CustomizeContextViewAction"/>
-			<action id="Debugger.CustomizeThreadsView" class="com.intellij.debugger.actions.CustomizeThreadsViewAction"/>
+			<action id="Debugger.CustomizeThreadsView" class="com.intellij.debugger.actions.CustomizeThreadsViewAction">
+				<add-to-group group-id="XDebugger.Frames.Tree.Popup" anchor="last"/>
+			</action>
 			<action id="Debugger.NewWatch" class="com.intellij.debugger.actions.NewWatchAction" icon="AllIcons.Debugger.NewWatch"/>
 			<action id="Debugger.EditWatch" class="com.intellij.debugger.actions.EditWatchAction"/>
 			<action id="Debugger.EditFrameSource" class="com.intellij.debugger.actions.EditFrameSourceAction"/>
@@ -185,14 +191,18 @@
 			<reference ref="Debugger.PopFrame"/>
 			<action id="Debugger.RemoveAllWatches" class="com.intellij.debugger.actions.RemoveAllWatchesAction"/>
 			<action id="Debugger.RemoveWatch" class="com.intellij.debugger.actions.RemoveWatchAction" icon="AllIcons.Actions.Delete"/>
-			<action id="Debugger.ViewAsGroup" class="com.intellij.debugger.actions.ViewAsGroup"/>
-			<action id="Debugger.SetValue" class="com.intellij.debugger.actions.SetValueAction"/>
+			<action id="Debugger.ViewAsGroup" class="com.intellij.debugger.actions.ViewAsGroup">
+				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+			</action>
+			<action id="Debugger.AdjustArrayRange" class="com.intellij.debugger.actions.AdjustArrayRangeAction">
+				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+			</action>
+			<!--<action id="Debugger.SetValue" class="com.intellij.debugger.actions.SetValueAction"/>-->
 			<!--<action id="Debugger.ShowAsHex" class="com.intellij.debugger.actions.ShowAsHexAction" text="Show as Hex"/>-->
 			<action id="Debugger.ShowFrame" class="com.intellij.debugger.actions.ShowFrameAction"/>
 			<action id="Debugger.ResumeThread" class="com.intellij.debugger.actions.ResumeThreadAction"/>
 			<action id="Debugger.FreezeThread" class="com.intellij.debugger.actions.FreezeThreadAction"/>
 			<action id="Debugger.InterruptThread" class="com.intellij.debugger.actions.InterruptThreadAction"/>
-			<action id="Debugger.FocusOnBreakpoint" class="com.intellij.debugger.ui.breakpoints.actions.FocusOnBreakpointAction"/>
 			<add-to-group group-id="DebuggerActions" anchor="first"/>
 		</group>
 
@@ -240,7 +250,7 @@
 			<reference ref="Debugger.AdjustArrayRange"/>
 			<reference ref="Debugger.Inspect"/>
 			<reference ref="Debugger.MarkObject"/>
-			<reference ref="Debugger.SetValue"/>
+			<!--<reference ref="Debugger.SetValue"/> -->
 			<reference ref="Debugger.EditNodeSource"/>
 			<reference ref="Debugger.EditTypeSource"/>
 			<separator/>
@@ -260,7 +270,7 @@
 			<reference ref="Debugger.AdjustArrayRange"/>
 			<reference ref="Debugger.Inspect"/>
 			<reference ref="Debugger.MarkObject"/>
-			<reference ref="Debugger.SetValue"/>
+			<!--<reference ref="Debugger.SetValue"/> -->
 			<reference ref="Debugger.EditNodeSource"/>
 			<reference ref="Debugger.EditTypeSource"/>
 			<separator/>
@@ -281,7 +291,7 @@
 			<reference ref="Debugger.AdjustArrayRange"/>
 			<reference ref="Debugger.Inspect"/>
 			<reference ref="Debugger.MarkObject"/>
-			<reference ref="Debugger.SetValue"/>
+			<!--<reference ref="Debugger.SetValue"/> -->
 			<reference ref="Debugger.EditNodeSource"/>
 			<reference ref="Debugger.EditTypeSource"/>
 			<separator/>
@@ -322,7 +332,7 @@
 			<reference ref="Debugger.AdjustArrayRange"/>
 			<reference ref="Debugger.Inspect"/>
 			<reference ref="Debugger.MarkObject"/>
-			<reference ref="Debugger.SetValue"/>
+			<!--<reference ref="Debugger.SetValue"/> -->
 			<reference ref="Debugger.EditNodeSource"/>
 			<reference ref="Debugger.EditTypeSource"/>
 			<separator/>

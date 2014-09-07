@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,87 +15,68 @@
  */
 package com.intellij.debugger;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.*;
-import com.intellij.execution.filters.ExceptionFilters;
-import com.intellij.execution.filters.Filter;
-import com.intellij.execution.filters.TextConsoleBuilder;
-import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.runners.RunContentBuilder;
-import com.intellij.openapi.project.Project;
+import com.intellij.execution.configurations.RemoteConnection;
+import com.intellij.execution.configurations.RemoteState;
+import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.configurations.SearchScopeProvider;
+import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.psi.search.GlobalSearchScope;
 
-import java.util.List;
+public class DefaultDebugEnvironment implements DebugEnvironment
+{
+	private final GlobalSearchScope mySearchScope;
+	private final RemoteConnection myRemoteConnection;
+	private final boolean myPollConnection;
+	private final ExecutionEnvironment environment;
+	private final RunProfileState state;
 
-/**
- * Created by IntelliJ IDEA.
- * User: michael.golubev
- */
-public class DefaultDebugEnvironment implements DebugEnvironment {
+	public DefaultDebugEnvironment(@NotNull ExecutionEnvironment environment, @NotNull RunProfileState state, RemoteConnection remoteConnection,
+			boolean pollConnection)
+	{
+		this.environment = environment;
+		this.state = state;
+		myRemoteConnection = remoteConnection;
+		myPollConnection = pollConnection;
 
-  private final GlobalSearchScope mySearchScope;
-  private final Executor myExecutor;
-  private final ProgramRunner myRunner;
-  private RunProfileState myState;
-  private final RemoteConnection myRemoteConnection;
-  private final boolean myPollConnection;
-  private final RunProfile myRunProfile;
+		mySearchScope = SearchScopeProvider.createSearchScope(environment.getProject(), environment.getRunProfile());
+	}
 
-  public DefaultDebugEnvironment(Project project,
-                                 Executor executor,
-                                 ProgramRunner runner,
-                                 RunProfile runProfile,
-                                 RunProfileState state,
-                                 RemoteConnection remoteConnection,
-                                 boolean pollConnection) {
-    myExecutor = executor;
-    myRunner = runner;
-    myRunProfile = runProfile;
-    myState = state;
-    myRemoteConnection = remoteConnection;
-    myPollConnection = pollConnection;
+	@Override
+	public ExecutionResult createExecutionResult() throws ExecutionException
+	{
+		return state.execute(environment.getExecutor(), environment.getRunner());
+	}
 
-    mySearchScope = RunContentBuilder.createSearchScope(project, runProfile);
-  }
+	@Override
+	public GlobalSearchScope getSearchScope()
+	{
+		return mySearchScope;
+	}
 
-  @Override
-  public ExecutionResult createExecutionResult() throws ExecutionException {
-    if (myState instanceof CommandLineState) {
-      final TextConsoleBuilder consoleBuilder = ((CommandLineState)myState).getConsoleBuilder();
-      if (consoleBuilder != null) {
-        List<Filter> filters = ExceptionFilters.getFilters(mySearchScope);
-        for (Filter filter : filters) {
-          consoleBuilder.addFilter(filter);
-        }
-      }
-    }
-    return myState.execute(myExecutor, myRunner);
-  }
+	@Override
+	public boolean isRemote()
+	{
+		return environment.getRunProfile() instanceof RemoteState;
+	}
 
-  @Override
-  public GlobalSearchScope getSearchScope() {
-    return mySearchScope;
-  }
+	@Override
+	public RemoteConnection getRemoteConnection()
+	{
+		return myRemoteConnection;
+	}
 
-  @Override
-  public boolean isRemote() {
-    return myState instanceof RemoteState;
-  }
+	@Override
+	public boolean isPollConnection()
+	{
+		return myPollConnection;
+	}
 
-  @Override
-  public RemoteConnection getRemoteConnection() {
-    return myRemoteConnection;
-  }
-
-  @Override
-  public boolean isPollConnection() {
-    return myPollConnection;
-  }
-
-  @Override
-  public String getSessionName() {
-    return myRunProfile.getName();
-  }
+	@Override
+	public String getSessionName()
+	{
+		return environment.getRunProfile().getName();
+	}
 }

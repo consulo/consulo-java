@@ -29,8 +29,10 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.engine.JavaDebugProcess;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.ui.impl.DebuggerTreePanel;
@@ -46,6 +48,10 @@ import com.intellij.openapi.actionSystem.CommonShortcuts;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.DoubleClickListener;
+import com.intellij.xdebugger.XDebugProcess;
+import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.impl.frame.XDebugView;
+import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 
 public abstract class DebuggerAction extends AnAction
 {
@@ -159,7 +165,7 @@ public abstract class DebuggerAction extends AnAction
 				return true;
 			}
 		};
-		//listener.installOn(tree);
+		listener.installOn(tree);
 
 		final AnAction action = ActionManager.getInstance().getAction(actionName);
 		action.registerCustomShortcutSet(CommonShortcuts.getEditSource(), tree);
@@ -168,7 +174,7 @@ public abstract class DebuggerAction extends AnAction
 		{
 			public void dispose()
 			{
-				//listener.uninstall(tree);
+				listener.uninstall(tree);
 				action.unregisterCustomShortcutSet(tree);
 			}
 		};
@@ -197,5 +203,23 @@ public abstract class DebuggerAction extends AnAction
 				event.getPresentation().setVisible(true);
 			}
 		});
+	}
+
+	public static void refreshViews(@NotNull XValueNodeImpl node)
+	{
+		refreshViews(XDebugView.getSession(node.getTree()));
+	}
+
+	public static void refreshViews(@Nullable XDebugSession session)
+	{
+		if(session != null)
+		{
+			XDebugProcess process = session.getDebugProcess();
+			if(process instanceof JavaDebugProcess)
+			{
+				((JavaDebugProcess) process).saveNodeHistory();
+			}
+			session.rebuildViews();
+		}
 	}
 }
