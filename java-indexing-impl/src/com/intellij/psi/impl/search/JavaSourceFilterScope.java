@@ -49,23 +49,7 @@ public class JavaSourceFilterScope extends DelegatingGlobalSearchScope {
     if (myIndex.isInSourceContent(file)) {
       return true;
     }
-    final Project project = getProject();
 
-    if (project != null) {
-      for (OrderEntry entry : myIndex.getOrderEntriesForFile(file)) {
-        if (entry instanceof SdkOrderEntry) {
-          final SdkOrderEntry sdkOrderEntry = (SdkOrderEntry)entry;
-
-          for (SdkResolveScopeProvider provider : SdkResolveScopeProvider.EP_NAME.getExtensions()) {
-            final GlobalSearchScope scope = provider.getScope(project, sdkOrderEntry);
-
-            if (scope != null && scope.contains(file)) {
-              return true;
-            }
-          }
-        }
-      }
-    }
     return false;
   }
 
