@@ -16,19 +16,33 @@
  */
 package com.intellij.refactoring.migration;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragment;
+import com.intellij.psi.JavaCodeFragmentFactory;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.LanguageTextField;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class EditMigrationEntryDialog extends DialogWrapper{
   private JRadioButton myRbPackage;
@@ -130,12 +144,12 @@ public class EditMigrationEntryDialog extends DialogWrapper{
     String text = myOldNameField.getText();
     text = text.trim();
     PsiManager manager = PsiManager.getInstance(myProject);
-    if (!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isQualifiedName(text)){
+    if (!PsiNameHelper.getInstance(manager.getProject()).isQualifiedName(text)){
       isEnabled = false;
     }
     text = myNewNameField.getText();
     text = text.trim();
-    if (!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isQualifiedName(text)){
+    if (!PsiNameHelper.getInstance(manager.getProject()).isQualifiedName(text)){
       isEnabled = false;
     }
     setOKActionEnabled(isEnabled);

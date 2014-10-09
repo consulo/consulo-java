@@ -20,9 +20,9 @@ import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.impl.file.PsiPackageHelper;
 import com.intellij.util.ProcessingContext;
 
@@ -41,7 +41,7 @@ public class PsiPackageRenameValidator implements RenameInputValidatorEx {
       if (!PsiPackageHelper.getInstance(project).isValidPackageName(newName)) {
         return "Not a valid package name";
       }
-      if (!JavaPsiFacade.getInstance(project).getNameHelper().isIdentifier(newName)) {
+      if (!PsiNameHelper.getInstance(project).isIdentifier(newName)) {
         return "Not a valid identifier name";
       }
     }

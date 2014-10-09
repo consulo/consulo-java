@@ -215,7 +215,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 		String fileName = name + "." + JavaFileType.INSTANCE.getDefaultExtension();
 		directory.checkCreateFile(fileName);
 
-		PsiNameHelper helper = JavaPsiFacade.getInstance(directory.getProject()).getNameHelper();
+		PsiNameHelper helper = PsiNameHelper.getInstance(directory.getProject());
 		PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
 		String qualifiedName = aPackage == null ? null : aPackage.getQualifiedName();
 		if(!StringUtil.isEmpty(qualifiedName) && !helper.isQualifiedName(qualifiedName))

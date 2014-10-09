@@ -15,10 +15,14 @@
  */
 package com.intellij.ide.actions;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import javax.swing.Icon;
 
-import javax.swing.*;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiNameHelper;
 
 public abstract class JavaCreateTemplateInPackageAction<T extends PsiElement> extends CreateTemplateInPackageAction<T> {
 
@@ -34,6 +38,6 @@ public abstract class JavaCreateTemplateInPackageAction<T extends PsiElement> ex
     }
 
     String name = pkg.getQualifiedName();
-    return StringUtil.isEmpty(name) || JavaPsiFacade.getInstance(directory.getProject()).getNameHelper().isQualifiedName(name);
+    return StringUtil.isEmpty(name) || PsiNameHelper.getInstance(directory.getProject()).isQualifiedName(name);
   }
 }

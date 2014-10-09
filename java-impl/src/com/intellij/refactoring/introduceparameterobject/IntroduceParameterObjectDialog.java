@@ -15,6 +15,22 @@
  */
 package com.intellij.refactoring.introduceparameterobject;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.TreeJavaClassChooserDialog;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.help.HelpManager;
@@ -27,7 +43,11 @@ import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiFormatUtil;
-import com.intellij.refactoring.*;
+import com.intellij.refactoring.HelpID;
+import com.intellij.refactoring.MoveDestination;
+import com.intellij.refactoring.PackageWrapper;
+import com.intellij.refactoring.RefactorJBundle;
+import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.refactoring.ui.RefactoringDialog;
@@ -39,16 +59,6 @@ import com.intellij.ui.RecentsManager;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings({"OverridableMethodCallInConstructor"})
 public class IntroduceParameterObjectDialog extends RefactoringDialog {
@@ -184,8 +194,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
   @Override
   protected void canRun() throws ConfigurationException {
     final Project project = sourceMethod.getProject();
-    final JavaPsiFacade manager = JavaPsiFacade.getInstance(project);
-    final PsiNameHelper nameHelper = manager.getNameHelper();
+    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(project);
 
     final List<PsiParameter> parametersToExtract = getParametersToExtract();
     if (parametersToExtract.isEmpty()) {

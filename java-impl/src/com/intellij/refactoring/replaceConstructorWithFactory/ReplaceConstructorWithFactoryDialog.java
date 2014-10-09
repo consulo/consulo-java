@@ -15,12 +15,32 @@
  */
 package com.intellij.refactoring.replaceConstructorWithFactory;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
@@ -30,13 +50,6 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.ui.JavaReferenceEditorUtil;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;
 import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * @author dsl
@@ -202,7 +215,7 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
   @Override
   protected void canRun() throws ConfigurationException {
     final String name = myNameField.getEnteredName();
-    final PsiNameHelper nameHelper = JavaPsiFacade.getInstance(myContainingClass.getProject()).getNameHelper();
+    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(myContainingClass.getProject());
     if (!nameHelper.isIdentifier(name)) {
       throw new ConfigurationException("\'" + name + "\' is invalid factory method name");
     }

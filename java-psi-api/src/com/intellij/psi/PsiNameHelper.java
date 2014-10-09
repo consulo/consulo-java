@@ -28,8 +28,6 @@ import com.intellij.util.ArrayUtil;
 
 /**
  * Service for validating and parsing Java identifiers.
- *
- * @see com.intellij.psi.JavaPsiFacade#getNameHelper()
  */
 @ProjectService
 public abstract class PsiNameHelper {

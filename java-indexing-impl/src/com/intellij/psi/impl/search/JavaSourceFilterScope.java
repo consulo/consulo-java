@@ -19,14 +19,13 @@
  */
 package com.intellij.psi.impl.search;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.SdkResolveScopeProvider;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
 
 public class JavaSourceFilterScope extends DelegatingGlobalSearchScope {
   private final ProjectFileIndex myIndex;

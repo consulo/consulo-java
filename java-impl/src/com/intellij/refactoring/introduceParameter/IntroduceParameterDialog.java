@@ -24,24 +24,40 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
+import gnu.trove.TIntArrayList;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.List;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiLocalVariable;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.*;
+import com.intellij.refactoring.ui.NameSuggestionsField;
+import com.intellij.refactoring.ui.NameSuggestionsGenerator;
+import com.intellij.refactoring.ui.NameSuggestionsManager;
+import com.intellij.refactoring.ui.RefactoringDialog;
+import com.intellij.refactoring.ui.TypeSelector;
+import com.intellij.refactoring.ui.TypeSelectorManager;
 import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.usageView.UsageInfo;
-import gnu.trove.TIntArrayList;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
 
 public class IntroduceParameterDialog extends RefactoringDialog {
   private TypeSelector myTypeSelector;
@@ -281,7 +297,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
   @Override
   protected void canRun() throws ConfigurationException {
     String name = getParameterName();
-    if (name == null || !JavaPsiFacade.getInstance(myProject).getNameHelper().isIdentifier(name)) {
+    if (name == null || !PsiNameHelper.getInstance(myProject).isIdentifier(name)) {
       throw new ConfigurationException("\'" + (name != null ? name : "") + "\' is invalid parameter name");
     }
   }

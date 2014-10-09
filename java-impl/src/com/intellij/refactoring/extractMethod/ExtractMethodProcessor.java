@@ -643,7 +643,7 @@ public class ExtractMethodProcessor implements MatchProvider
 			{
 				final String text = StringUtil.decapitalize(StringUtil.capitalizeWords(prevSibling.getText().trim().substring(2),
 						true)).replaceAll(" ", "");
-				if(JavaPsiFacade.getInstance(myProject).getNameHelper().isIdentifier(text) && text.length() < 20)
+				if(PsiNameHelper.getInstance(myProject).isIdentifier(text) && text.length() < 20)
 				{
 					return text;
 				}

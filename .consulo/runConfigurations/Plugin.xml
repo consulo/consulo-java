@@ -2,6 +2,8 @@
   <configuration default="false" name="Plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Consulo In Sandbox" singleton="true">
     <option name="VM_PARAMETERS" value="-ea -Xmx1024m -Didea.is.internal=true -XX:MaxPermSize=512m" />
     <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="USE_ALT_CONSULO_SDK" value="false" />
+    <option name="ALT_CONSULO_SDK_PATH" />
     <java-sdk name="1.6" />
     <consulo-sdk name="Consulo 1.SNAPSHOT" />
     <artifact name="plugin" />

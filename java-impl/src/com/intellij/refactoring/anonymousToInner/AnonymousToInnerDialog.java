@@ -15,6 +15,15 @@
  */
 package com.intellij.refactoring.anonymousToInner;
 
+import java.awt.BorderLayout;
+import java.util.Map;
+
+import javax.swing.Action;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
@@ -36,11 +45,6 @@ import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.util.Function;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.ui.FormBuilder;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Map;
 
 class AnonymousToInnerDialog extends DialogWrapper{
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.anonymousToInner.AnonymousToInnerDialog");
@@ -150,7 +154,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
       errorString = RefactoringBundle.message("anonymousToInner.no.inner.class.name");
     }
     else {
-      if (!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isIdentifier(innerClassName)) {
+      if (!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(innerClassName)) {
         errorString = RefactoringMessageUtil.getIncorrectIdentifierMessage(innerClassName);
       }
       else{

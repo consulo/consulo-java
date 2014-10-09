@@ -616,7 +616,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 
 		String name = getMethodName();
-		if(!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isIdentifier(name))
+		if(!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(name))
 		{
 			return RefactoringMessageUtil.getIncorrectIdentifierMessage(name);
 		}
@@ -646,7 +646,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 		{
 			final ParameterTableModelItemBase<ParameterInfoImpl> item = parameterInfos.get(i);
 
-			if(!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isIdentifier(item.parameter.getName()))
+			if(!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(item.parameter.getName()))
 			{
 				return RefactoringMessageUtil.getIncorrectIdentifierMessage(item.parameter.getName());
 			}

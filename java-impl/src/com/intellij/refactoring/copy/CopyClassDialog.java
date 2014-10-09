@@ -15,13 +15,28 @@
  */
 package com.intellij.refactoring.copy;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
+
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pass;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.MoveDestination;
 import com.intellij.refactoring.PackageWrapper;
@@ -36,11 +51,6 @@ import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
 
 class CopyClassDialog extends DialogWrapper{
   @NonNls private static final String RECENTS_KEY = "CopyClassDialog.RECENTS_KEY";
@@ -150,7 +160,7 @@ class CopyClassDialog extends DialogWrapper{
 
     final String[] errorString = new String[1];
     final PsiManager manager = PsiManager.getInstance(myProject);
-    final PsiNameHelper nameHelper = JavaPsiFacade.getInstance(manager.getProject()).getNameHelper();
+    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(manager.getProject());
     if (packageName.length() > 0 && !nameHelper.isQualifiedName(packageName)) {
       errorString[0] = RefactoringBundle.message("invalid.target.package.name.specified");
     } else if (className != null && className.isEmpty()) {

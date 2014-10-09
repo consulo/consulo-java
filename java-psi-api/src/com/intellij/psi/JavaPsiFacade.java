@@ -113,7 +113,7 @@ public abstract class JavaPsiFacade
 	 */
 	@NotNull
 	@Deprecated
-	@DeprecationInfo(value = "Use PsiNameHelper#getInstance(Project)")
+	@DeprecationInfo(value = "Use PsiNameHelper#getInstance(Project)", until = "2.0")
 	public abstract PsiNameHelper getNameHelper();
 
 	/**

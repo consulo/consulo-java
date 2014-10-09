@@ -15,6 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.daemon.QuickFixBundle;
@@ -40,12 +46,6 @@ import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Mike
@@ -66,7 +66,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
     PsiReferenceExpression ref = call.getMethodExpression();
     String name = ref.getReferenceName();
 
-    if (name == null || !JavaPsiFacade.getInstance(ref.getProject()).getNameHelper().isIdentifier(name)) return false;
+    if (name == null || !PsiNameHelper.getInstance(ref.getProject()).isIdentifier(name)) return false;
     if (hasErrorsInArgumentList(call)) return false;
     setText(getDisplayString(name));
     return true;

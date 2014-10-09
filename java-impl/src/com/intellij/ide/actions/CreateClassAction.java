@@ -36,10 +36,10 @@ import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 
@@ -87,7 +87,7 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 			@Override
 			public String getErrorText(String inputString)
 			{
-				if(inputString.length() > 0 && !JavaPsiFacade.getInstance(project).getNameHelper().isQualifiedName(inputString))
+				if(inputString.length() > 0 && !PsiNameHelper.getInstance(project).isQualifiedName(inputString))
 				{
 					return "This is not a valid Java qualified name";
 				}

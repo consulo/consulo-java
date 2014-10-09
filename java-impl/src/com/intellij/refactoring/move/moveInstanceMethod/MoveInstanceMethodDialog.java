@@ -37,12 +37,12 @@ import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.VerticalFlowLayout;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.PsiVariable;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
@@ -148,7 +148,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
       EditorTextField field = myOldClassParameterNameFields.get(aClass);
       if (field.isEnabled()) {
         String parameterName = field.getText().trim();
-        if (!JavaPsiFacade.getInstance(myMethod.getProject()).getNameHelper().isIdentifier(parameterName)) {
+        if (!PsiNameHelper.getInstance(myMethod.getProject()).isIdentifier(parameterName)) {
           Messages
             .showErrorDialog(getProject(), RefactoringBundle.message("move.method.enter.a.valid.name.for.parameter"), myRefactoringName);
           return;

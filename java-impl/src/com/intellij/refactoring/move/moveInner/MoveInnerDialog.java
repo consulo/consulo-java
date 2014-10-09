@@ -20,6 +20,19 @@
  */
 package com.intellij.refactoring.move.moveInner;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
@@ -46,15 +59,6 @@ import com.intellij.refactoring.util.RefactoringMessageUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.ui.EditorTextField;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Map;
-import java.util.Set;
 
 public class MoveInnerDialog extends RefactoringDialog {
   private final Project myProject;
@@ -245,7 +249,7 @@ public class MoveInnerDialog extends RefactoringDialog {
       message = RefactoringBundle.message("no.class.name.specified");
     }
     else {
-      if (!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isIdentifier(className)) {
+      if (!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(className)) {
         message = RefactoringMessageUtil.getIncorrectIdentifierMessage(className);
       }
       else {
@@ -254,7 +258,7 @@ public class MoveInnerDialog extends RefactoringDialog {
             message = RefactoringBundle.message("no.parameter.name.specified");
           }
           else {
-            if (!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isIdentifier(parameterName)) {
+            if (!PsiNameHelper.getInstance(manager.getProject()).isIdentifier(parameterName)) {
               message = RefactoringMessageUtil.getIncorrectIdentifierMessage(parameterName);
             }
           }

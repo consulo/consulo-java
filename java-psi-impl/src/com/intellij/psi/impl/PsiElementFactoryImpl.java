@@ -15,7 +15,17 @@
  */
 package com.intellij.psi.impl;
 
-import com.intellij.lang.*;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.Language;
+import com.intellij.lang.LanguageParserDefinitions;
+import com.intellij.lang.ParserDefinition;
+import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilderFactory;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.lexer.JavaLexer;
@@ -23,12 +33,22 @@ import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
-import com.intellij.psi.impl.light.*;
-import com.intellij.psi.impl.source.*;
+import com.intellij.psi.impl.light.LightClassReference;
+import com.intellij.psi.impl.light.LightClassReferenceExpression;
+import com.intellij.psi.impl.light.LightIdentifier;
+import com.intellij.psi.impl.light.LightKeyword;
+import com.intellij.psi.impl.light.LightPackageReference;
+import com.intellij.psi.impl.light.LightPackageReferenceExpression;
+import com.intellij.psi.impl.light.LightTypeElement;
+import com.intellij.psi.impl.source.DummyHolder;
+import com.intellij.psi.impl.source.DummyHolderFactory;
+import com.intellij.psi.impl.source.JavaDummyElement;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
+import com.intellij.psi.impl.source.PsiImmediateClassType;
+import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.TreeElement;
@@ -38,11 +58,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements PsiElementFactory {
   private PsiClass myArrayClass;
@@ -415,7 +430,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   }
 
   private boolean isIdentifier(@NotNull String name) {
-    return JavaPsiFacade.getInstance(myManager.getProject()).getNameHelper().isIdentifier(name);
+    return PsiNameHelper.getInstance(myManager.getProject()).isIdentifier(name);
   }
 
   @NotNull
@@ -552,7 +567,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @NotNull
   @Override
   public PsiKeyword createKeyword(@NotNull final String text) throws IncorrectOperationException {
-    if (!JavaPsiFacade.getInstance(myManager.getProject()).getNameHelper().isKeyword(text)) {
+    if (!PsiNameHelper.getInstance(myManager.getProject()).isKeyword(text)) {
       throw new IncorrectOperationException("\"" + text + "\" is not a keyword.");
     }
     return new LightKeyword(myManager, text);
@@ -588,7 +603,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
     if (packageName.isEmpty()) {
       throw new IncorrectOperationException("Cannot create import statement for default package.");
     }
-    if (!JavaPsiFacade.getInstance(myManager.getProject()).getNameHelper().isQualifiedName(packageName)) {
+    if (!PsiNameHelper.getInstance(myManager.getProject()).isQualifiedName(packageName)) {
       throw new IncorrectOperationException("Incorrect package name: \"" + packageName + "\".");
     }
 
@@ -602,7 +617,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   public PsiDeclarationStatement createVariableDeclarationStatement(@NotNull final String name,
                                                                     @NotNull final PsiType type,
                                                                     final PsiExpression initializer) throws IncorrectOperationException {
-    if (!JavaPsiFacade.getInstance(myManager.getProject()).getNameHelper().isIdentifier(name)) {
+    if (!PsiNameHelper.getInstance(myManager.getProject()).isIdentifier(name)) {
       throw new IncorrectOperationException("\"" + name + "\" is not an identifier.");
     }
     if (PsiType.NULL.equals(type)) {

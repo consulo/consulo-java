@@ -83,8 +83,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
     final Ref<PsiClass> parentClassRef = Ref.create(null);
     final Project project = e.getData(CommonDataKeys.PROJECT);
     assert project != null;
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiNameHelper helper = psiFacade.getNameHelper();
+    final PsiNameHelper helper = PsiNameHelper.getInstance(project);
     final PackageChooserDialog dialog = new PackageChooserDialog("Choose Target Package and Hierarchy Root Class", project) {
 
       @Override

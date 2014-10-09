@@ -20,7 +20,20 @@
  */
 package com.intellij.compiler.cache;
 
-import com.intellij.compiler.classParsing.*;
+import gnu.trove.TIntHashSet;
+import gnu.trove.TIntObjectHashMap;
+import gnu.trove.TIntObjectIterator;
+import gnu.trove.TIntObjectProcedure;
+
+import java.util.*;
+
+import org.jetbrains.annotations.NonNls;
+import com.intellij.compiler.classParsing.AnnotationConstantValue;
+import com.intellij.compiler.classParsing.AnnotationNameValuePair;
+import com.intellij.compiler.classParsing.ConstantValue;
+import com.intellij.compiler.classParsing.FieldInfo;
+import com.intellij.compiler.classParsing.MemberInfo;
+import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.make.CacheUtils;
 import com.intellij.openapi.application.ApplicationManager;
@@ -28,17 +41,17 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.cls.ClsUtil;
-import gnu.trove.TIntHashSet;
-import gnu.trove.TIntObjectHashMap;
-import gnu.trove.TIntObjectIterator;
-import gnu.trove.TIntObjectProcedure;
-import org.jetbrains.annotations.NonNls;
-
-import java.util.*;
 
 class JavaDependencyProcessor {
   private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.make.JavaDependencyProcessor");
@@ -1025,7 +1038,7 @@ class JavaDependencyProcessor {
             return null;
           }
           final PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
-          final PsiNameHelper nameHelper = JavaPsiFacade.getInstance(myProject).getNameHelper();
+          final PsiNameHelper nameHelper = PsiNameHelper.getInstance(myProject);
           for (Iterator it = methodsToCheck.iterator(); it.hasNext();) {
             final MethodInfo methodInfo = (MethodInfo)it.next();
             if (!nameHelper.isIdentifier(myJavaDependencyCache.resolve(methodInfo.getName()), LanguageLevel.JDK_1_3)) { // fix for SCR 16068

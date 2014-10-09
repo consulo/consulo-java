@@ -15,15 +15,23 @@
  */
 package com.intellij.codeInsight.folding.impl;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassInitializer;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportList;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.javadoc.PsiDocComment;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class JavaElementSignatureProvider extends AbstractElementSignatureProvider {
@@ -181,7 +189,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
     else if (type.equals("class")) {
       String name = tokenizer.nextToken();
 
-      PsiNameHelper nameHelper = JavaPsiFacade.getInstance(file.getProject()).getNameHelper();
+      PsiNameHelper nameHelper = PsiNameHelper.getInstance(file.getProject());
       if (nameHelper.isIdentifier(name)) {
         int index = 0;
         try {

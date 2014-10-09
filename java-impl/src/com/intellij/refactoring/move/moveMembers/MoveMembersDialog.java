@@ -15,6 +15,23 @@
  */
 package com.intellij.refactoring.move.moveMembers;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.PackageUtil;
 import com.intellij.ide.util.TreeClassChooser;
@@ -49,17 +66,6 @@ import com.intellij.ui.RecentsManager;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 public class MoveMembersDialog extends RefactoringDialog implements MoveMembersOptions {
   @NonNls private static final String RECENTS_KEY = "MoveMembersDialog.RECENTS_KEY";
@@ -264,7 +270,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
       return RefactoringBundle.message("no.destination.class.specified");
     }
     else {
-      if (!JavaPsiFacade.getInstance(manager.getProject()).getNameHelper().isQualifiedName(fqName)) {
+      if (!PsiNameHelper.getInstance(manager.getProject()).isQualifiedName(fqName)) {
         return RefactoringBundle.message("0.is.not.a.legal.fq.name", fqName);
       }
       else {

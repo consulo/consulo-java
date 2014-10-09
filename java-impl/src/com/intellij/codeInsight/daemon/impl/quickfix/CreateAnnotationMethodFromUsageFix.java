@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.TailType;
@@ -26,8 +28,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
   private static final Logger LOG = Logger.getInstance("#" + CreateAnnotationMethodFromUsageFix.class.getName());
@@ -44,7 +44,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
     if (call == null || !call.isValid()) return false;
     String name = call.getName();
 
-    if (name == null || !JavaPsiFacade.getInstance(call.getProject()).getNameHelper().isIdentifier(name)) return false;
+    if (name == null || !PsiNameHelper.getInstance(call.getProject()).isIdentifier(name)) return false;
     if (getAnnotationValueType(call.getValue()) == null) return false;
     setText(QuickFixBundle.message("create.method.from.usage.text", name));
     return true;

@@ -273,7 +273,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     final GlobalSearchScope scope = getScope();
     for (final PsiJavaPackage subPackage : aPackage.getSubPackages(scope)) {
       final String shortName = subPackage.getQualifiedName().substring(startOffset);
-      if (JavaPsiFacade.getInstance(subPackage.getProject()).getNameHelper().isIdentifier(shortName)) {
+      if (PsiNameHelper.getInstance(subPackage.getProject()).isIdentifier(shortName)) {
         list.add(subPackage);
       }
     }

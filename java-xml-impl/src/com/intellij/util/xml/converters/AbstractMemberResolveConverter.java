@@ -27,13 +27,13 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.ide.TypePresentationService;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.psi.util.PropertyMemberType;
@@ -130,7 +130,7 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
 
   public LocalQuickFix[] getQuickFixes(final ConvertContext context) {
     final String targetName = ((GenericValue)context.getInvocationElement()).getStringValue();
-    if (!JavaPsiFacade.getInstance(context.getProject()).getNameHelper().isIdentifier(targetName)) return super.getQuickFixes(context);
+    if (!PsiNameHelper.getInstance(context.getProject()).isIdentifier(targetName)) return super.getQuickFixes(context);
     final PsiClass targetClass = getTargetClass(context);
     if (targetClass == null) return super.getQuickFixes(context);
     final PropertyMemberType memberType = getMemberTypes(context)[0];

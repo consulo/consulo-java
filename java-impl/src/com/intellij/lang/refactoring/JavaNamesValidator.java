@@ -16,17 +16,17 @@
 package com.intellij.lang.refactoring;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiNameHelper;
 
 /**
  * Default NamesValidator interface implementation. Uses java language keyword set and java language rules for identifier.
  */
 public class JavaNamesValidator implements NamesValidator {
   public boolean isKeyword(String name, Project project) {
-    return JavaPsiFacade.getInstance(project).getNameHelper().isKeyword(name);
+    return PsiNameHelper.getInstance(project).isKeyword(name);
   }
 
   public boolean isIdentifier(String name, Project project) {
-    return JavaPsiFacade.getInstance(project).getNameHelper().isIdentifier(name);
+    return PsiNameHelper.getInstance(project).isIdentifier(name);
   }
 }

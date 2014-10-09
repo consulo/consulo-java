@@ -15,6 +15,25 @@
  */
 package com.intellij.refactoring.extractclass;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -32,7 +51,11 @@ import com.intellij.refactoring.classMembers.MemberInfoBase;
 import com.intellij.refactoring.classMembers.MemberInfoChange;
 import com.intellij.refactoring.classMembers.MemberInfoChangeListener;
 import com.intellij.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
-import com.intellij.refactoring.ui.*;
+import com.intellij.refactoring.ui.JavaVisibilityPanel;
+import com.intellij.refactoring.ui.MemberSelectionPanel;
+import com.intellij.refactoring.ui.MemberSelectionTable;
+import com.intellij.refactoring.ui.PackageNameReferenceEditorCombo;
+import com.intellij.refactoring.ui.RefactoringDialog;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
@@ -40,17 +63,6 @@ import com.intellij.ui.components.JBLabelDecorator;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
 
 @SuppressWarnings({"OverridableMethodCallInConstructor"})
 class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeListener<PsiMember, MemberInfo> {
@@ -167,7 +179,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
   @Override
   protected void canRun() throws ConfigurationException {
     final Project project = sourceClass.getProject();
-    final PsiNameHelper nameHelper = JavaPsiFacade.getInstance(project).getNameHelper();
+    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(project);
     final List<PsiMethod> methods = getMethodsToExtract();
     final List<PsiField> fields = getFieldsToExtract();
     final List<PsiClass> innerClasses = getClassesToExtract();

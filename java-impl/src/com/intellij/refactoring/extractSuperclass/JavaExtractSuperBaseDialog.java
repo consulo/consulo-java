@@ -41,6 +41,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.refactoring.MoveDestination;
 import com.intellij.refactoring.PackageWrapper;
 import com.intellij.refactoring.RefactoringBundle;
@@ -140,7 +141,7 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
     final PsiFile containingFile = mySourceClass.getContainingFile();
     final boolean fromDefaultPackage = containingFile instanceof PsiClassOwner && ((PsiClassOwner)containingFile).getPackageName().isEmpty(); 
-    if (!(fromDefaultPackage && StringUtil.isEmpty(targetPackageName)) && !psiFacade.getNameHelper().isQualifiedName(targetPackageName)) {
+    if (!(fromDefaultPackage && StringUtil.isEmpty(targetPackageName)) && !PsiNameHelper.getInstance(myProject).isQualifiedName(targetPackageName)) {
       throw new OperationFailedException("Invalid package name: " + targetPackageName);
     }
     final PsiJavaPackage aPackage = psiFacade.findPackage(targetPackageName);
@@ -179,7 +180,7 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
   @Nullable
   @Override
   protected String validateName(String name) {
-    return JavaPsiFacade.getInstance(myProject).getNameHelper().isIdentifier(name)
+    return PsiNameHelper.getInstance(myProject).isIdentifier(name)
            ? null
            : RefactoringMessageUtil.getIncorrectIdentifierMessage(name);
   }

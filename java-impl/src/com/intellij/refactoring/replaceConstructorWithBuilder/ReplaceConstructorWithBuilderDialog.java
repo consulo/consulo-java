@@ -20,6 +20,25 @@
  */
 package com.intellij.refactoring.replaceConstructorWithBuilder;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.diagnostic.Logger;
@@ -28,7 +47,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.IdeFocusManager;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.PackageWrapper;
 import com.intellij.refactoring.RefactoringBundle;
@@ -36,21 +59,14 @@ import com.intellij.refactoring.move.moveClassesOrPackages.DestinationFolderComb
 import com.intellij.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.refactoring.ui.RefactoringDialog;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.ui.*;
+import com.intellij.ui.BooleanTableCellRenderer;
+import com.intellij.ui.ComboboxWithBrowseButton;
+import com.intellij.ui.DocumentAdapter;
+import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.TableUtil;
 import com.intellij.util.ui.Table;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
   private final PsiMethod[] myConstructors;
@@ -153,7 +169,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
 
   @Override
   protected void canRun() throws ConfigurationException {
-    final PsiNameHelper nameHelper = JavaPsiFacade.getInstance(myProject).getNameHelper();
+    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(myProject);
     for (ParameterData parameterData : myParametersMap.values()) {
       if (!nameHelper.isIdentifier(parameterData.getFieldName())) throw new ConfigurationException("\'" + parameterData.getFieldName() + "\' is not a valid field name");
       if (!nameHelper.isIdentifier(parameterData.getSetterName())) throw new ConfigurationException("\'" + parameterData.getSetterName() + "\' is not a valid setter name");
