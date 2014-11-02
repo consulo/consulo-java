@@ -47,7 +47,6 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizableStringList;
-import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.profile.codeInspection.InspectionProfileManager;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
@@ -206,13 +205,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 		element.addContent(entryPointsElement);
 		if(!additional_annotations.isEmpty())
 		{
-			try
-			{
-				additional_annotations.writeExternal(element);
-			}
-			catch(WriteExternalException ignored)
-			{
-			}
+			additional_annotations.writeExternal(element);
 		}
 	}
 
