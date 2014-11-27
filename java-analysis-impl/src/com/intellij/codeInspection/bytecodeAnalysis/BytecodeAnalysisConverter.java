@@ -41,15 +41,7 @@ import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassOwner;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.io.CachingEnumerator;
@@ -343,12 +335,12 @@ public class BytecodeAnalysisConverter implements ApplicationComponent
 
 	private int mkPsiClassKey(PsiClass psiClass, int dimensions) throws IOException
 	{
-		PsiClassOwner psiFile = (PsiClassOwner) psiClass.getContainingFile();
-		if(psiFile == null)
+		PsiFile containingFile = psiClass.getContainingFile();
+		if(!(containingFile instanceof PsiClassOwner))
 		{
-			LOG.debug("getContainingFile was null for " + psiClass.getQualifiedName());
 			return -1;
 		}
+		PsiClassOwner psiFile = (PsiClassOwner) containingFile;
 		String packageName = psiFile.getPackageName();
 		String qname = psiClass.getQualifiedName();
 		if(qname == null)
