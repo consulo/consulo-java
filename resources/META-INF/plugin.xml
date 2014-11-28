@@ -17,6 +17,7 @@
 	<id>org.consulo.java</id>
 	<name>Java</name>
 	<version>SNAPHOT</version>
+	<category>Custom Languages</category>
 	<vendor>Jetbrains and others</vendor>
 	<depends optional="true" config-file="com.intellij.regexp.xml">com.intellij.regexp</depends>
 	<depends optional="true" config-file="org.intellij.intellilang.xml">org.intellij.intelliLang</depends>
