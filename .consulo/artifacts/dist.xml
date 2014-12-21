@@ -56,6 +56,7 @@
           <element id="zip-archive" name="java-i18n.jar">
             <element id="module-output" name="java-i18n" />
           </element>
+          <element id="library" level="project" name="jimage-jdk6-sources" />
         </element>
       </element>
     </root>

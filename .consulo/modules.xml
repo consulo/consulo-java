@@ -321,6 +321,7 @@
               </binaries>
             </library>
           </orderEntry>
+          <orderEntry type="library" name="jimage-jdk6-sources" level="project" />
         </module-layer>
       </module>
       <module name="java-manifest" dirurl="file://$PROJECT_DIR$/java-manifest" current-layer="Default">
@@ -455,4 +456,3 @@
     </modules>
   </component>
 </project>
-

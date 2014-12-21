@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="jimage-jdk6-sources">
+    <binaries>
+      <root url="jar://$PROJECT_DIR$/lib/jimage-jdk6.jar!/" />
+    </binaries>
+    <sources>
+      <root url="jar://$PROJECT_DIR$/libSrc/jimage-jdk6-sources.jar!/" />
+    </sources>
+  </library>
+</component>

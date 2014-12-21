@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.java.JavaIcons;
+import org.mustbe.consulo.java.library.jimage.JImageFileType;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.util.ExecUtil;
 import com.intellij.ide.highlighter.JarArchiveFileType;
@@ -335,7 +336,7 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public boolean isValidSdkHome(String path)
 	{
-		return checkForJdk(new File(path));
+		return JavaSdkTypeUtil.checkForJdk(new File(path));
 	}
 
 	@Override
@@ -408,7 +409,8 @@ public class JavaSdkImpl extends JavaSdk
 		VirtualFile docs = findDocs(jdkHome, "docs/api");
 
 		final SdkModificator sdkModificator = sdk.getSdkModificator();
-		final Set<VirtualFile> previousRoots = new LinkedHashSet<VirtualFile>(Arrays.asList(sdkModificator.getRoots(BinariesOrderRootType.getInstance())));
+		final Set<VirtualFile> previousRoots = new LinkedHashSet<VirtualFile>(Arrays.asList(sdkModificator.getRoots(BinariesOrderRootType
+				.getInstance())));
 		sdkModificator.removeRoots(BinariesOrderRootType.getInstance());
 		previousRoots.removeAll(new HashSet<VirtualFile>(classes));
 		for(VirtualFile aClass : classes)
@@ -424,6 +426,24 @@ public class JavaSdkImpl extends JavaSdk
 			sdkModificator.addRoot(sources, SourcesOrderRootType.getInstance());
 		}
 		addJavaFxSources(jdkHome, sdkModificator);
+
+		File modulesDir = new File(jdkHome, "lib/modules");
+		if(modulesDir.exists())
+		{
+			for(File file : modulesDir.listFiles())
+			{
+				VirtualFile maybeJImageFile = LocalFileSystem.getInstance().findFileByIoFile(file);
+				if(maybeJImageFile == null || maybeJImageFile.getFileType() != JImageFileType.INSTANCE)
+				{
+					continue;
+				}
+				VirtualFile jimageArchiveFile = ArchiveVfsUtil.getArchiveRootForLocalFile(maybeJImageFile);
+				if(jimageArchiveFile != null)
+				{
+					sdkModificator.addRoot(jimageArchiveFile, BinariesOrderRootType.getInstance());
+				}
+			}
+		}
 
 		if(docs != null)
 		{

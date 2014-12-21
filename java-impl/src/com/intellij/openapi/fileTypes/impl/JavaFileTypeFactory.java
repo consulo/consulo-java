@@ -15,16 +15,22 @@
  */
 package com.intellij.openapi.fileTypes.impl;
 
-import com.intellij.ide.highlighter.*;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.library.jimage.JImageFileType;
+import com.intellij.ide.highlighter.JarArchiveFileType;
+import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
-import org.jetbrains.annotations.NotNull;
 
-public class JavaFileTypeFactory extends FileTypeFactory {
-  @Override
-  public void createFileTypes(@NotNull final FileTypeConsumer consumer) {
-    consumer.consume(JarArchiveFileType.INSTANCE, "jar;war;apk");
-    consumer.consume(JavaClassFileType.INSTANCE, "class");
-    consumer.consume(JavaFileType.INSTANCE, "java");
-  }
+public class JavaFileTypeFactory extends FileTypeFactory
+{
+	@Override
+	public void createFileTypes(@NotNull final FileTypeConsumer consumer)
+	{
+		consumer.consume(JarArchiveFileType.INSTANCE, "jar;war;apk");
+		consumer.consume(JavaClassFileType.INSTANCE);
+		consumer.consume(JavaFileType.INSTANCE);
+		consumer.consume(JImageFileType.INSTANCE);
+	}
 }
