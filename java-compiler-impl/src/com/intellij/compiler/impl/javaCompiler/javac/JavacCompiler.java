@@ -34,6 +34,7 @@ import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
+import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.JavaCompilerBundle;
 import com.intellij.compiler.JavaCompilerUtil;
@@ -202,8 +203,9 @@ public class JavacCompiler extends ExternalCompiler
 
 	@Override
 	@NotNull
-	public GeneralCommandLine createStartupCommand(
-			final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
+	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
+			final CompileContext context,
+			final String outputPath) throws IOException, IllegalArgumentException
 	{
 
 		try
@@ -237,8 +239,7 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@NotNull
-	private GeneralCommandLine createStartupCommand(
-			final ModuleChunk chunk,
+	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
 			final String outputPath,
 			final CompileContext compileContext,
 			JpsJavaCompilerOptions javacOptions,
@@ -251,8 +252,6 @@ public class JavacCompiler extends ExternalCompiler
 		{
 			throw new IllegalArgumentException(JavaCompilerBundle.message("javac.error.unknown.jdk.version", jdk.getName()));
 		}
-		final boolean isVersion1_0 = version == JavaSdkVersion.JDK_1_0;
-		final boolean isVersion1_1 = version == JavaSdkVersion.JDK_1_1;
 
 		JavaSdkType sdkType = (JavaSdkType) jdk.getSdkType();
 
@@ -283,7 +282,7 @@ public class JavacCompiler extends ExternalCompiler
 
 		parametersList.add("-classpath");
 
-		if(isVersion1_0)
+		if(version == JavaSdkVersion.JDK_1_0)
 		{
 			parametersList.add(sdkType.getToolsPath(jdk)); //  do not use JavacRunner for jdk 1.0
 		}
@@ -303,14 +302,13 @@ public class JavacCompiler extends ExternalCompiler
 			parametersList.add(JAVAC_MAIN_CLASS_OLD);
 		}
 
-		addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, isVersion1_0, isVersion1_1, myTempFiles, true, true,
-				myAnnotationProcessorMode);
+		addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, true, myAnnotationProcessorMode);
 
 		parametersList.addAll(additionalOptions);
 
 		final List<VirtualFile> files = chunk.getFilesToCompile();
 
-		if(isVersion1_0)
+		if(version == JavaSdkVersion.JDK_1_0)
 		{
 			for(VirtualFile file : files)
 			{
@@ -339,7 +337,7 @@ public class JavacCompiler extends ExternalCompiler
 					{
 						LOG.debug("Adding path for compilation " + path);
 					}
-					writer.println(isVersion1_1 ? path : CompilerUtil.quotePath(path));
+					writer.println(version == JavaSdkVersion.JDK_1_1 ? path : CompilerUtil.quotePath(path));
 				}
 			}
 			finally
@@ -351,8 +349,7 @@ public class JavacCompiler extends ExternalCompiler
 		return commandLine;
 	}
 
-	public static List<String> addAdditionalSettings(
-			ParametersList parametersList,
+	public static List<String> addAdditionalSettings(ParametersList parametersList,
 			JpsJavaCompilerOptions javacOptions,
 			boolean isAnnotationProcessing,
 			JavaSdkVersion version,
@@ -446,14 +443,12 @@ public class JavacCompiler extends ExternalCompiler
 		return additionalOptions;
 	}
 
-	public static void addCommandLineOptions(
-			CompileContext compileContext,
+	public static void addCommandLineOptions(CompileContext compileContext,
 			ModuleChunk chunk,
 			@NonNls ParametersList commandLine,
 			String outputPath,
 			Sdk jdk,
-			boolean version1_0,
-			boolean version1_1,
+			JavaSdkVersion version,
 			List<File> tempFiles,
 			boolean addSourcePath,
 			boolean useTempFile,
@@ -470,7 +465,7 @@ public class JavacCompiler extends ExternalCompiler
 		final String bootCp = JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk);
 
 		final String classPath;
-		if(version1_0 || version1_1)
+		if(version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1)
 		{
 			classPath = bootCp + File.pathSeparator + cp;
 		}
@@ -478,13 +473,13 @@ public class JavacCompiler extends ExternalCompiler
 		{
 			classPath = cp;
 			commandLine.add("-bootclasspath");
-			addClassPathValue(jdk, false, commandLine, bootCp, "javac_bootcp", tempFiles, useTempFile);
+			addClassPathValue(jdk, version, commandLine, bootCp, "javac_bootcp", tempFiles, useTempFile);
 		}
 
 		commandLine.add("-classpath");
-		addClassPathValue(jdk, version1_0, commandLine, classPath, "javac_cp", tempFiles, useTempFile);
+		addClassPathValue(jdk, version, commandLine, classPath, "javac_cp", tempFiles, useTempFile);
 
-		if(!version1_1 && !version1_0 && addSourcePath)
+		if(version != JavaSdkVersion.JDK_1_0 && version != JavaSdkVersion.JDK_1_1 && addSourcePath)
 		{
 			commandLine.add("-sourcepath");
 			// this way we tell the compiler that the sourcepath is "empty". However, javac thinks that sourcepath is 'new File("")'
@@ -496,7 +491,14 @@ public class JavacCompiler extends ExternalCompiler
 			}
 			else
 			{
-				commandLine.add("\"\"");
+				if(version.isAtLeast(JavaSdkVersion.JDK_1_9))
+				{
+					commandLine.add(".");
+				}
+				else
+				{
+					commandLine.add("\"\"");
+				}
 			}
 		}
 
@@ -504,7 +506,8 @@ public class JavacCompiler extends ExternalCompiler
 		{
 			commandLine.add("-s");
 			commandLine.add(outputPath.replace('/', File.separatorChar));
-			final String moduleOutputPath = CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0], false);
+			final String moduleOutputPath = CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0],
+					ProductionContentFolderTypeProvider.getInstance());
 			if(moduleOutputPath != null)
 			{
 				commandLine.add("-d");
@@ -518,9 +521,8 @@ public class JavacCompiler extends ExternalCompiler
 		}
 	}
 
-	private static void addClassPathValue(
-			final Sdk jdk,
-			final boolean isVersion1_0,
+	private static void addClassPathValue(final Sdk jdk,
+			final JavaSdkVersion version,
 			final ParametersList parametersList,
 			final String cpString,
 			@NonNls final String tempFileName,
@@ -533,7 +535,7 @@ public class JavacCompiler extends ExternalCompiler
 			return;
 		}
 		// must include output path to classpath, otherwise javac will compile all dependent files no matter were they compiled before or not
-		if(isVersion1_0)
+		if(version == JavaSdkVersion.JDK_1_0)
 		{
 			parametersList.add(((JavaSdkType) jdk.getSdkType()).getToolsPath(jdk) + File.pathSeparator + cpString);
 		}
