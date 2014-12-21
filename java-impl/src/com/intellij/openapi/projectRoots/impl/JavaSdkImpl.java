@@ -31,10 +31,10 @@ import java.util.regex.Pattern;
 
 import javax.swing.Icon;
 
-import org.mustbe.consulo.java.JavaIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaIcons;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.util.ExecUtil;
 import com.intellij.ide.highlighter.JarArchiveFileType;
@@ -54,6 +54,9 @@ import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.types.BinariesOrderRootType;
+import com.intellij.openapi.roots.types.DocumentationOrderRootType;
+import com.intellij.openapi.roots.types.SourcesOrderRootType;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.ArchiveFileSystem;
@@ -405,26 +408,26 @@ public class JavaSdkImpl extends JavaSdk
 		VirtualFile docs = findDocs(jdkHome, "docs/api");
 
 		final SdkModificator sdkModificator = sdk.getSdkModificator();
-		final Set<VirtualFile> previousRoots = new LinkedHashSet<VirtualFile>(Arrays.asList(sdkModificator.getRoots(OrderRootType.BINARIES)));
-		sdkModificator.removeRoots(OrderRootType.BINARIES);
+		final Set<VirtualFile> previousRoots = new LinkedHashSet<VirtualFile>(Arrays.asList(sdkModificator.getRoots(BinariesOrderRootType.getInstance())));
+		sdkModificator.removeRoots(BinariesOrderRootType.getInstance());
 		previousRoots.removeAll(new HashSet<VirtualFile>(classes));
 		for(VirtualFile aClass : classes)
 		{
-			sdkModificator.addRoot(aClass, OrderRootType.BINARIES);
+			sdkModificator.addRoot(aClass, BinariesOrderRootType.getInstance());
 		}
 		for(VirtualFile root : previousRoots)
 		{
-			sdkModificator.addRoot(root, OrderRootType.BINARIES);
+			sdkModificator.addRoot(root, BinariesOrderRootType.getInstance());
 		}
 		if(sources != null)
 		{
-			sdkModificator.addRoot(sources, OrderRootType.SOURCES);
+			sdkModificator.addRoot(sources, SourcesOrderRootType.getInstance());
 		}
 		addJavaFxSources(jdkHome, sdkModificator);
 
 		if(docs != null)
 		{
-			sdkModificator.addRoot(docs, OrderRootType.DOCUMENTATION);
+			sdkModificator.addRoot(docs, DocumentationOrderRootType.getInstance());
 		}
 		else if(SystemInfo.isMac)
 		{
@@ -439,7 +442,7 @@ public class JavaSdkImpl extends JavaSdk
 			}
 			if(commonDocs != null)
 			{
-				sdkModificator.addRoot(commonDocs, OrderRootType.DOCUMENTATION);
+				sdkModificator.addRoot(commonDocs, DocumentationOrderRootType.getInstance());
 			}
 
 			VirtualFile appleDocs = findDocs(jdkHome, "appledocs");
@@ -449,7 +452,7 @@ public class JavaSdkImpl extends JavaSdk
 			}
 			if(appleDocs != null)
 			{
-				sdkModificator.addRoot(appleDocs, OrderRootType.DOCUMENTATION);
+				sdkModificator.addRoot(appleDocs, DocumentationOrderRootType.getInstance());
 			}
 
 			if(commonDocs == null && appleDocs == null && sources == null)
@@ -457,7 +460,7 @@ public class JavaSdkImpl extends JavaSdk
 				String url = getDefaultDocumentationUrl(sdk);
 				if(url != null)
 				{
-					sdkModificator.addRoot(VirtualFileManager.getInstance().findFileByUrl(url), OrderRootType.DOCUMENTATION);
+					sdkModificator.addRoot(VirtualFileManager.getInstance().findFileByUrl(url), DocumentationOrderRootType.getInstance());
 				}
 			}
 		}
@@ -571,7 +574,7 @@ public class JavaSdkImpl extends JavaSdk
 	{
 		for(VirtualFile virtualFile : findClasses(file, isJre))
 		{
-			sdkModificator.addRoot(virtualFile, OrderRootType.BINARIES);
+			sdkModificator.addRoot(virtualFile, BinariesOrderRootType.getInstance());
 		}
 	}
 
@@ -605,7 +608,7 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			return;
 		}
-		sdkModificator.addRoot(archiveRootForLocalFile, OrderRootType.SOURCES);
+		sdkModificator.addRoot(archiveRootForLocalFile, SourcesOrderRootType.getInstance());
 	}
 
 	private static void addSources(File file, SdkModificator sdkModificator)
@@ -613,7 +616,7 @@ public class JavaSdkImpl extends JavaSdk
 		VirtualFile vFile = findSources(file);
 		if(vFile != null)
 		{
-			sdkModificator.addRoot(vFile, OrderRootType.SOURCES);
+			sdkModificator.addRoot(vFile, SourcesOrderRootType.getInstance());
 		}
 	}
 
@@ -656,7 +659,7 @@ public class JavaSdkImpl extends JavaSdk
 		VirtualFile vFile = findDocs(file, "docs/api");
 		if(vFile != null)
 		{
-			rootContainer.addRoot(vFile, OrderRootType.DOCUMENTATION);
+			rootContainer.addRoot(vFile, DocumentationOrderRootType.getInstance());
 		}
 	}
 
@@ -687,9 +690,9 @@ public class JavaSdkImpl extends JavaSdk
 	@Override
 	public boolean isRootTypeApplicable(OrderRootType type)
 	{
-		return type == OrderRootType.BINARIES ||
-				type == OrderRootType.SOURCES ||
-				type == OrderRootType.DOCUMENTATION ||
+		return type == BinariesOrderRootType.getInstance() ||
+				type == SourcesOrderRootType.getInstance() ||
+				type == DocumentationOrderRootType.getInstance() ||
 				type == AnnotationOrderRootType.getInstance();
 	}
 }
