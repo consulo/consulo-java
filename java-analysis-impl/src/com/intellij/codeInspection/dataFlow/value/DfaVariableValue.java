@@ -34,165 +34,216 @@ import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Trinity;
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.MultiMap;
 
-public class DfaVariableValue extends DfaValue {
+public class DfaVariableValue extends DfaValue
+{
 
-  public static class Factory {
-    private final MultiMap<Trinity<Boolean,String,DfaVariableValue>,DfaVariableValue> myExistingVars = new MultiMap<Trinity<Boolean, String, DfaVariableValue>, DfaVariableValue>();
-    private final DfaValueFactory myFactory;
+	public static class Factory
+	{
+		private final MultiMap<Trinity<Boolean, String, DfaVariableValue>, DfaVariableValue> myExistingVars = new MultiMap<Trinity<Boolean, String,
+				DfaVariableValue>, DfaVariableValue>();
+		private final DfaValueFactory myFactory;
 
-    Factory(DfaValueFactory factory) {
-      myFactory = factory;
-    }
+		Factory(DfaValueFactory factory)
+		{
+			myFactory = factory;
+		}
 
-    public DfaVariableValue createVariableValue(PsiVariable myVariable, boolean isNegated) {
-      return createVariableValue(myVariable, myVariable.getType(), isNegated, null);
-    }
-    @NotNull
-    public DfaVariableValue createVariableValue(@NotNull PsiModifierListOwner myVariable,
-                                                @Nullable PsiType varType,
-                                                boolean isNegated,
-                                                @Nullable DfaVariableValue qualifier) {
-      Trinity<Boolean,String,DfaVariableValue> key = Trinity.create(isNegated, ((PsiNamedElement)myVariable).getName(), qualifier);
-      for (DfaVariableValue aVar : myExistingVars.get(key)) {
-        if (aVar.hardEquals(myVariable, varType, isNegated, qualifier)) return aVar;
-      }
+		public DfaVariableValue createVariableValue(PsiVariable myVariable, boolean isNegated)
+		{
+			return createVariableValue(myVariable, myVariable.getType(), isNegated, null);
+		}
 
-      DfaVariableValue result = new DfaVariableValue(myVariable, varType, isNegated, myFactory, qualifier);
-      myExistingVars.putValue(key, result);
-      while (qualifier != null) {
-        qualifier.myDependents.add(result);
-        qualifier = qualifier.getQualifier();
-      }
-      return result;
-    }
+		@NotNull
+		public DfaVariableValue createVariableValue(@NotNull PsiModifierListOwner myVariable,
+				@Nullable PsiType varType,
+				boolean isNegated,
+				@Nullable DfaVariableValue qualifier)
+		{
+			Trinity<Boolean, String, DfaVariableValue> key = Trinity.create(isNegated, ((PsiNamedElement) myVariable).getName(), qualifier);
+			for(DfaVariableValue aVar : myExistingVars.get(key))
+			{
+				if(aVar.hardEquals(myVariable, varType, isNegated, qualifier))
+				{
+					return aVar;
+				}
+			}
 
-    public List<DfaVariableValue> getAllQualifiedBy(DfaVariableValue value) {
-      return value.myDependents;
-    }
+			DfaVariableValue result = new DfaVariableValue(myVariable, varType, isNegated, myFactory, qualifier);
+			myExistingVars.putValue(key, result);
+			while(qualifier != null)
+			{
+				qualifier.myDependents.add(result);
+				qualifier = qualifier.getQualifier();
+			}
+			return result;
+		}
 
-  }
+		public List<DfaVariableValue> getAllQualifiedBy(DfaVariableValue value)
+		{
+			return value.myDependents;
+		}
 
-  private final PsiModifierListOwner myVariable;
-  private final PsiType myVarType;
-  @Nullable private final DfaVariableValue myQualifier;
-  private DfaVariableValue myNegatedValue;
-  private final boolean myIsNegated;
-  private Nullness myInherentNullability;
-  private final DfaTypeValue myTypeValue;
-  private final List<DfaVariableValue> myDependents = new SmartList<DfaVariableValue>();
+	}
 
-  private DfaVariableValue(@NotNull PsiModifierListOwner variable, PsiType varType, boolean isNegated, DfaValueFactory factory, @Nullable DfaVariableValue qualifier) {
-    super(factory);
-    myVariable = variable;
-    myIsNegated = isNegated;
-    myQualifier = qualifier;
-    myVarType = varType;
-    myTypeValue = varType == null ? null : (DfaTypeValue)myFactory.createTypeValue(varType, Nullness.UNKNOWN);
-  }
+	private final PsiModifierListOwner myVariable;
+	private final PsiType myVarType;
+	@Nullable
+	private final DfaVariableValue myQualifier;
+	private DfaVariableValue myNegatedValue;
+	private final boolean myIsNegated;
+	private Nullness myInherentNullability;
+	private final DfaTypeValue myTypeValue;
+	private final List<DfaVariableValue> myDependents = new SmartList<DfaVariableValue>();
 
-  @Nullable
-  public DfaTypeValue getTypeValue() {
-    return myTypeValue;
-  }
+	private DfaVariableValue(@NotNull PsiModifierListOwner variable,
+			PsiType varType,
+			boolean isNegated,
+			DfaValueFactory factory,
+			@Nullable DfaVariableValue qualifier)
+	{
+		super(factory);
+		myVariable = variable;
+		myIsNegated = isNegated;
+		myQualifier = qualifier;
+		myVarType = varType;
+		DfaValue typeValue = myFactory.createTypeValue(varType, Nullness.UNKNOWN);
+		myTypeValue = typeValue instanceof DfaTypeValue ? (DfaTypeValue) typeValue : null;
+		if(varType != null && !varType.isValid())
+		{
+			PsiUtil.ensureValidType(varType, "Variable: " + variable + " of class " + variable.getClass());
+		}
+	}
 
-  @Nullable
-  public PsiModifierListOwner getPsiVariable() {
-    return myVariable;
-  }
+	@Nullable
+	public DfaTypeValue getTypeValue()
+	{
+		return myTypeValue;
+	}
 
-  @Nullable
-  public PsiType getVariableType() {
-    return myVarType;
-  }
+	@Nullable
+	public PsiModifierListOwner getPsiVariable()
+	{
+		return myVariable;
+	}
 
-  public boolean isNegated() {
-    return myIsNegated;
-  }
+	@Nullable
+	public PsiType getVariableType()
+	{
+		return myVarType;
+	}
 
-  @Nullable
-  public DfaVariableValue getNegatedValue() {
-    return myNegatedValue;
-  }
+	public boolean isNegated()
+	{
+		return myIsNegated;
+	}
 
-  @Override
-  public DfaVariableValue createNegated() {
-    if (myNegatedValue != null) {
-      return myNegatedValue;
-    }
-    return myNegatedValue = myFactory.getVarFactory().createVariableValue(myVariable, myVarType, !myIsNegated, myQualifier);
-  }
+	@Nullable
+	public DfaVariableValue getNegatedValue()
+	{
+		return myNegatedValue;
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public String toString() {
-    return (myIsNegated ? "!" : "") + ((PsiNamedElement)myVariable).getName() + (myQualifier == null ? "" : "|" + myQualifier.toString());
-  }
+	@Override
+	public DfaVariableValue createNegated()
+	{
+		if(myNegatedValue != null)
+		{
+			return myNegatedValue;
+		}
+		return myNegatedValue = myFactory.getVarFactory().createVariableValue(myVariable, myVarType, !myIsNegated, myQualifier);
+	}
 
-  private boolean hardEquals(PsiModifierListOwner psiVar, PsiType varType, boolean negated, DfaVariableValue qualifier) {
-    return psiVar == myVariable &&
-           Comparing.equal(TypeConversionUtil.erasure(varType), TypeConversionUtil.erasure(myVarType)) &&
-           negated == myIsNegated &&
-           (myQualifier == null ? qualifier == null : myQualifier.hardEquals(qualifier.getPsiVariable(), qualifier.getVariableType(),
-                                                                             qualifier.isNegated(), qualifier.getQualifier()));
-  }
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public String toString()
+	{
+		return (myIsNegated ? "!" : "") + ((PsiNamedElement) myVariable).getName() + (myQualifier == null ? "" : "|" + myQualifier.toString());
+	}
 
-  @Nullable
-  public DfaVariableValue getQualifier() {
-    return myQualifier;
-  }
+	private boolean hardEquals(PsiModifierListOwner psiVar, PsiType varType, boolean negated, DfaVariableValue qualifier)
+	{
+		return psiVar == myVariable &&
+				Comparing.equal(TypeConversionUtil.erasure(varType), TypeConversionUtil.erasure(myVarType)) &&
+				negated == myIsNegated &&
+				(myQualifier == null ? qualifier == null : myQualifier.hardEquals(qualifier.getPsiVariable(), qualifier.getVariableType(),
+						qualifier.isNegated(), qualifier.getQualifier()));
+	}
 
-  public Nullness getInherentNullability() {
-    if (myInherentNullability != null) {
-      return myInherentNullability;
-    }
+	@Nullable
+	public DfaVariableValue getQualifier()
+	{
+		return myQualifier;
+	}
 
-    return myInherentNullability = calcInherentNullability();
-  }
+	public Nullness getInherentNullability()
+	{
+		if(myInherentNullability != null)
+		{
+			return myInherentNullability;
+		}
 
-  private Nullness calcInherentNullability() {
-    PsiModifierListOwner var = getPsiVariable();
-    Nullness nullability = DfaPsiUtil.getElementNullability(getVariableType(), var);
-    if (nullability != Nullness.UNKNOWN) {
-      return nullability;
-    }
+		return myInherentNullability = calcInherentNullability();
+	}
 
-    if (var instanceof PsiField && DfaPsiUtil.isFinalField((PsiVariable)var)) {
-      List<PsiExpression> initializers = DfaPsiUtil.findAllConstructorInitializers((PsiField)var);
-      if (initializers.isEmpty()) {
-        return Nullness.UNKNOWN;
-      }
+	private Nullness calcInherentNullability()
+	{
+		PsiModifierListOwner var = getPsiVariable();
+		Nullness nullability = DfaPsiUtil.getElementNullability(getVariableType(), var);
+		if(nullability != Nullness.UNKNOWN)
+		{
+			return nullability;
+		}
 
-      boolean hasUnknowns = false;
-      for (PsiExpression expression : initializers) {
-        if (!(expression instanceof PsiReferenceExpression)) {
-          return Nullness.UNKNOWN;
-        }
-        PsiElement target = ((PsiReferenceExpression)expression).resolve();
-        if (!(target instanceof PsiParameter)) {
-          return Nullness.UNKNOWN;
-        }
-        if (NullableNotNullManager.isNullable((PsiParameter)target)) {
-          return Nullness.NULLABLE;
-        }
-        if (!NullableNotNullManager.isNotNull((PsiParameter)target)) {
-          hasUnknowns = true;
-        }
-      }
-      return hasUnknowns ? Nullness.UNKNOWN : Nullness.NOT_NULL;
-    }
+		if(var instanceof PsiField && DfaPsiUtil.isFinalField((PsiVariable) var))
+		{
+			List<PsiExpression> initializers = DfaPsiUtil.findAllConstructorInitializers((PsiField) var);
+			if(initializers.isEmpty())
+			{
+				return Nullness.UNKNOWN;
+			}
 
-    return Nullness.UNKNOWN;
-  }
+			boolean hasUnknowns = false;
+			for(PsiExpression expression : initializers)
+			{
+				if(!(expression instanceof PsiReferenceExpression))
+				{
+					return Nullness.UNKNOWN;
+				}
+				PsiElement target = ((PsiReferenceExpression) expression).resolve();
+				if(!(target instanceof PsiParameter))
+				{
+					return Nullness.UNKNOWN;
+				}
+				if(NullableNotNullManager.isNullable((PsiParameter) target))
+				{
+					return Nullness.NULLABLE;
+				}
+				if(!NullableNotNullManager.isNotNull((PsiParameter) target))
+				{
+					hasUnknowns = true;
+				}
+			}
+			return hasUnknowns ? Nullness.UNKNOWN : Nullness.NOT_NULL;
+		}
 
-  public boolean isFlushableByCalls() {
-    if (myVariable instanceof PsiLocalVariable || myVariable instanceof PsiParameter) return false;
-    if (myVariable instanceof PsiVariable && myVariable.hasModifierProperty(PsiModifier.FINAL)) {
-      return myQualifier != null && myQualifier.isFlushableByCalls();
-    }
-    return true;
-  }
+		return Nullness.UNKNOWN;
+	}
+
+	public boolean isFlushableByCalls()
+	{
+		if(myVariable instanceof PsiLocalVariable || myVariable instanceof PsiParameter)
+		{
+			return false;
+		}
+		if(myVariable instanceof PsiVariable && myVariable.hasModifierProperty(PsiModifier.FINAL))
+		{
+			return myQualifier != null && myQualifier.isFlushableByCalls();
+		}
+		return true;
+	}
 
 }
