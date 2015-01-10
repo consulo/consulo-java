@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2015 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.execution;
 
-import com.intellij.psi.PsiClass;
+package com.intellij.debugger.impl;
+
+import com.intellij.execution.configurations.ModuleRunProfile;
 
 /**
- * @author dyoma
+ * @author VISTALL
+ * @since 10.01.15
  */
-public interface SingleClassConfiguration
+public interface GenericDebugRunnerConfiguration extends ModuleRunProfile
 {
-	void setMainClass(final PsiClass psiClass);
-
-	PsiClass getMainClass();
-
-	void setMainClassName(String qualifiedName);
 }

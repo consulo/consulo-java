@@ -15,6 +15,14 @@
  */
 package com.intellij.execution.application;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.impl.GenericDebugRunnerConfiguration;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
@@ -26,7 +34,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.execution.util.ProgramParametersUtil;
 import com.intellij.openapi.components.PathMacroManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
@@ -40,277 +47,318 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters,
+		SingleClassConfiguration, RefactoringListenerProvider, GenericDebugRunnerConfiguration
+{
 
-public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule>
-  implements CommonJavaRunConfigurationParameters, SingleClassConfiguration, RefactoringListenerProvider {
-  private static final Logger LOG = Logger.getInstance("com.intellij.execution.application.ApplicationConfiguration");
+	public String MAIN_CLASS_NAME;
+	public String VM_PARAMETERS;
+	public String PROGRAM_PARAMETERS;
+	public String WORKING_DIRECTORY;
+	public boolean ALTERNATIVE_JRE_PATH_ENABLED;
+	public String ALTERNATIVE_JRE_PATH;
+	public boolean ENABLE_SWING_INSPECTOR;
 
-  public String MAIN_CLASS_NAME;
-  public String VM_PARAMETERS;
-  public String PROGRAM_PARAMETERS;
-  public String WORKING_DIRECTORY;
-  public boolean ALTERNATIVE_JRE_PATH_ENABLED;
-  public String ALTERNATIVE_JRE_PATH;
-  public boolean ENABLE_SWING_INSPECTOR;
+	public String ENV_VARIABLES;
+	private Map<String, String> myEnvs = new LinkedHashMap<String, String>();
+	public boolean PASS_PARENT_ENVS = true;
 
-  public String ENV_VARIABLES;
-  private Map<String, String> myEnvs = new LinkedHashMap<String, String>();
-  public boolean PASS_PARENT_ENVS = true;
+	public ApplicationConfiguration(final String name, final Project project, ConfigurationType applicationConfigurationType)
+	{
+		this(name, project, applicationConfigurationType.getConfigurationFactories()[0]);
+	}
 
-  public ApplicationConfiguration(final String name, final Project project, ConfigurationType applicationConfigurationType) {
-    this(name, project, applicationConfigurationType.getConfigurationFactories()[0]);
-  }
+	protected ApplicationConfiguration(final String name, final Project project, final ConfigurationFactory factory)
+	{
+		super(name, new JavaRunConfigurationModule(project, true), factory);
+	}
 
-  protected ApplicationConfiguration(final String name, final Project project, final ConfigurationFactory factory) {
-    super(name, new JavaRunConfigurationModule(project, true), factory);
-  }
+	@Override
+	public void setMainClass(final PsiClass psiClass)
+	{
+		final Module originalModule = getConfigurationModule().getModule();
+		setMainClassName(JavaExecutionUtil.getRuntimeQualifiedName(psiClass));
+		setModule(JavaExecutionUtil.findModule(psiClass));
+		restoreOriginalModule(originalModule);
+	}
 
-  @Override
-  public void setMainClass(final PsiClass psiClass) {
-    final Module originalModule = getConfigurationModule().getModule();
-    setMainClassName(JavaExecutionUtil.getRuntimeQualifiedName(psiClass));
-    setModule(JavaExecutionUtil.findModule(psiClass));
-    restoreOriginalModule(originalModule);
-  }
+	@Override
+	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
+	{
+		final JavaCommandLineState state = new JavaApplicationCommandLineState(this, env);
+		JavaRunConfigurationModule module = getConfigurationModule();
+		state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
+		return state;
+	}
 
-  @Override
-  public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException {
-    final JavaCommandLineState state = new JavaApplicationCommandLineState(this, env);
-    JavaRunConfigurationModule module = getConfigurationModule();
-    state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
-    return state;
-  }
+	@NotNull
+	@Override
+	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
+	{
+		SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<ApplicationConfiguration>();
+		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new ApplicationConfigurable(getProject()));
+		JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
+		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<ApplicationConfiguration>());
+		return group;
+	}
 
-  @Override
-  public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<ApplicationConfiguration>();
-    group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new ApplicationConfigurable(getProject()));
-    JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-    group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<ApplicationConfiguration>());
-    return group;
-  }
+	@Override
+	@Nullable
+	public String getGeneratedName()
+	{
+		if(MAIN_CLASS_NAME == null)
+		{
+			return null;
+		}
+		return JavaExecutionUtil.getPresentableClassName(MAIN_CLASS_NAME, getConfigurationModule());
+	}
 
-  @Override
-  @Nullable
-  public String getGeneratedName() {
-    if (MAIN_CLASS_NAME == null) {
-      return null;
-    }
-    return JavaExecutionUtil.getPresentableClassName(MAIN_CLASS_NAME, getConfigurationModule());
-  }
+	@Override
+	public void setGeneratedName()
+	{
+		setName(getGeneratedName());
+	}
 
-  public void setGeneratedName() {
-    setName(getGeneratedName());
-  }
+	@Override
+	public RefactoringElementListener getRefactoringElementListener(final PsiElement element)
+	{
+		final RefactoringElementListener listener = RefactoringListeners.getClassOrPackageListener(element,
+				new RefactoringListeners.SingleClassConfigurationAccessor(this));
+		return RunConfigurationExtension.wrapRefactoringElementListener(element, this, listener);
+	}
 
-  @Override
-  public RefactoringElementListener getRefactoringElementListener(final PsiElement element) {
-    final RefactoringElementListener listener =
-      RefactoringListeners.getClassOrPackageListener(element, new RefactoringListeners.SingleClassConfigurationAccessor(this));
-    return RunConfigurationExtension.wrapRefactoringElementListener(element, this, listener);
-  }
+	@Override
+	@Nullable
+	public PsiClass getMainClass()
+	{
+		return getConfigurationModule().findClass(MAIN_CLASS_NAME);
+	}
 
-  @Override
-  @Nullable
-  public PsiClass getMainClass() {
-    return getConfigurationModule().findClass(MAIN_CLASS_NAME);
-  }
+	@Override
+	public boolean isGeneratedName()
+	{
+		if(MAIN_CLASS_NAME == null || MAIN_CLASS_NAME.length() == 0)
+		{
+			return JavaExecutionUtil.isNewName(getName());
+		}
+		return Comparing.equal(getName(), getGeneratedName());
+	}
 
-  @Override
-  public boolean isGeneratedName() {
-    if (MAIN_CLASS_NAME == null || MAIN_CLASS_NAME.length() == 0) {
-      return JavaExecutionUtil.isNewName(getName());
-    }
-    return Comparing.equal(getName(), getGeneratedName());
-  }
+	@Override
+	public String suggestedName()
+	{
+		if(MAIN_CLASS_NAME == null || MAIN_CLASS_NAME.length() == 0)
+		{
+			return getName();
+		}
+		return ProgramRunnerUtil.shortenName(JavaExecutionUtil.getShortClassName(MAIN_CLASS_NAME), 6) + ".main()";
+	}
 
-  @Override
-  public String suggestedName() {
-    if (MAIN_CLASS_NAME == null || MAIN_CLASS_NAME.length() == 0) {
-      return getName();
-    }
-    return ProgramRunnerUtil.shortenName(JavaExecutionUtil.getShortClassName(MAIN_CLASS_NAME), 6) + ".main()";
-  }
+	@Override
+	public void setMainClassName(final String qualifiedName)
+	{
+		final boolean generatedName = isGeneratedName();
+		MAIN_CLASS_NAME = qualifiedName;
+		if(generatedName)
+		{
+			setGeneratedName();
+		}
+	}
 
-  @Override
-  public void setMainClassName(final String qualifiedName) {
-    final boolean generatedName = isGeneratedName();
-    MAIN_CLASS_NAME = qualifiedName;
-    if (generatedName) setGeneratedName();
-  }
+	@Override
+	public void checkConfiguration() throws RuntimeConfigurationException
+	{
+		JavaParametersUtil.checkAlternativeJRE(this);
+		final JavaRunConfigurationModule configurationModule = getConfigurationModule();
+		final PsiClass psiClass = configurationModule.checkModuleAndClassName(MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified" +
+				".error.text"));
+		if(!PsiMethodUtil.hasMainMethod(psiClass))
+		{
+			throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", MAIN_CLASS_NAME));
+		}
+		ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), configurationModule.getModule());
+		JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
+	}
 
-  @Override
-  public void checkConfiguration() throws RuntimeConfigurationException {
-    JavaParametersUtil.checkAlternativeJRE(this);
-    final JavaRunConfigurationModule configurationModule = getConfigurationModule();
-    final PsiClass psiClass =
-      configurationModule.checkModuleAndClassName(MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified.error.text"));
-    if (!PsiMethodUtil.hasMainMethod(psiClass)) {
-      throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", MAIN_CLASS_NAME));
-    }
-    ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), configurationModule.getModule());
-    JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
-  }
+	@Override
+	public void setVMParameters(String value)
+	{
+		VM_PARAMETERS = value;
+	}
 
-  @Override
-  public void setVMParameters(String value) {
-    VM_PARAMETERS = value;
-  }
+	@Override
+	public String getVMParameters()
+	{
+		return VM_PARAMETERS;
+	}
 
-  @Override
-  public String getVMParameters() {
-    return VM_PARAMETERS;
-  }
+	@Override
+	public void setProgramParameters(String value)
+	{
+		PROGRAM_PARAMETERS = value;
+	}
 
-  @Override
-  public void setProgramParameters(String value) {
-    PROGRAM_PARAMETERS = value;
-  }
+	@Override
+	public String getProgramParameters()
+	{
+		return PROGRAM_PARAMETERS;
+	}
 
-  @Override
-  public String getProgramParameters() {
-    return PROGRAM_PARAMETERS;
-  }
+	@Override
+	public void setWorkingDirectory(String value)
+	{
+		WORKING_DIRECTORY = ExternalizablePath.urlValue(value);
+	}
 
-  @Override
-  public void setWorkingDirectory(String value) {
-    WORKING_DIRECTORY = ExternalizablePath.urlValue(value);
-  }
+	@Override
+	public String getWorkingDirectory()
+	{
+		return ExternalizablePath.localPathValue(WORKING_DIRECTORY);
+	}
 
-  @Override
-  public String getWorkingDirectory() {
-    return ExternalizablePath.localPathValue(WORKING_DIRECTORY);
-  }
+	@Override
+	public void setPassParentEnvs(boolean passParentEnvs)
+	{
+		PASS_PARENT_ENVS = passParentEnvs;
+	}
 
-  @Override
-  public void setPassParentEnvs(boolean passParentEnvs) {
-    PASS_PARENT_ENVS = passParentEnvs;
-  }
+	@Override
+	@NotNull
+	public Map<String, String> getEnvs()
+	{
+		return myEnvs;
+	}
 
-  @Override
-  @NotNull
-  public Map<String, String> getEnvs() {
-    return myEnvs;
-  }
+	@Override
+	public void setEnvs(@NotNull final Map<String, String> envs)
+	{
+		myEnvs.clear();
+		myEnvs.putAll(envs);
+	}
 
-  @Override
-  public void setEnvs(@NotNull final Map<String, String> envs) {
-    myEnvs.clear();
-    myEnvs.putAll(envs);
-  }
+	@Override
+	public boolean isPassParentEnvs()
+	{
+		return PASS_PARENT_ENVS;
+	}
 
-  @Override
-  public boolean isPassParentEnvs() {
-    return PASS_PARENT_ENVS;
-  }
+	@Override
+	@Nullable
+	public String getRunClass()
+	{
+		return MAIN_CLASS_NAME;
+	}
 
-  @Override
-  @Nullable
-  public String getRunClass() {
-    return MAIN_CLASS_NAME;
-  }
+	@Override
+	@Nullable
+	public String getPackage()
+	{
+		return null;
+	}
 
-  @Override
-  @Nullable
-  public String getPackage() {
-    return null;
-  }
+	@Override
+	public boolean isAlternativeJrePathEnabled()
+	{
+		return ALTERNATIVE_JRE_PATH_ENABLED;
+	}
 
-  @Override
-  public boolean isAlternativeJrePathEnabled() {
-    return ALTERNATIVE_JRE_PATH_ENABLED;
-  }
+	@Override
+	public void setAlternativeJrePathEnabled(boolean enabled)
+	{
+		this.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
+	}
 
-  @Override
-  public void setAlternativeJrePathEnabled(boolean enabled) {
-    this.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
-  }
+	@Override
+	public String getAlternativeJrePath()
+	{
+		return ALTERNATIVE_JRE_PATH;
+	}
 
-  @Override
-  public String getAlternativeJrePath() {
-    return ALTERNATIVE_JRE_PATH;
-  }
+	@Override
+	public void setAlternativeJrePath(String path)
+	{
+		this.ALTERNATIVE_JRE_PATH = path;
+	}
 
-  @Override
-  public void setAlternativeJrePath(String path) {
-    this.ALTERNATIVE_JRE_PATH = path;
-  }
+	@Override
+	public Collection<Module> getValidModules()
+	{
+		return JavaRunConfigurationModule.getModulesForClass(getProject(), MAIN_CLASS_NAME);
+	}
 
-  @Override
-  public Collection<Module> getValidModules() {
-    return JavaRunConfigurationModule.getModulesForClass(getProject(), MAIN_CLASS_NAME);
-  }
+	@Override
+	protected ModuleBasedConfiguration createInstance()
+	{
+		return new ApplicationConfiguration(getName(), getProject(), ApplicationConfigurationType.getInstance());
+	}
 
-  @Override
-  protected ModuleBasedConfiguration createInstance() {
-    return new ApplicationConfiguration(getName(), getProject(), ApplicationConfigurationType.getInstance());
-  }
+	@Override
+	public void readExternal(final Element element) throws InvalidDataException
+	{
+		PathMacroManager.getInstance(getProject()).expandPaths(element);
+		super.readExternal(element);
+		JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
+		DefaultJDOMExternalizer.readExternal(this, element);
+		readModule(element);
+		EnvironmentVariablesComponent.readExternal(element, getEnvs());
+	}
 
-  @Override
-  public void readExternal(final Element element) throws InvalidDataException {
-    PathMacroManager.getInstance(getProject()).expandPaths(element);
-    super.readExternal(element);
-    JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
-    DefaultJDOMExternalizer.readExternal(this, element);
-    readModule(element);
-    EnvironmentVariablesComponent.readExternal(element, getEnvs());
-  }
+	@Override
+	public void writeExternal(final Element element) throws WriteExternalException
+	{
+		super.writeExternal(element);
+		JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
+		DefaultJDOMExternalizer.writeExternal(this, element);
+		writeModule(element);
+		EnvironmentVariablesComponent.writeExternal(element, getEnvs());
+		PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
+	}
 
-  @Override
-  public void writeExternal(final Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
-    DefaultJDOMExternalizer.writeExternal(this, element);
-    writeModule(element);
-    EnvironmentVariablesComponent.writeExternal(element, getEnvs());
-    PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
-  }
+	public static class JavaApplicationCommandLineState extends JavaCommandLineState
+	{
 
-  public static class JavaApplicationCommandLineState extends JavaCommandLineState {
+		private final ApplicationConfiguration myConfiguration;
 
-    private final ApplicationConfiguration myConfiguration;
+		public JavaApplicationCommandLineState(@NotNull final ApplicationConfiguration configuration, final ExecutionEnvironment environment)
+		{
+			super(environment);
+			myConfiguration = configuration;
+		}
 
-    public JavaApplicationCommandLineState(@NotNull final ApplicationConfiguration configuration, final ExecutionEnvironment environment) {
-      super(environment);
-      myConfiguration = configuration;
-    }
+		@Override
+		protected JavaParameters createJavaParameters() throws ExecutionException
+		{
+			final JavaParameters params = new JavaParameters();
+			final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
 
-    @Override
-    protected JavaParameters createJavaParameters() throws ExecutionException {
-      final JavaParameters params = new JavaParameters();
-      final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
+			final int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME, false);
+			final String jreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
+			JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
+			JavaParametersUtil.configureConfiguration(params, myConfiguration);
 
-      final int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME, false);
-      final String jreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
-      JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
-      JavaParametersUtil.configureConfiguration(params, myConfiguration);
+			params.setMainClass(myConfiguration.MAIN_CLASS_NAME);
+			for(RunConfigurationExtension ext : Extensions.getExtensions(RunConfigurationExtension.EP_NAME))
+			{
+				ext.updateJavaParameters(myConfiguration, params, getRunnerSettings());
+			}
 
-      params.setMainClass(myConfiguration.MAIN_CLASS_NAME);
-      for (RunConfigurationExtension ext : Extensions.getExtensions(RunConfigurationExtension.EP_NAME)) {
-        ext.updateJavaParameters(myConfiguration, params, getRunnerSettings());
-      }
+			return params;
+		}
 
-      return params;
-    }
+		@NotNull
+		@Override
+		protected OSProcessHandler startProcess() throws ExecutionException
+		{
+			final OSProcessHandler handler = super.startProcess();
+			RunnerSettings runnerSettings = getRunnerSettings();
+			JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(myConfiguration, handler, runnerSettings);
+			return handler;
+		}
 
-    @NotNull
-    @Override
-    protected OSProcessHandler startProcess() throws ExecutionException {
-      final OSProcessHandler handler = super.startProcess();
-      RunnerSettings runnerSettings = getRunnerSettings();
-      JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(myConfiguration, handler, runnerSettings);
-      return handler;
-    }
-
-    protected ApplicationConfiguration getConfiguration() {
-      return myConfiguration;
-    }
-  }
+		protected ApplicationConfiguration getConfiguration()
+		{
+			return myConfiguration;
+		}
+	}
 }

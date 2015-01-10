@@ -50,8 +50,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 	@Override
 	public boolean canRun(@NotNull final String executorId, @NotNull final RunProfile profile)
 	{
-		return executorId.equals(DefaultDebugExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile && !(profile instanceof
-				RunConfigurationWithSuppressedDefaultDebugAction);
+		return executorId.equals(DefaultDebugExecutor.EXECUTOR_ID) && profile instanceof GenericDebugRunnerConfiguration;
 	}
 
 	@Override
@@ -62,8 +61,10 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 	}
 
 	@Override
-	protected RunContentDescriptor doExecute(@NotNull Project project, @NotNull RunProfileState state,
-			@Nullable RunContentDescriptor contentToReuse, @NotNull ExecutionEnvironment env) throws ExecutionException
+	protected RunContentDescriptor doExecute(@NotNull Project project,
+			@NotNull RunProfileState state,
+			@Nullable RunContentDescriptor contentToReuse,
+			@NotNull ExecutionEnvironment env) throws ExecutionException
 	{
 		FileDocumentManager.getInstance().saveAllDocuments();
 		return createContentDescriptor(state, contentToReuse == null || env.getContentToReuse() == contentToReuse ? env : new
@@ -71,8 +72,8 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 	}
 
 	@Nullable
-	protected RunContentDescriptor createContentDescriptor(@NotNull RunProfileState state, @NotNull ExecutionEnvironment environment) throws
-			ExecutionException
+	protected RunContentDescriptor createContentDescriptor(@NotNull RunProfileState state,
+			@NotNull ExecutionEnvironment environment) throws ExecutionException
 	{
 		if(state instanceof JavaCommandLine)
 		{
@@ -97,7 +98,9 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 	}
 
 	@Nullable
-	protected RunContentDescriptor attachVirtualMachine(RunProfileState state, @NotNull ExecutionEnvironment env, RemoteConnection connection,
+	protected RunContentDescriptor attachVirtualMachine(RunProfileState state,
+			@NotNull ExecutionEnvironment env,
+			RemoteConnection connection,
 			boolean pollConnection) throws ExecutionException
 	{
 		DebugEnvironment environment = new DefaultDebugUIEnvironment(env, state, connection, pollConnection).getEnvironment();
@@ -161,7 +164,9 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 	}
 
 	@Override
-	public void patch(JavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile,
+	public void patch(JavaParameters javaParameters,
+			RunnerSettings settings,
+			RunProfile runProfile,
 			final boolean beforeExecution) throws ExecutionException
 	{
 		doPatch(javaParameters, settings);

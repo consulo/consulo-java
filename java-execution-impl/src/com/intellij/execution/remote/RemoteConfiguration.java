@@ -25,6 +25,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.options.CompileStepBeforeRun;
 import com.intellij.debugger.engine.RemoteStateState;
+import com.intellij.debugger.impl.GenericDebugRunnerConfiguration;
 import com.intellij.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
@@ -48,7 +49,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 
 public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements
-		RunConfigurationWithSuppressedDefaultRunAction, CompileStepBeforeRun.Suppressor
+		RunConfigurationWithSuppressedDefaultRunAction, CompileStepBeforeRun.Suppressor, GenericDebugRunnerConfiguration
 {
 
 	@Override
