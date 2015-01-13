@@ -75,10 +75,6 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
           if (PsiClassUtil.isRunnableClass(psiClass, false) && PsiMethodUtil.findMainMethod(psiClass) != null) {
             iconDescriptor.addLayerIcon(AllIcons.Nodes.RunnableMark);
           }
-
-          if (TestFrameworks.getInstance().isTestClass(psiClass)) {
-            iconDescriptor.addLayerIcon(AllIcons.Nodes.JunitTestMark);
-          }
         }
       }
 
