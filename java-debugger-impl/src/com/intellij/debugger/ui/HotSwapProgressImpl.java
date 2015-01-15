@@ -15,6 +15,12 @@
  */
 package com.intellij.debugger.ui;
 
+import gnu.trove.TIntObjectHashMap;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.impl.DebuggerSession;
@@ -25,132 +31,175 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.progress.PerformInBackgroundOption;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator;
+import com.intellij.openapi.progress.util.AbstractProgressIndicatorExBase;
 import com.intellij.openapi.progress.util.ProgressWindow;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.ui.MessageCategory;
-import gnu.trove.TIntObjectHashMap;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+public class HotSwapProgressImpl extends HotSwapProgress
+{
+	static final NotificationGroup NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("HotSwap", ToolWindowId.DEBUG, true);
 
-public class HotSwapProgressImpl extends HotSwapProgress{
-  static final NotificationGroup NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("HotSwap", ToolWindowId.DEBUG, true);
+	TIntObjectHashMap<List<String>> myMessages = new TIntObjectHashMap<List<String>>();
+	private final ProgressWindow myProgressWindow;
+	private String myTitle = DebuggerBundle.message("progress.hot.swap.title");
 
-  TIntObjectHashMap<List<String>> myMessages = new TIntObjectHashMap<List<String>>();
-  private final ProgressWindow myProgressWindow;
-  private String myTitle = DebuggerBundle.message("progress.hot.swap.title");
+	public HotSwapProgressImpl(Project project)
+	{
+		super(project);
+		myProgressWindow = new BackgroundableProcessIndicator(getProject(), myTitle, new PerformInBackgroundOption()
+		{
+			@Override
+			public boolean shouldStartInBackground()
+			{
+				return DebuggerSettings.getInstance().HOTSWAP_IN_BACKGROUND;
+			}
 
-  public HotSwapProgressImpl(Project project) {
-    super(project);
-    myProgressWindow = new BackgroundableProcessIndicator(getProject(), myTitle, new PerformInBackgroundOption() {
-      public boolean shouldStartInBackground() {
-        return DebuggerSettings.getInstance().HOTSWAP_IN_BACKGROUND;
-      }
+			@Override
+			public void processSentToBackground()
+			{
+			}
 
-      public void processSentToBackground() {
-      }
+		}, null, null, true);
+		myProgressWindow.addStateDelegate(new AbstractProgressIndicatorExBase()
+		{
+			@Override
+			public void cancel()
+			{
+				super.cancel();
+				HotSwapProgressImpl.this.cancel();
+			}
+		});
+	}
 
-    }, null, null, true) {
-      public void cancel() {
-        HotSwapProgressImpl.this.cancel();
-        super.cancel();
-      }
-    };
-  }
+	@Override
+	public void finished()
+	{
+		super.finished();
 
-  public void finished() {
-    super.finished();
+		final List<String> errors = getMessages(MessageCategory.ERROR);
+		final List<String> warnings = getMessages(MessageCategory.WARNING);
+		if(!errors.isEmpty())
+		{
+			NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.hot.swap.completed.with.errors"), buildMessage(errors),
+					NotificationType.ERROR, null).notify(getProject());
+		}
+		else if(!warnings.isEmpty())
+		{
+			NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.hot.swap.completed.with.warnings"), buildMessage(warnings),
+					NotificationType.WARNING, null).notify(getProject());
+		}
+		else if(!myMessages.isEmpty())
+		{
+			List<String> messages = new ArrayList<String>();
+			for(int category : myMessages.keys())
+			{
+				messages.addAll(getMessages(category));
+			}
+			NOTIFICATION_GROUP.createNotification(buildMessage(messages), NotificationType.INFORMATION).notify(getProject());
+		}
+	}
 
-    final List<String> errors = getMessages(MessageCategory.ERROR);
-    final List<String> warnings = getMessages(MessageCategory.WARNING);
-    if (!errors.isEmpty()) {
-      NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.hot.swap.completed.with.errors"), buildMessage(errors),
-                                                              NotificationType.ERROR, null).notify(getProject());
-    }
-    else if (!warnings.isEmpty()){
-      NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.hot.swap.completed.with.warnings"),
-                                            buildMessage(warnings), NotificationType.WARNING, null).notify(getProject());
-    }
-    else if (!myMessages.isEmpty()){
-      List<String> messages = new ArrayList<String>();
-      for (int category : myMessages.keys()) {
-        messages.addAll(getMessages(category));
-      }
-      NOTIFICATION_GROUP.createNotification(buildMessage(messages), NotificationType.INFORMATION).notify(getProject());
-    }
-  }
+	private List<String> getMessages(int category)
+	{
+		final List<String> messages = myMessages.get(category);
+		return messages == null ? Collections.<String>emptyList() : messages;
+	}
 
-  private List<String> getMessages(int category) {
-    final List<String> messages = myMessages.get(category);
-    return messages == null? Collections.<String>emptyList() : messages;
-  }
-    
-  private static String buildMessage(List<String> messages) {
-    return StringUtil.trimEnd(StringUtil.join(messages, " \n").trim(), ";");
-  }
-  
-  public void addMessage(DebuggerSession session, final int type, final String text) {
-    List<String> messages = myMessages.get(type);
-    if (messages == null) {
-      messages = new ArrayList<String>();
-      myMessages.put(type, messages);
-    }
-    final StringBuilder builder = StringBuilderSpinAllocator.alloc();
-    try {
-      builder.append(session.getSessionName()).append(": ").append(text).append(";");
-      messages.add(builder.toString());
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(builder);
-    }
-  }
+	private static String buildMessage(List<String> messages)
+	{
+		return StringUtil.trimEnd(StringUtil.join(messages, " \n").trim(), ";");
+	}
 
-  public void setText(final String text) {
-    DebuggerInvocationUtil.invokeLater(getProject(), new Runnable() {
-      public void run() {
-        if (!myProgressWindow.isCanceled() && myProgressWindow.isRunning()) {
-          myProgressWindow.setText(text);
-        }
-      }
-    }, myProgressWindow.getModalityState());
+	@Override
+	public void addMessage(DebuggerSession session, final int type, final String text)
+	{
+		List<String> messages = myMessages.get(type);
+		if(messages == null)
+		{
+			messages = new ArrayList<String>();
+			myMessages.put(type, messages);
+		}
+		final StringBuilder builder = StringBuilderSpinAllocator.alloc();
+		try
+		{
+			builder.append(session.getSessionName()).append(": ").append(text).append(";");
+			messages.add(builder.toString());
+		}
+		finally
+		{
+			StringBuilderSpinAllocator.dispose(builder);
+		}
+	}
 
-  }
+	@Override
+	public void setText(final String text)
+	{
+		DebuggerInvocationUtil.invokeLater(getProject(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(!myProgressWindow.isCanceled() && myProgressWindow.isRunning())
+				{
+					myProgressWindow.setText(text);
+				}
+			}
+		}, myProgressWindow.getModalityState());
 
-  public void setTitle(final String text) {
-    DebuggerInvocationUtil.invokeLater(getProject(), new Runnable() {
-      public void run() {
-        if (!myProgressWindow.isCanceled() && myProgressWindow.isRunning()) {
-        myProgressWindow.setTitle(text);
-        }
-      }
-    }, myProgressWindow.getModalityState());
+	}
 
-  }
+	@Override
+	public void setTitle(final String text)
+	{
+		DebuggerInvocationUtil.invokeLater(getProject(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(!myProgressWindow.isCanceled() && myProgressWindow.isRunning())
+				{
+					myProgressWindow.setTitle(text);
+				}
+			}
+		}, myProgressWindow.getModalityState());
 
-  public void setFraction(final double v) {
-    DebuggerInvocationUtil.invokeLater(getProject(), new Runnable() {
-      public void run() {
-        if (!myProgressWindow.isCanceled() && myProgressWindow.isRunning()) {
-        myProgressWindow.setFraction(v);
-        }
-      }
-    }, myProgressWindow.getModalityState());
-  }
+	}
 
-  public boolean isCancelled() {
-    return myProgressWindow.isCanceled();
-  }
+	@Override
+	public void setFraction(final double v)
+	{
+		DebuggerInvocationUtil.invokeLater(getProject(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(!myProgressWindow.isCanceled() && myProgressWindow.isRunning())
+				{
+					myProgressWindow.setFraction(v);
+				}
+			}
+		}, myProgressWindow.getModalityState());
+	}
 
-  public ProgressIndicator getProgressIndicator() {
-     return myProgressWindow;
-  }
+	@Override
+	public boolean isCancelled()
+	{
+		return myProgressWindow.isCanceled();
+	}
 
-  public void setDebuggerSession(DebuggerSession session) {
-    myTitle = DebuggerBundle.message("progress.hot.swap.title") + " : " + session.getSessionName();
-    myProgressWindow.setTitle(myTitle);
-  }
+	public ProgressIndicator getProgressIndicator()
+	{
+		return myProgressWindow;
+	}
+
+	@Override
+	public void setDebuggerSession(DebuggerSession session)
+	{
+		myTitle = DebuggerBundle.message("progress.hot.swap.title") + " : " + session.getSessionName();
+		myProgressWindow.setTitle(myTitle);
+	}
 }

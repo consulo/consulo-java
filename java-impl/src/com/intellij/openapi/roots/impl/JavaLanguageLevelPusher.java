@@ -45,7 +45,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public void initExtra(Project project, MessageBus bus, Engine languageLevelUpdater) {
+  public void initExtra(@NotNull Project project, @NotNull MessageBus bus, @NotNull Engine languageLevelUpdater) {
     // nothing
   }
 
@@ -67,7 +67,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public LanguageLevel getImmediateValue(Project project, VirtualFile file) {
+  public LanguageLevel getImmediateValue(@NotNull Project project, VirtualFile file) {
     if(file == null) {
       return null;
     }
@@ -79,7 +79,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public LanguageLevel getImmediateValue(Module module) {
+  public LanguageLevel getImmediateValue(@NotNull Module module) {
     ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
     final JavaModuleExtension extension = moduleRootManager.getExtension(JavaModuleExtension.class);
@@ -87,7 +87,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public boolean acceptsFile(VirtualFile file) {
+  public boolean acceptsFile(@NotNull VirtualFile file) {
     return false;
   }
 
@@ -99,7 +99,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
 
   @Override
-  public void persistAttribute(VirtualFile fileOrDir, @NotNull LanguageLevel level) throws IOException {
+  public void persistAttribute(@NotNull Project project, @NotNull VirtualFile fileOrDir, @NotNull LanguageLevel level)  throws IOException {
     final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
     if (iStream != null) {
       try {
@@ -123,6 +123,6 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Override
-  public void afterRootsChanged(Project project) {
+  public void afterRootsChanged(@NotNull Project project) {
   }
 }

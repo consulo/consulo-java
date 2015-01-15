@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,32 @@
  */
 package com.intellij.slicer;
 
+import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeWillExpandListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.actions.CloseTabToolbarAction;
@@ -32,391 +58,482 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ex.ToolWindowManagerEx;
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.pom.Navigatable;
-import com.intellij.ui.*;
+import com.intellij.ui.AutoScrollToSourceHandler;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.SideBorder;
+import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usages.Usage;
+import com.intellij.usages.UsageViewPresentation;
 import com.intellij.usages.UsageViewSettings;
 import com.intellij.usages.impl.UsagePreviewPanel;
 import com.intellij.util.EditSourceOnDoubleClickHandler;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.TestOnly;
-
-import javax.swing.*;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeWillExpandListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author cdr
  */
-public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider, Disposable {
-  private final SliceTreeBuilder myBuilder;
-  private final JTree myTree;
+public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider, Disposable
+{
+	private final SliceTreeBuilder myBuilder;
+	private final JTree myTree;
 
-  private final AutoScrollToSourceHandler myAutoScrollToSourceHandler = new AutoScrollToSourceHandler() {
-    @Override
-    protected boolean isAutoScrollMode() {
-      return isAutoScroll();
-    }
+	private final AutoScrollToSourceHandler myAutoScrollToSourceHandler = new AutoScrollToSourceHandler()
+	{
+		@Override
+		protected boolean isAutoScrollMode()
+		{
+			return isAutoScroll();
+		}
 
-    @Override
-    protected void setAutoScrollMode(final boolean state) {
-      setAutoScroll(state);
-    }
-  };
-  private UsagePreviewPanel myUsagePreviewPanel;
-  private final Project myProject;
-  private boolean isDisposed;
-  private final ToolWindow myToolWindow;
+		@Override
+		protected void setAutoScrollMode(final boolean state)
+		{
+			setAutoScroll(state);
+		}
+	};
+	private UsagePreviewPanel myUsagePreviewPanel;
+	private final Project myProject;
+	private boolean isDisposed;
+	private final ToolWindow myToolWindow;
 
-  public SlicePanel(@NotNull final Project project,
-                    boolean dataFlowToThis,
-                    @NotNull SliceNode rootNode,
-                    boolean splitByLeafExpressions,
-                    @NotNull final ToolWindow toolWindow) {
-    super(new BorderLayout());
-    myToolWindow = toolWindow;
-    final ToolWindowManagerListener listener = new ToolWindowManagerListener() {
-      ToolWindowAnchor myAnchor = toolWindow.getAnchor();
-      @Override
-      public void toolWindowRegistered(@NotNull String id) {
-      }
+	public SlicePanel(@NotNull final Project project,
+			boolean dataFlowToThis,
+			@NotNull SliceNode rootNode,
+			boolean splitByLeafExpressions,
+			@NotNull final ToolWindow toolWindow)
+	{
+		super(new BorderLayout());
+		myToolWindow = toolWindow;
+		final ToolWindowManagerListener listener = new ToolWindowManagerListener()
+		{
+			ToolWindowAnchor myAnchor = toolWindow.getAnchor();
 
-      @Override
-      public void stateChanged() {
-        if (!project.isOpen()) return;
-        if (toolWindow.getAnchor() != myAnchor) {
-          myAnchor = myToolWindow.getAnchor();
-          layoutPanel();
-        }
-      }
-    };
-    ToolWindowManagerEx.getInstanceEx(project).addToolWindowManagerListener(listener);
-    Disposer.register(this, new Disposable() {
-      @Override
-      public void dispose() {
-        ToolWindowManagerEx.getInstanceEx(project).removeToolWindowManagerListener(listener);
-      }
-    });
+			@Override
+			public void toolWindowRegistered(@NotNull String id)
+			{
+			}
 
-    ApplicationManager.getApplication().assertIsDispatchThread();
-    myProject = project;
-    myTree = createTree();
+			@Override
+			public void stateChanged()
+			{
+				if(!project.isOpen())
+				{
+					return;
+				}
+				if(toolWindow.getAnchor() != myAnchor)
+				{
+					myAnchor = myToolWindow.getAnchor();
+					layoutPanel();
+				}
+			}
+		};
+		ToolWindowManagerEx.getInstanceEx(project).addToolWindowManagerListener(listener);
+		Disposer.register(this, new Disposable()
+		{
+			@Override
+			public void dispose()
+			{
+				ToolWindowManagerEx.getInstanceEx(project).removeToolWindowManagerListener(listener);
+			}
+		});
 
-    myBuilder = new SliceTreeBuilder(myTree, project, dataFlowToThis, rootNode, splitByLeafExpressions);
-    myBuilder.setCanYieldUpdate(!ApplicationManager.getApplication().isUnitTestMode());
+		ApplicationManager.getApplication().assertIsDispatchThread();
+		myProject = project;
+		myTree = createTree();
 
-    Disposer.register(this, myBuilder);
+		myBuilder = new SliceTreeBuilder(myTree, project, dataFlowToThis, rootNode, splitByLeafExpressions);
+		myBuilder.setCanYieldUpdate(!ApplicationManager.getApplication().isUnitTestMode());
 
-    myBuilder.addSubtreeToUpdate((DefaultMutableTreeNode)myTree.getModel().getRoot(), new Runnable() {
-      @Override
-      public void run() {
-        if (isDisposed || myBuilder.isDisposed() || myProject.isDisposed()) return;
-        final SliceNode rootNode = myBuilder.getRootSliceNode();
-        myBuilder.expand(rootNode, new Runnable() {
-          @Override
-          public void run() {
-            if (isDisposed || myBuilder.isDisposed() || myProject.isDisposed()) return;
-            myBuilder.select(rootNode.myCachedChildren.get(0)); //first there is ony one child
-          }
-        });
-        treeSelectionChanged();
-      }
-    });
+		Disposer.register(this, myBuilder);
 
-    layoutPanel();
-  }
+		myBuilder.addSubtreeToUpdate((DefaultMutableTreeNode) myTree.getModel().getRoot(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(isDisposed || myBuilder.isDisposed() || myProject.isDisposed())
+				{
+					return;
+				}
+				final SliceNode rootNode = myBuilder.getRootSliceNode();
+				myBuilder.expand(rootNode, new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						if(isDisposed || myBuilder.isDisposed() || myProject.isDisposed())
+						{
+							return;
+						}
+						myBuilder.select(rootNode.myCachedChildren.get(0)); //first there is ony one child
+					}
+				});
+				treeSelectionChanged();
+			}
+		});
 
-  private void layoutPanel() {
-    if (myUsagePreviewPanel != null) {
-      Disposer.dispose(myUsagePreviewPanel);
-    }
-    removeAll();
-    JScrollPane pane = ScrollPaneFactory.createScrollPane(myTree);
+		layoutPanel();
+	}
 
-    if (isPreview()) {
-      pane.setBorder(IdeBorderFactory.createBorder(SideBorder.LEFT | SideBorder.RIGHT));
+	private void layoutPanel()
+	{
+		if(myUsagePreviewPanel != null)
+		{
+			Disposer.dispose(myUsagePreviewPanel);
+		}
+		removeAll();
+		JScrollPane pane = ScrollPaneFactory.createScrollPane(myTree);
 
-      boolean vertical = myToolWindow.getAnchor() == ToolWindowAnchor.LEFT || myToolWindow.getAnchor() == ToolWindowAnchor.RIGHT;
-      Splitter splitter = new Splitter(vertical, UsageViewSettings.getInstance().PREVIEW_USAGES_SPLITTER_PROPORTIONS);
-      splitter.setFirstComponent(pane);
-      myUsagePreviewPanel = new UsagePreviewPanel(myProject);
-      myUsagePreviewPanel.setBorder(IdeBorderFactory.createBorder(SideBorder.LEFT));
+		if(isPreview())
+		{
+			pane.setBorder(IdeBorderFactory.createBorder(SideBorder.LEFT | SideBorder.RIGHT));
 
-      Disposer.register(this, myUsagePreviewPanel);
-      splitter.setSecondComponent(myUsagePreviewPanel);
-      add(splitter, BorderLayout.CENTER);
-    }
-    else {
-      pane.setBorder(IdeBorderFactory.createBorder(SideBorder.LEFT));
-      add(pane, BorderLayout.CENTER);
-    }
+			boolean vertical = myToolWindow.getAnchor() == ToolWindowAnchor.LEFT || myToolWindow.getAnchor() == ToolWindowAnchor.RIGHT;
+			Splitter splitter = new Splitter(vertical, UsageViewSettings.getInstance().PREVIEW_USAGES_SPLITTER_PROPORTIONS);
+			splitter.setFirstComponent(pane);
+			myUsagePreviewPanel = new UsagePreviewPanel(myProject, new UsageViewPresentation());
+			myUsagePreviewPanel.setBorder(IdeBorderFactory.createBorder(SideBorder.LEFT));
 
-    add(createToolbar().getComponent(), BorderLayout.WEST);
+			Disposer.register(this, myUsagePreviewPanel);
+			splitter.setSecondComponent(myUsagePreviewPanel);
+			add(splitter, BorderLayout.CENTER);
+		}
+		else
+		{
+			pane.setBorder(IdeBorderFactory.createBorder(SideBorder.LEFT));
+			add(pane, BorderLayout.CENTER);
+		}
 
-    myTree.getParent().setBackground(UIManager.getColor("Tree.background"));
+		add(createToolbar().getComponent(), BorderLayout.WEST);
 
-    revalidate();
-  }
+		myTree.getParent().setBackground(UIManager.getColor("Tree.background"));
 
-  @Override
-  public void dispose() {
-    if (myUsagePreviewPanel != null) {
-      UsageViewSettings.getInstance().PREVIEW_USAGES_SPLITTER_PROPORTIONS = ((Splitter)myUsagePreviewPanel.getParent()).getProportion();
-      myUsagePreviewPanel = null;
-    }
-    
-    isDisposed = true;
-    ToolTipManager.sharedInstance().unregisterComponent(myTree);
-  }
+		revalidate();
+	}
 
-  @NotNull
-  private JTree createTree() {
-    DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-    final Tree tree = new Tree(new DefaultTreeModel(root)){
-      @Override
+	@Override
+	public void dispose()
+	{
+		if(myUsagePreviewPanel != null)
+		{
+			UsageViewSettings.getInstance().PREVIEW_USAGES_SPLITTER_PROPORTIONS = ((Splitter) myUsagePreviewPanel.getParent()).getProportion();
+			myUsagePreviewPanel = null;
+		}
+
+		isDisposed = true;
+		ToolTipManager.sharedInstance().unregisterComponent(myTree);
+	}
+
+	@NotNull
+	private JTree createTree()
+	{
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+		final Tree tree = new Tree(new DefaultTreeModel(root))/* {
+	  @Override
       protected void paintComponent(Graphics g) {
         DuplicateNodeRenderer.paintDuplicateNodesBackground(g, this);
         super.paintComponent(g);
       }
-    };
-    tree.setOpaque(false);
+    }*/;
+		tree.setOpaque(false);
 
-    tree.setToggleClickCount(-1);
-    SliceUsageCellRenderer renderer = new SliceUsageCellRenderer();
-    renderer.setOpaque(false);
-    tree.setCellRenderer(renderer);
-    UIUtil.setLineStyleAngled(tree);
-    tree.setRootVisible(false);
-    
-    tree.setShowsRootHandles(true);
-    tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-    tree.setSelectionPath(new TreePath(root.getPath()));
-    //ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_METHOD_HIERARCHY_POPUP);
-    //PopupHandler.installPopupHandler(tree, group, ActionPlaces.METHOD_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
-    EditSourceOnDoubleClickHandler.install(tree);
+		tree.setToggleClickCount(-1);
+		SliceUsageCellRenderer renderer = new SliceUsageCellRenderer();
+		renderer.setOpaque(false);
+		tree.setCellRenderer(renderer);
+		UIUtil.setLineStyleAngled(tree);
+		tree.setRootVisible(false);
 
-    new TreeSpeedSearch(tree);
-    TreeUtil.installActions(tree);
-    ToolTipManager.sharedInstance().registerComponent(tree);
+		tree.setShowsRootHandles(true);
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.setSelectionPath(new TreePath(root.getPath()));
+		//ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction(IdeActions.GROUP_METHOD_HIERARCHY_POPUP);
+		//PopupHandler.installPopupHandler(tree, group, ActionPlaces.METHOD_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
+		EditSourceOnDoubleClickHandler.install(tree);
 
-    myAutoScrollToSourceHandler.install(tree);
+		new TreeSpeedSearch(tree);
+		TreeUtil.installActions(tree);
+		ToolTipManager.sharedInstance().registerComponent(tree);
 
-    tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
-      @Override
-      public void valueChanged(final TreeSelectionEvent e) {
-        treeSelectionChanged();
-      }
-    });
+		myAutoScrollToSourceHandler.install(tree);
 
-    tree.addKeyListener(new KeyAdapter() {
-      @Override
-      public void keyPressed(KeyEvent e) {
-        if (KeyEvent.VK_ENTER == e.getKeyCode()) {
-          List<Navigatable> navigatables = getNavigatables();
-          if (navigatables.isEmpty()) return;
-          for (Navigatable navigatable : navigatables) {
-            if (navigatable instanceof AbstractTreeNode && ((AbstractTreeNode)navigatable).getValue() instanceof Usage) {
-              navigatable = (Usage)((AbstractTreeNode)navigatable).getValue();
-            }
-            if (navigatable.canNavigateToSource()) {
-              navigatable.navigate(false);
-              if (navigatable instanceof Usage) {
-                ((Usage)navigatable).highlightInEditor();
-              }
-            }
-          }
-          e.consume();
-        }
-      }
-    });
+		tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener()
+		{
+			@Override
+			public void valueChanged(final TreeSelectionEvent e)
+			{
+				treeSelectionChanged();
+			}
+		});
 
-    tree.addTreeWillExpandListener(new TreeWillExpandListener() {
-      @Override
-      public void treeWillCollapse(TreeExpansionEvent event) {
-      }
+		tree.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if(KeyEvent.VK_ENTER == e.getKeyCode())
+				{
+					List<Navigatable> navigatables = getNavigatables();
+					if(navigatables.isEmpty())
+					{
+						return;
+					}
+					for(Navigatable navigatable : navigatables)
+					{
+						if(navigatable instanceof AbstractTreeNode && ((AbstractTreeNode) navigatable).getValue() instanceof Usage)
+						{
+							navigatable = (Usage) ((AbstractTreeNode) navigatable).getValue();
+						}
+						if(navigatable.canNavigateToSource())
+						{
+							navigatable.navigate(false);
+							if(navigatable instanceof Usage)
+							{
+								((Usage) navigatable).highlightInEditor();
+							}
+						}
+					}
+					e.consume();
+				}
+			}
+		});
 
-      @Override
-      public void treeWillExpand(TreeExpansionEvent event) {
-        TreePath path = event.getPath();
-        SliceNode node = fromPath(path);
-        node.calculateDupNode();
-      }
-    });
+		tree.addTreeWillExpandListener(new TreeWillExpandListener()
+		{
+			@Override
+			public void treeWillCollapse(TreeExpansionEvent event)
+			{
+			}
 
-    return tree;
-  }
+			@Override
+			public void treeWillExpand(TreeExpansionEvent event)
+			{
+				TreePath path = event.getPath();
+				SliceNode node = fromPath(path);
+				node.calculateDupNode();
+			}
+		});
 
-  private void treeSelectionChanged() {
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        if (isDisposed) return;
-        List<UsageInfo> infos = getSelectedUsageInfos();
-        if (infos != null && myUsagePreviewPanel != null) {
-          myUsagePreviewPanel.updateLayout(infos);
-        }
-      }
-    });
-  }
+		return tree;
+	}
 
-  private static SliceNode fromPath(TreePath path) {
-    Object lastPathComponent = path.getLastPathComponent();
-    if (lastPathComponent instanceof DefaultMutableTreeNode) {
-      DefaultMutableTreeNode node = (DefaultMutableTreeNode)lastPathComponent;
-      Object userObject = node.getUserObject();
-      if (userObject instanceof SliceNode) {
-        return (SliceNode)userObject;
-      }
-    }
-   return null;
-  }
+	private void treeSelectionChanged()
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(isDisposed)
+				{
+					return;
+				}
+				List<UsageInfo> infos = getSelectedUsageInfos();
+				if(infos != null && myUsagePreviewPanel != null)
+				{
+					myUsagePreviewPanel.updateLayout(infos);
+				}
+			}
+		});
+	}
 
-  @Nullable
-  private List<UsageInfo> getSelectedUsageInfos() {
-    TreePath[] paths = myTree.getSelectionPaths();
-    if (paths == null) return null;
-    final ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
-    for (TreePath path : paths) {
-      SliceNode sliceNode = fromPath(path);
-      if (sliceNode != null) {
-        result.add(sliceNode.getValue().getUsageInfo());
-      }
-    }
-    if (result.isEmpty()) return null;
-    return result;
-  }
+	private static SliceNode fromPath(TreePath path)
+	{
+		Object lastPathComponent = path.getLastPathComponent();
+		if(lastPathComponent instanceof DefaultMutableTreeNode)
+		{
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) lastPathComponent;
+			Object userObject = node.getUserObject();
+			if(userObject instanceof SliceNode)
+			{
+				return (SliceNode) userObject;
+			}
+		}
+		return null;
+	}
 
-  @Override
-  public void calcData(DataKey key, DataSink sink) {
-    if (key == PlatformDataKeys.NAVIGATABLE_ARRAY) {
-      List<Navigatable> navigatables = getNavigatables();
-      if (!navigatables.isEmpty()) {
-        sink.put(PlatformDataKeys.NAVIGATABLE_ARRAY, navigatables.toArray(new Navigatable[navigatables.size()]));
-      }
-    }
-  }
+	@Nullable
+	private List<UsageInfo> getSelectedUsageInfos()
+	{
+		TreePath[] paths = myTree.getSelectionPaths();
+		if(paths == null)
+		{
+			return null;
+		}
+		final ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
+		for(TreePath path : paths)
+		{
+			SliceNode sliceNode = fromPath(path);
+			if(sliceNode != null)
+			{
+				result.add(sliceNode.getValue().getUsageInfo());
+			}
+		}
+		if(result.isEmpty())
+		{
+			return null;
+		}
+		return result;
+	}
 
-  @NotNull
-  private List<Navigatable> getNavigatables() {
-    TreePath[] paths = myTree.getSelectionPaths();
-    if (paths == null) return Collections.emptyList();
-    final ArrayList<Navigatable> navigatables = new ArrayList<Navigatable>();
-    for (TreePath path : paths) {
-      Object lastPathComponent = path.getLastPathComponent();
-      if (lastPathComponent instanceof DefaultMutableTreeNode) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)lastPathComponent;
-        Object userObject = node.getUserObject();
-        if (userObject instanceof Navigatable) {
-          navigatables.add((Navigatable)userObject);
-        }
-        else if (node instanceof Navigatable) {
-          navigatables.add((Navigatable)node);
-        }
-      }
-    }
-    return navigatables;
-  }
+	@Override
+	public void calcData(DataKey key, DataSink sink)
+	{
+		if(key == CommonDataKeys.NAVIGATABLE_ARRAY)
+		{
+			List<Navigatable> navigatables = getNavigatables();
+			if(!navigatables.isEmpty())
+			{
+				sink.put(CommonDataKeys.NAVIGATABLE_ARRAY, navigatables.toArray(new Navigatable[navigatables.size()]));
+			}
+		}
+	}
 
-  @NotNull
-  private ActionToolbar createToolbar() {
-    final DefaultActionGroup actionGroup = new DefaultActionGroup();
-    actionGroup.add(new MyRefreshAction(myTree));
-    if (isToShowAutoScrollButton()) {
-      actionGroup.add(myAutoScrollToSourceHandler.createToggleAction());
-    }
-    if (isToShowCloseButton()) {
-      actionGroup.add(new CloseAction());
-    }
-    if (isToShowPreviewButton()) {
-      actionGroup.add(new ToggleAction(UsageViewBundle.message("preview.usages.action.text"), "preview", AllIcons.Actions.PreviewDetails) {
-        @Override
-        public boolean isSelected(AnActionEvent e) {
-          return isPreview();
-        }
+	@NotNull
+	private List<Navigatable> getNavigatables()
+	{
+		TreePath[] paths = myTree.getSelectionPaths();
+		if(paths == null)
+		{
+			return Collections.emptyList();
+		}
+		final ArrayList<Navigatable> navigatables = new ArrayList<Navigatable>();
+		for(TreePath path : paths)
+		{
+			Object lastPathComponent = path.getLastPathComponent();
+			if(lastPathComponent instanceof DefaultMutableTreeNode)
+			{
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) lastPathComponent;
+				Object userObject = node.getUserObject();
+				if(userObject instanceof Navigatable)
+				{
+					navigatables.add((Navigatable) userObject);
+				}
+				else if(node instanceof Navigatable)
+				{
+					navigatables.add((Navigatable) node);
+				}
+			}
+		}
+		return navigatables;
+	}
 
-        @Override
-        public void setSelected(AnActionEvent e, boolean state) {
-          setPreview(state);
-          layoutPanel();
-        }
-      });
-    }
+	@NotNull
+	private ActionToolbar createToolbar()
+	{
+		final DefaultActionGroup actionGroup = new DefaultActionGroup();
+		actionGroup.add(new MyRefreshAction(myTree));
+		if(isToShowAutoScrollButton())
+		{
+			actionGroup.add(myAutoScrollToSourceHandler.createToggleAction());
+		}
+		if(isToShowCloseButton())
+		{
+			actionGroup.add(new CloseAction());
+		}
+		if(isToShowPreviewButton())
+		{
+			actionGroup.add(new ToggleAction(UsageViewBundle.message("preview.usages.action.text"), "preview", AllIcons.Actions.PreviewDetails)
+			{
+				@Override
+				public boolean isSelected(AnActionEvent e)
+				{
+					return isPreview();
+				}
 
-    if (myBuilder.dataFlowToThis) {
-      actionGroup.add(new GroupByLeavesAction(myBuilder));
-      actionGroup.add(new CanItBeNullAction(myBuilder));
-    }
+				@Override
+				public void setSelected(AnActionEvent e, boolean state)
+				{
+					setPreview(state);
+					layoutPanel();
+				}
+			});
+		}
 
-    //actionGroup.add(new ContextHelpAction(HELP_ID));
+		if(myBuilder.dataFlowToThis)
+		{
+			actionGroup.add(new GroupByLeavesAction(myBuilder));
+			actionGroup.add(new CanItBeNullAction(myBuilder));
+		}
 
-    return ActionManager.getInstance().createActionToolbar(ActionPlaces.TYPE_HIERARCHY_VIEW_TOOLBAR, actionGroup, false);
-  }
+		//actionGroup.add(new ContextHelpAction(HELP_ID));
 
-  public boolean isToShowAutoScrollButton() {return true;}
-  public abstract boolean isAutoScroll();
+		return ActionManager.getInstance().createActionToolbar(ActionPlaces.TYPE_HIERARCHY_VIEW_TOOLBAR, actionGroup, false);
+	}
 
-  public abstract void setAutoScroll(boolean autoScroll);
+	public boolean isToShowAutoScrollButton()
+	{
+		return true;
+	}
 
-  public boolean isToShowCloseButton() {return true;}
+	public abstract boolean isAutoScroll();
 
-  public boolean isToShowPreviewButton() {return true;}
-  public abstract boolean isPreview();
+	public abstract void setAutoScroll(boolean autoScroll);
 
-  public abstract void setPreview(boolean preview);
+	public boolean isToShowCloseButton()
+	{
+		return true;
+	}
 
-  private class CloseAction extends CloseTabToolbarAction {
-    @Override
-    public final void actionPerformed(final AnActionEvent e) {
-      close();
-    }
-  }
+	public boolean isToShowPreviewButton()
+	{
+		return true;
+	}
 
-  protected void close() {
-    final ProgressIndicator progress = myBuilder.getUi().getProgress();
-    if (progress != null) {
-      progress.cancel();
-    }
-  }
+	public abstract boolean isPreview();
 
-  private final class MyRefreshAction extends RefreshAction {
-    private MyRefreshAction(JComponent tree) {
-      super(IdeBundle.message("action.refresh"), IdeBundle.message("action.refresh"), AllIcons.Actions.Refresh);
-      registerShortcutOn(tree);
-    }
+	public abstract void setPreview(boolean preview);
 
-    @Override
-    public final void actionPerformed(final AnActionEvent e) {
-      SliceNode rootNode = (SliceNode)myBuilder.getRootNode().getUserObject();
-      rootNode.setChanged();
-      myBuilder.addSubtreeToUpdate(myBuilder.getRootNode());
-    }
+	private class CloseAction extends CloseTabToolbarAction
+	{
+		@Override
+		public final void actionPerformed(final AnActionEvent e)
+		{
+			close();
+		}
+	}
 
-    @Override
-    public final void update(final AnActionEvent event) {
-      final Presentation presentation = event.getPresentation();
-      presentation.setEnabled(true);
-    }
-  }
+	protected void close()
+	{
+		final ProgressIndicator progress = myBuilder.getUi().getProgress();
+		if(progress != null)
+		{
+			progress.cancel();
+		}
+	}
 
-  @TestOnly
-  public SliceTreeBuilder getBuilder() {
-    return myBuilder;
-  }
+	private final class MyRefreshAction extends RefreshAction
+	{
+		private MyRefreshAction(JComponent tree)
+		{
+			super(IdeBundle.message("action.refresh"), IdeBundle.message("action.refresh"), AllIcons.Actions.Refresh);
+			registerShortcutOn(tree);
+		}
+
+		@Override
+		public final void actionPerformed(final AnActionEvent e)
+		{
+			SliceNode rootNode = (SliceNode) myBuilder.getRootNode().getUserObject();
+			rootNode.setChanged();
+			myBuilder.addSubtreeToUpdate(myBuilder.getRootNode());
+		}
+
+		@Override
+		public final void update(final AnActionEvent event)
+		{
+			final Presentation presentation = event.getPresentation();
+			presentation.setEnabled(true);
+		}
+	}
+
+	@TestOnly
+	public SliceTreeBuilder getBuilder()
+	{
+		return myBuilder;
+	}
 }

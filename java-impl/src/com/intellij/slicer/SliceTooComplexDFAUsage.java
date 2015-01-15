@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,11 @@
  */
 package com.intellij.slicer;
 
+import java.awt.Font;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
@@ -23,52 +28,57 @@ import com.intellij.ui.JBColor;
 import com.intellij.usages.TextChunk;
 import com.intellij.usages.UsagePresentation;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * User: cdr
  */
-public class SliceTooComplexDFAUsage extends SliceUsage {
-  public SliceTooComplexDFAUsage(@NotNull PsiElement element, @NotNull SliceUsage parent, @NotNull PsiSubstitutor substitutor) {
-    super(element, parent, substitutor);
-  }
+public class SliceTooComplexDFAUsage extends SliceUsage
+{
+	public SliceTooComplexDFAUsage(@NotNull PsiElement element, @NotNull SliceUsage parent, @NotNull PsiSubstitutor substitutor)
+	{
+		super(element, parent, substitutor, 0, "");
+	}
 
-  @Override
-  public void processChildren(Processor<SliceUsage> processor) {
-    // no children
-  }
+	@Override
+	public void processChildren(@NotNull Processor<SliceUsage> processor)
+	{
+		// no children
+	}
 
-  @NotNull
-  @Override
-  public UsagePresentation getPresentation() {
-    final UsagePresentation presentation = super.getPresentation();
-    return new UsagePresentation() {
-      @Override
-      @NotNull
-      public TextChunk[] getText() {
-        return new TextChunk[]{
-          new TextChunk(new TextAttributes(JBColor.RED, null, null, EffectType.WAVE_UNDERSCORE, Font.PLAIN), getTooltipText())
-        };
-      }
+	@NotNull
+	@Override
+	public UsagePresentation getPresentation()
+	{
+		final UsagePresentation presentation = super.getPresentation();
+		return new UsagePresentation()
+		{
+			@Override
+			@NotNull
+			public TextChunk[] getText()
+			{
+				return new TextChunk[]{
+						new TextChunk(new TextAttributes(JBColor.RED, null, null, EffectType.WAVE_UNDERSCORE, Font.PLAIN), getTooltipText())
+				};
+			}
 
-      @Override
-      @NotNull
-      public String getPlainText() {
-        return presentation.getPlainText();
-      }
+			@Override
+			@NotNull
+			public String getPlainText()
+			{
+				return presentation.getPlainText();
+			}
 
-      @Override
-      public Icon getIcon() {
-        return presentation.getIcon();
-      }
+			@Override
+			public Icon getIcon()
+			{
+				return presentation.getIcon();
+			}
 
-      @Override
-      public String getTooltipText() {
-        return "Too complex to analyze, analysis stopped here";
-      }
-    };
-  }
+			@Override
+			public String getTooltipText()
+			{
+				return "Too complex to analyze, analysis stopped here";
+			}
+		};
+	}
 }

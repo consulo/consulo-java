@@ -26,6 +26,7 @@ import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.diagnostic.LogUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -418,15 +419,23 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 	@NotNull
 	public JavaResolveResult[] multiResolve(boolean incompleteCode)
 	{
-		FileElement fileElement = SharedImplUtil.findFileElement(this);
+		FileASTNode fileElement = SharedImplUtil.findFileElement(this);
 		if(fileElement == null)
 		{
 			LOG.error("fileElement == null!");
 			return JavaResolveResult.EMPTY_ARRAY;
 		}
-		final PsiManagerEx manager = fileElement.getManager();
-		if(manager == null)
+		PsiFile containingFile = SharedImplUtil.getContainingFile(fileElement);
+		if(containingFile == null)
 		{
+			LOG.error("containingFile == null!");
+			return JavaResolveResult.EMPTY_ARRAY;
+		}
+		PsiFile psiFile = SharedImplUtil.getContainingFile(fileElement);
+		PsiManager manager = psiFile == null ? null : psiFile.getManager();
+		if (manager == null)
+		{
+			PsiUtilCore.ensureValid(this);
 			LOG.error("getManager() == null!");
 			return JavaResolveResult.EMPTY_ARRAY;
 		}

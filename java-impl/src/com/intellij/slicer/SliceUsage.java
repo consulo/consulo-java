@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,89 +15,133 @@
  */
 package com.intellij.slicer;
 
+import gnu.trove.TObjectHashingStrategy;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiSubstitutor;
-import com.intellij.slicer.forward.SliceFUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usages.UsageInfo2UsageAdapter;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
-import gnu.trove.TObjectHashingStrategy;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author cdr
  */
-public class SliceUsage extends UsageInfo2UsageAdapter {
-  private final SliceUsage myParent;
-  public final SliceAnalysisParams params;
-  private final PsiSubstitutor mySubstitutor;
+public class SliceUsage extends UsageInfo2UsageAdapter
+{
+	private final SliceUsage myParent;
+	public final SliceAnalysisParams params;
+	private final PsiSubstitutor mySubstitutor;
+	protected final int indexNesting; // 0 means bare expression 'x', 1 means x[?], 2 means x[?][?] etc
+	@NotNull
+	protected final String syntheticField; // "" means no field, otherwise it's a name of fake field of container, e.g. "keys" for Map
 
-  public SliceUsage(@NotNull PsiElement element, @NotNull SliceUsage parent, @NotNull PsiSubstitutor substitutor) {
-    super(new UsageInfo(element));
-    myParent = parent;
-    mySubstitutor = substitutor;
-    params = parent.params;
-    assert params != null;
-  }
-  public SliceUsage(@NotNull PsiElement element, @NotNull SliceAnalysisParams params) {
-    super(new UsageInfo(element));
-    myParent = null;
-    this.params = params;
-    mySubstitutor = PsiSubstitutor.EMPTY;
-  }
+	public SliceUsage(@NotNull PsiElement element,
+			@NotNull SliceUsage parent,
+			@NotNull PsiSubstitutor substitutor,
+			int indexNesting,
+			@NotNull String syntheticField)
+	{
+		super(new UsageInfo(element));
+		myParent = parent;
+		mySubstitutor = substitutor;
+		this.syntheticField = syntheticField;
+		params = parent.params;
+		assert params != null;
+		this.indexNesting = indexNesting;
+	}
 
-  public void processChildren(Processor<SliceUsage> processor) {
-    final PsiElement element = getElement();
-    ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
-    indicator.checkCanceled();
+	// root usage
+	private SliceUsage(@NotNull PsiElement element, @NotNull SliceAnalysisParams params)
+	{
+		super(new UsageInfo(element));
+		myParent = null;
+		this.params = params;
+		mySubstitutor = PsiSubstitutor.EMPTY;
+		indexNesting = 0;
+		syntheticField = "";
+	}
 
-    final Processor<SliceUsage> uniqueProcessor =
-      new CommonProcessors.UniqueProcessor<SliceUsage>(processor, new TObjectHashingStrategy<SliceUsage>() {
-        @Override
-        public int computeHashCode(final SliceUsage object) {
-          return object.getUsageInfo().hashCode();
-        }
+	@NotNull
+	public static SliceUsage createRootUsage(@NotNull PsiElement element, @NotNull SliceAnalysisParams params)
+	{
+		return new SliceUsage(element, params);
+	}
 
-        @Override
-        public boolean equals(final SliceUsage o1, final SliceUsage o2) {
-          return o1.getUsageInfo().equals(o2.getUsageInfo());
-        }
-      });
+	public void processChildren(@NotNull Processor<SliceUsage> processor)
+	{
+		final PsiElement element = ApplicationManager.getApplication().runReadAction(new Computable<PsiElement>()
+		{
+			@Override
+			public PsiElement compute()
+			{
+				return getElement();
+			}
+		});
+		ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
+		indicator.checkCanceled();
 
-    ApplicationManager.getApplication().runReadAction(new Runnable() {
-      @Override
-      public void run() {
-        if (params.dataFlowToThis) {
-          SliceUtil.processUsagesFlownDownTo(element, uniqueProcessor, SliceUsage.this, mySubstitutor);
-        }
-        else {
-          SliceFUtil.processUsagesFlownFromThe(element, uniqueProcessor, SliceUsage.this);
-        }
-      }
-    });
-  }
+		final Processor<SliceUsage> uniqueProcessor = new CommonProcessors.UniqueProcessor<SliceUsage>(processor,
+				new TObjectHashingStrategy<SliceUsage>()
+		{
+			@Override
+			public int computeHashCode(final SliceUsage object)
+			{
+				return object.getUsageInfo().hashCode();
+			}
 
-  public SliceUsage getParent() {
-    return myParent;
-  }
+			@Override
+			public boolean equals(final SliceUsage o1, final SliceUsage o2)
+			{
+				return o1.getUsageInfo().equals(o2.getUsageInfo());
+			}
+		});
 
-  @NotNull
-  public AnalysisScope getScope() {
-    return params.scope;
-  }
+		ApplicationManager.getApplication().runReadAction(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(params.dataFlowToThis)
+				{
+					SliceUtil.processUsagesFlownDownTo(element, uniqueProcessor, SliceUsage.this, mySubstitutor, indexNesting, syntheticField);
+				}
+				else
+				{
+					SliceForwardUtil.processUsagesFlownFromThe(element, uniqueProcessor, SliceUsage.this);
+				}
+			}
+		});
+	}
 
-  SliceUsage copy() {
-    PsiElement element = getUsageInfo().getElement();
-    return getParent() == null ? new SliceUsage(element, params) : new SliceUsage(element, getParent(),mySubstitutor);
-  }
+	public SliceUsage getParent()
+	{
+		return myParent;
+	}
 
-  public PsiSubstitutor getSubstitutor() {
-    return mySubstitutor;
-  }
+	@NotNull
+	public AnalysisScope getScope()
+	{
+		return params.scope;
+	}
 
+	@NotNull
+	SliceUsage copy()
+	{
+		PsiElement element = getUsageInfo().getElement();
+		return getParent() == null ? createRootUsage(element, params) : new SliceUsage(element, getParent(), mySubstitutor, indexNesting,
+				syntheticField);
+	}
+
+	@NotNull
+	public PsiSubstitutor getSubstitutor()
+	{
+		return mySubstitutor;
+	}
 }

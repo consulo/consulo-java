@@ -1007,5 +1007,4 @@ public class PsiImplUtil
 	{
 		return element instanceof LeafElement && tokenSet.contains(((LeafElement) element).getElementType());
 	}
-
 }

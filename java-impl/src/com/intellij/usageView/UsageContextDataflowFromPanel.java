@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,34 +16,41 @@
 
 package com.intellij.usageView;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.usages.UsageContextPanel;
 import com.intellij.usages.UsageView;
+import com.intellij.usages.UsageViewPresentation;
 import com.intellij.usages.impl.UsageViewImpl;
-import org.jetbrains.annotations.NotNull;
 
-public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel {
-  public static class Provider extends UsageContextDataflowToPanel.Provider {
-    @NotNull
-    @Override
-    public UsageContextPanel create(@NotNull UsageView usageView) {
-      return new UsageContextDataflowFromPanel(((UsageViewImpl)usageView).getProject());
-    }
+public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel
+{
+	public static class Provider extends UsageContextDataflowToPanel.Provider
+	{
+		@NotNull
+		@Override
+		public UsageContextPanel create(@NotNull UsageView usageView)
+		{
+			return new UsageContextDataflowFromPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
+		}
 
-    @NotNull
-    @Override
-    public String getTabTitle() {
-      return "Dataflow from Here";
-    }
-  }
+		@NotNull
+		@Override
+		public String getTabTitle()
+		{
+			return "Dataflow from Here";
+		}
+	}
 
-  public UsageContextDataflowFromPanel(@NotNull Project project) {
-    super(project);
-  }
+	public UsageContextDataflowFromPanel(@NotNull Project project, @NotNull UsageViewPresentation presentation)
+	{
+		super(project, presentation);
+	}
 
 
-  @Override
-  protected boolean isDataflowToThis() {
-    return false;
-  }
+	@Override
+	protected boolean isDataflowToThis()
+	{
+		return false;
+	}
 }
