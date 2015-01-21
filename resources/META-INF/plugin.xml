@@ -1947,6 +1947,7 @@
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
 		<contentFolderSupportPatcher implementation="org.consulo.java.platform.module.extension.JavaContentFolderSupportPatcher" />
 		<pathMacroExpendableProtocol protocol="jar"/>
+		<pathMacroExpendableProtocol protocol="jimage"/>
 
 		<psi.directoryMethodProxy implementation="com.intellij.psi.impl.file.JavaPsiDirectoryMethodProxy"/>
 
