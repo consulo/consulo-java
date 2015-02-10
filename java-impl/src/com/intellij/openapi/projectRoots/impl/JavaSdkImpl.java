@@ -48,7 +48,6 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.JdkUtil;
 import com.intellij.openapi.projectRoots.JdkVersionUtil;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
@@ -177,9 +176,7 @@ public class JavaSdkImpl extends JavaSdk
 		return path;
 	}
 
-	@Override
-	@SuppressWarnings({"HardCodedStringLiteral"})
-	public String suggestHomePath()
+	private static String suggestNonWindowsHomePath()
 	{
 		if(SystemInfo.isMac)
 		{
@@ -223,7 +220,7 @@ public class JavaSdkImpl extends JavaSdk
 				return null;
 			}
 			File javaHome = new File(property).getParentFile();//actually java.home points to to jre home
-			if(javaHome != null && JdkUtil.checkForJdk(javaHome))
+			if(javaHome != null && JavaSdkTypeUtil.checkForJdk(javaHome))
 			{
 				return javaHome.getAbsolutePath();
 			}
@@ -237,7 +234,7 @@ public class JavaSdkImpl extends JavaSdk
 	{
 		if(!SystemInfo.isWindows)
 		{
-			return Collections.singletonList(suggestHomePath());
+			return Collections.singletonList(suggestNonWindowsHomePath());
 		}
 
 		String property = System.getProperty("java.home");
@@ -278,6 +275,12 @@ public class JavaSdkImpl extends JavaSdk
 		return result;
 	}
 
+	@Override
+	public boolean canCreatePredefinedSdks()
+	{
+		return true;
+	}
+
 	private static void scanFolder(File javasFolder, ArrayList<String> result)
 	{
 		File[] candidates = javasFolder.listFiles(new FileFilter()
@@ -285,7 +288,7 @@ public class JavaSdkImpl extends JavaSdk
 			@Override
 			public boolean accept(File pathname)
 			{
-				return JdkUtil.checkForJdk(pathname);
+				return JavaSdkTypeUtil.checkForJdk(pathname);
 			}
 		});
 		if(candidates != null)

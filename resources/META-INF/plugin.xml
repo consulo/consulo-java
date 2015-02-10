@@ -1907,7 +1907,6 @@
 		<applicationService serviceInterface="com.intellij.psi.impl.file.PsiPackageImplementationHelper"
 							serviceImplementation="com.intellij.psi.impl.file.PsiPackageImplementationHelperImpl"/>
 		<sdkType implementation="com.intellij.openapi.projectRoots.impl.JavaSdkImpl"/>
-		<bundledSdkProvider implementation="com.intellij.openapi.projectRoots.impl.InternalBundledSdkProvider"/>
 
 		<consoleFilterProvider implementation="com.intellij.execution.filters.DefaultConsoleFiltersProvider"/>
 
