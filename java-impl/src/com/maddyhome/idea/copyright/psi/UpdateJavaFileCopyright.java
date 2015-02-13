@@ -16,107 +16,150 @@
 
 package com.maddyhome.idea.copyright.psi;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.maddyhome.idea.copyright.CopyrightProfile;
-import com.maddyhome.idea.copyright.options.JavaOptions;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.copyright.config.CopyrightFileConfig;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportList;
+import com.intellij.psi.PsiJavaFile;
+import com.maddyhome.idea.copyright.CopyrightProfile;
+import com.maddyhome.idea.copyright.ui.TemplateCommentPanel;
+
+public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFileConfig>
 {
-    public UpdateJavaFileCopyright(Project project, Module module, VirtualFile root, CopyrightProfile options)
-    {
-        super(project, module, root, options);
-    }
+	public static final int LOCATION_BEFORE_PACKAGE = 1;
+	public static final int LOCATION_BEFORE_IMPORT = 2;
+	public static final int LOCATION_BEFORE_CLASS = 3;
 
-    protected boolean accept()
-    {
-        return getFile() instanceof PsiJavaFile;
-    }
+	public UpdateJavaFileCopyright(@NotNull PsiFile psiFile, @NotNull CopyrightProfile copyrightProfile)
+	{
+		super(psiFile, copyrightProfile);
+	}
 
-    protected void scanFile()
-    {
-        logger.debug("updating " + getFile().getVirtualFile());
+	@Override
+	protected boolean accept()
+	{
+		return getFile() instanceof PsiJavaFile;
+	}
 
-        PsiClassOwner javaFile = (PsiClassOwner)getFile();
-        PsiElement pkg = getPackageStatement();
-        PsiElement[] imports = getImportsList();
-        PsiClass topclass = null;
-        PsiClass[] classes = javaFile.getClasses();
-        if (classes.length > 0)
-        {
-            topclass = classes[0];
-        }
+	@Override
+	protected void scanFile()
+	{
+		logger.debug("updating " + getFile().getVirtualFile());
 
-        PsiElement first = javaFile.getFirstChild();
+		PsiClassOwner javaFile = (PsiClassOwner) getFile();
+		PsiElement pkg = getPackageStatement();
+		PsiElement[] imports = getImportsList();
+		PsiClass topclass = null;
+		PsiClass[] classes = javaFile.getClasses();
+		if(classes.length > 0)
+		{
+			topclass = classes[0];
+		}
 
-        int location = getLanguageOptions().getFileLocation();
-        if (pkg != null)
-        {
-            checkComments(first, pkg, location == JavaOptions.LOCATION_BEFORE_PACKAGE);
-            first = pkg;
-        }
-        else if (location == JavaOptions.LOCATION_BEFORE_PACKAGE)
-        {
-            location = JavaOptions.LOCATION_BEFORE_IMPORT;
-        }
+		PsiElement first = javaFile.getFirstChild();
 
-        if (imports != null && imports.length > 0)
-        {
-            checkComments(first, imports[0], location == JavaOptions.LOCATION_BEFORE_IMPORT);
-            first = imports[0];
-        }
-        else if (location == JavaOptions.LOCATION_BEFORE_IMPORT)
-        {
-            location = JavaOptions.LOCATION_BEFORE_CLASS;
-        }
+		int location = getLanguageOptions().getFileLocation();
+		if(pkg != null)
+		{
+			checkComments(first, pkg, location == LOCATION_BEFORE_PACKAGE);
+			first = pkg;
+		}
+		else if(location == LOCATION_BEFORE_PACKAGE)
+		{
+			location = LOCATION_BEFORE_IMPORT;
+		}
 
-        if (topclass != null)
-        {
-            final List<PsiComment> comments = new ArrayList<PsiComment>();
-            collectComments(first, topclass, comments);
-            collectComments(topclass.getFirstChild(), topclass.getModifierList(), comments);
-          checkCommentsForTopClass(topclass, location, comments);
-        }
-        else if (location == JavaOptions.LOCATION_BEFORE_CLASS)
-        {
-            // no package, no imports, no top level class
-        }
-    }
+		if(imports != null && imports.length > 0)
+		{
+			checkComments(first, imports[0], location == LOCATION_BEFORE_IMPORT);
+			first = imports[0];
+		}
+		else if(location == LOCATION_BEFORE_IMPORT)
+		{
+			location = LOCATION_BEFORE_CLASS;
+		}
 
-  protected void checkCommentsForTopClass(PsiClass topclass, int location, List<PsiComment> comments) {
-    checkComments(topclass.getModifierList(), location == JavaOptions.LOCATION_BEFORE_CLASS, comments);
-  }
+		if(topclass != null)
+		{
+			final List<PsiComment> comments = new ArrayList<PsiComment>();
+			collectComments(first, topclass, comments);
+			collectComments(topclass.getFirstChild(), topclass.getModifierList(), comments);
+			checkCommentsForTopClass(topclass, location, comments);
+		}
+		else if(location == LOCATION_BEFORE_CLASS)
+		{
+			// no package, no imports, no top level class
+		}
+	}
 
-  @Nullable
-  protected PsiElement[] getImportsList() {
-    final PsiJavaFile javaFile = (PsiJavaFile)getFile();
-    assert javaFile != null;
-    final PsiImportList importList = javaFile.getImportList();
-    return importList == null ? null : importList.getChildren();
-  }
+	protected void checkCommentsForTopClass(PsiClass topclass, int location, List<PsiComment> comments)
+	{
+		checkComments(topclass.getModifierList(), location == LOCATION_BEFORE_CLASS, comments);
+	}
 
-  @Nullable
-  protected PsiElement getPackageStatement() {
-    PsiJavaFile javaFile = (PsiJavaFile)getFile();
-    assert javaFile != null;
-    return javaFile.getPackageStatement();
-  }
+	@Nullable
+	protected PsiElement[] getImportsList()
+	{
+		final PsiJavaFile javaFile = (PsiJavaFile) getFile();
+		final PsiImportList importList = javaFile.getImportList();
+		return importList == null ? null : importList.getChildren();
+	}
 
-  private static final Logger logger = Logger.getInstance(UpdateJavaFileCopyright.class.getName());
+	@Nullable
+	protected PsiElement getPackageStatement()
+	{
+		PsiJavaFile javaFile = (PsiJavaFile) getFile();
+		return javaFile.getPackageStatement();
+	}
 
-  public static class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider {
+	private static final Logger logger = Logger.getInstance(UpdateJavaFileCopyright.class.getName());
 
-    @Override
-    public UpdateCopyright createInstance(Project project, Module module, VirtualFile file, FileType base, CopyrightProfile options) {
-      return new UpdateJavaFileCopyright(project, module, file, options);
-    }
-  }
+	public static class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider<CopyrightFileConfig>
+	{
+		@NotNull
+		@Override
+		public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@NotNull PsiFile file, @NotNull CopyrightProfile copyrightProfile)
+		{
+			return new UpdateJavaFileCopyright(file, copyrightProfile);
+		}
+
+		@NotNull
+		@Override
+		public CopyrightFileConfig createDefaultOptions()
+		{
+			return new CopyrightFileConfig();
+		}
+
+		@NotNull
+		@Override
+		public TemplateCommentPanel createConfigurable(@NotNull Project project, @NotNull TemplateCommentPanel parentPane,
+				@NotNull FileType fileType)
+		{
+			return new TemplateCommentPanel(fileType, parentPane, project)
+			{
+				@Override
+				public void addAdditionalComponents(@NotNull JPanel additionalPanel)
+				{
+					addLocationInFile(new String[]{
+							"Before Package",
+							"Before Imports",
+							"Before Class"
+					});
+				}
+			};
+		}
+	}
 }
