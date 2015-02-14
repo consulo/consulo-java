@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.JavaCodeFragmentFactory;
 import com.intellij.psi.PsiFile
@@ -87,7 +87,7 @@ public class FragmentCompletionTest extends LightCodeInsightFixtureTestCase {
 
   public void testQualifierCastingInExpressionCodeFragment() throws Throwable {
     final ctxText = "class Bar {{ Object o; o=null }}"
-    final ctxFile = createLightFile(StdFileTypes.JAVA, ctxText)
+    final ctxFile = createLightFile(JavaFileType.INSTANCE, ctxText)
     final context = ctxFile.findElementAt(ctxText.indexOf("o="))
     assert context
 

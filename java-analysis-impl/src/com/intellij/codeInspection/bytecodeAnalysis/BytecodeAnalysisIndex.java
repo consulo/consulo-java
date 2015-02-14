@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileWithId;
@@ -88,7 +88,7 @@ public class BytecodeAnalysisIndex extends FileBasedIndexExtension<Integer, Coll
   @NotNull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
-    return new DefaultFileTypeSpecificInputFilter(StdFileTypes.CLASS) {
+    return new DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE) {
       @Override
       public boolean acceptInput(Project project, @NotNull VirtualFile file) {
         return ourEnabled && super.acceptInput(project, file);

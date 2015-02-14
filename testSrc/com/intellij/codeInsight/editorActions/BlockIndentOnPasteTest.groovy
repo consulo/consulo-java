@@ -16,8 +16,8 @@
 package com.intellij.codeInsight.editorActions
 
 import com.intellij.codeInsight.CodeInsightSettings
+import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.fileTypes.FileType
-import com.intellij.openapi.fileTypes.StdFileTypes
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 import com.intellij.openapi.application.ApplicationManager
 
@@ -751,7 +751,7 @@ class Test {
     doTest(before, toPaste, expected)
   }
   
-  def doTest(String before, toPaste, expected, FileType fileType = StdFileTypes.JAVA) {
+  def doTest(String before, toPaste, expected, FileType fileType = JavaFileType.INSTANCE) {
     myFixture.configureByText(fileType, before)
 
     def settings = CodeInsightSettings.getInstance()

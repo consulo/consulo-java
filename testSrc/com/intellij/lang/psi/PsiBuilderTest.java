@@ -3,7 +3,7 @@ package com.intellij.lang.psi;
 import com.intellij.lang.*;
 import com.intellij.lang.impl.PsiBuilderImpl;
 import com.intellij.lexer.JavaLexer;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiFile;
@@ -64,7 +64,7 @@ public class PsiBuilderTest extends LightIdeaTestCase {
   }
 
   private static PsiBuilderImpl createBuilder(final String text, ASTNode originalTree) {
-    final Language lang = StdFileTypes.JAVA.getLanguage();
+    final Language lang = JavaFileType.INSTANCE.getLanguage();
     final ParserDefinition parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(lang);
     assertNotNull(parserDefinition);
     PsiFile psiFile = createFile("x.java", text);

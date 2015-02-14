@@ -19,11 +19,29 @@
  */
 package com.intellij.codeInspection.i18n;
 
+import gnu.trove.THashMap;
+
+import java.awt.BorderLayout;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.impl.FileTemplateConfigurable;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.properties.psi.I18nizedTextGenerator;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.PropertyCreationHandler;
@@ -31,7 +49,6 @@ import com.intellij.lang.properties.psi.ResourceBundleManager;
 import com.intellij.lang.properties.references.I18nizeQuickFixDialog;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -42,18 +59,6 @@ import com.intellij.ui.EditorComboBox;
 import com.intellij.ui.HyperlinkLabel;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import gnu.trove.THashMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import java.awt.*;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
 
 public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
   private final PsiLiteralExpression myLiteralExpression;
@@ -119,7 +124,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
       PsiExpressionCodeFragment expressionCodeFragment =
         codeFragmentFactory.createExpressionCodeFragment(defaultVarName, myLiteralExpression, myResourceBundleType, true);
       Document document = PsiDocumentManager.getInstance(myProject).getDocument(expressionCodeFragment);
-      myRBEditorTextField = new EditorComboBox(document, myProject, StdFileTypes.JAVA);
+      myRBEditorTextField = new EditorComboBox(document, myProject, JavaFileType.INSTANCE);
       myResourceBundleSuggester.add(myRBEditorTextField, BorderLayout.CENTER);
       suggestAvailableResourceBundleExpressions();
       myRBEditorTextField.addDocumentListener(new DocumentAdapter() {

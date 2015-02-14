@@ -22,7 +22,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.impl.DocumentImpl;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -113,7 +113,7 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
   }
 
   public static CommonCodeStyleSettings.IndentOptions getIndentOptions() {
-    return getSettings().getRootSettings().getIndentOptions(StdFileTypes.JAVA);
+    return getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE);
   }
 
   public void doTest() throws Exception {

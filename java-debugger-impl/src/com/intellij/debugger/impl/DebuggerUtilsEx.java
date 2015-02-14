@@ -54,11 +54,11 @@ import com.intellij.debugger.requests.Requestor;
 import com.intellij.debugger.ui.CompletionEditor;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
@@ -812,7 +812,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 	{
 		text = StringUtil.unquoteString(text);
 		text = StringUtil.unescapeStringCharacters(text);
-		int tabSize = CodeStyleSettingsManager.getSettings(project).getTabSize(StdFileTypes.JAVA);
+		int tabSize = CodeStyleSettingsManager.getSettings(project).getTabSize(JavaFileType.INSTANCE);
 		if(tabSize < 0)
 		{
 			tabSize = 0;

@@ -29,7 +29,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
 public class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase {
   public void testAnnotator() throws Exception {
     Annotator annotator = new MyAnnotator();
-    Language javaLanguage = StdFileTypes.JAVA.getLanguage();
+    Language javaLanguage = JavaFileType.INSTANCE.getLanguage();
     LanguageAnnotators.INSTANCE.addExplicitExtension(javaLanguage, annotator);
     enableInspectionTool(new DefaultHighlightVisitorBasedInspection.AnnotatorBasedInspection());
     try {

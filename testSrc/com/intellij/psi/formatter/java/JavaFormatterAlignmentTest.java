@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.util.IncorrectOperationException;
 
@@ -32,7 +32,7 @@ public class JavaFormatterAlignmentTest extends AbstractJavaFormatterTest {
     // Inspired by IDEA-30369
     getSettings().ALIGN_MULTILINE_CHAINED_METHODS = true;
     getSettings().METHOD_CALL_CHAIN_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
-    getSettings().getRootSettings().getIndentOptions(StdFileTypes.JAVA).CONTINUATION_INDENT_SIZE = 8;
+    getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE).CONTINUATION_INDENT_SIZE = 8;
     doTest();
   }
 
@@ -50,7 +50,7 @@ public class JavaFormatterAlignmentTest extends AbstractJavaFormatterTest {
 
   public void testMultipleMethodAnnotationsCommentedInTheMiddle() throws Exception {
     getSettings().BLANK_LINES_AFTER_CLASS_HEADER = 1;
-    getSettings().getRootSettings().getIndentOptions(StdFileTypes.JAVA).INDENT_SIZE = 4;
+    getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE).INDENT_SIZE = 4;
 
     // Inspired by IDEA-53942
     doTextTest(
@@ -83,8 +83,8 @@ public class JavaFormatterAlignmentTest extends AbstractJavaFormatterTest {
   public void testMethodCallArgumentsAndSmartTabs() throws IncorrectOperationException {
     // Inspired by IDEADEV-20144.
     getSettings().ALIGN_MULTILINE_PARAMETERS_IN_CALLS = true;
-    getSettings().getRootSettings().getIndentOptions(StdFileTypes.JAVA).SMART_TABS = true;
-    getSettings().getRootSettings().getIndentOptions(StdFileTypes.JAVA).USE_TAB_CHARACTER = true;
+    getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE).SMART_TABS = true;
+    getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE).USE_TAB_CHARACTER = true;
     doTextTest("class Foo {\n" +
                "    void foo() {\n" +
                "        bar(new Object[] {\n" +

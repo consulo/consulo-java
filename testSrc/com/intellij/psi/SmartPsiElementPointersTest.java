@@ -23,7 +23,7 @@ import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.event.EditorEventMulticaster;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.source.PsiFileImpl;
@@ -338,7 +338,7 @@ public class SmartPsiElementPointersTest extends CodeInsightTestCase {
   }
 
   public void testPointerDisambiguationAfterDupLine() throws Exception {
-    PsiJavaFile file = (PsiJavaFile)configureByText(StdFileTypes.JAVA, "class XXX{ void foo() { \n" +
+    PsiJavaFile file = (PsiJavaFile)configureByText(JavaFileType.INSTANCE, "class XXX{ void foo() { \n" +
                                        " <caret>foo();\n" +
                                        "}}");
     PsiClass aClass = file.getClasses()[0];
