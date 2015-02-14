@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,32 +20,40 @@
  */
 package com.intellij.codeEditor.printing;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.impl.LineMarkersPass;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+public class MethodSeparatorProvider extends FileSeparatorProvider
+{
+	@Override
+	public List<LineMarkerInfo> getFileSeparators(final PsiFile file, final Document document, @Nullable final Editor editor)
+	{
+		final List<LineMarkerInfo> result = new ArrayList<LineMarkerInfo>();
+		LineMarkersPass pass = new LineMarkersPass(file.getProject(), file, editor, document, file.getTextRange());
+		for(LineMarkerInfo lineMarkerInfo : pass.queryLineMarkers())
+		{
+			if(lineMarkerInfo.separatorColor != null)
+			{
+				result.add(lineMarkerInfo);
+			}
+		}
 
-public class MethodSeparatorProvider extends FileSeparatorProvider {
-  @Override
-  public List<LineMarkerInfo> getFileSeparators(final PsiFile file, final Document document, @Nullable final Editor editor) {
-    final List<LineMarkerInfo> result = new ArrayList<LineMarkerInfo>();
-    LineMarkersPass pass = new LineMarkersPass(file.getProject(), file, editor, document, 0, file.getTextLength(), true);
-    for (LineMarkerInfo lineMarkerInfo : pass.queryLineMarkers()) {
-      if (lineMarkerInfo.separatorColor != null) {
-        result.add(lineMarkerInfo);
-      }
-    }
-
-    Collections.sort(result, new Comparator<LineMarkerInfo>() {
-      public int compare(final LineMarkerInfo i1, final LineMarkerInfo i2) {
-        return i1.startOffset - i2.startOffset;
-      }
-    });
-    return result;
-  }
+		Collections.sort(result, new Comparator<LineMarkerInfo>()
+		{
+			public int compare(final LineMarkerInfo i1, final LineMarkerInfo i2)
+			{
+				return i1.startOffset - i2.startOffset;
+			}
+		});
+		return result;
+	}
 }
