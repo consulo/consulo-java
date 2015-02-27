@@ -15,127 +15,174 @@
  */
 package com.intellij.codeInspection.defaultFileTemplateUsage;
 
-import com.intellij.codeInspection.*;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.impl.FileTemplateConfigurable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
+import javax.swing.SwingUtilities;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
+import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.fileTemplates.impl.FileTemplateConfigurable;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaToken;
+import com.intellij.psi.PsiWhiteSpace;
 
 /**
  * @author cdr
  */
-public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionTool {
-  // Fields are left for the compatibility
-  @Deprecated @SuppressWarnings("UnusedDeclaration")
-  public boolean CHECK_FILE_HEADER = true;
-  @Deprecated @SuppressWarnings("UnusedDeclaration")
-  public boolean CHECK_TRY_CATCH_SECTION = true;
-  @Deprecated @SuppressWarnings("UnusedDeclaration")
-  public boolean CHECK_METHOD_BODY = true;
+public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionTool
+{
+	// Fields are left for the compatibility
+	@Deprecated
+	@SuppressWarnings("UnusedDeclaration")
+	public boolean CHECK_FILE_HEADER = true;
+	@Deprecated
+	@SuppressWarnings("UnusedDeclaration")
+	public boolean CHECK_TRY_CATCH_SECTION = true;
+	@Deprecated
+	@SuppressWarnings("UnusedDeclaration")
+	public boolean CHECK_METHOD_BODY = true;
 
-  @Override
-  @NotNull
-  public String getGroupDisplayName() {
-    return GENERAL_GROUP_NAME;
-  }
+	@Override
+	@NotNull
+	public String getGroupDisplayName()
+	{
+		return GENERAL_GROUP_NAME;
+	}
 
-  @Override
-  @NotNull
-  public String getDisplayName() {
-    return InspectionsBundle.message("default.file.template.display.name");
-  }
+	@Override
+	@NotNull
+	public String getDisplayName()
+	{
+		return InspectionsBundle.message("default.file.template.display.name");
+	}
 
-  @Override
-  @NotNull
-  @NonNls
-  public String getShortName() {
-    return "DefaultFileTemplate";
-  }
+	@Override
+	@NotNull
+	@NonNls
+	public String getShortName()
+	{
+		return "DefaultFileTemplate";
+	}
 
-  static Pair<? extends PsiElement, ? extends PsiElement> getInteriorRange(PsiCodeBlock codeBlock) {
-    PsiElement[] children = codeBlock.getChildren();
-    if (children.length == 0) return Pair.create(codeBlock, codeBlock);
-    int start;
-    for (start=0; start<children.length;start++) {
-      PsiElement child = children[start];
-      if (child instanceof PsiWhiteSpace) continue;
-      if (child instanceof PsiJavaToken && ((PsiJavaToken)child).getTokenType() == JavaTokenType.LBRACE) continue;
-      break;
-    }
-    int end;
-    for (end=children.length-1; end > start;end--) {
-      PsiElement child = children[end];
-      if (child instanceof PsiWhiteSpace) continue;
-      if (child instanceof PsiJavaToken && ((PsiJavaToken)child).getTokenType() == JavaTokenType.RBRACE) continue;
-      break;
-    }
-    return Pair.create(children[start], children[end]);
-  }
+	static Pair<? extends PsiElement, ? extends PsiElement> getInteriorRange(PsiCodeBlock codeBlock)
+	{
+		PsiElement[] children = codeBlock.getChildren();
+		if(children.length == 0)
+		{
+			return Pair.create(codeBlock, codeBlock);
+		}
+		int start;
+		for(start = 0; start < children.length; start++)
+		{
+			PsiElement child = children[start];
+			if(child instanceof PsiWhiteSpace)
+			{
+				continue;
+			}
+			if(child instanceof PsiJavaToken && ((PsiJavaToken) child).getTokenType() == JavaTokenType.LBRACE)
+			{
+				continue;
+			}
+			break;
+		}
+		int end;
+		for(end = children.length - 1; end > start; end--)
+		{
+			PsiElement child = children[end];
+			if(child instanceof PsiWhiteSpace)
+			{
+				continue;
+			}
+			if(child instanceof PsiJavaToken && ((PsiJavaToken) child).getTokenType() == JavaTokenType.RBRACE)
+			{
+				continue;
+			}
+			break;
+		}
+		return Pair.create(children[start], children[end]);
+	}
 
-  @Override
-  @Nullable
-  public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
-    ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
-    return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
-  }
+	@Override
+	@Nullable
+	public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly)
+	{
+		ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
+		return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
+	}
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+	@Override
+	public boolean isEnabledByDefault()
+	{
+		return true;
+	}
 
-  public static LocalQuickFix createEditFileTemplateFix(final FileTemplate templateToEdit, final ReplaceWithFileTemplateFix replaceTemplateFix) {
-    return new MyLocalQuickFix(templateToEdit, replaceTemplateFix);
-  }
+	public static LocalQuickFix createEditFileTemplateFix(final FileTemplate templateToEdit, final ReplaceWithFileTemplateFix replaceTemplateFix)
+	{
+		return new MyLocalQuickFix(templateToEdit, replaceTemplateFix);
+	}
 
-  private static class MyLocalQuickFix implements LocalQuickFix {
-    private final FileTemplate myTemplateToEdit;
-    private final ReplaceWithFileTemplateFix myReplaceTemplateFix;
+	private static class MyLocalQuickFix implements LocalQuickFix
+	{
+		private final FileTemplate myTemplateToEdit;
+		private final ReplaceWithFileTemplateFix myReplaceTemplateFix;
 
-    public MyLocalQuickFix(FileTemplate templateToEdit, ReplaceWithFileTemplateFix replaceTemplateFix) {
-      myTemplateToEdit = templateToEdit;
-      myReplaceTemplateFix = replaceTemplateFix;
-    }
+		public MyLocalQuickFix(FileTemplate templateToEdit, ReplaceWithFileTemplateFix replaceTemplateFix)
+		{
+			myTemplateToEdit = templateToEdit;
+			myReplaceTemplateFix = replaceTemplateFix;
+		}
 
-    @Override
-    @NotNull
-    public String getName() {
-      return InspectionsBundle.message("default.file.template.edit.template");
-    }
+		@Override
+		@NotNull
+		public String getName()
+		{
+			return InspectionsBundle.message("default.file.template.edit.template");
+		}
 
-    @Override
-    @NotNull
-    public String getFamilyName() {
-      return getName();
-    }
+		@Override
+		@NotNull
+		public String getFamilyName()
+		{
+			return getName();
+		}
 
-    @Override
-    public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
-      final FileTemplateConfigurable configurable = new FileTemplateConfigurable();
-      SwingUtilities.invokeLater(new Runnable(){
-        @Override
-        public void run() {
-          configurable.setTemplate(myTemplateToEdit, null);
+		@Override
+		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		{
+			final FileTemplateConfigurable configurable = new FileTemplateConfigurable();
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					configurable.setTemplate(myTemplateToEdit, null);
 
-          boolean ok = ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
-          if (ok) {
-            ApplicationManager.getApplication().runWriteAction(new Runnable() {
-              @Override
-              public void run() {
-                myReplaceTemplateFix.applyFix(project, descriptor);
-              }
-            });
-          }
-        }
-      });
-    }
-  }
+					boolean ok = ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
+					if(ok)
+					{
+						WriteCommandAction.runWriteCommandAction(project, new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								myReplaceTemplateFix.applyFix(project, descriptor);
+							}
+						});
+					}
+				}
+			});
+		}
+	}
 }
