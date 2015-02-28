@@ -15,7 +15,7 @@
  */
 package com.intellij.ide.util.projectWizard.importSources;
 
-import com.intellij.ide.util.importProject.RootDetectionProcessor;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.util.text.StringUtil;
@@ -25,15 +25,6 @@ import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class JavaSourceRootDetectionUtil {
@@ -44,32 +35,6 @@ public class JavaSourceRootDetectionUtil {
   );
 
   private JavaSourceRootDetectionUtil() { }
-
-  @NotNull
-  public static Collection<JavaModuleSourceRoot> suggestRoots(@NotNull File dir) {
-    final List<JavaSourceRootDetector> detectors = ContainerUtil.findAll(ProjectStructureDetector.EP_NAME.getExtensions(), JavaSourceRootDetector.class);
-    final RootDetectionProcessor processor = new RootDetectionProcessor(dir, detectors.toArray(new JavaSourceRootDetector[detectors.size()]));
-    final Map<ProjectStructureDetector,List<DetectedProjectRoot>> rootsMap = processor.findRoots();
-
-    Map<File, JavaModuleSourceRoot> result = new HashMap<File, JavaModuleSourceRoot>();
-    for (List<DetectedProjectRoot> roots : rootsMap.values()) {
-      for (DetectedProjectRoot root : roots) {
-        if (root instanceof JavaModuleSourceRoot) {
-          final JavaModuleSourceRoot sourceRoot = (JavaModuleSourceRoot)root;
-          final File directory = sourceRoot.getDirectory();
-          final JavaModuleSourceRoot oldRoot = result.remove(directory);
-          if (oldRoot != null) {
-            result.put(directory, oldRoot.combineWith(sourceRoot));
-          }
-          else {
-            result.put(directory, sourceRoot);
-          }
-        }
-      }
-    }
-    return result.values();
-  }
-
 
   @Nullable
   public static String getPackageName(CharSequence text) {
