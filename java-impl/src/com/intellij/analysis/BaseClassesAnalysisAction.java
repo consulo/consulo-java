@@ -15,6 +15,8 @@
  */
 package com.intellij.analysis;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileStatusNotification;
@@ -25,8 +27,6 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author mike
@@ -49,7 +49,7 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
         indicator.setText(AnalysisScopeBundle.message("checking.class.files"));
 
         final CompilerManager compilerManager = CompilerManager.getInstance(myProject);
-        final boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope(myProject));
+        final boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
 
         ApplicationManager.getApplication().invokeLater(new Runnable() {
           @Override
@@ -93,7 +93,7 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
 
   private void compileAndAnalyze(final Project project, final AnalysisScope scope) {
     final CompilerManager compilerManager = CompilerManager.getInstance(project);
-    compilerManager.make(compilerManager.createProjectCompileScope(project), new CompileStatusNotification() {
+    compilerManager.make(compilerManager.createProjectCompileScope(), new CompileStatusNotification() {
       @Override
       public void finished(final boolean aborted, final int errors, final int warnings, final CompileContext compileContext) {
         if (aborted || errors != 0) return;

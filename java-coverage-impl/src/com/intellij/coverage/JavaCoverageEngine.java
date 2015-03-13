@@ -220,7 +220,7 @@ public class JavaCoverageEngine extends CoverageEngine {
             "Project class files are out of date. Would you like to recompile? The refusal to do it will result in incomplete coverage information",
             "Project is out of date", Messages.getWarningIcon()) == Messages.OK) {
             final CompilerManager compilerManager = CompilerManager.getInstance(project);
-            compilerManager.make(compilerManager.createProjectCompileScope(project), new CompileStatusNotification() {
+            compilerManager.make(compilerManager.createProjectCompileScope(), new CompileStatusNotification() {
               public void finished(final boolean aborted, final int errors, final int warnings, final CompileContext compileContext) {
                 if (aborted || errors != 0) return;
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
