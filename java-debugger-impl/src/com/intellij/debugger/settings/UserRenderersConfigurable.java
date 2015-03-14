@@ -15,28 +15,37 @@
  */
 package com.intellij.debugger.settings;
 
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.ui.tree.render.CompoundNodeRenderer;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
 import com.intellij.ide.util.ElementsChooser;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.options.ConfigurableUi;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.util.IconUtil;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.InternalIterator;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
-public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSettings>
+public final class UserRenderersConfigurable extends JPanel implements ConfigurableUi<NodeRendererSettings>
 {
 	private static final Icon ADD_ICON = IconUtil.getAddIcon();
 	private static final Icon REMOVE_ICON = IconUtil.getRemoveIcon();
@@ -44,19 +53,22 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 	private static final Icon UP_ICON = IconUtil.getMoveUpIcon();
 	private static final Icon DOWN_ICON = IconUtil.getMoveDownIcon();
 
-	private JPanel myNameFieldPanel;
-	private JTextField myNameField;
-	private ElementsChooser<NodeRenderer> myRendererChooser;
+	private final JPanel myNameFieldPanel;
+	private final JTextField myNameField;
+	private final ElementsChooser<NodeRenderer> myRendererChooser;
 	private NodeRenderer myCurrentRenderer = null;
 	private final CompoundRendererConfigurable myRendererDataConfigurable = new CompoundRendererConfigurable();
 
-	@Override
-	@NotNull
-	public JComponent getComponent()
+	public UserRenderersConfigurable()
 	{
+		super(new BorderLayout(4, 0));
+
+		myRendererChooser = new ElementsChooser<NodeRenderer>(true);
+		setupRenderersList();
+
 		JPanel left = new JPanel(new BorderLayout());
 		left.add(createToolbar(), BorderLayout.NORTH);
-		left.add(createRenderersList(), BorderLayout.CENTER);
+		left.add(myRendererChooser, BorderLayout.CENTER);
 
 		myNameField = new JTextField();
 		myNameFieldPanel = new JPanel(new BorderLayout());
@@ -81,15 +93,19 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 			}
 		});
 
-		JPanel panel = new JPanel(new BorderLayout(4, 0));
-		panel.add(left, BorderLayout.WEST);
-		panel.add(center, BorderLayout.CENTER);
-		return panel;
+		add(left, BorderLayout.WEST);
+		add(center, BorderLayout.CENTER);
 	}
 
-	private JComponent createRenderersList()
+	@Override
+	@NotNull
+	public JComponent getComponent()
 	{
-		myRendererChooser = new ElementsChooser<NodeRenderer>(true);
+		return this;
+	}
+
+	private void setupRenderersList()
+	{
 		myRendererChooser.getEmptyText().setText(DebuggerBundle.message("text.user.renderers.configurable.no.renderers"));
 
 		myRendererChooser.addElementsMarkListener(new ElementsChooser.ElementsMarkListener<NodeRenderer>()
@@ -111,7 +127,6 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 				}
 			}
 		});
-		return myRendererChooser;
 	}
 
 	private void updateCurrentRenderer(List<NodeRenderer> selectedElements)
@@ -151,6 +166,7 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 		myRendererDataConfigurable.setRenderer(renderer);
 	}
 
+	@NotNull
 	private JComponent createToolbar()
 	{
 		final DefaultActionGroup group = new DefaultActionGroup();
@@ -159,8 +175,7 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 		group.add(new CopyAction());
 		group.add(new MoveAction(true));
 		group.add(new MoveAction(false));
-		final ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, group, true);
-		return toolbar.getComponent();
+		return ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, group, true).getComponent();
 	}
 
 	@Override
@@ -270,8 +285,8 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 		public void update(AnActionEvent e)
 		{
 			super.update(e);
-			final Presentation presentation = e.getPresentation();
-			presentation.setEnabled(myRendererChooser.getSelectedElement() != null);
+
+			e.getPresentation().setEnabled(myRendererChooser.getSelectedElement() != null);
 		}
 	}
 
@@ -288,8 +303,7 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 			final NodeRenderer selectedElement = myRendererChooser.getSelectedElement();
 			if(selectedElement != null)
 			{
-				final NodeRenderer cloned = (NodeRenderer) selectedElement.clone();
-				myRendererChooser.addElement(cloned, true);
+				myRendererChooser.addElement((NodeRenderer) selectedElement.clone(), true);
 			}
 		}
 
@@ -297,8 +311,7 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 		public void update(AnActionEvent e)
 		{
 			super.update(e);
-			final Presentation presentation = e.getPresentation();
-			presentation.setEnabled(myRendererChooser.getSelectedElement() != null);
+			e.getPresentation().setEnabled(myRendererChooser.getSelectedElement() != null);
 		}
 	}
 
@@ -338,8 +351,7 @@ public class UserRenderersConfigurable implements ConfigurableUi<NodeRendererSet
 		public void update(AnActionEvent e)
 		{
 			super.update(e);
-			final Presentation presentation = e.getPresentation();
-			presentation.setEnabled(myRendererChooser.getSelectedElement() != null);
+			e.getPresentation().setEnabled(myRendererChooser.getSelectedElement() != null);
 		}
 	}
 }
