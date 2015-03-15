@@ -56,7 +56,7 @@ import com.intellij.util.PairConsumer;
  * @author VISTALL
  * @since 15.03.2015
  */
-public class JavaModuleExtensionPanel2 extends JPanel
+public class JavaModuleExtensionPanel extends JPanel
 {
 	private final JavaMutableModuleExtension<?> myMutableModuleExtension;
 
@@ -65,7 +65,7 @@ public class JavaModuleExtensionPanel2 extends JPanel
 	private JRadioButton mySourceDirRadioButton;
 
 	@RequiredDispatchThread
-	public JavaModuleExtensionPanel2(final JavaMutableModuleExtension<?> mutableModuleExtension, Runnable classpathStateUpdater)
+	public JavaModuleExtensionPanel(final JavaMutableModuleExtension<?> mutableModuleExtension, Runnable classpathStateUpdater)
 	{
 		super(new VerticalFlowLayout());
 		myMutableModuleExtension = mutableModuleExtension;
