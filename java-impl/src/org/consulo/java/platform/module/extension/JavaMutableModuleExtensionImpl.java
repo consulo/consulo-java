@@ -18,10 +18,11 @@ package org.consulo.java.platform.module.extension;
 import javax.swing.JComponent;
 
 import org.consulo.java.module.extension.JavaMutableModuleExtension;
-import org.consulo.java.platform.module.extension.ui.JavaModuleExtensionPanel;
+import org.consulo.java.platform.module.extension.ui.JavaModuleExtensionPanel2;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.pom.java.LanguageLevel;
@@ -39,9 +40,10 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 
 	@Nullable
 	@Override
+	@RequiredDispatchThread
 	public JComponent createConfigurablePanel(@Nullable Runnable updateOnCheck)
 	{
-		return new JavaModuleExtensionPanel(this, updateOnCheck);
+		return new JavaModuleExtensionPanel2(this, updateOnCheck);
 	}
 
 	@Override

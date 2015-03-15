@@ -31,6 +31,7 @@ import org.consulo.module.extension.ModuleExtension;
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.consulo.module.extension.ui.ModuleExtensionWithSdkPanel;
+import org.mustbe.consulo.DeprecationInfo;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -44,6 +45,8 @@ import com.intellij.ui.SimpleTextAttributes;
  * @author VISTALL
  * @since 15:23/19.05.13
  */
+@Deprecated
+@DeprecationInfo(value = "Use JavaModuleExtensionPanel2", until = "1.0")
 public class JavaModuleExtensionPanel extends JPanel {
   private final JavaMutableModuleExtension myMutableModuleExtension;
   private final Runnable myClasspathStateUpdater;
