@@ -50,7 +50,7 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.ui.ColoredListCellRendererWrapper;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.Consumer;
+import com.intellij.util.PairConsumer;
 
 /**
  * @author VISTALL
@@ -105,6 +105,28 @@ public class JavaModuleExtensionPanel2 extends JPanel
 			}
 		});
 
+		sdkBoxBuilder.postConsumer(new PairConsumer<Sdk, Sdk>()
+		{
+			@Override
+			public void consume(Sdk oldValue, Sdk newValue)
+			{
+				Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
+				if(selectedItem instanceof LanguageLevel && newValue != null && oldValue != null)
+				{
+					JavaSdkVersion oldSdkVersion = JavaSdk.getInstance().getVersion(oldValue);
+
+					// if old sdk version exists and lang version is equal sdk lang version
+					if(oldSdkVersion != null && oldSdkVersion.getMaxLanguageLevel() == selectedItem)
+					{
+						JavaSdkVersion newSdkVersion = JavaSdk.getInstance().getVersion(newValue);
+						if(newSdkVersion != null)
+						{
+							myLanguageLevelComboBox.setSelectedItem(newSdkVersion.getMaxLanguageLevel());
+						}
+					}
+				}
+			}
+		});
 
 		add(sdkBoxBuilder.build());
 
