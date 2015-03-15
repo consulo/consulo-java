@@ -45,7 +45,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CustomShortcutSet;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorFontType;
@@ -675,7 +675,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 
 			if(item.parameter.oldParameterIndex < 0)
 			{
-				item.parameter.defaultValue = ApplicationManager.getApplication().runWriteAction(new Computable<String>()
+				item.parameter.defaultValue = WriteCommandAction.runWriteCommandAction(myProject, new Computable<String>()
 				{
 					@Override
 					public String compute()
