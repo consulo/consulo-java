@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.codeStyle.OptionTreeWithPreviewPanel;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.fileTypes.FileType;
@@ -170,13 +169,8 @@ public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel {
     return JavaFileType.INSTANCE;
   }
 
-  public boolean setPanelLanguage(Language language) {
-    return super.setPanelLanguage(null);
-  }
-
   @Override
   protected void customizeSettings() {
-    resetDefaultNames();
     LanguageCodeStyleSettingsProvider provider = LanguageCodeStyleSettingsProvider.forLanguage(JavaLanguage.INSTANCE);
     if (provider != null) {
       provider.customizeSettings(this, getSettingsType());
