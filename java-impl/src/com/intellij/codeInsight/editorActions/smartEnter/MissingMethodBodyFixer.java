@@ -18,7 +18,14 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiDeclarationStatement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 
@@ -29,39 +36,54 @@ import com.intellij.util.IncorrectOperationException;
  * Time: 7:24:03 PM
  * To change this template use Options | File Templates.
  */
-public class MissingMethodBodyFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (!(psiElement instanceof PsiMethod)) return;
-    PsiMethod method = (PsiMethod) psiElement;
-    final PsiClass containingClass = method.getContainingClass();
-    if (containingClass == null || containingClass.isInterface()
-        || method.hasModifierProperty(PsiModifier.ABSTRACT) || method.hasModifierProperty(PsiModifier.NATIVE)) return;
+public class MissingMethodBodyFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(!(psiElement instanceof PsiMethod))
+		{
+			return;
+		}
+		PsiMethod method = (PsiMethod) psiElement;
+		final PsiClass containingClass = method.getContainingClass();
+		if(containingClass == null || containingClass.isInterface() || method.hasModifierProperty(PsiModifier.ABSTRACT) || method.hasModifierProperty(PsiModifier.NATIVE))
 
-    final PsiCodeBlock body = method.getBody();
-    final Document doc = editor.getDocument();
-    if (body != null) {
-      // See IDEADEV-1093. This is quite hacky heuristic but it seem to be best we can do.
-      String bodyText = body.getText();
-      if (bodyText.startsWith("{")) {
-        final PsiStatement[] statements = body.getStatements();
-        if (statements.length > 0) {
-          if (statements[0] instanceof PsiDeclarationStatement) {
-            if (PsiTreeUtil.getDeepestLast(statements[0]) instanceof PsiErrorElement) {
-              if (containingClass.getRBrace() == null) {
-                doc.insertString(body.getTextRange().getStartOffset() + 1, "\n}");
-              }
-            }
-          }
-        }
-      }
-      return;
-    }
-    int endOffset = method.getTextRange().getEndOffset();
-    if (StringUtil.endsWithChar(method.getText(), ';')) {
-      doc.deleteString(endOffset - 1, endOffset);
-      endOffset--;
-    }
-    doc.insertString(endOffset, "{\n}");
-  }
+		{
+			return;
+		}
+
+		final PsiCodeBlock body = method.getBody();
+		final Document doc = editor.getDocument();
+		if(body != null)
+		{
+			// See IDEADEV-1093. This is quite hacky heuristic but it seem to be best we can do.
+			String bodyText = body.getText();
+			if(bodyText.startsWith("{"))
+			{
+				final PsiStatement[] statements = body.getStatements();
+				if(statements.length > 0)
+				{
+					if(statements[0] instanceof PsiDeclarationStatement)
+					{
+						if(PsiTreeUtil.getDeepestLast(statements[0]) instanceof PsiErrorElement)
+						{
+							if(containingClass.getRBrace() == null)
+							{
+								doc.insertString(body.getTextRange().getStartOffset() + 1, "\n}");
+							}
+						}
+					}
+				}
+			}
+			return;
+		}
+		int endOffset = method.getTextRange().getEndOffset();
+		if(StringUtil.endsWithChar(method.getText(), ';'))
+		{
+			doc.deleteString(endOffset - 1, endOffset);
+			endOffset--;
+		}
+		doc.insertString(endOffset, "{\n}");
+	}
 }
