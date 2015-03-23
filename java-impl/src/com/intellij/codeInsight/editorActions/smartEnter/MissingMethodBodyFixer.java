@@ -15,16 +15,20 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
+import static com.intellij.psi.PsiModifier.ABSTRACT;
+import static com.intellij.psi.PsiModifier.DEFAULT;
+import static com.intellij.psi.PsiModifier.NATIVE;
+import static com.intellij.psi.PsiModifier.PRIVATE;
+import static com.intellij.psi.PsiModifier.STATIC;
+
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiDeclarationStatement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -47,8 +51,7 @@ public class MissingMethodBodyFixer implements Fixer
 		}
 		PsiMethod method = (PsiMethod) psiElement;
 		final PsiClass containingClass = method.getContainingClass();
-		if(containingClass == null || containingClass.isInterface() || method.hasModifierProperty(PsiModifier.ABSTRACT) || method.hasModifierProperty(PsiModifier.NATIVE))
-
+		if(!shouldHaveBody(method))
 		{
 			return;
 		}
@@ -78,12 +81,33 @@ public class MissingMethodBodyFixer implements Fixer
 			}
 			return;
 		}
-		int endOffset = method.getTextRange().getEndOffset();
-		if(StringUtil.endsWithChar(method.getText(), ';'))
+		int endOffset = method.getThrowsList().getTextRange().getEndOffset();
+		if(endOffset < doc.getTextLength() && doc.getCharsSequence().charAt(endOffset) == ';')
 		{
-			doc.deleteString(endOffset - 1, endOffset);
-			endOffset--;
+			doc.deleteString(endOffset, endOffset + 1);
 		}
 		doc.insertString(endOffset, "{\n}");
+	}
+
+	static boolean shouldHaveBody(PsiMethod method)
+	{
+		PsiClass containingClass = method.getContainingClass();
+		if(containingClass == null)
+		{
+			return false;
+		}
+		if(method.hasModifierProperty(PRIVATE))
+		{
+			return true;
+		}
+		if(method.hasModifierProperty(ABSTRACT) || method.hasModifierProperty(NATIVE))
+		{
+			return false;
+		}
+		if(containingClass.isInterface() && !method.hasModifierProperty(DEFAULT) && !method.hasModifierProperty(STATIC))
+		{
+			return false;
+		}
+		return true;
 	}
 }

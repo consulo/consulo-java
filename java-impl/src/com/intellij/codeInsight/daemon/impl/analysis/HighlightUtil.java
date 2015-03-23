@@ -212,6 +212,7 @@ public class HighlightUtil extends HighlightUtilBase
 			return null;
 		}
 		final boolean level8OrHigher = PsiUtil.isLanguageLevel8OrHigher(modifierList);
+		final boolean level9OrHigher = PsiUtil.isLanguageLevel9OrHigher(modifierList);
 		for(@PsiModifier.ModifierConstant String incompatible : incompatibles)
 		{
 			if(level8OrHigher)
@@ -219,6 +220,22 @@ public class HighlightUtil extends HighlightUtilBase
 				if(modifier.equals(PsiModifier.STATIC) && incompatible.equals(PsiModifier.ABSTRACT))
 				{
 					continue;
+				}
+			}
+			if(level9OrHigher && modifier.equals(PsiModifier.PRIVATE) && incompatible.equals(PsiModifier.PUBLIC))
+			{
+				continue;
+			}
+			if(modifier.equals(PsiModifier.STATIC) && incompatible.equals(PsiModifier.FINAL))
+			{
+				final PsiElement parent = modifierList.getParent();
+				if(parent instanceof PsiMethod)
+				{
+					final PsiClass containingClass = ((PsiMethod) parent).getContainingClass();
+					if(containingClass == null || !containingClass.isInterface())
+					{
+						continue;
+					}
 				}
 			}
 			if(modifierList.hasModifierProperty(incompatible))
@@ -1118,7 +1135,14 @@ public class HighlightUtil extends HighlightUtilBase
 			if(PsiModifier.PRIVATE.equals(modifier) || PsiModifier.PROTECTED.equals(modifier) || PsiModifier.TRANSIENT.equals(modifier) ||
 					PsiModifier.STRICTFP.equals(modifier) || PsiModifier.SYNCHRONIZED.equals(modifier))
 			{
-				isAllowed &= modifierOwnerParent instanceof PsiClass && !((PsiClass) modifierOwnerParent).isInterface();
+				isAllowed &= modifierOwnerParent instanceof PsiClass && (!((PsiClass) modifierOwnerParent).isInterface() || PsiUtil
+						.isLanguageLevel9OrHigher(modifierOwner));
+			}
+
+			if(containingClass != null && containingClass.isAnnotationType())
+			{
+				isAllowed &= !PsiModifier.STATIC.equals(modifier);
+				isAllowed &= !PsiModifier.DEFAULT.equals(modifier);
 			}
 		}
 		else if(modifierOwner instanceof PsiField)
@@ -3683,7 +3707,7 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 	}
 
-	private enum Feature
+	public enum Feature
 	{
 		GENERICS(LanguageLevel.JDK_1_5, "feature.generics"),
 		ANNOTATIONS(LanguageLevel.JDK_1_5, "feature.annotations"),
@@ -3699,7 +3723,8 @@ public class HighlightUtil extends HighlightUtilBase
 		EXTENSION_METHODS(LanguageLevel.JDK_1_8, "feature.extension.methods"),
 		METHOD_REFERENCES(LanguageLevel.JDK_1_8, "feature.method.references"),
 		LAMBDA_EXPRESSIONS(LanguageLevel.JDK_1_8, "feature.lambda.expressions"),
-		TYPE_ANNOTATIONS(LanguageLevel.JDK_1_8, "feature.type.annotations");
+		TYPE_ANNOTATIONS(LanguageLevel.JDK_1_8, "feature.type.annotations"),
+		PRIVATE_METHODS_IN_INTERFACES(LanguageLevel.JDK_1_9, "feature.private.methods.in.interfaces");
 
 		@NotNull
 		private final LanguageLevel level;
@@ -3714,7 +3739,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@Nullable
-	private static HighlightInfo checkFeature(@NotNull final PsiElement element,
+	public static HighlightInfo checkFeature(@NotNull final PsiElement element,
 			@NotNull Feature feature,
 			@NotNull LanguageLevel languageLevel,
 			@NotNull PsiFile containingFile)

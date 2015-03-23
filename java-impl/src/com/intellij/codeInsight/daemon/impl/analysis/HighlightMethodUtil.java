@@ -1007,6 +1007,7 @@ public class HighlightMethodUtil
 		boolean isInterface = aClass != null && aClass.isInterface();
 		boolean isExtension = method.hasModifierProperty(PsiModifier.DEFAULT);
 		boolean isStatic = method.hasModifierProperty(PsiModifier.STATIC);
+		boolean isPrivate = method.hasModifierProperty(PsiModifier.PRIVATE);
 
 		final List<IntentionAction> additionalFixes = new ArrayList<IntentionAction>();
 		String description = null;
@@ -1024,7 +1025,7 @@ public class HighlightMethodUtil
 		}
 		else if(isInterface)
 		{
-			if(!isExtension && !isStatic)
+			if(!isExtension && !isStatic && !isPrivate)
 			{
 				description = JavaErrorMessages.message("interface.methods.cannot.have.body");
 				if(PsiUtil.isLanguageLevel8OrHigher(method))
@@ -1032,10 +1033,18 @@ public class HighlightMethodUtil
 					additionalFixes.add(QUICK_FIX_FACTORY.createModifierListFix(method, PsiModifier.DEFAULT, true, false));
 					additionalFixes.add(QUICK_FIX_FACTORY.createModifierListFix(method, PsiModifier.STATIC, true, false));
 				}
+				if(PsiUtil.isLanguageLevel9OrHigher(method))
+				{
+					additionalFixes.add(QUICK_FIX_FACTORY.createModifierListFix(method, PsiModifier.PRIVATE, true, false));
+				}
 			}
 			else if(isExtension)
 			{
 				return HighlightUtil.checkExtensionMethodsFeature(method, languageLevel, containingFile);
+			}
+			else if(isPrivate)
+			{
+				return HighlightUtil.checkFeature(method, HighlightUtil.Feature.PRIVATE_METHODS_IN_INTERFACES, languageLevel, containingFile);
 			}
 		}
 		else if(isExtension)
