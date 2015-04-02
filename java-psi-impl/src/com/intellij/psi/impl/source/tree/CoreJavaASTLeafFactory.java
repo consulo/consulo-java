@@ -15,7 +15,10 @@
  */
 package com.intellij.psi.impl.source.tree;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTLeafFactory;
+import com.intellij.lang.LanguageVersion;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.javadoc.PsiDocTokenImpl;
 import com.intellij.psi.impl.source.tree.java.PsiIdentifierImpl;
@@ -24,8 +27,6 @@ import com.intellij.psi.impl.source.tree.java.PsiKeywordImpl;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.java.IJavaDocElementType;
 import com.intellij.psi.tree.java.IJavaElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yole
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory {
   @Override
   @NotNull
-  public LeafElement createLeaf(final IElementType type, final CharSequence text) {
+  public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion<?> languageVersion, @NotNull final CharSequence text) {
     if (type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT) {
       return new PsiCoreCommentImpl(type, text);
     }
