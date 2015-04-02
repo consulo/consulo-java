@@ -26,8 +26,6 @@ package org.osmorc.manifest.lang;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.psi.tree.IElementType;
 
 /**
@@ -43,7 +41,7 @@ public class ManifestTokenType extends IElementType
 	public static final ManifestTokenType SEMICOLON = new ManifestTokenType("SEMICOLON_TOKEN");
 	public static final ManifestTokenType EQUALS = new ManifestTokenType("EQUALS_TOKEN");
 	public static final ManifestTokenType COMMA = new ManifestTokenType("COMMA_TOKEN");
-	public static final ManifestTokenType SHARP = new ManifestTokenType("SHARP", ManifestLanguageVersion.Bnd);
+	public static final ManifestTokenType SHARP = new ManifestTokenType("SHARP");
 	public static final ManifestTokenType QUOTE = new ManifestTokenType("QUOTE_TOKEN");
 	public static final ManifestTokenType HEADER_VALUE_PART = new ManifestTokenType("HEADER_VALUE_PART_TOKEN");
 	public static final ManifestTokenType SIGNIFICANT_SPACE = new ManifestTokenType("SIGNIFICANT_SPACE_TOKEN");
@@ -51,16 +49,11 @@ public class ManifestTokenType extends IElementType
 	public static final ManifestTokenType CLOSING_PARENTHESIS_TOKEN = new ManifestTokenType("CLOSING_PARENTHESIS_TOKEN");
 	public static final ManifestTokenType OPENING_BRACKET_TOKEN = new ManifestTokenType("OPENING_BRACKET_TOKEN");
 	public static final ManifestTokenType CLOSING_BRACKET_TOKEN = new ManifestTokenType("CLOSING_BRACKET_TOKEN");
-	public static final ManifestTokenType LINE_COMMENT = new ManifestTokenType("LINE_COMMENT", ManifestLanguageVersion.Bnd);
+	public static final ManifestTokenType LINE_COMMENT = new ManifestTokenType("LINE_COMMENT");
 
-	private ManifestTokenType(@NotNull @NonNls String debugName)
+	public ManifestTokenType(@NotNull @NonNls String debugName)
 	{
-		this(debugName, null);
-	}
-
-	public ManifestTokenType(@NotNull @NonNls String debugName, @Nullable LanguageVersion languageVersion)
-	{
-		super(debugName, ManifestLanguage.INSTANCE, languageVersion);
+		super(debugName, ManifestLanguage.INSTANCE);
 	}
 
 	public String toString()
