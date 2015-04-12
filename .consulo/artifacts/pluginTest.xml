@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact name="pluginTest">
+    <output-path>$PROJECT_DIR$/out/artifacts/pluginTest</output-path>
+    <root id="root">
+      <element id="artifact" artifact-name="plugin" />
+      <element id="directory" name="java">
+        <element id="directory" name="lib">
+          <element id="zip-archive" name="java-tests.jar">
+            <element id="module-test-output" name="consulo-java" />
+          </element>
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
