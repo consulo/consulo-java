@@ -1,5 +1,5 @@
 PsiJavaFile:FileWithClass.java
-  PsiPackageStatement:a
+  PsiJavaPackageStatement:a
     PsiKeyword:package('package')
     PsiWhiteSpace(' ')
     PsiJavaCodeReferenceElement:a

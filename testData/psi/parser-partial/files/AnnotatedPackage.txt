@@ -1,5 +1,5 @@
 PsiJavaFile:AnnotatedPackage.java
-  PsiPackageStatement:a.b.c
+  PsiJavaPackageStatement:a.b.c
     PsiModifierList:@Anno
       PsiAnnotation
         PsiJavaToken:AT('@')
