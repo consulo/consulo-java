@@ -40,9 +40,9 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PlatformIcons;
 
 /**
  * The standard "New Class" action.
@@ -59,9 +59,9 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 	@Override
 	protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder)
 	{
-		builder.setTitle(JavaCoreBundle.message("action.create.new.class")).addKind("Class", AllIcons.Nodes.Class, 
-				JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME).addKind("Interface", PlatformIcons.INTERFACE_ICON, 
-				JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
+		builder.setTitle(JavaCoreBundle.message("action.create.new.class"))
+				.addKind("Class", AllIcons.Nodes.Class, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME)
+				.addKind("Interface", AllIcons.Nodes.Interface, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
 
 		Module module = ModuleUtilCore.findModuleForPsiElement(directory);
 		assert module != null;
@@ -69,8 +69,8 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 
 		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_5))
 		{
-			builder.addKind("Enum", PlatformIcons.ENUM_ICON, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
-			builder.addKind("Annotation", PlatformIcons.ANNOTATION_TYPE_ICON, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
+			builder.addKind("Enum", AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
+			builder.addKind("Annotation", AllIcons.Nodes.Annotationtype, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
 		}
 
 		for(FileTemplate template : FileTemplateManager.getInstance().getAllTemplates())
@@ -124,8 +124,9 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 	@Override
 	protected String getActionName(PsiDirectory directory, String newName, String templateName)
 	{
-		return JavaCoreBundle.message("progress.creating.class", StringUtil.getQualifiedName(JavaDirectoryService.getInstance().getPackage
-				(directory).getQualifiedName(), newName));
+		PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+		assert aPackage != null;
+		return JavaCoreBundle.message("progress.creating.class", StringUtil.getQualifiedName(aPackage.getQualifiedName(), newName));
 	}
 
 	protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException
