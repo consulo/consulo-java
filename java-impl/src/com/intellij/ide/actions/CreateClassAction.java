@@ -23,6 +23,7 @@ import org.consulo.module.extension.ModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.core.JavaCoreBundle;
+import com.intellij.icons.AllIcons;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaCreateFromTemplateHandler;
@@ -52,15 +53,14 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 {
 	public CreateClassAction()
 	{
-		super(JavaCoreBundle.message("action.NewClass.text"), JavaCoreBundle.message("action.create.new.class.description"),
-				PlatformIcons.CLASS_ICON, true);
+		super(null, null, AllIcons.Nodes.Class, true);
 	}
 
 	@Override
 	protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder)
 	{
-		builder.setTitle(JavaCoreBundle.message("action.create.new.class")).addKind("Class", PlatformIcons.CLASS_ICON,
-				JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME).addKind("Interface", PlatformIcons.INTERFACE_ICON,
+		builder.setTitle(JavaCoreBundle.message("action.create.new.class")).addKind("Class", AllIcons.Nodes.Class, 
+				JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME).addKind("Interface", PlatformIcons.INTERFACE_ICON, 
 				JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
 
 		Module module = ModuleUtilCore.findModuleForPsiElement(directory);
