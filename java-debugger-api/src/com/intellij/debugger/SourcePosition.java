@@ -15,6 +15,10 @@
  */
 package com.intellij.debugger;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -26,12 +30,15 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiForStatement;
+import com.intellij.psi.SyntheticElement;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * User: lex
@@ -251,7 +258,7 @@ public abstract class SourcePosition implements Navigatable{
     }
   }
 
-  public static SourcePosition createFromLineComputable(final PsiFile file, final Computable<Integer> line) {
+  public static SourcePosition createFromLineComputable(@NotNull final PsiFile file, final Computable<Integer> line) {
     return new SourcePositionCache(file) {
       @Override
       protected int calcLine() {
@@ -260,7 +267,7 @@ public abstract class SourcePosition implements Navigatable{
     };
   }
 
-  public static SourcePosition createFromLine(final PsiFile file, final int line) {
+  public static SourcePosition createFromLine(@NotNull final PsiFile file, final int line) {
     return new SourcePositionCache(file) {
       @Override
       protected int calcLine() {
@@ -269,7 +276,7 @@ public abstract class SourcePosition implements Navigatable{
     };
   }
 
-  public static SourcePosition createFromOffset(final PsiFile file, final int offset) {
+  public static SourcePosition createFromOffset(@NotNull final PsiFile file, final int offset) {
     return new SourcePositionCache(file) {
 
       @Override

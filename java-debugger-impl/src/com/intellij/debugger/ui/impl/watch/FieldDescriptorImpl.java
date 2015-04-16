@@ -45,6 +45,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiVariable;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -168,13 +169,19 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 				aClass = (PsiClass) aClass.getNavigationElement();
 				for(PsiField field : aClass.getFields())
 				{
+					PsiFile containingFile = field.getContainingFile();
+					if(containingFile == null)
+					{
+						continue;
+					}
+
 					if(fieldName.equals(field.getName()))
 					{
 						if(nearest)
 						{
-							return DebuggerContextUtil.findNearest(context, field, aClass.getContainingFile());
+							return DebuggerContextUtil.findNearest(context, field, containingFile);
 						}
-						return SourcePosition.createFromOffset(field.getContainingFile(), field.getTextOffset());
+						return SourcePosition.createFromOffset(containingFile, field.getTextOffset());
 					}
 				}
 			}
