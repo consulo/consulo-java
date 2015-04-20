@@ -15,16 +15,16 @@
  */
 package com.intellij.codeInsight.highlighting;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @author yole
@@ -32,7 +32,7 @@ import java.util.Collection;
 public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
   public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
-    int offset = TargetElementUtilBase.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
+    int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     PsiElement target = file.findElementAt(offset);
     if (target instanceof PsiKeyword) {
       PsiElement parent = target.getParent();

@@ -15,7 +15,10 @@
  */
 package com.intellij.vcsUtil;
 
-import com.intellij.codeInsight.TargetElementUtilBase;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredDispatchThread;
+import com.intellij.codeInsight.TargetElementUtil;
+import com.intellij.codeInsight.TargetElementUtilEx;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -23,18 +26,25 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vcs.VcsBundle;
 import com.intellij.openapi.vcs.actions.VcsContext;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiCompiledElement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiStatement;
+import com.intellij.util.containers.ContainerUtil;
 
 /**
  * @author yole
  */
 public class JavaVcsSelectionProvider implements VcsSelectionProvider {
   @Nullable
+  @RequiredDispatchThread
   public VcsSelection getSelection(final VcsContext context) {
     final Editor editor = context.getEditor();
     if (editor == null) return null;
-    PsiElement psiElement = TargetElementUtilBase.findTargetElement(editor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement psiElement = TargetElementUtil.findTargetElement(editor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     if (psiElement == null) {
       return null;
     }

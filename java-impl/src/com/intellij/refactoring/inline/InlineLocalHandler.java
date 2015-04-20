@@ -16,8 +16,14 @@
  */
 package com.intellij.refactoring.inline;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.openapi.application.ApplicationManager;
@@ -46,12 +52,6 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class InlineLocalHandler extends JavaInlineActionHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.inline.InlineLocalHandler");
@@ -63,7 +63,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
   }
 
   public void inlineElement(Project project, Editor editor, PsiElement element) {
-    final PsiReference psiReference = TargetElementUtilBase.findReference(editor);
+    final PsiReference psiReference = TargetElementUtil.findReference(editor);
     final PsiReferenceExpression refExpr = psiReference instanceof PsiReferenceExpression ? ((PsiReferenceExpression)psiReference) : null;
     invoke(project, editor, (PsiLocalVariable) element, refExpr);
   }

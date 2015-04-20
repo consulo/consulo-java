@@ -15,18 +15,23 @@
  */
 package com.intellij.refactoring.typeMigration.actions;
 
-import com.intellij.codeInsight.TargetElementUtilBase;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiReferenceParameterList;
+import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.actions.BaseRefactoringAction;
 import com.intellij.refactoring.typeMigration.ChangeTypeSignatureHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class ChangeTypeSignatureAction extends BaseRefactoringAction {
   public boolean isAvailableInEditorOnly() {
@@ -52,7 +57,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction {
   }
 
   protected boolean isAvailableOnElementInEditorAndFile(@NotNull final PsiElement element, @NotNull final Editor editor, @NotNull PsiFile file, @NotNull DataContext context) {
-    final int offset = TargetElementUtilBase.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
+    final int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     final PsiElement psiElement = file.findElementAt(offset);
     final PsiReferenceParameterList referenceParameterList = PsiTreeUtil.getParentOfType(psiElement, PsiReferenceParameterList.class);
     if (referenceParameterList != null) {

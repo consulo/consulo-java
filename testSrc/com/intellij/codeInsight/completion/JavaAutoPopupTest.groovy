@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion
 import com.intellij.codeInsight.CodeInsightSettings
-import com.intellij.codeInsight.TargetElementUtil
+import com.intellij.codeInsight.TargetElementUtilOld
 import com.intellij.codeInsight.completion.impl.CompletionServiceImpl
 import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler
 import com.intellij.codeInsight.lookup.Lookup
@@ -939,17 +939,17 @@ class Foo {
     type('x')
     assertContains 'x__foo', 'x__goo'
     edt {
-      assert foo == TargetElementUtil.instance.findTargetElement(myFixture.editor, TargetElementUtil.LOOKUP_ITEM_ACCEPTED)
+      assert foo == TargetElementUtilOld.instance.findTargetElement(myFixture.editor, TargetElementUtilOld.LOOKUP_ITEM_ACCEPTED)
       myFixture.performEditorAction(IdeActions.ACTION_EDITOR_MOVE_CARET_DOWN)
-      assert goo == TargetElementUtil.instance.findTargetElement(myFixture.editor, TargetElementUtil.LOOKUP_ITEM_ACCEPTED)
+      assert goo == TargetElementUtilOld.instance.findTargetElement(myFixture.editor, TargetElementUtilOld.LOOKUP_ITEM_ACCEPTED)
     }
 
     type('_')
     myFixture.assertPreferredCompletionItems 1, 'x__foo', 'x__goo'
     edt {
-      assert goo == TargetElementUtil.instance.findTargetElement(myFixture.editor, TargetElementUtil.LOOKUP_ITEM_ACCEPTED)
+      assert goo == TargetElementUtilOld.instance.findTargetElement(myFixture.editor, TargetElementUtilOld.LOOKUP_ITEM_ACCEPTED)
       myFixture.performEditorAction(IdeActions.ACTION_EDITOR_MOVE_CARET_UP)
-      assert foo == TargetElementUtil.instance.findTargetElement(myFixture.editor, TargetElementUtil.LOOKUP_ITEM_ACCEPTED)
+      assert foo == TargetElementUtilOld.instance.findTargetElement(myFixture.editor, TargetElementUtilOld.LOOKUP_ITEM_ACCEPTED)
     }
   }
 

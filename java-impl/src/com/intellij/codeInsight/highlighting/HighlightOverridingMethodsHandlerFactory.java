@@ -15,9 +15,13 @@
  */
 package com.intellij.codeInsight.highlighting;
 
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.*;
-import com.intellij.codeInsight.TargetElementUtilBase;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiKeyword;
+import com.intellij.psi.PsiReferenceList;
 
 /**
  * @author yole
@@ -25,7 +29,7 @@ import com.intellij.codeInsight.TargetElementUtilBase;
 public class HighlightOverridingMethodsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
   public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
-    int offset = TargetElementUtilBase.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
+    int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     final PsiElement target = file.findElementAt(offset);
     if (target instanceof PsiKeyword && (PsiKeyword.EXTENDS.equals(target.getText()) || PsiKeyword.IMPLEMENTS.equals(target.getText()))) {
       PsiElement parent = target.getParent();

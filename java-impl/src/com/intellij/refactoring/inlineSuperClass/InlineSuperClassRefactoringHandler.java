@@ -22,7 +22,7 @@ package com.intellij.refactoring.inlineSuperClass;
 
 import java.util.Collection;
 
-import com.intellij.codeInsight.TargetElementUtilBase;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -71,7 +71,7 @@ public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler 
     }
 
     PsiClass chosen = null;
-    PsiReference reference = editor != null ? TargetElementUtilBase.findReference(editor, editor.getCaretModel().getOffset()) : null;
+    PsiReference reference = editor != null ? TargetElementUtil.findReference(editor, editor.getCaretModel().getOffset()) : null;
     if (reference != null) {
       final PsiElement resolve = reference.resolve();
       if (resolve == superClass) {

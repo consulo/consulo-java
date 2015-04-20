@@ -1691,9 +1691,6 @@
 		<printOption implementation="com.intellij.codeEditor.printing.HyperlinksToClassesOption"/>
 
 		<indexPatternBuilder implementation="com.intellij.psi.impl.search.JavaIndexPatternBuilder"/>
-
-		<!--TODO [VISTALL] core depend <applicationService serviceInterface="com.intellij.codeInsight.TargetElementUtilBase"
-							 serviceImplementation="com.intellij.codeInsight.TargetElementUtil"/>  -->
 		<gotoClassContributor implementation="com.intellij.ide.util.gotoByName.DefaultClassNavigationContributor"/>
 		<gotoSymbolContributor implementation="com.intellij.ide.util.gotoByName.DefaultSymbolNavigationContributor"/>
 		<scopeTreeExpander implementation="com.intellij.ide.scopeView.ClassesScopeTreeStructureExpander"/>
@@ -1821,9 +1818,6 @@
 		<psiViewerExtension implementation="com.intellij.internal.psiView.PsiViewerCodeFragmentExtension"/>
 		<psiViewerExtension implementation="com.intellij.internal.psiView.PsiViewerExpressionExtension"/>
 
-		<!--TODO [VISTALL] core depend<applicationService serviceInterface="com.intellij.profile.codeInspection.InspectionProfileManager"
-							serviceImplementation="com.intellij.profile.codeInspection.JavaAwareInspectionProfileManager"/> -->
-
 		<resolveScopeEnlarger implementation="com.intellij.psi.NonClasspathResolveScopeEnlarger"/>
 
 		<xdebugger.debuggerSupport implementation="com.intellij.debugger.ui.JavaDebuggerSupport"/>
@@ -1947,6 +1941,8 @@
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
 		<newModuleBuilder implementation="org.mustbe.consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder" />
 		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.codeInspection.SuppressManagerImpl"/>
+
+		<targetElementUtilEx implementation="com.intellij.codeInsight.JavaTargetElementUtilEx" />
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

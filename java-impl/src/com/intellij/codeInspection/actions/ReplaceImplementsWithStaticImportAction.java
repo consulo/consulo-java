@@ -15,9 +15,20 @@
  */
 package com.intellij.codeInspection.actions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.TargetElementUtilBase;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
@@ -36,10 +47,6 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ReplaceImplementsWithStaticImportAction.class);
@@ -68,7 +75,7 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
         return isEmptyClass(project, (PsiClass)parent) && DirectClassInheritorsSearch.search((PsiClass)parent).findFirst() != null;
       }
     }
-    final PsiReference psiReference = TargetElementUtilBase.findReference(editor);
+    final PsiReference psiReference = TargetElementUtil.findReference(editor);
     if (psiReference == null) return false;
 
     final PsiReferenceList referenceList = PsiTreeUtil.getParentOfType(psiReference.getElement(), PsiReferenceList.class);

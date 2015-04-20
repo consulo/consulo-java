@@ -19,7 +19,8 @@
  */
 package com.intellij.find.findUsages;
 
-import com.intellij.codeInsight.TargetElementUtilBase;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -27,7 +28,6 @@ import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.PsiThrowStatement;
 import com.intellij.usages.UsageTarget;
 import com.intellij.usages.UsageTargetProvider;
-import org.jetbrains.annotations.Nullable;
 
 public class ThrowsUsageTargetProvider implements UsageTargetProvider {
   @Override
@@ -35,7 +35,7 @@ public class ThrowsUsageTargetProvider implements UsageTargetProvider {
   public UsageTarget[] getTargets(Editor editor, final PsiFile file) {
     if (editor == null || file == null) return null;
 
-    PsiElement element = file.findElementAt(TargetElementUtilBase.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset()));
+    PsiElement element = file.findElementAt(TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset()));
     if (element == null) return null;
 
     if (element instanceof PsiKeyword && PsiKeyword.THROWS.equals(element.getText())) {

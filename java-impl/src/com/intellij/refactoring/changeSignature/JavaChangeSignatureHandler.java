@@ -15,7 +15,9 @@
  */
 package com.intellij.refactoring.changeSignature;
 
-import com.intellij.codeInsight.TargetElementUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.JavaTargetElementUtilEx;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -30,8 +32,6 @@ import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
 
@@ -87,7 +87,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, method)) return;
 
     final PsiClass containingClass = method.getContainingClass();
-    final PsiReferenceExpression refExpr = editor != null ? TargetElementUtil.findReferenceExpression(editor) : null;
+    final PsiReferenceExpression refExpr = editor != null ? JavaTargetElementUtilEx.findReferenceExpression(editor) : null;
     final boolean allowDelegation = containingClass != null && !containingClass.isInterface();
     final DialogWrapper dialog = new JavaChangeSignatureDialog(project, method, allowDelegation, refExpr);
     dialog.show();

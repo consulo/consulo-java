@@ -20,6 +20,10 @@
  */
 package com.intellij.codeInspection.concurrencyAnnotations;
 
+import net.jcip.annotations.GuardedBy;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -30,13 +34,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PathUtil;
-import net.jcip.annotations.GuardedBy;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class JCiPOrderEntryFix implements IntentionAction {
   private static final Logger LOG = Logger.getInstance("#" + JCiPOrderEntryFix.class.getName());
@@ -74,7 +79,7 @@ public class JCiPOrderEntryFix implements IntentionAction {
 
   @Override
   public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
-    final PsiJavaCodeReferenceElement reference = (PsiJavaCodeReferenceElement)TargetElementUtil.findReference(editor);
+    final PsiJavaCodeReferenceElement reference = (PsiJavaCodeReferenceElement) TargetElementUtil.findReference(editor);
     LOG.assertTrue(reference != null);
     String jarPath = PathUtil.getJarPathForClass(GuardedBy.class);
     final VirtualFile virtualFile = file.getVirtualFile();

@@ -20,8 +20,13 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.TargetElementUtilBase;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -32,11 +37,6 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
   private final PsiCall myMethodCall;
@@ -74,8 +74,7 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
       final PsiMethod psiMethod = (PsiMethod)method;
       return checkMethod(element, psiMethod);
     } else if (myMethodCall instanceof PsiMethodCallExpression){
-      final Collection<PsiElement> psiElements = TargetElementUtilBase.getInstance()
-        .getTargetCandidates(((PsiMethodCallExpression)myMethodCall).getMethodExpression());
+      final Collection<PsiElement> psiElements = TargetElementUtil.getTargetCandidates(((PsiMethodCallExpression) myMethodCall).getMethodExpression());
       for (PsiElement psiElement : psiElements) {
         if (psiElement instanceof PsiMethod) {
           final PsiExpression expression = checkMethod(element, (PsiMethod)psiElement);

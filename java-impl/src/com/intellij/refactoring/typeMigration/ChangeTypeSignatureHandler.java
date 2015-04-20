@@ -15,19 +15,25 @@
  */
 package com.intellij.refactoring.typeMigration;
 
-import com.intellij.codeInsight.TargetElementUtilBase;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiReferenceParameterList;
+import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.typeMigration.ui.TypeMigrationDialog;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class ChangeTypeSignatureHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance("#" + ChangeTypeSignatureHandler.class.getName());
@@ -36,7 +42,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler {
 
   public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    final int offset = TargetElementUtilBase.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
+    final int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     final PsiElement element = file.findElementAt(offset);
     PsiTypeElement typeElement = PsiTreeUtil.getParentOfType(element, PsiTypeElement.class);
     while (typeElement != null) {

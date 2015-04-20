@@ -15,8 +15,17 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.TargetElementUtil;
+import com.intellij.codeInsight.JavaTargetElementUtilEx;
 import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -49,11 +58,6 @@ import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author cdr
@@ -248,7 +252,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
       final List<ParameterInfoImpl> parameterInfos = newParametersInfo != null
                                                      ? new ArrayList<ParameterInfoImpl>(Arrays.asList(newParametersInfo))
                                                      : new ArrayList<ParameterInfoImpl>();
-      final PsiReferenceExpression refExpr = TargetElementUtil.findReferenceExpression(editor);
+      final PsiReferenceExpression refExpr = JavaTargetElementUtilEx.findReferenceExpression(editor);
       JavaChangeSignatureDialog dialog = JavaChangeSignatureDialog.createAndPreselectNew(project, method, parameterInfos, allowDelegation, refExpr);
       dialog.setParameterInfos(parameterInfos);
       dialog.show();
