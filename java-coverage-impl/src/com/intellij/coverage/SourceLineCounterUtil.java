@@ -6,7 +6,6 @@ import gnu.trove.TIntProcedure;
 import java.util.List;
 
 import org.jetbrains.org.objectweb.asm.ClassReader;
-import com.intellij.rt.coverage.instrumentation.SourceLineCounter;
 
 /**
  * User: anna
