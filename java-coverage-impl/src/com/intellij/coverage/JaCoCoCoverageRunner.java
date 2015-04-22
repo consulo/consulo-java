@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.execution.configurations.SimpleJavaParameters;
-import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -35,12 +35,9 @@ import com.intellij.rt.coverage.data.ClassData;
 import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.ProjectData;
-import com.intellij.util.PathUtil;
 
 public class JaCoCoCoverageRunner extends JavaCoverageRunner
 {
-	private static final Logger LOG = Logger.getInstance("#" + JaCoCoCoverageRunner.class.getName());
-
 	@Override
 	public ProjectData loadCoverageData(@NotNull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite)
 	{
@@ -72,6 +69,7 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner
 			executionDataReader.setExecutionDataVisitor(executionDataStore);
 			executionDataReader.setSessionInfoVisitor(new ISessionInfoVisitor()
 			{
+				@Override
 				public void visitSessionInfo(SessionInfo info)
 				{
 					System.out.println(info.toString());
@@ -151,13 +149,15 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner
 	}
 
 
+	@Override
 	public void appendCoverageArgument(final String sessionDataFilePath, final String[] patterns, final SimpleJavaParameters javaParameters,
 			final boolean collectLineInfo, final boolean isSampling)
 	{
-		StringBuffer argument = new StringBuffer("-javaagent:");
-		final String agentPath = PathUtil.getJarPathForClass(org.jacoco.agent.rt.RT.class);
-		final String parentPath = handleSpacesInPath(agentPath);
-		argument.append(parentPath).append(File.separator).append(new File(agentPath).getName());
+		final File agentFile = new File(PluginManager.getPluginPath(JaCoCoCoverageRunner.class), "coverage-lib/jacoco/jacocoagent.jar");
+
+		StringBuilder argument = new StringBuilder("-javaagent:");
+		final String parentPath = handleSpacesInPath(agentFile);
+		argument.append(parentPath).append(File.separator).append(agentFile.getName());
 		argument.append("=");
 		argument.append("destfile=").append(sessionDataFilePath);
 		argument.append(",append=false");
@@ -165,16 +165,19 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner
 	}
 
 
+	@Override
 	public String getPresentableName()
 	{
 		return "JaCoCo";
 	}
 
+	@Override
 	public String getId()
 	{
 		return "jacoco";
 	}
 
+	@Override
 	public String getDataFileExtension()
 	{
 		return "exec";

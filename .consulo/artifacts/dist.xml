@@ -43,10 +43,6 @@
             <element id="module-output" name="java-manifest" />
             <element id="module-production-resource-output" name="java-manifest" />
           </element>
-          <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/coverage-report-idea.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/coverage-report.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/jacocoagent.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/jacocoant.jar" />
           <element id="zip-archive" name="coverate_rt.jar">
             <element id="module-output" name="coverage_rt" />
           </element>
@@ -57,6 +53,10 @@
             <element id="module-output" name="java-i18n" />
           </element>
           <element id="library" level="project" name="jimage-jdk6-sources" />
+          <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/jacocoant.jar" />
+        </element>
+        <element id="directory" name="coverage-lib">
+          <element id="dir-copy" path="$PROJECT_DIR$/java-coverage-impl/libRt" />
         </element>
       </element>
     </root>

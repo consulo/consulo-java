@@ -351,6 +351,9 @@
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-execution-impl" />
+          <orderEntry type="module" module-name="java-impl" />
+          <orderEntry type="module" module-name="coverage_rt" />
+          <orderEntry type="library" name="jetbrains-asm5" level="project" />
           <orderEntry type="module-library">
             <library>
               <binaries>
@@ -358,16 +361,6 @@
               </binaries>
             </library>
           </orderEntry>
-          <orderEntry type="module-library">
-            <library>
-              <binaries>
-                <root url="jar://$MODULE_DIR$/lib/jacocoagent.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module" module-name="java-impl" />
-          <orderEntry type="module" module-name="coverage_rt" />
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
         </module-layer>
       </module>
       <module name="coverage_rt" dirurl="file://$PROJECT_DIR$/java-coverage-impl/coverage_rt" current-layer="Default">
