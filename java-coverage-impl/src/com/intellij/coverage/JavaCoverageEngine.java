@@ -3,10 +3,8 @@ package com.intellij.coverage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -18,8 +16,6 @@ import org.mustbe.consulo.roots.ContentFolderScopes;
 import org.mustbe.consulo.roots.ContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
-import com.intellij.CommonBundle;
-import com.intellij.codeEditor.printing.ExportToHTMLSettings;
 import com.intellij.coverage.view.CoverageViewExtension;
 import com.intellij.coverage.view.CoverageViewManager;
 import com.intellij.coverage.view.JavaCoverageViewExtension;
@@ -29,9 +25,7 @@ import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
 import com.intellij.execution.configurations.coverage.JavaCoverageEnabledConfiguration;
 import com.intellij.execution.testframework.AbstractTestProxy;
-import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileStatusNotification;
@@ -41,9 +35,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -64,22 +55,11 @@ import com.intellij.psi.controlFlow.ControlFlowFactory;
 import com.intellij.psi.controlFlow.Instruction;
 import com.intellij.psi.impl.source.tree.java.PsiSwitchStatementImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopes;
-import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.rt.coverage.data.JumpData;
 import com.intellij.rt.coverage.data.LineData;
-import com.intellij.rt.coverage.data.ProjectData;
 import com.intellij.rt.coverage.data.SwitchData;
-import com.intellij.rt.coverage.instrumentation.SaveHook;
 import com.intellij.util.containers.HashSet;
-import jetbrains.coverage.report.ClassInfo;
-import jetbrains.coverage.report.ReportBuilderFactory;
-import jetbrains.coverage.report.ReportGenerationFailedException;
-import jetbrains.coverage.report.SourceCodeProvider;
-import jetbrains.coverage.report.html.HTMLReportBuilder;
-import jetbrains.coverage.report.idea.IDEACoverageData;
-
 /**
  * @author Roman.Chernyatchik
  */
@@ -579,88 +559,6 @@ public class JavaCoverageEngine extends CoverageEngine {
         return ((PsiClassOwner)sourceFile).getPackageName();
       }
     });
-  }
-
-  protected static void generateJavaReport(@NotNull final Project project,
-                                           final File tempFile,
-                                           final CoverageSuitesBundle currentSuite) {
-    final ExportToHTMLSettings settings = ExportToHTMLSettings.getInstance(project);
-    final ProjectData projectData = currentSuite.getCoverageData();
-    ProgressManager.getInstance().run(new Task.Backgroundable(project, "Generating coverage report ...") {
-      final Exception[] myExceptions = new Exception[1];
-
-      public void run(@NotNull final ProgressIndicator indicator) {
-        try {
-          new SaveHook(tempFile, true, new IdeaClassFinder(project, currentSuite)).save(projectData);
-          final HTMLReportBuilder builder = ReportBuilderFactory.createHTMLReportBuilder();
-          builder.setReportDir(new File(settings.OUTPUT_DIRECTORY));
-          final SourceCodeProvider sourceCodeProvider = new SourceCodeProvider() {
-            public String getSourceCode(@NotNull final String classname) throws IOException {
-              return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-                public String compute() {
-                  final PsiClass psiClass = ClassUtil.findPsiClassByJVMName(PsiManager.getInstance(project), classname);
-                  return psiClass != null ? psiClass.getContainingFile().getText() : "";
-                }
-              });
-            }
-          };
-          builder.generateReport(new IDEACoverageData(projectData, sourceCodeProvider) {
-            @NotNull
-            @Override
-            public Collection<ClassInfo> getClasses() {
-              final Collection<ClassInfo> classes = super.getClasses();
-              if (!currentSuite.isTrackTestFolders()) {
-                final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-                final GlobalSearchScope productionScope = GlobalSearchScopes.projectProductionScope(project);
-                for (Iterator<ClassInfo> iterator = classes.iterator(); iterator.hasNext();) {
-                  final ClassInfo aClass = iterator.next();
-                  final PsiClass psiClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-                    public PsiClass compute() {
-                      return psiFacade.findClass(aClass.getFQName(), productionScope);
-                    }
-                  });
-                  if (psiClass == null) {
-                    iterator.remove();
-                  }
-                }
-              }
-              return classes;
-            }
-          });
-        }
-        catch (IOException e) {
-          LOG.error(e);
-        }
-        catch (ReportGenerationFailedException e) {
-          myExceptions[0] = e;
-        }
-      }
-
-      @Override
-      public void onSuccess() {
-        if (myExceptions[0] != null) {
-          Messages.showErrorDialog(project, myExceptions[0].getMessage(), CommonBundle.getErrorTitle());
-          return;
-        }
-        if (settings.OPEN_IN_BROWSER) {
-          BrowserUtil.browse(new File(settings.OUTPUT_DIRECTORY, "index.html"));
-        }
-      }
-    });
-  }
-
-  @Override
-  public final void generateReport(@NotNull final Project project,
-                                   @NotNull final DataContext dataContext,
-                                   @NotNull final CoverageSuitesBundle currentSuite) {
-    try {
-      final File tempFile = FileUtil.createTempFile("temp", "");
-      tempFile.deleteOnExit();
-      generateJavaReport(project, tempFile, currentSuite);
-    }
-    catch (IOException e1) {
-      LOG.error(e1);
-    }
   }
 
   @Override

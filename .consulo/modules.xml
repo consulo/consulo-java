@@ -365,20 +365,6 @@
               </binaries>
             </library>
           </orderEntry>
-          <orderEntry type="module-library">
-            <library>
-              <binaries>
-                <root url="jar://$MODULE_DIR$/lib/coverage-report-idea.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library>
-              <binaries>
-                <root url="jar://$MODULE_DIR$/lib/coverage-report.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="coverage_rt" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
