@@ -31,6 +31,7 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
+import com.intellij.psi.augment.JavaEnumAugmentProvider;
 import com.intellij.psi.impl.InheritanceImplUtil;
 import com.intellij.psi.impl.PsiClassImplUtil;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -59,6 +60,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	public ClsClassImpl(final PsiClassStub stub)
 	{
 		super(stub);
+		putUserData(JavaEnumAugmentProvider.FLAG, Boolean.TRUE);
 	}
 
 	@Override
@@ -515,14 +517,6 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent,
 			@NotNull PsiElement place)
 	{
-		if(isEnum())
-		{
-			if(!PsiClassImplUtil.processDeclarationsInEnum(processor, state, myInnersCache))
-			{
-				return false;
-			}
-		}
-
 		LanguageLevel level = processor instanceof MethodsProcessor ? ((MethodsProcessor) processor).getLanguageLevel() : PsiUtil.getLanguageLevel
 				(place);
 		return PsiClassImplUtil.processDeclarationsInClass(this, processor, state, null, lastParent, place, level, false);

@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.JavaTargetElementUtilEx;
 import com.intellij.ide.util.SuperMethodWarningUtil;
+import com.intellij.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -150,6 +151,16 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler
 
 	@Override
 	public PsiElement findTargetMember(PsiElement element)
+	{
+		PsiElement target = findTargetImpl(element);
+		if(JavaRefactoringSupportProvider.isDisableRefactoringForLightElement(target))
+		{
+			return null;
+		}
+		return target;
+	}
+
+	private PsiElement findTargetImpl(PsiElement element)
 	{
 		if(PsiTreeUtil.getParentOfType(element, PsiParameterList.class) != null)
 		{

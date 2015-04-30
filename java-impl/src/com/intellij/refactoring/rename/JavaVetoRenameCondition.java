@@ -16,6 +16,7 @@
 package com.intellij.refactoring.rename;
 
 import org.consulo.java.platform.util.JavaProjectRootsUtil;
+import com.intellij.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -26,7 +27,8 @@ public class JavaVetoRenameCondition implements Condition<PsiElement>
 	@Override
 	public boolean value(final PsiElement element)
 	{
-		return element instanceof PsiJavaFile &&
+		return JavaRefactoringSupportProvider.isDisableRefactoringForLightElement(element) ||
+				element instanceof PsiJavaFile &&
 				//  !JspPsiUtil.isInJspFile(element) &&
 				!JavaProjectRootsUtil.isOutsideSourceRoot((PsiFile) element) &&
 				((PsiJavaFile) element).getClasses().length > 0;

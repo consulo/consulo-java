@@ -15,9 +15,11 @@
  */
 package com.intellij.lang.java;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
@@ -71,6 +73,10 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider
 	@Override
 	public boolean isMemberInplaceRenameAvailable(PsiElement elementToRename, PsiElement context)
 	{
+		if(isDisableRefactoringForLightElement(elementToRename))
+		{
+			return false;
+		}
 		return elementToRename instanceof PsiMember;
 	}
 
@@ -143,8 +149,13 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider
 		return true;
 	}
 
-	public static boolean mayRenameInplace(PsiElement elementToRename, final PsiElement nameSuggestionContext)
+	public static boolean mayRenameInplace(@NotNull PsiElement elementToRename, final PsiElement nameSuggestionContext)
 	{
+		if(isDisableRefactoringForLightElement(elementToRename))
+		{
+			return false;
+		}
+
 		if(nameSuggestionContext != null && nameSuggestionContext.getContainingFile() != elementToRename.getContainingFile())
 		{
 			return false;
@@ -169,6 +180,15 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider
 		}
 		PsiFile containingFile = elementToRename.getContainingFile();
 		return PsiTreeUtil.isAncestor(containingFile, scopeElements[0], false);
+	}
+
+	public static boolean isDisableRefactoringForLightElement(@Nullable PsiElement element)
+	{
+		if(element instanceof LightMethodBuilder)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	private static boolean isElementWithComment(final PsiElement[] scopeElements)

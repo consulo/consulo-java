@@ -36,6 +36,7 @@ public interface JavaClassNames {
 	@NonNls String JAVA_LANG_ASSERTION_ERROR = "java.lang.AssertionError";
 	@NonNls String JAVA_LANG_RUNTIME_EXCEPTION = "java.lang.RuntimeException";
 	@NonNls String JAVA_LANG_AUTO_CLOSEABLE = "java.lang.AutoCloseable";
+	@NonNls String JAVA_LANG_ILLEGAL_ARGUMENT_EXCEPTION = "java.lang.IllegalArgumentException";
 
 	@NonNls String JAVA_LANG_ITERABLE = "java.lang.Iterable";
 	@NonNls String JAVA_UTIL_ITERATOR = "java.util.Iterator";

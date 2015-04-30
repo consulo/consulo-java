@@ -45,7 +45,6 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.OrFilter;
 import com.intellij.psi.impl.compiled.ClsElementImpl;
-import com.intellij.psi.impl.source.ClassInnerStuffCache;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.scope.ElementClassFilter;
@@ -504,34 +503,6 @@ public class PsiClassImplUtil
 			MembersMap map = buildAllMaps(myClass);
 			return new CachedValueProvider.Result<MembersMap>(map, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
 		}
-	}
-
-	public static boolean processDeclarationsInEnum(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
-			@NotNull ClassInnerStuffCache innerStuffCache)
-	{
-		ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
-		if(classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.METHOD))
-		{
-			NameHint nameHint = processor.getHint(NameHint.KEY);
-			if((nameHint == null || VALUES_METHOD.equals(nameHint.getName(state))))
-			{
-				PsiMethod method = innerStuffCache.getValuesMethod();
-				if(method != null && !processor.execute(method, ResolveState.initial()))
-				{
-					return false;
-				}
-			}
-			if((nameHint == null || VALUE_OF_METHOD.equals(nameHint.getName(state))))
-			{
-				PsiMethod method = innerStuffCache.getValueOfMethod();
-				if(method != null && !processor.execute(method, ResolveState.initial()))
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
 	}
 
 	public static boolean processDeclarationsInClass(@NotNull PsiClass aClass, @NotNull final PsiScopeProcessor processor,

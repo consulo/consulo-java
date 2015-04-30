@@ -32,6 +32,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
+import com.intellij.psi.augment.JavaEnumAugmentProvider;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.impl.InheritanceImplUtil;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
@@ -73,12 +74,14 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	protected PsiClassImpl(final PsiClassStub stub, final IStubElementType type)
 	{
 		super(stub, type);
+		putUserData(JavaEnumAugmentProvider.FLAG, Boolean.TRUE);
 		addTrace(null);
 	}
 
 	public PsiClassImpl(final ASTNode node)
 	{
 		super(node);
+		putUserData(JavaEnumAugmentProvider.FLAG, Boolean.TRUE);
 		addTrace(null);
 	}
 
@@ -586,14 +589,6 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent,
 			@NotNull PsiElement place)
 	{
-		if(isEnum())
-		{
-			if(!PsiClassImplUtil.processDeclarationsInEnum(processor, state, myInnersCache))
-			{
-				return false;
-			}
-		}
-
 		LanguageLevel level = PsiUtil.getLanguageLevel(place);
 		return PsiClassImplUtil.processDeclarationsInClass(this, processor, state, null, lastParent, place, level, false);
 	}
