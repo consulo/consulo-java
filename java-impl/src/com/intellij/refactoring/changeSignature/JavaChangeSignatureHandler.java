@@ -33,153 +33,206 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 
-public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
+public class JavaChangeSignatureHandler implements ChangeSignatureHandler
+{
 
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-    editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    PsiElement element = findTargetMember(file, editor);
-    if (element == null) {
-      element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
-    }
-    invokeOnElement(project, editor, element);
-  }
+	@Override
+	public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	{
+		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
+		PsiElement element = findTargetMember(file, editor);
+		if(element == null)
+		{
+			element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+		}
+		invokeOnElement(project, editor, element);
+	}
 
-  private static void invokeOnElement(Project project, Editor editor, PsiElement element) {
-    if (element instanceof PsiMethod) {
-      final ChangeSignatureGestureDetector detector = ChangeSignatureGestureDetector.getInstance(project);
-      final PsiIdentifier nameIdentifier = ((PsiMethod)element).getNameIdentifier();
-      if (nameIdentifier != null && detector.isChangeSignatureAvailable(element)) {
-        detector.changeSignature(element.getContainingFile(), false);
-        return;
-      }
-      invoke((PsiMethod) element, project, editor);
-    }
-    else if (element instanceof PsiClass) {
-      invoke((PsiClass) element, editor);
-    }
-    else {
-      String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class.name"));
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_SIGNATURE);
-    }
-  }
+	private static void invokeOnElement(Project project, Editor editor, PsiElement element)
+	{
+		if(element instanceof PsiMethod)
+		{
+			final ChangeSignatureGestureDetector detector = ChangeSignatureGestureDetector.getInstance(project);
+			final PsiIdentifier nameIdentifier = ((PsiMethod) element).getNameIdentifier();
+			if(nameIdentifier != null && detector.isChangeSignatureAvailable(element))
+			{
+				detector.changeSignature(element.getContainingFile(), false);
+				return;
+			}
+			invoke((PsiMethod) element, project, editor);
+		}
+		else if(element instanceof PsiClass)
+		{
+			invoke((PsiClass) element, editor);
+		}
+		else
+		{
+			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class" +
+					".name"));
+			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_SIGNATURE);
+		}
+	}
 
-  public void invoke(@NotNull final Project project, @NotNull final PsiElement[] elements, @Nullable final DataContext dataContext) {
-    if (elements.length != 1) return;
-    Editor editor = dataContext != null ? PlatformDataKeys.EDITOR.getData(dataContext) : null;
-    invokeOnElement(project, editor, elements[0]);
-  }
+	@Override
+	public void invoke(@NotNull final Project project, @NotNull final PsiElement[] elements, @Nullable final DataContext dataContext)
+	{
+		if(elements.length != 1)
+		{
+			return;
+		}
+		Editor editor = dataContext != null ? PlatformDataKeys.EDITOR.getData(dataContext) : null;
+		invokeOnElement(project, editor, elements[0]);
+	}
 
-  @Nullable
-  @Override
-  public String getTargetNotFoundMessage() {
-    return RefactoringBundle.message("error.wrong.caret.position.method.or.class.name");
-  }
+	@Nullable
+	@Override
+	public String getTargetNotFoundMessage()
+	{
+		return RefactoringBundle.message("error.wrong.caret.position.method.or.class.name");
+	}
 
-  private static void invoke(final PsiMethod method, final Project project, @Nullable final Editor editor) {
-    PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
-    if (newMethod == null) return;
+	private static void invoke(final PsiMethod method, final Project project, @Nullable final Editor editor)
+	{
+		PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
+		if(newMethod == null)
+		{
+			return;
+		}
 
-    if (!newMethod.equals(method)) {
-      ChangeSignatureUtil.invokeChangeSignatureOn(newMethod, project);
-      return;
-    }
+		if(!newMethod.equals(method))
+		{
+			ChangeSignatureUtil.invokeChangeSignatureOn(newMethod, project);
+			return;
+		}
 
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, method)) return;
+		if(!CommonRefactoringUtil.checkReadOnlyStatus(project, method))
+		{
+			return;
+		}
 
-    final PsiClass containingClass = method.getContainingClass();
-    final PsiReferenceExpression refExpr = editor != null ? JavaTargetElementUtilEx.findReferenceExpression(editor) : null;
-    final boolean allowDelegation = containingClass != null && !containingClass.isInterface();
-    final DialogWrapper dialog = new JavaChangeSignatureDialog(project, method, allowDelegation, refExpr);
-    dialog.show();
-  }
+		final PsiClass containingClass = method.getContainingClass();
+		final PsiReferenceExpression refExpr = editor != null ? JavaTargetElementUtilEx.findReferenceExpression(editor) : null;
+		final boolean allowDelegation = containingClass != null && !containingClass.isInterface();
+		final DialogWrapper dialog = new JavaChangeSignatureDialog(project, method, allowDelegation, refExpr);
+		dialog.show();
+	}
 
-  private static void invoke(final PsiClass aClass, Editor editor) {
-    final PsiTypeParameterList typeParameterList = aClass.getTypeParameterList();
-    Project project = aClass.getProject();
-    if (typeParameterList == null) {
-      final String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("changeClassSignature.no.type.parameters"));
-      CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_CLASS_SIGNATURE);
-      return;
-    }
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) return;
+	private static void invoke(final PsiClass aClass, Editor editor)
+	{
+		final PsiTypeParameterList typeParameterList = aClass.getTypeParameterList();
+		Project project = aClass.getProject();
+		if(typeParameterList == null)
+		{
+			final String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("changeClassSignature.no.type.parameters"));
+			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_CLASS_SIGNATURE);
+			return;
+		}
+		if(!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass))
+		{
+			return;
+		}
 
-    ChangeClassSignatureDialog dialog = new ChangeClassSignatureDialog(aClass, true);
-    //if (!ApplicationManager.getApplication().isUnitTestMode()){
-    dialog.show();
-    //}else {
-    //  dialog.showAndGetOk()
-    //}
-  }
+		ChangeClassSignatureDialog dialog = new ChangeClassSignatureDialog(aClass, true);
+		//if (!ApplicationManager.getApplication().isUnitTestMode()){
+		dialog.show();
+		//}else {
+		//  dialog.showAndGetOk()
+		//}
+	}
 
-  @Nullable
-  public PsiElement findTargetMember(PsiFile file, Editor editor) {
-    PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-    return findTargetMember(element);
-  }
+	@Override
+	@Nullable
+	public PsiElement findTargetMember(PsiFile file, Editor editor)
+	{
+		PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
+		return findTargetMember(element);
+	}
 
-  public PsiElement findTargetMember(PsiElement element) {
-    if (PsiTreeUtil.getParentOfType(element, PsiParameterList.class) != null) {
-      return PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-    }
+	@Override
+	public PsiElement findTargetMember(PsiElement element)
+	{
+		if(PsiTreeUtil.getParentOfType(element, PsiParameterList.class) != null)
+		{
+			return PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+		}
 
-    final PsiTypeParameterList typeParameterList = PsiTreeUtil.getParentOfType(element, PsiTypeParameterList.class);
-    if (typeParameterList != null) {
-      return PsiTreeUtil.getParentOfType(typeParameterList, PsiMember.class);
-    }
+		final PsiTypeParameterList typeParameterList = PsiTreeUtil.getParentOfType(element, PsiTypeParameterList.class);
+		if(typeParameterList != null)
+		{
+			return PsiTreeUtil.getParentOfType(typeParameterList, PsiMember.class);
+		}
 
-    final PsiElement elementParent = element.getParent();
-    if (elementParent instanceof PsiMethod && ((PsiMethod)elementParent).getNameIdentifier()==element) {
-      final PsiClass containingClass = ((PsiMethod)elementParent).getContainingClass();
-      if (containingClass != null && containingClass.isAnnotationType()) {
-        return null;
-      }
-      return elementParent;
-    }
-    if (elementParent instanceof PsiClass && ((PsiClass)elementParent).getNameIdentifier()==element) {
-      if (((PsiClass)elementParent).isAnnotationType()) {
-        return null;
-      }
-      return elementParent;
-    }
+		final PsiElement elementParent = element.getParent();
+		if(elementParent instanceof PsiMethod && ((PsiMethod) elementParent).getNameIdentifier() == element)
+		{
+			final PsiClass containingClass = ((PsiMethod) elementParent).getContainingClass();
+			if(containingClass != null && containingClass.isAnnotationType())
+			{
+				return null;
+			}
+			return elementParent;
+		}
+		if(elementParent instanceof PsiClass && ((PsiClass) elementParent).getNameIdentifier() == element)
+		{
+			if(((PsiClass) elementParent).isAnnotationType())
+			{
+				return null;
+			}
+			return elementParent;
+		}
 
-    final PsiCallExpression expression = PsiTreeUtil.getParentOfType(element, PsiCallExpression.class);
-    if (expression != null) {
-      final PsiExpression qualifierExpression;
-      if (expression instanceof PsiMethodCallExpression) {
-        qualifierExpression = ((PsiMethodCallExpression)expression).getMethodExpression().getQualifierExpression();
-      } else if (expression instanceof PsiNewExpression) {
-        qualifierExpression = ((PsiNewExpression)expression).getQualifier();
-      } else {
-        qualifierExpression = null;
-      }
-      if (PsiTreeUtil.isAncestor(qualifierExpression, element, false)) {
-        final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(qualifierExpression, PsiExpressionList.class);
-        if (expressionList != null) {
-          final PsiElement parent = expressionList.getParent();
-          if (parent instanceof PsiCallExpression) {
-            return ((PsiCallExpression)parent).resolveMethod();
-          }
-        }
-      }
-      else {
-        return expression.resolveMethod();
-      }
-    }
+		final PsiCallExpression expression = PsiTreeUtil.getParentOfType(element, PsiCallExpression.class);
+		if(expression != null)
+		{
+			final PsiExpression qualifierExpression;
+			if(expression instanceof PsiMethodCallExpression)
+			{
+				qualifierExpression = ((PsiMethodCallExpression) expression).getMethodExpression().getQualifierExpression();
+			}
+			else if(expression instanceof PsiNewExpression)
+			{
+				qualifierExpression = ((PsiNewExpression) expression).getQualifier();
+			}
+			else
+			{
+				qualifierExpression = null;
+			}
+			if(PsiTreeUtil.isAncestor(qualifierExpression, element, false))
+			{
+				final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(qualifierExpression, PsiExpressionList.class);
+				if(expressionList != null)
+				{
+					final PsiElement parent = expressionList.getParent();
+					if(parent instanceof PsiCallExpression)
+					{
+						return ((PsiCallExpression) parent).resolveMethod();
+					}
+				}
+			}
+			else
+			{
+				return expression.resolveMethod();
+			}
+		}
 
-    final PsiReferenceParameterList referenceParameterList = PsiTreeUtil.getParentOfType(element, PsiReferenceParameterList.class);
-    if (referenceParameterList != null) {
-      final PsiJavaCodeReferenceElement referenceElement =
-        PsiTreeUtil.getParentOfType(referenceParameterList, PsiJavaCodeReferenceElement.class);
-      if (referenceElement != null) {
-        final PsiElement resolved = referenceElement.resolve();
-        if (resolved instanceof PsiClass) {
-          return resolved;
-        }
-        else if (resolved instanceof PsiMethod) {
-          return resolved;
-        }
-      }
-    }
-    return null;
-  }
+		final PsiReferenceParameterList referenceParameterList = PsiTreeUtil.getParentOfType(element, PsiReferenceParameterList.class);
+		if(referenceParameterList != null)
+		{
+			final PsiJavaCodeReferenceElement referenceElement = PsiTreeUtil.getParentOfType(referenceParameterList,
+					PsiJavaCodeReferenceElement.class);
+			if(referenceElement != null)
+			{
+				final PsiElement resolved = referenceElement.resolve();
+				if(resolved instanceof PsiClass)
+				{
+					return resolved;
+				}
+				else if(resolved instanceof PsiMethod)
+				{
+					return resolved;
+				}
+			}
+		}
+		return null;
+	}
 }
