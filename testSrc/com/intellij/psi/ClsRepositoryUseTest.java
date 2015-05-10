@@ -33,8 +33,8 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtensionImpl;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtensionImpl;
 
 import java.io.File;
 

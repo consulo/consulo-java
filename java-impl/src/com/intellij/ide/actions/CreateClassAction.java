@@ -18,7 +18,7 @@ package com.intellij.ide.actions;
 
 import java.util.Map;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.module.extension.ModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

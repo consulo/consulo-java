@@ -30,8 +30,8 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
 import com.intellij.pom.java.LanguageLevel;
-import org.consulo.java.platform.module.extension.JavaModuleExtensionImpl;
-import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtensionImpl;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtensionImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 

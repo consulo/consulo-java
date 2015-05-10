@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import org.consulo.java.platform.util.JavaProjectRootsUtil;
+import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.roots.ProjectRootManager;

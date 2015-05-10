@@ -17,7 +17,7 @@ package com.intellij.execution.applet;
 
 import javax.swing.Icon;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.module.extension.ModuleExtensionHelper;
 import com.intellij.execution.ExecutionBundle;

@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.rename;
 
-import org.consulo.java.platform.util.JavaProjectRootsUtil;
+import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
 import com.intellij.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;

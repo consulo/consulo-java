@@ -17,7 +17,7 @@ package com.intellij.packaging.impl.elements;
 
 import javax.swing.Icon;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.icons.AllIcons;

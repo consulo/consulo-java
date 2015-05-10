@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.consulo.java.module.extension;
+package org.mustbe.consulo.java.module.extension;
 
-import org.consulo.java.platform.module.extension.SpecialDirLocation;
 import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;

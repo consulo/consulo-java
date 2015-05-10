@@ -22,7 +22,7 @@
  */
 package com.intellij.execution.util;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;

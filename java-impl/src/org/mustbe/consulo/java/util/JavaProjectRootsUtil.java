@@ -1,6 +1,6 @@
-package org.consulo.java.platform.util;
+package org.mustbe.consulo.java.util;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;

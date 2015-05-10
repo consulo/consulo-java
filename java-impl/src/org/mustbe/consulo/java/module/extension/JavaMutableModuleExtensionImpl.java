@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.consulo.java.platform.module.extension;
+package org.mustbe.consulo.java.module.extension;
 
 import javax.swing.JComponent;
 
-import org.consulo.java.module.extension.JavaMutableModuleExtension;
-import org.consulo.java.platform.module.extension.ui.JavaModuleExtensionPanel;
+import org.mustbe.consulo.java.module.extension.ui.JavaModuleExtensionPanel;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

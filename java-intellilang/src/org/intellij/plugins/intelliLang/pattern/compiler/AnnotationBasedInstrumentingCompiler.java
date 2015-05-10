@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.consulo.compiler.CompilerPathsManager;
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;

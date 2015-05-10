@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.consulo.java.platform.module.extension;
+package org.mustbe.consulo.java.module.extension;
 
 import java.util.Set;
 

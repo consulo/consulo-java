@@ -15,7 +15,7 @@
  */
 package com.intellij.compiler;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.openapi.application.ApplicationManager;

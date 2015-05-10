@@ -18,7 +18,7 @@ package com.intellij.externalSystem;
 import java.util.Collection;
 import java.util.List;
 
-import org.consulo.java.module.extension.JavaMutableModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.externalSystem.model.DataNode;

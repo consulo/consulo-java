@@ -22,7 +22,7 @@ package com.intellij.execution.remote;
 
 import javax.swing.Icon;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.module.extension.ModuleExtensionHelper;

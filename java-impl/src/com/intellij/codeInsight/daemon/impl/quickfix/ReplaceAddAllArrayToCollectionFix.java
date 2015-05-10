@@ -20,7 +20,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.FileModificationService;

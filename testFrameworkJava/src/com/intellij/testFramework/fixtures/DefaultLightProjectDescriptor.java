@@ -22,7 +22,7 @@ import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
-import org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtensionImpl;
 
 /**
 * @author peter

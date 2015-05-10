@@ -16,7 +16,7 @@
 
 package org.mustbe.consulo.java.ide.newProjectOrModule;
 
-import org.consulo.java.module.extension.JavaMutableModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.ide.impl.NewModuleBuilder;
 import org.mustbe.consulo.ide.impl.NewModuleContext;

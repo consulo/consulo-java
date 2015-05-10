@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.consulo.java.module.extension.JavaMutableModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;

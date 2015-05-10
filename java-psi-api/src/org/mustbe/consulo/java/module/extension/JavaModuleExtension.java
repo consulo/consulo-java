@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.consulo.java.module.extension;
+package org.mustbe.consulo.java.module.extension;
 
-import org.consulo.java.platform.module.extension.SpecialDirLocation;
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.consulo.java.platform.module.extension.ui;
+package org.mustbe.consulo.java.module.extension.ui;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -26,9 +26,9 @@ import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.consulo.java.module.extension.JavaMutableModuleExtension;
-import org.consulo.java.platform.module.extension.SpecialDirLocation;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
+import org.mustbe.consulo.java.module.extension.SpecialDirLocation;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;

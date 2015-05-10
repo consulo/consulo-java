@@ -15,7 +15,6 @@
  */
 package com.intellij.ide;
 
-import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -27,7 +26,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiMethodUtil;
-import org.consulo.java.platform.util.JavaProjectRootsUtil;
+import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**

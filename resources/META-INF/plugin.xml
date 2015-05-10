@@ -658,7 +658,7 @@
 		<elementFinder implementation="com.intellij.psi.impl.migration.MigrationElementFinder"/>
 
 		<backendCompiler implementationClass="com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler"/>
-		<debugger.jvmDebugProvider implementation="org.mustbe.consulo.fileType.DefaultJVMDebugProvider"/>
+		<debugger.jvmDebugProvider implementation="org.mustbe.consulo.java.fileType.DefaultJVMDebugProvider"/>
 
 		<augmentProvider implementation="com.intellij.psi.augment.JavaEnumAugmentProvider" />
 	</extensions>
@@ -1893,7 +1893,7 @@
 		<configurationType implementation="com.intellij.execution.application.ApplicationConfigurationType"/>
 		<runConfigurationProducer implementation="com.intellij.execution.application.ApplicationConfigurationProducer"/>
 
-		<psi.packageSupportProvider implementation="org.consulo.java.platform.psi.impl.JavaPsiPackageSupportProvider"/>
+		<psi.packageSupportProvider implementation="org.mustbe.consulo.java.psi.impl.JavaPsiPackageSupportProvider"/>
 		<customPropertyScopeProvider implementation="com.intellij.psi.impl.search.SimpleAccessorScopeProvider"/>
 
 		<compiler.additionalOutputDirectoriesProvider
@@ -1919,12 +1919,12 @@
 		<moduleExtensionProvider key="java"
 								 icon="/icons/java.png"
 								 name="Java"
-								 immutableClass="org.consulo.java.platform.module.extension.JavaModuleExtensionImpl"
-								 mutableClass="org.consulo.java.platform.module.extension.JavaMutableModuleExtensionImpl"/>
+								 immutableClass="org.mustbe.consulo.java.module.extension.JavaModuleExtensionImpl"
+								 mutableClass="org.mustbe.consulo.java.module.extension.JavaMutableModuleExtensionImpl"/>
 		<orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
 		<orderRootTypeEditor key="javaExternalAnnotations"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
-		<contentFolderSupportPatcher implementation="org.consulo.java.platform.module.extension.JavaContentFolderSupportPatcher" />
+		<contentFolderSupportPatcher implementation="org.mustbe.consulo.java.module.extension.JavaContentFolderSupportPatcher" />
 		<pathMacroExpendableProtocol protocol="jar"/>
 		<pathMacroExpendableProtocol protocol="jimage"/>
 

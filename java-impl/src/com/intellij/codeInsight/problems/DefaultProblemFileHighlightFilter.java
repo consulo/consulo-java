@@ -19,7 +19,7 @@ import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.consulo.java.platform.util.JavaProjectRootsUtil;
+import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
 
 /**
 * @author yole
