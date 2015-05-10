@@ -15,6 +15,9 @@
  */
 package com.intellij.ide;
 
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaIcons;
+import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -26,8 +29,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiMethodUtil;
-import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author VISTALL
@@ -150,7 +151,7 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
       return false;
     }
     if (!JavaProjectRootsUtil.isJavaSourceFile(element.getProject(), virtualFile, true)) {
-      iconDescriptor.setMainIcon(AllIcons.FileTypes.JavaOutsideSource);
+      iconDescriptor.setMainIcon(JavaIcons.FileTypes.JavaOutsideSource);
       return true;
     }
     return false;

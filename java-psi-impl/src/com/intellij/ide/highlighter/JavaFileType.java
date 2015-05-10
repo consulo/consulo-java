@@ -19,7 +19,7 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.icons.AllIcons;
+import org.mustbe.consulo.java.JavaIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
@@ -53,6 +53,6 @@ public class JavaFileType extends LanguageFileType {
 
   @Override
   public Icon getIcon() {
-    return AllIcons.FileTypes.Java;
+    return JavaIcons.FileTypes.Java;
   }
 }

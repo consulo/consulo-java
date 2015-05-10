@@ -19,16 +19,20 @@ import javax.swing.Icon;
 
 import com.intellij.openapi.util.IconLoader;
 
-/**
- * @author VISTALL
- * @since 13:59/19.05.13
- */
+// Generated Consulo DevKit plugin 
 public interface JavaIcons
 {
-	interface Gutter
+	interface FileTypes
 	{
-		Icon ExtAnnotation = IconLoader.findIcon("/icons/gutter/extAnnotation.png");
+		Icon Java = IconLoader.getIcon("/icons/fileTypes/java.png");  // 16x16
+		Icon JavaClass = IconLoader.getIcon("/icons/fileTypes/javaClass.png");  // 16x16
+		Icon JavaOutsideSource = IconLoader.getIcon("/icons/fileTypes/javaOutsideSource.png");  // 16x16
 	}
 
-	Icon Java = IconLoader.findIcon("/icons/java.png");
+	interface Gutter
+	{
+		Icon ExtAnnotation = IconLoader.getIcon("/icons/gutter/extAnnotation.png");  // 12x12
+	}
+
+	Icon Java = IconLoader.getIcon("/icons/java.png");  // 16x16
 }

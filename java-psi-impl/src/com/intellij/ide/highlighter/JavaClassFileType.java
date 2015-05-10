@@ -15,26 +15,17 @@
  */
 package com.intellij.ide.highlighter;
 
-import com.intellij.icons.AllIcons;
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 public class JavaClassFileType implements FileType {
 
   public static JavaClassFileType INSTANCE = new JavaClassFileType();
-
-  private static final NotNullLazyValue<Icon> ICON = new NotNullLazyValue<Icon>() {
-    @NotNull
-    @Override
-    protected Icon compute() {
-      return AllIcons.FileTypes.JavaClass;
-    }
-  };
 
   private JavaClassFileType() {
   }
@@ -59,7 +50,7 @@ public class JavaClassFileType implements FileType {
 
   @Override
   public Icon getIcon() {
-    return ICON.getValue();
+    return JavaIcons.FileTypes.JavaClass;
   }
 
   @Override
