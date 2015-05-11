@@ -30,10 +30,8 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.codeInspection.InspectionProfileEntry;
-import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.ex.InspectionProfileImpl;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
 import com.intellij.psi.PsiElement;
@@ -41,14 +39,10 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.util.ReflectionUtil;
 import com.intellij.util.ui.UIUtil;
-import com.siyeh.ig.telemetry.InspectionGadgetsTelemetry;
 
 public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool
 {
-	private static final Logger LOG = Logger.getInstance("#com.siyeh.ig.BaseInspection");
-
 	private String m_shortName = null;
-	private long timestamp = -1L;
 
 	@Override
 	@NotNull
@@ -195,34 +189,6 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool
 		{
 			out.append(',');
 			out.append(strings[i].get(index));
-		}
-	}
-
-	@Override
-	public void inspectionStarted(@NotNull LocalInspectionToolSession session, boolean isOnTheFly)
-	{
-		super.inspectionStarted(session, isOnTheFly);
-		if(InspectionGadgetsTelemetry.isEnabled())
-		{
-			timestamp = System.currentTimeMillis();
-		}
-	}
-
-	@Override
-	public void inspectionFinished(@NotNull LocalInspectionToolSession session, @NotNull ProblemsHolder problemsHolder)
-	{
-		super.inspectionFinished(session, problemsHolder);
-		if(InspectionGadgetsTelemetry.isEnabled())
-		{
-			if(timestamp < 0L)
-			{
-				LOG.warn("finish reported without corresponding start");
-				return;
-			}
-			final long end = System.currentTimeMillis();
-			final String displayName = getDisplayName();
-			InspectionGadgetsTelemetry.getInstance().reportRun(displayName, end - timestamp);
-			timestamp = -1L;
 		}
 	}
 

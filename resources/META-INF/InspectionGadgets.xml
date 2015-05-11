@@ -2595,15 +2595,4 @@
                      level="WARNING" implementationClass="com.siyeh.ig.visibility.ParameterHidingMemberVariableInspection"/>
   </extensions>
 
-  <application-components>
-    <component>
-      <implementation-class>com.siyeh.ig.InspectionGadgetsPlugin</implementation-class>
-    </component>
-  </application-components>
-  <project-components>
-    <component>
-      <implementation-class>com.siyeh.ig.InspectionGadgetsProjectComponent</implementation-class>
-    </component>
-  </project-components>
-
 </idea-plugin>
