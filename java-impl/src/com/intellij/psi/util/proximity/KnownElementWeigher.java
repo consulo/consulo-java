@@ -15,14 +15,18 @@
  */
 package com.intellij.psi.util.proximity;
 
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.util.ProximityLocation;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.util.ProximityLocation;
 
 /**
  * @author peter
@@ -37,7 +41,7 @@ public class KnownElementWeigher extends ProximityWeigher {
     }
 
     Project project = location.getProject();
-    if (project == null || !SdkOrLibraryWeigher.isJdkElement(element, project)) {
+    if (project == null || !SdkOrLibraryWeigher.isSdkElement(element, project)) {
       return 0;
     }
 
