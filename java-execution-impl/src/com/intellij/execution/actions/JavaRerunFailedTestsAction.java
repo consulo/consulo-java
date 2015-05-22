@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * User: anna
- * Date: 24-Dec-2008
- */
 package com.intellij.execution.actions;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.testframework.Filter;
 import com.intellij.execution.testframework.JavaAwareFilter;
+import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.actions.AbstractRerunFailedTestsAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentContainer;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
 
-public class JavaRerunFailedTestsAction extends AbstractRerunFailedTestsAction {
+/**
+ * @author anna
+ * @since 24-Dec-2008
+ */
+public class JavaRerunFailedTestsAction extends AbstractRerunFailedTestsAction
+{
+	public JavaRerunFailedTestsAction(@NotNull ComponentContainer componentContainer, @NotNull TestConsoleProperties consoleProperties)
+	{
+		super(componentContainer);
+		init(consoleProperties);
+	}
 
-  protected JavaRerunFailedTestsAction(@NotNull ComponentContainer componentContainer) {
-    super(componentContainer);
-  }
-
-  @NotNull
-  @Override
-  protected Filter getFilter(Project project, GlobalSearchScope searchScope) {
-    return super.getFilter(project, searchScope).and(JavaAwareFilter.METHOD(project, searchScope));
-  }
-
+	@NotNull
+	@Override
+	protected Filter getFilter(@NotNull Project project, @NotNull GlobalSearchScope searchScope)
+	{
+		return super.getFilter(project, searchScope).and(JavaAwareFilter.METHOD(project, searchScope));
+	}
 }
