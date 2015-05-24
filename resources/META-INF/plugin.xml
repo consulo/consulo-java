@@ -1836,18 +1836,6 @@
 		<treeCopyHandler implementation="com.intellij.psi.impl.source.tree.JavaTreeCopyHandler"/>
 		<treeGenerator implementation="com.intellij.psi.impl.source.tree.JavaTreeGenerator"/>
 
-
-		<!--
-	   <wizardMode implementation="com.intellij.ide.util.newProjectWizard.modes.CreateFromScratchMode" id="CreateFromScratchMode" order="first"/>
-	   -->
-		<wizardMode implementation="com.intellij.ide.util.newProjectWizard.modes.CreateProjectFromSourcesMode" id="CreateProjectFromSourcesMode"
-					order="after CreateFromScratchMode"/>
-		<wizardMode implementation="com.intellij.ide.util.newProjectWizard.modes.CreateModuleFromSourcesMode" id="CreateModuleFromSourcesMode"
-					order="after CreateProjectFromSourcesMode"/>
-
-		<projectStructureDetector implementation="com.intellij.ide.util.projectWizard.importSources.impl.JavaProjectStructureDetector"
-								  order="first"/>
-
 		<applicationService serviceImplementation="com.intellij.execution.JavaRunConfigurationExtensionManager"/>
 
 

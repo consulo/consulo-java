@@ -27,12 +27,11 @@ import com.intellij.usages.UsageToPsiElementProvider;
  * @author Konstantin Bulenkov
  */
 public class JavaUsageToPsiElementProvider extends UsageToPsiElementProvider {
-  private static final Language JAVA = Language.findLanguageByID("JAVA");
   private static final int MAX_HOPES = 17;
 
   @Override
   public PsiElement getAppropriateParentFrom(PsiElement element) {
-    if (element.getLanguage() == JAVA) {
+    if (element.getLanguage() == JavaLanguage.INSTANCE) {
       int hopes = 0;
       while (hopes++ < MAX_HOPES && element != null) {
         if (element instanceof PsiField ||
