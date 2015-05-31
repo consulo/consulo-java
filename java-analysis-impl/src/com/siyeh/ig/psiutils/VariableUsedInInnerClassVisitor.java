@@ -15,8 +15,12 @@
  */
 package com.siyeh.ig.psiutils;
 
-import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaRecursiveElementVisitor;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiVariable;
 
 class VariableUsedInInnerClassVisitor extends JavaRecursiveElementVisitor {
 

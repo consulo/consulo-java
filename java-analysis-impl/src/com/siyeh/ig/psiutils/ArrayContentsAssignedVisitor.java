@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.psiutils;
 
-import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.*;
+import com.intellij.psi.tree.IElementType;
 
 class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
 

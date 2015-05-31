@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.psiutils;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
 class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 

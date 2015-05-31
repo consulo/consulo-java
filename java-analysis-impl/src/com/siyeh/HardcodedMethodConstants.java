@@ -15,8 +15,8 @@
  */
 package com.siyeh;
 
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
 import org.jetbrains.annotations.NonNls;
+import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 
 /**
  * User: anna
@@ -58,7 +58,7 @@ public class HardcodedMethodConstants {
   public static final String PRINT_STACK_TRACE = "printStackTrace";
   public static final String REMOVE = "remove";
   public static final String RUN = "run";
-  public static final String SERIAL_VERSION_UID = HighlightUtil.SERIAL_VERSION_UID_FIELD_NAME;
+  public static final String SERIAL_VERSION_UID = HighlightUtilBase.SERIAL_VERSION_UID_FIELD_NAME;
   public static final String SET = "set";
   public static final String SIZE = "size";
   public static final String STARTS_WITH = "startsWith";

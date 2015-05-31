@@ -15,11 +15,11 @@
  */
 package com.siyeh.ig.psiutils;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiVariable;
-import org.jetbrains.annotations.NotNull;
 
 class VariableUsedVisitor extends JavaRecursiveElementVisitor {
 

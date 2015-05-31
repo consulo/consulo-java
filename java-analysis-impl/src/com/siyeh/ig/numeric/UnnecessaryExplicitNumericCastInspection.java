@@ -15,6 +15,11 @@
  */
 package com.siyeh.ig.numeric;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.project.Project;
@@ -28,11 +33,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
 

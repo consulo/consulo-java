@@ -246,8 +246,6 @@
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" exported="" />
-          <orderEntry type="module" module-name="java-indexing-impl" />
-          <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
         </module-layer>
