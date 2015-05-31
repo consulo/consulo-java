@@ -54,14 +54,23 @@ import com.intellij.debugger.requests.Requestor;
 import com.intellij.debugger.ui.CompletionEditor;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
+import com.intellij.execution.filters.ExceptionFilters;
+import com.intellij.execution.filters.TextConsoleBuilder;
+import com.intellij.execution.filters.TextConsoleBuilderFactory;
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.RunnerLayoutUi;
+import com.intellij.execution.ui.layout.impl.RunnerContentUi;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.Pair;
@@ -77,6 +86,9 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.ui.classFilter.ClassFilter;
+import com.intellij.ui.content.Content;
+import com.intellij.unscramble.ThreadDumpPanel;
+import com.intellij.unscramble.ThreadState;
 import com.intellij.util.SmartList;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.impl.XSourcePositionImpl;
@@ -545,6 +557,49 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		}
 		return null;
 	}
+
+	private static int myThreadDumpsCount = 0;
+	private static int myCurrentThreadDumpId = 1;
+
+	private static final String THREAD_DUMP_CONTENT_PREFIX = "Dump";
+
+	public static void addThreadDump(Project project, List<ThreadState> threads, final RunnerLayoutUi ui, DebuggerSession session)
+	{
+		final TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(project);
+		consoleBuilder.filters(ExceptionFilters.getFilters(session.getSearchScope()));
+		final ConsoleView consoleView = consoleBuilder.getConsole();
+		final DefaultActionGroup toolbarActions = new DefaultActionGroup();
+		consoleView.allowHeavyFilters();
+		final ThreadDumpPanel panel = new ThreadDumpPanel(project, consoleView, toolbarActions, threads);
+
+		final String id = THREAD_DUMP_CONTENT_PREFIX + " #" + myCurrentThreadDumpId;
+		final Content content = ui.createContent(id, panel, id, null, null);
+		content.putUserData(RunnerContentUi.LIGHTWEIGHT_CONTENT_MARKER, Boolean.TRUE);
+		content.setCloseable(true);
+		content.setDescription("Thread Dump");
+		ui.addContent(content);
+		ui.selectAndFocus(content, true, true);
+		myThreadDumpsCount++;
+		myCurrentThreadDumpId++;
+		Disposer.register(content, new Disposable()
+		{
+			@Override
+			public void dispose()
+			{
+				myThreadDumpsCount--;
+				if(myThreadDumpsCount == 0)
+				{
+					myCurrentThreadDumpId = 1;
+				}
+			}
+		});
+		Disposer.register(content, consoleView);
+		ui.selectAndFocus(content, true, false);
+		if (threads.size() > 0) {
+			panel.selectStackFrame(0);
+		}
+	}
+
 
 	public abstract DebuggerTreeNode getSelectedNode(DataContext context);
 

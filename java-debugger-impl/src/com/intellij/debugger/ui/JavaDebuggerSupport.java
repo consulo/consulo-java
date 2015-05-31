@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerManagerEx;
-import com.intellij.debugger.actions.*;
+import com.intellij.debugger.actions.JavaMarkObjectActionHandler;
+import com.intellij.debugger.actions.JvmSmartStepIntoActionHandler;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.ide.DataManager;
@@ -43,7 +44,6 @@ import com.intellij.xdebugger.impl.actions.EditBreakpointActionHandler;
 import com.intellij.xdebugger.impl.actions.MarkObjectActionHandler;
 import com.intellij.xdebugger.impl.breakpoints.ui.BreakpointItem;
 import com.intellij.xdebugger.impl.breakpoints.ui.BreakpointPanelProvider;
-import com.intellij.xdebugger.impl.evaluate.quick.common.QuickEvaluateHandler;
 import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 
 /**
@@ -52,20 +52,8 @@ import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 public class JavaDebuggerSupport extends DebuggerSupport
 {
 	private final JavaBreakpointPanelProvider myBreakpointPanelProvider = new JavaBreakpointPanelProvider();
-	private final StepOverActionHandler myStepOverActionHandler = new StepOverActionHandler();
-	private final StepIntoActionHandler myStepIntoActionHandler = new StepIntoActionHandler();
-	private final StepOutActionHandler myStepOutActionHandler = new StepOutActionHandler();
-	private final ForceStepOverActionHandler myForceStepOverActionHandler = new ForceStepOverActionHandler();
-	private final ForceStepIntoActionHandler myForceStepIntoActionHandler = new ForceStepIntoActionHandler();
-	private final RunToCursorActionHandler myRunToCursorActionHandler = new RunToCursorActionHandler();
-	private final ForceRunToCursorActionHandler myForceRunToCursorActionHandler = new ForceRunToCursorActionHandler();
-	private final ResumeActionHandler myResumeActionHandler = new ResumeActionHandler();
-	private final PauseActionHandler myPauseActionHandler = new PauseActionHandler();
-	private final ShowExecutionPointActionHandler myShowExecutionPointActionHandler = new ShowExecutionPointActionHandler();
-	//private final EvaluateActionHandler myEvaluateActionHandler = new EvaluateActionHandler();
-	private final QuickEvaluateActionHandler myQuickEvaluateHandler = new QuickEvaluateActionHandler();
+	//private final QuickEvaluateActionHandler myQuickEvaluateHandler = new QuickEvaluateActionHandler();
 	private final DebuggerActionHandler mySmartStepIntoHandler = new JvmSmartStepIntoActionHandler();
-	private final DebuggerActionHandler myAddToWatchedActionHandler = new AddToWatchActionHandler();
 	private final JavaMarkObjectActionHandler myMarkObjectActionHandler = new JavaMarkObjectActionHandler();
 
 	@Override
@@ -79,14 +67,14 @@ public class JavaDebuggerSupport extends DebuggerSupport
 	@NotNull
 	public DebuggerActionHandler getStepOverHandler()
 	{
-		return myStepOverActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getStepIntoHandler()
 	{
-		return myStepIntoActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
@@ -100,91 +88,84 @@ public class JavaDebuggerSupport extends DebuggerSupport
 	@NotNull
 	public DebuggerActionHandler getStepOutHandler()
 	{
-		return myStepOutActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getForceStepOverHandler()
 	{
-		return myForceStepOverActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getForceStepIntoHandler()
 	{
-		return myForceStepIntoActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getRunToCursorHandler()
 	{
-		return DISABLED;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getForceRunToCursorHandler()
 	{
-		return DISABLED;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getResumeActionHandler()
 	{
-		return myResumeActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getPauseHandler()
 	{
-		return myPauseActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getToggleLineBreakpointHandler()
 	{
-		return DISABLED;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@NotNull
 	@Override
 	public DebuggerActionHandler getToggleTemporaryLineBreakpointHandler()
 	{
-		return DISABLED;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getShowExecutionPointHandler()
 	{
-		return myShowExecutionPointActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@Override
 	@NotNull
 	public DebuggerActionHandler getEvaluateHandler()
 	{
-		return DISABLED;
-	}
-
-	@Override
-	@NotNull
-	public QuickEvaluateHandler getQuickEvaluateHandler()
-	{
-		return myQuickEvaluateHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 	@NotNull
 	@Override
 	public DebuggerActionHandler getAddToWatchesActionHandler()
 	{
-		return myAddToWatchedActionHandler;
+		return DisabledActionHandler.INSTANCE;
 	}
 
 
@@ -368,20 +349,6 @@ public class JavaDebuggerSupport extends DebuggerSupport
 		}
 		return ProjectManager.getInstance().getDefaultProject();
 	}
-
-	private static final DebuggerActionHandler DISABLED = new DebuggerActionHandler()
-	{
-		@Override
-		public void perform(@NotNull Project project, AnActionEvent event)
-		{
-		}
-
-		@Override
-		public boolean isEnabled(@NotNull Project project, AnActionEvent event)
-		{
-			return false;
-		}
-	};
 
 	private static final EditBreakpointActionHandler X_EDIT = new EditBreakpointActionHandler()
 	{
