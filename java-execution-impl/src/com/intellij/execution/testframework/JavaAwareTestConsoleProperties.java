@@ -20,14 +20,14 @@
  */
 package com.intellij.execution.testframework;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.execution.Executor;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.config.Storage;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public abstract class JavaAwareTestConsoleProperties extends TestConsoleProperties {
   public JavaAwareTestConsoleProperties(final Storage storage, Project project, Executor executor) {

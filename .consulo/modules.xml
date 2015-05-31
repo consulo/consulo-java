@@ -145,7 +145,7 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module" module-name="java-execution-api" />
+          <orderEntry type="module" module-name="java-execution-api" exported="" />
           <orderEntry type="module" module-name="java-psi-api" />
           <orderEntry type="library" exploded="" name="jdi" level="project" />
         </module-layer>
@@ -195,9 +195,9 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module" module-name="java-debugger-api" />
-          <orderEntry type="module" module-name="java-execution-impl" />
+          <orderEntry type="module" module-name="java-debugger-api" exported="" />
           <orderEntry type="module" module-name="java-impl" />
+          <orderEntry type="module" module-name="java-rt" />
         </module-layer>
       </module>
       <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl" current-layer="Default">
@@ -212,8 +212,8 @@
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-execution-api" exported="" />
           <orderEntry type="module" module-name="java-impl" />
-          <orderEntry type="module" module-name="java-debugger-impl" />
           <orderEntry type="module" module-name="java-rt" />
+          <orderEntry type="module" module-name="java-debugger-impl" />
         </module-layer>
       </module>
       <module name="java-analysis-impl" dirurl="file://$PROJECT_DIR$/java-analysis-impl" current-layer="Default">

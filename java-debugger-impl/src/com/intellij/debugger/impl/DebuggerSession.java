@@ -240,6 +240,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		return mySessionName;
 	}
 
+	@NotNull
 	public DebugProcessImpl getProcess()
 	{
 		return myDebugProcess;
