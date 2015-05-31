@@ -1,5 +1,6 @@
 /*
  * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2015 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +20,14 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.ExecutionException;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 
-/**
- * @author max
- */
+@Logger
 public class TransportServiceWrapper
 {
 	@NotNull
@@ -58,8 +57,6 @@ public class TransportServiceWrapper
 			throw new ExecutionException(e.getClass().getName() + " : " + e.getMessage());
 		}
 	}
-
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.apiAdapters.TransportService");
 
 	private final TransportService myDelegateObject;
 	private final Class<?> myDelegateClass;
@@ -96,7 +93,7 @@ public class TransportServiceWrapper
 			return "dt_socket";
 		}
 
-		LOG.error("Unknown service: " + myDelegateClass.getName());
+		LOGGER.error("Unknown service: " + myDelegateClass.getName());
 		return "<unknown>";
 	}
 }
