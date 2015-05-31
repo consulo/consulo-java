@@ -50,6 +50,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.StringBuilderSpinAllocator;
 import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 
 public abstract class DebuggerUtils
 {
@@ -589,7 +590,8 @@ public abstract class DebuggerUtils
 		return rv.get().booleanValue();
 	}
 
-	public abstract String findAvailableDebugAddress(boolean useSockets) throws ExecutionException;
+	@NotNull
+	public abstract TransportService.ListenKey findAvailableDebugAddress(int type) throws ExecutionException;
 
 	public static boolean isSynthetic(TypeComponent typeComponent)
 	{

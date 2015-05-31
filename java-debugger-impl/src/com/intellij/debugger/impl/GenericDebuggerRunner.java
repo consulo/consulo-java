@@ -151,7 +151,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 		if(debuggerRunnerSettings != null)
 		{
 			remoteConnection.setUseSockets(debuggerRunnerSettings.getTransport() == DebuggerSettings.SOCKET_TRANSPORT);
-			remoteConnection.setAddress(debuggerRunnerSettings.DEBUG_PORT);
+			remoteConnection.setAddress(debuggerRunnerSettings.getDebugPort());
 		}
 
 		return remoteConnection;
@@ -178,8 +178,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 		final GenericDebuggerRunnerSettings debuggerSettings = ((GenericDebuggerRunnerSettings) settings);
 		if(StringUtil.isEmpty(debuggerSettings.getDebugPort()))
 		{
-			debuggerSettings.setDebugPort(DebuggerUtils.getInstance().findAvailableDebugAddress(debuggerSettings.getTransport() == DebuggerSettings
-					.SOCKET_TRANSPORT));
+			debuggerSettings.setDebugPort(DebuggerUtils.getInstance().findAvailableDebugAddress(debuggerSettings.getTransport()).address());
 		}
 		return DebuggerManagerImpl.createDebugParameters(javaParameters, debuggerSettings, false);
 	}

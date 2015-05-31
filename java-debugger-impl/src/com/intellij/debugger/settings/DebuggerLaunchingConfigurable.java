@@ -27,8 +27,8 @@ import javax.swing.JRadioButton;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
+import com.intellij.debugger.apiAdapters.TransportClassDelegates;
 import com.intellij.openapi.options.ConfigurableUi;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.ui.components.panels.VerticalBox;
 
@@ -42,23 +42,19 @@ class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
 	@Override
 	public void reset(@NotNull DebuggerSettings settings)
 	{
-		if(!SystemInfo.isWindows)
+		Class<?> sharedMemoryTransportServiceClass = TransportClassDelegates.getSharedMemoryTransportServiceClass();
+
+		if(settings.DEBUGGER_TRANSPORT == DebuggerSettings.SHMEM_TRANSPORT)
 		{
-			myRbSocket.setSelected(true);
-			myRbShmem.setEnabled(false);
+			myRbShmem.setSelected(true);
 		}
 		else
 		{
-			if(settings.DEBUGGER_TRANSPORT == DebuggerSettings.SHMEM_TRANSPORT)
-			{
-				myRbShmem.setSelected(true);
-			}
-			else
-			{
-				myRbSocket.setSelected(true);
-			}
-			myRbShmem.setEnabled(true);
+			myRbSocket.setSelected(true);
 		}
+
+		myRbShmem.setEnabled(sharedMemoryTransportServiceClass != null);
+
 		myCbForceClassicVM.setSelected(settings.FORCE_CLASSIC_VM);
 		myCbDisableJIT.setSelected(settings.DISABLE_JIT);
 	}

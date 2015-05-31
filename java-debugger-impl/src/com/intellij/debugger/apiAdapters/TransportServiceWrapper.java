@@ -18,206 +18,85 @@ package com.intellij.debugger.apiAdapters;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.ArrayUtil;
-import consulo.internal.com.sun.jdi.connect.Transport;
+import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 
 /**
  * @author max
  */
 public class TransportServiceWrapper
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.apiAdapters.TransportService");
-
-	private final Object myDelegateObject;
-	private final Class<?> myDelegateClass;
-	@SuppressWarnings({"HardCodedStringLiteral"})
-	private static final String SOCKET_TRANSPORT_CLASS = "consulo.internal.com.sun.tools.jdi.SocketTransportService";
-	@SuppressWarnings({"HardCodedStringLiteral"})
-	private static final String SHMEM_TRANSPORT_CLASS = "consulo.internal.com.sun.tools.jdi.SharedMemoryTransportService";
-
-	private final Map<String, Object> myListenAddresses = new HashMap<String, Object>();
-
-	private TransportServiceWrapper(Class delegateClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-			InstantiationException
+	@NotNull
+	public static TransportServiceWrapper createTransportService(int type) throws ExecutionException
 	{
-		myDelegateClass = delegateClass;
-		final Constructor constructor = delegateClass.getDeclaredConstructor(ArrayUtil.EMPTY_CLASS_ARRAY);
-		constructor.setAccessible(true);
-		myDelegateObject = constructor.newInstance(ArrayUtil.EMPTY_OBJECT_ARRAY);
-	}
-
-	/**
-	 * Applicable if IDEA is run on JDK 1.4.2.x only!
-	 *
-	 * @param transportObj
-	 */
-	private TransportServiceWrapper(Transport transportObj)
-	{
-		myDelegateClass = transportObj.getClass();
-		myDelegateObject = transportObj;
-	}
-
-	public ConnectionServiceWrapper attach(final String s) throws IOException
-	{
-		try
+		Class<?> transportClass = null;
+		switch(type)
 		{
-			// Applicable if IDEA is run on JDK 1.4.2.x only!
-			// in JDK 1.5 the signature of the "attach" method has been changed to "attach(String, long, long)"
-			//noinspection HardCodedStringLiteral
-			final Method method = myDelegateClass.getMethod("attach", new Class[]{String.class});
-			method.setAccessible(true);
-			return new ConnectionServiceWrapper(method.invoke(myDelegateObject, new Object[]{s}));
-		}
-		catch(NoSuchMethodException e)
-		{
-			LOG.error(e);
-		}
-		catch(IllegalAccessException e)
-		{
-			LOG.error(e);
-		}
-		catch(InvocationTargetException e)
-		{
-			final Throwable cause = e.getCause();
-			if(cause instanceof IOException)
-			{
-				throw (IOException) cause;
-			}
-			LOG.error(e);
-		}
-		return null;
-	}
-
-	public String startListening() throws IOException
-	{
-		try
-		{
-			//noinspection HardCodedStringLiteral
-			final Method method = myDelegateClass.getMethod("startListening", ArrayUtil.EMPTY_CLASS_ARRAY);
-			method.setAccessible(true);
-			final Object rv = method.invoke(myDelegateObject, ArrayUtil.EMPTY_OBJECT_ARRAY);
-			// important! do not cast to string cause return types differ in jdk 1.4 and jdk 1.5
-			final String strValue = rv.toString();
-			myListenAddresses.put(strValue, rv);
-			return strValue;
-		}
-		catch(NoSuchMethodException e)
-		{
-			LOG.error(e);
-		}
-		catch(IllegalAccessException e)
-		{
-			LOG.error(e);
-		}
-		catch(InvocationTargetException e)
-		{
-			final Throwable cause = e.getCause();
-			if(cause instanceof IOException)
-			{
-				throw (IOException) cause;
-			}
-			LOG.error(e);
-		}
-		return null;
-	}
-
-	public void stopListening(final String address) throws IOException
-	{
-		try
-		{
-			Object value = myListenAddresses.get(address);
-			if(value == null)
-			{
-				value = address;
-			}
-			Class paramClass = value.getClass();
-			for(Class superClass = paramClass.getSuperclass(); !Object.class.equals(superClass); superClass = superClass.getSuperclass())
-			{
-				paramClass = superClass;
-			}
-			//noinspection HardCodedStringLiteral
-			final Method method = myDelegateClass.getMethod("stopListening", new Class[]{paramClass});
-			method.setAccessible(true);
-			method.invoke(myDelegateObject, new Object[]{value});
-		}
-		catch(NoSuchMethodException e)
-		{
-			LOG.error(e);
-		}
-		catch(IllegalAccessException e)
-		{
-			LOG.error(e);
-		}
-		catch(InvocationTargetException e)
-		{
-			final Throwable cause = e.getCause();
-			if(cause instanceof IOException)
-			{
-				throw (IOException) cause;
-			}
-			LOG.error(e);
-		}
-	}
-
-	@SuppressWarnings({"HardCodedStringLiteral"})
-	public String transportId()
-	{
-		if(SOCKET_TRANSPORT_CLASS.equals(myDelegateClass.getName()))
-		{
-			return "dt_socket";
-		}
-		else if(SHMEM_TRANSPORT_CLASS.equals(myDelegateClass.getName()))
-		{
-			return "dt_shmem";
-		}
-
-		LOG.error("Unknown serivce");
-		return "<unknown>";
-	}
-
-	public static TransportServiceWrapper getTransportService(boolean forceSocketTransport) throws ExecutionException
-	{
-		TransportServiceWrapper transport;
-		try
-		{
-			try
-			{
-				if(forceSocketTransport)
+			case DebuggerSettings.SOCKET_TRANSPORT:
+				transportClass = TransportClassDelegates.getSocketTransportServiceClass();
+				break;
+			case DebuggerSettings.SHMEM_TRANSPORT:
+				transportClass = TransportClassDelegates.getSharedMemoryTransportServiceClass();
+				if(transportClass == null)
 				{
-					transport = new TransportServiceWrapper(Class.forName(SOCKET_TRANSPORT_CLASS));
+					transportClass = TransportClassDelegates.getSocketTransportServiceClass();
 				}
-				else
-				{
-					transport = new TransportServiceWrapper(Class.forName(SHMEM_TRANSPORT_CLASS));
-				}
-			}
-			catch(UnsatisfiedLinkError e)
-			{
-				transport = new TransportServiceWrapper(Class.forName(SOCKET_TRANSPORT_CLASS));
-			}
+				break;
+		}
+
+		try
+		{
+			return new TransportServiceWrapper(transportClass);
 		}
 		catch(Exception e)
 		{
 			throw new ExecutionException(e.getClass().getName() + " : " + e.getMessage());
 		}
-		return transport;
 	}
 
-	/**
-	 * Applicable if IDEA is run on JDK 1.4.2.x only!
-	 *
-	 * @param transportObject
-	 * @return transport service wrapper
-	 */
-	public static TransportServiceWrapper getTransportService(Transport transportObject)
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.apiAdapters.TransportService");
+
+	private final TransportService myDelegateObject;
+	private final Class<?> myDelegateClass;
+
+	private TransportServiceWrapper(Class<?> delegateClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+			InstantiationException
 	{
-		return new TransportServiceWrapper(transportObject);
+		myDelegateClass = delegateClass;
+		final Constructor constructor = delegateClass.getDeclaredConstructor(ArrayUtil.EMPTY_CLASS_ARRAY);
+		constructor.setAccessible(true);
+		myDelegateObject = (TransportService) constructor.newInstance(ArrayUtil.EMPTY_OBJECT_ARRAY);
 	}
 
+	@NotNull
+	public TransportService.ListenKey startListening() throws IOException
+	{
+		return myDelegateObject.startListening();
+	}
+
+	public void stopListening(final TransportService.ListenKey listenKey) throws IOException
+	{
+		myDelegateObject.stopListening(listenKey);
+	}
+
+	@NotNull
+	public String transportId()
+	{
+		if(myDelegateClass == TransportClassDelegates.getSharedMemoryTransportServiceClass())
+		{
+			return "dt_shmem";
+		}
+		else if(myDelegateClass == TransportClassDelegates.getSocketTransportServiceClass())
+		{
+			return "dt_socket";
+		}
+
+		LOG.error("Unknown service: " + myDelegateClass.getName());
+		return "<unknown>";
+	}
 }

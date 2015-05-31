@@ -15,13 +15,22 @@
  */
 package com.intellij.debugger.impl;
 
+import java.io.IOException;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.apiAdapters.TransportServiceWrapper;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.StackFrameContext;
-import com.intellij.debugger.engine.evaluation.*;
+import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
+import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
+import com.intellij.debugger.engine.evaluation.EvaluateException;
+import com.intellij.debugger.engine.evaluation.TextWithImports;
+import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilderImpl;
+import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.CompletionEditor;
 import com.intellij.debugger.ui.DebuggerExpressionComboBox;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeExpression;
@@ -38,101 +47,147 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.net.NetUtils;
 import consulo.internal.com.sun.jdi.Value;
-import org.jdom.Element;
+import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 
-import java.io.IOException;
+public class DebuggerUtilsImpl extends DebuggerUtilsEx
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.DebuggerUtilsImpl");
 
-public class DebuggerUtilsImpl extends DebuggerUtilsEx{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.DebuggerUtilsImpl");
+	@Override
+	public PsiExpression substituteThis(PsiExpression expressionWithThis,
+			PsiExpression howToEvaluateThis,
+			Value howToEvaluateThisValue,
+			StackFrameContext context) throws EvaluateException
+	{
+		return DebuggerTreeNodeExpression.substituteThis(expressionWithThis, howToEvaluateThis, howToEvaluateThisValue);
+	}
 
-  public PsiExpression substituteThis(PsiExpression expressionWithThis, PsiExpression howToEvaluateThis, Value howToEvaluateThisValue, StackFrameContext context)
-    throws EvaluateException {
-    return DebuggerTreeNodeExpression.substituteThis(expressionWithThis, howToEvaluateThis, howToEvaluateThisValue);
-  }
+	@Override
+	public EvaluatorBuilder getEvaluatorBuilder()
+	{
+		return EvaluatorBuilderImpl.getInstance();
+	}
 
-  public EvaluatorBuilder getEvaluatorBuilder() {
-    return EvaluatorBuilderImpl.getInstance();
-  }
+	@Override
+	public DebuggerTreeNode getSelectedNode(DataContext context)
+	{
+		return DebuggerAction.getSelectedNode(context);
+	}
 
-  public DebuggerTreeNode getSelectedNode(DataContext context) {
-    return DebuggerAction.getSelectedNode(context);
-  }
+	@Override
+	public DebuggerContextImpl getDebuggerContext(DataContext context)
+	{
+		return DebuggerAction.getDebuggerContext(context);
+	}
 
-  public DebuggerContextImpl getDebuggerContext(DataContext context) {
-    return DebuggerAction.getDebuggerContext(context);
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public Element writeTextWithImports(TextWithImports text)
+	{
+		Element element = new Element("TextWithImports");
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public Element writeTextWithImports(TextWithImports text) {
-    Element element = new Element("TextWithImports");
+		element.setAttribute("text", text.toExternalForm());
+		element.setAttribute("type", text.getKind() == CodeFragmentKind.EXPRESSION ? "expression" : "code fragment");
+		return element;
+	}
 
-    element.setAttribute("text", text.toExternalForm());
-    element.setAttribute("type", text.getKind() == CodeFragmentKind.EXPRESSION ? "expression" : "code fragment");
-    return element;
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public TextWithImports readTextWithImports(Element element)
+	{
+		LOG.assertTrue("TextWithImports".equals(element.getName()));
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public TextWithImports readTextWithImports(Element element) {
-    LOG.assertTrue("TextWithImports".equals(element.getName()));
+		String text = element.getAttributeValue("text");
+		if("expression".equals(element.getAttributeValue("type")))
+		{
+			return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, text);
+		}
+		else
+		{
+			return new TextWithImportsImpl(CodeFragmentKind.CODE_BLOCK, text);
+		}
+	}
 
-    String text = element.getAttributeValue("text");
-    if ("expression".equals(element.getAttributeValue("type"))) {
-      return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, text);
-    } else {
-      return new TextWithImportsImpl(CodeFragmentKind.CODE_BLOCK, text);
-    }
-  }
+	@Override
+	public void writeTextWithImports(Element root, String name, TextWithImports value)
+	{
+		LOG.assertTrue(value.getKind() == CodeFragmentKind.EXPRESSION);
+		JDOMExternalizerUtil.writeField(root, name, value.toExternalForm());
+	}
 
-  public void writeTextWithImports(Element root, String name, TextWithImports value) {
-    LOG.assertTrue(value.getKind() == CodeFragmentKind.EXPRESSION);
-    JDOMExternalizerUtil.writeField(root, name, value.toExternalForm());
-  }
+	@Override
+	public TextWithImports readTextWithImports(Element root, String name)
+	{
+		String s = JDOMExternalizerUtil.readField(root, name);
+		if(s == null)
+		{
+			return null;
+		}
+		return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, s);
+	}
 
-  public TextWithImports readTextWithImports(Element root, String name) {
-    String s = JDOMExternalizerUtil.readField(root, name);
-    if(s == null) return null;
-    return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, s);
-  }
+	@Override
+	public TextWithImports createExpressionWithImports(String expression)
+	{
+		return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression);
+	}
 
-  public TextWithImports createExpressionWithImports(String expression) {
-    return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression);
-  }
+	@Override
+	public PsiElement getContextElement(StackFrameContext context)
+	{
+		return PositionUtil.getContextElement(context);
+	}
 
-  public PsiElement getContextElement(StackFrameContext context) {
-    return PositionUtil.getContextElement(context);
-  }
+	@Override
+	public PsiClass chooseClassDialog(String title, Project project)
+	{
+		TreeClassChooser dialog = TreeClassChooserFactory.getInstance(project).createAllProjectScopeChooser(title);
+		dialog.showDialog();
+		return dialog.getSelected();
+	}
 
-  public PsiClass chooseClassDialog(String title, Project project) {
-    TreeClassChooser dialog = TreeClassChooserFactory.getInstance(project).createAllProjectScopeChooser(title);
-    dialog.showDialog();
-    return dialog.getSelected();
-  }
+	@Override
+	public CompletionEditor createEditor(Project project, PsiElement context, String recentsId)
+	{
+		return new DebuggerExpressionComboBox(project, context, recentsId, DefaultCodeFragmentFactory.getInstance());
+	}
 
-  public CompletionEditor createEditor(Project project, PsiElement context, String recentsId) {
-    return new DebuggerExpressionComboBox(project, context, recentsId, DefaultCodeFragmentFactory.getInstance());
-  }
+	@Override
+	@NotNull
+	public TransportService.ListenKey findAvailableDebugAddress(final int type) throws ExecutionException
+	{
+		final TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(type);
 
-  public String findAvailableDebugAddress(final boolean useSockets) throws ExecutionException {
-    final TransportServiceWrapper transportService = TransportServiceWrapper.getTransportService(useSockets);
+		if(type == DebuggerSettings.SOCKET_TRANSPORT)
+		{
+			final int freePort;
+			try
+			{
+				freePort = NetUtils.findAvailableSocketPort();
+			}
+			catch(IOException e)
+			{
+				throw new ExecutionException(DebugProcessImpl.processError(e));
+			}
+			return new TransportService.ListenKey()
+			{
+				@Override
+				public String address()
+				{
+					return Integer.toString(freePort);
+				}
+			};
+		}
 
-    if(useSockets) {
-      final int freePort;
-      try {
-        freePort = NetUtils.findAvailableSocketPort();
-      }
-      catch (IOException e) {
-        throw new ExecutionException(DebugProcessImpl.processError(e));
-      }
-      return Integer.toString(freePort);
-    }
-
-    try {
-      String address  = transportService.startListening();
-      transportService.stopListening(address);
-      return address;
-    }
-    catch (IOException e) {
-      throw new ExecutionException(DebugProcessImpl.processError(e));
-    }
-  }
+		try
+		{
+			TransportService.ListenKey address = transportService.startListening();
+			transportService.stopListening(address);
+			return address;
+		}
+		catch(IOException e)
+		{
+			throw new ExecutionException(DebugProcessImpl.processError(e));
+		}
+	}
 }

@@ -37,7 +37,6 @@ import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.PositionManager;
 import com.intellij.debugger.actions.DebuggerActions;
-import com.intellij.debugger.apiAdapters.ConnectionServiceWrapper;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
@@ -142,7 +141,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	private ExecutionResult myExecutionResult;
 	private RemoteConnection myConnection;
 
-	private ConnectionServiceWrapper myConnectionService;
 	private Map<String, Connector.Argument> myArguments;
 
 	private final List<NodeRenderer> myRenderers = new ArrayList<NodeRenderer>();
@@ -402,13 +400,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 					LOG.error("Cannot find connector: " + SOCKET_LISTENING_CONNECTOR_NAME);
 				}
 				connector.stopListening(arguments);
-			}
-			else
-			{
-				if(myConnectionService != null)
-				{
-					myConnectionService.close();
-				}
 			}
 		}
 		catch(IOException e)
@@ -717,7 +708,6 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		finally
 		{
 			myArguments = null;
-			myConnectionService = null;
 		}
 	}
 

@@ -17,17 +17,19 @@ package com.intellij.execution.configurations;
 
 import org.jetbrains.annotations.NonNls;
 
-public interface DebuggingRunnerData {
-  @NonNls String DEBUGGER_RUNNER_ID = "Debug";
+public interface DebuggingRunnerData
+{
+	@NonNls
+	String DEBUGGER_RUNNER_ID = "Debug";
 
-  /**
-   * @return a string denoting debug port. In case of socket transport this is a number, in case of shared memory transport this is a string
-   */
-  String getDebugPort();
+	/**
+	 * @return a string denoting debug port. In case of socket transport this is a number, in case of shared memory transport this is a string
+	 */
+	String getDebugPort();
 
-  void setDebugPort(String port);
+	void setDebugPort(String port);
 
-  boolean isRemote();
+	boolean isRemote();
 
-  void setLocal(boolean isLocal);
+	void setLocal(boolean isLocal);
 }

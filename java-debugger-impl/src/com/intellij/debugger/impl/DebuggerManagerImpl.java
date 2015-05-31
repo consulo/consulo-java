@@ -562,7 +562,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 		{
 			try
 			{
-				address = DebuggerUtils.getInstance().findAvailableDebugAddress(useSockets);
+				address = DebuggerUtils.getInstance().findAvailableDebugAddress(transport).address();
 			}
 			catch(ExecutionException e)
 			{
@@ -577,7 +577,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 			address = debugPort;
 		}
 
-		final TransportServiceWrapper transportService = TransportServiceWrapper.getTransportService(useSockets);
+		final TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(transport);
 		final String debugAddress = debuggerInServerMode && useSockets ? "127.0.0.1:" + address : address;
 		String debuggeeRunProperties = "transport=" + transportService.transportId() + ",address=" + debugAddress;
 		if(debuggerInServerMode)
@@ -709,7 +709,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	public static RemoteConnection createDebugParameters(final JavaParameters parameters, GenericDebuggerRunnerSettings settings,
 			boolean checkValidity) throws ExecutionException
 	{
-		return createDebugParameters(parameters, settings.LOCAL, settings.getTransport(), settings.DEBUG_PORT, checkValidity);
+		return createDebugParameters(parameters, !settings.isRemote(), settings.getTransport(), settings.getDebugPort(), checkValidity);
 	}
 
 	private static class MyDebuggerStateManager extends DebuggerStateManager

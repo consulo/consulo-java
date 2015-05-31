@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,62 +15,72 @@
  */
 package com.intellij.debugger.impl;
 
+import org.jdom.Element;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.configurations.DebuggingRunnerData;
 import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import org.jdom.Element;
+import com.intellij.util.xmlb.SmartSerializer;
+import com.intellij.util.xmlb.annotations.OptionTag;
+import com.intellij.util.xmlb.annotations.Transient;
 
-public class GenericDebuggerRunnerSettings implements RunnerSettings, DebuggingRunnerData {
-  public String DEBUG_PORT = "";
-  public int TRANSPORT = DebuggerSettings.SOCKET_TRANSPORT;
-  public boolean LOCAL = true;
+public class GenericDebuggerRunnerSettings implements DebuggingRunnerData, RunnerSettings
+{
+	private final SmartSerializer mySerializer = new SmartSerializer();
 
-  public GenericDebuggerRunnerSettings() {
-  }
+	@Transient
+	@Deprecated
+	public String DEBUG_PORT = "";
 
-  @Override
-  public String getDebugPort() {
-    return DEBUG_PORT;
-  }
+	public int TRANSPORT = DebuggerSettings.SOCKET_TRANSPORT;
+	public boolean LOCAL = true;
 
-  @Override
-  public boolean isRemote() {
-    return !LOCAL;
-  }
+	@Override
+	@OptionTag("DEBUG_PORT")
+	public String getDebugPort()
+	{
+		//noinspection deprecation
+		return DEBUG_PORT;
+	}
 
-  @Override
-  public void setLocal(boolean isLocal) {
-    LOCAL = isLocal;
-  }
+	@Override
+	public void setDebugPort(String port)
+	{
+		//noinspection deprecation
+		DEBUG_PORT = port;
+	}
 
-  @Override
-  public void setDebugPort(String port) {
-    DEBUG_PORT = port;
-  }
+	@Override
+	public boolean isRemote()
+	{
+		return !LOCAL;
+	}
 
-  public void setTransport(int transport) {
-    TRANSPORT = transport;
-  }
+	@Override
+	public void setLocal(boolean isLocal)
+	{
+		LOCAL = isLocal;
+	}
 
-  @Override
-  public void readExternal(Element element) throws InvalidDataException {
-    DefaultJDOMExternalizer.readExternal(this, element);
-  }
+	@Transient
+	public int getTransport()
+	{
+		return LOCAL ? DebuggerSettings.getInstance().DEBUGGER_TRANSPORT : TRANSPORT;
+	}
 
-  @Override
-  public void writeExternal(Element element) throws WriteExternalException {
-    DefaultJDOMExternalizer.writeExternal(this, element);
-  }
+	public void setTransport(int transport)
+	{
+		TRANSPORT = transport;
+	}
 
-  public int getTransport() {
-    if (LOCAL) {
-      return DebuggerSettings.getInstance().DEBUGGER_TRANSPORT;
-    }
-    else {
-      return TRANSPORT;
-    }
-  }
+	@Override
+	public void readExternal(Element element)
+	{
+		mySerializer.readExternal(this, element);
+	}
+
+	@Override
+	public void writeExternal(Element element)
+	{
+		mySerializer.writeExternal(this, element);
+	}
 }
