@@ -103,15 +103,6 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		this(viewProvider, false);
 	}
 
-	/**
-	 * @deprecated use {@link #ClsFileImpl(FileViewProvider)} (to remove in IDEA 14)
-	 */
-	@SuppressWarnings("unused")
-	public ClsFileImpl(@NotNull PsiManager manager, @NotNull FileViewProvider viewProvider)
-	{
-		this(viewProvider, false);
-	}
-
 	private ClsFileImpl(@NotNull FileViewProvider viewProvider, boolean forDecompiling)
 	{
 		//noinspection ConstantConditions

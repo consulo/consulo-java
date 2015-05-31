@@ -16,6 +16,7 @@
 package com.intellij.psi;
 
 import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
@@ -35,7 +36,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 
 	public ClassFileViewProvider(@NotNull final PsiManager manager, @NotNull final VirtualFile virtualFile, final boolean physical)
 	{
-		super(manager, virtualFile, physical);
+		super(manager, virtualFile, physical, JavaClassFileType.INSTANCE);
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 			return null;
 		}
 
-		return new ClsFileImpl(PsiManager.getInstance(project), this);
+		return new ClsFileImpl(this);
 	}
 
 	public static boolean isInnerClass(VirtualFile vFile)
