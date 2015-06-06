@@ -33,7 +33,6 @@ import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.vfs.ArchiveEntry;
 import com.intellij.openapi.vfs.ArchiveFile;
 import com.intellij.openapi.vfs.ArchiveFileSystem;
-import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
 public class JarVersionDetectionUtil {
@@ -55,7 +54,7 @@ public class JarVersionDetectionUtil {
   @Nullable
   public static String detectJarVersion(@NotNull String detectionClass, @NotNull List<VirtualFile> files) {
     final VirtualFile jar = LibrariesHelper.getInstance().findRootByClass(files, detectionClass);
-    if (jar != null && jar.getFileSystem() instanceof JarFileSystem) {
+    if (jar != null && jar.getFileSystem() instanceof ArchiveFileSystem) {
       final VirtualFile manifestFile = jar.findFileByRelativePath(JarFile.MANIFEST_NAME);
       if (manifestFile != null) {
         try {

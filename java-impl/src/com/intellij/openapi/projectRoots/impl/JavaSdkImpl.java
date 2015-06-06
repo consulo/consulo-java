@@ -55,8 +55,6 @@ import com.intellij.openapi.roots.types.DocumentationOrderRootType;
 import com.intellij.openapi.roots.types.SourcesOrderRootType;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.ArchiveFileSystem;
-import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -610,13 +608,13 @@ public class JavaSdkImpl extends JavaSdk
 	@Nullable
 	private static VirtualFile findInJar(File jarFile, String relativePath)
 	{
-		if(!jarFile.exists())
+		VirtualFile fileByIoFile = LocalFileSystem.getInstance().findFileByIoFile(jarFile);
+		if(fileByIoFile == null)
 		{
 			return null;
 		}
-		String url = JarFileSystem.PROTOCOL_PREFIX +
-				jarFile.getAbsolutePath().replace(File.separatorChar, '/') + ArchiveFileSystem.ARCHIVE_SEPARATOR + relativePath;
-		return VirtualFileManager.getInstance().findFileByUrl(url);
+		VirtualFile archiveRootForLocalFile = ArchiveVfsUtil.getArchiveRootForLocalFile(fileByIoFile);
+		return archiveRootForLocalFile == null ? null : archiveRootForLocalFile.findFileByRelativePath(relativePath);
 	}
 
 	@Nullable

@@ -15,65 +15,86 @@
  */
 package com.intellij.openapi.roots.libraries;
 
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.vfs.JarFileSystem;
-import com.intellij.openapi.vfs.StandardFileSystems;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.util.text.StringTokenizer;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Arrays;
 import java.util.List;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.openapi.roots.types.BinariesOrderRootType;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
+
 /**
- * author: lesya
+ * @author lesya
  */
-public class LibrariesHelperImpl extends LibrariesHelper {
+public class LibrariesHelperImpl extends LibrariesHelper
+{
+	@Override
+	public VirtualFile findJarByClass(Library library, @NonNls String fqn)
+	{
+		return library == null ? null : findRootByClass(Arrays.asList(library.getFiles(BinariesOrderRootType.getInstance())), fqn);
+	}
 
-  @Override
-  public VirtualFile findJarByClass(Library library, @NonNls String fqn) {
-    return library == null ? null : findRootByClass(Arrays.asList(library.getFiles(OrderRootType.CLASSES)), fqn);
-  }
+	@Nullable
+	@Override
+	public VirtualFile findRootByClass(List<VirtualFile> roots, String fqn)
+	{
+		for(VirtualFile file : roots)
+		{
+			if(findInFile(file, fqn))
+			{
+				return file;
+			}
+		}
+		return null;
+	}
 
-  @Nullable
-  @Override
-  public VirtualFile findRootByClass(List<VirtualFile> roots, String fqn) {
-    for (VirtualFile file : roots) {
-      if (findInFile(file, new StringTokenizer(fqn, "."))) return file;
-    }
-    return null;
-  }
+	@Override
+	public boolean isClassAvailableInLibrary(Library library, String fqn)
+	{
+		final String[] urls = library.getUrls(BinariesOrderRootType.getInstance());
+		return isClassAvailable(urls, fqn);
+	}
 
-  @Override
-  public boolean isClassAvailableInLibrary(Library library, String fqn) {
-    final String[] urls = library.getUrls(OrderRootType.CLASSES);
-    return isClassAvailable(urls, fqn);
-  }
+	@Override
+	public boolean isClassAvailable(final String[] urls, String fqn)
+	{
+		for(String url : urls)
+		{
+			VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
+			if(file == null)
+			{
+				continue;
+			}
 
-  @Override
-  public boolean isClassAvailable(final String[] urls, String fqn) {
-    for (String url : urls) {
-      VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
-      if (file == null) continue;
-      if (!(file.getFileSystem() instanceof JarFileSystem) && !file.isDirectory()) {
-        file = StandardFileSystems.jar().findFileByPath(file.getPath() + JarFileSystem.JAR_SEPARATOR);
-      }
-      if (file == null) continue;
-      if (findInFile(file, new StringTokenizer(fqn, "."))) return true;
-    }
-    return false;
-  }
+			VirtualFile root = null;
+			if(file.isDirectory())
+			{
+				root = file;
+			}
+			else
+			{
+				root = ArchiveVfsUtil.getArchiveRootForLocalFile(file);
+			}
 
-  private static boolean findInFile(VirtualFile root, final StringTokenizer filePath) {
-    if (!filePath.hasMoreTokens()) return true;
-    @NonNls String name = filePath.nextToken();
-    if (!filePath.hasMoreTokens()) {
-      name += ".class";
-    }
-    final VirtualFile child = root.findChild(name);
-    return child != null && findInFile(child, filePath);
-  }
+			if(root == null)
+			{
+				continue;
+			}
+			if(findInFile(root, fqn))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
+	private static boolean findInFile(VirtualFile root, final String fqn)
+	{
+		String filePath = fqn.replace(".", "/") + "." + JavaClassFileType.INSTANCE.getDefaultExtension();
+
+		return root.findFileByRelativePath(filePath) != null;
+	}
 }
