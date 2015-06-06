@@ -15,7 +15,9 @@
  */
 package com.intellij.codeInsight.navigation.actions;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.JavaResolveResult;
@@ -31,15 +33,11 @@ import com.intellij.psi.util.PsiUtil;
 /**
  * @author yole
  */
-public class JavaTypeDeclarationProvider implements TypeDeclarationPlaceAwareProvider {
-  @Override
-  public PsiElement[] getSymbolTypeDeclarations(PsiElement symbol) {
-    return getSymbolTypeDeclarations(symbol, null, -1);
-  }
-
+public class JavaTypeDeclarationProvider extends TypeDeclarationProvider {
+  @RequiredReadAction
   @Nullable
   @Override
-  public PsiElement[] getSymbolTypeDeclarations(PsiElement targetElement, Editor editor, int offset) {
+  public PsiElement[] getSymbolTypeDeclarations(@NotNull PsiElement targetElement, Editor editor, int offset) {
     PsiType type;
     if (targetElement instanceof PsiVariable){
       type = ((PsiVariable)targetElement).getType();
