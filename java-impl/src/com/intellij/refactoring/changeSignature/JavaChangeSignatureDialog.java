@@ -92,7 +92,6 @@ import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.table.JBListTable;
 import com.intellij.util.ui.table.JBTableRow;
 import com.intellij.util.ui.table.JBTableRowEditor;
-import lombok.val;
 
 /**
  * @author Konstantin Bulenkov
@@ -182,7 +181,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
 	@NotNull
 	protected List<Pair<String, JPanel>> createAdditionalPanels()
 	{
-		val method = myMethod.getMethod();
+		final PsiMethod method = myMethod.getMethod();
 
 		// this method is invoked before constructor body
 		myExceptionsModel = new ExceptionsTableModel(method.getThrowsList());

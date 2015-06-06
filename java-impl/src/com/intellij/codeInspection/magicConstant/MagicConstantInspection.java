@@ -74,7 +74,6 @@ import com.intellij.slicer.SliceUsage;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ConcurrentSoftValueHashMap;
-import lombok.val;
 
 public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 {
@@ -233,7 +232,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 			return; // no jdk to attach
 		}
 		PsiMethod getModifiers = methods[0];
-		val externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
+		final ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
 		PsiAnnotation annotation = externalAnnotationsManager.findExternalAnnotation(getModifiers, MagicConstant.class.getName());
 		if(annotation != null)
 		{

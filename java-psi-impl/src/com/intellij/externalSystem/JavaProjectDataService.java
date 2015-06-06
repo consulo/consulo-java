@@ -18,9 +18,9 @@ package com.intellij.externalSystem;
 import java.util.Collection;
 import java.util.List;
 
-import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import com.intellij.openapi.externalSystem.model.DataNode;
 import com.intellij.openapi.externalSystem.model.Key;
 import com.intellij.openapi.externalSystem.service.project.manage.ProjectDataService;
@@ -35,7 +35,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
-import lombok.val;
+import com.intellij.pom.java.LanguageLevel;
 
 /**
  * @author Denis Zhdanov
@@ -59,8 +59,8 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
 		}
 		JavaProjectData projectData = toImport.iterator().next().getData();
 
-		val jdk = findJdk(projectData.getJdkVersion());
-		val languageLevel = projectData.getLanguageLevel();
+		final Sdk jdk = findJdk(projectData.getJdkVersion());
+		final LanguageLevel languageLevel = projectData.getLanguageLevel();
 
 		ExternalSystemApiUtil.executeProjectChangeAction(synchronous, new DisposeAwareProjectChange(project)
 		{

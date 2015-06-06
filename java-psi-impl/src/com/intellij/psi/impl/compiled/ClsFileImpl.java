@@ -77,7 +77,6 @@ import com.intellij.reference.SoftReference;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.cls.ClsFormatException;
-import lombok.val;
 
 public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub> implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx,
 		Queryable, PsiClassOwnerEx, PsiCompiledFile
@@ -637,8 +636,8 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	public static CharSequence decompile(@NotNull VirtualFile file)
 	{
 		PsiManager manager = PsiManager.getInstance(DefaultProjectFactory.getInstance().getDefaultProject());
-		val buffer = new StringBuilder();
-		val clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
+		final StringBuilder buffer = new StringBuilder();
+		final ClsFileImpl clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
 		ApplicationManager.getApplication().runReadAction(new Runnable()
 		{
 			@Override

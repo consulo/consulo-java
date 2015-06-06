@@ -53,7 +53,6 @@ import com.intellij.ui.TableUtil;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.ItemRemovable;
-import lombok.val;
 
 /**
  * @author Eugene Zhuravlev
@@ -412,7 +411,7 @@ public class TargetOptionsComponent extends JPanel
 
 	private void removeSelectedModules()
 	{
-		val rows = myTable.getSelectedRows();
+		int[] rows = myTable.getSelectedRows();
 		if(rows.length > 0)
 		{
 			TableUtil.removeSelectedItems(myTable);
@@ -421,8 +420,8 @@ public class TargetOptionsComponent extends JPanel
 
 	private void addModules()
 	{
-		val model = (TargetLevelTableModel) myTable.getModel();
-		val items = new ArrayList<Module>(Arrays.asList(ModuleManager.getInstance(myProject).getModules()));
+		TargetLevelTableModel model = (TargetLevelTableModel) myTable.getModel();
+		List<Module> items = new ArrayList<Module>(Arrays.asList(ModuleManager.getInstance(myProject).getModules()));
 		Set<Module> alreadyAdded = new HashSet<Module>();
 		for(TargetLevelTableModel.Item item : model.getItems())
 		{
@@ -444,9 +443,9 @@ public class TargetOptionsComponent extends JPanel
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
-		val chooser = new ChooseModulesDialog(this, items, "Choose module");
+		ChooseModulesDialog chooser = new ChooseModulesDialog(this, items, "Choose module");
 		chooser.show();
-		val elements = chooser.getChosenElements();
+		List<Module> elements = chooser.getChosenElements();
 		if(!elements.isEmpty())
 		{
 			model.addItems(elements);
@@ -461,14 +460,14 @@ public class TargetOptionsComponent extends JPanel
 	@Nullable
 	public String getProjectBytecodeTarget()
 	{
-		val item = ((String) myCbProjectTargetLevel.getSelectedItem()).trim();
+		String item = ((String) myCbProjectTargetLevel.getSelectedItem()).trim();
 		return "".equals(item) ? null : item;
 	}
 
 	public Map<String, String> getModulesBytecodeTargetMap()
 	{
 		TargetLevelTableModel model = (TargetLevelTableModel) myTable.getModel();
-		val map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<String, String>();
 		for(TargetLevelTableModel.Item item : model.getItems())
 		{
 			map.put(item.module.getName(), item.targetLevel);
@@ -478,10 +477,10 @@ public class TargetOptionsComponent extends JPanel
 
 	public void setModuleTargetLevels(Map<String, String> moduleLevels)
 	{
-		val map = new HashMap<Module, String>();
-		for(val module : ModuleManager.getInstance(myProject).getModules())
+		Map<Module, String> map = new HashMap<Module, String>();
+		for(Module module : ModuleManager.getInstance(myProject).getModules())
 		{
-			val target = moduleLevels.get(module.getName());
+			String target = moduleLevels.get(module.getName());
 			if(target != null)
 			{
 				map.put(module, target);

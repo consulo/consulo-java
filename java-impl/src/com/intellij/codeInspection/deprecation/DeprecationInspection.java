@@ -37,7 +37,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
-import lombok.val;
 
 /**
  * @author max
@@ -380,11 +379,11 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool
 
 		String description = null;
 
-		val symbolName = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
+		String symbolName = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
 		PsiAnnotation annotation = AnnotationUtil.findAnnotation((PsiModifierListOwner) refElement, DeprecationInfo.class.getName());
 		if(annotation != null)
 		{
-			val value = AnnotationUtil.getStringAttributeValue(annotation, PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);
+			String value = AnnotationUtil.getStringAttributeValue(annotation, PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);
 			description = JavaErrorMessages.message("deprecated.symbol.0", symbolName, value);
 		}
 

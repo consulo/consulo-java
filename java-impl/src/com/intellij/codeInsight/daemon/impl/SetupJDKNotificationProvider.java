@@ -15,10 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.module.extension.ModuleExtensionChangeListener;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ProjectTopics;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.highlighter.JavaClassFileType;
@@ -37,7 +37,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
-import lombok.val;
 
 /**
  * @author Danila Ponomarenko
@@ -115,7 +114,7 @@ public class SetupJDKNotificationProvider extends EditorNotifications.Provider<E
 	@NotNull
 	private static EditorNotificationPanel createPanel(final @NotNull Project project, final @NotNull PsiFile file)
 	{
-		val panel = new EditorNotificationPanel();
+		EditorNotificationPanel panel = new EditorNotificationPanel();
 		panel.setText(JavaCoreBundle.message("module.jdk.not.defined"));
 		panel.createActionLabel(JavaCoreBundle.message("module.jdk.setup"), new Runnable()
 		{

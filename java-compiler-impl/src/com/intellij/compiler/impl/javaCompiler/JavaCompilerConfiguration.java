@@ -27,7 +27,6 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
-import lombok.val;
 
 @ProjectService
 @State(
@@ -74,7 +73,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 	@Nullable
 	public String getBytecodeTargetLevel(Module module)
 	{
-		val level = myModuleBytecodeTarget.get(module.getName());
+		String level = myModuleBytecodeTarget.get(module.getName());
 		if(level != null)
 		{
 			return level.isEmpty() ? null : level;
@@ -216,18 +215,18 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
 		myBytecodeTargetLevel = null;
 		myModuleBytecodeTarget.clear();
-		val bytecodeTargetElement = parentNode.getChild(BYTECODE_TARGET_LEVEL);
+		Element bytecodeTargetElement = parentNode.getChild(BYTECODE_TARGET_LEVEL);
 		if(bytecodeTargetElement != null)
 		{
 			myBytecodeTargetLevel = bytecodeTargetElement.getAttributeValue(TARGET_ATTRIBUTE);
 			for(Element elem : bytecodeTargetElement.getChildren(MODULE))
 			{
-				val name = elem.getAttributeValue(NAME);
+				String name = elem.getAttributeValue(NAME);
 				if(name == null)
 				{
 					continue;
 				}
-				val target = elem.getAttributeValue(TARGET_ATTRIBUTE);
+				String target = elem.getAttributeValue(TARGET_ATTRIBUTE);
 				if(target == null)
 				{
 					continue;
