@@ -24,6 +24,11 @@
  */
 package com.intellij.refactoring.memberPullUp;
 
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ChangeContextUtil;
@@ -44,13 +49,21 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.*;
+import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
 import com.intellij.refactoring.listeners.JavaRefactoringListenerManager;
 import com.intellij.refactoring.listeners.impl.JavaRefactoringListenerManagerImpl;
-import com.intellij.refactoring.util.*;
+import com.intellij.refactoring.util.DocCommentPolicy;
+import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.refactoring.util.RefactoringHierarchyUtil;
+import com.intellij.refactoring.util.RefactoringUIUtil;
+import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.refactoring.util.classMembers.ClassMemberReferencesVisitor;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
@@ -61,10 +74,6 @@ import com.intellij.util.Query;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class PullUpHelper extends BaseRefactoringProcessor{
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.memberPullUp.PullUpHelper");
@@ -341,7 +350,7 @@ public class PullUpHelper extends BaseRefactoringProcessor{
       CodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(method.getProject());
       if (styleSettings.INSERT_OVERRIDE_ANNOTATION) {
         if (PsiUtil.isLanguageLevel5OrHigher(mySourceClass) && !myTargetSuperClass.isInterface() || PsiUtil.isLanguageLevel6OrHigher(mySourceClass)) {
-          new AddAnnotationFix(Override.class.getName(), method).invoke(method.getProject(), null, mySourceClass.getContainingFile());
+          new AddAnnotationFix(JavaClassNames.JAVA_LANG_OVERRIDE, method).invoke(method.getProject(), null, mySourceClass.getContainingFile());
         }
       }
       if (!PsiUtil.isLanguageLevel6OrHigher(mySourceClass) && myTargetSuperClass.isInterface()) {
@@ -394,7 +403,7 @@ public class PullUpHelper extends BaseRefactoringProcessor{
   }
 
   private static void deleteOverrideAnnotationIfFound(PsiMethod oMethod) {
-    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(oMethod, Override.class.getName());
+    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(oMethod, JavaClassNames.JAVA_LANG_OVERRIDE);
     if (annotation != null) {
       annotation.delete();
     }

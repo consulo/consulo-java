@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.safeDelete.usageInfo;
 
+import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiElement;
@@ -35,7 +36,7 @@ public class SafeDeleteOverrideAnnotation extends SafeDeleteUsageInfo implements
   }
 
   public void performRefactoring() throws IncorrectOperationException {
-    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, Override.class.getName());
+    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, JavaClassNames.JAVA_LANG_OVERRIDE);
     if (annotation != null) {
       annotation.delete();
     }

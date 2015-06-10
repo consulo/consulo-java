@@ -32,6 +32,7 @@ import javax.swing.KeyStroke;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.CodeInsightBundle;
@@ -327,10 +328,9 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 	{
 		if(insertOverride && canInsertOverride(overridden, targetClass))
 		{
-			final String overrideAnnotationName = Override.class.getName();
-			if(!AnnotationUtil.isAnnotated(method, overrideAnnotationName, false, true))
+			if(!AnnotationUtil.isAnnotated(method, JavaClassNames.JAVA_LANG_OVERRIDE, false, true))
 			{
-				AddAnnotationPsiFix.addPhysicalAnnotation(overrideAnnotationName, PsiNameValuePair.EMPTY_ARRAY, method.getModifierList());
+				AddAnnotationPsiFix.addPhysicalAnnotation(JavaClassNames.JAVA_LANG_OVERRIDE, PsiNameValuePair.EMPTY_ARRAY, method.getModifierList());
 			}
 		}
 		final Module module = ModuleUtilCore.findModuleForPsiElement(targetClass);

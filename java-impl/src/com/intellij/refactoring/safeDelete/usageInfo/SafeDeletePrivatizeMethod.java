@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.safeDelete.usageInfo;
 
+import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiMethod;
@@ -34,9 +35,10 @@ public class SafeDeletePrivatizeMethod extends SafeDeleteUsageInfo implements Sa
     return (PsiMethod) getElement();
   }
 
+  @Override
   public void performRefactoring() throws IncorrectOperationException {
     PsiUtil.setModifierProperty(getMethod(), PsiModifier.PRIVATE, true);
-    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, Override.class.getName());
+    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, JavaClassNames.JAVA_LANG_OVERRIDE);
     if (annotation != null) {
       annotation.delete();
     }
