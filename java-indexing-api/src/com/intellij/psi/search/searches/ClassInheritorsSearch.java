@@ -20,18 +20,19 @@ import gnu.trove.THashSet;
 import java.lang.ref.Reference;
 import java.util.Set;
 
+import org.consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
-import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiBundle;
@@ -49,10 +50,9 @@ import com.intellij.util.containers.Stack;
 /**
  * @author max
  */
+@Logger
 public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, ClassInheritorsSearch.SearchParameters>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.search.searches.ClassInheritorsSearch");
-
 	public static final ClassInheritorsSearch INSTANCE = new ClassInheritorsSearch();
 
 	static
@@ -65,7 +65,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 				final PsiClass baseClass = parameters.getClassToProcess();
 				final SearchScope searchScope = parameters.getScope();
 
-				LOG.assertTrue(searchScope != null);
+				LOGGER.assertTrue(searchScope != null);
 
 				ProgressIndicator progress = ProgressIndicatorProvider.getGlobalProgressIndicator();
 				if(progress != null)
@@ -110,7 +110,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 				final boolean checkInheritance,
 				boolean includeAnonymous)
 		{
-			this(aClass, scope, checkDeep, checkInheritance, includeAnonymous, Condition.TRUE);
+			this(aClass, scope, checkDeep, checkInheritance, includeAnonymous, Conditions.<String>alwaysTrue());
 		}
 
 		public SearchParameters(@NotNull final PsiClass aClass,
@@ -232,7 +232,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 				return baseClass.getQualifiedName();
 			}
 		});
-		if(CommonClassNames.JAVA_LANG_OBJECT.equals(qname))
+		if(JavaClassNames.JAVA_LANG_OBJECT.equals(qname))
 		{
 			return AllClassesSearch.search(searchScope, baseClass.getProject(), parameters.getNameCondition()).forEach(new Processor<PsiClass>()
 			{
@@ -249,7 +249,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 							return aClass.getQualifiedName();
 						}
 					});
-					return CommonClassNames.JAVA_LANG_OBJECT.equals(qname1) || consumer.process(aClass);
+					return JavaClassNames.JAVA_LANG_OBJECT.equals(qname1) || consumer.process(aClass);
 				}
 			});
 		}
