@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.util.Computable;
@@ -195,18 +194,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 
 	public static Query<PsiClass> search(@NotNull final PsiClass aClass, final boolean checkDeep)
 	{
-		return search(aClass, ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>()
-		{
-			@Override
-			public SearchScope compute()
-			{
-				if(aClass.isValid())
-				{
-					throw new ProcessCanceledException();
-				}
-				return aClass.getUseScope();
-			}
-		}), checkDeep);
+		return search(aClass, aClass.getUseScope(), checkDeep);
 	}
 
 	public static Query<PsiClass> search(@NotNull PsiClass aClass)
