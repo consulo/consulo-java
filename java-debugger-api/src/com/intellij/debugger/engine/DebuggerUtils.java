@@ -599,14 +599,7 @@ public abstract class DebuggerUtils
 		{
 			return false;
 		}
-		for(SyntheticTypeComponentProvider provider : SyntheticTypeComponentProvider.EP_NAME.getExtensions())
-		{
-			if(provider.isSynthetic(typeComponent))
-			{
-				return true;
-			}
-		}
-		return false;
+		return SyntheticTypeComponentProvider.EP_NAME.composite().isSynthetic(typeComponent);
 	}
 
 	public static boolean isSimpleGetter(PsiMethod method)

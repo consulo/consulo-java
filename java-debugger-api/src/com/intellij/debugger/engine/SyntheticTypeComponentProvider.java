@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger.engine;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import org.mustbe.consulo.extensions.CompositeExtensionPointName;
 import consulo.internal.com.sun.jdi.TypeComponent;
 
 /**
@@ -23,7 +23,8 @@ import consulo.internal.com.sun.jdi.TypeComponent;
  */
 public interface SyntheticTypeComponentProvider
 {
-	ExtensionPointName<SyntheticTypeComponentProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.syntheticProvider");
+	CompositeExtensionPointName<SyntheticTypeComponentProvider> EP_NAME =
+			CompositeExtensionPointName.applicationPoint("org.consulo.java.debugger.syntheticProvider", SyntheticTypeComponentProvider.class);
 
 	boolean isSynthetic(TypeComponent typeComponent);
 }
