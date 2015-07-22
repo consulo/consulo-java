@@ -23,18 +23,22 @@ package com.intellij.debugger.ui.breakpoints;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.actions.ThreadDumpAction;
 import com.intellij.debugger.engine.ContextUtil;
 import com.intellij.debugger.engine.DebugProcessImpl;
+import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
@@ -238,9 +242,56 @@ public class LineBreakpoint extends BreakpointWithHighlighter
 		updateUI();
 	}
 
-	protected boolean acceptLocation(DebugProcessImpl debugProcess, ReferenceType classType, Location loc)
+	private static Pattern ourAnonymousPattern = Pattern.compile(".*\\$\\d*$");
+
+	private static boolean isAnonymousClass(ReferenceType classType)
 	{
-		return true;
+		if(classType instanceof ClassType)
+		{
+			return ourAnonymousPattern.matcher(classType.name()).matches();
+		}
+		return false;
+	}
+
+	protected boolean acceptLocation(final DebugProcessImpl debugProcess, ReferenceType classType, final Location loc)
+	{
+		Method method = loc.method();
+		if(DebuggerUtils.isSynthetic(method))
+		{
+			return false;
+		}
+		boolean res = !(method.isConstructor() && loc.codeIndex() == 0 && isAnonymousClass(classType));
+		if(!res)
+		{
+			return false;
+		}
+		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
+		{
+			@Override
+			public Boolean compute()
+			{
+				if(getProperties() instanceof JavaLineBreakpointProperties)
+				{
+					Integer ordinal = ((JavaLineBreakpointProperties) getProperties()).getLambdaOrdinal();
+					if(ordinal == null)
+					{
+						return true;
+					}
+					PsiElement containingMethod = getContainingMethod();
+					if(containingMethod == null)
+					{
+						return false;
+					}
+					SourcePosition position = debugProcess.getPositionManager().getSourcePosition(loc);
+					if(position == null)
+					{
+						return false;
+					}
+					return DebuggerUtilsEx.inTheMethod(position, containingMethod);
+				}
+				return true;
+			}
+		});
 	}
 
 	private boolean isInScopeOf(DebugProcessImpl debugProcess, String className)
@@ -315,8 +366,7 @@ public class LineBreakpoint extends BreakpointWithHighlighter
 	}
 
 	@Nullable
-	private Collection<VirtualFile> findClassCandidatesInSourceContent(
-			final String className,
+	private Collection<VirtualFile> findClassCandidatesInSourceContent(final String className,
 			final GlobalSearchScope scope,
 			final ProjectFileIndex fileIndex)
 	{
@@ -572,6 +622,7 @@ public class LineBreakpoint extends BreakpointWithHighlighter
 	//  return canAddLineBreakpoint(myProject, document, position.getLine());
 	//}
 
+	@RequiredReadAction
 	public static boolean canAddLineBreakpoint(Project project, final Document document, final int lineIndex)
 	{
 		if(lineIndex < 0 || lineIndex >= document.getLineCount())
@@ -643,4 +694,27 @@ public class LineBreakpoint extends BreakpointWithHighlighter
 		return myOwnerMethodName;
 	}
 
+	@Nullable
+	@RequiredReadAction
+	public PsiElement getContainingMethod()
+	{
+		SourcePosition position = getSourcePosition();
+		if(position == null)
+		{
+			return null;
+		}
+		if(getProperties() instanceof JavaLineBreakpointProperties)
+		{
+			Integer ordinal = ((JavaLineBreakpointProperties) getProperties()).getLambdaOrdinal();
+			if(ordinal > -1)
+			{
+				List<PsiLambdaExpression> lambdas = DebuggerUtilsEx.collectLambdas(position, true);
+				if(ordinal < lambdas.size())
+				{
+					return lambdas.get(ordinal);
+				}
+			}
+		}
+		return DebuggerUtilsEx.getContainingMethod(position);
+	}
 }

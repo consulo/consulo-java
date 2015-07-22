@@ -107,6 +107,7 @@
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="module" module-name="java-debugger-impl" />
         </module-layer>
       </module>
       <module name="java-rt" dirurl="file://$PROJECT_DIR$/java-rt" current-layer="Default">

@@ -56,9 +56,7 @@ import com.intellij.openapi.actionSystem.Constraints;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Pair;
@@ -286,8 +284,7 @@ public class JavaDebugProcess extends XDebugProcess
 	@Override
 	public void runToPosition(@NotNull XSourcePosition position)
 	{
-		Document document = FileDocumentManager.getInstance().getDocument(position.getFile());
-		myJavaSession.runToCursor(document, position.getLine(), false);
+		myJavaSession.runToCursor(position, false);
 	}
 
 	@NotNull

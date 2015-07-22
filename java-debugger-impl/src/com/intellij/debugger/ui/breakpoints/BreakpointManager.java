@@ -34,6 +34,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
+import org.mustbe.consulo.RequiredDispatchThread;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.engine.BreakpointStepMethodFilter;
@@ -65,6 +67,7 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XDebuggerUtil;
+import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointAdapter;
 import com.intellij.xdebugger.breakpoints.XBreakpointManager;
@@ -234,9 +237,10 @@ public class BreakpointManager
 	}
 
 	@Nullable
-	public RunToCursorBreakpoint addRunToCursorBreakpoint(Document document, int lineIndex, final boolean ignoreBreakpoints)
+	@RequiredReadAction
+	public RunToCursorBreakpoint addRunToCursorBreakpoint(@NotNull XSourcePosition position, final boolean ignoreBreakpoints)
 	{
-		return RunToCursorBreakpoint.create(myProject, document, lineIndex, ignoreBreakpoints);
+		return RunToCursorBreakpoint.create(myProject, position, ignoreBreakpoints);
 	}
 
 	@Nullable
@@ -246,6 +250,7 @@ public class BreakpointManager
 	}
 
 	@Nullable
+	@RequiredDispatchThread
 	public LineBreakpoint addLineBreakpoint(Document document, int lineIndex)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();

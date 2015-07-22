@@ -132,4 +132,10 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 	{
 		return new MethodBreakpoint(project, breakpoint);
 	}
+
+	@Override
+	public boolean canBeHitInOtherPlaces()
+	{
+		return true;
+	}
 }

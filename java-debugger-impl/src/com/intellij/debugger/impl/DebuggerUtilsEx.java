@@ -23,6 +23,7 @@ package com.intellij.debugger.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -34,10 +35,13 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
+import com.intellij.debugger.engine.LambdaMethodFilter;
+import com.intellij.debugger.engine.SourcePositionHighlighter;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.CodeFragmentFactoryContextWrapper;
@@ -66,32 +70,34 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.pom.Navigatable;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.ui.content.Content;
 import com.intellij.unscramble.ThreadDumpPanel;
 import com.intellij.unscramble.ThreadState;
+import com.intellij.util.DocumentUtil;
 import com.intellij.util.SmartList;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.impl.XSourcePositionImpl;
+import com.intellij.xdebugger.impl.ui.ExecutionPointHighlighter;
 import consulo.internal.com.sun.jdi.CharValue;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
@@ -595,7 +601,8 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		});
 		Disposer.register(content, consoleView);
 		ui.selectAndFocus(content, true, false);
-		if (threads.size() > 0) {
+		if(threads.size() > 0)
+		{
 			panel.selectStackFrame(0);
 		}
 	}
@@ -875,9 +882,250 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return text.replace("\t", StringUtil.repeat(" ", tabSize));
 	}
 
+	/**
+	 * Decompiler aware version
+	 */
+	@Nullable
+	public static PsiElement findElementAt(@Nullable PsiFile file, int offset)
+	{
+		if(file instanceof PsiCompiledFile)
+		{
+			file = ((PsiCompiledFile) file).getDecompiledPsiFile();
+		}
+		if(file == null)
+		{
+			return null;
+		}
+		return file.findElementAt(offset);
+	}
+
 	@Nullable
 	public static XSourcePosition toXSourcePosition(@NotNull SourcePosition position)
 	{
-		return XSourcePositionImpl.create(position.getFile().getVirtualFile(), position.getLine());
+		VirtualFile file = position.getFile().getVirtualFile();
+		if(file == null)
+		{
+			file = position.getFile().getOriginalFile().getVirtualFile();
+		}
+		if(file == null)
+		{
+			return null;
+		}
+		return new JavaXSourcePosition(position, file);
 	}
+
+	private static final Key<VirtualFile> ALTERNATIVE_SOURCE_KEY = Key.create("JAVA_DEBUGGER_ALTERNATIVE_SOURCE");
+
+	private static class JavaXSourcePosition implements XSourcePosition, ExecutionPointHighlighter.HighlighterProvider
+	{
+		private final SourcePosition mySourcePosition;
+		@NotNull
+		private final VirtualFile myFile;
+
+		public JavaXSourcePosition(@NotNull SourcePosition sourcePosition, @NotNull VirtualFile file)
+		{
+			mySourcePosition = sourcePosition;
+			myFile = file;
+		}
+
+		@Override
+		public int getLine()
+		{
+			return mySourcePosition.getLine();
+		}
+
+		@Override
+		public int getOffset()
+		{
+			return mySourcePosition.getOffset();
+		}
+
+		@NotNull
+		@Override
+		public VirtualFile getFile()
+		{
+			VirtualFile file = ALTERNATIVE_SOURCE_KEY.get(myFile);
+			if(file != null)
+			{
+				return file;
+			}
+			return myFile;
+		}
+
+		@NotNull
+		@Override
+		public Navigatable createNavigatable(@NotNull Project project)
+		{
+			if(ALTERNATIVE_SOURCE_KEY.get(myFile) != null)
+			{
+				return new OpenFileDescriptor(project, getFile(), getLine(), 0);
+			}
+			return XSourcePositionImpl.doCreateOpenFileDescriptor(project, this);
+		}
+
+		@Nullable
+		@Override
+		public TextRange getHighlightRange()
+		{
+			return SourcePositionHighlighter.EP_NAME.composite().getHighlightRange(mySourcePosition);
+		}
+	}
+
+	public static boolean inTheMethod(@NotNull SourcePosition pos, @NotNull PsiElement method)
+	{
+		PsiElement elem = pos.getElementAt();
+		if(elem == null)
+		{
+			return false;
+		}
+		return Comparing.equal(getContainingMethod(elem), method);
+	}
+
+	@RequiredReadAction
+	public static boolean inTheSameMethod(@NotNull SourcePosition pos1, @NotNull SourcePosition pos2)
+	{
+		ApplicationManager.getApplication().assertReadAccessAllowed();
+		PsiElement elem1 = pos1.getElementAt();
+		PsiElement elem2 = pos2.getElementAt();
+		if(elem1 == null)
+		{
+			return elem2 == null;
+		}
+		if(elem2 != null)
+		{
+			PsiElement expectedMethod = getContainingMethod(elem1);
+			PsiElement currentMethod = getContainingMethod(elem2);
+			return Comparing.equal(expectedMethod, currentMethod);
+		}
+		return false;
+	}
+
+	@RequiredReadAction
+	private static PsiElement getNextElement(PsiElement element)
+	{
+		PsiElement sibling = element.getNextSibling();
+		if(sibling != null)
+		{
+			return sibling;
+		}
+		element = element.getParent();
+		if(element != null)
+		{
+			return getNextElement(element);
+		}
+		return null;
+	}
+
+	@RequiredReadAction
+	public static List<PsiLambdaExpression> collectLambdas(@NotNull SourcePosition position, final boolean onlyOnTheLine)
+	{
+		ApplicationManager.getApplication().assertReadAccessAllowed();
+		PsiFile file = position.getFile();
+		final int line = position.getLine();
+		final Document document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);
+		if(document == null || line >= document.getLineCount())
+		{
+			return Collections.emptyList();
+		}
+		PsiElement element = position.getElementAt();
+		final TextRange lineRange = DocumentUtil.getLineTextRange(document, line);
+		do
+		{
+			PsiElement parent = element.getParent();
+			if(parent == null || (parent.getTextOffset() < lineRange.getStartOffset()))
+			{
+				break;
+			}
+			element = parent;
+		}
+		while(true);
+
+		final List<PsiLambdaExpression> lambdas = new ArrayList<PsiLambdaExpression>(3);
+		final PsiElementVisitor lambdaCollector = new JavaRecursiveElementVisitor()
+		{
+			@Override
+			@RequiredReadAction
+			public void visitLambdaExpression(PsiLambdaExpression expression)
+			{
+				super.visitLambdaExpression(expression);
+				if(!onlyOnTheLine || getFirstElementOnTheLine(expression, document, line) != null)
+				{
+					lambdas.add(expression);
+				}
+			}
+		};
+		element.accept(lambdaCollector);
+		// add initial lambda if we're inside already
+		PsiElement method = getContainingMethod(element);
+		if(method instanceof PsiLambdaExpression)
+		{
+			lambdas.add((PsiLambdaExpression) method);
+		}
+		for(PsiElement sibling = getNextElement(element); sibling != null; sibling = getNextElement(sibling))
+		{
+			if(!intersects(lineRange, sibling))
+			{
+				break;
+			}
+			sibling.accept(lambdaCollector);
+		}
+		return lambdas;
+	}
+
+	@RequiredReadAction
+	public static boolean intersects(@NotNull TextRange range, @NotNull PsiElement elem)
+	{
+		TextRange elemRange = elem.getTextRange();
+		return elemRange != null && elemRange.intersects(range);
+	}
+
+	@Nullable
+	@RequiredReadAction
+	public static PsiElement getFirstElementOnTheLine(PsiLambdaExpression lambda, Document document, int line)
+	{
+		ApplicationManager.getApplication().assertReadAccessAllowed();
+		TextRange lineRange = DocumentUtil.getLineTextRange(document, line);
+		if(!intersects(lineRange, lambda))
+		{
+			return null;
+		}
+		PsiElement body = lambda.getBody();
+		if(body == null || !intersects(lineRange, body))
+		{
+			return null;
+		}
+		if(body instanceof PsiCodeBlock)
+		{
+			for(PsiStatement statement : ((PsiCodeBlock) body).getStatements())
+			{
+				if(intersects(lineRange, statement))
+				{
+					return statement;
+				}
+			}
+			return null;
+		}
+		return body;
+	}
+
+	@Nullable
+	public static PsiElement getContainingMethod(@Nullable PsiElement elem)
+	{
+		return PsiTreeUtil.getParentOfType(elem, PsiMethod.class, PsiLambdaExpression.class);
+	}
+
+	@Nullable
+	public static PsiElement getContainingMethod(@NotNull SourcePosition position)
+	{
+		return getContainingMethod(position.getElementAt());
+	}
+
+	public static final Comparator<Method> LAMBDA_ORDINAL_COMPARATOR = new Comparator<Method>()
+	{
+		@Override
+		public int compare(Method m1, Method m2)
+		{
+			return LambdaMethodFilter.getLambdaOrdinal(m1.name()) - LambdaMethodFilter.getLambdaOrdinal(m2.name());
+		}
+	};
 }

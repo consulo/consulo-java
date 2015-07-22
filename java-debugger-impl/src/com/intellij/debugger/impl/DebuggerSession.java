@@ -54,7 +54,6 @@ import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Comparing;
@@ -72,6 +71,7 @@ import com.intellij.xdebugger.AbstractDebuggerSession;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
+import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
 import com.intellij.xdebugger.impl.evaluate.quick.common.ValueLookupManager;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
@@ -323,11 +323,11 @@ public class DebuggerSession implements AbstractDebuggerSession
 		resumeAction(cmd, EVENT_STEP);
 	}
 
-	public void runToCursor(Document document, int line, final boolean ignoreBreakpoints)
+	public void runToCursor(@NotNull XSourcePosition position, final boolean ignoreBreakpoints)
 	{
 		try
 		{
-			DebugProcessImpl.ResumeCommand runToCursorCommand = myDebugProcess.createRunToCursorCommand(getSuspendContext(), document, line,
+			DebugProcessImpl.ResumeCommand runToCursorCommand = myDebugProcess.createRunToCursorCommand(getSuspendContext(), position,
 					ignoreBreakpoints);
 			mySteppingThroughThreads.add(runToCursorCommand.getContextThread());
 			resumeAction(runToCursorCommand, EVENT_STEP);

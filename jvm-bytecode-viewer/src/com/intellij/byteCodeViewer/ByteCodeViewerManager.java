@@ -14,7 +14,7 @@ import org.jetbrains.org.objectweb.asm.util.TraceClassVisitor;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.codeInsight.documentation.DockablePopupManager;
-import com.intellij.ide.util.JavaAnonymousClassesHelper;
+import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -26,12 +26,10 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.presentation.java.SymbolPresentationUtil;
-import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.content.Content;
@@ -153,7 +151,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     PsiClass containingClass = getContainingClass(psiElement);
     //todo show popup
     if (containingClass == null) return null;
-    final String classVMName = getClassVMName(containingClass);
+    final String classVMName = JVMNameUtil.getClassVMName(containingClass);
     if (classVMName == null) return null;
 
     Module module = ModuleUtilCore.findModuleForPsiElement(psiElement);
@@ -217,15 +215,6 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
       printWriter.close();
     }
     return writer.toString();
-  }
-
-  @Nullable
-  private static String getClassVMName(PsiClass containingClass) {
-    if (containingClass instanceof PsiAnonymousClass) {
-      return getClassVMName(PsiTreeUtil.getParentOfType(containingClass, PsiClass.class)) + 
-             JavaAnonymousClassesHelper.getName((PsiAnonymousClass)containingClass);
-    }
-    return ClassUtil.getJVMClassName(containingClass);
   }
 
   public static PsiClass getContainingClass(PsiElement psiElement) {

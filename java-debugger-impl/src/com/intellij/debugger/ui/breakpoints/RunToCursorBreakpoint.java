@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,19 @@ package com.intellij.debugger.ui.breakpoints;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebugProcessImpl;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.xdebugger.XSourcePosition;
+import consulo.internal.com.sun.jdi.Location;
+import consulo.internal.com.sun.jdi.ReferenceType;
 
 /**
  * @author Eugene Zhuravlev
@@ -49,6 +54,12 @@ public class RunToCursorBreakpoint extends LineBreakpoint
 	public SourcePosition getSourcePosition()
 	{
 		return myCustomPosition;
+	}
+
+	@Override
+	public int getLineIndex()
+	{
+		return myCustomPosition.getLine();
 	}
 
 	@Override
@@ -128,23 +139,50 @@ public class RunToCursorBreakpoint extends LineBreakpoint
 	}
 
 	@Override
+	protected JavaBreakpointProperties getProperties()
+	{
+		return null;
+	}
+
+	@Override
 	protected boolean isMuted(@NotNull final DebugProcessImpl debugProcess)
 	{
 		return false;  // always enabled
 	}
 
-	@Nullable
-	protected static RunToCursorBreakpoint create(@NotNull Project project, @NotNull Document document, int lineIndex, boolean restoreBreakpoints)
+	@Override
+	protected boolean acceptLocation(final DebugProcessImpl debugProcess, ReferenceType classType, final Location loc)
 	{
-		VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
-		if(virtualFile == null)
+		if(!super.acceptLocation(debugProcess, classType, loc))
 		{
-			return null;
+			return false;
 		}
+		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
+		{
+			@Override
+			public Boolean compute()
+			{
+				SourcePosition position = debugProcess.getPositionManager().getSourcePosition(loc);
+				if(position == null)
+				{
+					return false;
+				}
+				return DebuggerUtilsEx.inTheSameMethod(myCustomPosition, position);
+			}
+		});
+	}
 
-		PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
-		SourcePosition pos = SourcePosition.createFromLine(psiFile, lineIndex);
+	@Nullable
+	@RequiredReadAction
+	protected static RunToCursorBreakpoint create(@NotNull Project project, @NotNull XSourcePosition position, boolean restoreBreakpoints)
+	{
+		PsiFile psiFile = PsiManager.getInstance(project).findFile(position.getFile());
+		return new RunToCursorBreakpoint(project, SourcePosition.createFromOffset(psiFile, position.getOffset()), restoreBreakpoints);
+	}
 
-		return new RunToCursorBreakpoint(project, pos, restoreBreakpoints);
+	@Override
+	protected boolean shouldCreateRequest(DebugProcessImpl debugProcess)
+	{
+		return debugProcess.isAttached() && debugProcess.getRequestsManager().findRequests(this).isEmpty();
 	}
 }

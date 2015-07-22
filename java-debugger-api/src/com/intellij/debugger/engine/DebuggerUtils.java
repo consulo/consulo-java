@@ -593,14 +593,20 @@ public abstract class DebuggerUtils
 	@NotNull
 	public abstract TransportService.ListenKey findAvailableDebugAddress(int type) throws ExecutionException;
 
-	public static boolean isSynthetic(TypeComponent typeComponent)
+	public static boolean isSynthetic(@Nullable TypeComponent typeComponent)
 	{
 		if(typeComponent == null)
 		{
 			return false;
 		}
-		VirtualMachine machine = typeComponent.virtualMachine();
-		return machine != null && machine.canGetSyntheticAttribute() && typeComponent.isSynthetic();
+		for(SyntheticTypeComponentProvider provider : SyntheticTypeComponentProvider.EP_NAME.getExtensions())
+		{
+			if(provider.isSynthetic(typeComponent))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static boolean isSimpleGetter(PsiMethod method)
@@ -673,8 +679,7 @@ public abstract class DebuggerUtils
 		return ServiceManager.getService(DebuggerUtils.class);
 	}
 
-	public abstract PsiExpression substituteThis(
-			PsiExpression expressionWithThis,
+	public abstract PsiExpression substituteThis(PsiExpression expressionWithThis,
 			PsiExpression howToEvaluateThis,
 			Value howToEvaluateThisValue,
 			StackFrameContext context) throws EvaluateException;

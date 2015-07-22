@@ -17,6 +17,7 @@ package com.intellij.debugger.engine.requests;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -279,7 +280,9 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		return classPrepareRequest;
 	}
 
-	public ExceptionRequest createExceptionRequest(FilteredRequestor requestor, ReferenceType referenceType, boolean notifyCaught,
+	public ExceptionRequest createExceptionRequest(FilteredRequestor requestor,
+			ReferenceType referenceType,
+			boolean notifyCaught,
 			boolean notifyUnCaught)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -387,16 +390,19 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 	public void callbackOnPrepareClasses(final ClassPrepareRequestor requestor, final SourcePosition classPosition)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
-		ClassPrepareRequest prepareRequest = myDebugProcess.getPositionManager().createPrepareRequest(requestor, classPosition);
 
-		if(prepareRequest == null)
+		List<ClassPrepareRequest> prepareRequests = myDebugProcess.getPositionManager().createPrepareRequests(requestor, classPosition);
+		if(prepareRequests.isEmpty())
 		{
 			setInvalid(requestor, DebuggerBundle.message("status.invalid.breakpoint.out.of.class"));
 			return;
 		}
 
-		registerRequest(requestor, prepareRequest);
-		prepareRequest.enable();
+		for(ClassPrepareRequest prepareRequest : prepareRequests)
+		{
+			registerRequest(requestor, prepareRequest);
+			prepareRequest.enable();
+		}
 	}
 
 	@Override

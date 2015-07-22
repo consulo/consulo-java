@@ -78,7 +78,6 @@ import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -88,8 +87,8 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.ui.classFilter.DebuggerClassFilterProvider;
@@ -100,6 +99,7 @@ import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.XSourcePosition;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.AttachingConnector;
 import consulo.internal.com.sun.jdi.connect.Connector;
@@ -1133,8 +1133,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 			return "INVOKE: " + super.toString();
 		}
 
-		protected abstract E invokeMethod(
-				int invokePolicy,
+		protected abstract E invokeMethod(int invokePolicy,
 				final List args) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException;
 
 		public E start(EvaluationContextImpl evaluationContext, Method method) throws EvaluateException
@@ -1368,8 +1367,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	}
 
 	@Override
-	public Value invokeMethod(
-			@NotNull EvaluationContext evaluationContext,
+	public Value invokeMethod(@NotNull EvaluationContext evaluationContext,
 			@NotNull ObjectReference objRef,
 			@NotNull Method method,
 			final List args) throws EvaluateException
@@ -1378,8 +1376,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	}
 
 	@Override
-	public Value invokeInstanceMethod(
-			@NotNull EvaluationContext evaluationContext,
+	public Value invokeInstanceMethod(@NotNull EvaluationContext evaluationContext,
 			@NotNull final ObjectReference objRef,
 			final Method method,
 			final List args,
@@ -1389,8 +1386,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return new InvokeCommand<Value>(args)
 		{
 			@Override
-			protected Value invokeMethod(
-					int invokePolicy,
+			protected Value invokeMethod(int invokePolicy,
 					final List args) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException
 			{
 				if(LOG.isDebugEnabled())
@@ -1413,8 +1409,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	}
 
 	@Override
-	public Value invokeMethod(
-			final EvaluationContext evaluationContext,
+	public Value invokeMethod(final EvaluationContext evaluationContext,
 			final ClassType classType,
 			final Method method,
 			final List args) throws EvaluateException
@@ -1422,8 +1417,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return invokeMethod(evaluationContext, classType, method, args, false);
 	}
 
-	public Value invokeMethod(
-			@NotNull EvaluationContext evaluationContext,
+	public Value invokeMethod(@NotNull EvaluationContext evaluationContext,
 			@NotNull final ClassType classType,
 			@NotNull final Method method,
 			final List args,
@@ -1433,8 +1427,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return new InvokeCommand<Value>(args)
 		{
 			@Override
-			protected Value invokeMethod(
-					int invokePolicy,
+			protected Value invokeMethod(int invokePolicy,
 					final List args) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException
 			{
 				if(LOG.isDebugEnabled())
@@ -1453,8 +1446,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 	}
 
 	@Override
-	public ObjectReference newInstance(
-			final EvaluationContext evaluationContext,
+	public ObjectReference newInstance(final EvaluationContext evaluationContext,
 			final ClassType classType,
 			final Method method,
 			final List args) throws EvaluateException
@@ -1463,8 +1455,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		InvokeCommand<ObjectReference> invokeCommand = new InvokeCommand<ObjectReference>(args)
 		{
 			@Override
-			protected ObjectReference invokeMethod(
-					int invokePolicy,
+			protected ObjectReference invokeMethod(int invokePolicy,
 					final List args) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException
 			{
 				if(LOG.isDebugEnabled())
@@ -1631,8 +1622,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 			"HardCodedStringLiteral",
 			"SpellCheckingInspection"
 	})
-	public ReferenceType loadClass(
-			EvaluationContextImpl evaluationContext,
+	public ReferenceType loadClass(EvaluationContextImpl evaluationContext,
 			String qName,
 			ClassLoaderReference classLoader) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException,
 			InvalidTypeException, EvaluateException
@@ -1882,12 +1872,12 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		private final RunToCursorBreakpoint myRunToCursorBreakpoint;
 		private final boolean myIgnoreBreakpoints;
 
-		private RunToCursorCommand(SuspendContextImpl suspendContext, Document document, int lineIndex, final boolean ignoreBreakpoints)
+		private RunToCursorCommand(SuspendContextImpl suspendContext, @NotNull XSourcePosition position, final boolean ignoreBreakpoints)
 		{
 			super(suspendContext);
 			myIgnoreBreakpoints = ignoreBreakpoints;
-			final BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager();
-			myRunToCursorBreakpoint = breakpointManager.addRunToCursorBreakpoint(document, lineIndex, ignoreBreakpoints);
+			BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager();
+			myRunToCursorBreakpoint = breakpointManager.addRunToCursorBreakpoint(position, ignoreBreakpoints);
 		}
 
 		@Override
@@ -2403,18 +2393,16 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		return new StepIntoCommand(suspendContext, ignoreFilters, smartStepFilter);
 	}
 
-	public ResumeCommand createRunToCursorCommand(
-			SuspendContextImpl suspendContext,
-			Document document,
-			int lineIndex,
-			final boolean ignoreBreakpoints) throws EvaluateException
+	public ResumeCommand createRunToCursorCommand(SuspendContextImpl suspendContext,
+			@NotNull XSourcePosition position,
+			boolean ignoreBreakpoints) throws EvaluateException
 	{
-		RunToCursorCommand runToCursorCommand = new RunToCursorCommand(suspendContext, document, lineIndex, ignoreBreakpoints);
+		RunToCursorCommand runToCursorCommand = new RunToCursorCommand(suspendContext, position, ignoreBreakpoints);
 		if(runToCursorCommand.myRunToCursorBreakpoint == null)
 		{
-			final PsiFile psiFile = PsiDocumentManager.getInstance(getProject()).getPsiFile(document);
+			PsiFile psiFile = PsiManager.getInstance(myProject).findFile(position.getFile());
 			throw new EvaluateException(DebuggerBundle.message("error.running.to.cursor.no.executable.code",
-					psiFile != null ? psiFile.getName() : "<No File>", lineIndex), null);
+					psiFile != null ? psiFile.getName() : "<No File>", position.getLine()), null);
 		}
 		return runToCursorCommand;
 	}

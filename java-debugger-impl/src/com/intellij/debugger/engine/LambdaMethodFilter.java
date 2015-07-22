@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
  */
 package com.intellij.debugger.engine;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLambdaExpression;
@@ -93,12 +95,34 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 	{
 		final VirtualMachineProxyImpl vm = process.getVirtualMachineProxy();
 		final Method method = location.method();
-		return method.name().startsWith(LAMBDA_METHOD_PREFIX) && (!vm.canGetSyntheticAttribute() || method.isSynthetic());
+		return isLambdaName(method.name()) && (!vm.canGetSyntheticAttribute() || method.isSynthetic());
 	}
 
+	@Nullable
 	@Override
 	public Range<Integer> getCallingExpressionLines()
 	{
 		return myCallingExpressionLines;
+	}
+
+	public static boolean isLambdaName(@Nullable String name)
+	{
+		return !StringUtil.isEmpty(name) && name.startsWith(LAMBDA_METHOD_PREFIX);
+	}
+
+	public static int getLambdaOrdinal(@NotNull String name)
+	{
+		int pos = name.lastIndexOf('$');
+		if(pos > -1)
+		{
+			try
+			{
+				return Integer.parseInt(name.substring(pos + 1));
+			}
+			catch(NumberFormatException ignored)
+			{
+			}
+		}
+		return -1;
 	}
 }

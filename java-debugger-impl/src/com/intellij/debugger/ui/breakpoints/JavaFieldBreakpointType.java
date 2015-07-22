@@ -195,4 +195,10 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
 	{
 		return new FieldBreakpoint(project, breakpoint);
 	}
+
+	@Override
+	public boolean canBeHitInOtherPlaces()
+	{
+		return true;
+	}
 }

@@ -25,12 +25,14 @@ import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
+import com.intellij.ide.util.JavaAnonymousClassesHelper;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
+import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
@@ -534,6 +536,21 @@ public class JVMNameUtil
 			}
 		}
 		return "";
+	}
+
+	@Nullable
+	public static String getClassVMName(@Nullable PsiClass containingClass)
+	{
+		if(containingClass == null)
+		{
+			return null;
+		}
+		if(containingClass instanceof PsiAnonymousClass)
+		{
+			return getClassVMName(PsiTreeUtil.getParentOfType(containingClass, PsiClass.class)) + JavaAnonymousClassesHelper.getName(
+					(PsiAnonymousClass) containingClass);
+		}
+		return ClassUtil.getJVMClassName(containingClass);
 	}
 
 	public static PsiClass getTopLevelParentClass(PsiClass psiClass)

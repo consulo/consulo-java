@@ -80,6 +80,9 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
 
       processModifierList(element, iconDescriptor, flags);
     }
+    else if(element instanceof PsiLambdaExpression) {
+		iconDescriptor.setMainIcon(AllIcons.Nodes.Lambda);
+	}
     else if(element instanceof PsiJavaFile) {
       if(processedFile(element, iconDescriptor)) {
         return;
