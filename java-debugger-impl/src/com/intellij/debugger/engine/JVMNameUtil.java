@@ -313,15 +313,15 @@ public class JVMNameUtil
 
 	public static JVMName getJVMQualifiedName(PsiClass psiClass)
 	{
-		if(!PsiUtil.isLocalOrAnonymousClass(psiClass))
+		final String name = getNonAnonymousClassName(psiClass);
+		if(name != null)
 		{
-			final String name = getNonAnonymousClassName(psiClass);
-			if(name != null)
-			{
-				return getJVMRawText(name);
-			}
+			return getJVMRawText(name);
 		}
-		return new JVMClassAt(SourcePosition.createFromElement(psiClass));
+		else
+		{
+			return new JVMClassAt(SourcePosition.createFromElement(psiClass));
+		}
 	}
 
 	@Nullable
@@ -332,13 +332,10 @@ public class JVMNameUtil
 		{
 			return null;
 		}
-		if(!PsiUtil.isLocalOrAnonymousClass(psiClass))
+		final String name = getNonAnonymousClassName(psiClass);
+		if(name != null)
 		{
-			final String name = getNonAnonymousClassName(psiClass);
-			if(name != null)
-			{
-				return getJVMRawText(name);
-			}
+			return getJVMRawText(name);
 		}
 		return new JVMClassAt(pos);
 	}
@@ -346,6 +343,15 @@ public class JVMNameUtil
 	@Nullable
 	public static String getNonAnonymousClassName(PsiClass aClass)
 	{
+		if(PsiUtil.isLocalOrAnonymousClass(aClass))
+		{
+			return null;
+		}
+		String name = aClass.getName();
+		if(name == null)
+		{
+			return null;
+		}
 		PsiClass parentClass = PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true);
 		if(parentClass != null)
 		{
@@ -354,7 +360,7 @@ public class JVMNameUtil
 			{
 				return null;
 			}
-			return parentName + "$" + aClass.getName();
+			return parentName + "$" + name;
 		}
 		return DebuggerManager.getInstance(aClass.getProject()).getVMClassQualifiedName(aClass);
 	}
