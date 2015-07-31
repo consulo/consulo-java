@@ -15,14 +15,19 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiJavaToken;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTokenType, PsiJavaToken {
   private final PsiDocCommentOwner myParent;
@@ -69,7 +74,7 @@ class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTok
   @Override
   @NotNull
   public PsiElement[] getDescriptionElements() {
-    return EMPTY_ARRAY;
+    return PsiElement.EMPTY_ARRAY;
   }
 
   @Override

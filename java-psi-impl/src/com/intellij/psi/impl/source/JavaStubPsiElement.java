@@ -19,6 +19,8 @@
  */
 package com.intellij.psi.impl.source;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.ide.util.PsiNavigationSupport;
 import com.intellij.lang.ASTNode;
@@ -38,8 +40,6 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class JavaStubPsiElement<T extends StubElement> extends StubBasedPsiElementBase<T> implements StubBasedPsiElement<T> {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.JavaStubPsiElement");
@@ -204,7 +204,7 @@ public abstract class JavaStubPsiElement<T extends StubElement> extends StubBase
   @NotNull
   public PsiElement[] getChildren() {
     PsiElement psiChild = getFirstChild();
-    if (psiChild == null) return EMPTY_ARRAY;
+    if (psiChild == null) return PsiElement.EMPTY_ARRAY;
 
     int count = 0;
     while (psiChild != null) {

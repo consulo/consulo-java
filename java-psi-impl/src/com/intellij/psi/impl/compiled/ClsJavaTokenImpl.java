@@ -15,10 +15,13 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiJavaToken;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
 public class ClsJavaTokenImpl extends ClsElementImpl implements PsiJavaToken {
   private ClsElementImpl myParent;
@@ -48,7 +51,7 @@ public class ClsJavaTokenImpl extends ClsElementImpl implements PsiJavaToken {
   @NotNull
   @Override
   public PsiElement[] getChildren() {
-    return EMPTY_ARRAY;
+    return PsiElement.EMPTY_ARRAY;
   }
 
   @Override
