@@ -303,7 +303,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 		return result == null ? PsiClass.EMPTY_ARRAY : result.toArray(new PsiClass[result.size()]);
 	}
 
-	private class PsiElementFinderImpl extends PsiElementFinder implements DumbAware
+	public class PsiElementFinderImpl extends PsiElementFinder implements DumbAware
 	{
 		@Override
 		public PsiClass findClass(@NotNull String qualifiedName, @NotNull GlobalSearchScope scope)
