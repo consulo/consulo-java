@@ -19,6 +19,7 @@ import gnu.trove.THashSet;
 
 import java.util.*;
 
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
@@ -462,6 +463,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 			return DirectoryIndex.getInstance(getProject()).getDirectoriesByPackageName(psiPackage.getQualifiedName(),
 					false).forEach(new ReadActionProcessor<VirtualFile>()
 			{
+				@RequiredReadAction
 				@Override
 				public boolean processInReadAction(final VirtualFile dir)
 				{
