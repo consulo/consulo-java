@@ -584,6 +584,7 @@
 						interface="com.intellij.lang.properties.psi.ResourceBundleManager"
 						area="CONSULO_PROJECT"/>
 		<extensionPoint name="i18nizeHandlerProvider" interface="com.intellij.codeInspection.i18n.I18nizeHandlerProvider"/>
+		<extensionPoint name="smartPointer.anchorProvider" interface="com.intellij.psi.impl.smartPointers.SmartPointerAnchorProvider" />
 	</extensionPoints>
 
 	<extensions defaultExtensionNs="org.consulo.java">
@@ -660,6 +661,9 @@
 		<debugger.jvmDebugProvider implementation="org.mustbe.consulo.java.fileType.DefaultJVMDebugProvider"/>
 
 		<augmentProvider implementation="com.intellij.psi.augment.JavaEnumAugmentProvider" />
+
+		<smartPointer.anchorProvider implementation="com.intellij.psi.impl.smartPointers.JavaAnchorProvider"/>
+		<smartPointer.anchorProvider implementation="com.intellij.psi.impl.smartPointers.XmlAnchorProvider"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
