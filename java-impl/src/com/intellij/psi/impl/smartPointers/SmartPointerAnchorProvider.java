@@ -27,7 +27,7 @@ import com.intellij.psi.PsiElement;
  */
 public abstract class SmartPointerAnchorProvider
 {
-	public static final ExtensionPointName<SmartPointerAnchorProvider> EP_NAME = ExtensionPointName.create("org.consulo.smartPointer" +
+	public static final ExtensionPointName<SmartPointerAnchorProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.smartPointer" +
 			".anchorProvider");
 
 	/**
