@@ -15,66 +15,89 @@
  */
 package com.intellij.psi.impl.smartPointers;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAnchor;
+import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiVariable;
+import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.psi.impl.source.PsiFileWithStubSupport;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.xml.util.XmlTagUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class AnchorElementInfoFactory implements SmartPointerElementInfoFactory {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.smartPointers.AnchorElementInfoFactory");
+public class AnchorElementInfoFactory implements SmartPointerElementInfoFactory
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.smartPointers.AnchorElementInfoFactory");
 
-  @Override
-  @Nullable
-  public SmartPointerElementInfo createElementInfo(@NotNull PsiElement element) {
-    PsiFile containingFile = element.getContainingFile();
-    if (element instanceof StubBasedPsiElement && containingFile instanceof PsiFileWithStubSupport) {
-      PsiFileWithStubSupport stubFile = (PsiFileWithStubSupport)containingFile;
-      StubTree stubTree = stubFile.getStubTree();
-      if (stubTree != null) {
-        // use stubs when tree is not loaded
-        StubBasedPsiElement stubPsi = (StubBasedPsiElement)element;
-        int stubId = PsiAnchor.calcStubIndex(stubPsi);
-        IStubElementType myStubElementType = stubPsi.getElementType();
-        if (stubId != -1) {
-          return new AnchorElementInfo(element, stubFile, stubId, myStubElementType);
-        }
-      }
-    }
+	@Override
+	@Nullable
+	public SmartPointerElementInfo createElementInfo(@NotNull PsiElement element)
+	{
+		PsiFile containingFile = element.getContainingFile();
+		if(element instanceof StubBasedPsiElement && containingFile instanceof PsiFileWithStubSupport)
+		{
+			PsiFileWithStubSupport stubFile = (PsiFileWithStubSupport) containingFile;
+			StubTree stubTree = stubFile.getStubTree();
+			if(stubTree != null)
+			{
+				// use stubs when tree is not loaded
+				StubBasedPsiElement stubPsi = (StubBasedPsiElement) element;
+				int stubId = PsiAnchor.calcStubIndex(stubPsi);
+				IStubElementType myStubElementType = stubPsi.getElementType();
+				if(stubId != -1)
+				{
+					return new AnchorElementInfo(element, stubFile, stubId, myStubElementType);
+				}
+			}
+		}
 
-    PsiElement anchor = getAnchor(element);
-    if (anchor != null) {
-      return new AnchorElementInfo(anchor, containingFile);
-    }
-    return null;
-  }
+		PsiElement anchor = getAnchor(element);
+		if(anchor != null)
+		{
+			return new AnchorElementInfo(anchor, containingFile);
+		}
+		return null;
+	}
 
-  @Nullable
-  static PsiElement getAnchor(PsiElement element) {
-    LOG.assertTrue(element.isValid());
-    PsiElement anchor = null;
-    if (element instanceof PsiClass) {
-      if (element instanceof PsiAnonymousClass) {
-        anchor = ((PsiAnonymousClass)element).getBaseClassReference().getReferenceNameElement();
-      }
-      else {
-        anchor = ((PsiClass)element).getNameIdentifier();
-      }
-    }
-    else if (element instanceof PsiMethod) {
-      anchor = ((PsiMethod)element).getNameIdentifier();
-    }
-    else if (element instanceof PsiVariable) {
-      anchor = ((PsiVariable)element).getNameIdentifier();
-    }
-    else if (element instanceof XmlTag) {
-      anchor = XmlTagUtil.getStartTagNameElement((XmlTag)element);
-    }
-    if (anchor != null && (!anchor.isPhysical() /*|| anchor.getTextRange()==null*/)) return null;
-    return anchor;
-  }
+	@Nullable
+	static PsiElement getAnchor(PsiElement element)
+	{
+		LOG.assertTrue(element.isValid());
+		PsiElement anchor = null;
+		if(element instanceof PsiClass)
+		{
+			if(element instanceof PsiAnonymousClass)
+			{
+				anchor = ((PsiAnonymousClass) element).getBaseClassReference().getReferenceNameElement();
+			}
+			else
+			{
+				anchor = ((PsiClass) element).getNameIdentifier();
+			}
+		}
+		else if(element instanceof PsiMethod)
+		{
+			anchor = ((PsiMethod) element).getNameIdentifier();
+		}
+		else if(element instanceof PsiVariable)
+		{
+			anchor = ((PsiVariable) element).getNameIdentifier();
+		}
+		else if(element instanceof XmlTag)
+		{
+			anchor = XmlTagUtil.getStartTagNameElement((XmlTag) element);
+		}
+		if(anchor != null && (!anchor.isPhysical() /*|| anchor.getTextRange()==null*/))
+		{
+			return null;
+		}
+		return anchor;
+	}
 }
