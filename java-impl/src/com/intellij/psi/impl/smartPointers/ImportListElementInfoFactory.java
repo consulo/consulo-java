@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,41 @@
  */
 package com.intellij.psi.impl.smartPointers;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiImportList;
 import com.intellij.psi.PsiJavaFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class ImportListElementInfoFactory implements SmartPointerElementInfoFactory {
-  @Override
-  @Nullable
-  public SmartPointerElementInfo createElementInfo(@NotNull final PsiElement element) {
-    if (element instanceof PsiImportList) {
-      return new ImportListInfo((PsiJavaFile)element.getContainingFile());
-    }
-    return null;
-  }
+public class ImportListElementInfoFactory implements SmartPointerElementInfoFactory
+{
+	@Override
+	@Nullable
+	public SmartPointerElementInfo createElementInfo(@NotNull final PsiElement element)
+	{
+		if(element instanceof PsiImportList)
+		{
+			return new ImportListInfo((PsiJavaFile) element.getContainingFile());
+		}
+		return null;
+	}
 
-  private static class ImportListInfo extends FileElementInfo {
-    public ImportListInfo(@NotNull PsiJavaFile file) {
-      super(file);
-    }
+	private static class ImportListInfo extends FileElementInfo
+	{
+		private ImportListInfo(@NotNull PsiJavaFile file)
+		{
+			super(file);
+		}
 
-    @Override
-    public PsiElement restoreElement() {
-      PsiElement element = super.restoreElement();
-      if (!(element instanceof PsiJavaFile)) return null;
-      return ((PsiJavaFile)element).getImportList();
-    }
-  }
+		@Override
+		public PsiElement restoreElement()
+		{
+			PsiElement element = super.restoreElement();
+			if(!(element instanceof PsiJavaFile))
+			{
+				return null;
+			}
+			return ((PsiJavaFile) element).getImportList();
+		}
+	}
 }

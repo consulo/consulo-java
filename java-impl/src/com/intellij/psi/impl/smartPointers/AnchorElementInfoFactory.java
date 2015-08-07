@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,20 @@ package com.intellij.psi.impl.smartPointers;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiAnchor;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiVariable;
 import com.intellij.psi.StubBasedPsiElement;
+import com.intellij.psi.impl.source.PsiFileImpl;
 import com.intellij.psi.impl.source.PsiFileWithStubSupport;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubTree;
-import com.intellij.psi.xml.XmlTag;
-import com.intellij.xml.util.XmlTagUtil;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.IStubFileElementType;
+import com.intellij.psi.util.PsiUtilCore;
 
 public class AnchorElementInfoFactory implements SmartPointerElementInfoFactory
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.smartPointers.AnchorElementInfoFactory");
-
 	@Override
 	@Nullable
 	public SmartPointerElementInfo createElementInfo(@NotNull PsiElement element)
@@ -51,8 +46,9 @@ public class AnchorElementInfoFactory implements SmartPointerElementInfoFactory
 				StubBasedPsiElement stubPsi = (StubBasedPsiElement) element;
 				int stubId = PsiAnchor.calcStubIndex(stubPsi);
 				IStubElementType myStubElementType = stubPsi.getElementType();
-				if(stubId != -1)
-				{
+				IElementType contentElementType = ((PsiFileImpl) containingFile).getContentElementType();
+				if(stubId != -1 && contentElementType instanceof IStubFileElementType)
+				{ // TemplateDataElementType is not IStubFileElementType
 					return new AnchorElementInfo(element, stubFile, stubId, myStubElementType);
 				}
 			}
@@ -67,36 +63,17 @@ public class AnchorElementInfoFactory implements SmartPointerElementInfoFactory
 	}
 
 	@Nullable
-	static PsiElement getAnchor(PsiElement element)
+	static PsiElement getAnchor(@NotNull PsiElement element)
 	{
-		LOG.assertTrue(element.isValid());
+		PsiUtilCore.ensureValid(element);
 		PsiElement anchor = null;
-		if(element instanceof PsiClass)
+		for(SmartPointerAnchorProvider provider : SmartPointerAnchorProvider.EP_NAME.getExtensions())
 		{
-			if(element instanceof PsiAnonymousClass)
+			anchor = provider.getAnchor(element);
+			if(anchor != null && anchor.isPhysical())
 			{
-				anchor = ((PsiAnonymousClass) element).getBaseClassReference().getReferenceNameElement();
+				return anchor;
 			}
-			else
-			{
-				anchor = ((PsiClass) element).getNameIdentifier();
-			}
-		}
-		else if(element instanceof PsiMethod)
-		{
-			anchor = ((PsiMethod) element).getNameIdentifier();
-		}
-		else if(element instanceof PsiVariable)
-		{
-			anchor = ((PsiVariable) element).getNameIdentifier();
-		}
-		else if(element instanceof XmlTag)
-		{
-			anchor = XmlTagUtil.getStartTagNameElement((XmlTag) element);
-		}
-		if(anchor != null && (!anchor.isPhysical() /*|| anchor.getTextRange()==null*/))
-		{
-			return null;
 		}
 		return anchor;
 	}
