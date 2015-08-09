@@ -23,6 +23,7 @@ import java.util.Set;
 import org.consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -192,11 +193,13 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 		return search(aClass, scope, checkDeep, true);
 	}
 
+	@RequiredReadAction
 	public static Query<PsiClass> search(@NotNull final PsiClass aClass, final boolean checkDeep)
 	{
 		return search(aClass, aClass.getUseScope(), checkDeep);
 	}
 
+	@RequiredReadAction
 	public static Query<PsiClass> search(@NotNull PsiClass aClass)
 	{
 		return search(aClass, true);
@@ -291,7 +294,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 				});
 				if(!result.isNull())
 				{
-					return result.get().booleanValue();
+					return result.get();
 				}
 
 				if(parameters.isCheckDeep() && !(candidate instanceof PsiAnonymousClass) && !isFinal(candidate))
@@ -371,8 +374,8 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
 			@Override
 			public Boolean compute()
 			{
-				return Boolean.valueOf(baseClass.hasModifierProperty(PsiModifier.FINAL));
+				return baseClass.hasModifierProperty(PsiModifier.FINAL);
 			}
-		}).booleanValue();
+		});
 	}
 }

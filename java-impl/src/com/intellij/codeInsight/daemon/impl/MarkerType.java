@@ -293,7 +293,14 @@ public class MarkerType
 			@Override
 			public void run()
 			{
-				ClassInheritorsSearch.search(aClass, true).forEach(new PsiElementProcessorAdapter<PsiClass>(collectProcessor));
+				ApplicationManager.getApplication().runReadAction(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						ClassInheritorsSearch.search(aClass, true).forEach(new PsiElementProcessorAdapter<PsiClass>(collectProcessor));
+					}
+				});
 			}
 		}, SEARCHING_FOR_OVERRIDDEN_METHODS, true, aClass.getProject(), (JComponent) e.getComponent()))
 		{
