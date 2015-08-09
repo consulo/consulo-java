@@ -15,6 +15,9 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.impl.DocumentImpl;
@@ -26,8 +29,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.ui.JavaReferenceEditorUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class PsiUtilEx {
 
@@ -103,6 +104,7 @@ public class PsiUtilEx {
     }
   }
 
+  @RequiredReadAction
   public static Document createDocument(final String s, final Project project) {
     if (ApplicationManager.getApplication().isUnitTestMode() || project.isDefault()) {
       return new DocumentImpl(s);

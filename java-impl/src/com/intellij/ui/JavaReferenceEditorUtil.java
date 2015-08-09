@@ -15,13 +15,18 @@
  */
 package com.intellij.ui;
 
+import java.awt.event.ActionListener;
+
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaCodeFragment;
+import com.intellij.psi.JavaCodeFragmentFactory;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.util.NullableFunction;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.event.ActionListener;
 
 /**
  * @author yole
@@ -43,6 +48,7 @@ public class JavaReferenceEditorUtil {
   }
 
   @Nullable
+  @RequiredReadAction
   public static Document createDocument(final String text, Project project, boolean isClassesAccepted) {
     final PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
     final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
@@ -52,6 +58,7 @@ public class JavaReferenceEditorUtil {
   }
 
   @Nullable
+  @RequiredReadAction
   public static Document createTypeDocument(final String text, Project project) {
     final PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
     final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
