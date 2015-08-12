@@ -94,7 +94,7 @@ public class SdkSettingsStep extends ModuleWizardStep {
     }
 
     JButton button = new JButton("Ne\u001Bw...");
-    mySdkComboBox.setSetupButton(button, project, myModel, new SdkComboBox.NoneSdkComboBoxItem(), null, false);
+    mySdkComboBox.setSetupButton(button, project, myModel, new SdkComboBox.NullSdkComboBoxItem("None"), null, false);
     JPanel jdkPanel = new JPanel(new BorderLayout(4, 0));
     jdkPanel.add(mySdkComboBox);
     jdkPanel.add(button, BorderLayout.EAST);
