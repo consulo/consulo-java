@@ -566,8 +566,6 @@
 
 		<extensionPoint name="psi.clsCustomNavigationPolicy"
 						interface="com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy"/>
-		<extensionPoint name="psi.clsDecompiledFileProvider"
-						interface="com.intellij.psi.ClsFileDecompiledPsiFileProvider"/>
 		<extensionPoint name="extraExceptionHandler" interface="com.intellij.codeInsight.ExtraExceptionHandler"/>
 
 		<extensionPoint name="backendCompiler" beanClass="com.intellij.compiler.impl.javaCompiler.BackendCompilerEP" area="CONSULO_PROJECT">
