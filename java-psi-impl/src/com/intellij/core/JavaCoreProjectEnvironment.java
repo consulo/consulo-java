@@ -15,11 +15,20 @@
  */
 package com.intellij.core;
 
+import java.io.File;
+
+import org.consulo.psi.PsiPackageManager;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.psi.impl.PsiPackageManagerImpl;
 import com.intellij.mock.MockFileIndexFacade;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiElementFinder;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiResolveHelper;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import com.intellij.psi.impl.JavaPsiFacadeImpl;
@@ -28,11 +37,6 @@ import com.intellij.psi.impl.PsiElementFactoryImpl;
 import com.intellij.psi.impl.file.impl.JavaFileManager;
 import com.intellij.psi.impl.source.resolve.JavaResolveCache;
 import com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl;
-import org.consulo.psi.PsiPackageManager;
-import org.consulo.psi.impl.PsiPackageManagerImpl;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 /**
  * TODO [VISTALL]
