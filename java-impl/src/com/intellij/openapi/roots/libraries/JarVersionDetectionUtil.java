@@ -35,77 +35,101 @@ import com.intellij.openapi.vfs.ArchiveFile;
 import com.intellij.openapi.vfs.ArchiveFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
-public class JarVersionDetectionUtil {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.roots.libraries.JarVersionDetectionUtil");
+public class JarVersionDetectionUtil
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.roots.libraries" +
+			".JarVersionDetectionUtil");
 
-  private JarVersionDetectionUtil() {
-  }
+	private JarVersionDetectionUtil()
+	{
+	}
 
-  @Nullable
-  public static String detectJarVersion(@NotNull final String detectionClass, @NotNull Module module) {
-    try {
-      return detectJarVersion(getDetectionJar(detectionClass, module));
-    }
-    catch (IOException e) {
-      return null;
-    }
-  }
+	@Nullable
+	public static String detectJarVersion(@NotNull final String detectionClass, @NotNull Module module)
+	{
+		try
+		{
+			return detectJarVersion(getDetectionJar(detectionClass, module));
+		}
+		catch(IOException e)
+		{
+			return null;
+		}
+	}
 
-  @Nullable
-  public static String detectJarVersion(@NotNull String detectionClass, @NotNull List<VirtualFile> files) {
-    final VirtualFile jar = LibrariesHelper.getInstance().findRootByClass(files, detectionClass);
-    if (jar != null && jar.getFileSystem() instanceof ArchiveFileSystem) {
-      final VirtualFile manifestFile = jar.findFileByRelativePath(JarFile.MANIFEST_NAME);
-      if (manifestFile != null) {
-        try {
-          final InputStream input = manifestFile.getInputStream();
-          try {
-            return new Manifest(input).getMainAttributes().getValue(Attributes.Name.IMPLEMENTATION_VERSION);
-          }
-          finally {
-            input.close();
-          }
-        }
-        catch (IOException e) {
-          LOG.debug(e);
-          return null;
-        }
-      }
-    }
-    return null;
-  }
+	@Nullable
+	public static String detectJarVersion(@NotNull String detectionClass, @NotNull List<VirtualFile> files)
+	{
+		final VirtualFile jar = LibrariesHelper.getInstance().findRootByClass(files, detectionClass);
+		if(jar != null && jar.getFileSystem() instanceof ArchiveFileSystem)
+		{
+			final VirtualFile manifestFile = jar.findFileByRelativePath(JarFile.MANIFEST_NAME);
+			if(manifestFile != null)
+			{
+				try
+				{
+					final InputStream input = manifestFile.getInputStream();
+					try
+					{
+						return new Manifest(input).getMainAttributes().getValue(Attributes.Name
+								.IMPLEMENTATION_VERSION);
+					}
+					finally
+					{
+						input.close();
+					}
+				}
+				catch(IOException e)
+				{
+					LOG.debug(e);
+					return null;
+				}
+			}
+		}
+		return null;
+	}
 
-  @Nullable
-  public static String detectJarVersion(ArchiveFile zipFile) {
-    if (zipFile == null) {
-      return null;
-    }
-    try {
-      final ArchiveEntry zipEntry = zipFile.getEntry(JarFile.MANIFEST_NAME);
-      if (zipEntry == null) {
-        return null;
-      }
-      final InputStream inputStream = zipFile.getInputStream(zipEntry);
-      final Manifest manifest = new Manifest(inputStream);
-      final Attributes attributes = manifest.getMainAttributes();
-      return attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION);
-    }
-    catch (IOException e) {
-      return null;
-    }
-  }
+	@Nullable
+	public static String detectJarVersion(ArchiveFile zipFile)
+	{
+		if(zipFile == null)
+		{
+			return null;
+		}
+		try
+		{
+			final ArchiveEntry zipEntry = zipFile.getEntry(JarFile.MANIFEST_NAME);
+			if(zipEntry == null)
+			{
+				return null;
+			}
+			final InputStream inputStream = zipFile.getInputStream(zipEntry);
+			final Manifest manifest = new Manifest(inputStream);
+			final Attributes attributes = manifest.getMainAttributes();
+			return attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION);
+		}
+		catch(IOException e)
+		{
+			return null;
+		}
+	}
 
-  @Nullable
-  private static ArchiveFile getDetectionJar(final String detectionClass, Module module) throws IOException {
-      for (OrderEntry library : ModuleRootManager.getInstance(module).getOrderEntries()) {
-        if (library instanceof LibraryOrderEntry) {
-          VirtualFile file = LibrariesHelper.getInstance().findJarByClass(((LibraryOrderEntry)library).getLibrary(), detectionClass);
-          if (file != null && file.getFileSystem() instanceof ArchiveFileSystem) {
-            return ((ArchiveFileSystem)file.getFileSystem()).getArchiveWrapperFile(file);
-          }
-        }
-      }
-    return null;
-  }
+	@Nullable
+	private static ArchiveFile getDetectionJar(final String detectionClass, Module module) throws IOException
+	{
+		for(OrderEntry library : ModuleRootManager.getInstance(module).getOrderEntries())
+		{
+			if(library instanceof LibraryOrderEntry)
+			{
+				VirtualFile file = LibrariesHelper.getInstance().findJarByClass(((LibraryOrderEntry) library)
+						.getLibrary(), detectionClass);
+				if(file != null && file.getFileSystem() instanceof ArchiveFileSystem)
+				{
+					return ((ArchiveFileSystem) file.getFileSystem()).getArchiveWrapperFile(file);
+				}
+			}
+		}
+		return null;
+	}
 }
 
