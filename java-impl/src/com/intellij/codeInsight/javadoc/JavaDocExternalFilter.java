@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,27 @@
  */
 package com.intellij.codeInsight.javadoc;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.documentation.AbstractExternalFilter;
 import com.intellij.codeInsight.documentation.DocumentationManager;
+import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
 import com.intellij.codeInsight.documentation.PlatformDocumentationUtil;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.lang.java.JavaDocumentationProvider;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NullableComputable;
-import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,105 +45,136 @@ import java.util.regex.Pattern;
  * To change this template use Options | File Templates.
  */
 
-public class JavaDocExternalFilter extends AbstractExternalFilter {
-  private final Project myProject;
-  
-  private static final Trinity<Pattern, Pattern, Boolean> ourPackageInfoSettings = Trinity.create(
-    Pattern.compile("package\\s+[^\\s]+\\s+description", Pattern.CASE_INSENSITIVE),
-    Pattern.compile("START OF BOTTOM NAVBAR", Pattern.CASE_INSENSITIVE),
-    Boolean.TRUE
-  );
-  
-  protected static @NonNls final Pattern ourHTMLsuffix = Pattern.compile("[.][hH][tT][mM][lL]?");
-  protected static @NonNls final Pattern ourParentFolderprefix = Pattern.compile("^[.][.]/");
-  protected static @NonNls final Pattern ourAnchorsuffix = Pattern.compile("#(.*)$");
-  protected static @NonNls final Pattern ourHTMLFilesuffix = Pattern.compile("/([^/]*[.][hH][tT][mM][lL]?)$");
-  private static @NonNls final Pattern ourHREFselector = Pattern.compile("<A.*?HREF=\"([^>\"]*)\"", Pattern.CASE_INSENSITIVE|Pattern.DOTALL);
-  private static @NonNls final Pattern ourMethodHeading = Pattern.compile("<H3>(.+?)</H3>", Pattern.CASE_INSENSITIVE|Pattern.DOTALL);
-  protected static @NonNls final String DOC_ELEMENT_PROTOCOL = "doc_element://";
-  @NonNls protected static final String H2 = "</H2>";
-  @NonNls protected static final String HTML_CLOSE = "</HTML>";
-  @NonNls protected static final String HTML = "<HTML>";
+public class JavaDocExternalFilter extends AbstractExternalFilter
+{
+	private final Project myProject;
 
-  private final RefConvertor[] myReferenceConvertors = new RefConvertor[]{
-    new RefConvertor(ourHREFselector) {
-      @Override
-      protected String convertReference(String root, String href) {
-        if (BrowserUtil.isAbsoluteURL(href)) {
-          return href;
-        }
+	private static final ParseSettings ourPackageInfoSettings = new ParseSettings(Pattern.compile
+			("package\\s+[^\\s]+\\s+description", Pattern.CASE_INSENSITIVE), Pattern.compile("START OF BOTTOM NAVBAR",
+			Pattern.CASE_INSENSITIVE), true, false);
 
-        if (StringUtil.startsWithChar(href, '#')) {
-          return DOC_ELEMENT_PROTOCOL + root + href;
-        }
+	protected static
+	@NonNls
+	final Pattern ourHTMLsuffix = Pattern.compile("[.][hH][tT][mM][lL]?");
+	protected static
+	@NonNls
+	final Pattern ourParentFolderprefix = Pattern.compile("^[.][.]/");
+	protected static
+	@NonNls
+	final Pattern ourAnchorsuffix = Pattern.compile("#(.*)$");
+	protected static
+	@NonNls
+	final Pattern ourHTMLFilesuffix = Pattern.compile("/([^/]*[.][hH][tT][mM][lL]?)$");
+	private static
+	@NonNls
+	final Pattern ourHREFselector = Pattern.compile("<A.*?HREF=\"([^>\"]*)\"", Pattern.CASE_INSENSITIVE | Pattern
+			.DOTALL);
+	private static
+	@NonNls
+	final Pattern ourMethodHeading = Pattern.compile("<H[34]>(.+?)</H[34]>", Pattern.CASE_INSENSITIVE | Pattern
+			.DOTALL);
+	@NonNls
+	protected static final String H2 = "</H2>";
+	@NonNls
+	protected static final String HTML_CLOSE = "</HTML>";
+	@NonNls
+	protected static final String HTML = "<HTML>";
 
-        String nakedRoot = ourHTMLFilesuffix.matcher(root).replaceAll("/");
+	private final RefConvertor[] myReferenceConvertors = new RefConvertor[]{
+			new RefConvertor(ourHREFselector)
+			{
+				@Override
+				protected String convertReference(String root, String href)
+				{
+					if(BrowserUtil.isAbsoluteURL(href))
+					{
+						return href;
+					}
 
-        String stripped = ourHTMLsuffix.matcher(href).replaceAll("");
-        int len = stripped.length();
+					if(StringUtil.startsWithChar(href, '#'))
+					{
+						return root + href;
+					}
 
-        do stripped = ourParentFolderprefix.matcher(stripped).replaceAll(""); while (len > (len = stripped.length()));
+					String nakedRoot = ourHTMLFilesuffix.matcher(root).replaceAll("/");
 
-        final String elementRef = stripped.replaceAll("/", ".");
-        final String classRef = ourAnchorsuffix.matcher(elementRef).replaceAll("");
+					String stripped = ourHTMLsuffix.matcher(href).replaceAll("");
+					int len = stripped.length();
 
-        return
-          (JavaPsiFacade.getInstance(myProject).findClass(classRef, GlobalSearchScope.allScope(myProject)) != null)
-          ? DocumentationManager.PSI_ELEMENT_PROTOCOL + elementRef
-          : DOC_ELEMENT_PROTOCOL + doAnnihilate(nakedRoot + href);
-      }
-    },
+					do
+					{
+						stripped = ourParentFolderprefix.matcher(stripped).replaceAll("");
+					}
+					while(len > (len = stripped.length()));
 
-    myIMGConvertor
-  };
+					final String elementRef = stripped.replaceAll("/", ".");
+					final String classRef = ourAnchorsuffix.matcher(elementRef).replaceAll("");
 
-  public JavaDocExternalFilter(Project project) {
-    myProject = project;
-  }
+					return (JavaPsiFacade.getInstance(myProject).findClass(classRef,
+							GlobalSearchScope.allScope(myProject)) != null) ? DocumentationManagerProtocol
+							.PSI_ELEMENT_PROTOCOL + elementRef : doAnnihilate(nakedRoot + href);
+				}
+			}
+	};
 
-  @Override
-  protected RefConvertor[] getRefConvertors() {
-    return myReferenceConvertors;
-  }
+	public JavaDocExternalFilter(Project project)
+	{
+		myProject = project;
+	}
 
-  @Nullable
-  public static String filterInternalDocInfo(String text) {
-    if (text == null) {
-      return null;
-    }
-    text = PlatformDocumentationUtil.fixupText(text);
-    return text;
-  }
+	@Override
+	protected RefConvertor[] getRefConverters()
+	{
+		return myReferenceConvertors;
+	}
 
-  @Override
-  @Nullable
-   public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception {
-     String externalDoc = super.getExternalDocInfoForElement(docURL, element);
-     if (externalDoc != null) {
-       if (element instanceof PsiMethod) {
-         final String className = ApplicationManager.getApplication().runReadAction(
-             new NullableComputable<String>() {
-               @Override
-               @Nullable
-               public String compute() {
-                 PsiClass aClass = ((PsiMethod)element).getContainingClass();
-                 return aClass == null ? null : aClass.getQualifiedName();
-               }
-             }
-         );
-         Matcher matcher = ourMethodHeading.matcher(externalDoc);
-         final StringBuilder buffer = new StringBuilder();
-         DocumentationManager.createHyperlink(buffer, className, className, false);
-         //noinspection HardCodedStringLiteral
-         return matcher.replaceFirst("<H3>" + buffer.toString() + "</H3>");
-      }
-    }
-    return externalDoc;
-  }
+	@Nullable
+	public static String filterInternalDocInfo(String text)
+	{
+		if(text == null)
+		{
+			return null;
+		}
+		text = PlatformDocumentationUtil.fixupText(text);
+		return text;
+	}
 
-  @NotNull
-  @Override
-  protected Trinity<Pattern, Pattern, Boolean> getParseSettings(@NotNull String url) {
-    return url.endsWith(JavaDocumentationProvider.PACKAGE_SUMMARY_FILE) ? ourPackageInfoSettings : super.getParseSettings(url);
-  }
+	@Override
+	@Nullable
+	public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception
+	{
+		String externalDoc = super.getExternalDocInfoForElement(docURL, element);
+		if(externalDoc != null)
+		{
+			if(element instanceof PsiMethod)
+			{
+				final String className = ApplicationManager.getApplication().runReadAction(new
+																								   NullableComputable<String>()
+				{
+					@Override
+					@Nullable
+					public String compute()
+					{
+						PsiClass aClass = ((PsiMethod) element).getContainingClass();
+						return aClass == null ? null : aClass.getQualifiedName();
+					}
+				});
+				Matcher matcher = ourMethodHeading.matcher(externalDoc);
+				final StringBuilder buffer = new StringBuilder();
+				DocumentationManager.createHyperlink(buffer, className, className, false);
+				//noinspection HardCodedStringLiteral
+				return matcher.replaceFirst("<H3>" + buffer.toString() + "</H3>");
+			}
+		}
+		return externalDoc;
+	}
+
+
+	@NotNull
+	@Override
+	protected ParseSettings getParseSettings(@NotNull String url)
+	{
+		return url.endsWith(JavaDocumentationProvider.PACKAGE_SUMMARY_FILE) ? ourPackageInfoSettings : super
+				.getParseSettings(url);
+	}
 }
