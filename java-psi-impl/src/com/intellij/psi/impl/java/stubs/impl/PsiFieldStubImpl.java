@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
@@ -22,100 +24,145 @@ import com.intellij.psi.impl.java.stubs.PsiFieldStub;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author max
  */
-public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub {
-  private final StringRef myName;
-  private final TypeInfo myType;
-  private final StringRef myInitializer;
-  private final byte myFlags;
+public class PsiFieldStubImpl extends StubBase<PsiField> implements PsiFieldStub
+{
+	private final StringRef myName;
+	private final TypeInfo myType;
+	private final StringRef myInitializer;
+	private final byte myFlags;
 
-  private static final int ENUM_CONST = 0x01;
-  private static final int DEPRECATED = 0x02;
-  private static final int DEPRECATED_ANNOTATION = 0x04;
+	private static final int ENUM_CONST = 0x01;
+	private static final int DEPRECATED = 0x02;
+	private static final int DEPRECATED_ANNOTATION = 0x04;
+	private static final int HAS_DOC_COMMENT = 0x08;
 
-  public PsiFieldStubImpl(StubElement parent, String name, @NotNull TypeInfo type, @Nullable String initializer, byte flags) {
-    this(parent, StringRef.fromString(name), type, StringRef.fromString(initializer), flags);
-  }
+	public PsiFieldStubImpl(StubElement parent,
+			String name,
+			@NotNull TypeInfo type,
+			@Nullable String initializer,
+			byte flags)
+	{
+		this(parent, StringRef.fromString(name), type, StringRef.fromString(initializer), flags);
+	}
 
-  public PsiFieldStubImpl(StubElement parent, StringRef name, @NotNull TypeInfo type, @Nullable StringRef initializer, byte flags) {
-    super(parent, isEnumConst(flags) ? JavaStubElementTypes.ENUM_CONSTANT : JavaStubElementTypes.FIELD);
-    myName = name;
-    myType = type;
-    myInitializer = initializer;
-    myFlags = flags;
-  }
+	public PsiFieldStubImpl(StubElement parent,
+			StringRef name,
+			@NotNull TypeInfo type,
+			@Nullable StringRef initializer,
+			byte flags)
+	{
+		super(parent, isEnumConst(flags) ? JavaStubElementTypes.ENUM_CONSTANT : JavaStubElementTypes.FIELD);
+		myName = name;
+		myType = type;
+		myInitializer = initializer;
+		myFlags = flags;
+	}
 
-  @Override
-  @NotNull
-  public TypeInfo getType(boolean doResolve) {
-    return doResolve ? myType.applyAnnotations(this) : myType;
-  }
+	@Override
+	@NotNull
+	public TypeInfo getType(boolean doResolve)
+	{
+		return doResolve ? myType.applyAnnotations(this) : myType;
+	}
 
-  @Override
-  public String getInitializerText() {
-    return StringRef.toString(myInitializer);
-  }
+	@Override
+	public String getInitializerText()
+	{
+		return StringRef.toString(myInitializer);
+	}
 
-  public byte getFlags() {
-    return myFlags;
-  }
+	public byte getFlags()
+	{
+		return myFlags;
+	}
 
-  @Override
-  public boolean isEnumConstant() {
-    return isEnumConst(myFlags);
-  }
+	@Override
+	public boolean isEnumConstant()
+	{
+		return isEnumConst(myFlags);
+	}
 
-  private static boolean isEnumConst(final byte flags) {
-    return (flags & ENUM_CONST) != 0;
-  }
+	private static boolean isEnumConst(final byte flags)
+	{
+		return (flags & ENUM_CONST) != 0;
+	}
 
-  @Override
-  public boolean isDeprecated() {
-    return (myFlags & DEPRECATED) != 0;
-  }
+	@Override
+	public boolean isDeprecated()
+	{
+		return (myFlags & DEPRECATED) != 0;
+	}
 
-  @Override
-  public boolean hasDeprecatedAnnotation() {
-    return (myFlags & DEPRECATED_ANNOTATION) != 0;
-  }
+	@Override
+	public boolean hasDeprecatedAnnotation()
+	{
+		return (myFlags & DEPRECATED_ANNOTATION) != 0;
+	}
 
-  @Override
-  public String getName() {
-    return StringRef.toString(myName);
-  }
+	@Override
+	public boolean hasDocComment()
+	{
+		return (myFlags & HAS_DOC_COMMENT) != 0;
+	}
 
-  public static byte packFlags(boolean isEnumConst, boolean isDeprecated, boolean hasDeprecatedAnnotation) {
-    byte flags = 0;
-    if (isEnumConst) flags |= ENUM_CONST;
-    if (isDeprecated) flags |= DEPRECATED;
-    if (hasDeprecatedAnnotation) flags |= DEPRECATED_ANNOTATION;
-    return flags;
-  }
+	@Override
+	public String getName()
+	{
+		return StringRef.toString(myName);
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("PsiFieldStub[");
+	public static byte packFlags(boolean isEnumConst,
+			boolean isDeprecated,
+			boolean hasDeprecatedAnnotation,
+			boolean hasDocComment)
+	{
+		byte flags = 0;
+		if(isEnumConst)
+		{
+			flags |= ENUM_CONST;
+		}
+		if(isDeprecated)
+		{
+			flags |= DEPRECATED;
+		}
+		if(hasDeprecatedAnnotation)
+		{
+			flags |= DEPRECATED_ANNOTATION;
+		}
+		if(hasDocComment)
+		{
+			flags |= HAS_DOC_COMMENT;
+		}
+		return flags;
+	}
 
-    if (isDeprecated() || hasDeprecatedAnnotation()) {
-      builder.append("deprecated ");
-    }
-    if (isEnumConstant()) {
-      builder.append("enumconst ");
-    }
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("PsiFieldStub[");
 
-    builder.append(myName).append(':').append(myType);
+		if(isDeprecated() || hasDeprecatedAnnotation())
+		{
+			builder.append("deprecated ");
+		}
+		if(isEnumConstant())
+		{
+			builder.append("enumconst ");
+		}
 
-    if (myInitializer != null) {
-      builder.append('=').append(myInitializer);
-    }
+		builder.append(myName).append(':').append(myType);
 
-    builder.append("]");
-    return builder.toString();
-  }
+		if(myInitializer != null)
+		{
+			builder.append('=').append(myInitializer);
+		}
+
+		builder.append("]");
+		return builder.toString();
+	}
 }

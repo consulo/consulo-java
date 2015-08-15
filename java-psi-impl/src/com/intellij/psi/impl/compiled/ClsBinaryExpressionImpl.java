@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,116 +22,132 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
-public class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpression {
-  private final ClsElementImpl myParent;
-  private final PsiExpression myLOperand;
-  private final PsiJavaToken myOperation;
-  private final PsiExpression myROperand;
+abstract class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpression
+{
+	private final ClsElementImpl myParent;
+	private final PsiExpression myLOperand;
+	private final PsiJavaToken myOperation;
+	private final PsiExpression myROperand;
 
-  public ClsBinaryExpressionImpl(ClsElementImpl parent,
-                                 ClsLiteralExpressionImpl lOperand,
-                                 ClsJavaTokenImpl operation,
-                                 ClsLiteralExpressionImpl rOperand) {
-    myParent = parent;
-    myLOperand = lOperand;
-    myOperation = operation;
-    myROperand = rOperand;
-    lOperand.setParent(this);
-    operation.setParent(this);
-    rOperand.setParent(this);
-  }
+	ClsBinaryExpressionImpl(@NotNull ClsElementImpl parent)
+	{
+		myParent = parent;
+		myLOperand = createLOperand();
+		myOperation = createOperation();
+		myROperand = createROperand();
+	}
 
-  public ClsBinaryExpressionImpl(ClsElementImpl parent,
-                                 ClsPrefixExpressionImpl lOperand,
-                                 ClsJavaTokenImpl operation,
-                                 ClsLiteralExpressionImpl rOperand) {
-    myParent = parent;
-    myLOperand = lOperand;
-    myOperation = operation;
-    myROperand = rOperand;
-    lOperand.setParent(this);
-    operation.setParent(this);
-    rOperand.setParent(this);
-  }
+	@NotNull
+	protected abstract PsiJavaToken createOperation();
 
-  @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
-    buffer.append(getText());
-  }
+	@NotNull
+	protected abstract PsiExpression createLOperand();
 
-  @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaElementType.BINARY_EXPRESSION);
-  }
+	@NotNull
+	protected abstract ClsLiteralExpressionImpl createROperand();
 
-  @Override
-  public String getText() {
-    return StringUtil.join(myLOperand.getText(), " ", myOperation.getText(), " ", myROperand.getText());
-  }
 
-  @NotNull
-  @Override
-  public PsiElement[] getChildren() {
-    return new PsiElement[]{myLOperand, myOperation, myROperand};
-  }
+	@Override
+	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	{
+		buffer.append(getText());
+	}
 
-  @Override
-  public PsiElement getParent() {
-    return myParent;
-  }
+	@Override
+	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	{
+		setMirrorCheckingType(element, JavaElementType.BINARY_EXPRESSION);
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitBinaryExpression(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public String getText()
+	{
+		return StringUtil.join(myLOperand.getText(), " ", myOperation.getText(), " ", myROperand.getText());
+	}
 
-  @NotNull
-  @Override
-  public PsiExpression getLOperand() {
-    return myLOperand;
-  }
+	@NotNull
+	@Override
+	public PsiElement[] getChildren()
+	{
+		return new PsiElement[]{
+				myLOperand,
+				myOperation,
+				myROperand
+		};
+	}
 
-  @NotNull
-  @Override
-  public PsiExpression getROperand() {
-    return myROperand;
-  }
+	@Override
+	public PsiElement getParent()
+	{
+		return myParent;
+	}
 
-  @NotNull
-  @Override
-  public PsiJavaToken getOperationSign() {
-    return myOperation;
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitBinaryExpression(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @NotNull
-  @Override
-  public IElementType getOperationTokenType() {
-    return myOperation.getTokenType();
-  }
+	@NotNull
+	@Override
+	public PsiExpression getLOperand()
+	{
+		return myLOperand;
+	}
 
-  @Override
-  public PsiJavaToken getTokenBeforeOperand(@NotNull PsiExpression operand) {
-    return getOperationSign();
-  }
+	@NotNull
+	@Override
+	public PsiExpression getROperand()
+	{
+		return myROperand;
+	}
 
-  @Override
-  public PsiType getType() {
-    return myLOperand.getType();
-  }
+	@NotNull
+	@Override
+	public PsiJavaToken getOperationSign()
+	{
+		return myOperation;
+	}
 
-  @NotNull
-  @Override
-  public PsiExpression[] getOperands() {
-    return new PsiExpression[]{getLOperand(), getROperand()};
-  }
+	@NotNull
+	@Override
+	public IElementType getOperationTokenType()
+	{
+		return myOperation.getTokenType();
+	}
 
-  @Override
-  public String toString() {
-    return "PsiBinaryExpression:" + getText();
-  }
+	@Override
+	public PsiJavaToken getTokenBeforeOperand(@NotNull PsiExpression operand)
+	{
+		return getOperationSign();
+	}
+
+	@Override
+	public PsiType getType()
+	{
+		return myLOperand.getType();
+	}
+
+	@NotNull
+	@Override
+	public PsiExpression[] getOperands()
+	{
+		return new PsiExpression[]{
+				getLOperand(),
+				getROperand()
+		};
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PsiBinaryExpression:" + getText();
+	}
 }

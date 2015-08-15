@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,84 +22,102 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
-public class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpression {
-  private ClsElementImpl myParent;
-  private final PsiJavaToken myOperation;
-  private final PsiExpression myOperand;
+abstract class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpression
+{
+	private final ClsElementImpl myParent;
+	private final PsiJavaToken myOperation;
+	private final PsiExpression myOperand;
 
-  public ClsPrefixExpressionImpl(ClsElementImpl parent, ClsJavaTokenImpl operation, ClsLiteralExpressionImpl operand) {
-    myParent = parent;
-    myOperation = operation;
-    myOperand = operand;
-    operation.setParent(this);
-    operand.setParent(this);
-  }
+	ClsPrefixExpressionImpl(ClsElementImpl parent)
+	{
+		myParent = parent;
+		myOperation = createOperation();
+		myOperand = createOperand();
+	}
 
-  void setParent(ClsElementImpl parent) {
-    myParent = parent;
-  }
+	@NotNull
+	protected abstract PsiExpression createOperand();
 
-  @NotNull
-  @Override
-  public PsiExpression getOperand() {
-    return myOperand;
-  }
+	@NotNull
+	protected abstract PsiJavaToken createOperation();
 
-  @NotNull
-  @Override
-  public PsiJavaToken getOperationSign() {
-    return myOperation;
-  }
+	@NotNull
+	@Override
+	public PsiExpression getOperand()
+	{
+		return myOperand;
+	}
 
-  @NotNull
-  @Override
-  public IElementType getOperationTokenType() {
-    return myOperation.getTokenType();
-  }
+	@NotNull
+	@Override
+	public PsiJavaToken getOperationSign()
+	{
+		return myOperation;
+	}
 
-  @Override
-  public PsiType getType() {
-    return myOperand.getType();
-  }
+	@NotNull
+	@Override
+	public IElementType getOperationTokenType()
+	{
+		return myOperation.getTokenType();
+	}
 
-  @Override
-  public PsiElement getParent() {
-    return myParent;
-  }
+	@Override
+	public PsiType getType()
+	{
+		return myOperand.getType();
+	}
 
-  @NotNull
-  @Override
-  public PsiElement[] getChildren() {
-    return new PsiElement[]{myOperation, myOperand};
-  }
+	@Override
+	public PsiElement getParent()
+	{
+		return myParent;
+	}
 
-  @Override
-  public String getText() {
-    return StringUtil.join(myOperation.getText(), myOperand.getText());
-  }
+	@NotNull
+	@Override
+	public PsiElement[] getChildren()
+	{
+		return new PsiElement[]{
+				myOperation,
+				myOperand
+		};
+	}
 
-  @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
-    buffer.append(getText());
-  }
+	@Override
+	public String getText()
+	{
+		return StringUtil.join(myOperation.getText(), myOperand.getText());
+	}
 
-  @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaElementType.PREFIX_EXPRESSION);
-  }
+	@Override
+	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	{
+		buffer.append(getText());
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitPrefixExpression(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	{
+		setMirrorCheckingType(element, JavaElementType.PREFIX_EXPRESSION);
+	}
 
-  @Override
-  public String toString() {
-    return "PsiPrefixExpression:" + getText();
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitPrefixExpression(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PsiPrefixExpression:" + getText();
+	}
 }

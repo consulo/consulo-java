@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@ package com.intellij.psi.search.searches;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.application.DumbAwareSearchParameters;
+import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -26,10 +29,12 @@ import com.intellij.psi.search.SearchRequestCollector;
 import com.intellij.psi.search.SearchRequestQuery;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.SearchSession;
+import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.MergeQuery;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
+import com.intellij.util.QueryExecutor;
 import com.intellij.util.UniqueResultsQuery;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -39,18 +44,21 @@ import com.intellij.util.containers.ContainerUtil;
 public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 		MethodReferencesSearch.SearchParameters>
 {
+	public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("org.consulo.java" +
+			".methodReferencesSearch");
 	public static final MethodReferencesSearch INSTANCE = new MethodReferencesSearch();
 
-	public static class SearchParameters
+	public static class SearchParameters implements DumbAwareSearchParameters
 	{
 		private final PsiMethod myMethod;
+		private final Project myProject;
 		private final SearchScope myScope;
 		private final boolean myStrictSignatureSearch;
 		private final SearchRequestCollector myOptimizer;
 		private final boolean isSharedOptimizer;
 
-		public SearchParameters(PsiMethod method,
-				SearchScope scope,
+		public SearchParameters(@NotNull PsiMethod method,
+				@NotNull SearchScope scope,
 				boolean strictSignatureSearch,
 				@Nullable SearchRequestCollector optimizer)
 		{
@@ -59,13 +67,21 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 			myStrictSignatureSearch = strictSignatureSearch;
 			isSharedOptimizer = optimizer != null;
 			myOptimizer = optimizer != null ? optimizer : new SearchRequestCollector(new SearchSession());
+			myProject = PsiUtilCore.getProjectInReadAction(method);
 		}
 
-		public SearchParameters(final PsiMethod aClass, SearchScope scope, final boolean strict)
+		public SearchParameters(@NotNull PsiMethod method, @NotNull SearchScope scope, final boolean strict)
 		{
-			this(aClass, scope, strict, null);
+			this(method, scope, strict, null);
 		}
 
+		@NotNull
+		public Project getProject()
+		{
+			return myProject;
+		}
+
+		@NotNull
 		public PsiMethod getMethod()
 		{
 			return myMethod;
@@ -115,7 +131,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 		super("org.consulo.java");
 	}
 
-	public static Query<PsiReference> search(final PsiMethod method,
+	public static Query<PsiReference> search(@NotNull PsiMethod method,
 			SearchScope scope,
 			final boolean strictSignatureSearch)
 	{
@@ -161,13 +177,14 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 
 		final SearchRequestCollector requests = parameters.getOptimizer();
 
-		return uniqueResults(new MergeQuery<PsiReference>(result, new SearchRequestQuery(parameters.getMethod()
-				.getProject(), requests)));
+		Project project = PsiUtilCore.getProjectInReadAction(parameters.getMethod());
+		return uniqueResults(new MergeQuery<PsiReference>(result, new SearchRequestQuery(project, requests)));
 	}
 
 	public static Query<PsiReference> search(final PsiMethod method, final boolean strictSignatureSearch)
 	{
-		return search(method, GlobalSearchScope.allScope(method.getProject()), strictSignatureSearch);
+		return search(method, GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(method)),
+				strictSignatureSearch);
 	}
 
 	public static Query<PsiReference> search(final PsiMethod method)
@@ -178,7 +195,6 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 	private static UniqueResultsQuery<PsiReference, ReferenceDescriptor> uniqueResults(@NotNull Query<PsiReference>
 			composite)
 	{
-		return new UniqueResultsQuery<PsiReference, ReferenceDescriptor>(composite,
-				ContainerUtil.<ReferenceDescriptor>canonicalStrategy(), ReferenceDescriptor.MAPPER);
+		return new UniqueResultsQuery<PsiReference, ReferenceDescriptor>(composite, ContainerUtil.<ReferenceDescriptor>canonicalStrategy(), ReferenceDescriptor.MAPPER);
 	}
 }

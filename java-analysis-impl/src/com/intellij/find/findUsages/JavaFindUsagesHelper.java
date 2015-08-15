@@ -49,6 +49,7 @@ import com.intellij.psi.search.PsiReferenceProcessor;
 import com.intellij.psi.search.PsiReferenceProcessorAdapter;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
+import com.intellij.psi.search.searches.FunctionalExpressionSearch;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -283,7 +284,7 @@ public class JavaFindUsagesHelper
 						return false;
 					}
 				}
-				/* TODO [VISTALL]
+
 				if(classOptions.isImplementingClasses)
 				{
 					FunctionalExpressionSearch.search(psiClass, classOptions.searchScope).forEach(new
@@ -296,7 +297,7 @@ public class JavaFindUsagesHelper
 							return addResult(expression, options, processor);
 						}
 					}));
-				}  */
+				}
 			}
 			else if(classOptions.isDerivedClasses)
 			{
@@ -325,8 +326,6 @@ public class JavaFindUsagesHelper
 				{
 					return false;
 				}
-				/*
-				TODO [VISTALL]
 				FunctionalExpressionSearch.search(psiMethod, methodOptions.searchScope).forEach(new
 						PsiElementProcessorAdapter<PsiFunctionalExpression>(new
 																					PsiElementProcessor<PsiFunctionalExpression>()
@@ -336,7 +335,7 @@ public class JavaFindUsagesHelper
 					{
 						return addResult(expression, options, processor);
 					}
-				}));  */
+				}));
 			}
 		}
 

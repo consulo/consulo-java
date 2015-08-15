@@ -395,6 +395,7 @@
 		<extensionPoint name="classInheritorsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="deepestSuperMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="directClassInheritorsSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="functionalExpressionSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="methodReferencesSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="overridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="superMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
@@ -938,9 +939,10 @@
 		<programRunner id="defaultRunRunner" implementation="com.intellij.execution.impl.DefaultJavaProgramRunner"/>
 
 
-		<specialTool shortName="UnusedDeclaration" displayName="Unused declaration" groupBundle="messages.InspectionsBundle"
-					 groupKey="group.names.declaration.redundancy" enabledByDefault="true" level="WARNING"
-					 implementationClass="com.intellij.codeInspection.deadCode.UnusedDeclarationInspection"/>
+		<globalInspection groupPath="Java" language="JAVA" shortName="unused" displayName="Unused declaration" groupBundle="messages.InspectionsBundle"
+						  groupKey="group.names.declaration.redundancy" enabledByDefault="true" level="WARNING"
+						  implementationClass="com.intellij.codeInspection.deadCode.UnusedDeclarationInspection"
+						  presentation="com.intellij.codeInspection.deadCode.UnusedDeclarationPresentation"/>
 		<specialTool shortName="UnusedLibrary" bundle="messages.InspectionsBundle" key="unused.library.display.name"
 					 groupName="Declaration redundancy" enabledByDefault="false" level="WARNING"
 					 implementationClass="com.intellij.codeInspection.unusedLibraries.UnusedLibrariesInspection"/>
@@ -1764,6 +1766,7 @@
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaStaticMemberTypeIndex"/>
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex"/>
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaSuperClassNameOccurenceIndex"/>
+		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaMethodParameterTypesIndex"/>
 
 		<fileBasedIndex implementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
 
@@ -1926,6 +1929,9 @@
 		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.codeInspection.SuppressManagerImpl"/>
 
 		<targetElementUtilEx implementation="com.intellij.codeInsight.JavaTargetElementUtilEx" />
+
+		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
+		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

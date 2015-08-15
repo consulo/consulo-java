@@ -16,8 +16,7 @@
 package com.intellij.psi.impl.search;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadActionProcessor;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.pom.java.LanguageLevel;
@@ -44,34 +43,50 @@ public class ConstructorReferencesSearchHelper
 		myManager = manager;
 	}
 
-	public boolean processConstructorReferences(@NotNull final Processor<PsiReference> processor, @NotNull final PsiMethod constructor,
-			@NotNull final PsiClass containingClass, @NotNull final SearchScope searchScope, boolean ignoreAccessScope,
-			final boolean isStrictSignatureSearch, @NotNull SearchRequestCollector collector)
+	/*
+	   * Project is passed around explicitly to avoid invoking PsiElement.getProject each time we need it. There are
+	   * two reasons:
+	   * 1. Performance. getProject traverses AST upwards
+	   * 2. Exception avoidance. Project is needed outside of read action (to run it via DumbService in the first
+	   * place),
+	   *    and so getProject would fail with an assertion that read action is required but not present.
+	   */
+	public boolean processConstructorReferences(@NotNull final Processor<PsiReference> processor,
+			@NotNull final PsiMethod constructor,
+			@NotNull final PsiClass containingClass,
+			@NotNull final SearchScope searchScope,
+			@NotNull final Project project,
+			boolean ignoreAccessScope,
+			final boolean isStrictSignatureSearch,
+			@NotNull SearchRequestCollector collector)
 	{
 		final boolean[] constructorCanBeCalledImplicitly = new boolean[1];
 		final boolean[] isEnum = new boolean[1];
 		final boolean[] isUnder18 = new boolean[1];
-		ApplicationManager.getApplication().runReadAction(new Runnable()
+
+		MethodUsagesSearcher.resolveInReadAction(project, new Computable<Void>()
 		{
 			@Override
-			public void run()
+			public Void compute()
 			{
 				constructorCanBeCalledImplicitly[0] = constructor.getParameterList().getParametersCount() == 0;
 				isEnum[0] = containingClass.isEnum();
 				isUnder18[0] = PsiUtil.getLanguageLevel(containingClass).isAtLeast(LanguageLevel.JDK_1_8);
+				return null;
 			}
 		});
 
 		if(isEnum[0])
 		{
-			if(!processEnumReferences(processor, constructor, containingClass))
+			if(!processEnumReferences(processor, constructor, project, containingClass))
 			{
 				return false;
 			}
 		}
 
 		// search usages like "new XXX(..)"
-		PairProcessor<PsiReference, SearchRequestCollector> processor1 = new PairProcessor<PsiReference, SearchRequestCollector>()
+		PairProcessor<PsiReference, SearchRequestCollector> processor1 = new PairProcessor<PsiReference,
+				SearchRequestCollector>()
 		{
 			@Override
 			public boolean process(PsiReference reference, SearchRequestCollector collector)
@@ -109,20 +124,20 @@ public class ConstructorReferencesSearchHelper
 		ReferencesSearch.searchOptimized(containingClass, searchScope, ignoreAccessScope, collector, true, processor1);
 		if(isUnder18[0])
 		{
-			if(!process18MethodPointers(processor, constructor, containingClass, searchScope))
+			if(!process18MethodPointers(processor, constructor, project, containingClass, searchScope))
 			{
 				return false;
 			}
 		}
 
 		// search usages like "this(..)"
-		if(!ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
+		if(!MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
 		{
 			@Override
 			public Boolean compute()
 			{
-				return processSuperOrThis(containingClass, constructor, constructorCanBeCalledImplicitly[0], searchScope, isStrictSignatureSearch,
-						PsiKeyword.THIS, processor);
+				return processSuperOrThis(containingClass, constructor, constructorCanBeCalledImplicitly[0],
+						searchScope, project, isStrictSignatureSearch, PsiKeyword.THIS, processor);
 			}
 		}))
 		{
@@ -138,8 +153,9 @@ public class ConstructorReferencesSearchHelper
 				final PsiElement navigationElement = inheritor.getNavigationElement();
 				if(navigationElement instanceof PsiClass)
 				{
-					return processSuperOrThis((PsiClass) navigationElement, constructor, constructorCanBeCalledImplicitly[0], searchScope,
-							isStrictSignatureSearch, PsiKeyword.SUPER, processor);
+					return processSuperOrThis((PsiClass) navigationElement, constructor,
+							constructorCanBeCalledImplicitly[0], searchScope, project, isStrictSignatureSearch,
+							PsiKeyword.SUPER, processor);
 				}
 				return true;
 			}
@@ -148,10 +164,12 @@ public class ConstructorReferencesSearchHelper
 		return ClassInheritorsSearch.search(containingClass, searchScope, false).forEach(processor2);
 	}
 
-	private static boolean processEnumReferences(@NotNull final Processor<PsiReference> processor, @NotNull final PsiMethod constructor,
+	private static boolean processEnumReferences(@NotNull final Processor<PsiReference> processor,
+			@NotNull final PsiMethod constructor,
+			@NotNull final Project project,
 			@NotNull final PsiClass aClass)
 	{
-		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
+		return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
 		{
 			@Override
 			public Boolean compute()
@@ -175,43 +193,59 @@ public class ConstructorReferencesSearchHelper
 		});
 	}
 
-	private static boolean process18MethodPointers(@NotNull final Processor<PsiReference> processor, @NotNull final PsiMethod constructor,
-			@NotNull PsiClass aClass, SearchScope searchScope)
+	private static boolean process18MethodPointers(@NotNull final Processor<PsiReference> processor,
+			@NotNull final PsiMethod constructor,
+			@NotNull final Project project,
+			@NotNull PsiClass aClass,
+			SearchScope searchScope)
 	{
-		return ReferencesSearch.search(aClass, searchScope).forEach(new ReadActionProcessor<PsiReference>()
+		return ReferencesSearch.search(aClass, searchScope).forEach(new Processor<PsiReference>()
 		{
 			@Override
-			public boolean processInReadAction(PsiReference reference)
+			public boolean process(PsiReference reference)
 			{
 				final PsiElement element = reference.getElement();
 				if(element != null)
 				{
-					final PsiElement parent = element.getParent();
-					if(parent instanceof PsiMethodReferenceExpression && ((PsiMethodReferenceExpression) parent).getReferenceNameElement()
-							instanceof PsiKeyword)
+					return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
 					{
-						if(((PsiMethodReferenceExpression) parent).isReferenceTo(constructor))
+						@Override
+						public Boolean compute()
 						{
-							if(!processor.process((PsiReference) parent))
+							final PsiElement parent = element.getParent();
+							if(parent instanceof PsiMethodReferenceExpression && ((PsiMethodReferenceExpression)
+									parent).getReferenceNameElement() instanceof PsiKeyword)
 							{
-								return false;
+								if(((PsiMethodReferenceExpression) parent).isReferenceTo(constructor))
+								{
+									if(!processor.process((PsiReference) parent))
+									{
+										return false;
+									}
+								}
 							}
+							return true;
 						}
-					}
+					});
 				}
 				return true;
 			}
 		});
 	}
 
-	private boolean processSuperOrThis(@NotNull PsiClass inheritor, @NotNull PsiMethod constructor, final boolean constructorCanBeCalledImplicitly,
-			@NotNull SearchScope searchScope, final boolean isStrictSignatureSearch, @NotNull String superOrThisKeyword,
+	private boolean processSuperOrThis(@NotNull PsiClass inheritor,
+			@NotNull PsiMethod constructor,
+			final boolean constructorCanBeCalledImplicitly,
+			@NotNull SearchScope searchScope,
+			@NotNull Project project,
+			final boolean isStrictSignatureSearch,
+			@NotNull String superOrThisKeyword,
 			@NotNull Processor<PsiReference> processor)
 	{
 		PsiMethod[] constructors = inheritor.getConstructors();
 		if(constructors.length == 0 && constructorCanBeCalledImplicitly)
 		{
-			if(!processImplicitConstructorCall(inheritor, processor, constructor, inheritor))
+			if(!processImplicitConstructorCall(inheritor, processor, constructor, project, inheritor))
 			{
 				return false;
 			}
@@ -241,15 +275,16 @@ public class ConstructorReferencesSearchHelper
 								if(referencedElement instanceof PsiMethod)
 								{
 									PsiMethod constructor1 = (PsiMethod) referencedElement;
-									boolean match = isStrictSignatureSearch ? myManager.areElementsEquivalent(constructor1,
-											constructor) : myManager.areElementsEquivalent(constructor.getContainingClass(),
-											constructor1.getContainingClass());
+									boolean match = isStrictSignatureSearch ? myManager.areElementsEquivalent
+											(constructor1, constructor) : myManager.areElementsEquivalent(constructor
+											.getContainingClass(), constructor1.getContainingClass());
 									if(match && !processor.process(refExpr))
 									{
 										return false;
 									}
 								}
-								//as long as we've encountered super/this keyword, no implicit ctr calls are possible here
+								//as long as we've encountered super/this keyword, no implicit ctr calls are possible
+								// here
 								continue;
 							}
 						}
@@ -258,7 +293,7 @@ public class ConstructorReferencesSearchHelper
 			}
 			if(constructorCanBeCalledImplicitly)
 			{
-				if(!processImplicitConstructorCall(method, processor, constructor, inheritor))
+				if(!processImplicitConstructorCall(method, processor, constructor, project, inheritor))
 				{
 					return false;
 				}
@@ -268,19 +303,23 @@ public class ConstructorReferencesSearchHelper
 		return true;
 	}
 
-	private boolean processImplicitConstructorCall(@NotNull final PsiMember usage, @NotNull final Processor<PsiReference> processor,
-			@NotNull final PsiMethod constructor, @NotNull final PsiClass containingClass)
+	private boolean processImplicitConstructorCall(@NotNull final PsiMember usage,
+			@NotNull final Processor<PsiReference> processor,
+			@NotNull final PsiMethod constructor,
+			@NotNull final Project project,
+			@NotNull final PsiClass containingClass)
 	{
 		if(containingClass instanceof PsiAnonymousClass)
 		{
 			return true;
 		}
-		boolean same = ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
+		boolean same = MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
 		{
 			@Override
 			public Boolean compute()
 			{
-				return myManager.areElementsEquivalent(constructor.getContainingClass(), containingClass.getSuperClass());
+				return myManager.areElementsEquivalent(constructor.getContainingClass(),
+						containingClass.getSuperClass());
 			}
 		});
 		if(!same)

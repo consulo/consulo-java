@@ -24,13 +24,20 @@
  */
 package com.intellij.util;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiBundle;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.usageView.UsageInfo;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 
 public class VisibilityUtil  {

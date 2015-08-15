@@ -19,19 +19,29 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.stubs.NamedStub;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
-public interface PsiFieldStub extends NamedStub<PsiField> {
-  @NonNls String INITIALIZER_TOO_LONG = ";INITIALIZER_TOO_LONG;";
-  @NonNls String INITIALIZER_NOT_STORED = ";INITIALIZER_NOT_STORED;";
+public interface PsiFieldStub extends NamedStub<PsiField>
+{
+	@NonNls
+	String INITIALIZER_TOO_LONG = ";INITIALIZER_TOO_LONG;";
+	@NonNls
+	String INITIALIZER_NOT_STORED = ";INITIALIZER_NOT_STORED;";
 
-  @NotNull TypeInfo getType(boolean doResolve);
-  String getInitializerText();
-  boolean isEnumConstant();
-  boolean isDeprecated();
-  boolean hasDeprecatedAnnotation();
+	@NotNull
+	TypeInfo getType(boolean doResolve);
+
+	String getInitializerText();
+
+	boolean isEnumConstant();
+
+	boolean isDeprecated();
+
+	boolean hasDeprecatedAnnotation();
+
+	boolean hasDocComment();
 }

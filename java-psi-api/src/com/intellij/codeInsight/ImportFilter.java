@@ -9,8 +9,8 @@ import com.intellij.psi.PsiFile;
  */
 public abstract class ImportFilter
 {
-	public static final ExtensionPointName<ImportFilter> EP_NAME = new ExtensionPointName<ImportFilter>("com.intellij" +
-			".importFilter");
+	public static final ExtensionPointName<ImportFilter> EP_NAME = new ExtensionPointName<ImportFilter>("org.consulo" +
+			".java.importFilter");
 
 	public abstract boolean shouldUseFullyQualifiedName(@NotNull PsiFile targetFile,
 			@NotNull String classQualifiedName);
