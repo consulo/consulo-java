@@ -15,6 +15,7 @@
  */
 package com.intellij.debugger.engine.evaluation;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -22,62 +23,81 @@ import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.ClassLoaderReference;
 import consulo.internal.com.sun.jdi.Value;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * User: lex
  * Date: Aug 28, 2003
  * Time: 2:02:29 PM
  */
-public final class EvaluationContextImpl implements EvaluationContext{
-  private final Value myThisObject;
-  private final SuspendContextImpl mySuspendContext;
-  private final StackFrameProxyImpl myFrameProxy;
-  private boolean myAutoLoadClasses = true;
-  
-  public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, Value thisObject) {
-    myThisObject = thisObject;
-    myFrameProxy = frameProxy;
-    mySuspendContext = suspendContext;
-  }
+public final class EvaluationContextImpl implements EvaluationContext
+{
+	private final Value myThisObject;
+	private final SuspendContextImpl mySuspendContext;
+	private final StackFrameProxyImpl myFrameProxy;
+	private boolean myAutoLoadClasses = true;
 
-  public Value getThisObject() {
-    return myThisObject;
-  }
+	public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext,
+			StackFrameProxyImpl frameProxy,
+			Value thisObject)
+	{
+		myThisObject = thisObject;
+		myFrameProxy = frameProxy;
+		mySuspendContext = suspendContext;
+	}
 
-  public SuspendContextImpl getSuspendContext() {
-    return mySuspendContext;
-  }
+	@Override
+	public Value getThisObject()
+	{
+		return myThisObject;
+	}
 
-  public StackFrameProxyImpl getFrameProxy() {
-    return myFrameProxy;
-  }
+	@Override
+	public SuspendContextImpl getSuspendContext()
+	{
+		return mySuspendContext;
+	}
 
-  public DebugProcessImpl getDebugProcess() {
-    return getSuspendContext().getDebugProcess();
-  }
+	@Override
+	public StackFrameProxyImpl getFrameProxy()
+	{
+		return myFrameProxy;
+	}
 
-  public Project getProject() {
-    DebugProcessImpl debugProcess = getDebugProcess();
-    return debugProcess != null ? debugProcess.getProject() : null;
-  }
+	@Override
+	public DebugProcessImpl getDebugProcess()
+	{
+		return getSuspendContext().getDebugProcess();
+	}
 
-  public EvaluationContextImpl createEvaluationContext(Value value) {
-    final EvaluationContextImpl copy = new EvaluationContextImpl(getSuspendContext(), getFrameProxy(), value);
-    copy.setAutoLoadClasses(myAutoLoadClasses);
-    return copy;
-  }
+	@Override
+	public Project getProject()
+	{
+		DebugProcessImpl debugProcess = getDebugProcess();
+		return debugProcess != null ? debugProcess.getProject() : null;
+	}
 
-  public ClassLoaderReference getClassLoader() throws EvaluateException {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    return myFrameProxy != null ? myFrameProxy.getClassLoader() : null;
-  }
+	@Override
+	public EvaluationContextImpl createEvaluationContext(Value value)
+	{
+		final EvaluationContextImpl copy = new EvaluationContextImpl(getSuspendContext(), getFrameProxy(), value);
+		copy.setAutoLoadClasses(myAutoLoadClasses);
+		return copy;
+	}
 
-  public boolean isAutoLoadClasses() {
-    return myAutoLoadClasses;
-  }
+	@Override
+	public ClassLoaderReference getClassLoader() throws EvaluateException
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		return myFrameProxy != null ? myFrameProxy.getClassLoader() : null;
+	}
 
-  public void setAutoLoadClasses(final boolean autoLoadClasses) {
-    myAutoLoadClasses = autoLoadClasses;
-  }
+	public boolean isAutoLoadClasses()
+	{
+		return myAutoLoadClasses;
+	}
+
+	public void setAutoLoadClasses(final boolean autoLoadClasses)
+	{
+		myAutoLoadClasses = autoLoadClasses;
+	}
 }
