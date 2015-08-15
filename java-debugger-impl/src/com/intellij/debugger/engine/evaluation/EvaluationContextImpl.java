@@ -16,6 +16,7 @@
 package com.intellij.debugger.engine.evaluation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -24,33 +25,31 @@ import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.ClassLoaderReference;
 import consulo.internal.com.sun.jdi.Value;
 
-/**
- * User: lex
- * Date: Aug 28, 2003
- * Time: 2:02:29 PM
- */
 public final class EvaluationContextImpl implements EvaluationContext
 {
 	private final Value myThisObject;
 	private final SuspendContextImpl mySuspendContext;
 	private final StackFrameProxyImpl myFrameProxy;
 	private boolean myAutoLoadClasses = true;
+	private ClassLoaderReference myClassLoader;
 
 	public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext,
 			StackFrameProxyImpl frameProxy,
-			Value thisObject)
+			@Nullable Value thisObject)
 	{
 		myThisObject = thisObject;
 		myFrameProxy = frameProxy;
 		mySuspendContext = suspendContext;
 	}
 
+	@Nullable
 	@Override
 	public Value getThisObject()
 	{
 		return myThisObject;
 	}
 
+	@NotNull
 	@Override
 	public SuspendContextImpl getSuspendContext()
 	{
@@ -63,17 +62,23 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return myFrameProxy;
 	}
 
+	@NotNull
 	@Override
 	public DebugProcessImpl getDebugProcess()
 	{
 		return getSuspendContext().getDebugProcess();
 	}
 
+	public DebuggerManagerThreadImpl getManagerThread()
+	{
+		return getSuspendContext().getDebugProcessNoAssert().getManagerThread();
+	}
+
 	@Override
 	public Project getProject()
 	{
 		DebugProcessImpl debugProcess = getDebugProcess();
-		return debugProcess != null ? debugProcess.getProject() : null;
+		return debugProcess.getProject();
 	}
 
 	@Override
@@ -84,11 +89,21 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return copy;
 	}
 
+	@Nullable
 	@Override
 	public ClassLoaderReference getClassLoader() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
+		if(myClassLoader != null)
+		{
+			return myClassLoader;
+		}
 		return myFrameProxy != null ? myFrameProxy.getClassLoader() : null;
+	}
+
+	public void setClassLoader(ClassLoaderReference classLoader)
+	{
+		myClassLoader = classLoader;
 	}
 
 	public boolean isAutoLoadClasses()

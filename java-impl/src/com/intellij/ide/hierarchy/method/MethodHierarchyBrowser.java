@@ -15,8 +15,19 @@
  */
 package com.intellij.ide.hierarchy.method;
 
+import java.util.Comparator;
+import java.util.Map;
+
+import javax.swing.JPanel;
+import javax.swing.JTree;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.IdeBundle;
-import com.intellij.ide.hierarchy.*;
+import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
+import com.intellij.ide.hierarchy.HierarchyTreeBuilder;
+import com.intellij.ide.hierarchy.HierarchyTreeStructure;
+import com.intellij.ide.hierarchy.JavaHierarchyUtil;
+import com.intellij.ide.hierarchy.MethodHierarchyBrowserBase;
 import com.intellij.ide.util.treeView.NodeDescriptor;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -27,13 +38,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.ui.PopupHandler;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.util.Comparator;
-import java.util.Map;
-
-public final class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
+public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.ide.hierarchy.method.MethodHierarchyBrowser");
 
   public MethodHierarchyBrowser(final Project project, final PsiMethod method) {

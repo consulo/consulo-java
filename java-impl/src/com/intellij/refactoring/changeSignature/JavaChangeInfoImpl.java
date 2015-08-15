@@ -37,7 +37,7 @@ import com.intellij.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
 
-class JavaChangeInfoImpl implements JavaChangeInfo {
+public class JavaChangeInfoImpl implements JavaChangeInfo {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.changeSignature.JavaChangeInfoImpl");
 
   @PsiModifier.ModifierConstant
