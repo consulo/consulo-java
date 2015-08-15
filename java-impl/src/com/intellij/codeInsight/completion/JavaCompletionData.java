@@ -61,7 +61,6 @@ import com.intellij.psi.filters.position.LeftNeighbour;
 import com.intellij.psi.filters.position.ParentElementFilter;
 import com.intellij.psi.filters.position.StartElementFilter;
 import com.intellij.psi.filters.position.SuperParentFilter;
-import com.intellij.psi.filters.position.TokenTypeFilter;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
@@ -124,7 +123,7 @@ public class JavaCompletionData extends JavaAwareCompletionData
 		{
 			return new OrFilter(new AndFilter(new LeftNeighbour(new OrFilter(new AndFilter(new TextFilter
 					(BLOCK_FINALIZERS), new NotFilter(new SuperParentFilter(new ClassFilter(PsiAnnotation.class)))),
-					new TextFilter("*/"), new TokenTypeFilter(JspElementType.HOLDER_TEMPLATE_DATA),
+					new TextFilter("*/"),
 					new ClassFilter(OuterLanguageElement.class), new AndFilter(new TextFilter(")"),
 					new NotFilter(new OrFilter(new ParentElementFilter(new ClassFilter(PsiExpressionList.class)),
 							new ParentElementFilter(new ClassFilter(PsiParameterList.class)),
