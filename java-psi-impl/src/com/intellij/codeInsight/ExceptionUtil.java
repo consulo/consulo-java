@@ -697,11 +697,13 @@ public class ExceptionUtil
 		return ex;
 	}
 
-	/** @deprecated use {@link #getCloserExceptions(PsiResourceListElement)} (to be removed in IDEA 16) */
+	/**
+	 * @deprecated use {@link #getCloserExceptions(PsiResourceListElement)} (to be removed in IDEA 16)
+	 */
 	@SuppressWarnings("unused")
 	public static List<PsiClassType> getCloserExceptions(@NotNull PsiResourceVariable resource)
 	{
-		return getCloserExceptions((PsiResourceListElement)resource);
+		return getCloserExceptions((PsiResourceListElement) resource);
 	}
 
 	@NotNull
@@ -712,11 +714,15 @@ public class ExceptionUtil
 				.<PsiClassType>emptyList();
 	}
 
-	/** @deprecated use {@link #getUnhandledCloserExceptions(PsiResourceListElement, PsiElement)} (to be removed in IDEA 16) */
+	/**
+	 * @deprecated use {@link #getUnhandledCloserExceptions(PsiResourceListElement,
+	 * PsiElement)} (to be removed in IDEA 16)
+	 */
 	@SuppressWarnings("unused")
-	public static List<PsiClassType> getUnhandledCloserExceptions(@NotNull PsiResourceVariable resource, @Nullable PsiElement topElement)
+	public static List<PsiClassType> getUnhandledCloserExceptions(@NotNull PsiResourceVariable resource,
+			@Nullable PsiElement topElement)
 	{
-		return getUnhandledCloserExceptions((PsiResourceListElement)resource, topElement);
+		return getUnhandledCloserExceptions((PsiResourceListElement) resource, topElement);
 	}
 
 	@NotNull
@@ -1063,9 +1069,17 @@ public class ExceptionUtil
 
 	public static boolean isHandledBy(@NotNull PsiClassType exceptionType, @NotNull PsiClassType[] referencedTypes)
 	{
+		return isHandledBy(exceptionType, referencedTypes, PsiSubstitutor.EMPTY);
+	}
+
+	public static boolean isHandledBy(@NotNull PsiClassType exceptionType,
+			@NotNull PsiClassType[] referencedTypes,
+			PsiSubstitutor substitutor)
+	{
 		for(PsiClassType classType : referencedTypes)
 		{
-			if(classType.isAssignableFrom(exceptionType))
+			PsiType psiType = substitutor.substitute(classType);
+			if(psiType != null && psiType.isAssignableFrom(exceptionType))
 			{
 				return true;
 			}

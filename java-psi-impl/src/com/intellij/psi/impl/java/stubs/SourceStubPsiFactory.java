@@ -82,7 +82,7 @@ public class SourceStubPsiFactory extends StubPsiFactory {
 
   @Override
   public PsiParameter createParameter(PsiParameterStub stub) {
-    return stub.isReceiver() ? new PsiReceiverParameterImpl(stub) : new PsiParameterImpl(stub);
+    return new PsiParameterImpl(stub);
   }
 
   @Override

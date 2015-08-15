@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.NullableComputable;
 import com.intellij.openapi.util.NullableLazyValue;
 import com.intellij.openapi.util.VolatileNullableLazyValue;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 {
@@ -60,8 +60,12 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 		return myTailType;
 	}
 
-	public ExpectedTypeInfoImpl(@NotNull PsiType type, @Type int kind, @NotNull PsiType defaultType, @NotNull TailType myTailType,
-			PsiMethod calledMethod, @NotNull NullableComputable<String> expectedName)
+	public ExpectedTypeInfoImpl(@NotNull PsiType type,
+			@Type int kind,
+			@NotNull PsiType defaultType,
+			@NotNull TailType myTailType,
+			PsiMethod calledMethod,
+			@NotNull NullableComputable<String> expectedName)
 	{
 		this.type = type;
 		this.kind = kind;
@@ -113,32 +117,20 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 	public boolean equals(final Object o)
 	{
 		if(this == o)
-		{
 			return true;
-		}
 		if(!(o instanceof ExpectedTypeInfoImpl))
-		{
 			return false;
-		}
 
 		final ExpectedTypeInfoImpl that = (ExpectedTypeInfoImpl) o;
 
 		if(kind != that.kind)
-		{
 			return false;
-		}
 		if(!defaultType.equals(that.defaultType))
-		{
 			return false;
-		}
 		if(!myTailType.equals(that.myTailType))
-		{
 			return false;
-		}
 		if(!type.equals(that.type))
-		{
 			return false;
-		}
 
 		return true;
 	}
@@ -175,9 +167,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 			if(info1.kind == TYPE_STRICTLY)
 			{
 				if(info1.type.equals(type))
-				{
 					return new ExpectedTypeInfoImpl[]{this};
-				}
 			}
 			else
 			{
@@ -189,21 +179,15 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 			if(info1.kind == TYPE_STRICTLY)
 			{
 				if(type.isAssignableFrom(info1.type))
-				{
 					return new ExpectedTypeInfoImpl[]{info1};
-				}
 			}
 			else if(info1.kind == TYPE_OR_SUBTYPE)
 			{
 				PsiType otherType = info1.type;
 				if(type.isAssignableFrom(otherType))
-				{
 					return new ExpectedTypeInfoImpl[]{info1};
-				}
 				else if(otherType.isAssignableFrom(type))
-				{
 					return new ExpectedTypeInfoImpl[]{this};
-				}
 			}
 			else
 			{
@@ -215,29 +199,21 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 			if(info1.kind == TYPE_STRICTLY)
 			{
 				if(info1.type.isAssignableFrom(type))
-				{
 					return new ExpectedTypeInfoImpl[]{info1};
-				}
 			}
 			else if(info1.kind == TYPE_OR_SUBTYPE)
 			{
 				PsiType otherType = info1.type;
 				if(otherType.isAssignableFrom(type))
-				{
 					return new ExpectedTypeInfoImpl[]{this};
-				}
 			}
 			else if(info1.kind == TYPE_OR_SUPERTYPE)
 			{
 				PsiType otherType = info1.type;
 				if(type.isAssignableFrom(otherType))
-				{
 					return new ExpectedTypeInfoImpl[]{this};
-				}
 				else if(otherType.isAssignableFrom(type))
-				{
 					return new ExpectedTypeInfoImpl[]{info1};
-				}
 			}
 			else
 			{

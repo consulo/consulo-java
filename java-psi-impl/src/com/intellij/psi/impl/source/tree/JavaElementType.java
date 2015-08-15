@@ -39,6 +39,7 @@ import com.intellij.psi.impl.source.JavaDummyElement;
 import com.intellij.psi.impl.source.PsiDiamondTypeElementImpl;
 import com.intellij.psi.impl.source.PsiImportStaticReferenceElementImpl;
 import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
+import com.intellij.psi.impl.source.PsiReceiverParameterImpl;
 import com.intellij.psi.impl.source.PsiTypeElementImpl;
 import com.intellij.psi.impl.source.tree.java.*;
 import com.intellij.psi.tree.ICompositeElementType;
@@ -97,7 +98,7 @@ public interface JavaElementType
 	IElementType ANNOTATION_METHOD = JavaStubElementTypes.ANNOTATION_METHOD;
 	IElementType CLASS_INITIALIZER = JavaStubElementTypes.CLASS_INITIALIZER;
 	IElementType PARAMETER = JavaStubElementTypes.PARAMETER;
-	IElementType RECEIVER_PARAMETER = JavaStubElementTypes.RECEIVER_PARAMETER;
+	IElementType RECEIVER_PARAMETER = new JavaCompositeElementType("RECEIVER", PsiReceiverParameterImpl.class);
 	IElementType PARAMETER_LIST = JavaStubElementTypes.PARAMETER_LIST;
 	IElementType EXTENDS_BOUND_LIST = JavaStubElementTypes.EXTENDS_BOUND_LIST;
 	IElementType THROWS_LIST = JavaStubElementTypes.THROWS_LIST;

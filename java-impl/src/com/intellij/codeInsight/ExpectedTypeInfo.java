@@ -15,42 +15,46 @@
  */
 package com.intellij.codeInsight;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiType;
 
 /**
  * @author ven
  */
-public interface ExpectedTypeInfo {
-  int TYPE_STRICTLY = 0;
-  int TYPE_OR_SUBTYPE = 1;
-  int TYPE_OR_SUPERTYPE = 2;
-  int TYPE_BETWEEN = 3;
+public interface ExpectedTypeInfo
+{
+	int TYPE_STRICTLY = 0;
+	int TYPE_OR_SUBTYPE = 1;
+	int TYPE_OR_SUPERTYPE = 2;
+	int TYPE_BETWEEN = 3;
+	int TYPE_SAME_SHAPED = 4;
 
-  @MagicConstant(valuesFromClass = ExpectedTypeInfo.class)
-  @interface Type {}
+	@MagicConstant(valuesFromClass = ExpectedTypeInfo.class)
+	@interface Type
+	{
+	}
 
-  ExpectedTypeInfo[] EMPTY_ARRAY = new ExpectedTypeInfo[0];
+	ExpectedTypeInfo[] EMPTY_ARRAY = new ExpectedTypeInfo[0];
 
-  PsiMethod getCalledMethod();
+	PsiMethod getCalledMethod();
 
-  @NotNull
-  PsiType getType();
+	@NotNull
+	PsiType getType();
 
-  PsiType getDefaultType();
+	PsiType getDefaultType();
 
-  @Type
-  int getKind();
+	@Type
+	int getKind();
 
-  boolean equals(ExpectedTypeInfo info);
+	boolean equals(ExpectedTypeInfo info);
 
-  String toString();
+	String toString();
 
-  @NotNull
-  ExpectedTypeInfo[] intersect(@NotNull ExpectedTypeInfo info);
+	@NotNull
+	ExpectedTypeInfo[] intersect(@NotNull ExpectedTypeInfo info);
 
-  @NotNull
-  TailType getTailType();
+	@NotNull
+	TailType getTailType();
 }
