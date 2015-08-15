@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.FileColorManager;
 import com.intellij.util.StringBuilderSpinAllocator;
+import com.intellij.util.ui.EmptyIcon;
 import com.intellij.util.ui.TextTransferable;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.frame.XStackFrame;
@@ -81,7 +82,19 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		{
 			myUiIndex = frame.getFrameIndex();
 			myLocation = frame.location();
-			myThisObject = frame.thisObject();
+			try
+			{
+				myThisObject = frame.thisObject();
+			}
+			catch(EvaluateException e)
+			{
+				// catch internal exceptions here
+				if(!(e.getCause() instanceof InternalException))
+				{
+					throw e;
+				}
+				LOG.info(e);
+			}
 			myMethodOccurrence = tracker.getMethodOccurrence(myUiIndex, myLocation.method());
 			myIsSynthetic = DebuggerUtils.isSynthetic(myMethodOccurrence.getMethod());
 			ApplicationManager.getApplication().runReadAction(new Runnable()
@@ -99,10 +112,11 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 					{
 						myBackgroundColor = FileColorManager.getInstance(file.getProject()).getFileColor(file);
 
-						final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(getDebugProcess().getProject()).getFileIndex();
+						final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(getDebugProcess()
+								.getProject()).getFileIndex();
 						final VirtualFile vFile = file.getVirtualFile();
-						myIsInLibraryContent = vFile != null && (projectFileIndex.isInLibraryClasses(vFile) || projectFileIndex.isInLibrarySource
-								(vFile));
+						myIsInLibraryContent = vFile != null && (projectFileIndex.isInLibraryClasses(vFile) ||
+								projectFileIndex.isInLibrarySource(vFile));
 					}
 				}
 			});
@@ -124,8 +138,8 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 			myIsInLibraryContent = false;
 		}
 
-		myXStackFrame = myLocation == null ? null : ((DebugProcessImpl) getDebugProcess()).getPositionManager().createStackFrame(frame,
-				(DebugProcessImpl) getDebugProcess(), myLocation);
+		myXStackFrame = myLocation == null ? null : ((DebugProcessImpl) getDebugProcess()).getPositionManager()
+				.createStackFrame(frame, (DebugProcessImpl) getDebugProcess(), myLocation);
 	}
 
 	@Nullable
@@ -204,7 +218,8 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	}
 
 	@Override
-	protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException
+	protected String calcRepresentation(EvaluationContextImpl context,
+			DescriptorLabelListener descriptorLabelListener) throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 
@@ -331,6 +346,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myIsInLibraryContent;
 	}
 
+	@Nullable
 	public Location getLocation()
 	{
 		return myLocation;
@@ -353,11 +369,16 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		catch(EvaluateException ignored)
 		{
 		}
-		return AllIcons.Debugger.StackFrame;
+		return EmptyIcon.create(6);//AllIcons.Debugger.StackFrame;
 	}
 
 	public Icon getIcon()
 	{
 		return myIcon;
+	}
+
+	public ObjectReference getThisObject()
+	{
+		return myThisObject;
 	}
 }
