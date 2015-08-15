@@ -15,124 +15,165 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
-import com.intellij.psi.*;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.MemberDependencyGraph;
-import com.intellij.util.containers.HashMap;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class InterfaceMemberDependencyGraph implements MemberDependencyGraph<PsiMember, MemberInfo> {
-  protected HashSet<PsiMethod> myInterfaceDependencies = null;
-  protected HashMap<PsiMethod,HashSet<PsiClass>> myMembersToInterfacesMap = new HashMap<PsiMethod, HashSet<PsiClass>>();
-  protected HashSet<PsiClass> myImplementedInterfaces;
-  protected HashMap<PsiClass,HashSet<PsiMethod>> myMethodsFromInterfaces;
-  protected PsiClass myClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiReferenceList;
+import com.intellij.refactoring.RefactoringBundle;
+import com.intellij.refactoring.classMembers.MemberDependencyGraph;
+import com.intellij.util.containers.HashMap;
 
-  public InterfaceMemberDependencyGraph(PsiClass aClass) {
-    myClass = aClass;
-    myImplementedInterfaces = new HashSet<PsiClass>();
-    myMethodsFromInterfaces = new com.intellij.util.containers.HashMap<PsiClass, HashSet<PsiMethod>>();
-  }
+public class InterfaceMemberDependencyGraph implements MemberDependencyGraph<PsiMember, MemberInfo>
+{
+	protected HashSet<PsiMethod> myInterfaceDependencies = null;
+	protected HashMap<PsiMethod, HashSet<PsiClass>> myMembersToInterfacesMap = new HashMap<PsiMethod,
+			HashSet<PsiClass>>();
+	protected HashSet<PsiClass> myImplementedInterfaces;
+	protected HashMap<PsiClass, HashSet<PsiMethod>> myMethodsFromInterfaces;
+	protected PsiClass myClass;
 
-  public void memberChanged(MemberInfo memberInfo) {
-    if (ClassMembersUtil.isImplementedInterface(memberInfo)) {
-      final PsiClass aClass = (PsiClass) memberInfo.getMember();
-      myInterfaceDependencies = null;
-      myMembersToInterfacesMap = null;
-      if(memberInfo.isChecked()) {
-        myImplementedInterfaces.add(aClass);
-      }
-      else {
-        myImplementedInterfaces.remove(aClass);
-      }
-    }
-  }
+	public InterfaceMemberDependencyGraph(PsiClass aClass)
+	{
+		myClass = aClass;
+		myImplementedInterfaces = new HashSet<PsiClass>();
+		myMethodsFromInterfaces = new com.intellij.util.containers.HashMap<PsiClass, HashSet<PsiMethod>>();
+	}
 
-  public Set<? extends PsiMember> getDependent() {
-    if(myInterfaceDependencies == null) {
-      myInterfaceDependencies = new HashSet<PsiMethod>();
-      myMembersToInterfacesMap = new com.intellij.util.containers.HashMap<PsiMethod, HashSet<PsiClass>>();
-      for (final PsiClass implementedInterface : myImplementedInterfaces) {
-        addInterfaceDeps(implementedInterface);
-      }
-    }
-    return myInterfaceDependencies;
-  }
+	@Override
+	public void memberChanged(MemberInfo memberInfo)
+	{
+		if(ClassMembersUtil.isImplementedInterface(memberInfo))
+		{
+			final PsiClass aClass = (PsiClass) memberInfo.getMember();
+			myInterfaceDependencies = null;
+			myMembersToInterfacesMap = null;
+			if(memberInfo.isChecked())
+			{
+				myImplementedInterfaces.add(aClass);
+			}
+			else
+			{
+				myImplementedInterfaces.remove(aClass);
+			}
+		}
+	}
 
-  public Set<? extends PsiMember> getDependenciesOf(PsiMember member) {
-    final Set dependent = getDependent();
-    if(dependent.contains(member)) return myMembersToInterfacesMap.get(member);
-    return null;
-  }
+	@Override
+	public Set<? extends PsiMember> getDependent()
+	{
+		if(myInterfaceDependencies == null)
+		{
+			myInterfaceDependencies = new HashSet<PsiMethod>();
+			myMembersToInterfacesMap = new com.intellij.util.containers.HashMap<PsiMethod, HashSet<PsiClass>>();
+			for(final PsiClass implementedInterface : myImplementedInterfaces)
+			{
+				addInterfaceDeps(implementedInterface);
+			}
+		}
+		return myInterfaceDependencies;
+	}
 
-  public String getElementTooltip(PsiMember member) {
-    final Set<? extends PsiMember> dependencies = getDependenciesOf(member);
-    if(dependencies == null || dependencies.size() == 0) return null;
-    StringBuffer buffer = new StringBuffer();
-    buffer.append(RefactoringBundle.message("interface.member.dependency.required.by.interfaces", dependencies.size()));
-    buffer.append(" ");
-    for (Iterator<? extends PsiMember> iterator = dependencies.iterator(); iterator.hasNext();) {
-      PsiClass aClass = (PsiClass) iterator.next();
-      buffer.append(aClass.getName());
-      if(iterator.hasNext()) {
-        buffer.append(", ");
-      }
-    }
-    return buffer.toString();
-  }
+	@Override
+	public Set<? extends PsiMember> getDependenciesOf(PsiMember member)
+	{
+		final Set dependent = getDependent();
+		if(dependent.contains(member))
+		{
+			return myMembersToInterfacesMap.get(member);
+		}
+		return null;
+	}
 
-  protected void addInterfaceDeps(PsiClass intf) {
-    HashSet<PsiMethod> interfaceMethods = myMethodsFromInterfaces.get(intf);
+	public String getElementTooltip(PsiMember member)
+	{
+		final Set<? extends PsiMember> dependencies = getDependenciesOf(member);
+		if(dependencies == null || dependencies.size() == 0)
+		{
+			return null;
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(RefactoringBundle.message("interface.member.dependency.required.by.interfaces",
+				dependencies.size()));
+		buffer.append(" ");
+		for(Iterator<? extends PsiMember> iterator = dependencies.iterator(); iterator.hasNext(); )
+		{
+			PsiClass aClass = (PsiClass) iterator.next();
+			buffer.append(aClass.getName());
+			if(iterator.hasNext())
+			{
+				buffer.append(", ");
+			}
+		}
+		return buffer.toString();
+	}
 
-    if(interfaceMethods == null) {
-      interfaceMethods = new HashSet<PsiMethod>();
-      buildInterfaceMethods(interfaceMethods, intf);
-      myMethodsFromInterfaces.put(intf, interfaceMethods);
-    }
-    for (PsiMethod method : interfaceMethods) {
-      HashSet<PsiClass> interfaces = myMembersToInterfacesMap.get(method);
-      if (interfaces == null) {
-        interfaces = new HashSet<PsiClass>();
-        myMembersToInterfacesMap.put(method, interfaces);
-      }
-      interfaces.add(intf);
-    }
-    myInterfaceDependencies.addAll(interfaceMethods);
-  }
+	protected void addInterfaceDeps(PsiClass intf)
+	{
+		HashSet<PsiMethod> interfaceMethods = myMethodsFromInterfaces.get(intf);
 
-  private void buildInterfaceMethods(HashSet<PsiMethod> interfaceMethods, PsiClass intf) {
-    PsiMethod[] methods = intf.getMethods();
-    for (PsiMethod method1 : methods) {
-      PsiMethod method = myClass.findMethodBySignature(method1, true);
-      if (method != null) {
-        interfaceMethods.add(method);
-      }
-    }
+		if(interfaceMethods == null)
+		{
+			interfaceMethods = new HashSet<PsiMethod>();
+			buildInterfaceMethods(interfaceMethods, intf);
+			myMethodsFromInterfaces.put(intf, interfaceMethods);
+		}
+		for(PsiMethod method : interfaceMethods)
+		{
+			HashSet<PsiClass> interfaces = myMembersToInterfacesMap.get(method);
+			if(interfaces == null)
+			{
+				interfaces = new HashSet<PsiClass>();
+				myMembersToInterfacesMap.put(method, interfaces);
+			}
+			interfaces.add(intf);
+		}
+		myInterfaceDependencies.addAll(interfaceMethods);
+	}
 
-    PsiReferenceList implementsList = intf.getImplementsList();
-    if (implementsList != null) {
-      PsiClassType[] implemented = implementsList.getReferencedTypes();
-      for (PsiClassType aImplemented : implemented) {
-        PsiClass resolved = aImplemented.resolve();
-        if (resolved != null) {
-          buildInterfaceMethods(interfaceMethods, resolved);
-        }
-      }
-    }
+	private void buildInterfaceMethods(HashSet<PsiMethod> interfaceMethods, PsiClass intf)
+	{
+		PsiMethod[] methods = intf.getMethods();
+		for(PsiMethod method1 : methods)
+		{
+			PsiMethod method = myClass.findMethodBySignature(method1, true);
+			if(method != null)
+			{
+				interfaceMethods.add(method);
+			}
+		}
 
-    PsiReferenceList extendsList = intf.getExtendsList();
-    if (extendsList != null) {
-      PsiClassType[] extended = extendsList.getReferencedTypes();
-      for (PsiClassType aExtended : extended) {
-        PsiClass ref = aExtended.resolve();
-        if (ref != null) {
-          buildInterfaceMethods(interfaceMethods, ref);
-        }
-      }
-    }
-  }
+		PsiReferenceList implementsList = intf.getImplementsList();
+		if(implementsList != null)
+		{
+			PsiClassType[] implemented = implementsList.getReferencedTypes();
+			for(PsiClassType aImplemented : implemented)
+			{
+				PsiClass resolved = aImplemented.resolve();
+				if(resolved != null)
+				{
+					buildInterfaceMethods(interfaceMethods, resolved);
+				}
+			}
+		}
+
+		PsiReferenceList extendsList = intf.getExtendsList();
+		if(extendsList != null)
+		{
+			PsiClassType[] extended = extendsList.getReferencedTypes();
+			for(PsiClassType aExtended : extended)
+			{
+				PsiClass ref = aExtended.resolve();
+				if(ref != null)
+				{
+					buildInterfaceMethods(interfaceMethods, ref);
+				}
+			}
+		}
+	}
 
 }
