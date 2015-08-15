@@ -24,62 +24,78 @@
  */
 package com.intellij.codeInspection.ex;
 
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
-import com.intellij.openapi.components.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import org.jdom.Element;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jdom.Element;
+import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
+import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
+
 @State(
-  name = "EntryPointsManager",
-  storages = {@Storage( file = StoragePathMacros.PROJECT_FILE)}
+		name = "EntryPointsManager",
+		storages = {@Storage(file = StoragePathMacros.PROJECT_FILE)}
 )
-public class EntryPointsManagerImpl extends EntryPointsManagerBase implements PersistentStateComponent<Element> {
-  public EntryPointsManagerImpl(Project project) {
-    super(project);
-  }
+public class EntryPointsManagerImpl extends EntryPointsManagerBase implements PersistentStateComponent<Element>
+{
+	public EntryPointsManagerImpl(Project project)
+	{
+		super(project);
+	}
 
-  @Override
-  public void configureAnnotations() {
-    final List<String> list = new ArrayList<String>(ADDITIONAL_ANNOTATIONS);
-    final JPanel listPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(list, "Do not check if annotated by", true);
-    new DialogWrapper(myProject) {
-      {
-        init();
-        setTitle("Configure annotations");
-      }
+	@Override
+	public void configureAnnotations()
+	{
+		final List<String> list = new ArrayList<String>(ADDITIONAL_ANNOTATIONS);
+		final JPanel listPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(list,
+				"Do not check if annotated by", true);
+		new DialogWrapper(myProject)
+		{
+			{
+				init();
+				setTitle("Configure Annotations");
+			}
 
-      @Override
-      protected JComponent createCenterPanel() {
-        return listPanel;
-      }
+			@Override
+			protected JComponent createCenterPanel()
+			{
+				return listPanel;
+			}
 
-      @Override
-      protected void doOKAction() {
-        ADDITIONAL_ANNOTATIONS.clear();
-        ADDITIONAL_ANNOTATIONS.addAll(list);
-        DaemonCodeAnalyzer.getInstance(myProject).restart();
-        super.doOKAction();
-      }
-    }.show();
-  }
+			@Override
+			protected void doOKAction()
+			{
+				ADDITIONAL_ANNOTATIONS.clear();
+				ADDITIONAL_ANNOTATIONS.addAll(list);
+				DaemonCodeAnalyzer.getInstance(myProject).restart();
+				super.doOKAction();
+			}
+		}.show();
+	}
 
-  @Override
-  public JButton createConfigureAnnotationsBtn() {
-    final JButton configureAnnotations = new JButton("Configure annotations...");
-    configureAnnotations.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        configureAnnotations();
-      }
-    });
-    return configureAnnotations;
-  }
+	@Override
+	public JButton createConfigureAnnotationsBtn()
+	{
+		final JButton configureAnnotations = new JButton("Configure annotations...");
+		configureAnnotations.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				configureAnnotations();
+			}
+		});
+		return configureAnnotations;
+	}
 }
