@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.search.QuerySearchRequest;
 import com.intellij.psi.search.SearchRequestCollector;
 import com.intellij.psi.search.SearchRequestQuery;
@@ -80,9 +81,32 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 			return myOptimizer;
 		}
 
-		public SearchScope getScope()
+		/**
+		 * @return the user-visible search scope, most often "Project Files" or "Project and Libraries".
+		 * Searchers most likely need to use {@link #getEffectiveSearchScope()}.
+		 */
+		public SearchScope getScopeDeterminedByUser()
 		{
 			return myScope;
+		}
+
+
+		/**
+		 * @return Same as {@link #getScopeDeterminedByUser()}. Searchers most likely need to use {@link
+		 * #getEffectiveSearchScope()}.
+		 */
+		@Deprecated
+		@NotNull
+		public SearchScope getScope()
+		{
+			return getScopeDeterminedByUser();
+		}
+
+		@NotNull
+		public SearchScope getEffectiveSearchScope()
+		{
+			SearchScope accessScope = PsiSearchHelper.SERVICE.getInstance(myMethod.getProject()).getUseScope(myMethod);
+			return myScope.intersectWith(accessScope);
 		}
 	}
 
