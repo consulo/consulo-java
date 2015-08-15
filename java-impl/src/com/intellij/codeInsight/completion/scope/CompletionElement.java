@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,12 @@
  */
 package com.intellij.codeInsight.completion.scope;
 
-import com.intellij.psi.*;
+import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiSubstitutor;
+import com.intellij.psi.PsiVariable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,39 +29,52 @@ import org.jetbrains.annotations.Nullable;
  * Time: 16:17:14
  * To change this template use Options | File Templates.
  */
-public class CompletionElement{
-  private final Object myElement;
-  private final PsiSubstitutor mySubstitutor;
+public class CompletionElement
+{
+	private final Object myElement;
+	private final PsiSubstitutor mySubstitutor;
 
-  public CompletionElement(Object element, PsiSubstitutor substitutor) {
-    myElement = element;
-    mySubstitutor = substitutor;
-  }
+	public CompletionElement(Object element, PsiSubstitutor substitutor)
+	{
+		myElement = element;
+		mySubstitutor = substitutor;
+	}
 
-  public PsiSubstitutor getSubstitutor(){
-    return mySubstitutor;
-  }
+	public PsiSubstitutor getSubstitutor()
+	{
+		return mySubstitutor;
+	}
 
-  public Object getElement(){
-    return myElement;
-  }
+	public Object getElement()
+	{
+		return myElement;
+	}
 
-  @Nullable
-  Object getUniqueId(){
-    if(myElement instanceof PsiClass){
-      return ((PsiClass)myElement).getQualifiedName();
-    }
-    if(myElement instanceof PsiJavaPackage){
-      return ((PsiJavaPackage)myElement).getQualifiedName();
-    }
-    if(myElement instanceof PsiMethod){
-      return ((PsiMethod)myElement).getSignature(mySubstitutor);
-    }
-    if (myElement instanceof PsiVariable) {
-      return "#" + ((PsiVariable)myElement).getName();
-    }
+	@Nullable
+	Object getUniqueId()
+	{
+		if(myElement instanceof PsiClass)
+		{
+			return ((PsiClass) myElement).getQualifiedName();
+		}
+		if(myElement instanceof PsiPackage)
+		{
+			return ((PsiPackage) myElement).getQualifiedName();
+		}
+		if(myElement instanceof PsiMethod)
+		{
+			return ((PsiMethod) myElement).getSignature(mySubstitutor);
+		}
+		if(myElement instanceof PsiVariable)
+		{
+			return getVariableUniqueId((PsiVariable) myElement);
+		}
 
-    return null;
-  }
+		return null;
+	}
 
+	public static String getVariableUniqueId(final PsiVariable variable)
+	{
+		return "#" + variable.getName();
+	}
 }

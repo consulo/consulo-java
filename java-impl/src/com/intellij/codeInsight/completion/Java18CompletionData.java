@@ -15,45 +15,65 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.TailType;
-import com.intellij.patterns.PsiElementPattern;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
-public class Java18CompletionData extends Java15CompletionData {
-  private static final PsiElementPattern<PsiElement, ?> AFTER_DOUBLE_COLON = psiElement()
-    .afterLeaf(psiElement(JavaTokenType.DOUBLE_COLON));
+import com.intellij.codeInsight.TailType;
+import com.intellij.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.patterns.PsiElementPattern;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiKeyword;
+import com.intellij.psi.PsiMethodReferenceExpression;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.Consumer;
 
-  @Override
-  public void fillCompletions(final CompletionParameters parameters, final CompletionResultSet result) {
-    PsiElement position = parameters.getPosition();
+public class Java18CompletionData extends Java15CompletionData
+{
+	private static final PsiElementPattern<PsiElement, ?> AFTER_DOUBLE_COLON = psiElement().afterLeaf(psiElement
+			(JavaTokenType.DOUBLE_COLON));
 
-    if (!inComment(position)) {
-      if (AFTER_DOUBLE_COLON.accepts(position)) {
-        PsiMethodReferenceExpression parent = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiMethodReferenceExpression.class);
-        TailType tail = parent != null && !LambdaHighlightingUtil.insertSemicolon(parent.getParent()) ? TailType.SEMICOLON : TailType.NONE;
-        result.addElement(new OverrideableSpace(createKeyword(position, PsiKeyword.NEW), tail));
-        return;
-      }
+	@Override
+	public void fillCompletions(final CompletionParameters parameters, final Consumer<LookupElement> result)
+	{
+		PsiElement position = parameters.getPosition();
 
-      if (isSuitableForClass(position)) {
-        PsiElement scope = position.getParent();
-        while (scope != null && !(scope instanceof PsiFile)) {
-          if (scope instanceof PsiClass && ((PsiClass)scope).isInterface()) {
-            result.addElement(new OverrideableSpace(createKeyword(position, PsiKeyword.DEFAULT), TailType.HUMBLE_SPACE_BEFORE_WORD));
-            break;
-          }
-          scope = scope.getParent();
-        }
-      }
-    }
+		if(!inComment(position))
+		{
+			if(AFTER_DOUBLE_COLON.accepts(position))
+			{
+				PsiMethodReferenceExpression parent = PsiTreeUtil.getParentOfType(parameters.getPosition(),
+						PsiMethodReferenceExpression.class);
+				TailType tail = parent != null && !LambdaHighlightingUtil.insertSemicolon(parent.getParent()) ?
+						TailType.SEMICOLON : TailType.NONE;
+				result.consume(new OverrideableSpace(createKeyword(position, PsiKeyword.NEW), tail));
+				return;
+			}
 
-    super.fillCompletions(parameters, result);
-  }
+			if(isSuitableForClass(position))
+			{
+				PsiElement scope = position.getParent();
+				while(scope != null && !(scope instanceof PsiFile))
+				{
+					if(scope instanceof PsiClass && ((PsiClass) scope).isInterface())
+					{
+						result.consume(new OverrideableSpace(createKeyword(position, PsiKeyword.DEFAULT),
+								TailType.HUMBLE_SPACE_BEFORE_WORD));
+						break;
+					}
+					scope = scope.getParent();
+				}
+			}
+		}
 
-  private static boolean inComment(final PsiElement position) {
-    return PsiTreeUtil.getParentOfType(position, PsiComment.class, false) != null;
-  }
+		super.fillCompletions(parameters, result);
+	}
+
+	private static boolean inComment(final PsiElement position)
+	{
+		return PsiTreeUtil.getParentOfType(position, PsiComment.class, false) != null;
+	}
 }

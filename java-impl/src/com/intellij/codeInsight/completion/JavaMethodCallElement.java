@@ -15,8 +15,14 @@
  */
 package com.intellij.codeInsight.completion;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
-import com.intellij.codeInsight.lookup.*;
+import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.codeInsight.lookup.LookupItem;
+import com.intellij.codeInsight.lookup.TypedLookupItem;
 import com.intellij.codeInsight.lookup.impl.JavaElementLookupRenderer;
 import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.openapi.editor.Document;
@@ -24,244 +30,330 @@ import com.intellij.openapi.util.ClassConditionKey;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author peter
  */
-public class JavaMethodCallElement extends LookupItem<PsiMethod> implements TypedLookupItem, StaticallyImportable {
-  public static final ClassConditionKey<JavaMethodCallElement> CLASS_CONDITION_KEY = ClassConditionKey.create(JavaMethodCallElement.class);
-  @Nullable private final PsiClass myContainingClass;
-  private final PsiMethod myMethod;
-  private final MemberLookupHelper myHelper;
-  private PsiSubstitutor myInferenceSubstitutor = PsiSubstitutor.EMPTY;
-  private boolean myMayNeedExplicitTypeParameters;
+public class JavaMethodCallElement extends LookupItem<PsiMethod> implements TypedLookupItem, StaticallyImportable
+{
+	public static final ClassConditionKey<JavaMethodCallElement> CLASS_CONDITION_KEY = ClassConditionKey.create
+			(JavaMethodCallElement.class);
+	@Nullable
+	private final PsiClass myContainingClass;
+	private final PsiMethod myMethod;
+	private final MemberLookupHelper myHelper;
+	private PsiSubstitutor myInferenceSubstitutor = PsiSubstitutor.EMPTY;
+	private boolean myMayNeedExplicitTypeParameters;
 
-  public JavaMethodCallElement(@NotNull PsiMethod method) {
-    super(method, method.getName());
-    myMethod = method;
-    myHelper = null;
-    myContainingClass = method.getContainingClass();
-  }
+	public JavaMethodCallElement(@NotNull PsiMethod method)
+	{
+		this(method, method.getName());
+	}
 
-  public JavaMethodCallElement(PsiMethod method, boolean shouldImportStatic, boolean mergedOverloads) {
-    super(method, method.getName());
-    myMethod = method;
-    myContainingClass = method.getContainingClass();
-    myHelper = new MemberLookupHelper(method, myContainingClass, shouldImportStatic, mergedOverloads);
-    if (!shouldImportStatic) {
-      forceQualify();
-    }
-  }
+	public JavaMethodCallElement(@NotNull PsiMethod method, String methodName)
+	{
+		super(method, methodName);
+		myMethod = method;
+		myHelper = null;
+		myContainingClass = method.getContainingClass();
+	}
 
-  @Override
-  public PsiType getType() {
-    return getSubstitutor().substitute(getInferenceSubstitutor().substitute(getObject().getReturnType()));
-  }
+	public JavaMethodCallElement(PsiMethod method, boolean shouldImportStatic, boolean mergedOverloads)
+	{
+		super(method, method.getName());
+		myMethod = method;
+		myContainingClass = method.getContainingClass();
+		myHelper = new MemberLookupHelper(method, myContainingClass, shouldImportStatic, mergedOverloads);
+		if(!shouldImportStatic)
+		{
+			forceQualify();
+		}
+	}
 
-  public void setInferenceSubstitutor(@NotNull final PsiSubstitutor substitutor, PsiElement place) {
-    myInferenceSubstitutor = substitutor;
-    myMayNeedExplicitTypeParameters = mayNeedTypeParameters(place);
-  }
+	@Override
+	public PsiType getType()
+	{
+		return getSubstitutor().substitute(getInferenceSubstitutor().substitute(getObject().getReturnType()));
+	}
 
-  @NotNull
-  public PsiSubstitutor getSubstitutor() {
-    final PsiSubstitutor substitutor = (PsiSubstitutor)getAttribute(SUBSTITUTOR);
-    return substitutor == null ? PsiSubstitutor.EMPTY : substitutor;
-  }
+	public void setInferenceSubstitutor(@NotNull final PsiSubstitutor substitutor, PsiElement place)
+	{
+		myInferenceSubstitutor = substitutor;
+		myMayNeedExplicitTypeParameters = mayNeedTypeParameters(place);
+	}
 
-  @NotNull
-  public PsiSubstitutor getInferenceSubstitutor() {
-    return myInferenceSubstitutor;
-  }
+	@NotNull
+	public PsiSubstitutor getSubstitutor()
+	{
+		final PsiSubstitutor substitutor = (PsiSubstitutor) getAttribute(SUBSTITUTOR);
+		return substitutor == null ? PsiSubstitutor.EMPTY : substitutor;
+	}
 
-  @Override
-  public void setShouldBeImported(boolean shouldImportStatic) {
-    myHelper.setShouldBeImported(shouldImportStatic);
-  }
+	@NotNull
+	public PsiSubstitutor getInferenceSubstitutor()
+	{
+		return myInferenceSubstitutor;
+	}
 
-  @Override
-  public boolean canBeImported() {
-    return myHelper != null;
-  }
+	@Override
+	public void setShouldBeImported(boolean shouldImportStatic)
+	{
+		myHelper.setShouldBeImported(shouldImportStatic);
+	}
 
-  @Override
-  public boolean willBeImported() {
-    return canBeImported() && myHelper.willBeImported();
-  }
+	@Override
+	public boolean canBeImported()
+	{
+		return myHelper != null;
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof JavaMethodCallElement)) return false;
-    if (!super.equals(o)) return false;
+	@Override
+	public boolean willBeImported()
+	{
+		return canBeImported() && myHelper.willBeImported();
+	}
 
-    return myInferenceSubstitutor.equals(((JavaMethodCallElement)o).myInferenceSubstitutor);
-  }
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(!(o instanceof JavaMethodCallElement))
+		{
+			return false;
+		}
+		if(!super.equals(o))
+		{
+			return false;
+		}
 
-  @Override
-  public int hashCode() {
-    int result = super.hashCode();
-    result = 31 * result + myInferenceSubstitutor.hashCode();
-    return result;
-  }
+		return myInferenceSubstitutor.equals(((JavaMethodCallElement) o).myInferenceSubstitutor);
+	}
 
-  @Override
-  public void handleInsert(InsertionContext context) {
-    final Document document = context.getDocument();
-    final PsiFile file = context.getFile();
-    final PsiMethod method = getObject();
+	@Override
+	public int hashCode()
+	{
+		int result = super.hashCode();
+		result = 31 * result + myInferenceSubstitutor.hashCode();
+		return result;
+	}
 
-    final LookupElement[] allItems = context.getElements();
-    final boolean overloadsMatter = allItems.length == 1 && getUserData(FORCE_SHOW_SIGNATURE_ATTR) == null;
-    final boolean hasParams = MethodParenthesesHandler.hasParams(this, allItems, overloadsMatter, method);
-    JavaCompletionUtil.insertParentheses(context, this, overloadsMatter, hasParams);
+	@Override
+	public void handleInsert(InsertionContext context)
+	{
+		final Document document = context.getDocument();
+		final PsiFile file = context.getFile();
+		final PsiMethod method = getObject();
 
-    final int startOffset = context.getStartOffset();
-    final OffsetKey refStart = context.trackOffset(startOffset, true);
-    if (shouldInsertTypeParameters() && mayNeedTypeParameters(context.getFile().findElementAt(context.getStartOffset()))) {
-      qualifyMethodCall(file, startOffset, document);
-      insertExplicitTypeParameters(context, refStart);
-    }
-    else if (myHelper != null || getAttribute(FORCE_QUALIFY) != null) {
-      context.commitDocument();
-      if (myHelper != null && willBeImported()) {
-        final PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiReferenceExpression.class, false);
-        if (ref != null && myContainingClass != null && !ref.isReferenceTo(method)) {
-          ref.bindToElementViaStaticImport(myContainingClass);
-        }
-        return;
-      }
+		final LookupElement[] allItems = context.getElements();
+		final boolean overloadsMatter = allItems.length == 1 && getUserData(FORCE_SHOW_SIGNATURE_ATTR) == null;
+		final boolean hasParams = MethodParenthesesHandler.hasParams(this, allItems, overloadsMatter, method);
+		JavaCompletionUtil.insertParentheses(context, this, overloadsMatter, hasParams);
 
-      qualifyMethodCall(file, startOffset, document);
-    }
+		final int startOffset = context.getStartOffset();
+		final OffsetKey refStart = context.trackOffset(startOffset, true);
+		if(shouldInsertTypeParameters() && mayNeedTypeParameters(context.getFile().findElementAt(context
+				.getStartOffset())))
+		{
+			qualifyMethodCall(file, startOffset, document);
+			insertExplicitTypeParameters(context, refStart);
+		}
+		else if(myHelper != null || getAttribute(FORCE_QUALIFY) != null)
+		{
+			context.commitDocument();
+			if(myHelper != null && willBeImported())
+			{
+				final PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset,
+						PsiReferenceExpression.class, false);
+				if(ref != null && myContainingClass != null && !ref.isReferenceTo(method))
+				{
+					ref.bindToElementViaStaticImport(myContainingClass);
+				}
+				return;
+			}
 
-    final PsiType type = method.getReturnType();
-    if (context.getCompletionChar() == '!' && type != null && PsiType.BOOLEAN.isAssignableFrom(type)) {
-      context.setAddCompletionChar(false);
-      context.commitDocument();
-      final int offset = context.getOffset(refStart);
-      final PsiMethodCallExpression methodCall = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiMethodCallExpression.class, false);
-      if (methodCall != null) {
-        FeatureUsageTracker.getInstance().triggerFeatureUsed(CodeCompletionFeatures.EXCLAMATION_FINISH);
-        document.insertString(methodCall.getTextRange().getStartOffset(), "!");
-      }
-    }
+			qualifyMethodCall(file, startOffset, document);
+		}
 
-  }
+		final PsiType type = method.getReturnType();
+		if(context.getCompletionChar() == '!' && type != null && PsiType.BOOLEAN.isAssignableFrom(type))
+		{
+			context.setAddCompletionChar(false);
+			context.commitDocument();
+			final int offset = context.getOffset(refStart);
+			final PsiMethodCallExpression methodCall = PsiTreeUtil.findElementOfClassAtOffset(file, offset,
+					PsiMethodCallExpression.class, false);
+			if(methodCall != null)
+			{
+				FeatureUsageTracker.getInstance().triggerFeatureUsed(CodeCompletionFeatures.EXCLAMATION_FINISH);
+				document.insertString(methodCall.getTextRange().getStartOffset(), "!");
+			}
+		}
 
-  private boolean shouldInsertTypeParameters() {
-    return myMayNeedExplicitTypeParameters && !getInferenceSubstitutor().equals(PsiSubstitutor.EMPTY) && myMethod.getParameterList().getParametersCount() == 0;
-  }
+	}
 
-  public static boolean mayNeedTypeParameters(final PsiElement leaf) {
-    if (PsiTreeUtil.getParentOfType(leaf, PsiExpressionList.class, true, PsiCodeBlock.class, PsiModifierListOwner.class) == null) {
-      if (PsiTreeUtil.getParentOfType(leaf, PsiConditionalExpression.class, true, PsiCodeBlock.class, PsiModifierListOwner.class) == null) {
-        return false;
-      }
-    }
-    if (leaf != null) {
-      final PsiElement parent = leaf.getParent();
-      if (parent instanceof PsiReferenceExpression && ((PsiReferenceExpression)parent).getTypeParameters().length > 0) {
-        return false;
-      }
-    }
-    return true;
-  }
+	private boolean shouldInsertTypeParameters()
+	{
+		return myMayNeedExplicitTypeParameters && !getInferenceSubstitutor().equals(PsiSubstitutor.EMPTY) && myMethod
+				.getParameterList().getParametersCount() == 0;
+	}
 
-  private void insertExplicitTypeParameters(InsertionContext context, OffsetKey refStart) {
-    context.commitDocument();
+	public static boolean mayNeedTypeParameters(final PsiElement leaf)
+	{
+		if(PsiTreeUtil.getParentOfType(leaf, PsiExpressionList.class, true, PsiCodeBlock.class,
+				PsiModifierListOwner.class) == null)
+		{
+			if(PsiTreeUtil.getParentOfType(leaf, PsiConditionalExpression.class, true, PsiCodeBlock.class,
+					PsiModifierListOwner.class) == null)
+			{
+				return false;
+			}
+		}
+		if(leaf != null)
+		{
+			final PsiElement parent = leaf.getParent();
+			if(parent instanceof PsiReferenceExpression && ((PsiReferenceExpression) parent).getTypeParameters()
+					.length > 0)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
-    final String typeParams = getTypeParamsText(false);
-    if (typeParams != null) {
-      context.getDocument().insertString(context.getOffset(refStart), typeParams);
-      JavaCompletionUtil.shortenReference(context.getFile(), context.getOffset(refStart));
-    }
-  }
+	private void insertExplicitTypeParameters(InsertionContext context, OffsetKey refStart)
+	{
+		context.commitDocument();
 
-  private void qualifyMethodCall(PsiFile file, final int startOffset, final Document document) {
-    final PsiReference reference = file.findReferenceAt(startOffset);
-    if (reference instanceof PsiReferenceExpression && ((PsiReferenceExpression)reference).isQualified()) {
-      return;
-    }
+		final String typeParams = getTypeParamsText(false);
+		if(typeParams != null)
+		{
+			context.getDocument().insertString(context.getOffset(refStart), typeParams);
+			JavaCompletionUtil.shortenReference(context.getFile(), context.getOffset(refStart));
+		}
+	}
 
-    final PsiMethod method = getObject();
-    if (!method.hasModifierProperty(PsiModifier.STATIC)) {
-      document.insertString(startOffset, "this.");
-      return;
-    }
+	private void qualifyMethodCall(PsiFile file, final int startOffset, final Document document)
+	{
+		final PsiReference reference = file.findReferenceAt(startOffset);
+		if(reference instanceof PsiReferenceExpression && ((PsiReferenceExpression) reference).isQualified())
+		{
+			return;
+		}
 
-    if (myContainingClass == null) return;
+		final PsiMethod method = getObject();
+		if(!method.hasModifierProperty(PsiModifier.STATIC))
+		{
+			document.insertString(startOffset, "this.");
+			return;
+		}
 
-    document.insertString(startOffset, ".");
-    JavaCompletionUtil.insertClassReference(myContainingClass, file, startOffset);
-  }
+		if(myContainingClass == null)
+		{
+			return;
+		}
 
-  @Nullable
-  private String getTypeParamsText(boolean presentable) {
-    final PsiMethod method = getObject();
-    final PsiSubstitutor substitutor = getInferenceSubstitutor();
-    final PsiTypeParameter[] parameters = method.getTypeParameters();
-    assert parameters.length > 0;
-    final StringBuilder builder = new StringBuilder("<");
-    boolean first = true;
-    for (final PsiTypeParameter parameter : parameters) {
-      if (!first) builder.append(", ");
-      first = false;
-      PsiType type = substitutor.substitute(parameter);
-      if (type instanceof PsiWildcardType) {
-        type = ((PsiWildcardType)type).getExtendsBound();
-      }
+		document.insertString(startOffset, ".");
+		JavaCompletionUtil.insertClassReference(myContainingClass, file, startOffset);
+	}
 
-      if (type == null || type instanceof PsiCapturedWildcardType) return null;
-      if (type.equals(TypeConversionUtil.typeParameterErasure(parameter))) return null;
+	@Nullable
+	private String getTypeParamsText(boolean presentable)
+	{
+		final PsiMethod method = getObject();
+		final PsiSubstitutor substitutor = getInferenceSubstitutor();
+		final PsiTypeParameter[] parameters = method.getTypeParameters();
+		assert parameters.length > 0;
+		final StringBuilder builder = new StringBuilder("<");
+		boolean first = true;
+		for(final PsiTypeParameter parameter : parameters)
+		{
+			if(!first)
+			{
+				builder.append(", ");
+			}
+			first = false;
+			PsiType type = substitutor.substitute(parameter);
+			if(type instanceof PsiWildcardType)
+			{
+				type = ((PsiWildcardType) type).getExtendsBound();
+			}
 
-      final String text = presentable ? type.getPresentableText() : type.getCanonicalText();
-      if (text.indexOf('?') >= 0) return null;
+			if(type == null || type instanceof PsiCapturedWildcardType)
+			{
+				return null;
+			}
+			if(type.equals(TypeConversionUtil.typeParameterErasure(parameter)))
+			{
+				return null;
+			}
 
-      builder.append(text);
-    }
-    return builder.append(">").toString();
-  }
+			final String text = presentable ? type.getPresentableText() : type.getCanonicalText();
+			if(text.indexOf('?') >= 0)
+			{
+				return null;
+			}
 
-  @Override
-  public LookupItem<PsiMethod> forceQualify() {
-    if (myContainingClass != null) {
-      String className = myContainingClass.getName();
-      if (className != null) {
-        addLookupStrings(className + "." + myMethod.getName());
-      }
-    }
-    return super.forceQualify();
-  }
+			builder.append(text);
+		}
+		return builder.append(">").toString();
+	}
 
-  @Override
-  public void renderElement(LookupElementPresentation presentation) {
-    presentation.setIcon(DefaultLookupItemRenderer.getRawIcon(this, presentation.isReal()));
+	@Override
+	public LookupItem<PsiMethod> forceQualify()
+	{
+		if(myContainingClass != null)
+		{
+			String className = myContainingClass.getName();
+			if(className != null)
+			{
+				addLookupStrings(className + "." + myMethod.getName());
+			}
+		}
+		return super.forceQualify();
+	}
 
-    presentation.setStrikeout(JavaElementLookupRenderer.isToStrikeout(this));
-    presentation.setItemTextBold(getAttribute(HIGHLIGHTED_ATTR) != null);
+	@Override
+	public boolean isValid()
+	{
+		return super.isValid() && myInferenceSubstitutor.isValid() && getSubstitutor().isValid();
+	}
 
-    MemberLookupHelper helper = myHelper != null ? myHelper : new MemberLookupHelper(myMethod, myContainingClass, false, false);
-    final Boolean qualify = getAttribute(FORCE_QUALIFY) != null ? Boolean.TRUE : myHelper == null ? Boolean.FALSE : null;
-    helper.renderElement(presentation, qualify, getSubstitutor());
+	@Override
+	public void renderElement(LookupElementPresentation presentation)
+	{
+		presentation.setIcon(DefaultLookupItemRenderer.getRawIcon(this, presentation.isReal()));
 
-    if (shouldInsertTypeParameters()) {
-      String typeParamsText = getTypeParamsText(true);
-      if (typeParamsText != null) {
-        if (typeParamsText.length() > 10) {
-          typeParamsText = typeParamsText.substring(0, 10) + "...>";
-        }
+		presentation.setStrikeout(JavaElementLookupRenderer.isToStrikeout(this));
+		presentation.setItemTextBold(getAttribute(HIGHLIGHTED_ATTR) != null);
 
-        String itemText = presentation.getItemText();
-        assert itemText != null;
-        int i = itemText.indexOf('.');
-        if (i > 0) {
-          presentation.setItemText(itemText.substring(0, i + 1) + typeParamsText + itemText.substring(i + 1));
-        }
-      }
-    }
-    
-  }
+		MemberLookupHelper helper = myHelper != null ? myHelper : new MemberLookupHelper(myMethod, myContainingClass,
+				false, false);
+		final Boolean qualify = getAttribute(FORCE_QUALIFY) != null ? Boolean.TRUE : myHelper == null ? Boolean.FALSE
+				: null;
+		helper.renderElement(presentation, qualify, getSubstitutor());
+
+		if(shouldInsertTypeParameters())
+		{
+			String typeParamsText = getTypeParamsText(true);
+			if(typeParamsText != null)
+			{
+				if(typeParamsText.length() > 10)
+				{
+					typeParamsText = typeParamsText.substring(0, 10) + "...>";
+				}
+
+				String itemText = presentation.getItemText();
+				assert itemText != null;
+				int i = itemText.indexOf('.');
+				if(i > 0)
+				{
+					presentation.setItemText(itemText.substring(0, i + 1) + typeParamsText + itemText.substring(i + 1));
+				}
+			}
+		}
+
+	}
 }

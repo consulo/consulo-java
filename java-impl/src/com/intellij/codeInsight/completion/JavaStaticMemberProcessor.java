@@ -15,76 +15,103 @@
  */
 package com.intellij.codeInsight.completion;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.VariableLookupItem;
 import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportList;
+import com.intellij.psi.PsiImportStaticStatement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
-* @author peter
-*/
-public class JavaStaticMemberProcessor extends StaticMemberProcessor {
-  private final PsiElement myOriginalPosition;
+ * @author peter
+ */
+public class JavaStaticMemberProcessor extends StaticMemberProcessor
+{
+	private final PsiElement myOriginalPosition;
 
-  public JavaStaticMemberProcessor(CompletionParameters parameters) {
-    super(parameters.getPosition());
-    myOriginalPosition = parameters.getOriginalPosition();
+	public JavaStaticMemberProcessor(CompletionParameters parameters)
+	{
+		super(parameters.getPosition());
+		myOriginalPosition = parameters.getOriginalPosition();
 
-    final PsiFile file = parameters.getPosition().getContainingFile();
-    if (file instanceof PsiJavaFile) {
-      final PsiImportList importList = ((PsiJavaFile)file).getImportList();
-      if (importList != null) {
-        for (PsiImportStaticStatement statement : importList.getImportStaticStatements()) {
-          importMembersOf(statement.resolveTargetClass());
-        }
-      }
-    }
-  }
+		final PsiFile file = parameters.getPosition().getContainingFile();
+		if(file instanceof PsiJavaFile)
+		{
+			final PsiImportList importList = ((PsiJavaFile) file).getImportList();
+			if(importList != null)
+			{
+				for(PsiImportStaticStatement statement : importList.getImportStaticStatements())
+				{
+					importMembersOf(statement.resolveTargetClass());
+				}
+			}
+		}
+	}
 
-  @NotNull
-  @Override
-  protected LookupElement createLookupElement(@NotNull PsiMember member, @NotNull final PsiClass containingClass, boolean shouldImport) {
-    shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
+	@NotNull
+	@Override
+	protected LookupElement createLookupElement(@NotNull PsiMember member,
+			@NotNull final PsiClass containingClass,
+			boolean shouldImport)
+	{
+		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition,
+				false);
 
-    if (member instanceof PsiMethod) {
-      return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new GlobalMethodCallElement((PsiMethod)member, shouldImport, false));
-    }
-    return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new VariableLookupItem((PsiField)member, shouldImport) {
-      @Override
-      public void handleInsert(InsertionContext context) {
-        FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.GLOBAL_MEMBER_NAME);
+		if(member instanceof PsiMethod)
+		{
+			return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new GlobalMethodCallElement((PsiMethod) member,
+					shouldImport, false));
+		}
+		return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new VariableLookupItem((PsiField) member,
+				shouldImport)
+		{
+			@Override
+			public void handleInsert(InsertionContext context)
+			{
+				FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.GLOBAL_MEMBER_NAME);
 
-        super.handleInsert(context);
-      }
-    });
-  }
+				super.handleInsert(context);
+			}
+		});
+	}
 
-  @Override
-  protected LookupElement createLookupElement(@NotNull List<PsiMethod> overloads,
-                                              @NotNull PsiClass containingClass,
-                                              boolean shouldImport) {
-    shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
+	@Override
+	protected LookupElement createLookupElement(@NotNull List<PsiMethod> overloads,
+			@NotNull PsiClass containingClass,
+			boolean shouldImport)
+	{
+		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition,
+				false);
 
-    final JavaMethodCallElement element = new GlobalMethodCallElement(overloads.get(0), shouldImport, true);
-    element.putUserData(JavaCompletionUtil.ALL_METHODS_ATTRIBUTE, overloads);
-    return element;
-  }
+		final JavaMethodCallElement element = new GlobalMethodCallElement(overloads.get(0), shouldImport, true);
+		JavaCompletionUtil.putAllMethods(element, overloads);
+		return element;
+	}
 
-  private static class GlobalMethodCallElement extends JavaMethodCallElement {
-    public GlobalMethodCallElement(PsiMethod member, boolean shouldImport, boolean mergedOverloads) {
-      super(member, shouldImport, mergedOverloads);
-    }
+	private static class GlobalMethodCallElement extends JavaMethodCallElement
+	{
+		public GlobalMethodCallElement(PsiMethod member, boolean shouldImport, boolean mergedOverloads)
+		{
+			super(member, shouldImport, mergedOverloads);
+		}
 
-    @Override
-    public void handleInsert(InsertionContext context) {
-      FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.GLOBAL_MEMBER_NAME);
+		@Override
+		public void handleInsert(InsertionContext context)
+		{
+			FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.GLOBAL_MEMBER_NAME);
 
-      super.handleInsert(context);
-    }
-  }
+			super.handleInsert(context);
+		}
+	}
 }

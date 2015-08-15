@@ -15,59 +15,95 @@
  */
 package com.intellij.codeInsight.completion;
 
+import static com.intellij.util.ObjectUtils.assertNotNull;
+
+import java.util.ArrayList;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupItem;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.ResolveResult;
-
-import java.util.ArrayList;
+import com.intellij.psi.PsiType;
 
 /**
  * @author peter
  */
-public class JavaMethodMergingContributor extends CompletionContributor {
+public class JavaMethodMergingContributor extends CompletionContributor
+{
 
-  @Override
-  public AutoCompletionDecision handleAutoCompletionPossibility(AutoCompletionContext context) {
-    final CompletionParameters parameters = context.getParameters();
-    if (parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType.BASIC) {
-      return null;
-    }
+	@Override
+	public AutoCompletionDecision handleAutoCompletionPossibility(@NotNull AutoCompletionContext context)
+	{
+		final CompletionParameters parameters = context.getParameters();
+		if(parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType
+				.BASIC)
+		{
+			return null;
+		}
 
-    final LookupElement[] items = context.getItems();
-    if (items.length > 1) {
-      String commonName = null;
-      LookupElement best = null;
-      final ArrayList<PsiMethod> allMethods = new ArrayList<PsiMethod>();
-      for (LookupElement item : items) {
-        Object o = item.getObject();
-        if (o instanceof ResolveResult) {
-          o = ((ResolveResult)o).getElement();
-        }
-        if (item.getUserData(LookupItem.FORCE_SHOW_SIGNATURE_ATTR) != null || !(o instanceof PsiMethod)) {
-          return AutoCompletionDecision.SHOW_LOOKUP;
-        }
+		final LookupElement[] items = context.getItems();
+		if(items.length > 1)
+		{
+			String commonName = null;
+			final ArrayList<PsiMethod> allMethods = new ArrayList<PsiMethod>();
+			for(LookupElement item : items)
+			{
+				Object o = item.getPsiElement();
+				if(item.getUserData(LookupItem.FORCE_SHOW_SIGNATURE_ATTR) != null || !(o instanceof PsiMethod))
+				{
+					return AutoCompletionDecision.SHOW_LOOKUP;
+				}
 
-        final PsiMethod method = (PsiMethod)o;
-        final JavaChainLookupElement chain = item.as(JavaChainLookupElement.CLASS_CONDITION_KEY);
-        final String name = method.getName() + "#" + (chain == null ? "" : chain.getQualifier().getLookupString());
-        if (commonName != null && !commonName.equals(name)) {
-          return AutoCompletionDecision.SHOW_LOOKUP;
-        }
+				final PsiMethod method = (PsiMethod) o;
+				final JavaChainLookupElement chain = item.as(JavaChainLookupElement.CLASS_CONDITION_KEY);
+				final String name = method.getName() + "#" + (chain == null ? "" : chain.getQualifier()
+						.getLookupString());
+				if(commonName != null && !commonName.equals(name))
+				{
+					return AutoCompletionDecision.SHOW_LOOKUP;
+				}
 
-        if (best == null && method.getParameterList().getParametersCount() > 0) {
-          best = item;
-        }
-        commonName = name;
-        allMethods.add(method);
-        item.putUserData(JavaCompletionUtil.ALL_METHODS_ATTRIBUTE, allMethods);
-      }
-      if (best == null) {
-        best = items[0];
-      }
-      return AutoCompletionDecision.insertItem(best);
-    }
+				commonName = name;
+				allMethods.add(method);
+			}
 
-    return super.handleAutoCompletionPossibility(context);
-  }
+			for(LookupElement item : items)
+			{
+				JavaCompletionUtil.putAllMethods(item, allMethods);
+			}
+
+			return AutoCompletionDecision.insertItem(findBestOverload(items));
+		}
+
+		return super.handleAutoCompletionPossibility(context);
+	}
+
+	public static LookupElement findBestOverload(LookupElement[] items)
+	{
+		LookupElement best = items[0];
+		for(int i = 1; i < items.length; i++)
+		{
+			LookupElement item = items[i];
+			if(getPriority(best) < getPriority(item))
+			{
+				best = item;
+			}
+		}
+		return best;
+	}
+
+	private static int getPriority(LookupElement element)
+	{
+		PsiMethod method = assertNotNull(getItemMethod(element));
+		return (method.getReturnType() == PsiType.VOID ? 0 : 1) + (method.getParameterList().getParametersCount() > 0
+				? 2 : 0);
+	}
+
+	@Nullable
+	private static PsiMethod getItemMethod(LookupElement item)
+	{
+		Object o = item.getPsiElement();
+		return o instanceof PsiMethod ? (PsiMethod) o : null;
+	}
 }

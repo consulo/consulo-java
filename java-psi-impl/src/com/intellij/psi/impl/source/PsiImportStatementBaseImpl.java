@@ -26,40 +26,55 @@ import com.intellij.psi.stubs.IStubElementType;
 /**
  * @author dsl
  */
-public abstract class PsiImportStatementBaseImpl extends JavaStubPsiElement<PsiImportStatementStub> implements PsiImportStatementBase{
-  public static final PsiImportStatementBaseImpl[] EMPTY_ARRAY = new PsiImportStatementBaseImpl[0];
+public abstract class PsiImportStatementBaseImpl extends JavaStubPsiElement<PsiImportStatementStub> implements
+		PsiImportStatementBase
+{
+	public static final PsiImportStatementBaseImpl[] EMPTY_ARRAY = new PsiImportStatementBaseImpl[0];
 
-  protected PsiImportStatementBaseImpl(final PsiImportStatementStub stub, final IStubElementType type) {
-    super(stub, type);
-  }
+	protected PsiImportStatementBaseImpl(final PsiImportStatementStub stub, final IStubElementType type)
+	{
+		super(stub, type);
+	}
 
-  protected PsiImportStatementBaseImpl(final ASTNode node) {
-    super(node);
-  }
+	protected PsiImportStatementBaseImpl(final ASTNode node)
+	{
+		super(node);
+	}
 
-  @Override
-  public boolean isOnDemand(){
-    final PsiImportStatementStub stub = getStub();
-    if (stub != null) {
-      return stub.isOnDemand();
-    }
+	@Override
+	public boolean isOnDemand()
+	{
+		final PsiImportStatementStub stub = getStub();
+		if(stub != null)
+		{
+			return stub.isOnDemand();
+		}
 
-    return calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_ON_DEMAND_DOT) != null;
-  }
+		return calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_ON_DEMAND_DOT) != null;
+	}
 
-  @Override
-  public PsiJavaCodeReferenceElement getImportReference() {
-    assert isValid();
-    final PsiImportStatementStub stub = getStub();
-    if (stub != null) {
-      return stub.getReference();
-    }
-    return (PsiJavaCodeReferenceElement)calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_REFERENCE);
-  }
+	@Override
+	public PsiJavaCodeReferenceElement getImportReference()
+	{
+		assert isValid();
+		final PsiImportStatementStub stub = getStub();
+		if(stub != null)
+		{
+			return stub.getReference();
+		}
+		return (PsiJavaCodeReferenceElement) calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_REFERENCE);
+	}
 
-  @Override
-  public PsiElement resolve() {
-    final PsiJavaCodeReferenceElement reference = getImportReference();
-    return reference == null ? null : reference.resolve();
-  }
+	@Override
+	public PsiElement resolve()
+	{
+		final PsiJavaCodeReferenceElement reference = getImportReference();
+		return reference == null ? null : reference.resolve();
+	}
+
+	@Override
+	public boolean isForeignFileImport()
+	{
+		return false;
+	}
 }
