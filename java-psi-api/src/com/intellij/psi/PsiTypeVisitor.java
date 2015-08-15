@@ -19,67 +19,92 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Visitor which can be used to visit Java types.
- * 
+ *
  * @author dsl
  */
-public class PsiTypeVisitor<A> {
-  @Nullable
-  public A visitType(PsiType type) {
-    return null;
-  }
+public class PsiTypeVisitor<A>
+{
+	@Nullable
+	public A visitType(PsiType type)
+	{
+		return null;
+	}
 
-  @Nullable
-  public A visitPrimitiveType(PsiPrimitiveType primitiveType) {
-    return visitType(primitiveType);
-  }
+	@Nullable
+	public A visitPrimitiveType(PsiPrimitiveType primitiveType)
+	{
+		return visitType(primitiveType);
+	}
 
-  @Nullable
-  public A visitArrayType(PsiArrayType arrayType) {
-    return visitType(arrayType);
-  }
+	@Nullable
+	public A visitArrayType(PsiArrayType arrayType)
+	{
+		return visitType(arrayType);
+	}
 
-  @Nullable
-  public A visitClassType(PsiClassType classType) {
-    return visitType(classType);
-  }
+	@Nullable
+	public A visitClassType(PsiClassType classType)
+	{
+		return visitType(classType);
+	}
 
-  @Nullable
-  public A visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType) {
-    return visitWildcardType(capturedWildcardType.getWildcard());
-  }
+	@Nullable
+	public A visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType)
+	{
+		return visitWildcardType(capturedWildcardType.getWildcard());
+	}
 
-  @Nullable
-  public A visitWildcardType(PsiWildcardType wildcardType) {
-    return visitType(wildcardType);
-  }
+	@Nullable
+	public A visitWildcardType(PsiWildcardType wildcardType)
+	{
+		return visitType(wildcardType);
+	}
 
-  @Nullable
-  public A visitEllipsisType(PsiEllipsisType ellipsisType) {
-    return visitArrayType(ellipsisType);
-  }
+	@Nullable
+	public A visitEllipsisType(PsiEllipsisType ellipsisType)
+	{
+		return visitArrayType(ellipsisType);
+	}
 
-  @Nullable
-  public A visitDisjunctionType(PsiDisjunctionType disjunctionType) {
-    return visitType(disjunctionType);
-  }
+	@Nullable
+	public A visitDisjunctionType(PsiDisjunctionType disjunctionType)
+	{
+		return visitType(disjunctionType);
+	}
 
-  @Nullable
-  public A visitDiamondType(PsiDiamondType diamondType) {
-    return visitType(diamondType);
-  }
-  
-  @Nullable
-  public A visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType) {
-    final PsiLambdaExpression lambdaExpression = lambdaExpressionType.getExpression();
-    final PsiType interfaceType = lambdaExpression.getFunctionalInterfaceType();
-    if (interfaceType != null) return interfaceType.accept(this);
-    return visitType(lambdaExpressionType);
-  }
-  
-  public A visitMethodReferenceType(PsiMethodReferenceType methodReferenceType) {
-    final PsiMethodReferenceExpression expression = methodReferenceType.getExpression();
-    final PsiType interfaceType = expression.getFunctionalInterfaceType();
-    if (interfaceType != null) return interfaceType.accept(this);
-    return visitType(methodReferenceType);
-  }
+	@Nullable
+	public A visitIntersectionType(PsiIntersectionType intersectionType)
+	{
+		PsiType type = intersectionType.getConjuncts()[0];
+		return type.accept(this);
+	}
+
+	@Nullable
+	public A visitDiamondType(PsiDiamondType diamondType)
+	{
+		return visitType(diamondType);
+	}
+
+	@Nullable
+	public A visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType)
+	{
+		final PsiLambdaExpression lambdaExpression = lambdaExpressionType.getExpression();
+		final PsiType interfaceType = lambdaExpression.getFunctionalInterfaceType();
+		if(interfaceType != null && LambdaUtil.isFunctionalType(interfaceType))
+		{
+			return interfaceType.accept(this);
+		}
+		return visitType(lambdaExpressionType);
+	}
+
+	public A visitMethodReferenceType(PsiMethodReferenceType methodReferenceType)
+	{
+		final PsiMethodReferenceExpression expression = methodReferenceType.getExpression();
+		final PsiType interfaceType = expression.getFunctionalInterfaceType();
+		if(interfaceType != null && LambdaUtil.isFunctionalType(interfaceType))
+		{
+			return interfaceType.accept(this);
+		}
+		return visitType(methodReferenceType);
+	}
 }

@@ -768,7 +768,7 @@ public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase imple
 			final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(manager.getProject());
 			if(!preserveQualification)
 			{
-				ref = (PsiExpression) codeStyleManager.shortenClassReferences(ref, JavaCodeStyleManager.UNCOMPLETE_CODE);
+				ref = (PsiExpression) codeStyleManager.shortenClassReferences(ref, JavaCodeStyleManager.INCOMPLETE_CODE);
 			}
 			return ref;
 		}

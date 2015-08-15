@@ -15,123 +15,162 @@
  */
 package com.intellij.codeInspection;
 
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.RedundantCastUtil;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * User: anna
  */
-public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool {
-  public static final Logger LOG = Logger.getInstance("#" + AnonymousCanBeMethodReferenceInspection.class.getName());
+public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool
+{
+	public static final Logger LOG = Logger.getInstance("#" + AnonymousCanBeMethodReferenceInspection.class.getName());
 
-  @Nls
-  @NotNull
-  @Override
-  public String getGroupDisplayName() {
-    return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
-  }
+	@Nls
+	@NotNull
+	@Override
+	public String getGroupDisplayName()
+	{
+		return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
+	}
 
-  @Nls
-  @NotNull
-  @Override
-  public String getDisplayName() {
-    return "Anonymous type can be replaced with method reference";
-  }
+	@Nls
+	@NotNull
+	@Override
+	public String getDisplayName()
+	{
+		return "Anonymous type can be replaced with method reference";
+	}
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+	@Override
+	public boolean isEnabledByDefault()
+	{
+		return true;
+	}
 
-  @NotNull
-  @Override
-  public String getShortName() {
-    return "Anonymous2MethodRef";
-  }
+	@NotNull
+	@Override
+	public String getShortName()
+	{
+		return "Anonymous2MethodRef";
+	}
 
-  @NotNull
-  @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
-    return new JavaElementVisitor() {
-      @Override
-      public void visitAnonymousClass(PsiAnonymousClass aClass) {
-        super.visitAnonymousClass(aClass);
-        if (PsiUtil.getLanguageLevel(aClass).isAtLeast(LanguageLevel.JDK_1_8)) {
-          final PsiClassType baseClassType = aClass.getBaseClassType();
-          final String functionalInterfaceErrorMessage = LambdaHighlightingUtil.checkInterfaceFunctional(baseClassType);
-          if (functionalInterfaceErrorMessage == null) {
-            final PsiMethod[] methods = aClass.getMethods();
-            if (methods.length == 1 && aClass.getFields().length == 0) {
-              final PsiCodeBlock body = methods[0].getBody();
-              final PsiCallExpression callExpression =
-                LambdaCanBeMethodReferenceInspection
-                  .canBeMethodReferenceProblem(body, methods[0].getParameterList().getParameters(), baseClassType);
-              if (callExpression != null && callExpression.resolveMethod() != methods[0]) {
-                final PsiElement parent = aClass.getParent();
-                if (parent instanceof PsiNewExpression) {
-                  final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression)parent).getClassOrAnonymousClassReference();
-                  if (classReference != null) {
-                    holder.registerProblem(classReference,
-                                           "Anonymous type can be replaced with method reference", new ReplaceWithMethodRefFix());
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-  }
+	@NotNull
+	@Override
+	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	{
+		return new JavaElementVisitor()
+		{
+			@Override
+			public void visitAnonymousClass(PsiAnonymousClass aClass)
+			{
+				super.visitAnonymousClass(aClass);
+				if(AnonymousCanBeLambdaInspection.canBeConvertedToLambda(aClass, true))
+				{
+					final PsiMethod method = aClass.getMethods()[0];
+					final PsiCodeBlock body = method.getBody();
+					final PsiCallExpression callExpression = LambdaCanBeMethodReferenceInspection
+							.canBeMethodReferenceProblem(body, method.getParameterList().getParameters(),
+									aClass.getBaseClassType());
+					if(callExpression != null)
+					{
+						final PsiMethod resolveMethod = callExpression.resolveMethod();
+						if(resolveMethod != method && !AnonymousCanBeLambdaInspection
+								.functionalInterfaceMethodReferenced(resolveMethod, aClass, callExpression))
+						{
+							final PsiElement parent = aClass.getParent();
+							if(parent instanceof PsiNewExpression)
+							{
+								final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) parent)
+										.getClassOrAnonymousClassReference();
+								if(classReference != null)
+								{
+									final PsiElement lBrace = aClass.getLBrace();
+									LOG.assertTrue(lBrace != null);
+									final TextRange rangeInElement = new TextRange(0, aClass.getStartOffsetInParent()
+											+ lBrace.getStartOffsetInParent());
+									holder.registerProblem(parent, "Anonymous #ref #loc can be replaced with method " +
+											"reference", ProblemHighlightType.LIKE_UNUSED_SYMBOL, rangeInElement,
+											new ReplaceWithMethodRefFix());
+								}
+							}
+						}
+					}
+				}
+			}
+		};
+	}
 
-  private static class ReplaceWithMethodRefFix implements LocalQuickFix {
-      @NotNull
-      @Override
-      public String getName() {
-        return "Replace with method reference";
-      }
+	private static class ReplaceWithMethodRefFix implements LocalQuickFix
+	{
+		@NotNull
+		@Override
+		public String getName()
+		{
+			return "Replace with method reference";
+		}
 
-      @NotNull
-      @Override
-      public String getFamilyName() {
-        return getName();
-      }
+		@NotNull
+		@Override
+		public String getFamilyName()
+		{
+			return getName();
+		}
 
-      @Override
-      public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        final PsiElement element = descriptor.getPsiElement();
-        final PsiAnonymousClass anonymousClass = PsiTreeUtil.getParentOfType(element, PsiAnonymousClass.class);
-        if (anonymousClass == null) return;
-        final PsiMethod[] methods = anonymousClass.getMethods();
-        if (methods.length != 1) return;
+		@Override
+		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		{
+			final PsiElement element = descriptor.getPsiElement();
+			if(element instanceof PsiNewExpression)
+			{
+				if(!FileModificationService.getInstance().preparePsiElementForWrite(element))
+				{
+					return;
+				}
+				final PsiAnonymousClass anonymousClass = ((PsiNewExpression) element).getAnonymousClass();
+				if(anonymousClass == null)
+				{
+					return;
+				}
+				final PsiMethod[] methods = anonymousClass.getMethods();
+				if(methods.length != 1)
+				{
+					return;
+				}
 
-        final PsiParameter[] parameters = methods[0].getParameterList().getParameters();
-        final PsiCallExpression callExpression = LambdaCanBeMethodReferenceInspection
-          .canBeMethodReferenceProblem(methods[0].getBody(), parameters, anonymousClass.getBaseClassType());
-        if (callExpression == null) return;
-        final String methodRefText =
-          LambdaCanBeMethodReferenceInspection.createMethodReferenceText(callExpression, anonymousClass.getBaseClassType());
+				final PsiParameter[] parameters = methods[0].getParameterList().getParameters();
+				final PsiCallExpression callExpression = LambdaCanBeMethodReferenceInspection
+						.canBeMethodReferenceProblem(methods[0].getBody(), parameters, anonymousClass.getBaseClassType());
+				if(callExpression == null)
+				{
+					return;
+				}
+				final String methodRefText = LambdaCanBeMethodReferenceInspection.createMethodReferenceText
+						(callExpression, anonymousClass.getBaseClassType(), parameters);
 
-        if (methodRefText != null) {
-          final String canonicalText = anonymousClass.getBaseClassType().getCanonicalText();
-          final PsiExpression psiExpression = JavaPsiFacade.getElementFactory(project).createExpressionFromText("(" + canonicalText + ")" + methodRefText, anonymousClass);
+				if(methodRefText != null)
+				{
+					final String canonicalText = anonymousClass.getBaseClassType().getCanonicalText();
+					final PsiExpression psiExpression = JavaPsiFacade.getElementFactory(project)
+							.createExpressionFromText("(" + canonicalText + ")" + methodRefText, anonymousClass);
 
-          PsiElement castExpr = anonymousClass.getParent().replace(psiExpression);
-          if (RedundantCastUtil.isCastRedundant((PsiTypeCastExpression)castExpr)) {
-            final PsiExpression operand = ((PsiTypeCastExpression)castExpr).getOperand();
-            LOG.assertTrue(operand != null);
-            castExpr = castExpr.replace(operand);
-          }
-          JavaCodeStyleManager.getInstance(project).shortenClassReferences(castExpr);
-        }
-      }
-    }
+					PsiElement castExpr = anonymousClass.getParent().replace(psiExpression);
+					if(RedundantCastUtil.isCastRedundant((PsiTypeCastExpression) castExpr))
+					{
+						final PsiExpression operand = ((PsiTypeCastExpression) castExpr).getOperand();
+						LOG.assertTrue(operand != null);
+						castExpr = castExpr.replace(operand);
+					}
+					JavaCodeStyleManager.getInstance(project).shortenClassReferences(castExpr);
+				}
+			}
+		}
+	}
 }

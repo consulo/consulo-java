@@ -15,116 +15,180 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
+import java.util.List;
+
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.*;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.PsiArrayType;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiSubstitutor;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.PsiWildcardType;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceBound;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * User: anna
  */
-public class TypeEqualityConstraint implements ConstraintFormula {
-  private static final Logger LOG = Logger.getInstance("#" + TypeEqualityConstraint.class.getName());
-  private PsiType myT;
-  private PsiType myS;
+public class TypeEqualityConstraint implements ConstraintFormula
+{
+	private static final Logger LOG = Logger.getInstance("#" + TypeEqualityConstraint.class.getName());
+	private PsiType myT;
+	private PsiType myS;
 
-  public TypeEqualityConstraint(@NotNull PsiType t, @NotNull PsiType s) {
-    myT = t;
-    myS = s;
-  }
+	public TypeEqualityConstraint(PsiType t, PsiType s)
+	{
+		myT = t;
+		myS = s;
+	}
 
-  @Override
-  public boolean reduce(InferenceSession session, List<ConstraintFormula> constraints) {
-    if (session.isProperType(myT) && session.isProperType(myS)) {
-      return myT.equals(myS);
-    }
-    InferenceVariable inferenceVariable = session.getInferenceVariable(myS);
-    if (inferenceVariable != null) {
-      inferenceVariable.addBound(myT, InferenceBound.EQ);
-      return true;
-    }
-    inferenceVariable = session.getInferenceVariable(myT);
-    if (inferenceVariable != null) {
-      inferenceVariable.addBound(myS, InferenceBound.EQ);
-      return true;
-    }
-    if (myT instanceof PsiClassType && myS instanceof PsiClassType) {
-      final PsiClassType.ClassResolveResult tResult = ((PsiClassType)myT).resolveGenerics();
-      final PsiClassType.ClassResolveResult sResult = ((PsiClassType)myS).resolveGenerics();
-      final PsiClass C = tResult.getElement();
-      if (C == sResult.getElement() && C != null) {
-        final PsiSubstitutor tSubstitutor = tResult.getSubstitutor();
-        final PsiSubstitutor sSubstitutor = sResult.getSubstitutor();
-        for (PsiTypeParameter typeParameter : C.getTypeParameters()) {
-          final PsiType tSubstituted = tSubstitutor.substitute(typeParameter);
-          final PsiType sSubstituted = sSubstitutor.substitute(typeParameter);
-          if (tSubstituted != null && sSubstituted != null) {
-            constraints.add(new TypeEqualityConstraint(tSubstituted, sSubstituted));
-          }
-        }
-        return true;
-      }
-    }
-    if (myT instanceof PsiArrayType && myS instanceof PsiArrayType) {
-      constraints.add(new TypeEqualityConstraint(((PsiArrayType)myT).getComponentType(), ((PsiArrayType)myS).getComponentType()));
-      return true;
-    }
-    if (myT instanceof PsiIntersectionType && myS instanceof PsiIntersectionType) {
-      final PsiType[] tConjuncts = ((PsiIntersectionType)myT).getConjuncts();
-      final PsiType[] sConjuncts = ((PsiIntersectionType)myS).getConjuncts();
-      if (sConjuncts.length == tConjuncts.length) {
-        for (int i = 0; i < sConjuncts.length; i++) {
-          constraints.add(new TypeEqualityConstraint(tConjuncts[i], sConjuncts[i]));
-        }
-        return true;
-      }
-    }
+	@Override
+	public boolean reduce(InferenceSession session, List<ConstraintFormula> constraints)
+	{
+		if(myT instanceof PsiWildcardType && myS instanceof PsiWildcardType)
+		{
+			final PsiType tBound = ((PsiWildcardType) myT).getBound();
+			final PsiType sBound = ((PsiWildcardType) myS).getBound();
 
-    if (myT instanceof PsiWildcardType && myS instanceof PsiWildcardType) {
-      final PsiType tBound = ((PsiWildcardType)myT).getBound();
-      final PsiType sBound = ((PsiWildcardType)myS).getBound();
+			if(tBound == null && sBound == null)
+			{
+				return true;
+			}
 
-      if (tBound == null && sBound == null) return true;
+			if(sBound == null && ((PsiWildcardType) myT).isExtends())
+			{
+				//extends bound of "?" (Object)
+				constraints.add(new TypeEqualityConstraint(((PsiWildcardType) myS).getExtendsBound(), tBound));
+				return true;
+			}
 
-      if (((PsiWildcardType)myT).isExtends() && ((PsiWildcardType)myS).isExtends() ||
-          ((PsiWildcardType)myT).isSuper() && ((PsiWildcardType)myS).isSuper()) {
+			if(tBound == null && ((PsiWildcardType) myS).isExtends())
+			{
+				//extends bound of "?" (Object)
+				constraints.add(new TypeEqualityConstraint(((PsiWildcardType) myT).getExtendsBound(), sBound));
+				return true;
+			}
 
-        LOG.assertTrue(tBound != null);
-        LOG.assertTrue(sBound != null);
-        constraints.add(new TypeEqualityConstraint(tBound, sBound));
-        return true;
-      }
-    }
-    return false;
-  }
+			if(((PsiWildcardType) myT).isExtends() && ((PsiWildcardType) myS).isExtends() || ((PsiWildcardType) myT)
+					.isSuper() && ((PsiWildcardType) myS).isSuper())
+			{
 
-  @Override
-  public void apply(PsiSubstitutor substitutor) {
-    myT = substitutor.substitute(myT);
-    myS = substitutor.substitute(myS);
-  }
+				LOG.assertTrue(tBound != null);
+				LOG.assertTrue(sBound != null);
+				constraints.add(new TypeEqualityConstraint(tBound, sBound));
+				return true;
+			}
+		}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+		if(myT instanceof PsiWildcardType || myS instanceof PsiWildcardType)
+		{
+			return false;
+		}
 
-    TypeEqualityConstraint that = (TypeEqualityConstraint)o;
+		if(session.isProperType(myT) && session.isProperType(myS))
+		{
+			if(myT == null)
+			{
+				return myS == null || myS.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+			}
+			if(myS == null)
+			{
+				return true;
+			}
+			return Comparing.equal(myT, myS);
+		}
+		InferenceVariable inferenceVariable = session.getInferenceVariable(myS);
+		if(inferenceVariable != null)
+		{
+			inferenceVariable.addBound(myT, InferenceBound.EQ);
+			return true;
+		}
+		inferenceVariable = session.getInferenceVariable(myT);
+		if(inferenceVariable != null)
+		{
+			inferenceVariable.addBound(myS, InferenceBound.EQ);
+			return true;
+		}
+		if(myT instanceof PsiClassType && myS instanceof PsiClassType)
+		{
+			final PsiClassType.ClassResolveResult tResult = ((PsiClassType) myT).resolveGenerics();
+			final PsiClassType.ClassResolveResult sResult = ((PsiClassType) myS).resolveGenerics();
+			final PsiClass tClass = tResult.getElement();
+			//equal erasure
+			if(tClass != null && tClass.getManager().areElementsEquivalent(tClass, sResult.getElement()))
+			{
+				final PsiSubstitutor tSubstitutor = tResult.getSubstitutor();
+				final PsiSubstitutor sSubstitutor = sResult.getSubstitutor();
+				for(PsiTypeParameter typeParameter : tClass.getTypeParameters())
+				{
+					final PsiType tSubstituted = tSubstitutor.substitute(typeParameter);
+					final PsiType sSubstituted = sSubstitutor.substituteWithBoundsPromotion(typeParameter);
+					if(tSubstituted != null && sSubstituted != null)
+					{
+						constraints.add(new TypeEqualityConstraint(tSubstituted, sSubstituted));
+					}
+				}
+				return true;
+			}
+		}
+		if(myT instanceof PsiArrayType && myS instanceof PsiArrayType)
+		{
+			constraints.add(new TypeEqualityConstraint(((PsiArrayType) myT).getComponentType(),
+					((PsiArrayType) myS).getComponentType()));
+			return true;
+		}
 
-    if (!myS.equals(that.myS)) return false;
-    if (!myT.equals(that.myT)) return false;
+		return false;
+	}
 
-    return true;
-  }
+	@Override
+	public void apply(PsiSubstitutor substitutor, boolean cache)
+	{
+		myT = substitutor.substitute(myT);
+		myS = substitutor.substitute(myS);
+	}
 
-  @Override
-  public int hashCode() {
-    int result = myT.hashCode();
-    result = 31 * result + myS.hashCode();
-    return result;
-  }
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+
+		TypeEqualityConstraint that = (TypeEqualityConstraint) o;
+
+		if(myS != null ? !myS.equals(that.myS) : that.myS != null)
+		{
+			return false;
+		}
+		if(myT != null ? !myT.equals(that.myT) : that.myT != null)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int result = myT != null ? myT.hashCode() : 0;
+		result = 31 * result + (myS != null ? myS.hashCode() : 0);
+		return result;
+	}
+
+	@Override
+	public String toString()
+	{
+		return myT.getPresentableText() + " == " + myS.getPresentableText();
+	}
 }

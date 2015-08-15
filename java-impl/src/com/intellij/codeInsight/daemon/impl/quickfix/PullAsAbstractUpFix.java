@@ -15,6 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.LinkedHashSet;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
 import com.intellij.codeInsight.intention.impl.RunRefactoringAction;
@@ -24,18 +28,21 @@ import com.intellij.ide.util.PsiClassListCellRenderer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.refactoring.extractInterface.ExtractInterfaceHandler;
 import com.intellij.refactoring.extractSuperclass.ExtractSuperclassHandler;
 import com.intellij.refactoring.memberPullUp.JavaPullUpHandler;
-import com.intellij.refactoring.memberPullUp.PullUpHelper;
+import com.intellij.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.LinkedHashSet;
 
 public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#" + PullAsAbstractUpFix.class.getName());
@@ -127,7 +134,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
     final MemberInfo memberInfo = new MemberInfo(method);
     memberInfo.setChecked(true);
     memberInfo.setToAbstract(true);
-    new PullUpHelper(containingClass, baseClass, new MemberInfo[]{memberInfo}, new DocCommentPolicy(DocCommentPolicy.ASIS)).run();
+    new PullUpProcessor(containingClass, baseClass, new MemberInfo[]{memberInfo}, new DocCommentPolicy(DocCommentPolicy.ASIS)).run();
   }
 
   @Override

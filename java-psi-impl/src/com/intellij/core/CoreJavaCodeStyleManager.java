@@ -40,7 +40,9 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
 
   @Override
   public PsiElement shortenClassReferences(@NotNull PsiElement element,
-                                           @MagicConstant(flags = {DO_NOT_ADD_IMPORTS, UNCOMPLETE_CODE}) int flags)
+                                           @MagicConstant(flags = {DO_NOT_ADD_IMPORTS,
+                                                   INCOMPLETE_CODE
+                                           }) int flags)
     throws IncorrectOperationException {
     return null;
   }

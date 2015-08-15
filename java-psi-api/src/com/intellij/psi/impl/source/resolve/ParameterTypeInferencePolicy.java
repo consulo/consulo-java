@@ -15,23 +15,36 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.util.Pair;
+import com.intellij.psi.ConstraintType;
+import com.intellij.psi.PsiCallExpression;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiExpressionList;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeParameter;
 
 /**
  * @author yole
  */
-public abstract class ParameterTypeInferencePolicy {
-  @Nullable
-  public abstract Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall,
-                                                                                   PsiExpressionList parent,
-                                                                                   PsiCallExpression contextCall,
-                                                                                   PsiTypeParameter typeParameter);
+public abstract class ParameterTypeInferencePolicy
+{
+	@Nullable
+	public abstract Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall,
+			PsiExpressionList parent,
+			PsiCallExpression contextCall,
+			PsiTypeParameter typeParameter);
 
-  public abstract PsiType getDefaultExpectedType(PsiCallExpression methodCall);
+	public abstract PsiType getDefaultExpectedType(PsiCallExpression methodCall);
 
-  public abstract Pair<PsiType, ConstraintType> getInferredTypeWithNoConstraint(PsiManager manager, PsiType superType);
+	public abstract Pair<PsiType, ConstraintType> getInferredTypeWithNoConstraint(PsiManager manager,
+			PsiType superType);
 
-  public abstract PsiType adjustInferredType(PsiManager manager, PsiType guess, ConstraintType second);
+	public abstract PsiType adjustInferredType(PsiManager manager, PsiType guess, ConstraintType second);
+
+	public boolean isVarargsIgnored()
+	{
+		return false;
+	}
 }

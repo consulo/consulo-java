@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,14 @@
  */
 package com.intellij.psi.impl.source;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -42,7 +43,15 @@ import com.intellij.psi.impl.source.resolve.ClassResolverProcessor;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.impl.source.resolve.VariableResolverProcessor;
-import com.intellij.psi.impl.source.tree.*;
+import com.intellij.psi.impl.source.tree.ChildRole;
+import com.intellij.psi.impl.source.tree.CompositeElement;
+import com.intellij.psi.impl.source.tree.CompositePsiElement;
+import com.intellij.psi.impl.source.tree.ICodeFragmentElementType;
+import com.intellij.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.psi.impl.source.tree.JavaSourceUtil;
+import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.scope.ElementClassFilter;
@@ -64,7 +73,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 
 	private volatile String myCachedQName = null;
 	private volatile String myCachedNormalizedText;
-	private int myKindWhenDummy = CLASS_NAME_KIND;
+	private volatile int myKindWhenDummy = CLASS_NAME_KIND;
 
 	public static final int CLASS_NAME_KIND = 1;
 	public static final int PACKAGE_NAME_KIND = 2;
@@ -105,9 +114,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return type == TokenType.DUMMY_HOLDER || type == JavaElementType.DUMMY_ELEMENT;
 	}
 
-	public int getKind()
+	public int getKind(@NotNull PsiFile containingFile)
 	{
-		PsiUtilCore.ensureValid(this);
+		PsiUtilCore.ensureValid(containingFile);
 		CompositeElement treeParent = getTreeParent();
 		IElementType i = treeParent.getElementType();
 		if(isDummy(i))
@@ -169,7 +178,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		}
 		if(i == JavaElementType.JAVA_CODE_REFERENCE)
 		{
-			int parentKind = ((PsiJavaCodeReferenceElementImpl) treeParent).getKind();
+			int parentKind = ((PsiJavaCodeReferenceElementImpl) treeParent).getKind(containingFile);
 			if(parentKind == CLASS_NAME_KIND)
 			{
 				return CLASS_OR_PACKAGE_NAME_KIND;
@@ -194,7 +203,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				i == JavaDocElementType.DOC_TYPE_HOLDER)
 		{
 			PsiDocComment docComment = PsiTreeUtil.getParentOfType(this, PsiDocComment.class);
-			if(docComment != null && docComment.getOwner() == null && docComment.getParent() instanceof PsiJavaFile)
+			if(JavaDocUtil.isInsidePackageInfo(docComment))
 			{
 				return CLASS_FQ_OR_PACKAGE_NAME_KIND;
 			}
@@ -305,46 +314,62 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	@NotNull
 	public String getCanonicalText()
 	{
-		switch(getKind())
+		return getCanonicalText(false, null, getContainingFile());
+	}
+
+	@NotNull
+	public String getCanonicalText(boolean annotated,
+			@Nullable PsiAnnotation[] annotations,
+			@NotNull PsiFile containingFile)
+	{
+		switch(getKind(containingFile))
 		{
 			case CLASS_NAME_KIND:
 			case CLASS_OR_PACKAGE_NAME_KIND:
 			case CLASS_IN_QUALIFIED_NEW_KIND:
-				final PsiElement target = resolve();
+				JavaResolveResult[] results = PsiImplUtil.multiResolveImpl(containingFile.getProject(),
+						containingFile, this, false, OurGenericsResolver.INSTANCE);
+				PsiElement target = results.length == 1 ? results[0].getElement() : null;
 				if(target instanceof PsiClass)
 				{
-					final PsiClass aClass = (PsiClass) target;
-					String name = aClass.getQualifiedName();
-					if(name == null)
+					StringBuilder buffer = new StringBuilder();
+
+					PsiClass aClass = (PsiClass) target;
+					PsiElement qualifier = getQualifier();
+
+					String prefix = null;
+					if(qualifier instanceof PsiJavaCodeReferenceElementImpl)
 					{
-						name = aClass.getName(); //?
+						prefix = ((PsiJavaCodeReferenceElementImpl) qualifier).getCanonicalText(annotated,
+								annotations, containingFile);
+						annotations = null;
 					}
-					final PsiType[] types = getTypeParameters();
-					if(types.length == 0)
+					else
 					{
-						final PsiElement qualifier = getQualifier();
-						if(qualifier instanceof PsiJavaCodeReferenceElement)
+						String fqn = aClass.getQualifiedName();
+						if(fqn != null)
 						{
-							return StringUtil.getQualifiedName(((PsiJavaCodeReferenceElement) qualifier)
-									.getCanonicalText(), aClass.getName());
+							prefix = StringUtil.getPackageName(fqn);
 						}
-						return name;
 					}
 
-					final StringBuilder buf = new StringBuilder();
-					buf.append(name);
-					buf.append('<');
-					for(int i = 0; i < types.length; i++)
+					if(!StringUtil.isEmpty(prefix))
 					{
-						if(i > 0)
-						{
-							buf.append(',');
-						}
-						buf.append(types[i].getCanonicalText());
+						buffer.append(prefix);
+						buffer.append('.');
 					}
-					buf.append('>');
 
-					return buf.toString();
+					if(annotated)
+					{
+						List<PsiAnnotation> list = annotations != null ? Arrays.asList(annotations) : getAnnotations();
+						PsiNameHelper.appendAnnotations(buffer, list, true);
+					}
+
+					buffer.append(aClass.getName());
+
+					PsiNameHelper.appendTypeArgs(buffer, getTypeParameters(), true, annotated);
+
+					return buffer.toString();
 				}
 				else if(target instanceof PsiPackage)
 				{
@@ -355,6 +380,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 					LOG.assertTrue(target == null, target);
 					return getNormalizedText();
 				}
+
 			case PACKAGE_NAME_KIND:
 			case CLASS_FQ_NAME_KIND:
 			case CLASS_FQ_OR_PACKAGE_NAME_KIND:
@@ -378,24 +404,25 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return advancedResolve(false).getElement();
 	}
 
-	private static final class OurGenericsResolver implements ResolveCache.PolyVariantResolver<PsiJavaReference>
+	private static final class OurGenericsResolver implements ResolveCache.PolyVariantContextResolver<PsiJavaReference>
 	{
 		private static final OurGenericsResolver INSTANCE = new OurGenericsResolver();
 
 		@NotNull
 		@Override
-		public JavaResolveResult[] resolve(@NotNull PsiJavaReference ref, boolean incompleteCode)
+		public ResolveResult[] resolve(@NotNull PsiJavaReference ref,
+				@NotNull PsiFile containingFile,
+				boolean incompleteCode)
 		{
 			PsiJavaCodeReferenceElementImpl referenceElement = (PsiJavaCodeReferenceElementImpl) ref;
-			int kind = referenceElement.getKind();
-			PsiFile containingFile = referenceElement.getContainingFile();
+			int kind = referenceElement.getKind(containingFile);
 			JavaResolveResult[] result = referenceElement.resolve(kind, containingFile);
 
 			if(incompleteCode && result.length == 0 && kind != CLASS_FQ_NAME_KIND && kind !=
 					CLASS_FQ_OR_PACKAGE_NAME_KIND)
 			{
 				VariableResolverProcessor processor = new VariableResolverProcessor(referenceElement, containingFile);
-				PsiScopesUtil.resolveAndWalk(processor, referenceElement, null, incompleteCode);
+				PsiScopesUtil.resolveAndWalk(processor, referenceElement, null, true);
 				result = processor.getResult();
 				if(result.length == 0 && kind == CLASS_NAME_KIND)
 				{
@@ -403,7 +430,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				}
 			}
 
-			JavaResolveUtil.substituteResults((PsiJavaCodeReferenceElement) ref, result);
+			JavaResolveUtil.substituteResults(referenceElement, result);
 
 			return result;
 		}
@@ -419,28 +446,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 
 	@Override
 	@NotNull
-	public JavaResolveResult[] multiResolve(final boolean incompleteCode)
+	public JavaResolveResult[] multiResolve(boolean incompleteCode)
 	{
-		FileASTNode fileElement = SharedImplUtil.findFileElement(this);
-		if(fileElement == null)
-		{
-			LOG.error("fileElement == null!");
-			return JavaResolveResult.EMPTY_ARRAY;
-		}
-
-		PsiFile file = SharedImplUtil.getContainingFile(fileElement);
-		boolean valid = file != null && file.isValid();
-		if(!valid)
-		{
-			LOG.error("invalid!");
-			return JavaResolveResult.EMPTY_ARRAY;
-		}
-		Project project = file.getProject();
-
-		final ResolveCache resolveCache = ResolveCache.getInstance(project);
-		final ResolveResult[] results = resolveCache.resolveWithCaching(this, OurGenericsResolver.INSTANCE, true,
-				incompleteCode, file);
-		return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
+		return PsiImplUtil.multiResolveImpl(this, incompleteCode, OurGenericsResolver.INSTANCE);
 	}
 
 	private PsiSubstitutor updateSubstitutor(PsiSubstitutor subst, final PsiClass psiClass)
@@ -453,7 +461,8 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return subst;
 	}
 
-	private JavaResolveResult[] resolve(final int kind, PsiFile containingFile)
+	@NotNull
+	private JavaResolveResult[] resolve(final int kind, @NotNull PsiFile containingFile)
 	{
 		switch(kind)
 		{
@@ -466,7 +475,8 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 					return JavaResolveResult.EMPTY_ARRAY;
 				}
 
-				PsiClass aClass = JavaPsiFacade.getInstance(getProject()).findClass(text, getResolveScope());
+				PsiClass aClass = JavaPsiFacade.getInstance(containingFile.getProject()).findClass(text,
+						getResolveScope());
 				if(aClass == null)
 				{
 					return JavaResolveResult.EMPTY_ARRAY;
@@ -608,13 +618,14 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	@Override
 	public PsiElement bindToElement(@NotNull final PsiElement element) throws IncorrectOperationException
 	{
-		CheckUtil.checkWritable(this);
+		PsiFile containingFile = getContainingFile();
+		CheckUtil.checkWritable(containingFile);
 		if(isReferenceTo(element))
 		{
 			return this;
 		}
 
-		switch(getKind())
+		switch(getKind(containingFile))
 		{
 			case CLASS_NAME_KIND:
 			case CLASS_FQ_NAME_KIND:
@@ -622,7 +633,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				{
 					throw cannotBindError(element);
 				}
-				return bindToClass((PsiClass) element);
+				return bindToClass((PsiClass) element, containingFile);
 
 			case PACKAGE_NAME_KIND:
 				if(!(element instanceof PsiPackage))
@@ -635,7 +646,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			case CLASS_FQ_OR_PACKAGE_NAME_KIND:
 				if(element instanceof PsiClass)
 				{
-					return bindToClass((PsiClass) element);
+					return bindToClass((PsiClass) element, containingFile);
 				}
 				else if(element instanceof PsiPackage)
 				{
@@ -654,7 +665,8 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 					{
 						throw new IncorrectOperationException(aClass.toString());
 					}
-					final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(getProject()).getParserFacade();
+					final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(containingFile.getProject())
+							.getParserFacade();
 					final PsiJavaCodeReferenceElement ref = parserFacade.createReferenceFromText(name, getParent());
 					getTreeParent().replaceChildInternal(this, (TreeElement) ref.getNode());
 					return ref;
@@ -675,12 +687,14 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		return new IncorrectOperationException("Cannot bind to " + element);
 	}
 
-	private PsiElement bindToClass(PsiClass aClass) throws IncorrectOperationException
+	private PsiElement bindToClass(@NotNull PsiClass aClass,
+			@NotNull PsiFile containingFile) throws IncorrectOperationException
 	{
 		String qName = aClass.getQualifiedName();
-		boolean preserveQualification = JavaCodeStyleSettingsFacade.getInstance(getProject()).useFQClassNames() &&
-				isFullyQualified();
-		JavaPsiFacade facade = JavaPsiFacade.getInstance(getProject());
+		Project project = containingFile.getProject();
+		boolean preserveQualification = JavaCodeStyleSettingsFacade.getInstance(project).useFQClassNames() &&
+				isFullyQualified(containingFile);
+		JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
 		if(qName == null)
 		{
 			qName = aClass.getName();
@@ -702,15 +716,26 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		{
 			text += parameterList.getText();
 		}
-		PsiJavaCodeReferenceElement ref = facade.getParserFacade().createReferenceFromText(text, getParent());
-		getTreeParent().replaceChildInternal(this, (TreeElement) ref.getNode());
+
+		PsiJavaCodeReferenceElement ref;
+		try
+		{
+			ref = facade.getParserFacade().createReferenceFromText(text, getParent());
+		}
+		catch(IncorrectOperationException e)
+		{
+			throw new IncorrectOperationException(e.getMessage() + " [qname=" + qName + " class=" + aClass + ";" +
+					aClass.getClass().getName() + "]");
+		}
+
 		((PsiJavaCodeReferenceElementImpl) ref).setAnnotations(annotations);
+		getTreeParent().replaceChildInternal(this, (TreeElement) ref.getNode());
 
 		if(!preserveQualification)
 		{
-			JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(aClass.getProject());
+			JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
 			ref = (PsiJavaCodeReferenceElement) codeStyleManager.shortenClassReferences(ref,
-					JavaCodeStyleManager.UNCOMPLETE_CODE);
+					JavaCodeStyleManager.INCOMPLETE_CODE);
 		}
 
 		return ref;
@@ -726,7 +751,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			if(modifierList != null)
 			{
 				List<PsiAnnotation> typeAnnotations = PsiImplUtil.getTypeUseAnnotations(modifierList);
-				if(typeAnnotations != null && typeAnnotations.size() > 0)
+				if(typeAnnotations != null && !typeAnnotations.isEmpty())
 				{
 					annotations.addAll(typeAnnotations);
 				}
@@ -758,23 +783,32 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		{
 			if(annotation.getParent() != newParent)
 			{
-				newParent.addAfter(annotation, anchor);
+				if(anchor != null)
+				{
+					newParent.addAfter(annotation, anchor);
+				}
+				else
+				{
+					newParent.add(annotation);
+				}
 				annotation.delete();
 			}
 		}
 	}
 
-	private boolean isFullyQualified()
+	private boolean isFullyQualified(@NotNull PsiFile containingFile)
 	{
-		switch(getKind())
+		int kind = getKind(containingFile);
+		switch(kind)
 		{
 			case CLASS_OR_PACKAGE_NAME_KIND:
 				if(resolve() instanceof PsiPackage)
 				{
 					return true;
 				}
-				//noinspection fallthrough
+				break;
 			case CLASS_NAME_KIND:
+			case CLASS_IN_QUALIFIED_NEW_KIND:
 				break;
 
 			case PACKAGE_NAME_KIND:
@@ -783,28 +817,28 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				return true;
 
 			default:
-				LOG.assertTrue(false);
+				LOG.error(kind);
 				return true;
 		}
 
-		final ASTNode qualifier = findChildByRole(ChildRole.QUALIFIER);
+		ASTNode qualifier = findChildByRole(ChildRole.QUALIFIER);
 		if(qualifier == null)
 		{
 			return false;
 		}
 
 		LOG.assertTrue(qualifier.getElementType() == JavaElementType.JAVA_CODE_REFERENCE);
-		final PsiElement refElement = SourceTreeToPsiMap.<PsiJavaCodeReferenceElement>treeToPsiNotNull(qualifier)
-				.resolve();
+		PsiElement refElement = SourceTreeToPsiMap.<PsiJavaCodeReferenceElement>treeToPsiNotNull(qualifier).resolve();
 		if(refElement instanceof PsiPackage)
 		{
 			return true;
 		}
 
-		return SourceTreeToPsiMap.<PsiJavaCodeReferenceElementImpl>treeToPsiNotNull(qualifier).isFullyQualified();
+		return SourceTreeToPsiMap.<PsiJavaCodeReferenceElementImpl>treeToPsiNotNull(qualifier).isFullyQualified
+				(containingFile);
 	}
 
-	private PsiElement bindToPackage(final PsiPackage aPackage) throws IncorrectOperationException
+	private PsiElement bindToPackage(@NotNull PsiPackage aPackage) throws IncorrectOperationException
 	{
 		final String qName = aPackage.getQualifiedName();
 		if(qName.isEmpty())
@@ -820,7 +854,13 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	@Override
 	public boolean isReferenceTo(final PsiElement element)
 	{
-		switch(getKind())
+		PsiFile containingFile = getContainingFile();
+		return isReferenceTo(element, containingFile);
+	}
+
+	private boolean isReferenceTo(PsiElement element, @NotNull PsiFile containingFile)
+	{
+		switch(getKind(containingFile))
 		{
 			case CLASS_NAME_KIND:
 			case CLASS_IN_QUALIFIED_NEW_KIND:
@@ -837,7 +877,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 					return false;
 				}
 				final String qName = ((PsiClass) element).getQualifiedName();
-				return qName != null && qName.equals(getCanonicalText());
+				return qName != null && qName.equals(getCanonicalText(false, null, containingFile));
 			}
 
 			case PACKAGE_NAME_KIND:
@@ -847,17 +887,16 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 					return false;
 				}
 				final String qName = ((PsiPackage) element).getQualifiedName();
-				return qName.equals(getCanonicalText());
+				return qName.equals(getCanonicalText(false, null, containingFile));
 			}
 
 			case CLASS_OR_PACKAGE_NAME_KIND:
-				//        if (lastChild.type != IDENTIFIER) return false;
 				if(element instanceof PsiPackage)
 				{
 					final String qName = ((PsiPackage) element).getQualifiedName();
-					return qName.equals(getCanonicalText());
+					return qName.equals(getCanonicalText(false, null, containingFile));
 				}
-				else if(element instanceof PsiClass)
+				if(element instanceof PsiClass)
 				{
 					final PsiIdentifier nameIdentifier = ((PsiClass) element).getNameIdentifier();
 					if(nameIdentifier == null)
@@ -866,28 +905,22 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 					}
 					PsiElement nameElement = getReferenceNameElement();
 					return nameElement != null && nameElement.textMatches(nameIdentifier) &&
-							element.getManager().areElementsEquivalent(resolve(), element);
+							containingFile.getManager().areElementsEquivalent(resolve(), element);
 				}
-				else
-				{
-					return false;
-				}
+				return false;
 
 			case CLASS_FQ_OR_PACKAGE_NAME_KIND:
 				if(element instanceof PsiClass)
 				{
 					final String qName = ((PsiClass) element).getQualifiedName();
-					return qName != null && qName.equals(getCanonicalText());
+					return qName != null && qName.equals(getCanonicalText(false, null, containingFile));
 				}
-				else if(element instanceof PsiPackage)
+				if(element instanceof PsiPackage)
 				{
 					final String qName = ((PsiPackage) element).getQualifiedName();
-					return qName.equals(getCanonicalText());
+					return qName.equals(getCanonicalText(false, null, containingFile));
 				}
-				else
-				{
-					return false;
-				}
+				return false;
 			default:
 				LOG.assertTrue(false);
 				return true;
@@ -899,7 +932,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			return false;
 		}
 		final String name = ((PsiClass) element).getName();
-		return name != null && referenceNameElement.getText().equals(name) && element.getManager()
+		return name != null && referenceNameElement.getText().equals(name) && containingFile.getManager()
 				.areElementsEquivalent(resolve(), element);
 	}
 
@@ -908,7 +941,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		String whiteSpaceAndComments = myCachedNormalizedText;
 		if(whiteSpaceAndComments == null)
 		{
-			myCachedNormalizedText = whiteSpaceAndComments = SourceUtil.getReferenceText(this);
+			myCachedNormalizedText = whiteSpaceAndComments = JavaSourceUtil.getReferenceText(this);
 		}
 		return whiteSpaceAndComments;
 	}
@@ -925,9 +958,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	}
 
 	@Override
-	public void fullyQualify(final PsiClass targetClass)
+	public void fullyQualify(@NotNull final PsiClass targetClass)
 	{
-		final int kind = getKind();
+		final int kind = getKind(getContainingFile());
 		if(kind != CLASS_NAME_KIND && kind != CLASS_OR_PACKAGE_NAME_KIND && kind != CLASS_IN_QUALIFIED_NEW_KIND)
 		{
 			LOG.error("Wrong kind " + kind);
@@ -961,9 +994,8 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	public Object[] getVariants()
 	{
 		final ElementFilter filter;
-		switch(getKind())
+		switch(getKind(getContainingFile()))
 		{
-
 			case CLASS_OR_PACKAGE_NAME_KIND:
 				filter = new OrFilter();
 				((OrFilter) filter).addFilter(ElementClassFilter.CLASS);
@@ -1009,7 +1041,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			filter.addFilter(new AndFilter(ElementClassFilter.METHOD, new NotFilter(new ConstructorFilter())));
 			filter.addFilter(ElementClassFilter.VARIABLE);
 		}
-		switch(getKind())
+		switch(getKind(getContainingFile()))
 		{
 			case CLASS_OR_PACKAGE_NAME_KIND:
 				filter.addFilter(ElementClassFilter.CLASS);
@@ -1063,11 +1095,6 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			return false;
 		}
 
-		if(isQualified())
-		{
-			return true;
-		}
-
 		PsiElement superParent = getParent();
 		while(superParent != null)
 		{
@@ -1075,7 +1102,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			{
 				return true;
 			}
-			if(superParent instanceof PsiClass)
+			if(superParent instanceof PsiClass || superParent instanceof PsiCatchSection)
 			{
 				return false;
 			}
@@ -1106,7 +1133,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 	@Override
 	public String getQualifiedName()
 	{
-		switch(getKind())
+		switch(getKind(getContainingFile()))
 		{
 			case CLASS_NAME_KIND:
 			case CLASS_OR_PACKAGE_NAME_KIND:
@@ -1177,7 +1204,6 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			return PsiType.EMPTY_ARRAY;
 		}
 		return parameterList.getTypeArguments();
-
 	}
 
 	@Override

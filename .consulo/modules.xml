@@ -220,7 +220,7 @@
       </module>
       <module name="java-analysis-impl" dirurl="file://$PROJECT_DIR$/java-analysis-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -233,6 +233,16 @@
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
           <orderEntry type="module" module-name="java-indexing-api" />
+          <orderEntry type="module-library">
+            <library name="consulo:XML">
+              <binaries>
+                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
+              </binaries>
+            </library>
+          </orderEntry>
         </module-layer>
       </module>
       <module name="java-psi-impl" dirurl="file://$PROJECT_DIR$/java-psi-impl" current-layer="Default">

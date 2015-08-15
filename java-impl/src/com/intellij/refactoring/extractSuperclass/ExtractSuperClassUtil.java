@@ -15,6 +15,13 @@
  */
 package com.intellij.refactoring.extractSuperclass;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
@@ -31,7 +38,7 @@ import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.refactoring.memberPullUp.PullUpHelper;
+import com.intellij.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.ui.ConflictsDialog;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.RefactoringUtil;
@@ -39,10 +46,6 @@ import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author dsl
@@ -79,7 +82,7 @@ public class ExtractSuperClassUtil {
     PsiJavaCodeReferenceElement ref = createExtendingReference(superclass, subclass, selectedMemberInfos); 
     subclass.getExtendsList().add(ref);
 
-    PullUpHelper pullUpHelper = new PullUpHelper(subclass, superclass, selectedMemberInfos,
+    PullUpProcessor pullUpHelper = new PullUpProcessor(subclass, superclass, selectedMemberInfos,
                                                  javaDocPolicy
     );
 

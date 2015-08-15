@@ -21,35 +21,42 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents a Java lambda expression.
  */
-public interface PsiLambdaExpression extends PsiExpression {
-  /**
-   * Returns this lambda expression's parameter list.
-   *
-   * @return parameter list.
-   */
-  @NotNull
-  PsiParameterList getParameterList();
+public interface PsiLambdaExpression extends PsiFunctionalExpression
+{
+	/**
+	 * Returns this lambda expression's parameter list.
+	 *
+	 * @return parameter list.
+	 */
+	@NotNull
+	PsiParameterList getParameterList();
 
-  /**
-   * Returns PSI element representing lambda expression body: {@link PsiCodeBlock}, {@link PsiExpression},
-   * or null if the expression is incomplete.
-   *
-   * @return lambda expression body.
-   */
-  @Nullable
-  PsiElement getBody();
+	/**
+	 * Returns PSI element representing lambda expression body: {@link PsiCodeBlock}, {@link PsiExpression},
+	 * or null if the expression is incomplete.
+	 *
+	 * @return lambda expression body.
+	 */
+	@Nullable
+	PsiElement getBody();
 
-  /**
-   * @return SAM type the lambda expression corresponds to
-   *         null when no SAM type could be found
-   */
-  @Nullable
-  PsiType getFunctionalInterfaceType();
+	boolean isVoidCompatible();
 
-  boolean isVoidCompatible();
+	boolean isValueCompatible();
 
-  /**
-   * @return true when lambda declares parameter types explicitly
-   */
-  boolean hasFormalParameterTypes();
+	/**
+	 * @return true when lambda declares parameter types explicitly
+	 */
+	boolean hasFormalParameterTypes();
+
+	/**
+	 * A lambda expression (§15.27) is potentially compatible with a functional interface type (§9.8) if all of the
+	 * following are true:
+	 * The arity of the target type's function type is the same as the arity of the lambda expression.
+	 * If the target type's function type has a void return, then the lambda body is either a statement expression
+	 * (§14.8) or a void-compatible block (§15.27.2).
+	 * If the target type's function type has a (non-void) return type, then the lambda body is either an expression
+	 * or a value-compatible block (§15.27.2).
+	 */
+	boolean isPotentiallyCompatible(PsiType left);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.intellij.psi;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayFactory;
@@ -81,21 +82,32 @@ public abstract class PsiType implements PsiAnnotationOwner
 	}
 
 	/**
-	 * @return text of the type that can be presented to a user (non-qualified references, with annotations).
+	 * Returns text of the type that can be presented to a user (references normally non-qualified).
 	 */
 	@NonNls
 	@NotNull
 	public abstract String getPresentableText();
 
 	/**
-	 * @return text of the type (fully-qualified references, no annotations).
+	 * Returns canonical representation of the type (all references fully-qualified).
+	 */
+	@NonNls
+	@NotNull
+	public String getCanonicalText(boolean annotated)
+	{
+		return getCanonicalText();
+	}
+
+	/**
+	 * Same as {@code getCanonicalText(false)}.
 	 */
 	@NonNls
 	@NotNull
 	public abstract String getCanonicalText();
 
 	/**
-	 * @return text of the type (fully-qualified references, with annotations).
+	 * Return canonical text of the type with some internal details added for presentational purposes. Use with care.
+	 * todo[r.sh] merge with getPresentableText()
 	 */
 	@NonNls
 	@NotNull
@@ -134,6 +146,20 @@ public abstract class PsiType implements PsiAnnotationOwner
 	public abstract boolean equalsToText(@NotNull @NonNls String text);
 
 	/**
+	 * Returns the class type for qualified class name.
+	 *
+	 * @param qName        qualified class name.
+	 * @param project
+	 * @param resolveScope the scope in which the class is searched.
+	 * @return the class instance.
+	 */
+	public static PsiClassType getTypeByName(String qName, Project project, GlobalSearchScope resolveScope)
+	{
+		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+		return factory.createTypeByFQClassName(qName, resolveScope);
+	}
+
+	/**
 	 * Returns the class type for the java.lang.Object class.
 	 *
 	 * @param manager      the PSI manager used to create the class type.
@@ -143,8 +169,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	@NotNull
 	public static PsiClassType getJavaLangObject(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
 	{
-		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-		return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_OBJECT, resolveScope);
+		return getTypeByName(CommonClassNames.JAVA_LANG_OBJECT, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -157,8 +182,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	@NotNull
 	public static PsiClassType getJavaLangClass(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
 	{
-		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-		return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_CLASS, resolveScope);
+		return getTypeByName(CommonClassNames.JAVA_LANG_CLASS, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -169,10 +193,10 @@ public abstract class PsiType implements PsiAnnotationOwner
 	 * @return the class instance.
 	 */
 	@NotNull
-	public static PsiClassType getJavaLangThrowable(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
+	public static PsiClassType getJavaLangThrowable(@NotNull PsiManager manager,
+			@NotNull GlobalSearchScope resolveScope)
 	{
-		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-		return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_THROWABLE, resolveScope);
+		return getTypeByName(CommonClassNames.JAVA_LANG_THROWABLE, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -185,8 +209,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	@NotNull
 	public static PsiClassType getJavaLangString(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
 	{
-		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-		return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_STRING, resolveScope);
+		return getTypeByName(CommonClassNames.JAVA_LANG_STRING, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -199,8 +222,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	@NotNull
 	public static PsiClassType getJavaLangError(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
 	{
-		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-		return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_ERROR, resolveScope);
+		return getTypeByName(CommonClassNames.JAVA_LANG_ERROR, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -211,10 +233,10 @@ public abstract class PsiType implements PsiAnnotationOwner
 	 * @return the class instance.
 	 */
 	@NotNull
-	public static PsiClassType getJavaLangRuntimeException(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
+	public static PsiClassType getJavaLangRuntimeException(@NotNull PsiManager manager,
+			@NotNull GlobalSearchScope resolveScope)
 	{
-		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-		return factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, resolveScope);
+		return getTypeByName(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, manager.getProject(), resolveScope);
 	}
 
 	/**
@@ -246,7 +268,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	 * Returns the innermost component type for an array type.
 	 *
 	 * @return the innermost (non-array) component of the type, or <code>this</code> if the type is not
-	 *         an array type.
+	 * an array type.
 	 */
 	@NotNull
 	public final PsiType getDeepComponentType()
@@ -309,47 +331,32 @@ public abstract class PsiType implements PsiAnnotationOwner
 		return getAnnotations();
 	}
 
-	@NotNull
-	protected String getAnnotationsTextPrefix(boolean qualified, boolean leadingSpace, boolean trailingSpace)
-	{
-		PsiAnnotation[] annotations = getAnnotations();
-		if(annotations.length == 0)
-		{
-			return "";
-		}
-
-		StringBuilder sb = new StringBuilder();
-		if(leadingSpace)
-		{
-			sb.append(' ');
-		}
-		for(int i = 0; i < annotations.length; i++)
-		{
-			if(i > 0)
-			{
-				sb.append(' ');
-			}
-			PsiAnnotation annotation = annotations[i];
-			if(qualified)
-			{
-				sb.append('@').append(annotation.getQualifiedName()).append(annotation.getParameterList().getText());
-			}
-			else
-			{
-				sb.append(annotation.getText());
-			}
-		}
-		if(trailingSpace)
-		{
-			sb.append(' ');
-		}
-		return sb.toString();
-	}
-
 	@Override
 	public String toString()
 	{
 		//noinspection HardCodedStringLiteral
 		return "PsiType:" + getPresentableText();
+	}
+
+	/**
+	 * Temporary class to facilitate transition to {@link #getCanonicalText(boolean)}.
+	 */
+	protected static abstract class Stub extends PsiType
+	{
+		protected Stub(@NotNull PsiAnnotation[] annotations)
+		{
+			super(annotations);
+		}
+
+		@NotNull
+		@Override
+		public final String getCanonicalText()
+		{
+			return getCanonicalText(false);
+		}
+
+		@NotNull
+		@Override
+		public abstract String getCanonicalText(boolean annotated);
 	}
 }

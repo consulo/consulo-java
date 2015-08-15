@@ -26,10 +26,8 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 		name = "RefactoringSettings",
 		storages = {
 				@Storage(
-						file = StoragePathMacros.APP_CONFIG + "/other.xml"
-				)
-		}
-)
+						file = StoragePathMacros.APP_CONFIG + "/other.xml")
+		})
 public class JavaRefactoringSettings implements PersistentStateComponent<JavaRefactoringSettings>
 {
 	// properties should be public in order to get saved by DefaultExternalizable implementation
@@ -110,6 +108,8 @@ public class JavaRefactoringSettings implements PersistentStateComponent<JavaRef
 	public boolean RENAME_VARIABLES = true;
 	@SuppressWarnings({"WeakerAccess"})
 	public boolean RENAME_TESTS = true;
+	@SuppressWarnings({"WeakerAccess"})
+	public boolean RENAME_OVERLOADS = true;
 
 	public static JavaRefactoringSettings getInstance()
 	{
@@ -146,11 +146,13 @@ public class JavaRefactoringSettings implements PersistentStateComponent<JavaRef
 		this.RENAME_PARAMETER_IN_HIERARCHY = rename;
 	}
 
+	@Override
 	public JavaRefactoringSettings getState()
 	{
 		return this;
 	}
 
+	@Override
 	public void loadState(JavaRefactoringSettings state)
 	{
 		XmlSerializerUtil.copyBean(state, this);
@@ -164,5 +166,15 @@ public class JavaRefactoringSettings implements PersistentStateComponent<JavaRef
 	public void setRenameTests(boolean renameTests)
 	{
 		this.RENAME_TESTS = renameTests;
+	}
+
+	public void setRenameOverloads(boolean renameOverloads)
+	{
+		RENAME_OVERLOADS = renameOverloads;
+	}
+
+	public boolean isRenameOverloads()
+	{
+		return RENAME_OVERLOADS;
 	}
 }

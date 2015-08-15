@@ -15,6 +15,9 @@
  */
 package com.intellij.refactoring.extractInterface;
 
+import javax.swing.SwingUtilities;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
@@ -31,16 +34,13 @@ import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.extractSuperclass.ExtractSuperClassUtil;
 import com.intellij.refactoring.lang.ElementsHandler;
-import com.intellij.refactoring.memberPullUp.PullUpHelper;
+import com.intellij.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 public class ExtractInterfaceHandler implements RefactoringActionHandler, ElementsHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractInterface.ExtractInterfaceHandler");
@@ -144,7 +144,7 @@ public class ExtractInterfaceHandler implements RefactoringActionHandler, Elemen
     final PsiReferenceList referenceList = aClass.isInterface() ? aClass.getExtendsList() : aClass.getImplementsList();
     assert referenceList != null;
     referenceList.add(ref);
-    PullUpHelper pullUpHelper = new PullUpHelper(aClass, anInterface, selectedMembers, javaDocPolicy);
+    PullUpProcessor pullUpHelper = new PullUpProcessor(aClass, anInterface, selectedMembers, javaDocPolicy);
     pullUpHelper.moveMembersToBase();
     return anInterface;
   }

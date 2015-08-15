@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayFactory;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,7 +82,11 @@ public abstract class PsiClassType extends PsiType {
 
   public boolean equals(Object obj) {
     if (this == obj) return true;
-    if (!(obj instanceof PsiClassType)) return false;
+    if (!(obj instanceof PsiClassType)) {
+      return obj instanceof PsiCapturedWildcardType &&
+             ((PsiCapturedWildcardType)obj).getLowerBound().equalsToText(CommonClassNames.JAVA_LANG_OBJECT) &&
+             equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+    }
     PsiClassType otherClassType = (PsiClassType)obj;
 
     String className = getClassName();
@@ -101,7 +106,7 @@ public abstract class PsiClassType extends PsiType {
     }
     return aClass.getManager().areElementsEquivalent(aClass, otherClass) &&
            (PsiUtil.isRawSubstitutor(aClass, result.getSubstitutor()) ||
-            PsiUtil.equalOnEquivalentClasses(result.getSubstitutor(), aClass, otherResult.getSubstitutor(), otherClass));
+            PsiUtil.equalOnEquivalentClasses(this, aClass, otherClassType, otherClass));
   }
 
   /**
@@ -166,7 +171,7 @@ public abstract class PsiClassType extends PsiType {
     if (aClass == null) return EMPTY_ARRAY;
 
     PsiClassType[] superTypes = aClass.getSuperTypes();
-    PsiType[] substitutionResults = new PsiType[superTypes.length];
+    PsiType[] substitutionResults = createArray(superTypes.length);
     for (int i = 0; i < superTypes.length; i++) {
       substitutionResults[i] = resolveResult.getSubstitutor().substitute(superTypes[i]);
     }
@@ -233,6 +238,7 @@ public abstract class PsiClassType extends PsiType {
    * @return type with requested language level
    */
   @NotNull
+  @Contract(pure = true)
   public abstract PsiClassType setLanguageLevel(@NotNull LanguageLevel languageLevel);
 
   /**
@@ -248,6 +254,7 @@ public abstract class PsiClassType extends PsiType {
         return null;
       }
 
+      @NotNull
       @Override
       public PsiSubstitutor getSubstitutor() {
         return PsiSubstitutor.EMPTY;
@@ -278,5 +285,24 @@ public abstract class PsiClassType extends PsiType {
         return false;
       }
     };
+  }
+
+  /**
+   * Temporary class to facilitate transition to {@link #getCanonicalText(boolean)}.
+   */
+  public static abstract class Stub extends PsiClassType {
+    protected Stub(LanguageLevel languageLevel, @NotNull PsiAnnotation[] annotations) {
+      super(languageLevel, annotations);
+    }
+
+    @NotNull
+    @Override
+    public final String getCanonicalText() {
+      return getCanonicalText(false);
+    }
+
+    @NotNull
+    @Override
+    public abstract String getCanonicalText(boolean annotated);
   }
 }

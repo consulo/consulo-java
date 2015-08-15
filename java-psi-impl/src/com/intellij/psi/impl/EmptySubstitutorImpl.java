@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,61 +15,87 @@
  */
 package com.intellij.psi.impl;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.EmptySubstitutor;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiSubstitutor;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeParameter;
+
 /**
- *  @author dsl
+ * @author dsl
  */
-public final class EmptySubstitutorImpl extends EmptySubstitutor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.EmptySubstitutorImpl");
-  @Override
-  public PsiType substitute(@NotNull PsiTypeParameter typeParameter){
-    return JavaPsiFacade.getInstance(typeParameter.getProject()).getElementFactory().createType(typeParameter);
-  }
+public final class EmptySubstitutorImpl extends EmptySubstitutor
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.EmptySubstitutorImpl");
 
-  @Override
-  public PsiType substitute(PsiType type){
-    return type;
-  }
+	@Override
+	public PsiType substitute(@NotNull PsiTypeParameter typeParameter)
+	{
+		return JavaPsiFacade.getInstance(typeParameter.getProject()).getElementFactory().createType(typeParameter);
+	}
 
-  @Override
-  public PsiType substituteWithBoundsPromotion(PsiTypeParameter typeParameter) {
-    return JavaPsiFacade.getInstance(typeParameter.getProject()).getElementFactory().createType(typeParameter);
-  }
+	@Override
+	public PsiType substitute(PsiType type)
+	{
+		return type;
+	}
 
-  @Override
-  public PsiSubstitutor put(PsiTypeParameter classParameter, PsiType mapping){
-    if (mapping != null && !mapping.isValid()) {
-      LOG.error("Invalid type in substitutor: " + mapping);
-    }
-    return new PsiSubstitutorImpl(classParameter, mapping);
-  }
+	@Override
+	public PsiType substituteWithBoundsPromotion(@NotNull PsiTypeParameter typeParameter)
+	{
+		return JavaPsiFacade.getInstance(typeParameter.getProject()).getElementFactory().createType(typeParameter);
+	}
 
-  @Override
-  public PsiSubstitutor putAll(PsiClass parentClass, PsiType[] mappings){
-    if(!parentClass.hasTypeParameters()) return this;
-    return new PsiSubstitutorImpl(parentClass, mappings);
-  }
+	@NotNull
+	@Override
+	public PsiSubstitutor put(@NotNull PsiTypeParameter classParameter, PsiType mapping)
+	{
+		if(mapping != null && !mapping.isValid())
+		{
+			LOG.error("Invalid type in substitutor: " + mapping);
+		}
+		return new PsiSubstitutorImpl(classParameter, mapping);
+	}
 
-  @Override
-  public PsiSubstitutor putAll(PsiSubstitutor another) {
-    return another;
-  }
+	@NotNull
+	@Override
+	public PsiSubstitutor putAll(@NotNull PsiClass parentClass, PsiType[] mappings)
+	{
+		if(!parentClass.hasTypeParameters())
+		{
+			return this;
+		}
+		return new PsiSubstitutorImpl(parentClass, mappings);
+	}
 
-  @Override
-  @NotNull
-  public Map<PsiTypeParameter, PsiType> getSubstitutionMap() {
-    return Collections.emptyMap();
-  }
+	@NotNull
+	@Override
+	public PsiSubstitutor putAll(@NotNull PsiSubstitutor another)
+	{
+		return another;
+	}
 
-  @Override
-  public boolean isValid() {
-    return true;
-  }
+	@Override
+	@NotNull
+	public Map<PsiTypeParameter, PsiType> getSubstitutionMap()
+	{
+		return Collections.emptyMap();
+	}
 
+	@Override
+	public boolean isValid()
+	{
+		return true;
+	}
+
+	@Override
+	public void ensureValid()
+	{
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,63 +15,77 @@
  */
 package com.intellij.psi;
 
-import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.search.GlobalSearchScope;
 
 /**
  * A type which represents a function denoted by a lambda expression.
  */
-public class PsiLambdaExpressionType extends PsiType {
-  private final PsiLambdaExpression myExpression;
+public class PsiLambdaExpressionType extends PsiType
+{
+	private final PsiLambdaExpression myExpression;
 
-  public PsiLambdaExpressionType(PsiLambdaExpression expression) {
-    super(PsiAnnotation.EMPTY_ARRAY);
-    myExpression = expression;
-  }
+	public PsiLambdaExpressionType(PsiLambdaExpression expression)
+	{
+		super(PsiAnnotation.EMPTY_ARRAY);
+		myExpression = expression;
+	}
 
-  @Override
-  public String getPresentableText() {
-    return "<lambda expression>";
-  }
+	@NotNull
+	@Override
+	public String getPresentableText()
+	{
+		return "<lambda expression>";
+	}
 
-  @Override
-  public String getCanonicalText() {
-    return getPresentableText();
-  }
+	@NotNull
+	@Override
+	public String getCanonicalText()
+	{
+		return getPresentableText();
+	}
 
-  @Override
-  public String getInternalCanonicalText() {
-    return getCanonicalText();
-  }
+	@NotNull
+	@Override
+	public String getInternalCanonicalText()
+	{
+		return getCanonicalText();
+	}
 
-  @Override
-  public boolean isValid() {
-    return myExpression.isValid();
-  }
+	@Override
+	public boolean isValid()
+	{
+		return myExpression.isValid();
+	}
 
-  @Override
-  public boolean equalsToText(@NonNls final String text) {
-    return false;
-  }
+	@Override
+	public boolean equalsToText(@NotNull @NonNls final String text)
+	{
+		return false;
+	}
 
-  @Override
-  public <A> A accept(@NotNull final PsiTypeVisitor<A> visitor) {
-    return visitor.visitLambdaExpressionType(this);
-  }
+	@Override
+	public <A> A accept(@NotNull final PsiTypeVisitor<A> visitor)
+	{
+		return visitor.visitLambdaExpressionType(this);
+	}
 
-  @Override
-  public GlobalSearchScope getResolveScope() {
-    return null;
-  }
+	@Override
+	public GlobalSearchScope getResolveScope()
+	{
+		return null;
+	}
 
-  @NotNull
-  @Override
-  public PsiType[] getSuperTypes() {
-    return PsiType.EMPTY_ARRAY;
-  }
+	@NotNull
+	@Override
+	public PsiType[] getSuperTypes()
+	{
+		return PsiType.EMPTY_ARRAY;
+	}
 
-  public PsiLambdaExpression getExpression() {
-    return myExpression;
-  }
+	public PsiLambdaExpression getExpression()
+	{
+		return myExpression;
+	}
 }

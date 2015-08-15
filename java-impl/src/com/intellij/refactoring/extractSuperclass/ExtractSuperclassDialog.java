@@ -15,6 +15,12 @@
  */
 package com.intellij.refactoring.extractSuperclass;
 
+import java.awt.BorderLayout;
+import java.util.List;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
@@ -24,7 +30,7 @@ import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.classMembers.MemberInfoChange;
 import com.intellij.refactoring.classMembers.MemberInfoModel;
-import com.intellij.refactoring.memberPullUp.PullUpHelper;
+import com.intellij.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.ui.MemberSelectionPanel;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.classMembers.InterfaceContainmentVerifier;
@@ -32,14 +38,10 @@ import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.classMembers.UsesAndInterfacesDependencyMemberInfoModel;
 import com.intellij.util.ArrayUtil;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
-
 class ExtractSuperclassDialog extends JavaExtractSuperBaseDialog {
   private final InterfaceContainmentVerifier myContainmentVerifier = new InterfaceContainmentVerifier() {
     public boolean checkedInterfacesContain(PsiMethod psiMethod) {
-      return PullUpHelper.checkedInterfacesContain(myMemberInfos, psiMethod);
+      return PullUpProcessor.checkedInterfacesContain(myMemberInfos, psiMethod);
     }
   };
 

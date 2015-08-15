@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,66 +15,96 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiResourceList;
+import com.intellij.psi.PsiResourceListElement;
+import com.intellij.psi.PsiResourceVariable;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+public class PsiResourceListImpl extends CompositePsiElement implements PsiResourceList
+{
+	public PsiResourceListImpl()
+	{
+		super(JavaElementType.RESOURCE_LIST);
+	}
 
-public class PsiResourceListImpl extends CompositePsiElement implements PsiResourceList {
-  public PsiResourceListImpl() {
-    super(JavaElementType.RESOURCE_LIST);
-  }
+	@Override
+	public int getResourceVariablesCount()
+	{
+		int count = 0;
+		for(PsiElement child = getFirstChild(); child != null; child = child.getNextSibling())
+		{
+			if(child instanceof PsiResourceListElement)
+			{
+				++count;
+			}
+		}
+		return count;
+	}
 
-  @Override
-  public int getResourceVariablesCount() {
-    int count = 0;
-    for (PsiElement child = getFirstChild(); child != null; child = child.getNextSibling()) {
-      if (child instanceof PsiResourceVariable) ++count;
-    }
-    return count;
-  }
+	@Deprecated
+	@Override
+	public List<PsiResourceVariable> getResourceVariables()
+	{
+		return PsiTreeUtil.getChildrenOfTypeAsList(this, PsiResourceVariable.class);
+	}
 
-  @NotNull
-  @Override
-  public List<PsiResourceVariable> getResourceVariables() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, PsiResourceVariable.class);
-  }
+	@NotNull
+	@Override
+	public Iterator<PsiResourceListElement> iterator()
+	{
+		return PsiTreeUtil.childIterator(this, PsiResourceListElement.class);
+	}
 
-  @Override
-  public void accept(@NotNull final PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitResourceList(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitResourceList(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @Override
-  public boolean processDeclarations(@NotNull final PsiScopeProcessor processor,
-                                     @NotNull final ResolveState state,
-                                     final PsiElement lastParent,
-                                     @NotNull final PsiElement place) {
-    return PsiImplUtil.processDeclarationsInResourceList(this, processor, state, lastParent);
-  }
+	@Override
+	public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+			@NotNull ResolveState state,
+			PsiElement lastParent,
+			@NotNull PsiElement place)
+	{
+		return PsiImplUtil.processDeclarationsInResourceList(this, processor, state, lastParent);
+	}
 
-  @Override
-  public void deleteChildInternal(@NotNull final ASTNode child) {
-    if (child.getPsi() instanceof PsiResourceVariable && getResourceVariablesCount() == 1) {
-      getTreeParent().deleteChildInternal(this);
-    }
+	@Override
+	public void deleteChildInternal(@NotNull ASTNode child)
+	{
+		if(child.getPsi() instanceof PsiResourceListElement && getResourceVariablesCount() == 1)
+		{
+			getTreeParent().deleteChildInternal(this);
+			return;
+		}
 
-    super.deleteChildInternal(child);
-  }
+		super.deleteChildInternal(child);
+	}
 
-  @Override
-  public String toString() {
-    return "PsiResourceList:" + getText();
-  }
+	@Override
+	public String toString()
+	{
+		return "PsiResourceList:" + getText();
+	}
 }

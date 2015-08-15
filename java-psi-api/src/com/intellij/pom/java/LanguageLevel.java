@@ -35,7 +35,8 @@ public enum LanguageLevel implements LanguageVersion<JavaLanguage>, Named, Named
 	JDK_1_6("1.6", JavaCoreBundle.message("jdk.1.6.language.level.description")),
 	JDK_1_7("1.7", JavaCoreBundle.message("jdk.1.7.language.level.description")),
 	JDK_1_8("1.8", JavaCoreBundle.message("jdk.1.8.language.level.description")),
-	JDK_1_9("1.9", JavaCoreBundle.message("jdk.1.9.language.level.description"));
+	JDK_1_9("1.9", JavaCoreBundle.message("jdk.1.9.language.level.description")),
+	JDK_X("Java X", JavaCoreBundle.message("jdk.X.language.level.description"));
 
 	public static final LanguageLevel HIGHEST = JDK_1_8;
 	public static final Key<LanguageLevel> KEY = Key.create("LANGUAGE_LEVEL");

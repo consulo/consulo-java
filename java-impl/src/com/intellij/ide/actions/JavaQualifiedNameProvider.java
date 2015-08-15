@@ -302,6 +302,6 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
     //  }
     //}
     final JavaCodeStyleManager codeStyleManagerEx = JavaCodeStyleManager.getInstance(element.getProject());
-    codeStyleManagerEx.shortenClassReferences(element, JavaCodeStyleManager.UNCOMPLETE_CODE);
+    codeStyleManagerEx.shortenClassReferences(element, JavaCodeStyleManager.INCOMPLETE_CODE);
   }
 }

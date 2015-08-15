@@ -19,16 +19,16 @@
  */
 package com.intellij.psi.codeStyle;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import java.util.Collection;
+
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.*;
+import com.intellij.util.IncorrectOperationException;
 
 public abstract class JavaCodeStyleManager {
   public static JavaCodeStyleManager getInstance(Project project) {
@@ -36,10 +36,10 @@ public abstract class JavaCodeStyleManager {
   }
 
   public static final int DO_NOT_ADD_IMPORTS = 0x1000;
-  public static final int UNCOMPLETE_CODE = 0x2000;
+  public static final int INCOMPLETE_CODE = 0x2000;
 
   public abstract boolean addImport(@NotNull PsiJavaFile file, @NotNull PsiClass refClass);
-  public abstract PsiElement shortenClassReferences(@NotNull PsiElement element, @MagicConstant(flags = {DO_NOT_ADD_IMPORTS, UNCOMPLETE_CODE}) int flags) throws IncorrectOperationException;
+  public abstract PsiElement shortenClassReferences(@NotNull PsiElement element, @MagicConstant(flags = {DO_NOT_ADD_IMPORTS, INCOMPLETE_CODE}) int flags) throws IncorrectOperationException;
 
   @NotNull public abstract String getPrefixByVariableKind(VariableKind variableKind);
   @NotNull public abstract String getSuffixByVariableKind(VariableKind variableKind);

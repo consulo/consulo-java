@@ -15,11 +15,13 @@
  */
 package com.intellij.psi;
 
+import org.consulo.lombok.annotations.ArrayFactoryFields;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a Java <code>return</code> statement.
  */
+@ArrayFactoryFields
 public interface PsiReturnStatement extends PsiStatement {
   /**
    * Returns the expression representing the value returned by the statement.

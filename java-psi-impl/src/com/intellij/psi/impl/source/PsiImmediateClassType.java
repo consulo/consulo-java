@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,271 +15,353 @@
  */
 package com.intellij.psi.impl.source;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *  @author dsl
+ * @author dsl
  */
-public class PsiImmediateClassType extends PsiClassType {
-  private final PsiClass myClass;
-  private final PsiSubstitutor mySubstitutor;
-  private final PsiManager myManager;
-  private String myCanonicalText;
-  private String myPresentableText;
-  private String myInternalCanonicalText;
+public class PsiImmediateClassType extends PsiClassType.Stub
+{
+	private final PsiClass myClass;
+	private final PsiSubstitutor mySubstitutor;
+	private final PsiManager myManager;
+	private String myCanonicalText;
+	private String myCanonicalTextAnnotated;
+	private String myPresentableText;
+	private String myInternalCanonicalText;
 
-  private final ClassResolveResult myClassResolveResult = new ClassResolveResult() {
-    @Override
-    public PsiClass getElement() {
-      return myClass;
-    }
+	private final ClassResolveResult myClassResolveResult = new ClassResolveResult()
+	{
+		@Override
+		public PsiClass getElement()
+		{
+			return myClass;
+		}
 
-    @Override
-    public PsiSubstitutor getSubstitutor() {
-      return mySubstitutor;
-    }
+		@NotNull
+		@Override
+		public PsiSubstitutor getSubstitutor()
+		{
+			return mySubstitutor;
+		}
 
-    @Override
-    public boolean isValidResult() {
-      return true;
-    }
+		@Override
+		public boolean isValidResult()
+		{
+			return true;
+		}
 
-    @Override
-    public boolean isAccessible() {
-      return true;
-    }
+		@Override
+		public boolean isAccessible()
+		{
+			return true;
+		}
 
-    @Override
-    public boolean isStaticsScopeCorrect() {
-      return true;
-    }
+		@Override
+		public boolean isStaticsScopeCorrect()
+		{
+			return true;
+		}
 
-    @Override
-    public PsiElement getCurrentFileResolveScope() {
-      return null;
-    }
+		@Override
+		public PsiElement getCurrentFileResolveScope()
+		{
+			return null;
+		}
 
-    @Override
-    public boolean isPackagePrefixPackageReference() {
-      return false;
-    }
-  };
+		@Override
+		public boolean isPackagePrefixPackageReference()
+		{
+			return false;
+		}
+	};
 
-  public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor) {
-    this(aClass, substitutor, null, PsiAnnotation.EMPTY_ARRAY);
-  }
+	public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor)
+	{
+		this(aClass, substitutor, null, PsiAnnotation.EMPTY_ARRAY);
+	}
 
-  public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor, @Nullable LanguageLevel languageLevel) {
-    this(aClass, substitutor, languageLevel, PsiAnnotation.EMPTY_ARRAY);
-  }
+	public PsiImmediateClassType(@NotNull PsiClass aClass,
+			@NotNull PsiSubstitutor substitutor,
+			@Nullable LanguageLevel level)
+	{
+		this(aClass, substitutor, level, PsiAnnotation.EMPTY_ARRAY);
+	}
 
-  public PsiImmediateClassType(@NotNull PsiClass aClass,
-                               @NotNull PsiSubstitutor substitutor,
-                               @Nullable LanguageLevel languageLevel,
-                               @NotNull PsiAnnotation[] annotations) {
-    super(languageLevel, annotations);
-    myClass = aClass;
-    myManager = aClass.getManager();
-    mySubstitutor = substitutor;
-    assert substitutor.isValid();
-  }
+	public PsiImmediateClassType(@NotNull PsiClass aClass,
+			@NotNull PsiSubstitutor substitutor,
+			@Nullable LanguageLevel level,
+			@NotNull PsiAnnotation... annotations)
+	{
+		super(level, annotations);
+		myClass = aClass;
+		myManager = aClass.getManager();
+		mySubstitutor = substitutor;
+		assert substitutor.isValid();
+	}
 
-  @Override
-  public PsiClass resolve() {
-    return myClass;
-  }
+	@Override
+	public PsiClass resolve()
+	{
+		return myClass;
+	}
 
-  @Override
-  public String getClassName() {
-    return myClass.getName();
-  }
-  @Override
-  @NotNull
-  public PsiType[] getParameters() {
-    final PsiTypeParameter[] parameters = myClass.getTypeParameters();
-    if (parameters.length == 0) {
-      return PsiType.EMPTY_ARRAY;
-    }
+	@Override
+	public String getClassName()
+	{
+		return myClass.getName();
+	}
 
-    List<PsiType> lst = new ArrayList<PsiType>();
-    for (PsiTypeParameter parameter : parameters) {
-      PsiType substituted = mySubstitutor.substitute(parameter);
-      if (substituted != null) {
-        lst.add(substituted);
-      }
-    }
-    return lst.toArray(new PsiType[lst.size()]);
-  }
+	@Override
+	@NotNull
+	public PsiType[] getParameters()
+	{
+		final PsiTypeParameter[] parameters = myClass.getTypeParameters();
+		if(parameters.length == 0)
+		{
+			return PsiType.EMPTY_ARRAY;
+		}
 
-  @Override
-  @NotNull
-  public ClassResolveResult resolveGenerics() {
-    return myClassResolveResult;
-  }
+		List<PsiType> lst = new ArrayList<PsiType>();
+		for(PsiTypeParameter parameter : parameters)
+		{
+			PsiType substituted = mySubstitutor.substitute(parameter);
+			if(substituted != null)
+			{
+				lst.add(substituted);
+			}
+		}
+		return lst.toArray(createArray(lst.size()));
+	}
 
-  @Override
-  @NotNull
-  public PsiClassType rawType() {
-    return JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory().createType(myClass);
-  }
+	@Override
+	@NotNull
+	public ClassResolveResult resolveGenerics()
+	{
+		return myClassResolveResult;
+	}
 
-  @Override
-  public String getPresentableText() {
-    if (myPresentableText == null) {
-      StringBuilder buffer = new StringBuilder();
-      buildText(myClass, mySubstitutor, buffer, false, false);
-      myPresentableText = buffer.toString();
-    }
-    return myPresentableText;
-  }
+	@Override
+	@NotNull
+	public PsiClassType rawType()
+	{
+		return JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory().createType(myClass);
+	}
 
-  @Override
-  public String getCanonicalText() {
-    if (myCanonicalText == null) {
-      assert mySubstitutor.isValid();
-      StringBuilder buffer = new StringBuilder();
-      buildText(myClass, mySubstitutor, buffer, true, false);
-      myCanonicalText = buffer.toString();
-    }
-    return myCanonicalText;
-  }
+	@NotNull
+	@Override
+	public String getPresentableText()
+	{
+		if(myPresentableText == null)
+		{
+			myPresentableText = getText(TextType.PRESENTABLE, true);
+		}
+		return myPresentableText;
+	}
 
-  @Override
-  public String getInternalCanonicalText() {
-    if (myInternalCanonicalText == null) {
-      StringBuilder buffer = new StringBuilder();
-      buildText(myClass, mySubstitutor, buffer, true, true);
-      myInternalCanonicalText = buffer.toString();
-    }
-    return myInternalCanonicalText;
-  }
+	@NotNull
+	@Override
+	public String getCanonicalText(boolean annotated)
+	{
+		String cached = annotated ? myCanonicalTextAnnotated : myCanonicalText;
+		if(cached == null)
+		{
+			cached = getText(TextType.CANONICAL, annotated);
+			if(annotated)
+			{
+				myCanonicalTextAnnotated = cached;
+			}
+			else
+			{
+				myCanonicalText = cached;
+			}
+		}
+		return cached;
+	}
 
-  private void buildText(@NotNull PsiClass aClass,
-                         @NotNull PsiSubstitutor substitutor,
-                         @NotNull StringBuilder buffer,
-                         boolean canonical,
-                         boolean internal) {
-    if (aClass instanceof PsiAnonymousClass) {
-      ClassResolveResult baseResolveResult = ((PsiAnonymousClass) aClass).getBaseClassType().resolveGenerics();
-      PsiClass baseClass = baseResolveResult.getElement();
-      PsiSubstitutor baseSub = baseResolveResult.getSubstitutor();
-      if (baseClass != null) {
-        buildText(baseClass, baseSub, buffer, canonical, internal);
-      }
-      return;
-    }
+	@NotNull
+	@Override
+	public String getInternalCanonicalText()
+	{
+		if(myInternalCanonicalText == null)
+		{
+			myInternalCanonicalText = getText(TextType.INT_CANONICAL, true);
+		}
+		return myInternalCanonicalText;
+	}
 
-    if (canonical == internal) {
-      buffer.append(getAnnotationsTextPrefix(internal, false, true));
-    }
+	private enum TextType
+	{
+		PRESENTABLE, CANONICAL, INT_CANONICAL
+	}
 
-    PsiClass enclosingClass = null;
-    if (!aClass.hasModifierProperty(PsiModifier.STATIC)) {
-      final PsiElement parent = aClass.getParent();
-      if (parent instanceof PsiClass && !(parent instanceof PsiAnonymousClass)) {
-        enclosingClass = (PsiClass)parent;
-      }
-    }
-    if (enclosingClass != null) {
-      buildText(enclosingClass, substitutor, buffer, canonical, false);
-      buffer.append('.');
-      buffer.append(aClass.getName());
-    }
-    else {
-      final String name;
-      if (!canonical) {
-        name = aClass.getName();
-      }
-      else {
-        final String qualifiedName = aClass.getQualifiedName();
-        if (qualifiedName == null) {
-          name = aClass.getName();
-        }
-        else {
-          name = qualifiedName;
-        }
-      }
-      buffer.append(name);
-    }
+	private String getText(@NotNull TextType textType, boolean annotated)
+	{
+		mySubstitutor.ensureValid();
+		StringBuilder buffer = new StringBuilder();
+		buildText(myClass, mySubstitutor, buffer, textType, annotated);
+		return buffer.toString();
+	}
 
-    PsiTypeParameter[] typeParameters = aClass.getTypeParameters();
-    if (typeParameters.length > 0) {
-      StringBuilder pineBuffer = new StringBuilder();
-      pineBuffer.append('<');
-      for (int i = 0; i < typeParameters.length; i++) {
-        PsiTypeParameter typeParameter = typeParameters[i];
-        assert typeParameter.isValid();
-        if (i > 0) pineBuffer.append(',');
-        final PsiType substitutionResult = substitutor.substitute(typeParameter);
-        if (substitutionResult == null) {
-          pineBuffer = null;
-          break;
-        }
-        assert substitutionResult.isValid();
-        if (canonical) {
-          if (internal) {
-            pineBuffer.append(substitutionResult.getInternalCanonicalText());
-          }
-          else {
-            pineBuffer.append(substitutionResult.getCanonicalText());
-          }
-        }
-        else {
-          pineBuffer.append(substitutionResult.getPresentableText());
-        }
-      }
-      if (pineBuffer != null) {
-        buffer.append(pineBuffer);
-        buffer.append('>');
-      }
-    }
-  }
+	private void buildText(@NotNull PsiClass aClass,
+			@NotNull PsiSubstitutor substitutor,
+			@NotNull StringBuilder buffer,
+			@NotNull TextType textType,
+			boolean annotated)
+	{
+		if(aClass instanceof PsiAnonymousClass)
+		{
+			ClassResolveResult baseResolveResult = ((PsiAnonymousClass) aClass).getBaseClassType().resolveGenerics();
+			PsiClass baseClass = baseResolveResult.getElement();
+			if(baseClass != null)
+			{
+				if(textType == TextType.INT_CANONICAL)
+				{
+					buffer.append("anonymous ");
+				}
+				buildText(baseClass, baseResolveResult.getSubstitutor(), buffer, textType, false);
+			}
+			return;
+		}
 
-  @Override
-  public boolean isValid() {
-    return myClass.isValid() && mySubstitutor.isValid();
-  }
+		boolean qualified = textType != TextType.PRESENTABLE;
 
-  @Override
-  public boolean equalsToText(String text) {
-    PsiElementFactory factory = JavaPsiFacade.getInstance(myManager.getProject()).getElementFactory();
-    final PsiType patternType;
-    try {
-      patternType = factory.createTypeFromText(text, myClass);
-    }
-    catch (IncorrectOperationException e) {
-      return false;
-    }
-    return equals(patternType);
+		PsiClass enclosingClass = null;
+		if(!aClass.hasModifierProperty(PsiModifier.STATIC))
+		{
+			PsiElement parent = aClass.getParent();
+			if(parent instanceof PsiClass && !(parent instanceof PsiAnonymousClass))
+			{
+				enclosingClass = (PsiClass) parent;
+			}
+		}
+		if(enclosingClass != null)
+		{
+			buildText(enclosingClass, substitutor, buffer, textType, false);
+			buffer.append('.');
+		}
+		else if(qualified)
+		{
+			String fqn = aClass.getQualifiedName();
+			if(fqn != null)
+			{
+				String prefix = StringUtil.getPackageName(fqn);
+				if(!StringUtil.isEmpty(prefix))
+				{
+					buffer.append(prefix);
+					buffer.append('.');
+				}
+			}
+		}
 
-  }
+		if(annotated)
+		{
+			PsiNameHelper.appendAnnotations(buffer, getAnnotations(), qualified);
+		}
 
-  @Override
-  @NotNull
-  public GlobalSearchScope getResolveScope() {
-    return myClass.getResolveScope();
-  }
+		buffer.append(aClass.getName());
 
-  @Override
-  @NotNull
-  public LanguageLevel getLanguageLevel() {
-    if (myLanguageLevel != null) return myLanguageLevel;
-    return PsiUtil.getLanguageLevel(myClass);
-  }
+		PsiTypeParameter[] typeParameters = aClass.getTypeParameters();
+		if(typeParameters.length > 0)
+		{
+			int pos = buffer.length();
+			buffer.append('<');
 
-  @NotNull
-  @Override
-  public PsiClassType setLanguageLevel(@NotNull final LanguageLevel languageLevel) {
-    if (languageLevel.equals(myLanguageLevel)) return this;
-    return new PsiImmediateClassType(myClass, mySubstitutor, languageLevel,getAnnotations());
-  }
+			for(int i = 0; i < typeParameters.length; i++)
+			{
+				PsiTypeParameter typeParameter = typeParameters[i];
+				PsiUtilCore.ensureValid(typeParameter);
+
+				if(i > 0)
+				{
+					buffer.append(',');
+					if(textType == TextType.PRESENTABLE)
+					{
+						buffer.append(' ');
+					}
+				}
+
+				PsiType substitutionResult = substitutor.substitute(typeParameter);
+				if(substitutionResult == null)
+				{
+					buffer.setLength(pos);
+					pos = -1;
+					break;
+				}
+				PsiUtil.ensureValidType(substitutionResult);
+
+				if(textType == TextType.PRESENTABLE)
+				{
+					buffer.append(substitutionResult.getPresentableText());
+				}
+				else if(textType == TextType.CANONICAL)
+				{
+					buffer.append(substitutionResult.getCanonicalText(annotated));
+				}
+				else
+				{
+					buffer.append(substitutionResult.getInternalCanonicalText());
+				}
+			}
+
+			if(pos >= 0)
+			{
+				buffer.append('>');
+			}
+		}
+	}
+
+	@Override
+	public boolean isValid()
+	{
+		return myClass.isValid() && mySubstitutor.isValid();
+	}
+
+	@Override
+	public boolean equalsToText(@NotNull String text)
+	{
+		PsiElementFactory factory = JavaPsiFacade.getInstance(myManager.getProject()).getElementFactory();
+		final PsiType patternType;
+		try
+		{
+			patternType = factory.createTypeFromText(text, myClass);
+		}
+		catch(IncorrectOperationException e)
+		{
+			return false;
+		}
+		return equals(patternType);
+	}
+
+	@Override
+	@NotNull
+	public GlobalSearchScope getResolveScope()
+	{
+		return myClass.getResolveScope();
+	}
+
+	@Override
+	@NotNull
+	public LanguageLevel getLanguageLevel()
+	{
+		return myLanguageLevel != null ? myLanguageLevel : PsiUtil.getLanguageLevel(myClass);
+	}
+
+	@NotNull
+	@Override
+	public PsiClassType setLanguageLevel(@NotNull LanguageLevel level)
+	{
+		return level.equals(myLanguageLevel) ? this : new PsiImmediateClassType(myClass, mySubstitutor, level, getAnnotations());
+	}
 }

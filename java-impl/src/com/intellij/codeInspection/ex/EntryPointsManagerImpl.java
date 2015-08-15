@@ -34,6 +34,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -41,6 +42,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.DialogWrapper;
 
 @State(
@@ -87,13 +89,19 @@ public class EntryPointsManagerImpl extends EntryPointsManagerBase implements Pe
 	@Override
 	public JButton createConfigureAnnotationsBtn()
 	{
+		return createConfigureAnnotationsButton();
+	}
+
+	@NotNull
+	public static JButton createConfigureAnnotationsButton()
+	{
 		final JButton configureAnnotations = new JButton("Configure annotations...");
 		configureAnnotations.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				configureAnnotations();
+				getInstance(ProjectUtil.guessCurrentProject(configureAnnotations)).configureAnnotations();
 			}
 		});
 		return configureAnnotations;

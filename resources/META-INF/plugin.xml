@@ -361,10 +361,6 @@
 		</component>
 
 		<component>
-			<implementation-class>com.intellij.codeInsight.daemon.impl.PostHighlightingPassFactory</implementation-class>
-		</component>
-
-		<component>
 			<interface-class>com.intellij.debugger.ui.DebuggerPanelsManager</interface-class>
 			<implementation-class>com.intellij.debugger.ui.DebuggerPanelsManager</implementation-class>
 		</component>
@@ -547,6 +543,10 @@
 			<with attribute="implementationClass" implements="com.intellij.refactoring.move.moveInner.MoveInnerHandler"/>
 		</extensionPoint>
 
+		<extensionPoint name="refactoring.pullUpHelperFactory" beanClass="com.intellij.lang.LanguageExtensionPoint">
+			<with attribute="implementationClass" implements="com.intellij.refactoring.memberPullUp.PullUpHelperFactory"/>
+		</extensionPoint>
+
 		<extensionPoint name="refactoring.moveClassToInnerHandler"
 						interface="com.intellij.refactoring.move.moveClassesOrPackages.MoveClassToInnerHandler"/>
 
@@ -638,6 +638,8 @@
 									  id="java"/>
 		<refactoring.safeDelete.JavaSafeDeleteDelegate implementationClass="com.intellij.refactoring.safeDelete.JavaSafeDeleteDelegateImpl"
 													   language="JAVA"/>
+		<refactoring.pullUpHelperFactory language="JAVA" implementationClass="com.intellij.refactoring.memberPullUp.JavaPullUpHelperFactory"/>
+
 		<safeDelete.importSearcher implementation="com.intellij.refactoring.safeDelete.JavaImportSearcher"/>
 
 		<refactoring.introduceParameterMethodUsagesProcessor
