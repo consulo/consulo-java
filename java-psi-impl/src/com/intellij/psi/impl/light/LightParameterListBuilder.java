@@ -29,7 +29,7 @@ public class LightParameterListBuilder extends LightElement implements PsiParame
 
   @Override
   public String toString() {
-    return "Light parameter lsit";
+    return "Light parameter list";
   }
 
   @NotNull
