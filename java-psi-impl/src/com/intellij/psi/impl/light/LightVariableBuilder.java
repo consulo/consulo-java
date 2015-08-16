@@ -79,6 +79,12 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 		return (T) this;
 	}
 
+	public T setModifierList(LightModifierList modifierList)
+	{
+		myModifierList = modifierList;
+		return (T)this;
+	}
+
 	@Override
 	public boolean hasModifierProperty(@NonNls @NotNull String name)
 	{
