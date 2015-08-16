@@ -24,108 +24,131 @@ import com.intellij.util.PlatformIcons;
 /**
  * @author peter
  */
-public class LightVariableBuilder<T extends LightVariableBuilder> extends LightElement implements PsiVariable, NavigationItem, OriginInfoAwareElement {
-  private final String myName;
-  private final PsiType myType;
-  private volatile LightModifierList myModifierList;
-  private volatile Icon myBaseIcon = PlatformIcons.VARIABLE_ICON;
-  private String myOriginInfo;
+public class LightVariableBuilder<T extends LightVariableBuilder> extends LightElement implements PsiVariable,
+		NavigationItem, OriginInfoAwareElement
+{
+	private final String myName;
+	private final PsiType myType;
+	private volatile LightModifierList myModifierList;
+	private volatile Icon myBaseIcon = PlatformIcons.VARIABLE_ICON;
+	private String myOriginInfo;
 
-  public LightVariableBuilder(@NotNull String name, @NotNull String type, @NotNull PsiElement navigationElement) {
-    this(name, JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type, navigationElement), navigationElement);
-  }
+	public LightVariableBuilder(@NotNull String name, @NotNull String type, @NotNull PsiElement navigationElement)
+	{
+		this(name, JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type,
+				navigationElement), navigationElement);
+	}
 
-  public LightVariableBuilder(@NotNull String name, @NotNull PsiType type, @NotNull PsiElement navigationElement) {
-    this(navigationElement.getManager(), name, type, JavaLanguage.INSTANCE);
-    setNavigationElement(navigationElement);
-  }
-  
-  public LightVariableBuilder(PsiManager manager, @NotNull String name, @NotNull PsiType type, Language language) {
-    super(manager, language);
-    myName = name;
-    myType = type;
-    myModifierList = new LightModifierList(manager);
-  }
+	public LightVariableBuilder(@NotNull String name, @NotNull PsiType type, @NotNull PsiElement navigationElement)
+	{
+		this(navigationElement.getManager(), name, type, JavaLanguage.INSTANCE);
+		setNavigationElement(navigationElement);
+	}
 
-  @Override
-  public String toString() {
-    return "LightVariableBuilder:" + getName();
-  }
+	public LightVariableBuilder(PsiManager manager, @NotNull String name, @NotNull PsiType type, Language language)
+	{
+		super(manager, language);
+		myName = name;
+		myType = type;
+		myModifierList = new LightModifierList(manager);
+	}
 
-  @NotNull
-  @Override
-  public PsiType getType() {
-    return myType;
-  }
+	@Override
+	public String toString()
+	{
+		return "LightVariableBuilder:" + getName();
+	}
 
-  @Override
-  @NotNull
-  public PsiModifierList getModifierList() {
-    return myModifierList;
-  }
+	@NotNull
+	@Override
+	public PsiType getType()
+	{
+		return myType;
+	}
 
-  public T setModifiers(String... modifiers) {
-    myModifierList = new LightModifierList(getManager(), getLanguage(), modifiers);
-    return (T)this;
-  }
+	@Override
+	@NotNull
+	public PsiModifierList getModifierList()
+	{
+		return myModifierList;
+	}
 
-  @Override
-  public boolean hasModifierProperty(@NonNls @NotNull String name) {
-    return myModifierList.hasModifierProperty(name);
-  }
+	public T setModifiers(String... modifiers)
+	{
+		myModifierList = new LightModifierList(getManager(), getLanguage(), modifiers);
+		return (T) this;
+	}
 
-  @NotNull
-  @Override
-  public String getName() {
-    return myName;
-  }
+	@Override
+	public boolean hasModifierProperty(@NonNls @NotNull String name)
+	{
+		return myModifierList.hasModifierProperty(name);
+	}
 
-  @Override
-  public PsiTypeElement getTypeElement() {
-    return null;
-  }
+	@NotNull
+	@Override
+	public String getName()
+	{
+		return myName;
+	}
 
-  @Override
-  public PsiExpression getInitializer() {
-    return null;
-  }
+	@Override
+	public PsiTypeElement getTypeElement()
+	{
+		return null;
+	}
 
-  @Override
-  public boolean hasInitializer() {
-    return false;
-  }
+	@Override
+	public PsiExpression getInitializer()
+	{
+		return null;
+	}
 
-  @Override
-  public void normalizeDeclaration() throws IncorrectOperationException {
-  }
+	@Override
+	public boolean hasInitializer()
+	{
+		return false;
+	}
 
-  @Override
-  public Object computeConstantValue() {
-    return null;
-  }
+	@Override
+	public void normalizeDeclaration() throws IncorrectOperationException
+	{
+	}
 
-  @Override
-  public PsiIdentifier getNameIdentifier() {
-    return null;
-  }
+	@Override
+	public Object computeConstantValue()
+	{
+		return null;
+	}
 
-  @Override
-  public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
-    throw new UnsupportedOperationException("setName is not implemented yet in com.intellij.psi.impl.light.LightVariableBuilder");
-  }
+	@Override
+	public PsiIdentifier getNameIdentifier()
+	{
+		return null;
+	}
 
-  public T setBaseIcon(Icon baseIcon) {
-    myBaseIcon = baseIcon;
-    return (T)this;
-  }
+	@Override
+	public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException
+	{
+		throw new UnsupportedOperationException("setName is not implemented yet in com.intellij.psi.impl.light" +
+				".LightVariableBuilder");
+	}
 
-  @Nullable
-  @Override
-  public String getOriginInfo() {
-    return myOriginInfo;
-  }
+	public T setBaseIcon(Icon baseIcon)
+	{
+		myBaseIcon = baseIcon;
+		return (T) this;
+	}
 
-  public void setOriginInfo(@Nullable String originInfo) {
-    myOriginInfo = originInfo;
-  }
+	@Nullable
+	@Override
+	public String getOriginInfo()
+	{
+		return myOriginInfo;
+	}
+
+	public void setOriginInfo(@Nullable String originInfo)
+	{
+		myOriginInfo = originInfo;
+	}
 }
