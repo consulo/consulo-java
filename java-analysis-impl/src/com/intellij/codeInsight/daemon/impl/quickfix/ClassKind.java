@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
-
 /**
- * @author ven
-*/
-public enum CreateClassKind implements ClassKind {
-  CLASS     (QuickFixBundle.message("create.class")),
-  INTERFACE (QuickFixBundle.message("create.interface")),
-  ENUM      (QuickFixBundle.message("create.enum")),
-  ANNOTATION("annotation");
-
-  private final String myDescription;
-
-  CreateClassKind(final String description) {
-    myDescription = description;
-  }
-
-  @Override
-  public String getDescription() {
-    return myDescription;
-  }
+ * Created by Max Medvedev on 28/05/14
+ */
+public interface ClassKind
+{
+	String getDescription();
 }
