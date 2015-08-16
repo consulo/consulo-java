@@ -40,7 +40,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
  */
 public class HardcodedContracts
 {
-	static List<MethodContract> getHardcodedContracts(@NotNull PsiMethod method, @NotNull PsiMethodCallExpression call)
+	static List<MethodContract> getHardcodedContracts(@NotNull PsiMethod method, @Nullable PsiMethodCallExpression call)
 	{
 		PsiClass owner = method.getContainingClass();
 		if(owner == null)
@@ -75,6 +75,10 @@ public class HardcodedContracts
 				"org.testng.Assert".equals(className) ||
 				"org.testng.AssertJUnit".equals(className))
 		{
+			if(call == null)
+			{
+				return Collections.emptyList();
+			}
 			return handleTestFrameworks(paramCount, className, methodName, call);
 		}
 
