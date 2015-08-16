@@ -26,16 +26,19 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiParameter;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
 /**
  * @author peter
  */
-class HardcodedContracts
+public class HardcodedContracts
 {
 	static List<MethodContract> getHardcodedContracts(@NotNull PsiMethod method, @NotNull PsiMethodCallExpression call)
 	{
@@ -53,7 +56,8 @@ class HardcodedContracts
 		{
 			if("exit".equals(methodName))
 			{
-				return Collections.singletonList(new MethodContract(createConstraintArray(paramCount), THROW_EXCEPTION));
+				return Collections.singletonList(new MethodContract(createConstraintArray(paramCount),
+						THROW_EXCEPTION));
 			}
 		}
 		else if("com.google.common.base.Preconditions".equals(className))
@@ -91,9 +95,11 @@ class HardcodedContracts
 				PsiExpression[] notArgs = ((PsiMethodCallExpression) expr).getArgumentList().getExpressions();
 				if(notArgs.length == 1 &&
 						notArgs[0] instanceof PsiMethodCallExpression &&
-						"equalTo".equals(((PsiMethodCallExpression) notArgs[0]).getMethodExpression().getReferenceName()))
+						"equalTo".equals(((PsiMethodCallExpression) notArgs[0]).getMethodExpression().getReferenceName
+								()))
 				{
-					PsiExpression[] equalArgs = ((PsiMethodCallExpression) notArgs[0]).getArgumentList().getExpressions();
+					PsiExpression[] equalArgs = ((PsiMethodCallExpression) notArgs[0]).getArgumentList()
+							.getExpressions();
 					if(equalArgs.length == 1 && ExpressionUtils.isNullLiteral(equalArgs[0]))
 					{
 						return true;
@@ -104,7 +110,9 @@ class HardcodedContracts
 		return false;
 	}
 
-	private static List<MethodContract> handleTestFrameworks(int paramCount, String className, String methodName,
+	private static List<MethodContract> handleTestFrameworks(int paramCount,
+			String className,
+			String methodName,
 			@NotNull PsiMethodCallExpression call)
 	{
 		if("assertThat".equals(methodName))
@@ -163,5 +171,21 @@ class HardcodedContracts
 			return Collections.singletonList(new MethodContract(constraints, THROW_EXCEPTION));
 		}
 		return Collections.emptyList();
+	}
+
+	public static boolean hasHardcodedContracts(@Nullable PsiElement element)
+	{
+		if(element instanceof PsiMethod)
+		{
+			return !getHardcodedContracts((PsiMethod) element, null).isEmpty();
+		}
+
+		if(element instanceof PsiParameter)
+		{
+			PsiElement parent = element.getParent();
+			return parent != null && hasHardcodedContracts(parent.getParent());
+		}
+
+		return false;
 	}
 }

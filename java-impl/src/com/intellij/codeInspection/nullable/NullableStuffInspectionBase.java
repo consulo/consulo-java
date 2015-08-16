@@ -15,12 +15,23 @@
  */
 package com.intellij.codeInspection.nullable;
 
+import java.util.List;
+
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.codeInsight.intention.impl.AddNotNullAnnotationFix;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.AnnotateMethodFix;
+import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.codeInspection.RemoveAnnotationQuickFix;
 import com.intellij.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -31,13 +42,13 @@ import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.*;
+import com.intellij.psi.util.ClassUtil;
+import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.psi.util.PropertyUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.util.List;
 
 public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionTool {
   // deprecated fields remain to minimize changes to users inspection profiles (which are often located in version control).
@@ -104,7 +115,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
                 }
               };
               if (REPORT_NOT_ANNOTATED_GETTER) {
-                if (!AnnotationUtil.isAnnotated(getter, manager.getAllAnnotations(), false, false) &&
+                if (!manager.hasNullability(field)&&
                     !TypeConversionUtil.isPrimitiveAndNotNull(getter.getReturnType())) {
                   holder.registerProblem(nameIdentifier, InspectionsBundle
                     .message("inspection.nullable.problems.annotated.field.getter.not.annotated", StringUtil.getShortName(anno)),
@@ -131,7 +142,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
             final PsiParameter parameter = parameters[0];
             LOG.assertTrue(parameter != null, setter.getText());
             AddAnnotationPsiFix addAnnoFix = new AddAnnotationPsiFix(anno, parameter, PsiNameValuePair.EMPTY_ARRAY, ArrayUtil.toStringArray(annoToRemove));
-            if (REPORT_NOT_ANNOTATED_GETTER && !AnnotationUtil.isAnnotated(parameter, manager.getAllAnnotations(), false, false) && !TypeConversionUtil.isPrimitiveAndNotNull(parameter.getType())) {
+            if (REPORT_NOT_ANNOTATED_GETTER &&  !manager.hasNullability(parameter) && !TypeConversionUtil.isPrimitiveAndNotNull(parameter.getType())) {
               final PsiIdentifier nameIdentifier1 = parameter.getNameIdentifier();
               assertValidElement(setter, parameter, nameIdentifier1);
               holder.registerProblem(nameIdentifier1,
@@ -167,7 +178,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
               if (target instanceof PsiParameter) {
                 PsiParameter parameter = (PsiParameter)target;
                 AddAnnotationPsiFix fix = new AddAnnotationPsiFix(anno, parameter, PsiNameValuePair.EMPTY_ARRAY, ArrayUtil.toStringArray(annoToRemove));
-                if (REPORT_NOT_ANNOTATED_GETTER && !AnnotationUtil.isAnnotated(parameter, manager.getAllAnnotations(), false, false) && !TypeConversionUtil.isPrimitiveAndNotNull(parameter.getType())) {
+                if (REPORT_NOT_ANNOTATED_GETTER &&  !manager.hasNullability(parameter) && !TypeConversionUtil.isPrimitiveAndNotNull(parameter.getType())) {
                   final PsiIdentifier nameIdentifier2 = parameter.getNameIdentifier();
                   assert nameIdentifier2 != null : parameter;
                   holder.registerProblem(nameIdentifier2, InspectionsBundle
@@ -326,7 +337,7 @@ public class NullableStuffInspectionBase extends BaseJavaBatchLocalInspectionToo
                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
           }
           if (!reported_not_annotated_parameter_overrides_notnull[i] && REPORT_NOT_ANNOTATED_METHOD_OVERRIDES_NOTNULL) {
-            if (!AnnotationUtil.isAnnotated(parameter, nullableManager.getAllAnnotations(), false, false) &&
+            if (!NullableNotNullManager.getInstance(parameter.getProject()).hasNullability(parameter) &&
                 nullableManager.isNotNull(superParameter, false)) {
               reported_not_annotated_parameter_overrides_notnull[i] = true;
               final LocalQuickFix fix = AnnotationUtil.isAnnotatingApplicable(parameter, nullableManager.getDefaultNotNull())
