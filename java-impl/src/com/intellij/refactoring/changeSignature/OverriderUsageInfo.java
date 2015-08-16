@@ -21,38 +21,49 @@ import com.intellij.usageView.UsageInfo;
 /**
  * @author ven
  */
-public class OverriderUsageInfo extends UsageInfo {
-  private final PsiMethod myBaseMethod;
-  private final boolean myToInsertArgs;
-  private final boolean myToCatchExceptions;
-  private final boolean myIsOriginalOverrider;
+public class OverriderUsageInfo extends UsageInfo
+{
+	private final PsiMethod myBaseMethod;
+	private final boolean myToInsertArgs;
+	private final boolean myToCatchExceptions;
+	private final boolean myIsOriginalOverrider;
 
-  public OverriderUsageInfo(final PsiMethod method, PsiMethod baseMethod, boolean  isOriginalOverrider,
-                            boolean toInsertArgs, boolean toCatchExceptions) {
-    super(method);
-    myBaseMethod = baseMethod;
-    myToInsertArgs = toInsertArgs;
-    myToCatchExceptions = toCatchExceptions;
-    myIsOriginalOverrider = isOriginalOverrider;
-  }
+	public OverriderUsageInfo(final PsiMethod method,
+			PsiMethod baseMethod,
+			boolean isOriginalOverrider,
+			boolean toInsertArgs,
+			boolean toCatchExceptions)
+	{
+		super(method);
+		myBaseMethod = baseMethod;
+		myToInsertArgs = toInsertArgs;
+		myToCatchExceptions = toCatchExceptions;
+		myIsOriginalOverrider = isOriginalOverrider;
+	}
 
-  public PsiMethod getBaseMethod() {
-    return myBaseMethod;
-  }
+	public PsiMethod getBaseMethod()
+	{
+		return myBaseMethod;
+	}
 
-  public PsiMethod getElement() {
-    return (PsiMethod)super.getElement();
-  }
+	@Override
+	public PsiMethod getElement()
+	{
+		return (PsiMethod) super.getElement();
+	}
 
-  public boolean isOriginalOverrider() {
-    return myIsOriginalOverrider;
-  }
+	public boolean isOriginalOverrider()
+	{
+		return myIsOriginalOverrider;
+	}
 
-  public boolean isToCatchExceptions() {
-    return myToCatchExceptions;
-  }
+	public boolean isToCatchExceptions()
+	{
+		return myToCatchExceptions;
+	}
 
-  public boolean isToInsertArgs() {
-    return myToInsertArgs;
-  }
+	public boolean isToInsertArgs()
+	{
+		return myToInsertArgs;
+	}
 }
