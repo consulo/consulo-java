@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.usageView.UsageInfo;
 
@@ -27,6 +29,7 @@ public class OverriderUsageInfo extends UsageInfo
 	private final boolean myToInsertArgs;
 	private final boolean myToCatchExceptions;
 	private final boolean myIsOriginalOverrider;
+	private final PsiMethod myOverridingMethod;
 
 	public OverriderUsageInfo(final PsiMethod method,
 			PsiMethod baseMethod,
@@ -35,6 +38,7 @@ public class OverriderUsageInfo extends UsageInfo
 			boolean toCatchExceptions)
 	{
 		super(method);
+		myOverridingMethod = method;
 		myBaseMethod = baseMethod;
 		myToInsertArgs = toInsertArgs;
 		myToCatchExceptions = toCatchExceptions;
@@ -46,10 +50,20 @@ public class OverriderUsageInfo extends UsageInfo
 		return myBaseMethod;
 	}
 
+	public PsiMethod getOverridingMethod()
+	{
+		return myOverridingMethod;
+	}
+
+	/**
+	 * @deprecated use {@link #getOverridingMethod()} instead
+	 */
+	@Nullable
 	@Override
 	public PsiMethod getElement()
 	{
-		return (PsiMethod) super.getElement();
+		PsiElement element = super.getElement();
+		return element instanceof PsiMethod ? (PsiMethod) element : myOverridingMethod;
 	}
 
 	public boolean isOriginalOverrider()
