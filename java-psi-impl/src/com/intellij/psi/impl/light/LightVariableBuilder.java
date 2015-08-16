@@ -140,6 +140,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
 				".LightVariableBuilder");
 	}
 
+	@Deprecated
 	public T setBaseIcon(Icon baseIcon)
 	{
 		myBaseIcon = baseIcon;
