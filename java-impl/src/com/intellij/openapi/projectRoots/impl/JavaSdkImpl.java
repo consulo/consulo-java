@@ -359,11 +359,7 @@ public class JavaSdkImpl extends JavaSdk
 				{
 					continue;
 				}
-				VirtualFile jimageArchiveFile = ArchiveVfsUtil.getArchiveRootForLocalFile(maybeJImageFile);
-				if(jimageArchiveFile != null)
-				{
-					sdkModificator.addRoot(jimageArchiveFile, BinariesOrderRootType.getInstance());
-				}
+				sdkModificator.addRoot(maybeJImageFile, BinariesOrderRootType.getInstance());
 			}
 		}
 

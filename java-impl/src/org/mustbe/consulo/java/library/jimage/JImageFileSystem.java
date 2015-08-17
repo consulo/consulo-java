@@ -16,8 +16,6 @@
 
 package org.mustbe.consulo.java.library.jimage;
 
-import java.io.IOException;
-
 import org.consulo.lombok.annotations.Logger;
 import org.consulo.vfs.ArchiveFileSystemBase;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +47,7 @@ public class JImageFileSystem extends ArchiveFileSystemBase implements Applicati
 	}
 
 	@Override
-	public ArchiveHandler createHandler(ArchiveFileSystem fileSystem, String path)
+	public ArchiveHandler createHandler(ArchiveFileSystem fileSystem, final String path)
 	{
 		return new ArchiveHandlerBase(fileSystem, path)
 		{
@@ -59,11 +57,11 @@ public class JImageFileSystem extends ArchiveFileSystemBase implements Applicati
 			{
 				try
 				{
-					return new JImageArchiveFile(myBasePath);
+					return new JImageArchiveFile(path);
 				}
-				catch(IOException e)
+				catch(Exception e)
 				{
-					LOGGER.warn(e);
+					LOGGER.error("Failed to load file: " + path, e);
 					return ArchiveFile.EMPTY;
 				}
 			}

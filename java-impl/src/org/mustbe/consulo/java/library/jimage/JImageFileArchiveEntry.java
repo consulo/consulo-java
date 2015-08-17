@@ -19,6 +19,7 @@ package org.mustbe.consulo.java.library.jimage;
 import java.io.IOException;
 
 import org.consulo.lombok.annotations.LazyInstance;
+import org.consulo.lombok.annotations.Logger;
 import com.intellij.openapi.vfs.ArchiveEntry;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.jdk.internal.jimage.ImageReader;
@@ -27,23 +28,24 @@ import consulo.internal.jdk.internal.jimage.ImageReader;
  * @author VISTALL
  * @since 21.12.14
  */
+@Logger
 public class JImageFileArchiveEntry implements ArchiveEntry
 {
 	private final ImageReader myImageReader;
-	private final String myName;
+	private final ImageReader.Resource myResource;
 	private final long myLastModified;
 
-	public JImageFileArchiveEntry(ImageReader imageReader, String name, long lastModified)
+	public JImageFileArchiveEntry(ImageReader imageReader, ImageReader.Resource resource, long lastModified)
 	{
 		myImageReader = imageReader;
-		myName = name;
+		myResource = resource;
 		myLastModified = lastModified;
 	}
 
 	@Override
 	public String getName()
 	{
-		return myName;
+		return JImageArchiveFile.cutStartSlash(myResource.getNameString());
 	}
 
 	@Override
@@ -67,15 +69,14 @@ public class JImageFileArchiveEntry implements ArchiveEntry
 	@LazyInstance
 	public byte[] getBytes()
 	{
-		byte[] resource = ArrayUtil.EMPTY_BYTE_ARRAY;
 		try
 		{
-			resource = myImageReader.getResource(myName);
+			return myImageReader.getResource(myResource);
 		}
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			LOGGER.error("Cant load data for: " + getName(), e);
+			return ArrayUtil.EMPTY_BYTE_ARRAY;
 		}
-		return resource;
 	}
 }

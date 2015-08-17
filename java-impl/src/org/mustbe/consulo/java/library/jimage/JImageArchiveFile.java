@@ -16,21 +16,23 @@
 
 package org.mustbe.consulo.java.library.jimage;
 
+import gnu.trove.THashMap;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.ArchiveEntry;
 import com.intellij.openapi.vfs.ArchiveFile;
 import com.intellij.util.ArrayUtil;
+import consulo.internal.jdk.internal.jimage.Consumer;
 import consulo.internal.jdk.internal.jimage.ImageReader;
+import consulo.internal.jdk.internal.jimage.UTF8String;
 
 /**
  * @author VISTALL
@@ -42,37 +44,50 @@ public class JImageArchiveFile implements ArchiveFile
 
 	public JImageArchiveFile(String basePath) throws IOException
 	{
-		ImageReader imageReader = ImageReader.open(basePath);
-
 		File file = new File(basePath);
 
-		long lastModified = file.lastModified();
+		final ImageReader imageReader = ImageReader.open(file.getPath());
 
-		String[] entryNames = imageReader.getEntryNames(false);
+		final long lastModified = file.lastModified();
 
-		myEntries = new TreeMap<String, ArchiveEntry>();
-		for(String entryName : entryNames)
+		myEntries = new THashMap<String, ArchiveEntry>(imageReader.getAttributeOffsetsLength());
+		ImageReader.Node node = imageReader.findNode(UTF8String.MODULES_STRING);
+		if(node instanceof ImageReader.Directory)
 		{
-			fillDirectory(entryName, lastModified, myEntries);
+			((ImageReader.Directory) node).walk(new Consumer<ImageReader.Node>()
+			{
+				@Override
+				public void accept(ImageReader.Node value)
+				{
+					if(value instanceof ImageReader.Directory)
+					{
+						imageReader.findNode(value.getName());
 
-			myEntries.put(entryName, new JImageFileArchiveEntry(imageReader, entryName, lastModified));
+						((ImageReader.Directory) value).walkChildren(this);
+
+						add(new JImageDirectoryArchiveEntry(cutStartSlash(value.getNameString()), lastModified));
+					}
+					else if(value instanceof ImageReader.Resource)
+					{
+						add(new JImageFileArchiveEntry(imageReader, (ImageReader.Resource) value, lastModified));
+					}
+				}
+			});
 		}
 	}
 
-	private static void fillDirectory(String entryName, long lastModified, Map<String, ArchiveEntry> entries)
+	public static String cutStartSlash(String name)
 	{
-		String dirName = StringUtil.getPackageName(entryName, '/');
-		if(dirName.isEmpty())
+		if(name.charAt(0) == '/')
 		{
-			return;
+			return name.substring(1, name.length());
 		}
+		return name;
+	}
 
-		if(entries.containsKey(dirName))
-		{
-			return;
-		}
-
-		entries.put(dirName, new JImageDirectoryArchiveEntry(dirName + "/", lastModified));
+	private void add(@NotNull ArchiveEntry archiveEntry)
+	{
+		myEntries.put(archiveEntry.getName(), archiveEntry);
 	}
 
 	@Nullable
