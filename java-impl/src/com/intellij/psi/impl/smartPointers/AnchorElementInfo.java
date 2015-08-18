@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.ProperTextRange;
@@ -38,13 +37,13 @@ import com.intellij.psi.tree.IElementType;
  */
 class AnchorElementInfo extends SelfElementInfo
 {
-	private volatile long myStubElementTypeAndId; // stubId in the lower 32 bits; stubElementTypeIndex in the high 32 bits packed together for
-	// atomicity
+	private volatile long myStubElementTypeAndId; // stubId in the lower 32 bits; stubElementTypeIndex in the high 32
+	// bits packed together for atomicity
 
 	AnchorElementInfo(@NotNull PsiElement anchor, @NotNull PsiFile containingFile)
 	{
-		super(containingFile.getProject(), ProperTextRange.create(anchor.getTextRange()), anchor.getClass(), containingFile,
-				LanguageUtil.getRootLanguage(anchor));
+		super(containingFile.getProject(), ProperTextRange.create(anchor.getTextRange()), anchor.getClass(),
+				containingFile, LanguageUtil.getRootLanguage(anchor), false);
 		assert !(anchor instanceof PsiFile) : "FileElementInfo must be used for file: " + anchor;
 		myStubElementTypeAndId = pack(-1, null);
 	}
@@ -55,7 +54,8 @@ class AnchorElementInfo extends SelfElementInfo
 			int stubId,
 			@NotNull IStubElementType stubElementType)
 	{
-		super(containingFile.getProject(), new ProperTextRange(0, 0), anchor.getClass(), containingFile, containingFile.getLanguage());
+		super(containingFile.getProject(), new ProperTextRange(0, 0), anchor.getClass(), containingFile,
+				containingFile.getLanguage(), false);
 		myStubElementTypeAndId = pack(stubId, stubElementType);
 		assert !(anchor instanceof PsiFile) : "FileElementInfo must be used for file: " + anchor;
 	}
@@ -150,13 +150,13 @@ class AnchorElementInfo extends SelfElementInfo
 	}
 
 	@Override
-	public void fastenBelt(int offset, RangeMarker[] cachedRangeMarker)
+	public void fastenBelt()
 	{
 		if(getStubId() != -1)
 		{
 			switchToTree();
 		}
-		super.fastenBelt(offset, cachedRangeMarker);
+		super.fastenBelt();
 	}
 
 	private void switchToTree()
