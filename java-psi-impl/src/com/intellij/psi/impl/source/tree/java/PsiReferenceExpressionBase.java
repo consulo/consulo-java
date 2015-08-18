@@ -15,103 +15,129 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.JavaResolveResult;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiReferenceParameterList;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement implements PsiReferenceExpression {
-  public PsiReferenceExpressionBase(@NotNull final IElementType type) {
-    super(type);
-  }
+public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement implements PsiReferenceExpression
+{
+	public PsiReferenceExpressionBase(@NotNull final IElementType type)
+	{
+		super(type);
+	}
 
-  @Override
-  public PsiElement bindToElementViaStaticImport(@NotNull final PsiClass qualifierClass) throws IncorrectOperationException {
-    throw new IncorrectOperationException();
-  }
+	@Override
+	public PsiElement bindToElementViaStaticImport(@NotNull final PsiClass qualifierClass) throws
+			IncorrectOperationException
+	{
+		throw new IncorrectOperationException();
+	}
 
-  @Override
-  public void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException {
-    throw new IncorrectOperationException();
-  }
+	@Override
+	public void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException
+	{
+		throw new IncorrectOperationException();
+	}
 
-  @Override
-  public PsiElement getElement() {
-    return this;
-  }
+	@Override
+	public PsiElement getElement()
+	{
+		return this;
+	}
 
-  @Override
-  public PsiElement resolve() {
-    return advancedResolve(false).getElement();
-  }
+	@Override
+	public PsiElement resolve()
+	{
+		return advancedResolve(false).getElement();
+	}
 
-  @Override
-  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    throw new IncorrectOperationException();
-  }
+	@Override
+	public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException
+	{
+		throw new IncorrectOperationException();
+	}
 
-  @Override
-  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-    throw new IncorrectOperationException();
-  }
+	@Override
+	public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException
+	{
+		throw new IncorrectOperationException();
+	}
 
-  @Override
-  public boolean isReferenceTo(final PsiElement element) {
-    return element.getManager().areElementsEquivalent(element, resolve());
-  }
+	@Override
+	public boolean isReferenceTo(final PsiElement element)
+	{
+		return element.getManager().areElementsEquivalent(element, resolve());
+	}
 
-  @NotNull
-  @Override
-  public Object[] getVariants() {
-    // this reference's variants are rather obtained with processVariants()
-    return ArrayUtil.EMPTY_OBJECT_ARRAY;
-  }
+	@NotNull
+	@Override
+	public Object[] getVariants()
+	{
+		// this reference's variants are rather obtained with processVariants()
+		return ArrayUtil.EMPTY_OBJECT_ARRAY;
+	}
 
-  @Override
-  public boolean isSoft() {
-    return false;
-  }
+	@Override
+	public boolean isSoft()
+	{
+		return false;
+	}
 
-  @Override
-  public PsiReference getReference() {
-    return this;
-  }
+	@Override
+	public PsiReference getReference()
+	{
+		return this;
+	}
 
-  @NotNull
-  @Override
-  public JavaResolveResult advancedResolve(boolean incompleteCode) {
-    final JavaResolveResult[] results = multiResolve(incompleteCode);
-    return results.length == 1 ? results[0] : JavaResolveResult.EMPTY;
-  }
+	@NotNull
+	@Override
+	public JavaResolveResult advancedResolve(boolean incompleteCode)
+	{
+		final JavaResolveResult[] results = multiResolve(incompleteCode);
+		return results.length == 1 ? results[0] : JavaResolveResult.EMPTY;
+	}
 
-  @Override
-  public String getReferenceName() {
-    final PsiElement element = getReferenceNameElement();
-    return element != null ? element.getText() : null;
-  }
+	@Override
+	public String getReferenceName()
+	{
+		final PsiElement element = getReferenceNameElement();
+		return element != null ? element.getText() : null;
+	}
 
-  @Override
-  public PsiReferenceParameterList getParameterList() {
-    return PsiTreeUtil.getChildOfType(this, PsiReferenceParameterList.class);
-  }
+	@Override
+	public PsiReferenceParameterList getParameterList()
+	{
+		return PsiTreeUtil.getChildOfType(this, PsiReferenceParameterList.class);
+	}
 
-  @NotNull
-  @Override
-  public PsiType[] getTypeParameters() {
-    final PsiReferenceParameterList parameterList = getParameterList();
-    return parameterList != null ? parameterList.getTypeArguments() : PsiType.EMPTY_ARRAY;
-  }
+	@NotNull
+	@Override
+	public PsiType[] getTypeParameters()
+	{
+		final PsiReferenceParameterList parameterList = getParameterList();
+		return parameterList != null ? parameterList.getTypeArguments() : PsiType.EMPTY_ARRAY;
+	}
 
-  @Override
-  public boolean isQualified() {
-    return getQualifier() != null;
-  }
+	@Override
+	public boolean isQualified()
+	{
+		return getQualifier() != null;
+	}
 
-  @Override
-  public String getQualifiedName() {
-    return getCanonicalText();
-  }
+	@Override
+	public String getQualifiedName()
+	{
+		return getCanonicalText();
+	}
 }

@@ -15,11 +15,11 @@
  */
 package com.intellij.psi.scope;
 
-import com.intellij.psi.infos.CandidateInfo;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
+import com.intellij.psi.infos.CandidateInfo;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,7 +28,8 @@ import java.util.List;
  * Time: 13:20:20
  * To change this template use Options | File Templates.
  */
-public interface PsiConflictResolver {
-  @Nullable 
-  CandidateInfo resolveConflict(@NotNull List<CandidateInfo> conflicts);
+public interface PsiConflictResolver
+{
+	@Nullable
+	CandidateInfo resolveConflict(@NotNull List<CandidateInfo> conflicts);
 }
