@@ -26,7 +26,6 @@ import java.util.Set;
 
 import javax.swing.Icon;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.UserDataHolderEx;
@@ -43,7 +41,6 @@ import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.ClassInnerStuffCache;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.infos.MethodCandidateInfo;
@@ -67,11 +64,7 @@ import com.intellij.psi.util.ParameterizedCachedValueProvider;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.ui.IconDeferrer;
-import com.intellij.ui.RowIcon;
-import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.NullableFunction;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
@@ -425,13 +418,13 @@ public class PsiClassImplUtil
 				return true;
 			}
 			MethodSignature premain = createSignatureFromText(factory, "void premain(String args, " +
-					"java.lang.instrument.Instrumentation i);");
+					"" + "java.lang.instrument.Instrumentation i);");
 			if(MethodSignatureUtil.areSignaturesEqual(signature, premain))
 			{
 				return true;
 			}
 			MethodSignature agentmain = createSignatureFromText(factory, "void agentmain(String args, " +
-					"java.lang.instrument.Instrumentation i);");
+					"" + "java.lang.instrument.Instrumentation i);");
 			if(MethodSignatureUtil.areSignaturesEqual(signature, agentmain))
 			{
 				return true;
@@ -1339,8 +1332,10 @@ public class PsiClassImplUtil
 		}
 		if(psiClass.isAnnotationType())
 		{
-			return new PsiClassType[]{getAnnotationSuperType(psiClass, JavaPsiFacade.getInstance(psiClass.getProject()
-			).getElementFactory())};
+			return new PsiClassType[]{
+					getAnnotationSuperType(psiClass, JavaPsiFacade.getInstance(psiClass.getProject())
+							.getElementFactory())
+			};
 		}
 		final PsiReferenceList extendsList = psiClass.getExtendsList();
 		if(extendsList != null)
@@ -1586,7 +1581,8 @@ public class PsiClassImplUtil
 
 		if(class1 instanceof PsiTypeParameter && class2 instanceof PsiTypeParameter)
 		{
-			if(!(Comparing.equal(class1.getName(), class2.getName()) && ((PsiTypeParameter) class1).getIndex() == ((PsiTypeParameter) class2).getIndex()))
+			if(!(Comparing.equal(class1.getName(), class2.getName()) && ((PsiTypeParameter) class1).getIndex() == (
+					(PsiTypeParameter) class2).getIndex()))
 
 			{
 				return false;
