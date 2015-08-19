@@ -40,6 +40,8 @@ import com.intellij.psi.impl.source.PsiImmediateClassType;
 public class JavaEnumAugmentProvider extends PsiAugmentProvider
 {
 	public static final Key<Boolean> FLAG = Key.create("enum.method.flags");
+	public static final String VALUES_METHOD_NAME = "values";
+	public static final String VALUE_OF_METHOD_NAME = "valueOf";
 
 	@NotNull
 	@Override
@@ -50,13 +52,13 @@ public class JavaEnumAugmentProvider extends PsiAugmentProvider
 		{
 			List<Psi> list = new ArrayList<Psi>(2);
 
-			LightMethodBuilder valuesMethod = new LightMethodBuilder(element.getManager(), JavaLanguage.INSTANCE, "values");
+			LightMethodBuilder valuesMethod = new LightMethodBuilder(element.getManager(), JavaLanguage.INSTANCE, VALUES_METHOD_NAME);
 			valuesMethod.setContainingClass((PsiClass) element);
 			valuesMethod.setMethodReturnType(new PsiArrayType(new PsiImmediateClassType((PsiClass)element, PsiSubstitutor.EMPTY)));
 			valuesMethod.addModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC);
 			list.add((Psi) valuesMethod);
 
-			LightMethodBuilder valueOfMethod = new LightMethodBuilder(element.getManager(), JavaLanguage.INSTANCE, "valueOf");
+			LightMethodBuilder valueOfMethod = new LightMethodBuilder(element.getManager(), JavaLanguage.INSTANCE, VALUE_OF_METHOD_NAME);
 			valueOfMethod.setContainingClass((PsiClass) element);
 			valueOfMethod.setMethodReturnType(new PsiImmediateClassType((PsiClass) element, PsiSubstitutor.EMPTY));
 			valueOfMethod.addModifiers(PsiModifier.PUBLIC, PsiModifier.STATIC);

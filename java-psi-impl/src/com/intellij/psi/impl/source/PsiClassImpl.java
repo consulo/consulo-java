@@ -41,7 +41,6 @@ import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiClassStub;
-import com.intellij.psi.impl.light.LightMethod;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.SharedImplUtil;
@@ -61,10 +60,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 
 	private final ClassInnerStuffCache myInnersCache = new ClassInnerStuffCache(this);
 
-	private volatile PsiMethod myValuesMethod;
-	private volatile PsiMethod myValueOfMethod;
 	private volatile String myCachedName;
-
 
 	public PsiClassImpl(final PsiClassStub stub)
 	{
@@ -117,8 +113,6 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	{
 		myInnersCache.dropCaches();
 		myCachedName = null;
-		myValueOfMethod = null;
-		myValuesMethod = null;
 	}
 
 	@Override
@@ -813,32 +807,5 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 		{
 			((Queryable) file).putInfo(info);
 		}
-	}
-
-	@Nullable
-	public PsiMethod getValuesMethod()
-	{
-		PsiMethod method = myValuesMethod;
-		if(method == null && isEnum() && getName() != null)
-		{
-			PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
-			final PsiMethod valuesMethod = elementFactory.createMethodFromText("public static " + getName() + "[] values() {}", this);
-			myValuesMethod = method = new LightMethod(getManager(), valuesMethod, this);
-		}
-		return method;
-	}
-
-	@Nullable
-	public PsiMethod getValueOfMethod()
-	{
-		PsiMethod method = myValueOfMethod;
-		if(method == null && isEnum() && getName() != null)
-		{
-			PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
-			final PsiMethod valuesMethod = elementFactory.createMethodFromText("public static " + getName() + " valueOf(String name) throws " +
-					"IllegalArgumentException {}", this);
-			myValueOfMethod = method = new LightMethod(getManager(), valuesMethod, this);
-		}
-		return method;
 	}
 }

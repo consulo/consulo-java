@@ -34,6 +34,7 @@ import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.augment.JavaEnumAugmentProvider;
 import com.intellij.psi.impl.FindSuperElementsHelper;
 import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -351,8 +352,28 @@ public class UnusedSymbolUtil
 		{
 			return true;
 		}
-		final PsiMethod valuesMethod = ((PsiClassImpl) containingClass).getValuesMethod();
-		return valuesMethod == null || isMethodReferenced(project, containingFile, valuesMethod, progress, helper);
+
+		if(containingClass.isEnum())
+		{
+			PsiMethod[] methodsByName = containingClass.findMethodsByName(JavaEnumAugmentProvider.VALUES_METHOD_NAME,
+					false);
+
+			PsiMethod valuesMethod = null;
+			for(PsiMethod psiMethod : methodsByName)
+			{
+				if(psiMethod.getParameterList().getParametersCount() == 0 && psiMethod.hasModifierProperty
+						(PsiModifier.STATIC))
+				{
+					valuesMethod = psiMethod;
+					break;
+				}
+			}
+			return valuesMethod == null || isMethodReferenced(project, containingFile, valuesMethod, progress, helper);
+		}
+		else
+		{
+			return true;
+		}
 	}
 
 	private static boolean canBeReferencedViaWeirdNames(@NotNull PsiMember member, @NotNull PsiFile containingFile)
