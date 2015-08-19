@@ -86,8 +86,7 @@ public class PsiClassImplUtil
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.PsiClassImplUtil");
 	private static final Key<ParameterizedCachedValue<Map<GlobalSearchScope, MembersMap>,
 			PsiClass>> MAP_IN_CLASS_KEY = Key.create("MAP_KEY");
-	private static final String VALUES_METHOD = "values";
-	private static final String VALUE_OF_METHOD = "valueOf";
+
 
 	private PsiClassImplUtil()
 	{

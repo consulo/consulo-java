@@ -624,6 +624,7 @@ public class GenericsUtil
 				}
 				final PsiAnnotation[] applicableAnnotations = classType.getApplicableAnnotations();
 				if(substitutor == PsiSubstitutor.EMPTY && !toExtend && applicableAnnotations.length == 0 && !(aClass instanceof PsiTypeParameter))
+
 				{
 					return classType;
 				}

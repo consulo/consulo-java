@@ -1571,11 +1571,13 @@ public final class PsiUtil extends PsiUtilCore
 		return "ignore".equals(name) || "ignored".equals(name);
 	}
 
-	/** @deprecated use {@link #getResourceCloserMethod(PsiResourceListElement)} (to be removed in IDEA 17) */
+	/**
+	 * @deprecated use {@link #getResourceCloserMethod(PsiResourceListElement)} (to be removed in IDEA 17)
+	 */
 	@SuppressWarnings("unused")
 	public static PsiMethod getResourceCloserMethod(@NotNull PsiResourceVariable resource)
 	{
-		return getResourceCloserMethod((PsiResourceListElement)resource);
+		return getResourceCloserMethod((PsiResourceListElement) resource);
 	}
 
 	@Nullable

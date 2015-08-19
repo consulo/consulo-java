@@ -15,13 +15,13 @@
  */
 package com.intellij.psi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ven
@@ -78,12 +78,14 @@ public class PsiCapturedWildcardType extends PsiType.Stub
 			return false;
 		}
 
-		if((myExistential.isSuper() || captured.myExistential.isSuper()) && !myExistential.equals(captured.myExistential))
+		if((myExistential.isSuper() || captured.myExistential.isSuper()) && !myExistential.equals(captured
+				.myExistential))
 		{
 			return false;
 		}
 
-		if((myContext instanceof PsiReferenceExpression || myContext instanceof PsiMethodCallExpression) && !Comparing.equal(myParameter, captured.myParameter))
+		if((myContext instanceof PsiReferenceExpression || myContext instanceof PsiMethodCallExpression) && !Comparing
+				.equal(myParameter, captured.myParameter))
 		{
 			return false;
 		}

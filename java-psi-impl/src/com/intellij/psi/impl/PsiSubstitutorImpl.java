@@ -144,6 +144,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 		final PsiSubstitutorImpl that = (PsiSubstitutorImpl) o;
 
 		if(mySubstitutionMap != null ? !mySubstitutionMap.equals(that.mySubstitutionMap) : that.mySubstitutionMap != null)
+
 		{
 			return false;
 		}
@@ -360,7 +361,6 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 			@Override
 			public PsiType visitType(PsiType type)
 			{
-				LOG.error(type.getInternalCanonicalText());
 				return null;
 			}
 		});

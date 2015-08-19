@@ -532,6 +532,7 @@
 		</extensionPoint>
 
 		<extensionPoint name="getterSetterProvider" interface="com.intellij.codeInsight.generation.GetterSetterPrototypeProvider"/>
+		<extensionPoint name="classTypePointerFactory" interface="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
 
 		<extensionPoint name="refactoring.safeDelete.JavaSafeDeleteDelegate" beanClass="com.intellij.lang.LanguageExtensionPoint">
@@ -670,6 +671,10 @@
 
 		<smartPointer.anchorProvider implementation="com.intellij.psi.impl.smartPointers.JavaAnchorProvider"/>
 		<smartPointer.anchorProvider implementation="com.intellij.psi.impl.smartPointers.XmlAnchorProvider"/>
+
+		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory" />
+
+		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
@@ -1935,7 +1940,6 @@
 
 		<targetElementUtilEx implementation="com.intellij.codeInsight.JavaTargetElementUtilEx" />
 
-		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
 		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
 	</extensions>
 
