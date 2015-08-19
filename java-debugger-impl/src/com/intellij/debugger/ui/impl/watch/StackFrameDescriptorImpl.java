@@ -41,7 +41,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.FileColorManager;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.intellij.util.ui.EmptyIcon;
 import com.intellij.util.ui.TextTransferable;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.frame.XStackFrame;
@@ -369,7 +368,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		catch(EvaluateException ignored)
 		{
 		}
-		return EmptyIcon.create(6);//AllIcons.Debugger.StackFrame;
+		return AllIcons.Debugger.StackFrame;
 	}
 
 	public Icon getIcon()
