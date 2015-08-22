@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,12 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.completion.JavaClassReferenceCompletionContributor;
+import com.intellij.codeInsight.editorActions.smartEnter.JavaSmartEnterProcessor;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.command.CommandProcessor;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
-import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.openapi.fileTypes.FileType;
@@ -162,16 +164,33 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 			{
 				return Result.CONTINUE;
 			}
-			PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+			Document doc = editor.getDocument();
+			PsiDocumentManager.getInstance(project).commitDocument(doc);
 			final PsiElement leaf = file.findElementAt(offset);
 			if(PsiTreeUtil.getParentOfType(leaf, PsiArrayInitializerExpression.class, false, PsiCodeBlock.class,
 					PsiMember.class) != null)
 			{
 				return Result.CONTINUE;
 			}
+			PsiElement st = leaf != null ? leaf.getParent() : null;
+			PsiElement prev = offset > 1 ? file.findElementAt(offset - 1) : null;
+			if(CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET && isRparenth(leaf) &&
+					(st instanceof PsiWhileStatement || st instanceof PsiIfStatement) && shouldInsertStatementBody(st,
+					doc, prev))
+			{
+				CommandProcessor.getInstance().executeCommand(project, new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						new JavaSmartEnterProcessor().process(project, editor, file);
+					}
+				}, "Insert block statement", null);
+				return Result.STOP;
+			}
 			if(PsiTreeUtil.getParentOfType(leaf, PsiCodeBlock.class, false, PsiMember.class) != null)
 			{
-				EditorModificationUtil.insertStringAtCaret(editor, "{", false, true);
+				EditorModificationUtil.insertStringAtCaret(editor, "{");
 				TypedHandler.indentOpenedBrace(project, editor);
 				return Result.STOP;
 			}
@@ -180,8 +199,51 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 		return Result.CONTINUE;
 	}
 
+	private static boolean shouldInsertStatementBody(@NotNull PsiElement statement,
+			@NotNull Document doc,
+			@Nullable PsiElement prev)
+	{
+		PsiStatement block = statement instanceof PsiWhileStatement ? ((PsiWhileStatement) statement).getBody() : (
+				(PsiIfStatement) statement).getThenBranch();
+		PsiExpression condition = PsiTreeUtil.getChildOfType(statement, PsiExpression.class);
+		PsiExpression latestExpression = PsiTreeUtil.getParentOfType(prev, PsiExpression.class);
+		if(latestExpression instanceof PsiNewExpression && ((PsiNewExpression) latestExpression).getAnonymousClass() == null)
+
+		{
+			return false;
+		}
+		return !(block instanceof PsiBlockStatement) && (block == null || startLine(doc, block) != startLine(doc,
+				statement) || condition == null);
+	}
+
+	private static boolean isRparenth(@Nullable PsiElement leaf)
+	{
+		if(leaf == null)
+		{
+			return false;
+		}
+		if(leaf.getNode().getElementType() == JavaTokenType.RPARENTH)
+		{
+			return true;
+		}
+		PsiElement next = PsiTreeUtil.nextVisibleLeaf(leaf);
+		if(next == null)
+		{
+			return false;
+		}
+		return next.getNode().getElementType() == JavaTokenType.RPARENTH;
+	}
+
+	private static int startLine(@NotNull Document doc, @NotNull PsiElement psiElement)
+	{
+		return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
+	}
+
 	@Override
-	public Result charTyped(final char c, final Project project, final Editor editor, @NotNull final PsiFile file)
+	public Result charTyped(final char c,
+			final Project project,
+			@NotNull final Editor editor,
+			@NotNull final PsiFile file)
 	{
 		if(myJavaLTTyped)
 		{
@@ -224,8 +286,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 			return false;
 		}
 
-		editor.getCaretModel().moveToOffset(offset + 1);
-		editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+		EditorModificationUtil.moveCaretRelatively(editor, 1);
 		return true;
 	}
 
@@ -284,8 +345,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate
 
 		if(balance == 0)
 		{
-			editor.getCaretModel().moveToOffset(offset + 1);
-			editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+			EditorModificationUtil.moveCaretRelatively(editor, 1);
 			return true;
 		}
 
