@@ -42,265 +42,383 @@ import com.intellij.psi.util.PsiUtil;
 /**
  * @author yole
  */
-public class JavaTypedHandler extends TypedHandlerDelegate {
-  static final TokenSet INVALID_INSIDE_REFERENCE = TokenSet.create(JavaTokenType.SEMICOLON, JavaTokenType.LBRACE, JavaTokenType.RBRACE);
-  private boolean myJavaLTTyped;
+public class JavaTypedHandler extends TypedHandlerDelegate
+{
+	static final TokenSet INVALID_INSIDE_REFERENCE = TokenSet.create(JavaTokenType.SEMICOLON, JavaTokenType.LBRACE,
+			JavaTokenType.RBRACE);
+	private boolean myJavaLTTyped;
 
-  private static void autoPopupMemberLookup(Project project, final Editor editor) {
-    AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, new Condition<PsiFile>() {
-      @Override
-      public boolean value(final PsiFile file) {
-        int offset = editor.getCaretModel().getOffset();
+	private static void autoPopupMemberLookup(Project project, final Editor editor)
+	{
+		AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, new Condition<PsiFile>()
+		{
+			@Override
+			public boolean value(final PsiFile file)
+			{
+				int offset = editor.getCaretModel().getOffset();
 
-        PsiElement lastElement = file.findElementAt(offset - 1);
-        if (lastElement == null) {
-          return false;
-        }
+				PsiElement lastElement = file.findElementAt(offset - 1);
+				if(lastElement == null)
+				{
+					return false;
+				}
 
-        //do not show lookup when typing varargs ellipsis
-        final PsiElement prevSibling = PsiTreeUtil.prevVisibleLeaf(lastElement);
-        if (prevSibling == null || ".".equals(prevSibling.getText())) return false;
-        PsiElement parent = prevSibling;
-        do {
-          parent = parent.getParent();
-        } while(parent instanceof PsiJavaCodeReferenceElement || parent instanceof PsiTypeElement);
-        if (parent instanceof PsiParameterList || parent instanceof PsiParameter) return false;
+				//do not show lookup when typing varargs ellipsis
+				final PsiElement prevSibling = PsiTreeUtil.prevVisibleLeaf(lastElement);
+				if(prevSibling == null || ".".equals(prevSibling.getText()))
+				{
+					return false;
+				}
+				PsiElement parent = prevSibling;
+				do
+				{
+					parent = parent.getParent();
+				}
+				while(parent instanceof PsiJavaCodeReferenceElement || parent instanceof PsiTypeElement);
+				if(parent instanceof PsiParameterList || parent instanceof PsiParameter)
+				{
+					return false;
+				}
 
-        if (!".".equals(lastElement.getText()) && !"#".equals(lastElement.getText())) {
-          return JavaClassReferenceCompletionContributor.findJavaClassReference(file, offset - 1) != null;
-        }
-        else{
-          final PsiElement element = file.findElementAt(offset);
-          return element == null ||
-                 !"#".equals(lastElement.getText()) ||
-                 PsiTreeUtil.getParentOfType(element, PsiDocComment.class) != null;
-        }
-      }
-    });
-  }
+				if(!".".equals(lastElement.getText()) && !"#".equals(lastElement.getText()))
+				{
+					return JavaClassReferenceCompletionContributor.findJavaClassReference(file, offset - 1) != null;
+				}
+				else
+				{
+					final PsiElement element = file.findElementAt(offset);
+					return element == null ||
+							!"#".equals(lastElement.getText()) ||
+							PsiTreeUtil.getParentOfType(element, PsiDocComment.class) != null;
+				}
+			}
+		});
+	}
 
-  @Override
-  public Result beforeCharTyped(final char c, final Project project, final Editor editor, final PsiFile file, final FileType fileType) {
-    if (c == '@' && file instanceof PsiJavaFile) {
-      autoPopupJavadocLookup(project, editor);
-    }
-    else if (c == '#' || c == '.') {
-      autoPopupMemberLookup(project, editor);
-    }
+	@Override
+	public Result beforeCharTyped(final char c,
+			final Project project,
+			final Editor editor,
+			final PsiFile file,
+			final FileType fileType)
+	{
+		if(c == '@' && file instanceof PsiJavaFile)
+		{
+			autoPopupJavadocLookup(project, editor);
+		}
+		else if(c == '#' || c == '.')
+		{
+			autoPopupMemberLookup(project, editor);
+		}
 
 
-    final FileType originalFileType = getOriginalFileType(file);
+		final FileType originalFileType = getOriginalFileType(file);
 
-    int offsetBefore = editor.getCaretModel().getOffset();
+		int offsetBefore = editor.getCaretModel().getOffset();
 
-    //important to calculate before inserting charTyped
-    myJavaLTTyped = '<' == c &&
-                    file instanceof PsiJavaFile &&
-                   // !(file instanceof JspFile) &&
-                    CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET &&
-                    PsiUtil.isLanguageLevel5OrHigher(file) &&
-                    isAfterClassLikeIdentifierOrDot(offsetBefore, editor);
+		//important to calculate before inserting charTyped
+		myJavaLTTyped = '<' == c &&
+				file instanceof PsiJavaFile &&
+				// !(file instanceof JspFile) &&
+				CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET &&
+				PsiUtil.isLanguageLevel5OrHigher(file) &&
+				isAfterClassLikeIdentifierOrDot(offsetBefore, editor);
 
-    if ('>' == c) {
-      if (file instanceof PsiJavaFile/* && !(file instanceof JspFile)*/ &&
-          CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET &&
-               PsiUtil.isLanguageLevel5OrHigher(file)) {
-        if (handleJavaGT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE)) return Result.STOP;
-      }
-    }
+		if('>' == c)
+		{
+			if(file instanceof PsiJavaFile/* && !(file instanceof JspFile)*/ &&
+					CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET &&
+					PsiUtil.isLanguageLevel5OrHigher(file))
+			{
+				if(handleJavaGT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE))
+				{
+					return Result.STOP;
+				}
+			}
+		}
 
-    if (c == ';') {
-      if (handleSemicolon(editor, fileType)) return Result.STOP;
-    }
-    if (originalFileType == JavaFileType.INSTANCE && c == '{') {
-      int offset = editor.getCaretModel().getOffset();
-      if (offset == 0) {
-        return Result.CONTINUE;
-      }
+		if(c == ';')
+		{
+			if(handleSemicolon(editor, fileType))
+			{
+				return Result.STOP;
+			}
+		}
+		if(originalFileType == JavaFileType.INSTANCE && c == '{')
+		{
+			int offset = editor.getCaretModel().getOffset();
+			if(offset == 0)
+			{
+				return Result.CONTINUE;
+			}
 
-      HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset - 1);
-      while (!iterator.atEnd() && iterator.getTokenType() == TokenType.WHITE_SPACE) {
-        iterator.retreat();
-      }
-      if (iterator.atEnd() || iterator.getTokenType() == JavaTokenType.RBRACKET || iterator.getTokenType() == JavaTokenType.EQ) {
-        return Result.CONTINUE;
-      }
-      PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-      final PsiElement leaf = file.findElementAt(offset);
-      if (PsiTreeUtil.getParentOfType(leaf, PsiArrayInitializerExpression.class, false, PsiCodeBlock.class, PsiMember.class) != null) {
-        return Result.CONTINUE;
-      }
-      if (PsiTreeUtil.getParentOfType(leaf, PsiCodeBlock.class, false, PsiMember.class) != null) {
-        EditorModificationUtil.insertStringAtCaret(editor, "{", false, true);
-        TypedHandler.indentOpenedBrace(project, editor);
-        return Result.STOP;
-      }
-    }
+			HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset - 1);
+			while(!iterator.atEnd() && iterator.getTokenType() == TokenType.WHITE_SPACE)
+			{
+				iterator.retreat();
+			}
+			if(iterator.atEnd() || iterator.getTokenType() == JavaTokenType.RBRACKET || iterator.getTokenType() ==
+					JavaTokenType.EQ)
+			{
+				return Result.CONTINUE;
+			}
+			PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+			final PsiElement leaf = file.findElementAt(offset);
+			if(PsiTreeUtil.getParentOfType(leaf, PsiArrayInitializerExpression.class, false, PsiCodeBlock.class,
+					PsiMember.class) != null)
+			{
+				return Result.CONTINUE;
+			}
+			if(PsiTreeUtil.getParentOfType(leaf, PsiCodeBlock.class, false, PsiMember.class) != null)
+			{
+				EditorModificationUtil.insertStringAtCaret(editor, "{", false, true);
+				TypedHandler.indentOpenedBrace(project, editor);
+				return Result.STOP;
+			}
+		}
 
-    return Result.CONTINUE;
-  }
+		return Result.CONTINUE;
+	}
 
-  @Override
-  public Result charTyped(final char c, final Project project, final Editor editor, @NotNull final PsiFile file) {
-    if (myJavaLTTyped) {
-      myJavaLTTyped = false;
-      handleAfterJavaLT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE);
-      return Result.STOP;
-    }
-    else if (c == ':') {
-      if (autoIndentCase(editor, project, file)) {
-        return Result.STOP;
-      }
-    }
-    return Result.CONTINUE;
-  }
+	@Override
+	public Result charTyped(final char c, final Project project, final Editor editor, @NotNull final PsiFile file)
+	{
+		if(myJavaLTTyped)
+		{
+			myJavaLTTyped = false;
+			handleAfterJavaLT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE);
+			return Result.STOP;
+		}
+		else if(c == ':')
+		{
+			if(autoIndentCase(editor, project, file))
+			{
+				return Result.STOP;
+			}
+		}
+		return Result.CONTINUE;
+	}
 
-  @Nullable
-  private static FileType getOriginalFileType(final PsiFile file) {
-    final VirtualFile virtualFile = file.getVirtualFile();
-    return virtualFile != null ? virtualFile.getFileType() : null;
-  }
+	@Nullable
+	private static FileType getOriginalFileType(final PsiFile file)
+	{
+		final VirtualFile virtualFile = file.getVirtualFile();
+		return virtualFile != null ? virtualFile.getFileType() : null;
+	}
 
-  private static boolean handleSemicolon(Editor editor, FileType fileType) {
-    if (fileType != JavaFileType.INSTANCE) return false;
-    int offset = editor.getCaretModel().getOffset();
-    if (offset == editor.getDocument().getTextLength()) return false;
+	private static boolean handleSemicolon(Editor editor, FileType fileType)
+	{
+		if(fileType != JavaFileType.INSTANCE)
+		{
+			return false;
+		}
+		int offset = editor.getCaretModel().getOffset();
+		if(offset == editor.getDocument().getTextLength())
+		{
+			return false;
+		}
 
-    char charAt = editor.getDocument().getCharsSequence().charAt(offset);
-    if (charAt != ';') return false;
+		char charAt = editor.getDocument().getCharsSequence().charAt(offset);
+		if(charAt != ';')
+		{
+			return false;
+		}
 
-    editor.getCaretModel().moveToOffset(offset + 1);
-    editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-    return true;
-  }
+		editor.getCaretModel().moveToOffset(offset + 1);
+		editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+		return true;
+	}
 
-  //need custom handler, since brace matcher cannot be used
-  public static boolean handleJavaGT(final Editor editor,
-                                      final IElementType lt,
-                                      final IElementType gt,
-                                      final TokenSet invalidInsideReference) {
-    if (!CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) return false;
+	//need custom handler, since brace matcher cannot be used
+	public static boolean handleJavaGT(final Editor editor,
+			final IElementType lt,
+			final IElementType gt,
+			final TokenSet invalidInsideReference)
+	{
+		if(!CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET)
+		{
+			return false;
+		}
 
-    int offset = editor.getCaretModel().getOffset();
+		int offset = editor.getCaretModel().getOffset();
 
-    if (offset == editor.getDocument().getTextLength()) return false;
+		if(offset == editor.getDocument().getTextLength())
+		{
+			return false;
+		}
 
-    HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
-    if (iterator.getTokenType() != gt) return false;
-    while (!iterator.atEnd() && !invalidInsideReference.contains(iterator.getTokenType())) {
-      iterator.advance();
-    }
+		HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
+		if(iterator.getTokenType() != gt)
+		{
+			return false;
+		}
+		while(!iterator.atEnd() && !invalidInsideReference.contains(iterator.getTokenType()))
+		{
+			iterator.advance();
+		}
 
-    if (!iterator.atEnd() && invalidInsideReference.contains(iterator.getTokenType())) iterator.retreat();
+		if(!iterator.atEnd() && invalidInsideReference.contains(iterator.getTokenType()))
+		{
+			iterator.retreat();
+		}
 
-    int balance = 0;
-    while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = iterator.getTokenType();
-      if (tokenType == lt) {
-        balance--;
-      }
-      else if (tokenType == gt) {
-        balance++;
-      }
-      else if (invalidInsideReference.contains(tokenType)) {
-        break;
-      }
+		int balance = 0;
+		while(!iterator.atEnd() && balance >= 0)
+		{
+			final IElementType tokenType = iterator.getTokenType();
+			if(tokenType == lt)
+			{
+				balance--;
+			}
+			else if(tokenType == gt)
+			{
+				balance++;
+			}
+			else if(invalidInsideReference.contains(tokenType))
+			{
+				break;
+			}
 
-      iterator.retreat();
-    }
+			iterator.retreat();
+		}
 
-    if (balance == 0) {
-      editor.getCaretModel().moveToOffset(offset + 1);
-      editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-      return true;
-    }
+		if(balance == 0)
+		{
+			editor.getCaretModel().moveToOffset(offset + 1);
+			editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+			return true;
+		}
 
-    return false;
-  }
+		return false;
+	}
 
-  //need custom handler, since brace matcher cannot be used
-  public static void handleAfterJavaLT(final Editor editor,
-                                        final IElementType lt,
-                                        final IElementType gt,
-                                        final TokenSet invalidInsideReference) {
-    if (!CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) return;
+	//need custom handler, since brace matcher cannot be used
+	public static void handleAfterJavaLT(final Editor editor,
+			final IElementType lt,
+			final IElementType gt,
+			final TokenSet invalidInsideReference)
+	{
+		if(!CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET)
+		{
+			return;
+		}
 
-    int offset = editor.getCaretModel().getOffset();
-    HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
-    while (iterator.getStart() > 0 && !invalidInsideReference.contains(iterator.getTokenType())) {
-      iterator.retreat();
-    }
+		int offset = editor.getCaretModel().getOffset();
+		HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
+		while(iterator.getStart() > 0 && !invalidInsideReference.contains(iterator.getTokenType()))
+		{
+			iterator.retreat();
+		}
 
-    if (invalidInsideReference.contains(iterator.getTokenType())) iterator.advance();
+		if(invalidInsideReference.contains(iterator.getTokenType()))
+		{
+			iterator.advance();
+		}
 
-    int balance = 0;
-    while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = iterator.getTokenType();
-      if (tokenType == lt) {
-        balance++;
-      }
-      else if (tokenType == gt) {
-        balance--;
-      }
-      else if (invalidInsideReference.contains(tokenType)) {
-        break;
-      }
+		int balance = 0;
+		while(!iterator.atEnd() && balance >= 0)
+		{
+			final IElementType tokenType = iterator.getTokenType();
+			if(tokenType == lt)
+			{
+				balance++;
+			}
+			else if(tokenType == gt)
+			{
+				balance--;
+			}
+			else if(invalidInsideReference.contains(tokenType))
+			{
+				break;
+			}
 
-      iterator.advance();
-    }
+			iterator.advance();
+		}
 
-    if (balance == 1) {
-      editor.getDocument().insertString(offset, ">");
-    }
-  }
+		if(balance == 1)
+		{
+			editor.getDocument().insertString(offset, ">");
+		}
+	}
 
-  private static void autoPopupJavadocLookup(final Project project, final Editor editor) {
-    AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, new Condition<PsiFile>() {
-      @Override
-      public boolean value(PsiFile file) {
-        int offset = editor.getCaretModel().getOffset();
+	private static void autoPopupJavadocLookup(final Project project, final Editor editor)
+	{
+		AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, new Condition<PsiFile>()
+		{
+			@Override
+			public boolean value(PsiFile file)
+			{
+				int offset = editor.getCaretModel().getOffset();
 
-        PsiElement lastElement = file.findElementAt(offset - 1);
-        return lastElement != null && StringUtil.endsWithChar(lastElement.getText(), '@');
-      }
-    });
-  }
+				PsiElement lastElement = file.findElementAt(offset - 1);
+				return lastElement != null && StringUtil.endsWithChar(lastElement.getText(), '@');
+			}
+		});
+	}
 
-  public static boolean isAfterClassLikeIdentifierOrDot(final int offset, final Editor editor) {
-    HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
-    if (iterator.atEnd()) return false;
-    if (iterator.getStart() > 0) iterator.retreat();
-    final IElementType tokenType = iterator.getTokenType();
-    if (tokenType == JavaTokenType.DOT) return true;
-    return isClassLikeIdentifier(offset, editor, iterator, JavaTokenType.IDENTIFIER);
-  }
+	public static boolean isAfterClassLikeIdentifierOrDot(final int offset, final Editor editor)
+	{
+		HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
+		if(iterator.atEnd())
+		{
+			return false;
+		}
+		if(iterator.getStart() > 0)
+		{
+			iterator.retreat();
+		}
+		final IElementType tokenType = iterator.getTokenType();
+		if(tokenType == JavaTokenType.DOT)
+		{
+			return true;
+		}
+		return isClassLikeIdentifier(offset, editor, iterator, JavaTokenType.IDENTIFIER);
+	}
 
-  public static boolean isClassLikeIdentifier(int offset, Editor editor, HighlighterIterator iterator, final IElementType idType) {
-    if (iterator.getTokenType() == idType && iterator.getEnd() == offset) {
-      final CharSequence chars = editor.getDocument().getCharsSequence();
-      final char startChar = chars.charAt(iterator.getStart());
-      if (!Character.isUpperCase(startChar)) return false;
-      final CharSequence word = chars.subSequence(iterator.getStart(), iterator.getEnd());
-      if (word.length() == 1) return true;
-      for (int i = 1; i < word.length(); i++) {
-        if (Character.isLowerCase(word.charAt(i))) return true;
-      }
-    }
+	public static boolean isClassLikeIdentifier(int offset,
+			Editor editor,
+			HighlighterIterator iterator,
+			final IElementType idType)
+	{
+		if(iterator.getTokenType() == idType && iterator.getEnd() == offset)
+		{
+			final CharSequence chars = editor.getDocument().getCharsSequence();
+			final char startChar = chars.charAt(iterator.getStart());
+			if(!Character.isUpperCase(startChar))
+			{
+				return false;
+			}
+			final CharSequence word = chars.subSequence(iterator.getStart(), iterator.getEnd());
+			if(word.length() == 1)
+			{
+				return true;
+			}
+			for(int i = 1; i < word.length(); i++)
+			{
+				if(Character.isLowerCase(word.charAt(i)))
+				{
+					return true;
+				}
+			}
+		}
 
-    return false;
-  }
-  
-  private static boolean autoIndentCase(Editor editor, Project project, PsiFile file) {
-    int offset = editor.getCaretModel().getOffset();
-    PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-    PsiElement currElement = file.findElementAt(offset - 1);
-    if (currElement != null) {
-      PsiElement parent = currElement.getParent();
-      if (parent != null && parent instanceof PsiSwitchLabelStatement) {
-        CodeStyleManager.getInstance(project).adjustLineIndent(file, parent.getTextOffset());
-        return true;
-      }
-    }
-    return false;
-  }
+		return false;
+	}
+
+	private static boolean autoIndentCase(Editor editor, Project project, PsiFile file)
+	{
+		int offset = editor.getCaretModel().getOffset();
+		PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+		PsiElement currElement = file.findElementAt(offset - 1);
+		if(currElement != null)
+		{
+			PsiElement parent = currElement.getParent();
+			if(parent != null && parent instanceof PsiSwitchLabelStatement)
+			{
+				CodeStyleManager.getInstance(project).adjustLineIndent(file, parent.getTextOffset());
+				return true;
+			}
+		}
+		return false;
+	}
 }
