@@ -46,6 +46,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ImageLoader;
+import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 
 /**
@@ -57,11 +58,9 @@ import com.intellij.util.ui.UIUtil;
  */
 public class IconLineMarkerProvider implements LineMarkerProvider
 {
-	private static final
 	@NonNls
-	String JAVAX_SWING_ICON = "javax.swing.Icon";
-	private static final int ICON_MAX_WEIGHT = 16;
-	private static final int ICON_MAX_HEIGHT = 16;
+	private static final String JAVAX_SWING_ICON = "javax.swing.Icon";
+
 	private static final int ICON_MAX_SIZE = 2 * 1024 * 1024; //2Kb
 	private static final List<String> ICON_EXTS = Arrays.asList("png", "ico", "bmp", "gif", "jpg");
 
@@ -139,6 +138,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 	}
 
 	@Nullable
+	@RequiredReadAction
 	private LineMarkerInfo<PsiElement> resolveIconInfo(PsiType type, PsiExpression initializer)
 	{
 		return resolveIconInfo(type, initializer, initializer);
@@ -236,7 +236,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 
 	private static boolean hasProperSize(Icon icon)
 	{
-		return icon.getIconHeight() <= ICON_MAX_HEIGHT && icon.getIconWidth() <= ICON_MAX_WEIGHT;
+		return icon.getIconHeight() <= JBUI.scaleIconSize(16) && icon.getIconWidth() <= JBUI.scaleIconSize(16);
 	}
 
 	@Nullable
@@ -254,7 +254,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 				iconsCache.put(file.getPath(), iconInfo);
 			}
 			catch(Exception e)
-			{//
+			{
 				iconInfo = null;
 				iconsCache.remove(path);
 			}
