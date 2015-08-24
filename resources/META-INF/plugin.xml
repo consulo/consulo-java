@@ -861,6 +861,7 @@
 						serviceImplementation="com.intellij.psi.impl.migration.PsiMigrationManager"/>
 		<projectService serviceInterface="com.intellij.psi.PsiResolveHelper"
 						serviceImplementation="com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl"/>
+		<projectService serviceImplementation="com.intellij.psi.util.ProjectIconsAccessor" />
 
 		<projectService serviceInterface="com.intellij.psi.JavaCodeFragmentFactory"
 						serviceImplementation="com.intellij.psi.impl.JavaCodeFragmentFactoryImpl"/>
