@@ -29,6 +29,7 @@ import javax.swing.ImageIcon;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
@@ -67,6 +68,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 	//TODO: remove old unused icons from the cache
 	private final HashMap<String, Pair<Long, Icon>> iconsCache = new HashMap<String, Pair<Long, Icon>>();
 
+	@RequiredReadAction
 	@Override
 	public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element)
 	{
@@ -143,6 +145,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 	}
 
 	@Nullable
+	@RequiredReadAction
 	private LineMarkerInfo<PsiElement> resolveIconInfo(PsiType type,
 			PsiExpression initializer,
 			PsiElement bindingElement)
@@ -225,6 +228,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 		return extension != null && ICON_EXTS.contains(extension.toLowerCase());
 	}
 
+	@RequiredReadAction
 	@Override
 	public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result)
 	{
@@ -267,7 +271,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 			String ext = file.getExtension();
 			VirtualFile newFile;
 			boolean retina = UIUtil.isRetina();
-			boolean dark = UIUtil.isUnderDarcula();
+			boolean dark = UIUtil.isUnderDarkBuildInLaf();
 			if(retina && dark)
 			{
 				newFile = parent.findChild(name + "@2x_dark." + ext);
