@@ -41,6 +41,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.ObjectUtils;
 
 /**
@@ -50,7 +51,8 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 {
 	private static final int FOLD_MAX_LENGTH = 50;
 	private static final Key<IProperty> CACHE = Key.create("i18n.property.cache");
-	public static final IProperty NULL = new PropertyImpl(new PropertyStubImpl(null, null), PropertiesElementTypes.PROPERTY);
+	public static final IProperty NULL = new PropertyImpl(new PropertyStubImpl(null, null),
+			PropertiesElementTypes.PROPERTY);
 
 	@Override
 	@NotNull
@@ -87,7 +89,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 		{
 			final IProperty property = getI18nProperty(project, expression);
 			final HashSet<Object> set = new HashSet<Object>();
-			set.add(property);
+			set.add(property != null ? property : PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
 			final String msg = formatI18nProperty(expression, property);
 
 			final PsiElement parent = expression.getParent();
@@ -115,14 +117,15 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 					}
 					if(ok)
 					{
-						result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(parent.getParent().getNode()), parent.getParent().getTextRange(),
-								null, set));
+						result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(parent.getParent().getNode()),
+								parent.getParent().getTextRange(), null, set));
 						return;
 					}
 				}
 			}
 
-			result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(expression.getNode()), expression.getTextRange(), null, set));
+			result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(expression.getNode()),
+					expression.getTextRange(), null, set));
 		}
 	}
 
