@@ -51,7 +51,8 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 {
 	private static final int FOLD_MAX_LENGTH = 50;
 	private static final Key<IProperty> CACHE = Key.create("i18n.property.cache");
-	public static final IProperty NULL = new PropertyImpl(new PropertyStubImpl(null, null), PropertiesElementTypes.PROPERTY);
+	public static final IProperty NULL = new PropertyImpl(new PropertyStubImpl(null, null),
+			PropertiesElementTypes.PROPERTY);
 
 	@Override
 	@NotNull
@@ -116,14 +117,15 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx
 					}
 					if(ok)
 					{
-						result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(parent.getParent().getNode()), parent.getParent().getTextRange(),
-								null, set));
+						result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(parent.getParent().getNode()),
+								parent.getParent().getTextRange(), null, set));
 						return;
 					}
 				}
 			}
 
-			result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(expression.getNode()), expression.getTextRange(), null, set));
+			result.add(new FoldingDescriptor(ObjectUtils.assertNotNull(expression.getNode()),
+					expression.getTextRange(), null, set));
 		}
 	}
 

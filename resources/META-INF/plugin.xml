@@ -861,6 +861,7 @@
 						serviceImplementation="com.intellij.psi.impl.migration.PsiMigrationManager"/>
 		<projectService serviceInterface="com.intellij.psi.PsiResolveHelper"
 						serviceImplementation="com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl"/>
+		<projectService serviceImplementation="com.intellij.psi.util.ProjectIconsAccessor" />
 
 		<projectService serviceInterface="com.intellij.psi.JavaCodeFragmentFactory"
 						serviceImplementation="com.intellij.psi.impl.JavaCodeFragmentFactoryImpl"/>
@@ -1893,8 +1894,6 @@
 		<compiler.additionalOutputDirectoriesProvider
 				implementation="com.intellij.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider"/>
 
-		<applicationService serviceInterface="com.intellij.ide.util.projectWizard.ProjectWizardStepFactory"
-							serviceImplementation="com.intellij.ide.util.projectWizard.ProjectWizardStepFactoryImpl"/>
 		<applicationService serviceInterface="com.intellij.openapi.roots.libraries.LibrariesHelper"
 							serviceImplementation="com.intellij.openapi.roots.libraries.LibrariesHelperImpl"/>
 
