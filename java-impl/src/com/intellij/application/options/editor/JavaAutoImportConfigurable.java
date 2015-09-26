@@ -240,7 +240,8 @@ public class JavaAutoImportConfigurable implements Configurable
 	@Override
 	public String getDisplayName()
 	{
-		return null;
+		// this is used only for calculation dimension key for simple configurable dialog
+		return getClass().getSimpleName();
 	}
 
 	@Nullable
