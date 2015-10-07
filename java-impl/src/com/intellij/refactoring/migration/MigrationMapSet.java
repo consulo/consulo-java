@@ -16,6 +16,18 @@
  */
 package com.intellij.refactoring.migration;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.InvalidDataException;
@@ -24,14 +36,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.util.UniqueFileNamesProvider;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class MigrationMapSet {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.migration.MigrationMapSet");
@@ -158,13 +162,13 @@ public class MigrationMapSet {
         }
       }
       catch(InvalidDataException e){
-        LOG.error("Invalid data in file: " + files[i].getAbsolutePath());
+        LOG.warn("Invalid data in file: " + files[i].getAbsolutePath(), e);
       }
       catch (JDOMException e) {
-        LOG.error("Invalid data in file: " + files[i].getAbsolutePath());
+        LOG.warn("Invalid data in file: " + files[i].getAbsolutePath(), e);
       }
       catch (IOException e) {
-        LOG.error(e);
+        LOG.warn(e);
       }
     }
   }
