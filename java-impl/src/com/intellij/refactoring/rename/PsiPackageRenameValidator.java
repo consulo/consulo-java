@@ -23,7 +23,6 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiNameHelper;
-import com.intellij.psi.impl.file.PsiPackageHelper;
 import com.intellij.util.ProcessingContext;
 
 /**
@@ -38,7 +37,7 @@ public class PsiPackageRenameValidator implements RenameInputValidatorEx {
       return "Trying to create a package with ignored name, result will not be visible";
     }
     if (newName.length() > 0) {
-      if (!PsiPackageHelper.getInstance(project).isValidPackageName(newName)) {
+      if (!PsiNameHelper.getInstance(project).isQualifiedName(newName)) {
         return "Not a valid package name";
       }
       if (!PsiNameHelper.getInstance(project).isIdentifier(newName)) {
