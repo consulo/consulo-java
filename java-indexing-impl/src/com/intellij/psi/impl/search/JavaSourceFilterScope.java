@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,42 +14,59 @@
  * limitations under the License.
  */
 
-/*
- * @author max
- */
 package com.intellij.psi.impl.search;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 
-public class JavaSourceFilterScope extends DelegatingGlobalSearchScope {
-  private final ProjectFileIndex myIndex;
+/**
+ * @author max
+ */
+public class JavaSourceFilterScope extends DelegatingGlobalSearchScope
+{
+	@Nullable
+	private final ProjectFileIndex myIndex;
 
-  public JavaSourceFilterScope(@NotNull final GlobalSearchScope delegate) {
-    super(delegate);
-    myIndex = ProjectRootManager.getInstance(getProject()).getFileIndex();
-  }
+	public JavaSourceFilterScope(@NotNull final GlobalSearchScope delegate)
+	{
+		super(delegate);
 
-  @Override
-  public boolean contains(final VirtualFile file) {
-    if (!super.contains(file)) {
-      return false;
-    }
+		Project project = getProject();
+		if(project != null)
+		{
+			myIndex = ProjectRootManager.getInstance(project).getFileIndex();
+		}
+		else
+		{
+			myIndex = null;
+		}
+	}
 
-    if (JavaClassFileType.INSTANCE == file.getFileType()) {
-      return myIndex.isInLibraryClasses(file);
-    }
+	@Override
+	public boolean contains(@NotNull final VirtualFile file)
+	{
+		if(!super.contains(file))
+		{
+			return false;
+		}
 
-    if (myIndex.isInSourceContent(file)) {
-      return true;
-    }
+		if(myIndex == null)
+		{
+			return false;
+		}
 
-    return false;
-  }
+		if(JavaClassFileType.INSTANCE == file.getFileType())
+		{
+			return myIndex.isInLibraryClasses(file);
+		}
 
+		return myIndex.isInSourceContent(file) || myBaseScope.isForceSearchingInLibrarySources() && myIndex.isInLibrarySource(file);
+	}
 }
