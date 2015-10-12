@@ -15,66 +15,79 @@
  */
 package com.intellij.codeInsight.editorActions.wordSelection;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.JavaDocTokenType;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.javadoc.PsiDocToken;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.util.text.CharArrayUtil;
-
 import java.util.List;
 
-public class DocTagSelectioner extends WordSelectioner {
-  @Override
-  public boolean canSelect(PsiElement e) {
-    return e instanceof PsiDocTag;
-  }
+import org.mustbe.consulo.RequiredReadAction;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.JavaDocTokenType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.psi.javadoc.PsiDocToken;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.util.text.CharArrayUtil;
 
-  @Override
-  public List<TextRange> select(PsiElement e, CharSequence editorText, int cursorOffset, Editor editor) {
-    List<TextRange> result = super.select(e, editorText, cursorOffset, editor);
+public class DocTagSelectioner extends WordSelectioner
+{
+	@Override
+	public boolean canSelect(PsiElement e)
+	{
+		return e instanceof PsiDocTag;
+	}
 
-    TextRange range = e.getTextRange();
+	@Override
+	public List<TextRange> select(PsiElement e, CharSequence editorText, int cursorOffset, Editor editor)
+	{
+		List<TextRange> result = super.select(e, editorText, cursorOffset, editor);
+		result.add(getDocTagRange((PsiDocTag) e, editorText, cursorOffset));
+		return result;
+	}
 
-    int endOffset = range.getEndOffset();
-    int startOffset = range.getStartOffset();
+	@RequiredReadAction
+	public static TextRange getDocTagRange(PsiDocTag e, CharSequence documentText, int minOffset)
+	{
+		TextRange range = e.getTextRange();
 
-    PsiElement[] children = e.getChildren();
+		int endOffset = range.getEndOffset();
+		int startOffset = range.getStartOffset();
 
-    for (int i = children.length - 1; i >= 0; i--) {
-      PsiElement child = children[i];
+		PsiElement[] children = e.getChildren();
 
-      int childStartOffset = child.getTextRange().getStartOffset();
+		for(int i = children.length - 1; i >= 0; i--)
+		{
+			PsiElement child = children[i];
 
-      if (childStartOffset <= cursorOffset) {
-        break;
-      }
+			int childStartOffset = child.getTextRange().getStartOffset();
 
-      if (child instanceof PsiDocToken) {
-        PsiDocToken token = (PsiDocToken)child;
+			if(childStartOffset <= minOffset)
+			{
+				break;
+			}
 
-        IElementType type = token.getTokenType();
-        char[] chars = token.textToCharArray();
-        int shift = CharArrayUtil.shiftForward(chars, 0, " \t\n\r");
+			if(child instanceof PsiDocToken)
+			{
+				PsiDocToken token = (PsiDocToken) child;
 
-        if (shift != chars.length && type != JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS) {
-          break;
-        }
-      }
-      else if (!(child instanceof PsiWhiteSpace)) {
-        break;
-      }
+				IElementType type = token.getTokenType();
+				char[] chars = token.textToCharArray();
+				int shift = CharArrayUtil.shiftForward(chars, 0, " \t\n\r");
 
-      endOffset = Math.min(childStartOffset, endOffset);
-    }
+				if(shift != chars.length && type != JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS)
+				{
+					break;
+				}
+			}
+			else if(!(child instanceof PsiWhiteSpace))
+			{
+				break;
+			}
 
-    startOffset = CharArrayUtil.shiftBackward(editorText, startOffset - 1, "* \t") + 1;
+			endOffset = Math.min(childStartOffset, endOffset);
+		}
 
-    result.add(new TextRange(startOffset, endOffset));
+		startOffset = CharArrayUtil.shiftBackward(documentText, startOffset - 1, "* \t") + 1;
 
-    return result;
-  }
+		return new TextRange(startOffset, endOffset);
+	}
 }

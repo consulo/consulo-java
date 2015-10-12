@@ -15,57 +15,62 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.psi.PsiClass;
+import com.intellij.util.Consumer;
+import com.intellij.util.containers.ContainerUtil;
+
 /**
-* @author peter
-*/
-public class InheritorsHolder implements Consumer<LookupElement> {
-  private final PsiElement myPosition;
-  private final Set<String> myAddedClasses = new HashSet<String>();
-  private final CompletionResultSet myResult;
+ * @author peter
+ */
+public class InheritorsHolder implements Consumer<LookupElement>
+{
+	private final Set<String> myAddedClasses = new HashSet<String>();
+	private final CompletionResultSet myResult;
 
-  public InheritorsHolder(PsiElement position, CompletionResultSet result) {
-    myPosition = position;
-    myResult = result;
-  }
+	public InheritorsHolder(CompletionResultSet result)
+	{
+		myResult = result;
+	}
 
-  @Override
-  public void consume(LookupElement lookupElement) {
-    final Object object = lookupElement.getObject();
-    if (object instanceof PsiClass) {
-      registerClass((PsiClass)object);
-    }
-    myResult.addElement(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(lookupElement));
-  }
+	@Override
+	public void consume(LookupElement lookupElement)
+	{
+		final Object object = lookupElement.getObject();
+		if(object instanceof PsiClass)
+		{
+			registerClass((PsiClass) object);
+		}
+		myResult.addElement(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(lookupElement));
+	}
 
-  public void registerClass(PsiClass psiClass) {
-    ContainerUtil.addIfNotNull(myAddedClasses, getClassName(psiClass));
-  }
+	public void registerClass(@NotNull PsiClass psiClass)
+	{
+		ContainerUtil.addIfNotNull(myAddedClasses, getClassName(psiClass));
+	}
 
-  @Nullable
-  private static String getClassName(PsiClass psiClass) {
-    String name = psiClass.getQualifiedName();
-    return name == null ? psiClass.getName() : name;
-  }
+	@Nullable
+	private static String getClassName(@NotNull PsiClass psiClass)
+	{
+		String name = psiClass.getQualifiedName();
+		return name == null ? psiClass.getName() : name;
+	}
 
-  public boolean alreadyProcessed(@NotNull LookupElement element) {
-    final Object object = element.getObject();
-    return object instanceof PsiClass && alreadyProcessed((PsiClass)object);
-  }
+	public boolean alreadyProcessed(@NotNull LookupElement element)
+	{
+		final Object object = element.getObject();
+		return object instanceof PsiClass && alreadyProcessed((PsiClass) object);
+	}
 
-  public boolean alreadyProcessed(@NotNull PsiClass object) {
-    final String name = getClassName(object);
-    return name == null || myAddedClasses.contains(name);
-  }
+	public boolean alreadyProcessed(@NotNull PsiClass object)
+	{
+		final String name = getClassName(object);
+		return name == null || myAddedClasses.contains(name);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,14 @@
  */
 package com.intellij.codeInsight.template;
 
-import com.intellij.codeInsight.completion.JavaCompletionData;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.PsiJavaPatterns.psiJavaElement;
+import static com.intellij.patterns.StandardPatterns.instanceOf;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.completion.JavaKeywordCompletion;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.ide.highlighter.JavaFileHighlighter;
 import com.intellij.lang.java.JavaLanguage;
@@ -26,143 +33,178 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+public abstract class JavaCodeContextType extends TemplateContextType
+{
 
-public abstract class JavaCodeContextType extends TemplateContextType {
+	protected JavaCodeContextType(@NotNull @NonNls String id, @NotNull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType)
+	{
+		super(id, presentableName, baseContextType);
+	}
 
-  protected JavaCodeContextType(@NotNull @NonNls String id,
-                                @NotNull String presentableName,
-                                @Nullable Class<? extends TemplateContextType> baseContextType) {
-    super(id, presentableName, baseContextType);
-  }
+	@Override
+	public boolean isInContext(@NotNull final PsiFile file, final int offset)
+	{
+		if(PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE))
+		{
+			PsiElement element = file.findElementAt(offset);
+			if(element instanceof PsiWhiteSpace)
+			{
+				return false;
+			}
+			return element != null && isInContext(element);
+		}
 
-  @Override
-  public boolean isInContext(@NotNull final PsiFile file, final int offset) {
-    if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
-      PsiElement element = file.findElementAt(offset);
-      if (element instanceof PsiWhiteSpace) {
-        return false;
-      }
-      return element != null && isInContext(element);
-    }
+		return false;
+	}
 
-    return false;
-  }
-  
-  protected abstract boolean isInContext(@NotNull PsiElement element);
+	protected abstract boolean isInContext(@NotNull PsiElement element);
 
-  @NotNull
-  @Override
-  public SyntaxHighlighter createHighlighter() {
-    return new JavaFileHighlighter();
-  }
+	@NotNull
+	@Override
+	public SyntaxHighlighter createHighlighter()
+	{
+		return new JavaFileHighlighter();
+	}
 
-  @Override
-  public Document createDocument(CharSequence text, Project project) {
-    if (project == null) {
-      return super.createDocument(text, project);
-    }
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
-    final JavaCodeFragment fragment = factory.createCodeBlockCodeFragment((String)text, psiFacade.findPackage(""), true);
-    DaemonCodeAnalyzer.getInstance(project).setHighlightingEnabled(fragment, false);
-    return PsiDocumentManager.getInstance(project).getDocument(fragment);
-  }
-  
-  public static class Generic extends JavaCodeContextType {
-    public Generic() {
-      super("JAVA_CODE", "Java", EverywhereContextType.class);
-    }
+	@Override
+	public Document createDocument(CharSequence text, Project project)
+	{
+		if(project == null)
+		{
+			return super.createDocument(text, project);
+		}
+		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+		final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
+		final JavaCodeFragment fragment = factory.createCodeBlockCodeFragment((String) text, psiFacade.findPackage(""), true);
+		DaemonCodeAnalyzer.getInstance(project).setHighlightingEnabled(fragment, false);
+		return PsiDocumentManager.getInstance(project).getDocument(fragment);
+	}
 
-    @Override
-    protected boolean isInContext(@NotNull PsiElement element) {
-      return true;
-    }
-  }
+	public static class Generic extends JavaCodeContextType
+	{
+		public Generic()
+		{
+			super("JAVA_CODE", "Java", EverywhereContextType.class);
+		}
 
-  public static class Statement extends JavaCodeContextType {
-    public Statement() {
-      super("JAVA_STATEMENT", "Statement", Generic.class);
-    }
+		@Override
+		protected boolean isInContext(@NotNull PsiElement element)
+		{
+			return true;
+		}
+	}
 
-    @Override
-    protected boolean isInContext(@NotNull PsiElement element) {
-      return isStatementContext(element);
-    }
+	public static class Statement extends JavaCodeContextType
+	{
+		public Statement()
+		{
+			super("JAVA_STATEMENT", "Statement", Generic.class);
+		}
 
-    private static boolean isStatementContext(PsiElement element) {
-      if (isAfterExpression(element) || JavaStringContextType.isStringLiteral(element)) {
-        return false;
-      }
-      
-      PsiStatement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
-      return statement != null && statement.getTextRange().getStartOffset() == element.getTextRange().getStartOffset();
-    }
-  }
-  public static class Expression extends JavaCodeContextType {
-    public Expression() {
-      super("JAVA_EXPRESSION", "Expression", Generic.class);
-    }
+		@Override
+		protected boolean isInContext(@NotNull PsiElement element)
+		{
+			return isStatementContext(element);
+		}
 
-    @Override
-    protected boolean isInContext(@NotNull PsiElement element) {
-      return isExpressionContext(element);
-    }
+		private static boolean isStatementContext(PsiElement element)
+		{
+			if(isAfterExpression(element) || JavaStringContextType.isStringLiteral(element))
+			{
+				return false;
+			}
 
-    private static boolean isExpressionContext(PsiElement element) {
-      final PsiElement parent = element.getParent();
-      if (!(parent instanceof PsiJavaCodeReferenceElement)) {
-        return false;
-      }
-      if (((PsiJavaCodeReferenceElement)parent).isQualified()) {
-        return false;
-      }
-      if (parent.getParent() instanceof PsiMethodCallExpression) {
-        return false;
-      }
+			PsiElement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class, PsiLambdaExpression.class);
+			if(statement instanceof PsiLambdaExpression)
+			{
+				PsiElement body = ((PsiLambdaExpression) statement).getBody();
+				if(body != null && PsiTreeUtil.isAncestor(body, element, false))
+				{
+					statement = body;
+				}
+			}
 
-      if (psiElement().withParents(PsiTypeElement.class, PsiMember.class).accepts(parent)) {
-        return false;
-      }
+			return statement != null && statement.getTextRange().getStartOffset() == element.getTextRange().getStartOffset();
+		}
+	}
 
-      if (JavaCompletionData.isInsideParameterList(element)) {
-        return false;
-      }
+	public static class Expression extends JavaCodeContextType
+	{
+		public Expression()
+		{
+			super("JAVA_EXPRESSION", "Expression", Generic.class);
+		}
 
-      return !isAfterExpression(element);
-    }
-  }
+		@Override
+		protected boolean isInContext(@NotNull PsiElement element)
+		{
+			return isExpressionContext(element);
+		}
 
-  private static boolean isAfterExpression(PsiElement element) {
-    ProcessingContext context = new ProcessingContext();
-    if (psiElement().inside(PsiExpression.class).afterLeaf(psiElement().inside(psiElement(PsiExpression.class).save("prevExpr"))).accepts(element, context)) {
-      PsiExpression prevExpr = (PsiExpression)context.get("prevExpr");
-      if (prevExpr.getTextRange().getEndOffset() <= element.getTextRange().getStartOffset()) {
-        return true;
-      }
-    }
+		private static boolean isExpressionContext(PsiElement element)
+		{
+			final PsiElement parent = element.getParent();
+			if(!(parent instanceof PsiJavaCodeReferenceElement))
+			{
+				return false;
+			}
+			if(((PsiJavaCodeReferenceElement) parent).isQualified())
+			{
+				return false;
+			}
+			if(parent.getParent() instanceof PsiMethodCallExpression)
+			{
+				return false;
+			}
 
-    return false;
-  }
+			if(psiElement().withParents(PsiTypeElement.class, PsiMember.class).accepts(parent))
+			{
+				return false;
+			}
 
-  public static class Declaration extends JavaCodeContextType {
-    public Declaration() {
-      super("JAVA_DECLARATION", "Declaration", Generic.class);
-    }
+			if(JavaKeywordCompletion.isInsideParameterList(element))
+			{
+				return false;
+			}
 
-    @Override
-    protected boolean isInContext(@NotNull PsiElement element) {
-      if (Statement.isStatementContext(element) || Expression.isExpressionContext(element)) {
-        return false;
-      }
+			return !isAfterExpression(element);
+		}
+	}
 
-      return JavaCompletionData.isSuitableForClass(element) || JavaCompletionData.isInsideParameterList(element);
-    }
-  }
+	private static boolean isAfterExpression(PsiElement element)
+	{
+		ProcessingContext context = new ProcessingContext();
+		if(psiJavaElement().withAncestor(1, instanceOf(PsiExpression.class)).afterLeaf(psiElement().withAncestor(1, psiElement(PsiExpression.class).save("prevExpr"))).accepts(element, context))
+		{
+			PsiExpression prevExpr = (PsiExpression) context.get("prevExpr");
+			if(prevExpr.getTextRange().getEndOffset() <= element.getTextRange().getStartOffset())
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static class Declaration extends JavaCodeContextType
+	{
+		public Declaration()
+		{
+			super("JAVA_DECLARATION", "Declaration", Generic.class);
+		}
+
+		@Override
+		protected boolean isInContext(@NotNull PsiElement element)
+		{
+			if(Statement.isStatementContext(element) || Expression.isExpressionContext(element))
+			{
+				return false;
+			}
+
+			return JavaKeywordCompletion.isSuitableForClass(element) || JavaKeywordCompletion.isInsideParameterList(element);
+		}
+	}
 
 
 }

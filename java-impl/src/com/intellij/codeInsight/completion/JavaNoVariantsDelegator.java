@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiClass;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 
 import java.util.Collections;
@@ -32,7 +31,15 @@ import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportStatementBase;
+import com.intellij.psi.PsiJavaCodeReferenceCodeFragment;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.CollectConsumer;
@@ -44,10 +51,9 @@ import com.intellij.util.Consumer;
 public class JavaNoVariantsDelegator extends CompletionContributor
 {
 	@Override
-	public void fillCompletionVariants(@NotNull final CompletionParameters parameters,
-			@NotNull final CompletionResultSet result)
+	public void fillCompletionVariants(@NotNull final CompletionParameters parameters, @NotNull final CompletionResultSet result)
 	{
-		final InheritorsHolder holder = new InheritorsHolder(parameters.getPosition(), result);
+		final InheritorsHolder holder = new InheritorsHolder(result);
 		ResultTracker tracker = new ResultTracker(result)
 		{
 			@Override
@@ -68,7 +74,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 			}
 		};
 		result.runRemainingContributors(parameters, tracker);
-		final boolean empty = tracker.containsOnlyPackages || suggestMetaAnnotations(parameters);
+		final boolean empty = tracker.containsOnlyPackages || suggestAllAnnotations(parameters);
 
 		if(!empty && parameters.getInvocationCount() == 0)
 		{
@@ -87,23 +93,17 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 					JavaCompletionContributor.isClassNamePossible(parameters) &&
 					!JavaSmartCompletionContributor.AFTER_NEW.accepts(parameters.getPosition()))
 			{
-				suggestNonImportedClasses(parameters, JavaCompletionSorting.addJavaSorting(parameters,
-						result.withPrefixMatcher(tracker.betterMatcher)), holder);
+				suggestNonImportedClasses(parameters, JavaCompletionSorting.addJavaSorting(parameters, result.withPrefixMatcher(tracker.betterMatcher)), holder);
 			}
 		}
 	}
 
-	private static boolean suggestMetaAnnotations(CompletionParameters parameters)
+	private static boolean suggestAllAnnotations(CompletionParameters parameters)
 	{
-		PsiElement position = parameters.getPosition();
-		return psiElement().withParents(PsiJavaCodeReferenceElement.class, PsiAnnotation.class, PsiModifierList.class,
-				PsiClass.class).accepts(position) && psiElement().withSuperParent(4, psiClass().isAnnotationType())
-				.accepts(position);
+		return psiElement().withParents(PsiJavaCodeReferenceElement.class, PsiAnnotation.class).accepts(parameters.getPosition());
 	}
 
-	private static void delegate(CompletionParameters parameters,
-			final CompletionResultSet result,
-			final InheritorsHolder inheritorsHolder)
+	private static void delegate(CompletionParameters parameters, final CompletionResultSet result, final InheritorsHolder inheritorsHolder)
 	{
 		if(parameters.getCompletionType() == CompletionType.BASIC)
 		{
@@ -111,7 +111,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 			suggestCollectionUtilities(parameters, result, position);
 
 			if(parameters.getInvocationCount() <= 1 &&
-					(JavaCompletionContributor.mayStartClassName(result) || suggestMetaAnnotations(parameters)) &&
+					(JavaCompletionContributor.mayStartClassName(result) || suggestAllAnnotations(parameters)) &&
 					JavaCompletionContributor.isClassNamePossible(parameters))
 			{
 				suggestNonImportedClasses(parameters, result, inheritorsHolder);
@@ -127,23 +127,18 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		}
 	}
 
-	private static void suggestCollectionUtilities(CompletionParameters parameters,
-			final CompletionResultSet result,
-			PsiElement position)
+	private static void suggestCollectionUtilities(CompletionParameters parameters, final CompletionResultSet result, PsiElement position)
 	{
 		if(StringUtil.isNotEmpty(result.getPrefixMatcher().getPrefix()))
 		{
 			for(ExpectedTypeInfo info : JavaSmartCompletionContributor.getExpectedTypes(parameters))
 			{
-				new CollectionsUtilityMethodsProvider(position, info.getType(), info.getDefaultType(),
-						result).addCompletions(true);
+				new CollectionsUtilityMethodsProvider(position, info.getType(), info.getDefaultType(), result).addCompletions(true);
 			}
 		}
 	}
 
-	private static void suggestChainedCalls(CompletionParameters parameters,
-			CompletionResultSet result,
-			PsiElement position)
+	private static void suggestChainedCalls(CompletionParameters parameters, CompletionResultSet result, PsiElement position)
 	{
 		PsiElement parent = position.getParent();
 		if(!(parent instanceof PsiJavaCodeReferenceElement) || parent.getParent() instanceof PsiImportStatementBase)
@@ -151,8 +146,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 			return;
 		}
 		PsiElement qualifier = ((PsiJavaCodeReferenceElement) parent).getQualifier();
-		if(!(qualifier instanceof PsiJavaCodeReferenceElement) || ((PsiJavaCodeReferenceElement) qualifier)
-				.isQualified())
+		if(!(qualifier instanceof PsiJavaCodeReferenceElement) || ((PsiJavaCodeReferenceElement) qualifier).isQualified())
 		{
 			return;
 		}
@@ -168,8 +162,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 			return;
 		}
 
-		String fullPrefix = parent.getText().substring(0, parameters.getOffset() - parent.getTextRange()
-				.getStartOffset());
+		String fullPrefix = parent.getText().substring(0, parameters.getOffset() - parent.getTextRange().getStartOffset());
 		CompletionResultSet qualifiedCollector = result.withPrefixMatcher(fullPrefix);
 		ElementFilter filter = JavaCompletionContributor.getReferenceFilter(position);
 		for(LookupElement base : suggestQualifierItems(parameters, (PsiJavaCodeReferenceElement) qualifier, filter))
@@ -177,24 +170,19 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 			PsiType type = JavaCompletionUtil.getLookupElementType(base);
 			if(type != null && !PsiType.VOID.equals(type))
 			{
-				PsiReferenceExpression ref = ReferenceExpressionCompletionContributor.createMockReference(position,
-						type, base);
+				PsiReferenceExpression ref = ReferenceExpressionCompletionContributor.createMockReference(position, type, base);
 				if(ref != null)
 				{
-					for(final LookupElement item : JavaSmartCompletionContributor.completeReference(position, ref,
-							filter, true, true, parameters, result.getPrefixMatcher()))
+					for(final LookupElement item : JavaSmartCompletionContributor.completeReference(position, ref, filter, true, true, parameters, result.getPrefixMatcher()))
 					{
-						qualifiedCollector.addElement(JavaCompletionUtil.highlightIfNeeded(null,
-								new JavaChainLookupElement(base, item), item.getObject(), position));
+						qualifiedCollector.addElement(JavaCompletionUtil.highlightIfNeeded(null, new JavaChainLookupElement(base, item), item.getObject(), position));
 					}
 				}
 			}
 		}
 	}
 
-	private static Set<LookupElement> suggestQualifierItems(CompletionParameters parameters,
-			PsiJavaCodeReferenceElement qualifier,
-			ElementFilter filter)
+	private static Set<LookupElement> suggestQualifierItems(CompletionParameters parameters, PsiJavaCodeReferenceElement qualifier, ElementFilter filter)
 	{
 		String referenceName = qualifier.getReferenceName();
 		if(referenceName == null)
@@ -203,11 +191,9 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		}
 
 		PrefixMatcher qMatcher = new CamelHumpMatcher(referenceName);
-		Set<LookupElement> plainVariants = JavaSmartCompletionContributor.completeReference(qualifier, qualifier,
-				filter, true, true, parameters, qMatcher);
+		Set<LookupElement> plainVariants = JavaSmartCompletionContributor.completeReference(qualifier, qualifier, filter, true, true, parameters, qMatcher);
 
-		for(PsiClass aClass : PsiShortNamesCache.getInstance(qualifier.getProject()).getClassesByName(referenceName,
-				qualifier.getResolveScope()))
+		for(PsiClass aClass : PsiShortNamesCache.getInstance(qualifier.getProject()).getClassesByName(referenceName, qualifier.getResolveScope()))
 		{
 			plainVariants.add(JavaClassNameCompletionContributor.createClassLookupItem(aClass, true));
 		}
@@ -221,19 +207,15 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		PsiElement qualifierName = qualifier.getReferenceNameElement();
 		if(qualifierName != null)
 		{
-			JavaClassNameCompletionContributor.addAllClasses(parameters.withPosition(qualifierName,
-					qualifierName.getTextRange().getEndOffset()), true, qMatcher, new CollectConsumer<LookupElement>
-					(allClasses));
+			JavaClassNameCompletionContributor.addAllClasses(parameters.withPosition(qualifierName, qualifierName.getTextRange().getEndOffset()), true, qMatcher,
+					new CollectConsumer<LookupElement>(allClasses));
 		}
 		return allClasses;
 	}
 
-	private static void suggestNonImportedClasses(final CompletionParameters parameters,
-			final CompletionResultSet result,
-			@Nullable final InheritorsHolder inheritorsHolder)
+	private static void suggestNonImportedClasses(final CompletionParameters parameters, final CompletionResultSet result, @Nullable final InheritorsHolder inheritorsHolder)
 	{
-		JavaClassNameCompletionContributor.addAllClasses(parameters, true, result.getPrefixMatcher(),
-				new Consumer<LookupElement>()
+		JavaClassNameCompletionContributor.addAllClasses(parameters, true, result.getPrefixMatcher(), new Consumer<LookupElement>()
 		{
 			@Override
 			public void consume(LookupElement element)
@@ -242,8 +224,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 				{
 					return;
 				}
-				JavaPsiClassReferenceElement classElement = element.as(JavaPsiClassReferenceElement
-						.CLASS_CONDITION_KEY);
+				JavaPsiClassReferenceElement classElement = element.as(JavaPsiClassReferenceElement.CLASS_CONDITION_KEY);
 				if(classElement != null)
 				{
 					classElement.setAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
@@ -282,3 +263,4 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		}
 	}
 }
+

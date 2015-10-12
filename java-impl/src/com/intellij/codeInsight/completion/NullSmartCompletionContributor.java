@@ -15,51 +15,56 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.lookup.LookupItem;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
-
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.and;
 import static com.intellij.patterns.StandardPatterns.not;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
+
+import com.intellij.codeInsight.ExpectedTypeInfo;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiKeyword;
+import com.intellij.psi.PsiPrimitiveType;
+
 /**
  * @author peter
  */
-public class NullSmartCompletionContributor extends CompletionContributor{
-  public NullSmartCompletionContributor() {
-    extend(CompletionType.SMART, and(JavaSmartCompletionContributor.INSIDE_EXPRESSION,
-                                                      not(psiElement().afterLeaf("."))), new ExpectedTypeBasedCompletionProvider() {
-      @Override
-      protected void addCompletions(final CompletionParameters parameters,
-                                    final CompletionResultSet result, final Collection<ExpectedTypeInfo> infos) {
-        if (!StringUtil.startsWithChar(result.getPrefixMatcher().getPrefix(), 'n')) {
-          return;
-        }
+public class NullSmartCompletionContributor extends CompletionContributor
+{
+	public NullSmartCompletionContributor()
+	{
+		extend(CompletionType.SMART, and(JavaSmartCompletionContributor.INSIDE_EXPRESSION, not(psiElement().afterLeaf("."))), new ExpectedTypeBasedCompletionProvider()
+		{
+			@Override
+			protected void addCompletions(final CompletionParameters parameters, final CompletionResultSet result, final Collection<ExpectedTypeInfo> infos)
+			{
+				if(!StringUtil.startsWithChar(result.getPrefixMatcher().getPrefix(), 'n'))
+				{
+					return;
+				}
 
-        LinkedHashSet<CompletionResult> results = result.runRemainingContributors(parameters, true);
-        for (CompletionResult completionResult : results) {
-          if (completionResult.isStartMatch()) {
-            return;
-          }
-        }
+				LinkedHashSet<CompletionResult> results = result.runRemainingContributors(parameters, true);
+				for(CompletionResult completionResult : results)
+				{
+					if(completionResult.isStartMatch())
+					{
+						return;
+					}
+				}
 
-        for (final ExpectedTypeInfo info : infos) {
-          if (!(info.getType() instanceof PsiPrimitiveType)) {
-            final LookupItem item = (LookupItem)BasicExpressionCompletionContributor.createKeywordLookupItem(parameters.getPosition(), PsiKeyword.NULL);
-            item.setAttribute(LookupItem.TYPE, PsiType.NULL);
-            result.addElement(JavaSmartCompletionContributor.decorate(item, infos));
-            return;
-          }
-        }
-      }
-    });
-  }
+				for(final ExpectedTypeInfo info : infos)
+				{
+					if(!(info.getType() instanceof PsiPrimitiveType))
+					{
+						final LookupElement item = BasicExpressionCompletionContributor.createKeywordLookupItem(parameters.getPosition(), PsiKeyword.NULL);
+						result.addElement(JavaSmartCompletionContributor.decorate(item, infos));
+						return;
+					}
+				}
+			}
+		});
+	}
 
 }

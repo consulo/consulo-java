@@ -15,182 +15,225 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.lookup.*;
-import com.intellij.diagnostic.LogMessageEx;
-import com.intellij.diagnostic.AttachmentFactory;
+import gnu.trove.THashSet;
+
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementDecorator;
+import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.codeInsight.lookup.TypedLookupItem;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.ClassConditionKey;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.text.CharArrayUtil;
-import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Set;
 
 /**
  * @author peter
  */
-public class JavaChainLookupElement extends LookupElementDecorator<LookupElement> implements TypedLookupItem {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.JavaChainLookupElement");
-  public static final ClassConditionKey<JavaChainLookupElement> CLASS_CONDITION_KEY = ClassConditionKey.create(JavaChainLookupElement.class);
-  private final LookupElement myQualifier;
+public class JavaChainLookupElement extends LookupElementDecorator<LookupElement> implements TypedLookupItem
+{
+	public static final Key<Boolean> CHAIN_QUALIFIER = Key.create("CHAIN_QUALIFIER");
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.JavaChainLookupElement");
+	public static final ClassConditionKey<JavaChainLookupElement> CLASS_CONDITION_KEY = ClassConditionKey.create(JavaChainLookupElement.class);
+	private final LookupElement myQualifier;
 
-  public JavaChainLookupElement(LookupElement qualifier, LookupElement main) {
-    super(main);
-    myQualifier = qualifier;
-  }
+	public JavaChainLookupElement(LookupElement qualifier, LookupElement main)
+	{
+		super(main);
+		myQualifier = qualifier;
+	}
 
-  @NotNull
-  @Override
-  public String getLookupString() {
-    return maybeAddParentheses(myQualifier.getLookupString()) + "." + getDelegate().getLookupString();
-  }
+	@NotNull
+	@Override
+	public String getLookupString()
+	{
+		return maybeAddParentheses(myQualifier.getLookupString()) + "." + getDelegate().getLookupString();
+	}
 
-  public LookupElement getQualifier() {
-    return myQualifier;
-  }
+	public LookupElement getQualifier()
+	{
+		return myQualifier;
+	}
 
-  @Override
-  public Set<String> getAllLookupStrings() {
-    final Set<String> strings = getDelegate().getAllLookupStrings();
-    final THashSet<String> result = new THashSet<String>();
-    result.addAll(strings);
-    result.add(getLookupString());
-    return result;
-  }
+	@Override
+	public Set<String> getAllLookupStrings()
+	{
+		final Set<String> strings = getDelegate().getAllLookupStrings();
+		final THashSet<String> result = new THashSet<String>();
+		result.addAll(strings);
+		result.add(getLookupString());
+		return result;
+	}
 
-  @NotNull
-  @Override
-  public String toString() {
-    return maybeAddParentheses(myQualifier.toString()) + "." + getDelegate();
-  }
+	@NotNull
+	@Override
+	public String toString()
+	{
+		return maybeAddParentheses(myQualifier.toString()) + "." + getDelegate();
+	}
 
-  private String maybeAddParentheses(String s) {
-    return getQualifierObject() instanceof PsiMethod ? s + "()" : s;
-  }
+	private String maybeAddParentheses(String s)
+	{
+		return getQualifierObject() instanceof PsiMethod ? s + "()" : s;
+	}
 
-  @Nullable
-  private Object getQualifierObject() {
-    Object qObject = myQualifier.getObject();
-    if (qObject instanceof ResolveResult) {
-      qObject = ((ResolveResult)qObject).getElement();
-    }
-    return qObject;
-  }
+	@Nullable
+	private Object getQualifierObject()
+	{
+		Object qObject = myQualifier.getObject();
+		if(qObject instanceof ResolveResult)
+		{
+			qObject = ((ResolveResult) qObject).getElement();
+		}
+		return qObject;
+	}
 
-  @Override
-  public void renderElement(LookupElementPresentation presentation) {
-    super.renderElement(presentation);
-    final LookupElementPresentation qualifierPresentation = new LookupElementPresentation();
-    myQualifier.renderElement(qualifierPresentation);
-    String name = maybeAddParentheses(qualifierPresentation.getItemText());
-    final String qualifierText = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY) != null ? "(" + name + ")" : name;
-    presentation.setItemText(qualifierText + "." + presentation.getItemText());
+	@Override
+	public boolean isValid()
+	{
+		return super.isValid() && myQualifier.isValid();
+	}
 
-    if (myQualifier instanceof LookupItem && getQualifierObject() instanceof PsiClass) {
-      String locationString = JavaPsiClassReferenceElement.getLocationString((LookupItem)myQualifier);
-      presentation.setTailText(StringUtil.notNullize(presentation.getTailText()) + locationString);
-    }
-  }
+	@Override
+	public void renderElement(LookupElementPresentation presentation)
+	{
+		super.renderElement(presentation);
+		final LookupElementPresentation qualifierPresentation = new LookupElementPresentation();
+		myQualifier.renderElement(qualifierPresentation);
+		String name = maybeAddParentheses(qualifierPresentation.getItemText());
+		final String qualifierText = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY) != null ? "(" + name + ")" : name;
+		presentation.setItemText(qualifierText + "." + presentation.getItemText());
 
-  @Override
-  public void handleInsert(InsertionContext context) {
-    final Document document = context.getEditor().getDocument();
-    document.replaceString(context.getStartOffset(), context.getTailOffset(), ";");
-    final InsertionContext qualifierContext = CompletionUtil.emulateInsertion(context, context.getStartOffset(), myQualifier);
-    OffsetKey oldStart = context.trackOffset(context.getStartOffset(), false);
+		if(myQualifier instanceof JavaPsiClassReferenceElement)
+		{
+			String locationString = ((JavaPsiClassReferenceElement) myQualifier).getLocationString();
+			presentation.setTailText(StringUtil.notNullize(presentation.getTailText()) + locationString);
+		}
+	}
 
-    int start = CharArrayUtil.shiftForward(context.getDocument().getCharsSequence(), context.getStartOffset(), " \t\n");
-    if (shouldParenthesizeQualifier(context.getFile(), start, qualifierContext.getTailOffset())) {
-      final String space = CodeStyleSettingsManager.getSettings(qualifierContext.getProject()).SPACE_WITHIN_PARENTHESES ? " " : "";
-      document.insertString(start, "(" + space);
-      document.insertString(qualifierContext.getTailOffset(), space + ")");
-    }
+	@Override
+	public void handleInsert(InsertionContext context)
+	{
+		final Document document = context.getEditor().getDocument();
+		document.replaceString(context.getStartOffset(), context.getTailOffset(), ";");
+		myQualifier.putUserData(CHAIN_QUALIFIER, true);
+		final InsertionContext qualifierContext = CompletionUtil.emulateInsertion(context, context.getStartOffset(), myQualifier);
+		OffsetKey oldStart = context.trackOffset(context.getStartOffset(), false);
 
-    final char atTail = document.getCharsSequence().charAt(context.getTailOffset() - 1);
-    if (atTail != ';') {
-      LOG.error(LogMessageEx.createEvent("Unexpected character",
-                                         "atTail=" + atTail + "\n" +
-                                         "offset=" + context.getTailOffset() + "\n" +
-                                         DebugUtil.currentStackTrace(),
-                                         AttachmentFactory.createAttachment(context.getDocument())));
+		PsiDocumentManager.getInstance(context.getProject()).doPostponedOperationsAndUnblockDocument(document);
 
-    }
-    document.replaceString(context.getTailOffset() - 1, context.getTailOffset(), ".");
+		int start = CharArrayUtil.shiftForward(context.getDocument().getCharsSequence(), context.getStartOffset(), " \t\n");
+		if(shouldParenthesizeQualifier(context.getFile(), start, qualifierContext.getTailOffset()))
+		{
+			final String space = CodeStyleSettingsManager.getSettings(qualifierContext.getProject()).SPACE_WITHIN_PARENTHESES ? " " : "";
+			document.insertString(start, "(" + space);
+			document.insertString(qualifierContext.getTailOffset(), space + ")");
+		}
 
-    CompletionUtil.emulateInsertion(getDelegate(), context.getTailOffset(), context);
-    context.commitDocument();
+		final char atTail = document.getCharsSequence().charAt(context.getTailOffset() - 1);
+		if(atTail != ';')
+		{
+			return;
+		}
+		document.replaceString(context.getTailOffset() - 1, context.getTailOffset(), ".");
 
-    int formatStart = context.getOffset(oldStart);
-    int formatEnd = context.getTailOffset();
-    if (formatStart >= 0 && formatEnd >= 0) {
-      CodeStyleManager.getInstance(context.getProject()).reformatText(context.getFile(), formatStart, formatEnd);
-    }
-  }
+		CompletionUtil.emulateInsertion(getDelegate(), context.getTailOffset(), context);
+		context.commitDocument();
 
-  protected boolean shouldParenthesizeQualifier(final PsiFile file, final int startOffset, final int endOffset) {
-    PsiElement element = file.findElementAt(startOffset);
-    if (element == null) {
-      return false;
-    }
+		int formatStart = context.getOffset(oldStart);
+		int formatEnd = context.getTailOffset();
+		if(formatStart >= 0 && formatEnd >= 0)
+		{
+			CodeStyleManager.getInstance(context.getProject()).reformatText(context.getFile(), formatStart, formatEnd);
+		}
+	}
 
-    PsiElement last = element;
-    while (element != null &&
-           element.getTextRange().getStartOffset() >= startOffset && element.getTextRange().getEndOffset() <= endOffset &&
-           !(element instanceof PsiExpressionStatement)) {
-      last = element;
-      element = element.getParent();
-    }
-    PsiExpression expr = PsiTreeUtil.getParentOfType(last, PsiExpression.class, false, PsiClass.class);
-    if (expr == null) {
-      return false;
-    }
-    if (expr.getTextRange().getEndOffset() > endOffset) {
-      return true;
-    }
+	protected boolean shouldParenthesizeQualifier(final PsiFile file, final int startOffset, final int endOffset)
+	{
+		PsiElement element = file.findElementAt(startOffset);
+		if(element == null)
+		{
+			return false;
+		}
 
-    if (expr instanceof PsiJavaCodeReferenceElement ||
-        expr instanceof PsiMethodCallExpression ||
-        expr instanceof PsiArrayAccessExpression) {
-      return false;
-    }
+		PsiElement last = element;
+		while(element != null &&
+				element.getTextRange().getStartOffset() >= startOffset && element.getTextRange().getEndOffset() <= endOffset &&
+				!(element instanceof PsiExpressionStatement))
+		{
+			last = element;
+			element = element.getParent();
+		}
+		PsiExpression expr = PsiTreeUtil.getParentOfType(last, PsiExpression.class, false, PsiClass.class);
+		if(expr == null)
+		{
+			return false;
+		}
+		if(expr.getTextRange().getEndOffset() > endOffset)
+		{
+			return true;
+		}
 
-    return true;
-  }
+		if(expr instanceof PsiJavaCodeReferenceElement ||
+				expr instanceof PsiMethodCallExpression ||
+				expr instanceof PsiNewExpression ||
+				expr instanceof PsiArrayAccessExpression)
+		{
+			return false;
+		}
 
-  @NotNull
-  private LookupElement getComparableQualifier() {
-    final CastingLookupElementDecorator casting = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY);
-    return casting == null ? myQualifier : casting.getDelegate();
-  }
+		return true;
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
+	@NotNull
+	private LookupElement getComparableQualifier()
+	{
+		final CastingLookupElementDecorator casting = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY);
+		return casting == null ? myQualifier : casting.getDelegate();
+	}
 
-    return getComparableQualifier().equals(((JavaChainLookupElement)o).getComparableQualifier());
-  }
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+		if(!super.equals(o))
+		{
+			return false;
+		}
 
-  @Override
-  public int hashCode() {
-    return 31 * super.hashCode() + getComparableQualifier().hashCode();
-  }
+		return getComparableQualifier().equals(((JavaChainLookupElement) o).getComparableQualifier());
+	}
 
-  @Override
-  public PsiType getType() {
-    final Object object = getObject();
-    if (object instanceof PsiMember) {
-      return JavaCompletionUtil.getQualifiedMemberReferenceType(JavaCompletionUtil.getLookupElementType(myQualifier), (PsiMember)object);
-    }
-    return ((PsiVariable) object).getType();
-  }
+	@Override
+	public int hashCode()
+	{
+		return 31 * super.hashCode() + getComparableQualifier().hashCode();
+	}
+
+	@Override
+	public PsiType getType()
+	{
+		final Object object = getObject();
+		if(object instanceof PsiMember)
+		{
+			return JavaCompletionUtil.getQualifiedMemberReferenceType(JavaCompletionUtil.getLookupElementType(myQualifier), (PsiMember) object);
+		}
+		return ((PsiVariable) object).getType();
+	}
 }

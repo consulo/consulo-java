@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupItem;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 
@@ -36,8 +35,7 @@ public class JavaMethodMergingContributor extends CompletionContributor
 	public AutoCompletionDecision handleAutoCompletionPossibility(@NotNull AutoCompletionContext context)
 	{
 		final CompletionParameters parameters = context.getParameters();
-		if(parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType
-				.BASIC)
+		if(parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType.BASIC)
 		{
 			return null;
 		}
@@ -50,15 +48,14 @@ public class JavaMethodMergingContributor extends CompletionContributor
 			for(LookupElement item : items)
 			{
 				Object o = item.getPsiElement();
-				if(item.getUserData(LookupItem.FORCE_SHOW_SIGNATURE_ATTR) != null || !(o instanceof PsiMethod))
+				if(item.getUserData(JavaCompletionUtil.FORCE_SHOW_SIGNATURE_ATTR) != null || !(o instanceof PsiMethod))
 				{
 					return AutoCompletionDecision.SHOW_LOOKUP;
 				}
 
 				final PsiMethod method = (PsiMethod) o;
 				final JavaChainLookupElement chain = item.as(JavaChainLookupElement.CLASS_CONDITION_KEY);
-				final String name = method.getName() + "#" + (chain == null ? "" : chain.getQualifier()
-						.getLookupString());
+				final String name = method.getName() + "#" + (chain == null ? "" : chain.getQualifier().getLookupString());
 				if(commonName != null && !commonName.equals(name))
 				{
 					return AutoCompletionDecision.SHOW_LOOKUP;
@@ -96,8 +93,7 @@ public class JavaMethodMergingContributor extends CompletionContributor
 	private static int getPriority(LookupElement element)
 	{
 		PsiMethod method = assertNotNull(getItemMethod(element));
-		return (method.getReturnType() == PsiType.VOID ? 0 : 1) + (method.getParameterList().getParametersCount() > 0
-				? 2 : 0);
+		return (method.getReturnType() == PsiType.VOID ? 0 : 1) + (method.getParameterList().getParametersCount() > 0 ? 2 : 0);
 	}
 
 	@Nullable

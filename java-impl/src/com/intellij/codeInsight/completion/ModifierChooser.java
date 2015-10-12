@@ -142,8 +142,7 @@ public class ModifierChooser
 			return (PsiModifierList) element.getParent();
 		}
 
-		return PsiTreeUtil.getParentOfType(FilterPositionUtil.searchNonSpaceNonCommentBack(element),
-				PsiModifierList.class);
+		return PsiTreeUtil.getParentOfType(FilterPositionUtil.searchNonSpaceNonCommentBack(element), PsiModifierList.class);
 	}
 
 	private static boolean shouldSuggestModifiers(PsiElement element)
@@ -172,7 +171,7 @@ public class ModifierChooser
 
 		if(parent instanceof PsiJavaFile || parent instanceof PsiClass)
 		{
-			if(prev == null || JavaCompletionData.END_OF_BLOCK.getValue().isAcceptable(element, prev.getParent()))
+			if(prev == null || JavaKeywordCompletion.END_OF_BLOCK.getValue().isAcceptable(element, prev.getParent()))
 			{
 				return true;
 			}
