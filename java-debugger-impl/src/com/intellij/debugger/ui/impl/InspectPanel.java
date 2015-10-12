@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@
  */
 package com.intellij.debugger.ui.impl;
 
+import java.awt.BorderLayout;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.actions.DebuggerActions;
 import com.intellij.debugger.impl.DebuggerContextImpl;
@@ -31,38 +34,45 @@ import com.intellij.openapi.actionSystem.ActionPopupMenu;
 import com.intellij.openapi.actionSystem.CommonShortcuts;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.ScrollPaneFactory;
-import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
+public class InspectPanel extends DebuggerTreePanel
+{
+	public InspectPanel(Project project, DebuggerStateManager stateManager, @NotNull NodeDescriptorImpl inspectDescriptor)
+	{
+		super(project, stateManager);
 
-public class InspectPanel extends DebuggerTreePanel {
-  public InspectPanel(Project project, DebuggerStateManager stateManager, @NotNull NodeDescriptorImpl inspectDescriptor) {
-    super(project, stateManager);
+		getInspectTree().setInspectDescriptor(inspectDescriptor);
 
-    getInspectTree().setInspectDescriptor(inspectDescriptor);
+		add(ScrollPaneFactory.createScrollPane(getInspectTree()), BorderLayout.CENTER);
+		registerDisposable(DebuggerAction.installEditAction(getInspectTree(), DebuggerActions.EDIT_NODE_SOURCE));
 
-    add(ScrollPaneFactory.createScrollPane(getInspectTree()), BorderLayout.CENTER);
-    registerDisposable(DebuggerAction.installEditAction(getInspectTree(), DebuggerActions.EDIT_NODE_SOURCE));
+		overrideShortcut(getInspectTree(), DebuggerActions.COPY_VALUE, CommonShortcuts.getCopy());
+		setUpdateEnabled(true);
+	}
 
-    overrideShortcut(getInspectTree(), DebuggerActions.COPY_VALUE, CommonShortcuts.getCopy());
-    setUpdateEnabled(true);
-  }
+	@Override
+	protected void changeEvent(DebuggerContextImpl newContext, DebuggerSession.Event event)
+	{
+		if(event != DebuggerSession.Event.THREADS_REFRESH)
+		{
+			super.changeEvent(newContext, event);
+		}
+	}
 
-  protected void changeEvent(DebuggerContextImpl newContext, int event) {
-    if (event != DebuggerSession.EVENT_THREADS_REFRESH) {
-      super.changeEvent(newContext, event);
-    }
-  }
+	@Override
+	protected DebuggerTree createTreeView()
+	{
+		return new InspectDebuggerTree(getProject());
+	}
 
-  protected DebuggerTree createTreeView() {
-    return new InspectDebuggerTree(getProject());
-  }
+	@Override
+	protected ActionPopupMenu createPopupMenu()
+	{
+		return InspectDebuggerTree.createPopupMenu();
+	}
 
-  protected ActionPopupMenu createPopupMenu() {
-    return InspectDebuggerTree.createPopupMenu();
-  }
-
-  public InspectDebuggerTree getInspectTree() {
-    return (InspectDebuggerTree)getTree();
-  }
+	public InspectDebuggerTree getInspectTree()
+	{
+		return (InspectDebuggerTree) getTree();
+	}
 }

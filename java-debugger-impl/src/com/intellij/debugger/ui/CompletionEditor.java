@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,21 @@
  */
 package com.intellij.debugger.ui;
 
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+public abstract class CompletionEditor extends JComponent
+{
+	public abstract void setText(TextWithImports text);
 
-public abstract class CompletionEditor extends JComponent{
-  public abstract void setText  (TextWithImports text);
+	public abstract TextWithImports getText();
 
-  public abstract TextWithImports getText();
+	public abstract void setContext(@Nullable PsiElement context);
 
-  public abstract void setContext(@Nullable PsiElement context);
+	public abstract PsiElement getContext();
 
-  public abstract PsiElement getContext();
-
-  public abstract void dispose();
-
-  public abstract String getRecentsId();
+	public abstract String getRecentsId();
 }

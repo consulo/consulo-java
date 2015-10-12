@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,14 @@
  */
 package com.intellij.debugger.ui;
 
-public interface DebuggerView {
+import com.intellij.debugger.impl.DebuggerSession;
 
-  void setUpdateEnabled(boolean enabled);
+public interface DebuggerView
+{
 
-  boolean isRefreshNeeded();
-  void rebuildIfVisible(final int eventContext);
+	void setUpdateEnabled(boolean enabled);
 
+	boolean isRefreshNeeded();
+
+	void rebuildIfVisible(final DebuggerSession.Event eventContext);
 }

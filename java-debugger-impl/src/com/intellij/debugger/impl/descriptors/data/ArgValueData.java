@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,26 @@
 package com.intellij.debugger.impl.descriptors.data;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.jdi.DecompiledLocalVariable;
 import com.intellij.debugger.ui.impl.watch.ArgumentValueDescriptorImpl;
 import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.Value;
 
 public class ArgValueData extends DescriptorData<ArgumentValueDescriptorImpl>
 {
-	private final int myIndex;
+	private final DecompiledLocalVariable myVariable;
 	private final Value myValue;
-	@Nullable
-	private final String myDisplayName;
 
-	public ArgValueData(int index, Value value, @Nullable String displayName)
+	public ArgValueData(DecompiledLocalVariable variable, Value value)
 	{
-		super();
-		myIndex = index;
+		myVariable = variable;
 		myValue = value;
-		myDisplayName = displayName;
 	}
 
 	@Override
 	protected ArgumentValueDescriptorImpl createDescriptorImpl(@NotNull Project project)
 	{
-		return new ArgumentValueDescriptorImpl(project, myIndex, myValue, myDisplayName);
+		return new ArgumentValueDescriptorImpl(project, myVariable, myValue);
 	}
 
 	@Override
@@ -50,18 +46,18 @@ public class ArgValueData extends DescriptorData<ArgumentValueDescriptorImpl>
 			return false;
 		}
 
-		return myIndex == ((ArgValueData) object).myIndex;
+		return myVariable.getSlot() == ((ArgValueData) object).myVariable.getSlot();
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return myIndex;
+		return myVariable.getSlot();
 	}
 
 	@Override
 	public DisplayKey<ArgumentValueDescriptorImpl> getDisplayKey()
 	{
-		return new SimpleDisplayKey<ArgumentValueDescriptorImpl>(myIndex);
+		return new SimpleDisplayKey<ArgumentValueDescriptorImpl>(myVariable.getSlot());
 	}
 }

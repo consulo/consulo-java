@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,13 @@ package com.intellij.debugger.engine;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.Patches;
@@ -27,11 +31,12 @@ import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.util.containers.HashSet;
-import com.intellij.xdebugger.frame.XExecutionStack;
 import com.intellij.xdebugger.frame.XSuspendContext;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ThreadReference;
@@ -57,14 +62,14 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	private final EventSet myEventSet;
 	private volatile boolean myIsResumed;
 
-	public ConcurrentLinkedQueue<SuspendContextCommandImpl> myPostponedCommands = new ConcurrentLinkedQueue<SuspendContextCommandImpl>();
+	private final ConcurrentLinkedQueue<SuspendContextCommandImpl> myPostponedCommands = new ConcurrentLinkedQueue<SuspendContextCommandImpl>();
 	public volatile boolean myInProgress;
 	private final HashSet<ObjectReference> myKeptReferences = new HashSet<ObjectReference>();
 	private EvaluationContextImpl myEvaluationContext = null;
 
-	private JavaExecutionStack[] myExecutionStacks;
+	private JavaExecutionStack myActiveExecutionStack;
 
-	SuspendContextImpl(@NotNull DebugProcessImpl debugProcess, int suspendPolicy, int eventVotes, EventSet set)
+	SuspendContextImpl(@NotNull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set)
 	{
 		myDebugProcess = debugProcess;
 		mySuspendPolicy = suspendPolicy;
@@ -85,6 +90,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	protected void resume()
 	{
 		assertNotResumed();
+		LOG.assertTrue(!isEvaluating(), "resuming context while evaluating");
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		try
 		{
@@ -92,14 +98,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 			{
 				for(ObjectReference objectReference : myKeptReferences)
 				{
-					try
-					{
-						objectReference.enableCollection();
-					}
-					catch(UnsupportedOperationException ignored)
-					{
-						// ignore: some J2ME implementations does not provide this operation
-					}
+					DebuggerUtilsEx.enableCollection(objectReference);
 				}
 				myKeptReferences.clear();
 			}
@@ -163,16 +162,17 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		}
 	}
 
+	@Nullable
 	@Override
 	public ThreadReferenceProxyImpl getThread()
 	{
 		return myThread;
 	}
 
+	@MagicConstant(flagsFromClass = EventRequest.class)
 	@Override
 	public int getSuspendPolicy()
 	{
-		assertNotResumed();
 		return mySuspendPolicy;
 	}
 
@@ -182,7 +182,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myVotesToVote = 1000000000;
 	}
 
-	public boolean isExplicitlyResumed(ThreadReferenceProxyImpl thread)
+	public boolean isExplicitlyResumed(@Nullable ThreadReferenceProxyImpl thread)
 	{
 		return myResumedThreads != null && myResumedThreads.contains(thread);
 	}
@@ -226,7 +226,6 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myEvaluationContext = evaluationContext;
 	}
 
-	@Override
 	public String toString()
 	{
 		if(myEventSet != null)
@@ -243,14 +242,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 			final boolean added = myKeptReferences.add(reference);
 			if(added)
 			{
-				try
-				{
-					reference.disableCollection();
-				}
-				catch(UnsupportedOperationException ignored)
-				{
-					// ignore: some J2ME implementations does not provide this operation
-				}
+				DebuggerUtilsEx.disableCollection(reference);
 			}
 		}
 	}
@@ -277,34 +269,70 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 
 	@Nullable
 	@Override
-	public XExecutionStack getActiveExecutionStack()
+	public JavaExecutionStack getActiveExecutionStack()
 	{
-		for(JavaExecutionStack stack : myExecutionStacks)
+		return myActiveExecutionStack;
+	}
+
+	public void initExecutionStacks(ThreadReferenceProxyImpl activeThread)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		if(myThread == null)
 		{
-			if(stack.getThreadProxy().equals(myThread))
-			{
-				return stack;
-			}
+			myThread = activeThread;
 		}
-		return null;
+		if(activeThread != null)
+		{
+			myActiveExecutionStack = new JavaExecutionStack(activeThread, myDebugProcess, myThread == activeThread);
+			myActiveExecutionStack.initTopFrame();
+		}
 	}
 
 	@Override
-	public XExecutionStack[] getExecutionStacks()
+	public void computeExecutionStacks(final XExecutionStackContainer container)
 	{
-		return myExecutionStacks;
+		myDebugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(this)
+		{
+			@Override
+			public void contextAction() throws Exception
+			{
+				List<JavaExecutionStack> res = new ArrayList<JavaExecutionStack>();
+				Collection<ThreadReferenceProxyImpl> threads = getDebugProcess().getVirtualMachineProxy().allThreads();
+				JavaExecutionStack currentStack = null;
+				for(ThreadReferenceProxyImpl thread : threads)
+				{
+					boolean current = thread == myThread;
+					JavaExecutionStack stack = new JavaExecutionStack(thread, myDebugProcess, current);
+					if(!current)
+					{
+						res.add(stack);
+					}
+					else
+					{
+						currentStack = stack;
+					}
+				}
+				Collections.sort(res, THREADS_COMPARATOR);
+				if(currentStack != null)
+				{
+					res.add(0, currentStack);
+				}
+				container.addExecutionStack(res, true);
+			}
+		});
 	}
 
-	public void initExecutionStacks(ThreadReferenceProxyImpl newThread)
+	private static final Comparator<JavaExecutionStack> THREADS_COMPARATOR = new Comparator<JavaExecutionStack>()
 	{
-		DebuggerManagerThreadImpl.assertIsManagerThread();
-		Collection<JavaExecutionStack> res = new ArrayList<JavaExecutionStack>();
-		Collection<ThreadReferenceProxyImpl> threads = getDebugProcess().getVirtualMachineProxy().allThreads();
-		for(ThreadReferenceProxyImpl thread : threads)
+		@Override
+		public int compare(JavaExecutionStack th1, JavaExecutionStack th2)
 		{
-			res.add(new JavaExecutionStack(thread, myDebugProcess, thread == myThread));
+			int res = Comparing.compare(th2.getThreadProxy().isSuspended(), th1.getThreadProxy().isSuspended());
+			if(res == 0)
+			{
+				return th1.getDisplayName().compareToIgnoreCase(th2.getDisplayName());
+			}
+			return res;
 		}
-		myExecutionStacks = res.toArray(new JavaExecutionStack[res.size()]);
-		myThread = newThread;
-	}
+	};
 }

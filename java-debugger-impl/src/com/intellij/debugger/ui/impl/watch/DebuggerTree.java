@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import javax.swing.tree.TreePath;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.engine.DebugProcessImpl;
+import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -49,7 +50,6 @@ import com.intellij.debugger.jdi.LocalVariableProxyImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
-import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.settings.ThreadsViewSettings;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
@@ -72,6 +72,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
+import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.ExceptionEvent;
@@ -391,7 +392,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 	{
 		DebuggerSession session = context.getDebuggerSession();
 
-		if(ApplicationManager.getApplication().isUnitTestMode() || (session != null && session.getState() == DebuggerSession.STATE_PAUSED))
+		if(ApplicationManager.getApplication().isUnitTestMode() || (session != null && session.getState() == DebuggerSession.State.PAUSED))
 		{
 			showMessage(MessageDescriptor.EVALUATING);
 			context.getDebugProcess().getManagerThread().schedule(command);
@@ -495,7 +496,12 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 
 		protected BuildNodeCommand(DebuggerTreeNodeImpl node)
 		{
-			super(DebuggerTree.this.getDebuggerContext());
+			this(node, null);
+		}
+
+		protected BuildNodeCommand(DebuggerTreeNodeImpl node, ThreadReferenceProxyImpl thread)
+		{
+			super(DebuggerTree.this.getDebuggerContext(), thread);
 			myNode = node;
 		}
 
@@ -574,15 +580,11 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 						if(thisRefType instanceof ClassType && thisRefType.equals(location.declaringType()) && thisRefType.name().contains("$"))
 						{ // makes sense for nested classes only
 							final ClassType clsType = (ClassType) thisRefType;
-							final DebugProcessImpl debugProcess = getDebuggerContext().getDebugProcess();
-							final VirtualMachineProxyImpl vm = debugProcess.getVirtualMachineProxy();
 							for(Field field : clsType.fields())
 							{
-								if((!vm.canGetSyntheticAttribute() || field.isSynthetic()) && StringUtil.startsWith(field.name(),
-										FieldDescriptorImpl.OUTER_LOCAL_VAR_FIELD_PREFIX))
+								if(DebuggerUtils.isSynthetic(field) && StringUtil.startsWith(field.name(), FieldDescriptorImpl.OUTER_LOCAL_VAR_FIELD_PREFIX))
 								{
-									final FieldDescriptorImpl fieldDescriptor = myNodeManager.getFieldDescriptor(stackDescriptor,
-											thisObjectReference, field);
+									final FieldDescriptorImpl fieldDescriptor = myNodeManager.getFieldDescriptor(stackDescriptor, thisObjectReference, field);
 									myChildren.add(myNodeManager.createNode(fieldDescriptor, evaluationContext));
 								}
 							}
@@ -593,7 +595,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 				try
 				{
 					buildVariables(stackDescriptor, evaluationContext);
-					if(classRenderer.SORT_ASCENDING)
+					if(XDebuggerSettingsManager.getInstance().getDataViewSettings().isSortValues())
 					{
 						Collections.sort(myChildren, NodeManagerImpl.getNodeComparator());
 					}
@@ -606,21 +608,19 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 				final Pair<Method, Value> methodValuePair = debuggerContext.getDebugProcess().getLastExecutedMethod();
 				if(methodValuePair != null)
 				{
-					ValueDescriptorImpl returnValueDescriptor = myNodeManager.getMethodReturnValueDescriptor(stackDescriptor,
-							methodValuePair.getFirst(), methodValuePair.getSecond());
+					ValueDescriptorImpl returnValueDescriptor = myNodeManager.getMethodReturnValueDescriptor(stackDescriptor, methodValuePair.getFirst(), methodValuePair.getSecond());
 					myChildren.add(1, myNodeManager.createNode(returnValueDescriptor, evaluationContext));
 				}
 				// add context exceptions
 				for(Pair<Breakpoint, Event> pair : DebuggerUtilsEx.getEventDescriptors(getSuspendContext()))
 				{
-					final Event debugEvent = pair.getSecond();
+					final consulo.internal.com.sun.jdi.event.Event debugEvent = pair.getSecond();
 					if(debugEvent instanceof ExceptionEvent)
 					{
 						final ObjectReference exception = ((ExceptionEvent) debugEvent).exception();
 						if(exception != null)
 						{
-							final ValueDescriptorImpl exceptionDescriptor = myNodeManager.getThrownExceptionObjectDescriptor(stackDescriptor,
-									exception);
+							final ValueDescriptorImpl exceptionDescriptor = myNodeManager.getThrownExceptionObjectDescriptor(stackDescriptor, exception);
 							final DebuggerTreeNodeImpl exceptionNode = myNodeManager.createNode(exceptionDescriptor, evaluationContext);
 							myChildren.add(1, exceptionNode);
 						}
@@ -643,8 +643,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 			{
 				if(e.errorCode() == 35)
 				{
-					myChildren.add(myNodeManager.createMessageNode(new MessageDescriptor(DebuggerBundle.message("error.corrupt.debug.info",
-							e.getMessage()))));
+					myChildren.add(myNodeManager.createMessageNode(new MessageDescriptor(DebuggerBundle.message("error.corrupt.debug.info", e.getMessage()))));
 				}
 				else
 				{
@@ -655,8 +654,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 			updateUI(true);
 		}
 
-		protected void buildVariables(
-				final StackFrameDescriptorImpl stackDescriptor, final EvaluationContextImpl evaluationContext) throws EvaluateException
+		protected void buildVariables(final StackFrameDescriptorImpl stackDescriptor, final EvaluationContextImpl evaluationContext) throws EvaluateException
 		{
 			final StackFrameProxyImpl frame = stackDescriptor.getFrameProxy();
 			for(final LocalVariableProxyImpl local : frame.visibleVariables())
@@ -694,8 +692,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 					public void run()
 					{
 						node.removeAllChildren();
-						node.add(getNodeFactory().createMessageNode(new MessageDescriptor(DebuggerBundle.message("error.cannot.build.node.children"
-								+ ".object.collected", message))));
+						node.add(getNodeFactory().createMessageNode(new MessageDescriptor(DebuggerBundle.message("error.cannot.build.node.children.object.collected", message))));
 						node.childrenChanged(false);
 					}
 				});
@@ -777,7 +774,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 	{
 		public BuildThreadCommand(DebuggerTreeNodeImpl threadNode)
 		{
-			super(threadNode);
+			super(threadNode, ((ThreadDescriptorImpl) threadNode.getDescriptor()).getThreadReference());
 		}
 
 		@Override
@@ -798,8 +795,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 						{
 							//Method method = stackFrame.location().method();
 							//ToDo :check whether is synthetic if (shouldDisplay(method)) {
-							myChildren.add(myNodeManager.createNode(myNodeManager.getStackFrameDescriptor(threadDescriptor, stackFrame),
-									getDebuggerContext().createEvaluationContext()));
+							myChildren.add(myNodeManager.createNode(myNodeManager.getStackFrameDescriptor(threadDescriptor, stackFrame), getDebuggerContext().createEvaluationContext()));
 						}
 					}
 					catch(EvaluateException e)
@@ -844,8 +840,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 
 			final DebuggerContextImpl debuggerContext = getDebuggerContext();
 			final SuspendContextImpl suspendContext = debuggerContext.getSuspendContext();
-			final EvaluationContextImpl evaluationContext = suspendContext != null && !suspendContext.isResumed() ? debuggerContext
-					.createEvaluationContext() : null;
+			final EvaluationContextImpl evaluationContext = suspendContext != null && !suspendContext.isResumed() ? debuggerContext.createEvaluationContext() : null;
 
 			boolean showCurrent = ThreadsViewSettings.getInstance().SHOW_CURRENT_THREAD;
 
@@ -853,8 +848,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 			{
 				if(group != null)
 				{
-					DebuggerTreeNodeImpl threadNode = myNodeManager.createNode(myNodeManager.getThreadGroupDescriptor(groupDescriptor, group),
-							evaluationContext);
+					DebuggerTreeNodeImpl threadNode = myNodeManager.createNode(myNodeManager.getThreadGroupDescriptor(groupDescriptor, group), evaluationContext);
 
 					if(showCurrent && ((ThreadGroupDescriptorImpl) threadNode.getDescriptor()).isCurrent())
 					{
@@ -873,8 +867,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 			{
 				if(thread != null)
 				{
-					final DebuggerTreeNodeImpl threadNode = myNodeManager.createNode(myNodeManager.getThreadDescriptor(groupDescriptor, thread),
-							evaluationContext);
+					final DebuggerTreeNodeImpl threadNode = myNodeManager.createNode(myNodeManager.getThreadDescriptor(groupDescriptor, thread), evaluationContext);
 					if(showCurrent && ((ThreadDescriptorImpl) threadNode.getDescriptor()).isCurrent())
 					{
 						threadNodes.add(0, threadNode);

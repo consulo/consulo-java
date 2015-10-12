@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,19 @@ import javax.swing.JComponent;
 import javax.swing.MutableComboBoxModel;
 import javax.swing.plaf.basic.ComboPopup;
 
-import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.event.DocumentAdapter;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
@@ -55,8 +59,8 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 	public static final Key<String> KEY = Key.create("DebuggerComboBoxEditor.KEY");
 	public static final int MAX_ROWS = 20;
 
-	private MyEditorComboBoxEditor myEditor;
-	private ComboBox myComboBox;
+	private final MyEditorComboBoxEditor myEditor;
+	private final ComboBox myComboBox;
 
 	private class MyEditorComboBoxEditor extends EditorComboBoxEditor
 	{
@@ -66,14 +70,12 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 			super(project, fileType);
 		}
 
-		@Override
 		public Object getItem()
 		{
 			Document document = (Document) super.getItem();
 			return createItem(document, getProject());
 		}
 
-		@Override
 		public void setItem(Object item)
 		{
 			TextWithImports twi = (TextWithImports) item;
@@ -84,6 +86,12 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 			final Document document = createDocument(twi);
 			getEditorComponent().setNewDocumentAndFileType(getCurrentFactory().getFileType(), document);
 			super.setItem(document);
+
+			// need to replace newlines with spaces, see IDEA-81789
+			if(document != null)
+			{
+				document.addDocumentListener(REPLACE_NEWLINES_LISTENER);
+			}
 	  /* Causes PSI being modified from PSI events. See IDEADEV-22102
       final Editor editor = getEditor();
       if (editor != null) {
@@ -94,14 +102,29 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 
 	}
 
-	public DebuggerExpressionComboBox(Project project, @NonNls String recentsId)
+	private static final DocumentListener REPLACE_NEWLINES_LISTENER = new DocumentAdapter()
 	{
-		this(project, null, recentsId, DefaultCodeFragmentFactory.getInstance());
+		@Override
+		public void documentChanged(DocumentEvent e)
+		{
+			final String text = e.getNewFragment().toString();
+			final String replaced = text.replace('\n', ' ');
+			if(replaced != text)
+			{
+				e.getDocument().replaceString(e.getOffset(), e.getOffset() + e.getNewLength(), replaced);
+			}
+		}
+	};
+
+	public DebuggerExpressionComboBox(@NotNull Project project, @NotNull Disposable parentDisposable, @Nullable PsiElement context, @Nullable String recentsId)
+	{
+		this(project, parentDisposable, context, recentsId, DefaultCodeFragmentFactory.getInstance());
 	}
 
-	public DebuggerExpressionComboBox(Project project, PsiElement context, @NonNls String recentsId, final CodeFragmentFactory factory)
+	public DebuggerExpressionComboBox(@NotNull Project project, @NotNull Disposable parentDisposable, @Nullable PsiElement context, @Nullable String recentsId, @NotNull CodeFragmentFactory factory)
 	{
-		super(project, context, recentsId, factory);
+		super(project, factory, parentDisposable, context, recentsId);
+
 		setLayout(new BorderLayout(0, 0));
 
 		myComboBox = new ComboBox(new MyComboboxModel(getRecents()), 100);
@@ -186,7 +209,6 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 	{
 	}
 
-	@Override
 	public TextWithImports getText()
 	{
 		return (TextWithImports) myComboBox.getEditor().getItem();
@@ -214,7 +236,6 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 		return null;
 	}
 
-	@Override
 	public Dimension getMinimumSize()
 	{
 		Dimension size = super.getMinimumSize();
@@ -222,7 +243,6 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 		return size;
 	}
 
-	@Override
 	public TextWithImports createText(String text, String importsString)
 	{
 		return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, text, importsString, getCurrentFactory().getFileType());
@@ -239,7 +259,6 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 		//}
 	}
 
-	@Override
 	public JComponent getPreferredFocusedComponent()
 	{
 		return (JComponent) myComboBox.getEditor().getEditorComponent();
@@ -260,7 +279,6 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 		return myEditor.getEditorComponent();
 	}
 
-	@Override
 	public void addRecent(TextWithImports text)
 	{
 		if(text.getText().length() != 0)
@@ -286,6 +304,8 @@ public class DebuggerExpressionComboBox extends DebuggerEditorImpl
 				final Editor editor = textField.getEditor();
 				if(editor != null)
 				{
+					int textLength = editor.getDocument().getTextLength();
+					offset = Math.min(offset, textLength);
 					textField.getCaretModel().moveToOffset(offset);
 					editor.getSelectionModel().setSelection(offset, offset);
 				}

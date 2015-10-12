@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,32 +24,43 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import java.util.Arrays;
+import gnu.trove.THashSet;
+
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.dataFlow.instructions.BranchingInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.ConditionalGotoInstruction;
-import com.intellij.codeInspection.dataFlow.instructions.EmptyInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.GotoInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
-import com.intellij.codeInspection.dataFlow.instructions.LambdaInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
+import com.intellij.openapi.util.registry.Registry;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassInitializer;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiDeclarationStatement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiLambdaExpression;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNewExpression;
+import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 
@@ -57,7 +68,6 @@ public class DataFlowRunner
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.DataFlowRunner");
 	private static final Key<Integer> TOO_EXPENSIVE_HASH = Key.create("TOO_EXPENSIVE_HASH");
-	public static final long ourTimeLimit = 1000 * 1000 * 1000; //1 sec in nanoseconds
 
 	private Instruction[] myInstructions;
 	private final MultiMap<PsiElement, DfaMemoryState> myNestedClosures = new MultiMap<PsiElement, DfaMemoryState>();
@@ -67,26 +77,19 @@ public class DataFlowRunner
 	// is executed more than this limit times.
 	public static final int MAX_STATES_PER_BRANCH = 300;
 
-	protected DataFlowRunner(PsiElement block)
+	protected DataFlowRunner()
 	{
-		PsiElement parentConstructor = PsiTreeUtil.findFirstParent(block, new Condition<PsiElement>()
-		{
-			@Override
-			public boolean value(PsiElement psiElement)
-			{
-				return psiElement instanceof PsiMethod && ((PsiMethod) psiElement).isConstructor();
-			}
-		});
-		myValueFactory = new DfaValueFactory(parentConstructor == null);
+		this(false, true);
+	}
+
+	protected DataFlowRunner(boolean unknownMembersAreNullable, boolean honorFieldInitializers)
+	{
+		myValueFactory = new DfaValueFactory(honorFieldInitializers, unknownMembersAreNullable);
 	}
 
 	public DfaValueFactory getFactory()
 	{
 		return myValueFactory;
-	}
-
-	protected void prepareAnalysis(@NotNull PsiElement psiBlock, Iterable<DfaMemoryState> initialStates)
-	{
 	}
 
 	@Nullable
@@ -112,7 +115,7 @@ public class DataFlowRunner
 			}
 		}
 
-		return Arrays.asList(createMemoryState());
+		return Collections.singletonList(createMemoryState());
 	}
 
 	public final RunnerResult analyzeMethod(@NotNull PsiElement psiBlock, InstructionVisitor visitor)
@@ -121,18 +124,22 @@ public class DataFlowRunner
 		return initialStates == null ? RunnerResult.NOT_APPLICABLE : analyzeMethod(psiBlock, visitor, false, initialStates);
 	}
 
-	public final RunnerResult analyzeMethod(@NotNull PsiElement psiBlock, InstructionVisitor visitor, boolean ignoreAssertions,
-			@NotNull Collection<DfaMemoryState> initialStates)
+	@NotNull
+	public final RunnerResult analyzeMethod(@NotNull PsiElement psiBlock, InstructionVisitor visitor, boolean ignoreAssertions, @NotNull Collection<DfaMemoryState> initialStates)
 	{
+		if(PsiTreeUtil.findChildOfType(psiBlock, OuterLanguageElement.class) != null)
+		{
+			return RunnerResult.NOT_APPLICABLE;
+		}
+
 		try
 		{
-			prepareAnalysis(psiBlock, initialStates);
-
-			final ControlFlow flow = createControlFlowAnalyzer().buildControlFlow(psiBlock, ignoreAssertions);
+			final ControlFlow flow = new ControlFlowAnalyzer(myValueFactory, psiBlock, ignoreAssertions).buildControlFlow();
 			if(flow == null)
 			{
 				return RunnerResult.NOT_APPLICABLE;
 			}
+			int[] loopNumber = LoopAnalyzer.calcInLoop(flow);
 
 			int endOffset = flow.getInstructionCount();
 			myInstructions = flow.getInstructions();
@@ -150,7 +157,7 @@ public class DataFlowRunner
 				{
 					joinInstructions.add(myInstructions[((ConditionalGotoInstruction) instruction).getOffset()]);
 				}
-				else if(instruction instanceof MethodCallInstruction)
+				else if(instruction instanceof MethodCallInstruction && !((MethodCallInstruction) instruction).getContracts().isEmpty())
 				{
 					joinInstructions.add(myInstructions[index + 1]);
 				}
@@ -182,11 +189,13 @@ public class DataFlowRunner
 			MultiMap<BranchingInstruction, DfaMemoryState> processedStates = MultiMap.createSet();
 			MultiMap<BranchingInstruction, DfaMemoryState> incomingStates = MultiMap.createSet();
 
-			WorkingTimeMeasurer measurer = new WorkingTimeMeasurer(shouldCheckTimeLimit() ? ourTimeLimit : ourTimeLimit * 5);
+			long msLimit = shouldCheckTimeLimit() ? 1000 : 5000;
+			WorkingTimeMeasurer measurer = new WorkingTimeMeasurer(msLimit * 1000 * 1000);
 			int count = 0;
 			while(!queue.isEmpty())
 			{
-				for(DfaInstructionState instructionState : queue.getNextInstructionStates(joinInstructions))
+				List<DfaInstructionState> states = queue.getNextInstructionStates(joinInstructions);
+				for(DfaInstructionState instructionState : states)
 				{
 					if(count++ % 1024 == 0 && measurer.isTimeOver())
 					{
@@ -217,7 +226,10 @@ public class DataFlowRunner
 							LOG.debug("Too complex because too many different possible states");
 							return RunnerResult.TOO_COMPLEX; // Too complex :(
 						}
-						processedStates.putValue(branching, instructionState.getMemoryState().createCopy());
+						if(loopNumber[branching.getIndex()] != 0)
+						{
+							processedStates.putValue(branching, instructionState.getMemoryState().createCopy());
+						}
 					}
 
 					DfaInstructionState[] after = acceptInstruction(visitor, instructionState);
@@ -228,15 +240,18 @@ public class DataFlowRunner
 						{
 							continue;
 						}
+						handleStepOutOfLoop(instruction, nextInstruction, loopNumber, processedStates, incomingStates, states, after, queue);
 						if(nextInstruction instanceof BranchingInstruction)
 						{
 							BranchingInstruction branching = (BranchingInstruction) nextInstruction;
-							if(processedStates.get(branching).contains(state.getMemoryState()) || incomingStates.get(branching).contains(state
-									.getMemoryState()))
+							if(processedStates.get(branching).contains(state.getMemoryState()) || incomingStates.get(branching).contains(state.getMemoryState()))
 							{
 								continue;
 							}
-							incomingStates.putValue(branching, state.getMemoryState().createCopy());
+							if(loopNumber[branching.getIndex()] != 0)
+							{
+								incomingStates.putValue(branching, state.getMemoryState().createCopy());
+							}
 						}
 						queue.offer(state);
 					}
@@ -259,6 +274,78 @@ public class DataFlowRunner
 		}
 	}
 
+	private void handleStepOutOfLoop(@NotNull final Instruction prevInstruction,
+			@NotNull Instruction nextInstruction,
+			@NotNull final int[] loopNumber,
+			MultiMap<BranchingInstruction, DfaMemoryState> processedStates,
+			MultiMap<BranchingInstruction, DfaMemoryState> incomingStates,
+			List<DfaInstructionState> inFlightStates,
+			DfaInstructionState[] afterStates,
+			StateQueue queue)
+	{
+		if(loopNumber[prevInstruction.getIndex()] == 0 || inSameLoop(prevInstruction, nextInstruction, loopNumber))
+		{
+			return;
+		}
+		// stepped out of loop. destroy all memory states from the loop, we don't need them anymore
+
+		// but do not touch yet states being handled right now
+		for(DfaInstructionState state : inFlightStates)
+		{
+			Instruction instruction = state.getInstruction();
+			if(inSameLoop(prevInstruction, instruction, loopNumber))
+			{
+				return;
+			}
+		}
+		for(DfaInstructionState state : afterStates)
+		{
+			Instruction instruction = state.getInstruction();
+			if(inSameLoop(prevInstruction, instruction, loopNumber))
+			{
+				return;
+			}
+		}
+		// and still in queue
+		if(!queue.processAll(new Processor<DfaInstructionState>()
+		{
+			@Override
+			public boolean process(DfaInstructionState state)
+			{
+				Instruction instruction = state.getInstruction();
+				if(inSameLoop(prevInstruction, instruction, loopNumber))
+				{
+					return false;
+				}
+				return true;
+			}
+		}))
+		{
+			return;
+		}
+
+		// now remove obsolete memory states
+		final Set<BranchingInstruction> mayRemoveStatesFor = new THashSet<BranchingInstruction>();
+		for(Instruction instruction : myInstructions)
+		{
+			if(inSameLoop(prevInstruction, instruction, loopNumber) && instruction instanceof BranchingInstruction)
+			{
+				mayRemoveStatesFor.add((BranchingInstruction) instruction);
+			}
+		}
+
+		for(Instruction instruction : mayRemoveStatesFor)
+		{
+			processedStates.remove((BranchingInstruction) instruction);
+			incomingStates.remove((BranchingInstruction) instruction);
+		}
+	}
+
+	private static boolean inSameLoop(@NotNull Instruction prevInstruction, @NotNull Instruction nextInstruction, @NotNull int[] loopNumber)
+	{
+		return loopNumber[nextInstruction.getIndex()] == loopNumber[prevInstruction.getIndex()];
+	}
+
 	protected boolean shouldCheckTimeLimit()
 	{
 		return !ApplicationManager.getApplication().isUnitTestMode();
@@ -267,30 +354,14 @@ public class DataFlowRunner
 	protected DfaInstructionState[] acceptInstruction(InstructionVisitor visitor, DfaInstructionState instructionState)
 	{
 		Instruction instruction = instructionState.getInstruction();
-		if(instruction instanceof MethodCallInstruction)
+		PsiElement closure = DfaUtil.getClosureInside(instruction);
+		if(closure instanceof PsiClass)
 		{
-			PsiCallExpression anchor = ((MethodCallInstruction) instruction).getCallExpression();
-			if(anchor instanceof PsiNewExpression)
-			{
-				PsiAnonymousClass anonymousClass = ((PsiNewExpression) anchor).getAnonymousClass();
-				if(anonymousClass != null)
-				{
-					registerNestedClosures(instructionState, anonymousClass);
-				}
-			}
+			registerNestedClosures(instructionState, (PsiClass) closure);
 		}
-		else if(instruction instanceof LambdaInstruction)
+		else if(closure instanceof PsiLambdaExpression)
 		{
-			PsiLambdaExpression lambdaExpression = ((LambdaInstruction) instruction).getLambdaExpression();
-			registerNestedClosures(instructionState, lambdaExpression);
-		}
-		else if(instruction instanceof EmptyInstruction)
-		{
-			PsiElement anchor = ((EmptyInstruction) instruction).getAnchor();
-			if(anchor instanceof PsiClass)
-			{
-				registerNestedClosures(instructionState, (PsiClass) anchor);
-			}
+			registerNestedClosures(instructionState, (PsiLambdaExpression) closure);
 		}
 
 		return instruction.accept(this, instructionState.getMemoryState(), visitor);
@@ -325,11 +396,6 @@ public class DataFlowRunner
 		{
 			myNestedClosures.putValue(body, createClosureState(state));
 		}
-	}
-
-	protected ControlFlowAnalyzer createControlFlowAnalyzer()
-	{
-		return new ControlFlowAnalyzer(myValueFactory);
 	}
 
 	protected DfaMemoryState createMemoryState()

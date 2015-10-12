@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,125 +15,184 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.EvaluatingComputable;
 import com.intellij.debugger.engine.ContextUtil;
 import com.intellij.debugger.engine.StackFrameContext;
-import com.intellij.debugger.engine.evaluation.*;
+import com.intellij.debugger.engine.evaluation.EvaluateException;
+import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
+import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
+import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.debugger.engine.evaluation.expression.Modifier;
+import com.intellij.debugger.engine.evaluation.expression.UnsupportedExpressionException;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.impl.PositionUtil;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionCodeFragment;
-import consulo.internal.com.sun.jdi.ObjectReference;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.refactoring.extractMethod.PrepareFailedException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.Value;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author lex
  */
-public abstract class EvaluationDescriptor extends ValueDescriptorImpl{
-  private Modifier myModifier;
-  protected TextWithImports myText;
-  private CodeFragmentFactory myCodeFragmentFactory = null; // used to force specific context, e.g. from evaluation
+public abstract class EvaluationDescriptor extends ValueDescriptorImpl
+{
+	private Modifier myModifier;
+	protected TextWithImports myText;
 
-  protected EvaluationDescriptor(TextWithImports text, Project project, Value value) {
-    super(project, value);
-    myText = text;
-  }
+	protected EvaluationDescriptor(TextWithImports text, Project project, Value value)
+	{
+		super(project, value);
+		myText = text;
+	}
 
-  protected EvaluationDescriptor(TextWithImports text, Project project) {
-    super(project);
-    setLvalue(false);
-    myText = text;
-  }
+	protected EvaluationDescriptor(TextWithImports text, Project project)
+	{
+		super(project);
+		setLvalue(false);
+		myText = text;
+	}
 
-  public final void setCodeFragmentFactory(CodeFragmentFactory codeFragmentFactory) {
-    myCodeFragmentFactory = codeFragmentFactory != null? new CodeFragmentFactoryContextWrapper(codeFragmentFactory) : null;
-  }
+	protected abstract EvaluationContextImpl getEvaluationContext(EvaluationContextImpl evaluationContext);
 
-  @Nullable
-  public final CodeFragmentFactory getCodeFragmentFactory() {
-    return myCodeFragmentFactory;
-  }
+	protected abstract PsiCodeFragment getEvaluationCode(StackFrameContext context) throws EvaluateException;
 
-  protected final @NotNull CodeFragmentFactory getEffectiveCodeFragmentFactory(final PsiElement psiContext) {
-    if (myCodeFragmentFactory != null) {
-      return myCodeFragmentFactory;
-    }
-    return DebuggerUtilsEx.getEffectiveCodeFragmentFactory(psiContext);
-  }
+	public PsiCodeFragment createCodeFragment(PsiElement context)
+	{
+		TextWithImports text = getEvaluationText();
+		final PsiCodeFragment fragment = DebuggerUtilsEx.findAppropriateCodeFragmentFactory(text, context).createCodeFragment(text, context, myProject);
+		fragment.forceResolveScope(GlobalSearchScope.allScope(myProject));
+		return fragment;
+	}
 
-  protected abstract EvaluationContextImpl getEvaluationContext (EvaluationContextImpl evaluationContext);
+	@Override
+	public final Value calcValue(final EvaluationContextImpl evaluationContext) throws EvaluateException
+	{
+		try
+		{
+			final EvaluationContextImpl thisEvaluationContext = getEvaluationContext(evaluationContext);
 
-  protected abstract PsiCodeFragment getEvaluationCode(StackFrameContext context) throws EvaluateException;
+			ExpressionEvaluator evaluator = null;
+			try
+			{
+				evaluator = DebuggerInvocationUtil.commitAndRunReadAction(myProject, new EvaluatingComputable<ExpressionEvaluator>()
+				{
+					@Override
+					public ExpressionEvaluator compute() throws EvaluateException
+					{
+						final PsiElement psiContext = PositionUtil.getContextElement(evaluationContext);
+						return DebuggerUtilsEx.findAppropriateCodeFragmentFactory(getEvaluationText(), psiContext).getEvaluatorBuilder().build(getEvaluationCode(thisEvaluationContext),
+								ContextUtil.getSourcePosition(thisEvaluationContext));
+					}
+				});
+			}
+			catch(UnsupportedExpressionException ex)
+			{
+				if(Registry.is("debugger.compiling.evaluator"))
+				{
+					evaluator = DebuggerInvocationUtil.commitAndRunReadAction(myProject, new EvaluatingComputable<ExpressionEvaluator>()
+					{
+						@Override
+						public ExpressionEvaluator compute() throws EvaluateException
+						{
+							final PsiElement psiContext = PositionUtil.getContextElement(evaluationContext);
+							if(psiContext == null)
+							{
+								return null;
+							}
+							PsiFile psiFile = psiContext.getContainingFile();
+							PsiCodeFragment fragment = createCodeFragment(psiContext);
+							try
+							{
+								ExtractLightMethodObjectHandler.ExtractedData data = ExtractLightMethodObjectHandler.extractLightMethodObject(myProject, psiFile, fragment,
+										CompilingEvaluator.getGeneratedClassName());
+								if(data != null)
+								{
+									return new CompilingEvaluatorImpl(evaluationContext, psiContext, data);
+								}
+							}
+							catch(PrepareFailedException e)
+							{
+								LOG.info(e);
+							}
+							return null;
+						}
+					});
+				}
+				if(evaluator == null)
+				{
+					throw ex;
+				}
+			}
 
-  public final Value calcValue(final EvaluationContextImpl evaluationContext) throws EvaluateException {
-    try {
-      final EvaluationContextImpl thisEvaluationContext = getEvaluationContext(evaluationContext);
+			if(!thisEvaluationContext.getDebugProcess().isAttached())
+			{
+				throw EvaluateExceptionUtil.PROCESS_EXITED;
+			}
+			StackFrameProxyImpl frameProxy = thisEvaluationContext.getFrameProxy();
+			if(frameProxy == null)
+			{
+				throw EvaluateExceptionUtil.NULL_STACK_FRAME;
+			}
 
-      final ExpressionEvaluator evaluator = DebuggerInvocationUtil.commitAndRunReadAction(myProject, new EvaluatingComputable<ExpressionEvaluator>() {
-        public ExpressionEvaluator compute() throws EvaluateException {
-          final PsiElement psiContext = PositionUtil.getContextElement(evaluationContext);
-          return getEffectiveCodeFragmentFactory(psiContext).getEvaluatorBuilder().build(getEvaluationCode(thisEvaluationContext),
-                                                            ContextUtil.getSourcePosition(thisEvaluationContext));
-        }
-      });
+			Value value = evaluator.evaluate(thisEvaluationContext);
+			DebuggerUtilsEx.keep(value, thisEvaluationContext);
 
+			myModifier = evaluator.getModifier();
+			setLvalue(myModifier != null);
 
-      if (!thisEvaluationContext.getDebugProcess().isAttached()) {
-        throw EvaluateExceptionUtil.PROCESS_EXITED;
-      }
-      StackFrameProxyImpl frameProxy = thisEvaluationContext.getFrameProxy();
-      if (frameProxy == null) {
-        throw EvaluateExceptionUtil.NULL_STACK_FRAME;
-      }
+			return value;
+		}
+		catch(final EvaluateException ex)
+		{
+			throw new EvaluateException(ex.getLocalizedMessage(), ex);
+		}
+		catch(ObjectCollectedException ex)
+		{
+			throw EvaluateExceptionUtil.OBJECT_WAS_COLLECTED;
+		}
+	}
 
-      final Value value = evaluator.evaluate(thisEvaluationContext);
-      if (value instanceof ObjectReference) {
-        thisEvaluationContext.getSuspendContext().keep(((ObjectReference)value));
-      }
-      myModifier = evaluator.getModifier();
-      setLvalue(myModifier != null);
+	@Override
+	public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException
+	{
+		PsiElement evaluationCode = getEvaluationCode(context);
+		if(evaluationCode instanceof PsiExpressionCodeFragment)
+		{
+			return ((PsiExpressionCodeFragment) evaluationCode).getExpression();
+		}
+		else
+		{
+			throw new EvaluateException(DebuggerBundle.message("error.cannot.create.expression.from.code.fragment"), null);
+		}
+	}
 
-      return value;
-    }
-    catch (final EvaluateException ex) {
-      throw new EvaluateException(ex.getLocalizedMessage(), ex);
-    }
-  }
+	@Nullable
+	public Modifier getModifier()
+	{
+		return myModifier;
+	}
 
-  public String calcValueName() {
-    return getName();
-  }
+	@Override
+	public boolean canSetValue()
+	{
+		return super.canSetValue() && myModifier != null && myModifier.canSetValue();
+	}
 
-  public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException {
-    PsiElement evaluationCode = getEvaluationCode(context);
-    if(evaluationCode instanceof PsiExpressionCodeFragment) {
-      return ((PsiExpressionCodeFragment)evaluationCode).getExpression();
-    }
-    else {
-      throw new EvaluateException(DebuggerBundle.message("error.cannot.create.expression.from.code.fragment"), null);
-    }
-  }
-
-  public Modifier getModifier() {
-    return myModifier;
-  }
-
-  public boolean canSetValue() {
-    return super.canSetValue() && myModifier != null && myModifier.canSetValue();
-  }
-
-  public TextWithImports getEvaluationText() {
-    return myText;
-  }
+	public TextWithImports getEvaluationText()
+	{
+		return myText;
+	}
 }

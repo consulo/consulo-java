@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.intellij.debugger.engine.jdi.LocalVariableProxy;
 import com.intellij.debugger.engine.jdi.StackFrameProxy;
 import com.intellij.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.debugger.impl.descriptors.data.*;
+import com.intellij.debugger.jdi.DecompiledLocalVariable;
 import com.intellij.debugger.jdi.LocalVariableProxyImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadGroupReferenceProxyImpl;
@@ -66,6 +67,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		myDisplayDescriptorSearcher.clear();
 	}
 
+	@NotNull
 	public <T extends NodeDescriptor> T getDescriptor(NodeDescriptor parent, DescriptorData<T> key)
 	{
 		final T descriptor = key.createDescriptor(myProject);
@@ -164,6 +166,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		return getDescriptor(parent, new ArrayItemData(array, index));
 	}
 
+	@NotNull
 	@Override
 	public FieldDescriptorImpl getFieldDescriptor(NodeDescriptor parent, ObjectReference objRef, Field field)
 	{
@@ -189,9 +192,9 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory
 		return getDescriptor(parent, new LocalData((LocalVariableProxyImpl) local));
 	}
 
-	public ArgumentValueDescriptorImpl getArgumentValueDescriptor(NodeDescriptor parent, int index, Value value, final String name)
+	public ArgumentValueDescriptorImpl getArgumentValueDescriptor(NodeDescriptor parent, DecompiledLocalVariable variable, Value value)
 	{
-		return getDescriptor(parent, new ArgValueData(index, value, name));
+		return getDescriptor(parent, new ArgValueData(variable, value));
 	}
 
 	public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, @NotNull StackFrameProxyImpl frameProxy)

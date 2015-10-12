@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,10 @@ import java.awt.BorderLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerContextListener;
+import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.ui.DebuggerView;
 import com.intellij.openapi.CompositeDisposable;
@@ -48,7 +50,8 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 
 		final DebuggerContextListener contextListener = new DebuggerContextListener()
 		{
-			public void changeEvent(DebuggerContextImpl newContext, int event)
+			@Override
+			public void changeEvent(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
 				UpdatableDebuggerView.this.changeEvent(newContext, event);
 			}
@@ -57,6 +60,7 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 
 		registerDisposable(new Disposable()
 		{
+			@Override
 			public void dispose()
 			{
 				myStateManager.removeListener(contextListener);
@@ -65,7 +69,7 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 
 	}
 
-	protected void changeEvent(final DebuggerContextImpl newContext, final int event)
+	protected void changeEvent(final DebuggerContextImpl newContext, final DebuggerSession.Event event)
 	{
 		if(newContext.getDebuggerSession() != null)
 		{
@@ -78,17 +82,19 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 		return myUpdateEnabled || isShowing();
 	}
 
+	@Override
 	public final void setUpdateEnabled(final boolean enabled)
 	{
 		myUpdateEnabled = enabled;
 	}
 
+	@Override
 	public final boolean isRefreshNeeded()
 	{
 		return myRefreshNeeded;
 	}
 
-	public final void rebuildIfVisible(final int event)
+	public final void rebuildIfVisible(final DebuggerSession.Event event)
 	{
 		if(isUpdateEnabled())
 		{
@@ -101,13 +107,14 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 		}
 	}
 
-	protected abstract void rebuild(int event);
+	protected abstract void rebuild(DebuggerSession.Event event);
 
 	protected final void registerDisposable(Disposable disposable)
 	{
 		myDisposables.add(disposable);
 	}
 
+	@NotNull
 	public DebuggerContextImpl getContext()
 	{
 		return myStateManager.getContext();
@@ -134,6 +141,7 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 		action.registerCustomShortcutSet(shortcutSet, forComponent);
 		registerDisposable(new Disposable()
 		{
+			@Override
 			public void dispose()
 			{
 				action.unregisterCustomShortcutSet(forComponent);

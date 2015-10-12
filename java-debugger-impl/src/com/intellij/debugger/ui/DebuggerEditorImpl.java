@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ import com.intellij.debugger.engine.evaluation.CodeFragmentFactoryContextWrapper
 import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
-import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.impl.PositionUtil;
 import com.intellij.ide.DataManager;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -80,51 +80,51 @@ public abstract class DebuggerEditorImpl extends CompletionEditor
 	private final JLabel myChooseFactory = new JLabel();
 	private WeakReference<ListPopup> myPopup;
 
-	private final PsiTreeChangeListener myPsiListener = new PsiTreeChangeAdapter()
-	{
-		@Override
-		public void childRemoved(@NotNull PsiTreeChangeEvent event)
-		{
-			checkContext();
-		}
-
-		@Override
-		public void childReplaced(@NotNull PsiTreeChangeEvent event)
-		{
-			checkContext();
-		}
-
-		@Override
-		public void childMoved(@NotNull PsiTreeChangeEvent event)
-		{
-			checkContext();
-		}
-
-		private void checkContext()
-		{
-			final PsiElement contextElement = getContext();
-			if(contextElement == null || !contextElement.isValid())
-			{
-				final DebuggerManagerEx manager = DebuggerManagerEx.getInstanceEx(myProject);
-				if(manager == null)
-				{
-					LOG.error("Cannot obtain debugger manager for project " + myProject);
-				}
-				final DebuggerContextImpl context = manager.getContextManager().getContext();
-				final PsiElement newContextElement = PositionUtil.getContextElement(context);
-				setContext(newContextElement != null && newContextElement.isValid() ? newContextElement : null);
-			}
-		}
-	};
 	private CodeFragmentFactory myFactory;
 	protected boolean myInitialFactory;
 
-	public DebuggerEditorImpl(Project project, PsiElement context, String recentsId, final CodeFragmentFactory factory)
+	public DebuggerEditorImpl(@NotNull Project project, @NotNull CodeFragmentFactory factory, @NotNull Disposable parentDisposable, @Nullable PsiElement context, @Nullable String recentsId)
 	{
 		myProject = project;
 		myContext = context;
 		myRecentsId = recentsId;
-		PsiManager.getInstance(project).addPsiTreeChangeListener(myPsiListener);
+		PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter()
+		{
+			@Override
+			public void childRemoved(@NotNull PsiTreeChangeEvent event)
+			{
+				checkContext();
+			}
+
+			@Override
+			public void childReplaced(@NotNull PsiTreeChangeEvent event)
+			{
+				checkContext();
+			}
+
+			@Override
+			public void childMoved(@NotNull PsiTreeChangeEvent event)
+			{
+				checkContext();
+			}
+
+			private void checkContext()
+			{
+				PsiElement contextElement = getContext();
+				if(contextElement == null || !contextElement.isValid())
+				{
+					DebuggerManagerEx manager = DebuggerManagerEx.getInstanceEx(myProject);
+					if(manager == null)
+					{
+						LOG.error("Cannot obtain debugger manager for project " + myProject);
+						return;
+					}
+
+					PsiElement newContextElement = PositionUtil.getContextElement(manager.getContextManager().getContext());
+					setContext(newContextElement != null && newContextElement.isValid() ? newContextElement : null);
+				}
+			}
+		}, parentDisposable);
 		setFactory(factory);
 		myInitialFactory = true;
 
@@ -176,8 +176,7 @@ public abstract class DebuggerEditorImpl extends CompletionEditor
 		}
 
 		DataContext dataContext = DataManager.getInstance().getDataContext(this);
-		return JBPopupFactory.getInstance().createActionGroupPopup("Choose language", actions, dataContext,
-				JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, false);
+		return JBPopupFactory.getInstance().createActionGroupPopup("Choose Language", actions, dataContext, JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, false);
 	}
 
 	@Override
@@ -342,15 +341,8 @@ public abstract class DebuggerEditorImpl extends CompletionEditor
 		}
 	}
 
-	@Override
-	public void dispose()
-	{
-		PsiManager.getInstance(myProject).removePsiTreeChangeListener(myPsiListener);
-		myCurrentDocument = null;
-	}
-
 	@NotNull
-	public static CodeFragmentFactory findAppropriateFactory(@NotNull TextWithImports text, @NotNull PsiElement context)
+	private static CodeFragmentFactory findAppropriateFactory(@NotNull TextWithImports text, @Nullable PsiElement context)
 	{
 		for(CodeFragmentFactory factory : DebuggerUtilsEx.getCodeFragmentFactories(context))
 		{
@@ -377,7 +369,7 @@ public abstract class DebuggerEditorImpl extends CompletionEditor
 		setFactory(findAppropriateFactory(text, myContext));
 	}
 
-	private void setFactory(@NotNull final CodeFragmentFactory factory)
+	private void setFactory(@NotNull CodeFragmentFactory factory)
 	{
 		myFactory = factory;
 		Icon icon = getCurrentFactory().getFileType().getIcon();

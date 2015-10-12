@@ -15,12 +15,17 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
-public interface NodeRenderer extends ChildrenRenderer, ValueLabelRenderer {
-  String getName();
+import com.intellij.openapi.extensions.ExtensionPointName;
 
-  void setName(String text);
+public interface NodeRenderer extends ChildrenRenderer, ValueLabelRenderer
+{
+	ExtensionPointName<NodeRenderer> EP_NAME = ExtensionPointName.create("com.intellij.debugger.nodeRenderer");
 
-  boolean isEnabled();
+	String getName();
 
-  void setEnabled(boolean enabled);
+	void setName(String text);
+
+	boolean isEnabled();
+
+	void setEnabled(boolean enabled);
 }

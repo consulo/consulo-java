@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,9 @@ import java.util.concurrent.TimeoutException;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.DumbService;
+import com.intellij.openapi.project.Project;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 
 /**
@@ -34,6 +37,8 @@ public abstract class InvokeThread<E extends PrioritizedTask>
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.InvokeThread");
 
 	private static final ThreadLocal<WorkerThreadRequest> ourWorkerRequest = new ThreadLocal<WorkerThreadRequest>();
+
+	protected final Project myProject;
 
 	public static final class WorkerThreadRequest<E extends PrioritizedTask> implements Runnable
 	{
@@ -141,8 +146,9 @@ public abstract class InvokeThread<E extends PrioritizedTask>
 
 	private volatile WorkerThreadRequest myCurrentRequest = null;
 
-	public InvokeThread()
+	public InvokeThread(Project project)
 	{
+		myProject = project;
 		myEvents = new EventQueue<E>(PrioritizedTask.Priority.values().length);
 		startNewWorkerThread();
 	}
@@ -160,6 +166,7 @@ public abstract class InvokeThread<E extends PrioritizedTask>
 	{
 		try
 		{
+			DumbService.getInstance(myProject).setAlternativeResolveEnabled(true);
 			while(true)
 			{
 				try
@@ -188,6 +195,9 @@ public abstract class InvokeThread<E extends PrioritizedTask>
 				catch(EventQueueClosedException ignored)
 				{
 					break;
+				}
+				catch(ProcessCanceledException ignored)
+				{
 				}
 				catch(RuntimeException e)
 				{
@@ -224,6 +234,7 @@ public abstract class InvokeThread<E extends PrioritizedTask>
 			{
 				LOG.debug("Request " + toString() + " exited");
 			}
+			DumbService.getInstance(myProject).setAlternativeResolveEnabled(false);
 		}
 
 	}

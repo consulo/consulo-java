@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 package com.intellij.debugger.impl;
+
 import java.util.EventListener;
 
+import org.jetbrains.annotations.NotNull;
 
-public interface DebuggerContextListener extends EventListener{
-  void changeEvent(DebuggerContextImpl newContext, int event);
+
+public interface DebuggerContextListener extends EventListener
+{
+	void changeEvent(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.util.ProgressIndicatorListenerAdapter;
 import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.util.Alarm;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
@@ -43,8 +44,9 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 	private volatile boolean myDisposed;
 
-	DebuggerManagerThreadImpl(@NotNull Disposable parent)
+	DebuggerManagerThreadImpl(@NotNull Disposable parent, Project project)
 	{
+		super(project);
 		Disposer.register(parent, this);
 	}
 
@@ -55,9 +57,9 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 	}
 
 	@TestOnly
-	public static DebuggerManagerThreadImpl createTestInstance(@NotNull Disposable parent)
+	public static DebuggerManagerThreadImpl createTestInstance(@NotNull Disposable parent, Project project)
 	{
-		return new DebuggerManagerThreadImpl(parent);
+		return new DebuggerManagerThreadImpl(parent, project);
 	}
 
 	public static boolean isManagerThread()
@@ -79,7 +81,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 	public void invoke(DebuggerCommandImpl managerCommand)
 	{
-		if(currentThread() instanceof DebuggerManagerThreadImpl)
+		if(currentThread() == this)
 		{
 			processEvent(managerCommand);
 		}
@@ -306,5 +308,14 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 			});
 		}
 
+	}
+
+	public void restartIfNeeded()
+	{
+		if(myEvents.isClosed())
+		{
+			myEvents.reopen();
+			startNewWorkerThread();
+		}
 	}
 }

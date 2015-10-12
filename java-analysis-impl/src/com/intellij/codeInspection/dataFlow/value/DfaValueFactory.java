@@ -43,10 +43,12 @@ public class DfaValueFactory
 	private final Map<Pair<DfaPsiType, DfaPsiType>, Boolean> myConvertibleCache = ContainerUtil.newHashMap();
 	private final Map<PsiType, DfaPsiType> myDfaTypes = ContainerUtil.newHashMap();
 	private final boolean myHonorFieldInitializers;
+	private final boolean myUnknownMembersAreNullable;
 
-	public DfaValueFactory(boolean honorFieldInitializers)
+	public DfaValueFactory(boolean honorFieldInitializers, boolean unknownMembersAreNullable)
 	{
 		myHonorFieldInitializers = honorFieldInitializers;
+		myUnknownMembersAreNullable = unknownMembersAreNullable;
 		myValues.add(null);
 		myVarFactory = new DfaVariableValue.Factory(this);
 		myConstFactory = new DfaConstValue.Factory(this);
@@ -59,6 +61,11 @@ public class DfaValueFactory
 	public boolean isHonorFieldInitializers()
 	{
 		return myHonorFieldInitializers;
+	}
+
+	public boolean isUnknownMembersAreNullable()
+	{
+		return myUnknownMembersAreNullable;
 	}
 
 	public DfaValue createTypeValue(@Nullable PsiType type, Nullness nullability)

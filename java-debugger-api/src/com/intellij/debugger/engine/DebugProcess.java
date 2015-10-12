@@ -15,6 +15,10 @@
  */
 package com.intellij.debugger.engine;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.PositionManager;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
@@ -22,94 +26,90 @@ import com.intellij.debugger.engine.jdi.VirtualMachineProxy;
 import com.intellij.debugger.engine.managerThread.DebuggerManagerThread;
 import com.intellij.debugger.requests.RequestManager;
 import com.intellij.execution.ExecutionResult;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.search.GlobalSearchScope;
-import consulo.internal.com.sun.jdi.*;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ArrayType;
+import consulo.internal.com.sun.jdi.ClassLoaderReference;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Value;
 
 /**
  * @author lex
  */
-public interface DebugProcess {
-  @NonNls String JAVA_STRATUM = "Java";
+public interface DebugProcess
+{
+	@NonNls
+	String JAVA_STRATUM = "Java";
 
-  <T> T    getUserData(Key<T> key);  
-  <T> void putUserData(Key<T> key, T value);
+	<T> T getUserData(Key<T> key);
 
-  Project getProject();
+	<T> void putUserData(Key<T> key, T value);
 
-  RequestManager getRequestsManager();
+	Project getProject();
 
-  PositionManager getPositionManager();
+	RequestManager getRequestsManager();
 
-  VirtualMachineProxy getVirtualMachineProxy();
+	PositionManager getPositionManager();
 
-  void addDebugProcessListener(DebugProcessListener listener);
+	VirtualMachineProxy getVirtualMachineProxy();
 
-  void removeDebugProcessListener(DebugProcessListener listener);
+	void addDebugProcessListener(DebugProcessListener listener);
 
-  /**
-   * The usual place to call this method is vmAttachedEvent. No additional actions are needed in this case.
-   * If position manager is appended later, when DebugSession is up and running, one might need to call BreakpointManager.updateAllRequests()
-   * to ensure that just adedd position manager was considered when creating breakpoint requests
-   * @param positionManager to be appended
-   */
-  void appendPositionManager(PositionManager positionManager);
+	void removeDebugProcessListener(DebugProcessListener listener);
 
-  void waitFor();
+	/**
+	 * The usual place to call this method is vmAttachedEvent. No additional actions are needed in this case.
+	 * If position manager is appended later, when DebugSession is up and running, one might need to call BreakpointManager.updateAllRequests()
+	 * to ensure that just adedd position manager was considered when creating breakpoint requests
+	 *
+	 * @param positionManager to be appended
+	 */
+	void appendPositionManager(PositionManager positionManager);
 
-  void waitFor(long timeout);
+	void waitFor();
 
-  void stop(boolean forceTerminate);
+	void waitFor(long timeout);
 
-  ExecutionResult getExecutionResult();
+	void stop(boolean forceTerminate);
 
-  DebuggerManagerThread getManagerThread();
+	ExecutionResult getExecutionResult();
 
-  Value invokeMethod(EvaluationContext evaluationContext,
-                     ObjectReference objRef,
-                     Method method,
-                     List args) throws EvaluateException;
+	DebuggerManagerThread getManagerThread();
 
-  /**
-   * Is equivalent to invokeInstanceMethod(evaluationContext, classType, method, args, 0) 
-   */
-  Value invokeMethod(EvaluationContext evaluationContext,
-                     ClassType classType,
-                     Method method,
-                     List args) throws EvaluateException;
+	Value invokeMethod(EvaluationContext evaluationContext, ObjectReference objRef, Method method, List args) throws EvaluateException;
 
-  Value invokeInstanceMethod(EvaluationContext evaluationContext, 
-                             ObjectReference objRef, 
-                             Method method, 
-                             List args, 
-                             int invocationOptions) throws EvaluateException;
+	/**
+	 * Is equivalent to invokeInstanceMethod(evaluationContext, classType, method, args, 0)
+	 */
+	Value invokeMethod(EvaluationContext evaluationContext, ClassType classType, Method method, List args) throws EvaluateException;
 
-  ReferenceType findClass(EvaluationContext evaluationContext,
-                          String name,
-                          ClassLoaderReference classLoader) throws EvaluateException;
+	Value invokeInstanceMethod(EvaluationContext evaluationContext, ObjectReference objRef, Method method, List args, int invocationOptions) throws EvaluateException;
 
-  ArrayReference newInstance(ArrayType arrayType,
-                             int dimension) throws EvaluateException;
+	ReferenceType findClass(EvaluationContext evaluationContext, String name, ClassLoaderReference classLoader) throws EvaluateException;
 
-  ObjectReference newInstance(EvaluationContext evaluationContext,
-                              ClassType classType,
-                              Method constructor,
-                              List paramList) throws EvaluateException;
+	ArrayReference newInstance(ArrayType arrayType, int dimension) throws EvaluateException;
 
-  boolean isAttached();
+	ObjectReference newInstance(EvaluationContext evaluationContext, ClassType classType, Method constructor, List paramList) throws EvaluateException;
 
-  boolean isDetached();
+	boolean isAttached();
 
-  boolean isDetaching();
+	boolean isDetached();
 
-  /**
-   * @return the search scope used by debugger to find sources corresponding to classes being executed
-   */
-  @NotNull
-  GlobalSearchScope getSearchScope();
+	boolean isDetaching();
+
+	/**
+	 * @return the search scope used by debugger to find sources corresponding to classes being executed
+	 */
+	@NotNull
+	GlobalSearchScope getSearchScope();
+
+	void printToConsole(String text);
+
+	ProcessHandler getProcessHandler();
 }

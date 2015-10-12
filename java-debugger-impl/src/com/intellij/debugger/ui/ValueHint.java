@@ -91,8 +91,7 @@ public class ValueHint extends AbstractValueHint
 	private PsiElement myCurrentExpression = null;
 	private Value myValueToShow = null;
 
-	private ValueHint(Project project, Editor editor, Point point, ValueHintType type, final PsiElement selectedExpression,
-			final TextRange textRange)
+	private ValueHint(Project project, Editor editor, Point point, ValueHintType type, final PsiElement selectedExpression, final TextRange textRange)
 	{
 		super(project, editor, point, type, textRange);
 		myCurrentExpression = selectedExpression;
@@ -121,12 +120,8 @@ public class ValueHint extends AbstractValueHint
 			return EvaluatorBuilderImpl.getInstance().build(myCurrentExpression, debuggerContext.getSourcePosition());
 		}
 
-		CodeFragmentFactory factory = DebuggerUtilsEx.getEffectiveCodeFragmentFactory(myCurrentExpression);
 		TextWithImportsImpl textWithImports = new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, myCurrentExpression.getText());
-		if(factory == null)
-		{
-			return null;
-		}
+		CodeFragmentFactory factory = DebuggerUtilsEx.findAppropriateCodeFragmentFactory(textWithImports, myCurrentExpression);
 		JavaCodeFragment codeFragment = factory.createCodeFragment(textWithImports, myCurrentExpression.getContext(), getProject());
 		codeFragment.forceResolveScope(GlobalSearchScope.allScope(getProject()));
 		return factory.getEvaluatorBuilder().build(codeFragment, debuggerContext.getSourcePosition());
@@ -197,12 +192,10 @@ public class ValueHint extends AbstractValueHint
 									{
 										if(getType() != ValueHintType.MOUSE_OVER_HINT || descriptor.isValueValid())
 										{
-											final SimpleColoredText simpleColoredText = DebuggerTreeRenderer.getDescriptorText(debuggerContext,
-													descriptor, true);
+											final SimpleColoredText simpleColoredText = DebuggerTreeRenderer.getDescriptorText(debuggerContext, descriptor, true);
 											if(isActiveTooltipApplicable(value))
 											{
-												simpleColoredText.append(" (" + DebuggerBundle.message("active.tooltip.suggestion") + ")",
-														SimpleTextAttributes.GRAYED_ATTRIBUTES);
+												simpleColoredText.append(" (" + DebuggerBundle.message("active.tooltip.suggestion") + ")", SimpleTextAttributes.GRAYED_ATTRIBUTES);
 											}
 											showHint(simpleColoredText, descriptor);
 										}
@@ -334,11 +327,7 @@ public class ValueHint extends AbstractValueHint
 		return null;
 	}
 
-	private static Trinity<PsiElement, TextRange, Value> getSelectedExpression(
-			final Project project,
-			final Editor editor,
-			final Point point,
-			final ValueHintType type)
+	private static Trinity<PsiElement, TextRange, Value> getSelectedExpression(final Project project, final Editor editor, final Point point, final ValueHintType type)
 	{
 		final Ref<PsiElement> selectedExpression = Ref.create(null);
 		final Ref<TextRange> currentRange = Ref.create(null);
@@ -363,8 +352,7 @@ public class ValueHint extends AbstractValueHint
 				int selectionStart = editor.getSelectionModel().getSelectionStart();
 				int selectionEnd = editor.getSelectionModel().getSelectionEnd();
 
-				if((type == ValueHintType.MOUSE_CLICK_HINT || type == ValueHintType.MOUSE_ALT_OVER_HINT) && (selectionStart <= offset && offset <=
-						selectionEnd))
+				if((type == ValueHintType.MOUSE_CLICK_HINT || type == ValueHintType.MOUSE_ALT_OVER_HINT) && (selectionStart <= offset && offset <= selectionEnd))
 				{
 					PsiElement ctx = (selectionStart > 0) ? psiFile.findElementAt(selectionStart - 1) : psiFile.findElementAt(selectionStart);
 					try
@@ -378,8 +366,7 @@ public class ValueHint extends AbstractValueHint
 								return;
 							}
 							selectedExpression.set(factory.createExpressionFromText(text, ctx));
-							currentRange.set(new TextRange(editor.getSelectionModel().getSelectionStart(),
-									editor.getSelectionModel().getSelectionEnd()));
+							currentRange.set(new TextRange(editor.getSelectionModel().getSelectionStart(), editor.getSelectionModel().getSelectionEnd()));
 						}
 					}
 					catch(IncorrectOperationException ignored)
@@ -394,8 +381,7 @@ public class ValueHint extends AbstractValueHint
 					{
 						return;
 					}
-					Pair<PsiElement, TextRange> pair = findExpression(elementAtCursor, type == ValueHintType.MOUSE_CLICK_HINT || type ==
-							ValueHintType.MOUSE_ALT_OVER_HINT);
+					Pair<PsiElement, TextRange> pair = findExpression(elementAtCursor, type == ValueHintType.MOUSE_CLICK_HINT || type == ValueHintType.MOUSE_ALT_OVER_HINT);
 					if(pair == null)
 					{
 						if(type == ValueHintType.MOUSE_OVER_HINT)
@@ -419,8 +405,7 @@ public class ValueHint extends AbstractValueHint
 												final JVMName jvmSignature = JVMNameUtil.getJVMSignature(psiMethod);
 												try
 												{
-													if(method.name().equals(psiMethod.getName()) && method.signature().equals(jvmSignature.getName
-															(debuggerSession.getProcess())))
+													if(method.name().equals(psiMethod.getName()) && method.signature().equals(jvmSignature.getName(debuggerSession.getProcess())))
 													{
 														pair = expressionPair;
 														preCalculatedValue.set(lastExecuted.getSecond());

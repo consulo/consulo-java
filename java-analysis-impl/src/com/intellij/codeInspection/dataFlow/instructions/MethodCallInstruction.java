@@ -30,18 +30,17 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
 import com.intellij.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
+import com.intellij.codeInspection.dataFlow.DfaOptionalSupport;
 import com.intellij.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.codeInspection.dataFlow.MethodContract;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PropertyUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 
@@ -62,8 +61,11 @@ public class MethodCallInstruction extends Instruction
 	private final MethodType myMethodType;
 	@Nullable
 	private final DfaValue myPrecalculatedReturnValue;
+	private final boolean myOfNullable;
 	private final boolean myVarArgCall;
 	private final Map<PsiExpression, Nullness> myArgRequiredNullability;
+	private boolean myOnlyNullArgs = true;
+	private boolean myOnlyNotNullArgs = true;
 
 	public enum MethodType
 	{
@@ -82,6 +84,7 @@ public class MethodCallInstruction extends Instruction
 		myPrecalculatedReturnValue = null;
 		myTargetMethod = null;
 		myVarArgCall = false;
+		myOfNullable = false;
 		myArgRequiredNullability = Collections.emptyMap();
 	}
 
@@ -113,6 +116,7 @@ public class MethodCallInstruction extends Instruction
 
 		myShouldFlushFields = !(call instanceof PsiNewExpression && myType != null && myType.getArrayDimensions() > 0) && !isPureCall();
 		myPrecalculatedReturnValue = precalculatedReturnValue;
+		myOfNullable = call instanceof PsiMethodCallExpression && DfaOptionalSupport.resolveOfNullable((PsiMethodCallExpression) call) != null;
 	}
 
 	private Map<PsiExpression, Nullness> calcArgRequiredNullability(PsiSubstitutor substitutor, PsiParameter[] parameters)
@@ -158,12 +162,7 @@ public class MethodCallInstruction extends Instruction
 		{
 			return false;
 		}
-		PsiAnnotation anno = ControlFlowAnalyzer.findContractAnnotation(myTargetMethod);
-		if(anno != null && Boolean.TRUE.equals(AnnotationUtil.getBooleanAttributeValue(anno, "pure")))
-		{
-			return true;
-		}
-		return PropertyUtil.isSimplePropertyGetter(myTargetMethod);
+		return ControlFlowAnalyzer.isPure(myTargetMethod);
 	}
 
 	@Nullable
@@ -236,7 +235,34 @@ public class MethodCallInstruction extends Instruction
 
 	public String toString()
 	{
-		return myMethodType == MethodType.UNBOXING ? "UNBOX" : myMethodType == MethodType.BOXING ? "BOX" : "CALL_METHOD: " + (myCall == null ?
-				"null" : myCall.getText());
+		return myMethodType == MethodType.UNBOXING ? "UNBOX" : myMethodType == MethodType.BOXING ? "BOX" : "CALL_METHOD: " + (myCall == null ? "null" : myCall.getText());
+	}
+
+	public boolean updateOfNullable(DfaMemoryState memState, DfaValue arg)
+	{
+		if(!myOfNullable)
+		{
+			return false;
+		}
+
+		if(!memState.isNotNull(arg))
+		{
+			myOnlyNotNullArgs = false;
+		}
+		if(!memState.isNull(arg))
+		{
+			myOnlyNullArgs = false;
+		}
+		return true;
+	}
+
+	public boolean isOptionalAlwaysNullProblem()
+	{
+		return myOfNullable && myOnlyNullArgs;
+	}
+
+	public boolean isOptionalAlwaysNotNullProblem()
+	{
+		return myOfNullable && myOnlyNotNullArgs;
 	}
 }

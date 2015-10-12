@@ -69,6 +69,8 @@ public interface JavaClassNames {
 	@NonNls String JAVA_UTIL_DICTIONARY = "java.util.Dictionary";
 	@NonNls String JAVA_UTIL_COMPARATOR = "java.util.Comparator";
 
+	@NonNls String JAVA_UTIL_OPTIONAL = "java.util.Optional";
+
 	@NonNls String JAVA_IO_SERIALIZABLE = "java.io.Serializable";
 	@NonNls String JAVA_IO_EXTERNALIZABLE = "java.io.Externalizable";
 	@NonNls String JAVA_IO_FILE = "java.io.File";

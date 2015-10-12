@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,32 +50,47 @@ public abstract class NodeRendererImpl implements NodeRenderer
 		myProperties.setName(presentableName);
 	}
 
+	@Override
 	public String getName()
 	{
 		return myProperties.getName();
 	}
 
+	@Override
 	public void setName(String name)
 	{
 		myProperties.setName(name);
 	}
 
+	@Override
 	public boolean isEnabled()
 	{
 		return myProperties.isEnabled();
 	}
 
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		myProperties.setEnabled(enabled);
 	}
 
-	public Icon calcValueIcon(
-			ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+	public boolean isShowType()
+	{
+		return myProperties.isShowType();
+	}
+
+	public void setShowType(boolean showType)
+	{
+		myProperties.setShowType(showType);
+	}
+
+	@Override
+	public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
 	{
 		return null;
 	}
 
+	@Override
 	public NodeRendererImpl clone()
 	{
 		try
@@ -91,11 +106,13 @@ public abstract class NodeRendererImpl implements NodeRenderer
 		return null;
 	}
 
+	@Override
 	public void readExternal(Element element) throws InvalidDataException
 	{
 		myProperties.readExternal(element);
 	}
 
+	@Override
 	public void writeExternal(Element element) throws WriteExternalException
 	{
 		myProperties.writeExternal(element);
@@ -109,6 +126,6 @@ public abstract class NodeRendererImpl implements NodeRenderer
 	@Nullable
 	public String getIdLabel(Value value, DebugProcess process)
 	{
-		return value instanceof ObjectReference ? ValueDescriptorImpl.getIdLabel((ObjectReference) value) : null;
+		return value instanceof ObjectReference && isShowType() ? ValueDescriptorImpl.getIdLabel((ObjectReference) value) : null;
 	}
 }

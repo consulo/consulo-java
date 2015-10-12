@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import java.util.List;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
@@ -24,109 +28,136 @@ import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiElement;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
-import java.util.Iterator;
-import java.util.List;
+public class CompoundNodeRenderer extends NodeRendererImpl
+{
+	public static final
+	@NonNls
+	String UNIQUE_ID = "CompoundNodeRenderer";
 
-public class CompoundNodeRenderer extends NodeRendererImpl{
-  public static final @NonNls String UNIQUE_ID = "CompoundNodeRenderer";
+	private ValueLabelRenderer myLabelRenderer;
+	private ChildrenRenderer myChildrenRenderer;
+	protected final NodeRendererSettings myRendererSettings;
 
-  private ValueLabelRenderer myLabelRenderer;
-  private ChildrenRenderer myChildrenRenderer;
-  protected final NodeRendererSettings myRendererSettings;
+	public CompoundNodeRenderer(NodeRendererSettings rendererSettings, String name, ValueLabelRenderer labelRenderer, ChildrenRenderer childrenRenderer)
+	{
+		super(name);
+		myRendererSettings = rendererSettings;
+		myLabelRenderer = labelRenderer;
+		myChildrenRenderer = childrenRenderer;
+	}
 
-  public CompoundNodeRenderer(NodeRendererSettings rendererSettings, String name, ValueLabelRenderer labelRenderer, ChildrenRenderer childrenRenderer) {
-    myRendererSettings = rendererSettings;
-    setName(name);
-    myLabelRenderer = labelRenderer;
-    myChildrenRenderer = childrenRenderer;
-  }
+	@Override
+	public String getUniqueId()
+	{
+		return UNIQUE_ID;
+	}
 
-  public String getUniqueId() {
-    return UNIQUE_ID;
-  }
+	@Override
+	public CompoundNodeRenderer clone()
+	{
+		CompoundNodeRenderer renderer = (CompoundNodeRenderer) super.clone();
+		renderer.myLabelRenderer = (myLabelRenderer != null) ? (ValueLabelRenderer) myLabelRenderer.clone() : null;
+		renderer.myChildrenRenderer = (myChildrenRenderer != null) ? (ChildrenRenderer) myChildrenRenderer.clone() : null;
+		return renderer;
+	}
 
-  public CompoundNodeRenderer clone() {
-    CompoundNodeRenderer renderer = (CompoundNodeRenderer)super.clone();
-    renderer.myLabelRenderer    = (myLabelRenderer    != null) ? (ValueLabelRenderer)myLabelRenderer.clone() : null;
-    renderer.myChildrenRenderer = (myChildrenRenderer != null) ? (ChildrenRenderer)myChildrenRenderer.clone() : null;
-    return renderer;
-  }
+	@Override
+	public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext)
+	{
+		getChildrenRenderer().buildChildren(value, builder, evaluationContext);
+	}
 
-  public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext) {
-    getChildrenRenderer().buildChildren(value, builder, evaluationContext);
-  }
+	@Override
+	public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
+	{
+		return getChildrenRenderer().getChildValueExpression(node, context);
+	}
 
-  public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException {
-    return getChildrenRenderer().getChildValueExpression(node, context);
-  }
+	@Override
+	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		return getChildrenRenderer().isExpandable(value, evaluationContext, parentDescriptor);
+	}
 
-  public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor) {
-    return getChildrenRenderer().isExpandable(value, evaluationContext, parentDescriptor);
-  }
+	@Override
+	public boolean isApplicable(Type type)
+	{
+		return getLabelRenderer().isApplicable(type) && getChildrenRenderer().isApplicable(type);
+	}
 
-  public boolean isApplicable(Type type) {
-    return getLabelRenderer().isApplicable(type) && getChildrenRenderer().isApplicable(type);
-  }
+	@Override
+	public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+	{
+		return getLabelRenderer().calcLabel(descriptor, evaluationContext, listener);
+	}
 
-  public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
-    return getLabelRenderer().calcLabel(descriptor, evaluationContext, listener);
-  }
+	public ValueLabelRenderer getLabelRenderer()
+	{
+		return myLabelRenderer;
+	}
 
-  public ValueLabelRenderer getLabelRenderer() {
-    return myLabelRenderer;
-  }
+	public ChildrenRenderer getChildrenRenderer()
+	{
+		return myChildrenRenderer;
+	}
 
-  public ChildrenRenderer getChildrenRenderer() {
-    return myChildrenRenderer;
-  }
+	public void setLabelRenderer(ValueLabelRenderer labelRenderer)
+	{
+		myLabelRenderer = labelRenderer;
+	}
 
-  public void setLabelRenderer(ValueLabelRenderer labelRenderer) {
-    myLabelRenderer = labelRenderer;
-  }
+	public void setChildrenRenderer(ChildrenRenderer childrenRenderer)
+	{
+		myChildrenRenderer = childrenRenderer;
+	}
 
-  public void setChildrenRenderer(ChildrenRenderer childrenRenderer) {
-    myChildrenRenderer = childrenRenderer;
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public void readExternal(Element element) throws InvalidDataException
+	{
+		super.readExternal(element);
+		List<Element> children = element.getChildren(NodeRendererSettings.RENDERER_TAG);
+		if(children != null)
+		{
+			for(Element elem : children)
+			{
+				String role = elem.getAttributeValue("role");
+				if(role == null)
+				{
+					continue;
+				}
+				if("label".equals(role))
+				{
+					myLabelRenderer = (ValueLabelRenderer) myRendererSettings.readRenderer(elem);
+				}
+				else if("children".equals(role))
+				{
+					myChildrenRenderer = (ChildrenRenderer) myRendererSettings.readRenderer(elem);
+				}
+			}
+		}
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public void readExternal(Element element) throws InvalidDataException {
-    super.readExternal(element);
-    final List children = element.getChildren(NodeRendererSettings.RENDERER_TAG);
-    if (children != null) {
-      for (Iterator it = children.iterator(); it.hasNext();) {
-        final Element elem = (Element)it.next();
-        final String role = elem.getAttributeValue("role");
-        if (role == null) {
-          continue;
-        }
-        if ("label".equals(role)) {
-          myLabelRenderer = (ValueLabelRenderer)myRendererSettings.readRenderer(elem);
-        }
-        else if ("children".equals(role)) {
-          myChildrenRenderer = (ChildrenRenderer)myRendererSettings.readRenderer(elem);
-        }
-      }
-    }
-  }
-
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public void writeExternal(Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    if (myLabelRenderer != null) {
-      final Element labelRendererElement = myRendererSettings.writeRenderer(myLabelRenderer);
-      labelRendererElement.setAttribute("role", "label");
-      element.addContent(labelRendererElement);
-    }
-    if (myChildrenRenderer != null) {
-      final Element childrenRendererElement = myRendererSettings.writeRenderer(myChildrenRenderer);
-      childrenRendererElement.setAttribute("role", "children");
-      element.addContent(childrenRendererElement);
-    }
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public void writeExternal(Element element) throws WriteExternalException
+	{
+		super.writeExternal(element);
+		if(myLabelRenderer != null)
+		{
+			final Element labelRendererElement = myRendererSettings.writeRenderer(myLabelRenderer);
+			labelRendererElement.setAttribute("role", "label");
+			element.addContent(labelRendererElement);
+		}
+		if(myChildrenRenderer != null)
+		{
+			final Element childrenRendererElement = myRendererSettings.writeRenderer(myChildrenRenderer);
+			childrenRendererElement.setAttribute("role", "children");
+			element.addContent(childrenRendererElement);
+		}
+	}
 }

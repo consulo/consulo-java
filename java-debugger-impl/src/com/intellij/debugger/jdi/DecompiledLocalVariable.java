@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,12 @@
  */
 package com.intellij.debugger.jdi;
 
+import java.util.Collection;
 import java.util.Comparator;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.util.text.StringUtil;
 
 /**
  * @author Eugene Zhuravlev
@@ -34,13 +39,15 @@ public class DecompiledLocalVariable
 
 	private final int mySlot;
 	private final String mySignature;
-	private final String myName;
+	private final boolean myIsParam;
+	private final Collection<String> myMatchedNames;
 
-	public DecompiledLocalVariable(int slot, String name, String signature)
+	public DecompiledLocalVariable(int slot, boolean isParam, @Nullable String signature, @NotNull Collection<String> names)
 	{
 		mySlot = slot;
+		myIsParam = isParam;
 		mySignature = signature;
-		myName = name;
+		myMatchedNames = names;
 	}
 
 	public int getSlot()
@@ -48,13 +55,46 @@ public class DecompiledLocalVariable
 		return mySlot;
 	}
 
+	@Nullable
 	public String getSignature()
 	{
 		return mySignature;
 	}
 
-	public String getName()
+	public boolean isParam()
 	{
-		return myName;
+		return myIsParam;
+	}
+
+	@NotNull
+	public String getDefaultName()
+	{
+		return myIsParam ? "arg_" + mySlot : "slot_" + mySlot;
+	}
+
+	public String getDisplayName()
+	{
+		String nameString = StringUtil.join(myMatchedNames, " | ");
+		if(myIsParam && myMatchedNames.size() == 1)
+		{
+			return nameString;
+		}
+		else if(!myMatchedNames.isEmpty())
+		{
+			return nameString + " (" + getDefaultName() + ")";
+		}
+		return getDefaultName();
+	}
+
+	@NotNull
+	public Collection<String> getMatchedNames()
+	{
+		return myMatchedNames;
+	}
+
+	@Override
+	public String toString()
+	{
+		return getDisplayName() + " (slot " + mySlot + ", " + mySignature + ")";
 	}
 }

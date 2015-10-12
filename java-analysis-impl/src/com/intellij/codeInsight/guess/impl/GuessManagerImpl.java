@@ -178,7 +178,7 @@ public class GuessManagerImpl extends GuessManager
 			scope = file;
 		}
 
-		DataFlowRunner runner = new DataFlowRunner(scope)
+		DataFlowRunner runner = new DataFlowRunner()
 		{
 			@Override
 			protected DfaMemoryState createMemoryState()
@@ -330,8 +330,7 @@ public class GuessManagerImpl extends GuessManager
 	private static final int CHECK_UP = 0x02;
 	private static final int CHECK_DOWN = 0x04;
 
-	private void addTypesByVariable(HashSet<PsiType> typesSet, PsiVariable var, PsiFile scopeFile, HashSet<PsiVariable> checkedVariables, int flags,
-			TextRange rangeToIgnore)
+	private void addTypesByVariable(HashSet<PsiType> typesSet, PsiVariable var, PsiFile scopeFile, HashSet<PsiVariable> checkedVariables, int flags, TextRange rangeToIgnore)
 	{
 		if(!checkedVariables.add(var))
 		{
@@ -379,8 +378,7 @@ public class GuessManagerImpl extends GuessManager
 							PsiParameter[] parameters = method.getParameterList().getParameters();
 							if(argIndex < parameters.length)
 							{
-								addTypesByVariable(typesSet, parameters[argIndex], method.getContainingFile(), checkedVariables,
-										flags | CHECK_USAGE, rangeToIgnore);
+								addTypesByVariable(typesSet, parameters[argIndex], method.getContainingFile(), checkedVariables, flags | CHECK_USAGE, rangeToIgnore);
 							}
 						}
 					}
@@ -424,8 +422,7 @@ public class GuessManagerImpl extends GuessManager
 							PsiElement refElement = ((PsiReferenceExpression) arg).resolve();
 							if(refElement instanceof PsiVariable)
 							{
-								addTypesByVariable(typesSet, (PsiVariable) refElement, scopeFile, checkedVariables, flags | CHECK_USAGE,
-										rangeToIgnore);
+								addTypesByVariable(typesSet, (PsiVariable) refElement, scopeFile, checkedVariables, flags | CHECK_USAGE, rangeToIgnore);
 							}
 						}
 						//TODO : constructor
@@ -452,8 +449,7 @@ public class GuessManagerImpl extends GuessManager
 				{
 					if(pattern.parameterIndex < 0)
 					{ // return value
-						if(methodCall.getParent() instanceof PsiTypeCastExpression && (rangeToIgnore == null || !rangeToIgnore.contains(methodCall
-								.getTextRange())))
+						if(methodCall.getParent() instanceof PsiTypeCastExpression && (rangeToIgnore == null || !rangeToIgnore.contains(methodCall.getTextRange())))
 						{
 							return ((PsiTypeCastExpression) methodCall.getParent()).getType();
 						}

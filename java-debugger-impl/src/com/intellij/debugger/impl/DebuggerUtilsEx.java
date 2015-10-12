@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.debugger.requests.Requestor;
-import com.intellij.debugger.ui.CompletionEditor;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.execution.filters.ExceptionFilters;
@@ -73,16 +72,9 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
@@ -95,25 +87,18 @@ import com.intellij.unscramble.ThreadDumpPanel;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.SmartList;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.frame.XValueNode;
 import com.intellij.xdebugger.impl.XSourcePositionImpl;
 import com.intellij.xdebugger.impl.ui.ExecutionPointHighlighter;
-import consulo.internal.com.sun.jdi.CharValue;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.InterfaceType;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.StringReference;
-import consulo.internal.com.sun.jdi.ThreadReference;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.EventSet;
 
 public abstract class DebuggerUtilsEx extends DebuggerUtils
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.DebuggerUtilsEx");
-
-	private static final int MAX_LABEL_SIZE = 255;
 
 	/**
 	 * @param context
@@ -292,7 +277,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 	public static ClassFilter create(Element element) throws InvalidDataException
 	{
 		ClassFilter filter = new ClassFilter();
-		filter.readExternal(element);
+		DefaultJDOMExternalizer.readExternal(filter, element);
 		return filter;
 	}
 
@@ -316,12 +301,12 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return false;
 	}
 
-	public static boolean isFiltered(String qName, ClassFilter[] classFilters)
+	public static boolean isFiltered(@NotNull String qName, ClassFilter[] classFilters)
 	{
 		return isFiltered(qName, Arrays.asList(classFilters));
 	}
 
-	public static boolean isFiltered(String qName, List<ClassFilter> classFilters)
+	public static boolean isFiltered(@NotNull String qName, List<ClassFilter> classFilters)
 	{
 		if(qName.indexOf('[') != -1)
 		{
@@ -351,20 +336,19 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return res;
 	}
 
-	public static ClassFilter[] readFilters(List children) throws InvalidDataException
+	public static ClassFilter[] readFilters(List<Element> children) throws InvalidDataException
 	{
-		if(children == null || children.size() == 0)
+		if(ContainerUtil.isEmpty(children))
 		{
 			return ClassFilter.EMPTY_ARRAY;
 		}
-		List<ClassFilter> classFiltersList = new ArrayList<ClassFilter>(children.size());
-		for(Object aChildren : children)
+
+		ClassFilter[] filters = new ClassFilter[children.size()];
+		for(int i = 0, size = children.size(); i < size; i++)
 		{
-			final ClassFilter classFilter = new ClassFilter();
-			classFilter.readExternal((Element) aChildren);
-			classFiltersList.add(classFilter);
+			filters[i] = create(children.get(i));
 		}
-		return classFiltersList.toArray(new ClassFilter[classFiltersList.size()]);
+		return filters;
 	}
 
 	public static void writeFilters(Element parentNode, @NonNls String tagName, ClassFilter[] filters) throws WriteExternalException
@@ -373,7 +357,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		{
 			Element element = new Element(tagName);
 			parentNode.addContent(element);
-			filter.writeExternal(element);
+			DefaultJDOMExternalizer.writeExternal(filter, element);
 		}
 	}
 
@@ -607,27 +591,43 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		}
 	}
 
+	public static void keep(Value value, EvaluationContext context)
+	{
+		if(value instanceof ObjectReference)
+		{
+			((SuspendContextImpl) context.getSuspendContext()).keep((ObjectReference) value);
+		}
+	}
 
 	public abstract DebuggerTreeNode getSelectedNode(DataContext context);
 
 	public abstract EvaluatorBuilder getEvaluatorBuilder();
 
-	public abstract CompletionEditor createEditor(Project project, PsiElement context, @NonNls String recentsId);
-
-	@Nullable
-	public static CodeFragmentFactory getEffectiveCodeFragmentFactory(final PsiElement psiContext)
+	@NotNull
+	public static CodeFragmentFactory findAppropriateCodeFragmentFactory(final TextWithImports text, final PsiElement context)
 	{
-		final CodeFragmentFactory factory = ApplicationManager.getApplication().runReadAction(new Computable<CodeFragmentFactory>()
+		CodeFragmentFactory factory = ApplicationManager.getApplication().runReadAction(new Computable<CodeFragmentFactory>()
 		{
 			@Override
 			public CodeFragmentFactory compute()
 			{
-				final List<CodeFragmentFactory> codeFragmentFactories = getCodeFragmentFactories(psiContext);
-				// the list always contains at least DefaultCodeFragmentFactory
-				return codeFragmentFactories.get(0);
+				final FileType fileType = text.getFileType();
+				final List<CodeFragmentFactory> factories = getCodeFragmentFactories(context);
+				if(fileType == null)
+				{
+					return factories.get(0);
+				}
+				for(CodeFragmentFactory factory : factories)
+				{
+					if(factory.getFileType().equals(fileType))
+					{
+						return factory;
+					}
+				}
+				return DefaultCodeFragmentFactory.getInstance();
 			}
 		});
-		return factory != null ? new CodeFragmentFactoryContextWrapper(factory) : null;
+		return new CodeFragmentFactoryContextWrapper(factory);
 	}
 
 	private static class SigReader
@@ -840,9 +840,10 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 
 	public static String truncateString(final String str)
 	{
-		if(str.length() > MAX_LABEL_SIZE)
+		// leave a small gap over XValueNode.MAX_VALUE_LENGTH to detect oversize
+		if(str.length() > XValueNode.MAX_VALUE_LENGTH + 5)
 		{
-			return str.substring(0, MAX_LABEL_SIZE) + "...";
+			return str.substring(0, XValueNode.MAX_VALUE_LENGTH + 5);
 		}
 		return str;
 	}
@@ -882,23 +883,6 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return text.replace("\t", StringUtil.repeat(" ", tabSize));
 	}
 
-	/**
-	 * Decompiler aware version
-	 */
-	@Nullable
-	public static PsiElement findElementAt(@Nullable PsiFile file, int offset)
-	{
-		if(file instanceof PsiCompiledFile)
-		{
-			file = ((PsiCompiledFile) file).getDecompiledPsiFile();
-		}
-		if(file == null)
-		{
-			return null;
-		}
-		return file.findElementAt(offset);
-	}
-
 	@Nullable
 	public static XSourcePosition toXSourcePosition(@NotNull SourcePosition position)
 	{
@@ -914,7 +898,13 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return new JavaXSourcePosition(position, file);
 	}
 
-	private static final Key<VirtualFile> ALTERNATIVE_SOURCE_KEY = Key.create("JAVA_DEBUGGER_ALTERNATIVE_SOURCE");
+	private static final Key<VirtualFile> ALTERNATIVE_SOURCE_KEY = new Key<VirtualFile>("DEBUGGER_ALTERNATIVE_SOURCE");
+
+	public static void setAlternativeSource(VirtualFile source, VirtualFile dest)
+	{
+		ALTERNATIVE_SOURCE_KEY.set(source, dest);
+		ALTERNATIVE_SOURCE_KEY.set(dest, null);
+	}
 
 	private static class JavaXSourcePosition implements XSourcePosition, ExecutionPointHighlighter.HighlighterProvider
 	{
@@ -971,36 +961,35 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		}
 	}
 
-	public static boolean inTheMethod(@NotNull SourcePosition pos, @NotNull PsiElement method)
+	/**
+	 * Decompiler aware version
+	 */
+	@Nullable
+	public static PsiElement findElementAt(@Nullable PsiFile file, int offset)
 	{
-		PsiElement elem = pos.getElementAt();
-		if(elem == null)
+		if(file instanceof PsiCompiledFile)
 		{
-			return false;
+			file = ((PsiCompiledFile) file).getDecompiledPsiFile();
 		}
-		return Comparing.equal(getContainingMethod(elem), method);
+		if(file == null)
+		{
+			return null;
+		}
+		return file.findElementAt(offset);
 	}
 
-	@RequiredReadAction
-	public static boolean inTheSameMethod(@NotNull SourcePosition pos1, @NotNull SourcePosition pos2)
+	public static String getLocationMethodQName(@NotNull Location location)
 	{
-		ApplicationManager.getApplication().assertReadAccessAllowed();
-		PsiElement elem1 = pos1.getElementAt();
-		PsiElement elem2 = pos2.getElementAt();
-		if(elem1 == null)
+		StringBuilder res = new StringBuilder();
+		ReferenceType type = location.declaringType();
+		if(type != null)
 		{
-			return elem2 == null;
+			res.append(type.name()).append('.');
 		}
-		if(elem2 != null)
-		{
-			PsiElement expectedMethod = getContainingMethod(elem1);
-			PsiElement currentMethod = getContainingMethod(elem2);
-			return Comparing.equal(expectedMethod, currentMethod);
-		}
-		return false;
+		res.append(location.method().name());
+		return res.toString();
 	}
 
-	@RequiredReadAction
 	private static PsiElement getNextElement(PsiElement element)
 	{
 		PsiElement sibling = element.getNextSibling();
@@ -1108,10 +1097,67 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return body;
 	}
 
+	public static boolean inTheMethod(@NotNull SourcePosition pos, @NotNull PsiElement method)
+	{
+		PsiElement elem = pos.getElementAt();
+		if(elem == null)
+		{
+			return false;
+		}
+		return Comparing.equal(getContainingMethod(elem), method);
+	}
+
+	@RequiredReadAction
+	public static boolean inTheSameMethod(@NotNull SourcePosition pos1, @NotNull SourcePosition pos2)
+	{
+		ApplicationManager.getApplication().assertReadAccessAllowed();
+		PsiElement elem1 = pos1.getElementAt();
+		PsiElement elem2 = pos2.getElementAt();
+		if(elem1 == null)
+		{
+			return elem2 == null;
+		}
+		if(elem2 != null)
+		{
+			PsiElement expectedMethod = getContainingMethod(elem1);
+			PsiElement currentMethod = getContainingMethod(elem2);
+			return Comparing.equal(expectedMethod, currentMethod);
+		}
+		return false;
+	}
+
 	@Nullable
 	public static PsiElement getContainingMethod(@Nullable PsiElement elem)
 	{
-		return PsiTreeUtil.getParentOfType(elem, PsiMethod.class, PsiLambdaExpression.class);
+		return PsiTreeUtil.getContextOfType(elem, PsiMethod.class, PsiLambdaExpression.class);
+	}
+
+	@Nullable
+	public static PsiElement getBody(@Nullable PsiElement containingMethod)
+	{
+		if(containingMethod instanceof PsiMethod)
+		{
+			return ((PsiMethod) containingMethod).getBody();
+		}
+		else if(containingMethod instanceof PsiLambdaExpression)
+		{
+			return ((PsiLambdaExpression) containingMethod).getBody();
+		}
+		return null;
+	}
+
+	@Nullable
+	public static PsiParameterList getParameterList(@Nullable PsiElement containingMethod)
+	{
+		if(containingMethod instanceof PsiMethod)
+		{
+			return ((PsiMethod) containingMethod).getParameterList();
+		}
+		else if(containingMethod instanceof PsiLambdaExpression)
+		{
+			return ((PsiLambdaExpression) containingMethod).getParameterList();
+		}
+		return null;
 	}
 
 	@Nullable
@@ -1128,4 +1174,28 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 			return LambdaMethodFilter.getLambdaOrdinal(m1.name()) - LambdaMethodFilter.getLambdaOrdinal(m2.name());
 		}
 	};
+
+	public static void disableCollection(ObjectReference reference)
+	{
+		try
+		{
+			reference.disableCollection();
+		}
+		catch(UnsupportedOperationException ignored)
+		{
+			// ignore: some J2ME implementations does not provide this operation
+		}
+	}
+
+	public static void enableCollection(ObjectReference reference)
+	{
+		try
+		{
+			reference.enableCollection();
+		}
+		catch(UnsupportedOperationException ignored)
+		{
+			// ignore: some J2ME implementations does not provide this operation
+		}
+	}
 }

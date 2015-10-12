@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaCodeFragment;
-import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpressionCodeFragment;
 import com.intellij.psi.PsiFile;
 import com.intellij.xdebugger.XExpression;
@@ -41,7 +41,7 @@ public final class TextWithImportsImpl implements TextWithImports
 	private final FileType myFileType;
 	private final String myImports;
 
-	public TextWithImportsImpl(PsiExpression expression)
+	public TextWithImportsImpl(@NotNull PsiElement expression)
 	{
 		myKind = CodeFragmentKind.EXPRESSION;
 		final String text = expression.getText();
@@ -81,8 +81,7 @@ public final class TextWithImportsImpl implements TextWithImports
 	private static Trinity<String, String, FileType> parseExternalForm(String s)
 	{
 		String[] split = s.split(String.valueOf(DebuggerEditorImpl.SEPARATOR));
-		return Trinity.create(split[0], split.length > 1 ? split[1] : "", split.length > 2 ? FileTypeManager.getInstance().getStdFileType(split[2])
-				: null);
+		return Trinity.create(split[0], split.length > 1 ? split[1] : "", split.length > 2 ? FileTypeManager.getInstance().getStdFileType(split[2]) : null);
 	}
 
 	@Override
@@ -159,12 +158,11 @@ public final class TextWithImportsImpl implements TextWithImports
 	}
 
 	@Nullable
-	public static XExpression toXExpression(TextWithImports text)
+	public static XExpression toXExpression(@Nullable TextWithImports text)
 	{
-		if(!text.getText().isEmpty())
+		if(text != null && !text.getText().isEmpty())
 		{
-			return new XExpressionImpl(text.getText(), XDebuggerEditorBase.getFileTypeLanguage(text.getFileType()),
-					StringUtil.nullize(text.getImports()), getMode(text.getKind()));
+			return new XExpressionImpl(text.getText(), XDebuggerEditorBase.getFileTypeLanguage(text.getFileType()), StringUtil.nullize(text.getImports()), getMode(text.getKind()));
 		}
 		return null;
 	}
@@ -206,8 +204,8 @@ public final class TextWithImportsImpl implements TextWithImports
 		}
 		else
 		{
-			return new TextWithImportsImpl(getKind(expression.getMode()), expression.getExpression(), StringUtil.notNullize(expression.getCustomInfo
-					()), expression.getLanguage() != null ? expression.getLanguage().getAssociatedFileType() : null);
+			return new TextWithImportsImpl(getKind(expression.getMode()), expression.getExpression(), StringUtil.notNullize(expression.getCustomInfo()),
+					expression.getLanguage() != null ? expression.getLanguage().getAssociatedFileType() : null);
 		}
 	}
 }

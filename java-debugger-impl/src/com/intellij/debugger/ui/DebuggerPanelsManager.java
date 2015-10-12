@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,14 +33,12 @@ import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
-import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.ui.ExecutionConsole;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.execution.ui.RunContentManager;
 import com.intellij.execution.ui.RunContentWithExecutorListener;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugProcessStarter;
 import com.intellij.xdebugger.XDebugSession;
@@ -61,21 +59,10 @@ public class DebuggerPanelsManager implements ProjectComponent
 	}
 
 	@Nullable
-	@Deprecated
-	/**
-	 * @deprecated to remove in IDEA 15
-	 */
-	public RunContentDescriptor attachVirtualMachine(Executor executor, @NotNull ProgramRunner runner, @NotNull ExecutionEnvironment environment,
-			RunProfileState state, RunContentDescriptor reuseContent, RemoteConnection remoteConnection,
+	public RunContentDescriptor attachVirtualMachine(@NotNull ExecutionEnvironment environment,
+			RunProfileState state,
+			RemoteConnection remoteConnection,
 			boolean pollConnection) throws ExecutionException
-	{
-		return attachVirtualMachine(new ExecutionEnvironmentBuilder(environment).executor(executor).runner(runner).contentToReuse(reuseContent)
-				.build(), state, remoteConnection, pollConnection);
-	}
-
-	@Nullable
-	public RunContentDescriptor attachVirtualMachine(@NotNull ExecutionEnvironment environment, RunProfileState state,
-			RemoteConnection remoteConnection, boolean pollConnection) throws ExecutionException
 	{
 		return attachVirtualMachine(new DefaultDebugUIEnvironment(environment, state, remoteConnection, pollConnection));
 	}
@@ -103,14 +90,13 @@ public class DebuggerPanelsManager implements ProjectComponent
 			debugProcess.putUserData(BatchEvaluator.REMOTE_SESSION_KEY, Boolean.TRUE);
 		}
 
-		XDebugSession debugSession = XDebuggerManager.getInstance(myProject).startSessionAndShowTab(modelEnvironment.getSessionName(),
-				environment.getReuseContent(), new XDebugProcessStarter()
+		XDebugSession debugSession = XDebuggerManager.getInstance(myProject).startSessionAndShowTab(modelEnvironment.getSessionName(), environment.getReuseContent(), new XDebugProcessStarter()
 		{
 			@Override
 			@NotNull
 			public XDebugProcess start(@NotNull XDebugSession session)
 			{
-				return new JavaDebugProcess(session, debuggerSession);
+				return JavaDebugProcess.create(session, debuggerSession);
 			}
 		});
 		return debugSession.getRunContentDescriptor();
@@ -127,16 +113,14 @@ public class DebuggerPanelsManager implements ProjectComponent
 			{
 				if(executor == DefaultDebugExecutor.getDebugExecutorInstance())
 				{
-					DebuggerSession session = descriptor == null ? null : getSession(myProject, descriptor.getExecutionConsole());
+					DebuggerSession session = descriptor == null ? null : getSession(myProject, descriptor);
 					if(session != null)
 					{
-						getContextManager().setState(session.getContextManager().getContext(), session.getState(), DebuggerSession.EVENT_CONTEXT,
-								null);
+						getContextManager().setState(session.getContextManager().getContext(), session.getState(), DebuggerSession.Event.CONTEXT, null);
 					}
 					else
 					{
-						getContextManager().setState(DebuggerContextImpl.EMPTY_CONTEXT, DebuggerSession.STATE_DISPOSED,
-								DebuggerSession.EVENT_CONTEXT, null);
+						getContextManager().setState(DebuggerContextImpl.EMPTY_CONTEXT, DebuggerSession.State.DISPOSED, DebuggerSession.Event.CONTEXT, null);
 					}
 				}
 			}
@@ -175,15 +159,13 @@ public class DebuggerPanelsManager implements ProjectComponent
 		return project.getComponent(DebuggerPanelsManager.class);
 	}
 
-	private static DebuggerSession getSession(Project project, ExecutionConsole console)
+	private static DebuggerSession getSession(Project project, RunContentDescriptor descriptor)
 	{
-		XDebugSession session = XDebuggerManager.getInstance(project).getDebugSession(console);
-		if(session != null)
+		for(JavaDebugProcess process : XDebuggerManager.getInstance(project).getDebugProcesses(JavaDebugProcess.class))
 		{
-			XDebugProcess process = session.getDebugProcess();
-			if(process instanceof JavaDebugProcess)
+			if(Comparing.equal(process.getProcessHandler(), descriptor.getProcessHandler()))
 			{
-				return ((JavaDebugProcess) process).getDebuggerSession();
+				return process.getDebuggerSession();
 			}
 		}
 		return null;

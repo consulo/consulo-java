@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,61 +15,56 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.intellij.openapi.util.Comparing;
 import consulo.internal.com.sun.jdi.BooleanValue;
 
 /**
  * @author lex
  */
-public class WhileStatementEvaluator implements Evaluator {
-  private final Evaluator myConditionEvaluator;
-  private final Evaluator myBodyEvaluator;
-  private final String myLabelName;
+public class WhileStatementEvaluator extends LoopEvaluator
+{
+	private final Evaluator myConditionEvaluator;
 
-  public WhileStatementEvaluator(Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName) {
-    myConditionEvaluator = new DisableGC(conditionEvaluator);
-    myBodyEvaluator = new DisableGC(bodyEvaluator);
-    myLabelName = labelName;
-  }
+	public WhileStatementEvaluator(@NotNull Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName)
+	{
+		super(labelName, bodyEvaluator);
+		myConditionEvaluator = new DisableGC(conditionEvaluator);
+	}
 
-  public Modifier getModifier() {
-    return myConditionEvaluator.getModifier();
-  }
+	@Override
+	public Modifier getModifier()
+	{
+		return myConditionEvaluator.getModifier();
+	}
 
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    Object value;
-    while (true) {
-      value = myConditionEvaluator.evaluate(context);
-      if (!(value instanceof BooleanValue)) {
-        throw EvaluateExceptionUtil.BOOLEAN_EXPECTED;
-      }
-      else {
-        if (!((BooleanValue)value).booleanValue()) {
-          break;
-        }
-      }
-      try {
-        myBodyEvaluator.evaluate(context);
-      }
-      catch (BreakException e) {
-        if (Comparing.equal(e.getLabelName(), myLabelName)) {
-          break;
-        }
-        else {
-          throw e;
-        }
-      }
-      catch (ContinueException e) {
-        if (!Comparing.equal(e.getLabelName(), myLabelName)) {
-          throw e;
-        }
-      }
-    }
+	@Override
+	public Object evaluate(EvaluationContextImpl context) throws EvaluateException
+	{
+		Object value;
+		while(true)
+		{
+			value = myConditionEvaluator.evaluate(context);
+			if(!(value instanceof BooleanValue))
+			{
+				throw EvaluateExceptionUtil.BOOLEAN_EXPECTED;
+			}
+			else
+			{
+				if(!((BooleanValue) value).booleanValue())
+				{
+					break;
+				}
+			}
 
-    return value;
-  }
+			if(body(context))
+			{
+				break;
+			}
+		}
 
+		return value;
+	}
 }

@@ -28,6 +28,7 @@ import gnu.trove.THashSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -49,12 +50,12 @@ import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FactoryMap;
 import com.intellij.util.containers.MultiMap;
@@ -64,6 +65,7 @@ import com.intellij.util.containers.MultiMap;
  */
 public class StandardInstructionVisitor extends InstructionVisitor
 {
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.StandardInstructionVisitor");
 	private static final Object ANY_VALUE = new Object();
 	private final Set<BinopInstruction> myReachable = new THashSet<BinopInstruction>();
 	private final Set<BinopInstruction> myCanBeNullInInstanceof = new THashSet<BinopInstruction>();
@@ -96,13 +98,6 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		{
 			DfaVariableValue var = (DfaVariableValue) dfaDest;
 
-			DfaValueFactory factory = runner.getFactory();
-			if(dfaSource instanceof DfaVariableValue && factory.getVarFactory().getAllQualifiedBy(var).contains(dfaSource))
-			{
-				dfaSource = factory.createTypeValue(((DfaVariableValue) dfaSource).getVariableType(),
-						((DfaVariableValue) dfaSource).getInherentNullability());
-			}
-
 			if(var.getInherentNullability() == Nullness.NOT_NULL)
 			{
 				checkNotNullable(memState, dfaSource, NullabilityProblem.assigningToNotNull, instruction.getRExpression());
@@ -112,6 +107,12 @@ public class StandardInstructionVisitor extends InstructionVisitor
 			{
 				memState.setVarValue(var, dfaSource);
 			}
+			if(var.getInherentNullability() == Nullness.NULLABLE && !memState.isNotNull(dfaSource) && instruction.isVariableInitializer())
+			{
+				DfaMemoryStateImpl stateImpl = (DfaMemoryStateImpl) memState;
+				stateImpl.setVariableState(var, stateImpl.getVariableState(var).withNullability(Nullness.NULLABLE));
+			}
+
 		}
 		else if(dfaDest instanceof DfaTypeValue && ((DfaTypeValue) dfaDest).isNotNull())
 		{
@@ -146,14 +147,13 @@ public class StandardInstructionVisitor extends InstructionVisitor
 	@Override
 	public DfaInstructionState[] visitPush(PushInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
-		if(instruction.isReferenceRead())
+		if(!instruction.isReferenceWrite() && instruction.getPlace() instanceof PsiReferenceExpression)
 		{
 			DfaValue dfaValue = instruction.getValue();
 			if(dfaValue instanceof DfaVariableValue)
 			{
 				DfaConstValue constValue = memState.getConstantValue((DfaVariableValue) dfaValue);
-				myPossibleVariableValues.putValue(instruction, constValue != null && (constValue.getValue() == null || constValue.getValue()
-						instanceof Boolean) ? constValue : ANY_VALUE);
+				myPossibleVariableValues.putValue(instruction, constValue != null && (constValue.getValue() == null || constValue.getValue() instanceof Boolean) ? constValue : ANY_VALUE);
 			}
 		}
 		return super.visitPush(instruction, runner, memState);
@@ -210,13 +210,23 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		DfaValue[] argValues = popCallArguments(instruction, runner, memState);
 		final DfaValue qualifier = popQualifier(instruction, runner, memState);
 
-		List<DfaMemoryState> currentStates = ContainerUtil.newArrayList(memState);
+		LinkedHashSet<DfaMemoryState> currentStates = ContainerUtil.newLinkedHashSet(memState);
 		Set<DfaMemoryState> finalStates = ContainerUtil.newLinkedHashSet();
 		if(argValues != null)
 		{
 			for(MethodContract contract : instruction.getContracts())
 			{
 				currentStates = addContractResults(argValues, contract, currentStates, instruction, runner.getFactory(), finalStates);
+				if(currentStates.size() + finalStates.size() > DataFlowRunner.MAX_STATES_PER_BRANCH)
+				{
+					if(LOG.isDebugEnabled())
+					{
+						LOG.debug("Too complex contract on " + instruction.getContext() + ", skipping contract processing");
+					}
+					finalStates.clear();
+					currentStates = ContainerUtil.newLinkedHashSet(memState);
+					break;
+				}
 			}
 		}
 		for(DfaMemoryState state : currentStates)
@@ -225,18 +235,17 @@ public class StandardInstructionVisitor extends InstructionVisitor
 			finalStates.add(state);
 		}
 
-		return ContainerUtil.map2Array(finalStates, DfaInstructionState.class, new Function<DfaMemoryState, DfaInstructionState>()
+		DfaInstructionState[] result = new DfaInstructionState[finalStates.size()];
+		int i = 0;
+		for(DfaMemoryState state : finalStates)
 		{
-			@Override
-			public DfaInstructionState fun(DfaMemoryState state)
+			if(instruction.shouldFlushFields())
 			{
-				if(instruction.shouldFlushFields())
-				{
-					state.flushFields();
-				}
-				return new DfaInstructionState(runner.getInstruction(instruction.getIndex() + 1), state);
+				state.flushFields();
 			}
-		});
+			result[i++] = new DfaInstructionState(runner.getInstruction(instruction.getIndex() + 1), state);
+		}
+		return result;
 	}
 
 	@Nullable
@@ -286,7 +295,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 					forceNotNull(runner, memState, arg);
 				}
 			}
-			else if(requiredNullability == Nullness.UNKNOWN)
+			else if(!instruction.updateOfNullable(memState, arg) && requiredNullability == Nullness.UNKNOWN)
 			{
 				checkNotNullable(memState, arg, NullabilityProblem.passingNullableArgumentToNonAnnotatedParameter, expr);
 			}
@@ -307,11 +316,15 @@ public class StandardInstructionVisitor extends InstructionVisitor
 		return qualifier;
 	}
 
-	private List<DfaMemoryState> addContractResults(DfaValue[] argValues, MethodContract contract, List<DfaMemoryState> states,
-			MethodCallInstruction instruction, DfaValueFactory factory, Set<DfaMemoryState> finalStates)
+	private LinkedHashSet<DfaMemoryState> addContractResults(DfaValue[] argValues,
+			MethodContract contract,
+			LinkedHashSet<DfaMemoryState> states,
+			MethodCallInstruction instruction,
+			DfaValueFactory factory,
+			Set<DfaMemoryState> finalStates)
 	{
 		DfaConstValue.Factory constFactory = factory.getConstFactory();
-		List<DfaMemoryState> falseStates = ContainerUtil.newArrayList();
+		LinkedHashSet<DfaMemoryState> falseStates = ContainerUtil.newLinkedHashSet();
 		for(int i = 0; i < argValues.length; i++)
 		{
 			DfaValue argValue = argValues[i];
@@ -322,6 +335,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 				continue;
 			}
 
+			boolean nullContract = expectedValue == constFactory.getNull();
 			boolean invertCondition = constraint.shouldUseNonEqComparison();
 			DfaValue condition = factory.getRelationFactory().createRelation(argValue, expectedValue, EQEQ, invertCondition);
 			if(condition == null)
@@ -330,17 +344,22 @@ public class StandardInstructionVisitor extends InstructionVisitor
 				{
 					for(DfaMemoryState state : states)
 					{
-						falseStates.add(state.createCopy());
+						DfaMemoryState falseCopy = state.createCopy();
+						if(nullContract)
+						{
+							(invertCondition ? falseCopy : state).markEphemeral();
+						}
+						falseStates.add(falseCopy);
 					}
 					continue;
 				}
 				condition = constFactory.createFromValue((argValue == expectedValue) != invertCondition, PsiType.BOOLEAN, null);
 			}
 
-			List<DfaMemoryState> nextStates = ContainerUtil.newArrayList();
+			LinkedHashSet<DfaMemoryState> nextStates = ContainerUtil.newLinkedHashSet();
 			for(DfaMemoryState state : states)
 			{
-				boolean unknownVsNull = expectedValue == constFactory.getNull() &&
+				boolean unknownVsNull = nullContract &&
 						argValue instanceof DfaVariableValue &&
 						((DfaMemoryStateImpl) state).getVariableState((DfaVariableValue) argValue).getNullability() == Nullness.UNKNOWN;
 				DfaMemoryState falseCopy = state.createCopy();
@@ -437,7 +456,12 @@ public class StandardInstructionVisitor extends InstructionVisitor
 
 		if(type != null && (type instanceof PsiClassType || type.getArrayDimensions() > 0))
 		{
-			return factory.createTypeValue(type, myReturnTypeNullability.get(instruction));
+			Nullness nullability = myReturnTypeNullability.get(instruction);
+			if(nullability == Nullness.UNKNOWN && factory.isUnknownMembersAreNullable())
+			{
+				nullability = Nullness.NULLABLE;
+			}
+			return factory.createTypeValue(type, nullability);
 		}
 		return DfaUnknownValue.getInstance();
 	}
@@ -499,8 +523,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 	}
 
 	@Nullable
-	private DfaInstructionState[] handleRelationBinop(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState,
-			DfaValue dfaRight, DfaValue dfaLeft)
+	private DfaInstructionState[] handleRelationBinop(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState, DfaValue dfaRight, DfaValue dfaLeft)
 	{
 		DfaValueFactory factory = runner.getFactory();
 		final Instruction next = runner.getInstruction(instruction.getIndex() + 1);
@@ -561,16 +584,19 @@ public class StandardInstructionVisitor extends InstructionVisitor
 	}
 
 	@Nullable
-	private static DfaInstructionState[] handleConstantComparison(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState,
-			DfaValue dfaRight, DfaValue dfaLeft, IElementType opSign)
+	private static DfaInstructionState[] handleConstantComparison(BinopInstruction instruction,
+			DataFlowRunner runner,
+			DfaMemoryState memState,
+			DfaValue dfaRight,
+			DfaValue dfaLeft,
+			IElementType opSign)
 	{
 		if(dfaRight instanceof DfaConstValue && dfaLeft instanceof DfaVariableValue)
 		{
 			Object value = ((DfaConstValue) dfaRight).getValue();
 			if(value instanceof Number)
 			{
-				DfaInstructionState[] result = checkComparingWithConstant(instruction, runner, memState, (DfaVariableValue) dfaLeft, opSign,
-						((Number) value).doubleValue());
+				DfaInstructionState[] result = checkComparingWithConstant(instruction, runner, memState, (DfaVariableValue) dfaLeft, opSign, ((Number) value).doubleValue());
 				if(result != null)
 				{
 					return result;
@@ -603,8 +629,12 @@ public class StandardInstructionVisitor extends InstructionVisitor
 	}
 
 	@Nullable
-	private static DfaInstructionState[] checkComparingWithConstant(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState,
-			DfaVariableValue var, IElementType opSign, double comparedWith)
+	private static DfaInstructionState[] checkComparingWithConstant(BinopInstruction instruction,
+			DataFlowRunner runner,
+			DfaMemoryState memState,
+			DfaVariableValue var,
+			IElementType opSign,
+			double comparedWith)
 	{
 		DfaConstValue knownConstantValue = memState.getConstantValue(var);
 		Object knownValue = knownConstantValue == null ? null : knownConstantValue.getValue();
@@ -620,19 +650,27 @@ public class StandardInstructionVisitor extends InstructionVisitor
 			return null;
 		}
 
-		double minValue = varType == PsiType.BYTE ? Byte.MIN_VALUE : varType == PsiType.SHORT ? Short.MIN_VALUE : varType == PsiType.INT ? Integer
-				.MIN_VALUE : varType == PsiType.CHAR ? Character.MIN_VALUE : varType == PsiType.LONG ? Long.MIN_VALUE : varType == PsiType.FLOAT ?
-				Float.MIN_VALUE : Double.MIN_VALUE;
-		double maxValue = varType == PsiType.BYTE ? Byte.MAX_VALUE : varType == PsiType.SHORT ? Short.MAX_VALUE : varType == PsiType.INT ? Integer
-				.MAX_VALUE : varType == PsiType.CHAR ? Character.MAX_VALUE : varType == PsiType.LONG ? Long.MAX_VALUE : varType == PsiType.FLOAT ?
-				Float.MAX_VALUE : Double.MAX_VALUE;
+		if(varType == PsiType.FLOAT || varType == PsiType.DOUBLE)
+		{
+			return null;
+		}
+
+		double minValue = varType == PsiType.BYTE ? Byte.MIN_VALUE : varType == PsiType.SHORT ? Short.MIN_VALUE : varType == PsiType.INT ? Integer.MIN_VALUE : varType == PsiType.CHAR ? Character
+				.MIN_VALUE : Long.MIN_VALUE;
+		double maxValue = varType == PsiType.BYTE ? Byte.MAX_VALUE : varType == PsiType.SHORT ? Short.MAX_VALUE : varType == PsiType.INT ? Integer.MAX_VALUE : varType == PsiType.CHAR ? Character
+				.MAX_VALUE : Long.MAX_VALUE;
 
 		return checkComparisonWithKnownRange(instruction, runner, memState, opSign, comparedWith, minValue, maxValue);
 	}
 
 	@Nullable
-	private static DfaInstructionState[] checkComparisonWithKnownRange(BinopInstruction instruction, DataFlowRunner runner, DfaMemoryState memState,
-			IElementType opSign, double comparedWith, double rangeMin, double rangeMax)
+	private static DfaInstructionState[] checkComparisonWithKnownRange(BinopInstruction instruction,
+			DataFlowRunner runner,
+			DfaMemoryState memState,
+			IElementType opSign,
+			double comparedWith,
+			double rangeMin,
+			double rangeMax)
 	{
 		if(comparedWith < rangeMin || comparedWith > rangeMax)
 		{
@@ -708,10 +746,7 @@ public class StandardInstructionVisitor extends InstructionVisitor
 				return true;
 			}
 		}
-		if(PsiTreeUtil.findChildOfType(element, PsiAssignmentExpression.class) != null)
-		{
-			return true;
-		}
 		return false;
 	}
+
 }

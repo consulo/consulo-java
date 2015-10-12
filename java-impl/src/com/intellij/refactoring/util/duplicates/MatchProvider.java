@@ -15,24 +15,29 @@
  */
 package com.intellij.refactoring.util.duplicates;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * @author dsl
  */
-public interface MatchProvider {
-  PsiElement processMatch(Match match) throws IncorrectOperationException;
+public interface MatchProvider
+{
+	PsiElement processMatch(Match match) throws IncorrectOperationException;
 
-  List<Match> getDuplicates();
+	List<Match> getDuplicates();
 
-  boolean hasDuplicates();
+	/**
+	 * @return null if no confirmation prompt is expected
+	 */
+	@Nullable
+	Boolean hasDuplicates();
 
-  @Nullable String getConfirmDuplicatePrompt(Match match);
+	@Nullable
+	String getConfirmDuplicatePrompt(Match match);
 
-  String getReplaceDuplicatesTitle(int idx, int size);
+	String getReplaceDuplicatesTitle(int idx, int size);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,12 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
+
+import java.util.List;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -28,162 +34,204 @@ import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiElement;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
-import consulo.internal.com.sun.jdi.*;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
 
-import java.util.Iterator;
+public class ToStringRenderer extends NodeRendererImpl
+{
+	public static final
+	@NonNls
+	String UNIQUE_ID = "ToStringRenderer";
 
-public class ToStringRenderer extends NodeRendererImpl {
-  public static final @NonNls String UNIQUE_ID = "ToStringRenderer";
+	private boolean USE_CLASS_FILTERS = false;
+	private ClassFilter[] myClassFilters = ClassFilter.EMPTY_ARRAY;
 
-  private boolean USE_CLASS_FILTERS = false;
-  private ClassFilter[] myClassFilters = ClassFilter.EMPTY_ARRAY;
+	public ToStringRenderer()
+	{
+		setEnabled(true);
+	}
 
-  public ToStringRenderer() {
-    setEnabled(true);
-  }
+	@Override
+	public String getUniqueId()
+	{
+		return UNIQUE_ID;
+	}
 
-  public String getUniqueId() {
-    return UNIQUE_ID;
-  }
+	@Override
+	public
+	@NonNls
+	String getName()
+	{
+		return "toString";
+	}
 
-  public @NonNls String getName() {
-    return "toString";
-  }
+	@Override
+	public void setName(String name)
+	{
+		// prohibit change
+	}
 
-  public void setName(String name) {
-    // prohibit change
-  }
+	@Override
+	public ToStringRenderer clone()
+	{
+		final ToStringRenderer cloned = (ToStringRenderer) super.clone();
+		final ClassFilter[] classFilters = (myClassFilters.length > 0) ? new ClassFilter[myClassFilters.length] : ClassFilter.EMPTY_ARRAY;
+		for(int idx = 0; idx < classFilters.length; idx++)
+		{
+			classFilters[idx] = myClassFilters[idx].clone();
+		}
+		cloned.myClassFilters = classFilters;
+		return cloned;
+	}
 
-  public ToStringRenderer clone() {
-    final ToStringRenderer cloned = (ToStringRenderer)super.clone();
-    final ClassFilter[] classFilters = (myClassFilters.length > 0)? new ClassFilter[myClassFilters.length] : ClassFilter.EMPTY_ARRAY;
-    for (int idx = 0; idx < classFilters.length; idx++) {
-      classFilters[idx] = myClassFilters[idx].clone();
-    }
-    cloned.myClassFilters = classFilters;
-    return cloned;
-  }
+	@Override
+	public String calcLabel(final ValueDescriptor valueDescriptor, EvaluationContext evaluationContext, final DescriptorLabelListener labelListener) throws EvaluateException
+	{
+		final Value value = valueDescriptor.getValue();
+		BatchEvaluator.getBatchEvaluator(evaluationContext.getDebugProcess()).invoke(new ToStringCommand(evaluationContext, value)
+		{
+			@Override
+			public void evaluationResult(String message)
+			{
+				valueDescriptor.setValueLabel(StringUtil.notNullize(message));
+				labelListener.labelChanged();
+			}
 
-  public String calcLabel(final ValueDescriptor valueDescriptor, EvaluationContext evaluationContext, final DescriptorLabelListener labelListener)
-    throws EvaluateException {
-    final Value value = valueDescriptor.getValue();
-    BatchEvaluator.getBatchEvaluator(evaluationContext.getDebugProcess()).invoke(new ToStringCommand(evaluationContext, value) {
-      public void evaluationResult(String message) {
-        valueDescriptor.setValueLabel(
-          message == null? "" : "\"" + DebuggerUtils.convertToPresentationString(DebuggerUtilsEx.truncateString(message)) + "\""
-        );
-        labelListener.labelChanged();
-      }
+			@Override
+			public void evaluationError(String message)
+			{
+				final String msg = value != null ? message + " " + DebuggerBundle.message("evaluation.error.cannot.evaluate.tostring", value.type().name()) : message;
+				valueDescriptor.setValueLabelFailed(new EvaluateException(msg, null));
+				labelListener.labelChanged();
+			}
+		});
+		return XDebuggerUIConstants.COLLECTING_DATA_MESSAGE;
+	}
 
-      public void evaluationError(String message) {
-        final String msg = value != null? message + " " + DebuggerBundle.message("evaluation.error.cannot.evaluate.tostring", value.type().name()) : message;
-        valueDescriptor.setValueLabelFailed(new EvaluateException(msg, null));
-        labelListener.labelChanged();
-      }
-    });
-    return XDebuggerUIConstants.COLLECTING_DATA_MESSAGE;
-  }
+	public boolean isUseClassFilters()
+	{
+		return USE_CLASS_FILTERS;
+	}
 
-  public boolean isUseClassFilters() {
-    return USE_CLASS_FILTERS;
-  }
+	public void setUseClassFilters(boolean value)
+	{
+		USE_CLASS_FILTERS = value;
+	}
 
-  public void setUseClassFilters(boolean value) {
-    USE_CLASS_FILTERS = value;
-  }
+	@Override
+	public boolean isApplicable(Type type)
+	{
+		if(!(type instanceof ReferenceType))
+		{
+			return false;
+		}
 
-  public boolean isApplicable(Type type) {
-    if(!(type instanceof ReferenceType)) {
-      return false;
-    }
+		if(JAVA_LANG_STRING.equals(type.name()))
+		{
+			return false; // do not render 'String' objects for performance reasons
+		}
 
-    if(type.name().equals("java.lang.String")) {
-      return false; // do not render 'String' objects for performance reasons
-    }
+		if(!overridesToString(type))
+		{
+			return false;
+		}
 
-    if(!overridesToString(type)) {
-      return false;
-    }
+		if(USE_CLASS_FILTERS)
+		{
+			if(!isFiltered(type))
+			{
+				return false;
+			}
+		}
 
-    if (USE_CLASS_FILTERS) {
-      if (!isFiltered(type)) {
-        return false;
-      }
-    }
+		return true;
+	}
 
-    return true;
-  }
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	private static boolean overridesToString(Type type)
+	{
+		if(type instanceof ClassType)
+		{
+			final List<Method> methods = ((ClassType) type).methodsByName("toString", "()Ljava/lang/String;");
+			for(Method method : methods)
+			{
+				if(!(method.declaringType().name()).equals(CommonClassNames.JAVA_LANG_OBJECT))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  private static boolean overridesToString(Type type) {
-    if(type instanceof ClassType) {
-      final ClassType classType = (ClassType)type;
-      final java.util.List methods = classType.methodsByName("toString", "()Ljava/lang/String;");
-      if (methods.size() > 0) {
-        for (Iterator iterator = methods.iterator(); iterator.hasNext();) {
-          final Method method = (Method)iterator.next();
-          if(!(method.declaringType().name()).equals(CommonClassNames.JAVA_LANG_OBJECT)){
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
+	@Override
+	public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext)
+	{
+		DebugProcessImpl.getDefaultRenderer(value).buildChildren(value, builder, evaluationContext);
+	}
 
-  public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext) {
-    final DebugProcessImpl debugProcess = (DebugProcessImpl)evaluationContext.getDebugProcess();
-    debugProcess.getDefaultRenderer(value).buildChildren(value, builder, evaluationContext);
-  }
+	@Override
+	public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
+	{
+		final Value parentValue = ((ValueDescriptor) node.getParent().getDescriptor()).getValue();
+		return DebugProcessImpl.getDefaultRenderer(parentValue).getChildValueExpression(node, context);
+	}
 
-  public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException {
-    final Value parentValue = ((ValueDescriptor)node.getParent().getDescriptor()).getValue();
-    final DebugProcessImpl debugProcess = (DebugProcessImpl)context.getDebugProcess();
-    return debugProcess.getDefaultRenderer(parentValue).getChildValueExpression(node, context);
-  }
+	@Override
+	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		return DebugProcessImpl.getDefaultRenderer(value).isExpandable(value, evaluationContext, parentDescriptor);
+	}
 
-  public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor) {
-    final DebugProcessImpl debugProcess = (DebugProcessImpl)evaluationContext.getDebugProcess();
-    return debugProcess.getDefaultRenderer(value).isExpandable(value, evaluationContext, parentDescriptor);
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public void readExternal(Element element) throws InvalidDataException
+	{
+		super.readExternal(element);
+		final String value = JDOMExternalizerUtil.readField(element, "USE_CLASS_FILTERS");
+		USE_CLASS_FILTERS = "true".equalsIgnoreCase(value);
+		myClassFilters = DebuggerUtilsEx.readFilters(element.getChildren("filter"));
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public void readExternal(Element element) throws InvalidDataException {
-    super.readExternal(element);
-    final String value = JDOMExternalizerUtil.readField(element, "USE_CLASS_FILTERS");
-    USE_CLASS_FILTERS = "true".equalsIgnoreCase(value);
-    myClassFilters = DebuggerUtilsEx.readFilters(element.getChildren("filter"));
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public void writeExternal(Element element) throws WriteExternalException
+	{
+		super.writeExternal(element);
+		JDOMExternalizerUtil.writeField(element, "USE_CLASS_FILTERS", USE_CLASS_FILTERS ? "true" : "false");
+		DebuggerUtilsEx.writeFilters(element, "filter", myClassFilters);
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public void writeExternal(Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    JDOMExternalizerUtil.writeField(element, "USE_CLASS_FILTERS", USE_CLASS_FILTERS? "true" : "false");
-    DebuggerUtilsEx.writeFilters(element, "filter", myClassFilters);
-  }
+	public ClassFilter[] getClassFilters()
+	{
+		return myClassFilters;
+	}
 
-  public ClassFilter[] getClassFilters() {
-    return myClassFilters;
-  }
+	public void setClassFilters(ClassFilter[] classFilters)
+	{
+		myClassFilters = classFilters != null ? classFilters : ClassFilter.EMPTY_ARRAY;
+	}
 
-  public void setClassFilters(ClassFilter[] classFilters) {
-    myClassFilters = classFilters != null? classFilters : ClassFilter.EMPTY_ARRAY;
-  }
-
-  private boolean isFiltered(Type t) {
-    if (t instanceof ReferenceType) {
-      for (ClassFilter classFilter : myClassFilters) {
-        if (classFilter.isEnabled() && DebuggerUtilsEx.getSuperType(t, classFilter.getPattern()) != null) {
-          return true;
-        }
-      }
-    }
-    return DebuggerUtilsEx.isFiltered(t.name(), myClassFilters);
-  }
+	private boolean isFiltered(Type t)
+	{
+		if(t instanceof ReferenceType)
+		{
+			for(ClassFilter classFilter : myClassFilters)
+			{
+				if(classFilter.isEnabled() && DebuggerUtils.getSuperType(t, classFilter.getPattern()) != null)
+				{
+					return true;
+				}
+			}
+		}
+		return DebuggerUtilsEx.isFiltered(t.name(), myClassFilters);
+	}
 }

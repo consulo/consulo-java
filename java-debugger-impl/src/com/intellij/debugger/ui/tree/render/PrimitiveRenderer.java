@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,21 @@
  */
 package com.intellij.debugger.ui.tree.render;
 
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
-import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.DefaultJDOMExternalizer;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.*;
 import org.jetbrains.annotations.NonNls;
@@ -33,86 +39,154 @@ import org.jetbrains.annotations.NonNls;
  * Date: Sep 18, 2003
  * Time: 3:07:27 PM
  */
-public class PrimitiveRenderer extends NodeRendererImpl {
-  public static final @NonNls String UNIQUE_ID = "PrimitiveRenderer";
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.PrimitiveRenderer");
+public class PrimitiveRenderer extends NodeRendererImpl
+{
+	public static final
+	@NonNls
+	String UNIQUE_ID = "PrimitiveRenderer";
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.PrimitiveRenderer");
 
-  public PrimitiveRenderer() {
-    //noinspection HardCodedStringLiteral
-    myProperties.setName("Primitive");
-  }
+	public boolean SHOW_HEX_VALUE = false;
 
-  public String getUniqueId() {
-    return UNIQUE_ID;
-  }
+	public PrimitiveRenderer()
+	{
+		super("Primitive");
+	}
 
-  public @NonNls String getName() {
-    return "Primitive";
-  }
+	@Override
+	public String getUniqueId()
+	{
+		return UNIQUE_ID;
+	}
 
-  public void setName(String text) {
-    // prohibit name change
-  }
+	@Override
+	public void setName(String text)
+	{
+		// prohibit name change
+	}
 
-  public final boolean isEnabled() {
-    return true;
-  }
+	@Override
+	public final boolean isEnabled()
+	{
+		return true;
+	}
 
-  public void setEnabled(boolean enabled) {
-    // prohibit change
-  }
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		// prohibit change
+	}
 
-  public boolean isApplicable(Type type) {
-    return type == null || type instanceof PrimitiveType || type instanceof VoidType;
-  }
+	@Override
+	public boolean isApplicable(Type type)
+	{
+		return type == null || type instanceof PrimitiveType || type instanceof VoidType;
+	}
 
-  public String calcLabel(ValueDescriptor valueDescriptor, EvaluationContext evaluationContext, DescriptorLabelListener labelListener) {
-    Value value = valueDescriptor.getValue();
-    if(value == null) {
-      //noinspection HardCodedStringLiteral
-      return "null";
-    }
-    else if (value instanceof PrimitiveValue) {
-      StringBuilder buf = new StringBuilder(16);
-      if (value instanceof CharValue) {
-        buf.append("'");
-        buf.append(DebuggerUtils.translateStringValue(value.toString()));
-        buf.append("' ");
-        long longValue = ((PrimitiveValue)value).longValue();
-        buf.append(Long.toString(longValue));
-      }
-      else if (value instanceof ByteValue) {
-        buf.append(value.toString());
-      }
-      else if (value instanceof ShortValue) {
-        buf.append(value.toString());
-      }
-      else if (value instanceof IntegerValue) {
-        buf.append(value.toString());
-      }
-      else if (value instanceof LongValue) {
-        buf.append(value.toString());
-      }
-      else {
-        buf.append(value.toString());
-      }
-      return buf.toString();
-    }
-    else {
-      return DebuggerBundle.message("label.undefined");
-    }
-  }
+	@Override
+	public String calcLabel(ValueDescriptor valueDescriptor, EvaluationContext evaluationContext, DescriptorLabelListener labelListener)
+	{
+		Value value = valueDescriptor.getValue();
+		if(value == null)
+		{
+			//noinspection HardCodedStringLiteral
+			return "null";
+		}
+		else if(value instanceof PrimitiveValue)
+		{
+			if(value instanceof CharValue)
+			{
+				StringBuilder buf = new StringBuilder();
+				appendCharValue((CharValue) value, buf);
+				if(SHOW_HEX_VALUE)
+				{
+					appendHexValue((CharValue) value, buf);
+				}
+				else
+				{
+					buf.append(' ').append(((PrimitiveValue) value).longValue());
+				}
+				return buf.toString();
+			}
+			else
+			{
+				if(SHOW_HEX_VALUE)
+				{
+					StringBuilder buf = new StringBuilder();
+					buf.append(value.toString());
+					appendHexValue((PrimitiveValue) value, buf);
+					return buf.toString();
+				}
+				else
+				{
+					return value.toString();
+				}
+			}
+		}
+		else
+		{
+			return DebuggerBundle.message("label.undefined");
+		}
+	}
 
-  public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-  }
+	static void appendCharValue(CharValue value, StringBuilder buf)
+	{
+		buf.append('\'');
+		String s = value.toString();
+		StringUtil.escapeStringCharacters(s.length(), s, "\'", buf);
+		buf.append('\'');
+	}
 
-  public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) {
-    LOG.assertTrue(false);
-    return null;
-  }
+	private static void appendHexValue(PrimitiveValue value, StringBuilder buf)
+	{
+		if(NodeRendererSettings.getInstance().getHexRenderer().isApplicable(value.type()))
+		{
+			buf.append(" (");
+			HexRenderer.appendHexValue(value, buf);
+			buf.append(')');
+		}
+	}
 
-  public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor) {
-    return false;
-  }
+	@Override
+	public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+	}
+
+	@Override
+	public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context)
+	{
+		LOG.assertTrue(false);
+		return null;
+	}
+
+	@Override
+	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		return false;
+	}
+
+	public boolean isShowHexValue()
+	{
+		return SHOW_HEX_VALUE;
+	}
+
+	public void setShowHexValue(boolean show)
+	{
+		this.SHOW_HEX_VALUE = show;
+	}
+
+	@Override
+	public void readExternal(Element element) throws InvalidDataException
+	{
+		super.readExternal(element);
+		DefaultJDOMExternalizer.readExternal(this, element);
+	}
+
+	@Override
+	public void writeExternal(Element element) throws WriteExternalException
+	{
+		super.writeExternal(element);
+		DefaultJDOMExternalizer.writeExternal(this, element);
+	}
 }

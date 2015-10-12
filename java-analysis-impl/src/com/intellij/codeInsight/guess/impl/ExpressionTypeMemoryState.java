@@ -15,6 +15,11 @@
  */
 package com.intellij.codeInsight.guess.impl;
 
+import gnu.trove.THashMap;
+import gnu.trove.TObjectHashingStrategy;
+
+import java.util.Map;
+
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.codeInspection.dataFlow.DfaMemoryStateImpl;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
@@ -23,93 +28,118 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
 import com.intellij.util.containers.HashMap;
-import gnu.trove.THashMap;
-import gnu.trove.TObjectHashingStrategy;
-
-import java.util.Map;
 
 /**
  * @author peter
  */
-public class ExpressionTypeMemoryState extends DfaMemoryStateImpl {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.guess.impl.ExpressionTypeMemoryState");
-  public static final TObjectHashingStrategy<PsiExpression> EXPRESSION_HASHING_STRATEGY = new TObjectHashingStrategy<PsiExpression>() {
-    @Override
-    public int computeHashCode(PsiExpression object) {
-      return object.getNode().getElementType().hashCode();
-    }
+public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.guess.impl.ExpressionTypeMemoryState");
+	public static final TObjectHashingStrategy<PsiExpression> EXPRESSION_HASHING_STRATEGY = new TObjectHashingStrategy<PsiExpression>()
+	{
+		@Override
+		public int computeHashCode(PsiExpression object)
+		{
+			return object.getNode().getElementType().hashCode();
+		}
 
-    @Override
-    public boolean equals(PsiExpression o1, PsiExpression o2) {
-      if (JavaPsiEquivalenceUtil.areExpressionsEquivalent(o1, o2)) {
-        if (computeHashCode(o1) != computeHashCode(o2)) {
-          LOG.error("different hashCodes: " + o1 + "; " + o2 + "; " + computeHashCode(o1) + "!=" + computeHashCode(o2));
-        }
+		@Override
+		public boolean equals(PsiExpression o1, PsiExpression o2)
+		{
+			if(JavaPsiEquivalenceUtil.areExpressionsEquivalent(o1, o2))
+			{
+				if(computeHashCode(o1) != computeHashCode(o2))
+				{
+					LOG.error("different hashCodes: " + o1 + "; " + o2 + "; " + computeHashCode(o1) + "!=" + computeHashCode(o2));
+				}
 
-        return true;
-      }
-      return false;
-    }
-  };
-  private final Map<PsiExpression, PsiType> myStates = new THashMap<PsiExpression, PsiType>(EXPRESSION_HASHING_STRATEGY);
+				return true;
+			}
+			return false;
+		}
+	};
+	private final Map<PsiExpression, PsiType> myStates = new THashMap<PsiExpression, PsiType>(EXPRESSION_HASHING_STRATEGY);
 
-  public ExpressionTypeMemoryState(final DfaValueFactory factory) {
-    super(factory);
-  }
+	public ExpressionTypeMemoryState(final DfaValueFactory factory)
+	{
+		super(factory);
+	}
 
-  private ExpressionTypeMemoryState(DfaMemoryStateImpl toCopy) {
-    super(toCopy);
-  }
+	private ExpressionTypeMemoryState(DfaMemoryStateImpl toCopy)
+	{
+		super(toCopy);
+	}
 
-  @Override
-  public DfaMemoryStateImpl createCopy() {
-    final ExpressionTypeMemoryState copy = new ExpressionTypeMemoryState(this);
-    copy.myStates.putAll(myStates);
-    return copy;
-  }
+	@Override
+	public DfaMemoryStateImpl createCopy()
+	{
+		final ExpressionTypeMemoryState copy = new ExpressionTypeMemoryState(this);
+		copy.myStates.putAll(myStates);
+		return copy;
+	}
 
-  @Override
-  public boolean applyCondition(DfaValue dfaCond) {
-    if (dfaCond instanceof DfaInstanceofValue) {
-      final DfaInstanceofValue value = (DfaInstanceofValue)dfaCond;
-      if (!value.isNegated()) {
-        setExpressionType(value.getExpression(), value.getCastType());
-      }
-    }
+	@Override
+	public boolean applyCondition(DfaValue dfaCond)
+	{
+		if(dfaCond instanceof DfaInstanceofValue)
+		{
+			final DfaInstanceofValue value = (DfaInstanceofValue) dfaCond;
+			if(!value.isNegated())
+			{
+				setExpressionType(value.getExpression(), value.getCastType());
+			}
+		}
 
-    return super.applyCondition(dfaCond);
-  }
+		return super.applyCondition(dfaCond);
+	}
 
-  public Map<PsiExpression, PsiType> getStates() {
-    return myStates;
-  }
+	public Map<PsiExpression, PsiType> getStates()
+	{
+		return myStates;
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
+	@Override
+	public boolean equals(Object o)
+	{
+		if(this == o)
+		{
+			return true;
+		}
+		if(o == null || getClass() != o.getClass())
+		{
+			return false;
+		}
+		if(!super.equals(o))
+		{
+			return false;
+		}
 
-    ExpressionTypeMemoryState that = (ExpressionTypeMemoryState)o;
+		ExpressionTypeMemoryState that = (ExpressionTypeMemoryState) o;
 
-    if (!myStates.equals(that.myStates)) return false;
+		if(!myStates.equals(that.myStates))
+		{
+			return false;
+		}
 
-    return true;
-  }
+		return true;
+	}
 
-  @Override
-  public int hashCode() {
-    int result = super.hashCode();
-    result = 31 * result + myStates.hashCode();
-    return result;
-  }
+	@Override
+	public int hashCode()
+	{
+		int result = super.hashCode();
+		result = 31 * result + myStates.hashCode();
+		return result;
+	}
 
-  @Override
-  public String toString() {
-    return super.toString() + " states=[" + new HashMap<PsiExpression, PsiType>(myStates) + "]";
-  }
+	@Override
+	public String toString()
+	{
+		return super.toString() + " states=[" + new HashMap<PsiExpression, PsiType>(myStates) + "]";
+	}
 
-  public void setExpressionType(PsiExpression expression, PsiType type) {
-    myStates.put(expression, type);
-  }
+	public void setExpressionType(PsiExpression expression, PsiType type)
+	{
+		myStates.put(expression, type);
+	}
 }

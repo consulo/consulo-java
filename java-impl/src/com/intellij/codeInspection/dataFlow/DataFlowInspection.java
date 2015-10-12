@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.NullableNotNullDialog;
 import com.intellij.codeInspection.AddAssertStatementFix;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -42,8 +43,11 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiBinaryExpression;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.refactoring.util.RefactoringUtil;
+import com.siyeh.ig.fixes.IntroduceVariableFix;
 
 public class DataFlowInspection extends DataFlowInspectionBase
 {
@@ -75,9 +79,23 @@ public class DataFlowInspection extends DataFlowInspectionBase
 	}
 
 	@Override
-	protected AddAssertStatementFix createAssertFix(PsiBinaryExpression binary)
+	protected AddAssertStatementFix createAssertFix(PsiBinaryExpression binary, PsiExpression expression)
 	{
-		return new AddAssertStatementFix(binary);
+		return RefactoringUtil.getParentStatement(expression, false) == null ? null : new AddAssertStatementFix(binary);
+	}
+
+	@Override
+	protected LocalQuickFix createIntroduceVariableFix(final PsiExpression expression)
+	{
+		return new IntroduceVariableFix(false)
+		{
+			@Nullable
+			@Override
+			public PsiExpression getExpressionToExtract(PsiElement element)
+			{
+				return (PsiExpression) element;
+			}
+		};
 	}
 
 	private class OptionsPanel extends JPanel
@@ -86,6 +104,7 @@ public class DataFlowInspection extends DataFlowInspectionBase
 		private final JCheckBox myReportConstantReferences;
 		private final JCheckBox mySuggestNullables;
 		private final JCheckBox myDontReportTrueAsserts;
+		private final JCheckBox myTreatUnknownMembersAsNullable;
 
 		private OptionsPanel()
 		{
@@ -141,6 +160,17 @@ public class DataFlowInspection extends DataFlowInspectionBase
 				}
 			});
 
+			myTreatUnknownMembersAsNullable = new JCheckBox("Treat non-annotated members and parameters as @Nullable");
+			myTreatUnknownMembersAsNullable.setSelected(TREAT_UNKNOWN_MEMBERS_AS_NULLABLE);
+			myTreatUnknownMembersAsNullable.getModel().addChangeListener(new ChangeListener()
+			{
+				@Override
+				public void stateChanged(ChangeEvent e)
+				{
+					TREAT_UNKNOWN_MEMBERS_AS_NULLABLE = myTreatUnknownMembersAsNullable.isSelected();
+				}
+			});
+
 			gc.insets = new Insets(0, 0, 0, 0);
 			gc.gridy = 0;
 			add(mySuggestNullables, gc);
@@ -166,31 +196,6 @@ public class DataFlowInspection extends DataFlowInspectionBase
 			gc.insets.bottom = 15;
 			add(configureAnnotations, gc);
 
-			if("true".equals(System.getProperty("dfa.inspection.show.method.configuration", "false")))
-			{
-				final JButton configureCheckAnnotations = new JButton(InspectionsBundle.message("configure.checker.option.button"));
-				configureCheckAnnotations.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						Project project = CommonDataKeys.PROJECT.getData(DataManager.getInstance().getDataContext(OptionsPanel.this));
-						if(project == null)
-						{
-							project = ProjectManager.getInstance().getDefaultProject();
-						}
-						final ConditionCheckDialog dialog = new ConditionCheckDialog(project, InspectionsBundle.message("configure.checker.option" +
-								".main.dialog.title"));
-						dialog.show();
-					}
-				});
-				gc.gridy++;
-				gc.fill = GridBagConstraints.NONE;
-				gc.insets.left = 20;
-				gc.insets.bottom = 15;
-				add(configureCheckAnnotations, gc);
-			}
-
 			gc.fill = GridBagConstraints.HORIZONTAL;
 			gc.weighty = 1;
 			gc.insets.left = 0;
@@ -202,6 +207,9 @@ public class DataFlowInspection extends DataFlowInspectionBase
 
 			gc.gridy++;
 			add(myReportConstantReferences, gc);
+
+			gc.gridy++;
+			add(myTreatUnknownMembersAsNullable, gc);
 		}
 	}
 

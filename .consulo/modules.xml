@@ -188,7 +188,7 @@
       </module>
       <module name="java-debugger-impl" dirurl="file://$PROJECT_DIR$/java-debugger-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
           <extension id="lombok" />
           <content url="file://$MODULE_DIR$">
@@ -200,6 +200,13 @@
           <orderEntry type="module" module-name="java-debugger-api" exported="" />
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-rt" />
+          <orderEntry type="module-library">
+            <library name="consulo:Images">
+              <binaries>
+                <root url="jar://$MODULE_DIR$/../dep/images/lib/images.jar!/" />
+              </binaries>
+            </library>
+          </orderEntry>
         </module-layer>
       </module>
       <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl" current-layer="Default">
@@ -260,6 +267,7 @@
           <orderEntry type="module" module-name="java-psi-api" exported="" />
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="module" module-name="java-indexing-api" />
         </module-layer>
       </module>
       <module name="java-generate-tostring" dirurl="file://$PROJECT_DIR$/java-generate-tostring" current-layer="Default">

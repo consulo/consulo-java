@@ -20,6 +20,7 @@
 	<category>Custom Languages</category>
 	<vendor>Jetbrains and others</vendor>
 	<depends optional="true" config-file="com.intellij.regexp.xml">com.intellij.regexp</depends>
+	<depends optional="true" config-file="com.intellij.images.xml">com.intellij.images</depends>
 	<depends optional="true" config-file="org.intellij.intellilang.xml">org.intellij.intelliLang</depends>
 	<depends optional="true" config-file="Spellchecker.xml">com.intellij.spellchecker</depends>
 	<depends optional="true" config-file="Properties.xml">com.intellij.properties</depends>
@@ -466,6 +467,10 @@
 		<extensionPoint name="debugger.jvmDebugProvider"
 						interface="com.intellij.debugger.engine.JVMDebugProvider"/>
 
+		<extensionPoint name="debugger.nodeRenderer" interface="com.intellij.debugger.ui.tree.render.NodeRenderer"/>
+
+		<extensionPoint name="debugger.nodeNameAdjuster" interface="com.intellij.debugger.ui.tree.NodeDescriptorNameAdjuster"/>
+
 		<extensionPoint name="debugger.syntheticProvider" interface="com.intellij.debugger.engine.SyntheticTypeComponentProvider" />
 
 		<extensionPoint name="debugger.sourcePositionHighlighter" interface="com.intellij.debugger.engine.SourcePositionHighlighter" />
@@ -666,6 +671,12 @@
 
 		<backendCompiler implementationClass="com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler"/>
 		<debugger.jvmDebugProvider implementation="org.mustbe.consulo.java.fileType.DefaultJVMDebugProvider"/>
+
+		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.ColorObjectRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.BinaryRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.TimestampRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.FileObjectRenderer"/>
+		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.StackTraceElementObjectRenderer"/>
 
 		<augmentProvider implementation="com.intellij.psi.augment.JavaEnumAugmentProvider" />
 
@@ -947,6 +958,8 @@
 
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.AttachSourcesNotificationProvider"/>
 		<editorNotificationProvider implementation="com.intellij.codeInsight.daemon.impl.SetupJDKNotificationProvider"/>
+		<editorNotificationProvider implementation="com.intellij.debugger.ui.AlternativeSourceNotificationProvider"/>
+
 		<programRunner id="defaultRunRunner" implementation="com.intellij.execution.impl.DefaultJavaProgramRunner"/>
 
 

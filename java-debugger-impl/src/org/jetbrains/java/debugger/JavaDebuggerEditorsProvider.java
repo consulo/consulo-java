@@ -10,7 +10,6 @@ import com.intellij.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
-import com.intellij.debugger.ui.DebuggerEditorImpl;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Document;
@@ -66,11 +65,7 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 
 	@NotNull
 	@Override
-	public XExpression createExpression(
-			@NotNull Project project,
-			@NotNull Document document,
-			@Nullable Language language,
-			@NotNull EvaluationMode mode)
+	public XExpression createExpression(@NotNull Project project, @NotNull Document document, @Nullable Language language, @NotNull EvaluationMode mode)
 	{
 		PsiDocumentManager.getInstance(project).commitDocument(document);
 		PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
@@ -82,27 +77,20 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 	}
 
 	@Override
-	protected PsiFile createExpressionCodeFragment(
-			@NotNull Project project,
-			@NotNull XExpression expression,
-			@Nullable PsiElement context,
-			boolean isPhysical)
+	protected PsiFile createExpressionCodeFragment(@NotNull Project project, @NotNull XExpression expression, @Nullable PsiElement context, boolean isPhysical)
 	{
 		TextWithImports text = TextWithImportsImpl.fromXExpression(expression);
 		if(text != null && context != null)
 		{
-			CodeFragmentFactory factory = DebuggerEditorImpl.findAppropriateFactory(text, context);
+			CodeFragmentFactory factory = DebuggerUtilsEx.findAppropriateCodeFragmentFactory(text, context);
 			JavaCodeFragment codeFragment = factory.createPresentationCodeFragment(text, context, project);
 			codeFragment.forceResolveScope(GlobalSearchScope.allScope(project));
-			if(context != null)
+
+			final PsiClass contextClass = PsiTreeUtil.getNonStrictParentOfType(context, PsiClass.class);
+			if(contextClass != null)
 			{
-				final PsiClass contextClass = PsiTreeUtil.getNonStrictParentOfType(context, PsiClass.class);
-				if(contextClass != null)
-				{
-					final PsiClassType contextType = JavaPsiFacade.getInstance(codeFragment.getProject()).getElementFactory().createType
-							(contextClass);
-					codeFragment.setThisType(contextType);
-				}
+				final PsiClassType contextType = JavaPsiFacade.getInstance(codeFragment.getProject()).getElementFactory().createType(contextClass);
+				codeFragment.setThisType(contextType);
 			}
 			return codeFragment;
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -46,9 +49,10 @@ public class DebuggerExpressionTextField extends DebuggerEditorImpl
 	@NonNls
 	String STUB = "stub";
 
-	public DebuggerExpressionTextField(Project project, PsiElement context, final @NonNls String recentsId)
+	public DebuggerExpressionTextField(@NotNull Project project, @NotNull Disposable parentDisposable, @Nullable PsiElement context, @Nullable String recentsId)
 	{
-		super(project, context, recentsId, DefaultCodeFragmentFactory.getInstance());
+		super(project, DefaultCodeFragmentFactory.getInstance(), parentDisposable, context, recentsId);
+
 		myStubField.setEnabled(false);
 		myEditor = new EditorTextField("", project, JavaFileType.INSTANCE);
 		setLayout(new BorderLayout());
@@ -59,7 +63,6 @@ public class DebuggerExpressionTextField extends DebuggerEditorImpl
 		setText(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, ""));
 	}
 
-	@Override
 	public JComponent getPreferredFocusedComponent()
 	{
 		return myEditor.getEditor().getContentComponent();
@@ -70,7 +73,6 @@ public class DebuggerExpressionTextField extends DebuggerEditorImpl
 		myEditor.selectAll();
 	}
 
-	@Override
 	public TextWithImports getText()
 	{
 		return createItem(myEditor.getDocument(), getProject());
@@ -93,13 +95,11 @@ public class DebuggerExpressionTextField extends DebuggerEditorImpl
 		}
 	}
 
-	@Override
 	public TextWithImports createText(String text, String importsString)
 	{
 		return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, text, importsString, getCurrentFactory().getFileType());
 	}
 
-	@Override
 	public void setEnabled(boolean enabled)
 	{
 		if(isEnabled() != enabled)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.actions.DebuggerActions;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -83,17 +84,17 @@ public class ThreadsPanel extends DebuggerTreePanel
 		stateManager.addListener(new DebuggerContextListener()
 		{
 			@Override
-			public void changeEvent(DebuggerContextImpl newContext, int event)
+			public void changeEvent(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
-				if(DebuggerSession.EVENT_ATTACHED == event || DebuggerSession.EVENT_RESUME == event)
+				if(DebuggerSession.Event.ATTACHED == event || DebuggerSession.Event.RESUME == event)
 				{
 					startLabelsUpdate();
 				}
-				else if(DebuggerSession.EVENT_PAUSE == event || DebuggerSession.EVENT_DETACHED == event || DebuggerSession.EVENT_DISPOSE == event)
+				else if(DebuggerSession.Event.PAUSE == event || DebuggerSession.Event.DETACHED == event || DebuggerSession.Event.DISPOSE == event)
 				{
 					myUpdateLabelsAlarm.cancelAllRequests();
 				}
-				if(DebuggerSession.EVENT_DETACHED == event || DebuggerSession.EVENT_DISPOSE == event)
+				if(DebuggerSession.Event.DETACHED == event || DebuggerSession.Event.DISPOSE == event)
 				{
 					stateManager.removeListener(this);
 				}
@@ -104,6 +105,10 @@ public class ThreadsPanel extends DebuggerTreePanel
 
 	private void startLabelsUpdate()
 	{
+		if(myUpdateLabelsAlarm.isDisposed())
+		{
+			return;
+		}
 		myUpdateLabelsAlarm.cancelAllRequests();
 		myUpdateLabelsAlarm.addRequest(new Runnable()
 		{
@@ -160,7 +165,7 @@ public class ThreadsPanel extends DebuggerTreePanel
 			private void reschedule()
 			{
 				final DebuggerSession session = getContext().getDebuggerSession();
-				if(session != null && session.isAttached() && !session.isPaused())
+				if(session != null && session.isAttached() && !session.isPaused() && !myUpdateLabelsAlarm.isDisposed())
 				{
 					myUpdateLabelsAlarm.addRequest(this, LABELS_UPDATE_DELAY_MS, ModalityState.NON_MODAL);
 				}

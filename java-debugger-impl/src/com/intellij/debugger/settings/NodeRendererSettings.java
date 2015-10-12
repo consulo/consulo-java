@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.intellij.debugger.settings;
 
-import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
-import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -37,8 +37,10 @@ import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.debugger.ui.impl.watch.ArrayElementDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.WatchItemDescriptor;
+import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.debugger.ui.tree.render.*;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -53,14 +55,12 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.EventDispatcher;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.InternalIterator;
-import com.intellij.util.ui.ColorIcon;
-import consulo.internal.com.sun.jdi.Field;
-import consulo.internal.com.sun.jdi.IntegerValue;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
 
 /**
@@ -69,496 +69,617 @@ import consulo.internal.com.sun.jdi.Value;
  * Time: 8:00:25 PM
  */
 @State(
-  name="NodeRendererSettings",
-  storages= {
-    @Storage(
-      file = StoragePathMacros.APP_CONFIG + "/debugger.renderers.xml"
-    )}
-)
-public class NodeRendererSettings implements PersistentStateComponent<Element> {
-  @NonNls private static final String REFERENCE_RENDERER = "Reference renderer";
-  @NonNls public static final String RENDERER_TAG = "Renderer";
-  @NonNls private static final String RENDERER_ID = "ID";
+		name = "NodeRendererSettings",
+		storages = {
+				@Storage(
+						file = StoragePathMacros.APP_CONFIG + "/debugger.renderers.xml")
+		})
+public class NodeRendererSettings implements PersistentStateComponent<Element>
+{
+	@NonNls
+	private static final String REFERENCE_RENDERER = "Reference renderer";
+	@NonNls
+	public static final String RENDERER_TAG = "Renderer";
+	@NonNls
+	private static final String RENDERER_ID = "ID";
 
-  private final EventDispatcher<NodeRendererSettingsListener> myDispatcher = EventDispatcher.create(NodeRendererSettingsListener.class);
-  private final List<NodeRenderer> myPluginRenderers = new ArrayList<NodeRenderer>();
-  private RendererConfiguration myCustomRenderers = new RendererConfiguration(this);
+	private final EventDispatcher<NodeRendererSettingsListener> myDispatcher = EventDispatcher.create(NodeRendererSettingsListener.class);
+	private final List<NodeRenderer> myPluginRenderers = new ArrayList<NodeRenderer>();
+	private RendererConfiguration myCustomRenderers = new RendererConfiguration(this);
 
-  // base renderers
-  private final PrimitiveRenderer myPrimitiveRenderer = new PrimitiveRenderer();
-  private final ArrayRenderer myArrayRenderer = new ArrayRenderer();
-  private final ClassRenderer myClassRenderer = new ClassRenderer();
-  private final HexRenderer myHexRenderer = new HexRenderer();
-  private final ToStringRenderer myToStringRenderer = new ToStringRenderer();
-  private final CompoundReferenceRenderer myColorRenderer;
-  // alternate collections
-  private final NodeRenderer[] myAlternateCollectionRenderers = new NodeRenderer[]{
-    createCompoundReferenceRenderer(
-      "Map", CommonClassNames.JAVA_UTIL_MAP,
-      createLabelRenderer(" size = ", "size()", null),
-      createExpressionChildrenRenderer("entrySet().toArray()", "!isEmpty()")
-    ),
-    createCompoundReferenceRenderer(
-      "Map.Entry", "java.util.Map$Entry",
-      new MapEntryLabelRenderer()/*createLabelRenderer(null, "\" \" + getKey() + \" -> \" + getValue()", null)*/,
-      createEnumerationChildrenRenderer(new String[][]{{"key", "getKey()"}, {"value", "getValue()"}})
-    ),
-    createCompoundReferenceRenderer(
-      "Collection", "java.util.Collection",
-      createLabelRenderer(" size = ", "size()", null),
-      createExpressionChildrenRenderer("toArray()", "!isEmpty()")
-    )
-  };
-  @NonNls private static final String HEX_VIEW_ENABLED = "HEX_VIEW_ENABLED";
-  @NonNls private static final String ALTERNATIVE_COLLECTION_VIEW_ENABLED = "ALTERNATIVE_COLLECTION_VIEW_ENABLED";
-  @NonNls private static final String CUSTOM_RENDERERS_TAG_NAME = "CustomRenderers";
-  
-  public NodeRendererSettings() {
-    myColorRenderer = new ColorObjectRenderer(this);
-    // default configuration
-    myHexRenderer.setEnabled(false);
-    myToStringRenderer.setEnabled(true);
-    setAlternateCollectionViewsEnabled(true);
-    myColorRenderer.setEnabled(true);
-  }
-  
-  public static NodeRendererSettings getInstance() {
-    return ServiceManager.getService(NodeRendererSettings.class);
-  }
-  
-  public void addPluginRenderer(NodeRenderer renderer) {
-    myPluginRenderers.add(renderer);
-  }
+	// base renderers
+	private final PrimitiveRenderer myPrimitiveRenderer = new PrimitiveRenderer();
+	private final ArrayRenderer myArrayRenderer = new ArrayRenderer();
+	private final ClassRenderer myClassRenderer = new ClassRenderer();
+	private final HexRenderer myHexRenderer = new HexRenderer();
+	private final ToStringRenderer myToStringRenderer = new ToStringRenderer();
+	// alternate collections
+	private final NodeRenderer[] myAlternateCollectionRenderers = new NodeRenderer[]{
+			createCompoundReferenceRenderer("Map", CommonClassNames.JAVA_UTIL_MAP, createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("entrySet().toArray()", 
+					"!isEmpty()")),
+			createCompoundReferenceRenderer("Map.Entry", "java.util.Map$Entry", new MapEntryLabelRenderer()/*createLabelRenderer(null, "\" \" + getKey() + \" -> \" + getValue()", null)*/, 
+					createEnumerationChildrenRenderer(new String[][]{
+					{
+							"key",
+							"getKey()"
+					},
+					{
+							"value",
+							"getValue()"
+					}
+			})),
+			new ListObjectRenderer(this),
+			createCompoundReferenceRenderer("Collection", "java.util.Collection", createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("toArray()", "!isEmpty()"))
+	};
+	@NonNls
+	private static final String HEX_VIEW_ENABLED = "HEX_VIEW_ENABLED";
+	@NonNls
+	private static final String ALTERNATIVE_COLLECTION_VIEW_ENABLED = "ALTERNATIVE_COLLECTION_VIEW_ENABLED";
+	@NonNls
+	private static final String CUSTOM_RENDERERS_TAG_NAME = "CustomRenderers";
 
-  public void removePluginRenderer(NodeRenderer renderer) {
-    myPluginRenderers.remove(renderer);
-  }
-  
-  public void setAlternateCollectionViewsEnabled(boolean enabled) {
-    for (NodeRenderer myAlternateCollectionRenderer : myAlternateCollectionRenderers) {
-      myAlternateCollectionRenderer.setEnabled(enabled);
-    }
-  }
+	public NodeRendererSettings()
+	{
+		// default configuration
+		myHexRenderer.setEnabled(false);
+		myToStringRenderer.setEnabled(true);
+		setAlternateCollectionViewsEnabled(true);
+	}
 
-  public boolean areAlternateCollectionViewsEnabled() {
-    return myAlternateCollectionRenderers[0].isEnabled();
-  }
+	public static NodeRendererSettings getInstance()
+	{
+		return ServiceManager.getService(NodeRendererSettings.class);
+	}
 
-  public boolean equals(Object o) {
-    if(!(o instanceof NodeRendererSettings)) return false;
+	/**
+	 * use {@link NodeRenderer} extension
+	 *
+	 * @param renderer
+	 */
+	@Deprecated
+	public void addPluginRenderer(NodeRenderer renderer)
+	{
+		myPluginRenderers.add(renderer);
+	}
 
-    return DebuggerUtilsEx.elementsEqual(getState(), ((NodeRendererSettings)o).getState());
-  }
+	@Deprecated
+	public void removePluginRenderer(NodeRenderer renderer)
+	{
+		myPluginRenderers.remove(renderer);
+	}
 
-  public void addListener(NodeRendererSettingsListener listener) {
-    myDispatcher.addListener(listener);
-  }
+	public void setAlternateCollectionViewsEnabled(boolean enabled)
+	{
+		for(NodeRenderer myAlternateCollectionRenderer : myAlternateCollectionRenderers)
+		{
+			myAlternateCollectionRenderer.setEnabled(enabled);
+		}
+	}
 
-  public void removeListener(NodeRendererSettingsListener listener) {
-    myDispatcher.removeListener(listener);
-  }
+	public boolean areAlternateCollectionViewsEnabled()
+	{
+		return myAlternateCollectionRenderers[0].isEnabled();
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public Element getState()  {
-    final Element element = new Element("NodeRendererSettings");
-    JDOMExternalizerUtil.writeField(element, HEX_VIEW_ENABLED, myHexRenderer.isEnabled()? "true" : "false");
-    JDOMExternalizerUtil.writeField(element, ALTERNATIVE_COLLECTION_VIEW_ENABLED, areAlternateCollectionViewsEnabled()? "true" : "false");
-    try {
-      element.addContent(writeRenderer(myArrayRenderer));
-      element.addContent(writeRenderer(myToStringRenderer));
-      element.addContent(writeRenderer(myClassRenderer));
-      if (myCustomRenderers.getRendererCount() > 0) {
-        final Element custom = new Element(CUSTOM_RENDERERS_TAG_NAME);
-        element.addContent(custom);
-        myCustomRenderers.writeExternal(custom);
-      }
-    }
-    catch (WriteExternalException e) {
-      // ignore
-    }
-    return element;
-  }
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof NodeRendererSettings))
+		{
+			return false;
+		}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public void loadState(final Element root) {
-    final String hexEnabled = JDOMExternalizerUtil.readField(root, HEX_VIEW_ENABLED);
-    if (hexEnabled != null) {
-      myHexRenderer.setEnabled("true".equalsIgnoreCase(hexEnabled));
-    }
+		return DebuggerUtilsEx.elementsEqual(getState(), ((NodeRendererSettings) o).getState());
+	}
 
-    final String alternativeEnabled = JDOMExternalizerUtil.readField(root, ALTERNATIVE_COLLECTION_VIEW_ENABLED);
-    if (alternativeEnabled != null) {
-      setAlternateCollectionViewsEnabled("true".equalsIgnoreCase(alternativeEnabled));
-    }
+	public void addListener(NodeRendererSettingsListener listener)
+	{
+		myDispatcher.addListener(listener);
+	}
 
-    final List rendererElements = root.getChildren(RENDERER_TAG);
-    for (final Object rendererElement : rendererElements) {
-      final Element elem = (Element)rendererElement;
-      final String id = elem.getAttributeValue(RENDERER_ID);
-      if (id == null) {
-        continue;
-      }
-      try {
-        if (ArrayRenderer.UNIQUE_ID.equals(id)) {
-          myArrayRenderer.readExternal(elem);
-        }
-        else if (ToStringRenderer.UNIQUE_ID.equals(id)) {
-          myToStringRenderer.readExternal(elem);
-        }
-        else if (ClassRenderer.UNIQUE_ID.equals(id)) {
-          myClassRenderer.readExternal(elem);
-        }
-      }
-      catch (InvalidDataException e) {
-        // ignore
-      }
-    }
-    final Element custom = root.getChild(CUSTOM_RENDERERS_TAG_NAME);
-    if (custom != null) {
-      myCustomRenderers.readExternal(custom);
-    }
+	public void removeListener(NodeRendererSettingsListener listener)
+	{
+		myDispatcher.removeListener(listener);
+	}
 
-    myDispatcher.getMulticaster().renderersChanged();
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public Element getState()
+	{
+		final Element element = new Element("NodeRendererSettings");
+		JDOMExternalizerUtil.writeField(element, HEX_VIEW_ENABLED, myHexRenderer.isEnabled() ? "true" : "false");
+		JDOMExternalizerUtil.writeField(element, ALTERNATIVE_COLLECTION_VIEW_ENABLED, areAlternateCollectionViewsEnabled() ? "true" : "false");
+		try
+		{
+			element.addContent(writeRenderer(myArrayRenderer));
+			element.addContent(writeRenderer(myToStringRenderer));
+			element.addContent(writeRenderer(myClassRenderer));
+			element.addContent(writeRenderer(myPrimitiveRenderer));
+			if(myCustomRenderers.getRendererCount() > 0)
+			{
+				final Element custom = new Element(CUSTOM_RENDERERS_TAG_NAME);
+				element.addContent(custom);
+				myCustomRenderers.writeExternal(custom);
+			}
+		}
+		catch(WriteExternalException e)
+		{
+			// ignore
+		}
+		return element;
+	}
 
-  public RendererConfiguration getCustomRenderers() {
-    return myCustomRenderers;
-  }
+	@Override
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public void loadState(final Element root)
+	{
+		final String hexEnabled = JDOMExternalizerUtil.readField(root, HEX_VIEW_ENABLED);
+		if(hexEnabled != null)
+		{
+			myHexRenderer.setEnabled("true".equalsIgnoreCase(hexEnabled));
+		}
 
-  public void setCustomRenderers(@NotNull final RendererConfiguration customRenderers) {
-    RendererConfiguration oldConfig = myCustomRenderers;
-    myCustomRenderers = customRenderers;
-    if (oldConfig == null || !oldConfig.equals(customRenderers)) {
-      fireRenderersChanged();
-    }
-  }
+		final String alternativeEnabled = JDOMExternalizerUtil.readField(root, ALTERNATIVE_COLLECTION_VIEW_ENABLED);
+		if(alternativeEnabled != null)
+		{
+			setAlternateCollectionViewsEnabled("true".equalsIgnoreCase(alternativeEnabled));
+		}
 
-  public List<NodeRenderer> getPluginRenderers() {
-    return new ArrayList<NodeRenderer>(myPluginRenderers);
-  }
-  
-  public PrimitiveRenderer getPrimitiveRenderer() {
-    return myPrimitiveRenderer;
-  }
+		final List rendererElements = root.getChildren(RENDERER_TAG);
+		for(final Object rendererElement : rendererElements)
+		{
+			final Element elem = (Element) rendererElement;
+			final String id = elem.getAttributeValue(RENDERER_ID);
+			if(id == null)
+			{
+				continue;
+			}
+			try
+			{
+				if(ArrayRenderer.UNIQUE_ID.equals(id))
+				{
+					myArrayRenderer.readExternal(elem);
+				}
+				else if(ToStringRenderer.UNIQUE_ID.equals(id))
+				{
+					myToStringRenderer.readExternal(elem);
+				}
+				else if(ClassRenderer.UNIQUE_ID.equals(id))
+				{
+					myClassRenderer.readExternal(elem);
+				}
+				else if(PrimitiveRenderer.UNIQUE_ID.equals(id))
+				{
+					myPrimitiveRenderer.readExternal(elem);
+				}
+			}
+			catch(InvalidDataException e)
+			{
+				// ignore
+			}
+		}
+		final Element custom = root.getChild(CUSTOM_RENDERERS_TAG_NAME);
+		if(custom != null)
+		{
+			myCustomRenderers.readExternal(custom);
+		}
 
-  public ArrayRenderer getArrayRenderer() {
-    return myArrayRenderer;
-  }
+		myDispatcher.getMulticaster().renderersChanged();
+	}
 
-  public ClassRenderer getClassRenderer() {
-    return myClassRenderer;
-  }
+	public RendererConfiguration getCustomRenderers()
+	{
+		return myCustomRenderers;
+	}
 
-  public HexRenderer getHexRenderer() {
-    return myHexRenderer;
-  }
+	public void setCustomRenderers(@NotNull final RendererConfiguration customRenderers)
+	{
+		RendererConfiguration oldConfig = myCustomRenderers;
+		myCustomRenderers = customRenderers;
+		if(oldConfig == null || !oldConfig.equals(customRenderers))
+		{
+			fireRenderersChanged();
+		}
+	}
 
-  public ToStringRenderer getToStringRenderer() {
-    return myToStringRenderer;
-  }
+	public List<NodeRenderer> getPluginRenderers()
+	{
+		return new ArrayList<NodeRenderer>(myPluginRenderers);
+	}
 
-  public NodeRenderer[] getAlternateCollectionRenderers() {
-    return myAlternateCollectionRenderers;
-  }
+	public PrimitiveRenderer getPrimitiveRenderer()
+	{
+		return myPrimitiveRenderer;
+	}
 
-  public void fireRenderersChanged() {
-    myDispatcher.getMulticaster().renderersChanged();
-  }
+	public ArrayRenderer getArrayRenderer()
+	{
+		return myArrayRenderer;
+	}
 
-  public List<NodeRenderer> getAllRenderers() {
-    // the order is important as the renderers are applied according to it
-    final List<NodeRenderer> allRenderers = new ArrayList<NodeRenderer>();
-    allRenderers.add(myHexRenderer);
-    allRenderers.add(myPrimitiveRenderer);
-    allRenderers.addAll(myPluginRenderers);
-    myCustomRenderers.iterateRenderers(new InternalIterator<NodeRenderer>() {
-      public boolean visit(final NodeRenderer renderer) {
-        allRenderers.add(renderer);
-        return true;
-      }
-    });
-    for (NodeRenderer myAlternateCollectionRenderer : myAlternateCollectionRenderers) {
-      allRenderers.add(myAlternateCollectionRenderer);
-    }
-    allRenderers.add(myColorRenderer);
-    allRenderers.add(myToStringRenderer);
-    allRenderers.add(myArrayRenderer);
-    allRenderers.add(myClassRenderer);
-    return allRenderers;
-  }
+	public ClassRenderer getClassRenderer()
+	{
+		return myClassRenderer;
+	}
 
-  public boolean isBase(final Renderer renderer) {
-    return renderer == myPrimitiveRenderer || renderer == myArrayRenderer || renderer == myClassRenderer;
-  }
+	public HexRenderer getHexRenderer()
+	{
+		return myHexRenderer;
+	}
 
-  public Renderer readRenderer(Element root) throws InvalidDataException {
-    if (root == null) {
-      return null;
-    }
+	public ToStringRenderer getToStringRenderer()
+	{
+		return myToStringRenderer;
+	}
 
-    if (!RENDERER_TAG.equals(root.getName())) {
-      throw new InvalidDataException("Cannot read renderer - tag name is not '" + RENDERER_TAG + "'");
-    }
+	public NodeRenderer[] getAlternateCollectionRenderers()
+	{
+		return myAlternateCollectionRenderers;
+	}
 
-    final String rendererId = root.getAttributeValue(RENDERER_ID);
-    if(rendererId == null) {
-      throw new InvalidDataException("unknown renderer ID: " + rendererId);
-    }
+	public void fireRenderersChanged()
+	{
+		myDispatcher.getMulticaster().renderersChanged();
+	}
 
-    final Renderer renderer = createRenderer(rendererId);
-    if(renderer == null) {
-      throw new InvalidDataException("unknown renderer ID: " + rendererId);
-    }
+	public List<NodeRenderer> getAllRenderers()
+	{
+		// the order is important as the renderers are applied according to it
+		final List<NodeRenderer> allRenderers = new ArrayList<NodeRenderer>();
 
-    renderer.readExternal(root);
+		// user defined renderers must come first
+		myCustomRenderers.iterateRenderers(new InternalIterator<NodeRenderer>()
+		{
+			@Override
+			public boolean visit(final NodeRenderer renderer)
+			{
+				allRenderers.add(renderer);
+				return true;
+			}
+		});
 
-    return renderer;
-  }
+		// plugins registered renderers come after that
+		allRenderers.addAll(myPluginRenderers);
+		Collections.addAll(allRenderers, NodeRenderer.EP_NAME.getExtensions());
 
-  public Element writeRenderer(Renderer renderer) throws WriteExternalException {
-    Element root = new Element(RENDERER_TAG);
-    if(renderer != null) {
-      root.setAttribute(RENDERER_ID  , renderer.getUniqueId());
-      renderer.writeExternal(root);
-    }
-    return root;
-  }
+		// now all predefined stuff
+		allRenderers.add(myHexRenderer);
+		allRenderers.add(myPrimitiveRenderer);
+		Collections.addAll(allRenderers, myAlternateCollectionRenderers);
+		allRenderers.add(myToStringRenderer);
+		allRenderers.add(myArrayRenderer);
+		allRenderers.add(myClassRenderer);
+		return allRenderers;
+	}
 
-  public Renderer createRenderer(final String rendererId) {
-    if (ClassRenderer.UNIQUE_ID.equals(rendererId)) {
-      return myClassRenderer;
-    }
-    else if (ArrayRenderer.UNIQUE_ID.equals(rendererId)) {
-      return myArrayRenderer;
-    }
-    else if (PrimitiveRenderer.UNIQUE_ID.equals(rendererId)) {
-      return myPrimitiveRenderer;
-    }
-    else if(HexRenderer.UNIQUE_ID.equals(rendererId)) {
-      return myHexRenderer;
-    }
-    else if(rendererId.equals(ExpressionChildrenRenderer.UNIQUE_ID)) {
-      return new ExpressionChildrenRenderer();
-    }
-    else if(rendererId.equals(LabelRenderer.UNIQUE_ID)) {
-      return new LabelRenderer();
-    }
-    else if(rendererId.equals(EnumerationChildrenRenderer.UNIQUE_ID)) {
-      return new EnumerationChildrenRenderer();
-    }
-    else if(rendererId.equals(ToStringRenderer.UNIQUE_ID)) {
-      return myToStringRenderer;
-    }
-    else if(rendererId.equals(CompoundNodeRenderer.UNIQUE_ID) || rendererId.equals(REFERENCE_RENDERER)) {
-      return createCompoundReferenceRenderer("unnamed", CommonClassNames.JAVA_LANG_OBJECT, null, null);
-    }
-    return null;
-  }
+	public boolean isBase(final Renderer renderer)
+	{
+		return renderer == myPrimitiveRenderer || renderer == myArrayRenderer || renderer == myClassRenderer;
+	}
 
-  private CompoundReferenceRenderer createCompoundReferenceRenderer(
-    @NonNls final String rendererName, @NonNls final String className, final ValueLabelRenderer labelRenderer, final ChildrenRenderer childrenRenderer
-    ) {
-    CompoundReferenceRenderer renderer = new CompoundReferenceRenderer(this, rendererName, labelRenderer, childrenRenderer);
-    renderer.setClassName(className);
-    return renderer;
-  }
+	public Renderer readRenderer(Element root) throws InvalidDataException
+	{
+		if(root == null)
+		{
+			return null;
+		}
 
-  private ExpressionChildrenRenderer createExpressionChildrenRenderer(@NonNls String expressionText, @NonNls String childrenExpandableText) {
-    final ExpressionChildrenRenderer childrenRenderer = new ExpressionChildrenRenderer();
-    childrenRenderer.setChildrenExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", JavaFileType.INSTANCE));
-    if (childrenExpandableText != null) {
-      childrenRenderer.setChildrenExpandable(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, childrenExpandableText, "", JavaFileType.INSTANCE));
-    }
-    return childrenRenderer;
-  }
+		if(!RENDERER_TAG.equals(root.getName()))
+		{
+			throw new InvalidDataException("Cannot read renderer - tag name is not '" + RENDERER_TAG + "'");
+		}
 
-  private EnumerationChildrenRenderer createEnumerationChildrenRenderer(@NonNls String[][] expressions) {
-    final EnumerationChildrenRenderer childrenRenderer = new EnumerationChildrenRenderer();
-    if (expressions != null && expressions.length > 0) {
-      final ArrayList<Pair<String, TextWithImports>> childrenList = new ArrayList<Pair<String, TextWithImports>>(expressions.length);
-      for (final String[] expression : expressions) {
-        childrenList.add(new Pair<String, TextWithImports>(expression[0], new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression[1], "", JavaFileType.INSTANCE)));
-      }
-      childrenRenderer.setChildren(childrenList);
-    }
-    return childrenRenderer;
-  }
+		final String rendererId = root.getAttributeValue(RENDERER_ID);
+		if(rendererId == null)
+		{
+			throw new InvalidDataException("unknown renderer ID: " + rendererId);
+		}
 
-  private static LabelRenderer createLabelRenderer(@NonNls final String prefix, @NonNls final String expressionText, @NonNls final String postfix) {
-    final LabelRenderer labelRenderer = new LabelRenderer() {
-      public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener labelListener) throws EvaluateException {
-        final String evaluated = super.calcLabel(descriptor, evaluationContext, labelListener);
-        if (prefix == null && postfix == null) {
-          return evaluated;
-        }
-        if (prefix != null && postfix != null) {
-          return prefix + evaluated + postfix;
-        }
-        if (prefix != null) {
-          return prefix + evaluated;
-        }
-        return evaluated + postfix;
-      }
-    };
-    labelRenderer.setLabelExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", JavaFileType.INSTANCE));
-    return labelRenderer;
-  }
+		final Renderer renderer = createRenderer(rendererId);
+		if(renderer == null)
+		{
+			throw new InvalidDataException("unknown renderer ID: " + rendererId);
+		}
 
-  private static class MapEntryLabelRenderer extends ReferenceRenderer implements ValueLabelRenderer{
-    private static final Computable<String> NULL_LABEL_COMPUTABLE = new Computable<String>() {
-      public String compute() {
-        return "null";
-      }
-    };
+		renderer.readExternal(root);
 
-    private final MyCachedEvaluator myKeyExpression = new MyCachedEvaluator();
-    private final MyCachedEvaluator myValueExpression = new MyCachedEvaluator();
+		return renderer;
+	}
 
-    private MapEntryLabelRenderer() {
-      super("java.util.Map$Entry");
-      myKeyExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getKey()", "", JavaFileType.INSTANCE));
-      myValueExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getValue()", "", JavaFileType.INSTANCE));
-    }
+	public Element writeRenderer(Renderer renderer) throws WriteExternalException
+	{
+		Element root = new Element(RENDERER_TAG);
+		if(renderer != null)
+		{
+			root.setAttribute(RENDERER_ID, renderer.getUniqueId());
+			renderer.writeExternal(root);
+		}
+		return root;
+	}
 
-    public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
-      return null;
-    }
+	public Renderer createRenderer(final String rendererId)
+	{
+		if(ClassRenderer.UNIQUE_ID.equals(rendererId))
+		{
+			return myClassRenderer;
+		}
+		else if(ArrayRenderer.UNIQUE_ID.equals(rendererId))
+		{
+			return myArrayRenderer;
+		}
+		else if(PrimitiveRenderer.UNIQUE_ID.equals(rendererId))
+		{
+			return myPrimitiveRenderer;
+		}
+		else if(HexRenderer.UNIQUE_ID.equals(rendererId))
+		{
+			return myHexRenderer;
+		}
+		else if(rendererId.equals(ExpressionChildrenRenderer.UNIQUE_ID))
+		{
+			return new ExpressionChildrenRenderer();
+		}
+		else if(rendererId.equals(LabelRenderer.UNIQUE_ID))
+		{
+			return new LabelRenderer();
+		}
+		else if(rendererId.equals(EnumerationChildrenRenderer.UNIQUE_ID))
+		{
+			return new EnumerationChildrenRenderer();
+		}
+		else if(rendererId.equals(ToStringRenderer.UNIQUE_ID))
+		{
+			return myToStringRenderer;
+		}
+		else if(rendererId.equals(CompoundNodeRenderer.UNIQUE_ID) || rendererId.equals(REFERENCE_RENDERER))
+		{
+			return createCompoundReferenceRenderer("unnamed", CommonClassNames.JAVA_LANG_OBJECT, null, null);
+		}
+		return null;
+	}
 
-    public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
-      final DescriptorUpdater descriptorUpdater = new DescriptorUpdater(descriptor, listener);
+	public CompoundReferenceRenderer createCompoundReferenceRenderer(@NonNls final String rendererName,
+			@NonNls final String className,
+			final ValueLabelRenderer labelRenderer,
+			final ChildrenRenderer childrenRenderer)
+	{
+		CompoundReferenceRenderer renderer = new CompoundReferenceRenderer(this, rendererName, labelRenderer, childrenRenderer);
+		renderer.setClassName(className);
+		return renderer;
+	}
 
-      final Value originalValue = descriptor.getValue();
-      final Pair<Computable<String>, ValueDescriptorImpl> keyPair = createValueComputable(evaluationContext, originalValue, myKeyExpression, descriptorUpdater);
-      final Pair<Computable<String>, ValueDescriptorImpl> valuePair = createValueComputable(evaluationContext, originalValue, myValueExpression, descriptorUpdater);
+	public static ExpressionChildrenRenderer createExpressionChildrenRenderer(@NonNls String expressionText, @NonNls String childrenExpandableText)
+	{
+		final ExpressionChildrenRenderer childrenRenderer = new ExpressionChildrenRenderer();
+		childrenRenderer.setChildrenExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", JavaFileType.INSTANCE));
+		if(childrenExpandableText != null)
+		{
+			childrenRenderer.setChildrenExpandable(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, childrenExpandableText, "", JavaFileType.INSTANCE));
+		}
+		return childrenRenderer;
+	}
 
-      descriptorUpdater.setKeyDescriptor(keyPair.second);
-      descriptorUpdater.setValueDescriptor(valuePair.second);
+	private static EnumerationChildrenRenderer createEnumerationChildrenRenderer(@NonNls String[][] expressions)
+	{
+		final EnumerationChildrenRenderer childrenRenderer = new EnumerationChildrenRenderer();
+		if(expressions != null && expressions.length > 0)
+		{
+			final ArrayList<Pair<String, TextWithImports>> childrenList = new ArrayList<Pair<String, TextWithImports>>(expressions.length);
+			for(final String[] expression : expressions)
+			{
+				childrenList.add(new Pair<String, TextWithImports>(expression[0], new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression[1], "", JavaFileType.INSTANCE)));
+			}
+			childrenRenderer.setChildren(childrenList);
+		}
+		return childrenRenderer;
+	}
 
-      return DescriptorUpdater.constructLabelText(keyPair.first.compute(), valuePair.first.compute());
-    }
+	private static LabelRenderer createLabelRenderer(@NonNls final String prefix, @NonNls final String expressionText, @NonNls final String postfix)
+	{
+		final LabelRenderer labelRenderer = new LabelRenderer()
+		{
+			@Override
+			public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener labelListener) throws EvaluateException
+			{
+				final String evaluated = super.calcLabel(descriptor, evaluationContext, labelListener);
+				if(prefix == null && postfix == null)
+				{
+					return evaluated;
+				}
+				if(prefix != null && postfix != null)
+				{
+					return prefix + evaluated + postfix;
+				}
+				if(prefix != null)
+				{
+					return prefix + evaluated;
+				}
+				return evaluated + postfix;
+			}
+		};
+		labelRenderer.setLabelExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expressionText, "", JavaFileType.INSTANCE));
+		return labelRenderer;
+	}
 
-    private Pair<Computable<String>, ValueDescriptorImpl> createValueComputable(final EvaluationContext evaluationContext,
-                                                                                Value originalValue,
-                                                                                final MyCachedEvaluator evaluator,
-                                                                                final DescriptorLabelListener listener) throws EvaluateException {
-      final Value eval = doEval(evaluationContext, originalValue, evaluator);
-      if (eval != null) {
-        final WatchItemDescriptor evalDescriptor = new WatchItemDescriptor(evaluationContext.getProject(), evaluator.getReferenceExpression(), eval);
-        evalDescriptor.setShowIdLabel(false);
-        return new Pair<Computable<String>, ValueDescriptorImpl>(new Computable<String>() {
-          public String compute() {
-            evalDescriptor.updateRepresentation((EvaluationContextImpl)evaluationContext, listener);
-            return evalDescriptor.getValueLabel();
-          }
-        }, evalDescriptor);
-      }
-      return new Pair<Computable<String>, ValueDescriptorImpl>(NULL_LABEL_COMPUTABLE, null);
-    }
+	private static class MapEntryLabelRenderer extends ReferenceRenderer implements ValueLabelRenderer
+	{
+		private static final Computable<String> NULL_LABEL_COMPUTABLE = new Computable<String>()
+		{
+			@Override
+			public String compute()
+			{
+				return "null";
+			}
+		};
 
-    public String getUniqueId() {
-      return "MapEntry renderer";
-    }
+		private final MyCachedEvaluator myKeyExpression = new MyCachedEvaluator();
+		private final MyCachedEvaluator myValueExpression = new MyCachedEvaluator();
 
-    private Value doEval(EvaluationContext evaluationContext, Value originalValue, MyCachedEvaluator cachedEvaluator)
-      throws EvaluateException {
-      final DebugProcess debugProcess = evaluationContext.getDebugProcess();
-      if (originalValue == null) {
-        return null;
-      }
-      try {
-        final ExpressionEvaluator evaluator = cachedEvaluator.getEvaluator(debugProcess.getProject());
-        if(!debugProcess.isAttached()) {
-          throw EvaluateExceptionUtil.PROCESS_EXITED;
-        }
-        final EvaluationContext thisEvaluationContext = evaluationContext.createEvaluationContext(originalValue);
-        return evaluator.evaluate(thisEvaluationContext);
-      }
-      catch (final EvaluateException ex) {
-        throw new EvaluateException(DebuggerBundle.message("error.unable.to.evaluate.expression") + " " + ex.getMessage(), ex);
-      }
-    }
+		private MapEntryLabelRenderer()
+		{
+			super("java.util.Map$Entry");
+			myKeyExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getKey()", "", JavaFileType.INSTANCE));
+			myValueExpression.setReferenceExpression(new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "this.getValue()", "", JavaFileType.INSTANCE));
+		}
 
-    private class MyCachedEvaluator extends CachedEvaluator {
-      protected String getClassName() {
-        return MapEntryLabelRenderer.this.getClassName();
-      }
+		@Override
+		public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+		{
+			return null;
+		}
 
-      public ExpressionEvaluator getEvaluator(Project project) throws EvaluateException {
-        return super.getEvaluator(project);
-      }
-    }
-  }
+		@Override
+		public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+		{
+			final DescriptorUpdater descriptorUpdater = new DescriptorUpdater(descriptor, listener);
 
-  private static class DescriptorUpdater implements DescriptorLabelListener {
-    private final ValueDescriptor myTargetDescriptor;
-    @Nullable
-    private ValueDescriptorImpl myKeyDescriptor;
-    @Nullable
-    private ValueDescriptorImpl myValueDescriptor;
-    private final DescriptorLabelListener myDelegate;
+			final Value originalValue = descriptor.getValue();
+			final Pair<Computable<String>, ValueDescriptorImpl> keyPair = createValueComputable(evaluationContext, originalValue, myKeyExpression, descriptorUpdater);
+			final Pair<Computable<String>, ValueDescriptorImpl> valuePair = createValueComputable(evaluationContext, originalValue, myValueExpression, descriptorUpdater);
 
-    private DescriptorUpdater(ValueDescriptor descriptor, DescriptorLabelListener delegate) {
-      myTargetDescriptor = descriptor;
-      myDelegate = delegate;
-    }
+			descriptorUpdater.setKeyDescriptor(keyPair.second);
+			descriptorUpdater.setValueDescriptor(valuePair.second);
 
-    public void setKeyDescriptor(@Nullable ValueDescriptorImpl keyDescriptor) {
-      myKeyDescriptor = keyDescriptor;
-    }
+			return DescriptorUpdater.constructLabelText(keyPair.first.compute(), valuePair.first.compute());
+		}
 
-    public void setValueDescriptor(@Nullable ValueDescriptorImpl valueDescriptor) {
-      myValueDescriptor = valueDescriptor;
-    }
+		private Pair<Computable<String>, ValueDescriptorImpl> createValueComputable(final EvaluationContext evaluationContext,
+				Value originalValue,
+				final MyCachedEvaluator evaluator,
+				final DescriptorLabelListener listener) throws EvaluateException
+		{
+			final Value eval = doEval(evaluationContext, originalValue, evaluator);
+			if(eval != null)
+			{
+				final WatchItemDescriptor evalDescriptor = new WatchItemDescriptor(evaluationContext.getProject(), evaluator.getReferenceExpression(), eval);
+				evalDescriptor.setShowIdLabel(false);
+				return new Pair<Computable<String>, ValueDescriptorImpl>(new Computable<String>()
+				{
+					@Override
+					public String compute()
+					{
+						evalDescriptor.updateRepresentation((EvaluationContextImpl) evaluationContext, listener);
+						return evalDescriptor.getValueLabel();
+					}
+				}, evalDescriptor);
+			}
+			return new Pair<Computable<String>, ValueDescriptorImpl>(NULL_LABEL_COMPUTABLE, null);
+		}
 
-    public void labelChanged() {
-      myTargetDescriptor.setValueLabel(constructLabelText(getDescriptorLabel(myKeyDescriptor), getDescriptorLabel(myValueDescriptor)));
-      myDelegate.labelChanged();
-    }
+		@Override
+		public String getUniqueId()
+		{
+			return "MapEntry renderer";
+		}
 
-    static String constructLabelText(final String keylabel, final String valueLabel) {
-      return keylabel + " -> " + valueLabel;
-    }
+		private Value doEval(EvaluationContext evaluationContext, Value originalValue, MyCachedEvaluator cachedEvaluator) throws EvaluateException
+		{
+			final DebugProcess debugProcess = evaluationContext.getDebugProcess();
+			if(originalValue == null)
+			{
+				return null;
+			}
+			try
+			{
+				final ExpressionEvaluator evaluator = cachedEvaluator.getEvaluator(debugProcess.getProject());
+				if(!debugProcess.isAttached())
+				{
+					throw EvaluateExceptionUtil.PROCESS_EXITED;
+				}
+				final EvaluationContext thisEvaluationContext = evaluationContext.createEvaluationContext(originalValue);
+				return evaluator.evaluate(thisEvaluationContext);
+			}
+			catch(final EvaluateException ex)
+			{
+				throw new EvaluateException(DebuggerBundle.message("error.unable.to.evaluate.expression") + " " + ex.getMessage(), ex);
+			}
+		}
 
-    private static String getDescriptorLabel(final ValueDescriptorImpl keyDescriptor) {
-      return keyDescriptor == null? "null" : keyDescriptor.getValueLabel();
-    }
-  }
+		private class MyCachedEvaluator extends CachedEvaluator
+		{
+			@Override
+			protected String getClassName()
+			{
+				return MapEntryLabelRenderer.this.getClassName();
+			}
 
-  private static class ColorObjectRenderer extends CompoundReferenceRenderer {
+			@Override
+			public ExpressionEvaluator getEvaluator(Project project) throws EvaluateException
+			{
+				return super.getEvaluator(project);
+			}
+		}
+	}
 
-    public ColorObjectRenderer(final NodeRendererSettings rendererSettings) {
-      super(rendererSettings, "Color", null, null);
-      setClassName("java.awt.Color");
-    }
+	private static class ListObjectRenderer extends CompoundReferenceRenderer
+	{
+		public ListObjectRenderer(NodeRendererSettings rendererSettings)
+		{
+			super(rendererSettings, "List", createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("toArray()", "!isEmpty()"));
+			setClassName(CommonClassNames.JAVA_UTIL_LIST);
+		}
 
-    public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
-      final ToStringRenderer toStringRenderer = myRendererSettings.getToStringRenderer();
-      if (toStringRenderer.isEnabled() && DebuggerManagerEx.getInstanceEx(evaluationContext.getProject()).getContext().isEvaluationPossible()) {
-        return toStringRenderer.calcLabel(descriptor, evaluationContext, listener);
-      }
-      return super.calcLabel(descriptor, evaluationContext, listener);
-    }
+		@Override
+		public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
+		{
+			LOG.assertTrue(node.getDescriptor() instanceof ArrayElementDescriptorImpl);
+			try
+			{
+				return getChildValueExpression("this.get(" + ((ArrayElementDescriptorImpl) node.getDescriptor()).getIndex() + ")", node, context);
+			}
+			catch(IncorrectOperationException e)
+			{
+				// fallback to original
+				return super.getChildValueExpression(node, context);
+			}
+		}
+	}
 
-    public Icon calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
-      final Value value = descriptor.getValue();
-      if (value instanceof ObjectReference) {
-        try {
-          final ObjectReference objRef = (ObjectReference)value;
-          final ReferenceType refType = objRef.referenceType();
-          final Field valueField = refType.fieldByName("value");
-          if (valueField != null) {
-            final Value rgbValue = objRef.getValue(valueField);
-            if (rgbValue instanceof IntegerValue) {
-              final Color color = new Color(((IntegerValue)rgbValue).value(), true);
-              return new ColorIcon(16, 12, color, true);
-            }
-          }
-        }
-        catch (Exception e) {
-          throw new EvaluateException(e.getMessage(), e);
-        }
-      }
-      return null;
-    }
-  }
+	private static class DescriptorUpdater implements DescriptorLabelListener
+	{
+		private final ValueDescriptor myTargetDescriptor;
+		@Nullable
+		private ValueDescriptorImpl myKeyDescriptor;
+		@Nullable
+		private ValueDescriptorImpl myValueDescriptor;
+		private final DescriptorLabelListener myDelegate;
+
+		private DescriptorUpdater(ValueDescriptor descriptor, DescriptorLabelListener delegate)
+		{
+			myTargetDescriptor = descriptor;
+			myDelegate = delegate;
+		}
+
+		public void setKeyDescriptor(@Nullable ValueDescriptorImpl keyDescriptor)
+		{
+			myKeyDescriptor = keyDescriptor;
+		}
+
+		public void setValueDescriptor(@Nullable ValueDescriptorImpl valueDescriptor)
+		{
+			myValueDescriptor = valueDescriptor;
+		}
+
+		@Override
+		public void labelChanged()
+		{
+			myTargetDescriptor.setValueLabel(constructLabelText(getDescriptorLabel(myKeyDescriptor), getDescriptorLabel(myValueDescriptor)));
+			myDelegate.labelChanged();
+		}
+
+		static String constructLabelText(final String keylabel, final String valueLabel)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.append('\"').append(keylabel).append("\" -> ");
+			if(!StringUtil.isEmpty(valueLabel))
+			{
+				sb.append('\"').append(valueLabel).append('\"');
+			}
+			return sb.toString();
+		}
+
+		private static String getDescriptorLabel(final ValueDescriptorImpl keyDescriptor)
+		{
+			return keyDescriptor == null ? "null" : keyDescriptor.getValueLabel();
+		}
+	}
 }

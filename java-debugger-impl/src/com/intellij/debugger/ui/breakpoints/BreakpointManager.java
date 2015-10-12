@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ package com.intellij.debugger.ui.breakpoints;
 
 import gnu.trove.THashMap;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +33,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
-import org.mustbe.consulo.RequiredDispatchThread;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.engine.BreakpointStepMethodFilter;
@@ -85,6 +82,7 @@ import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.request.BreakpointRequest;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
+import consulo.internal.com.sun.jdi.request.InvalidRequestStateException;
 import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 
@@ -119,9 +117,9 @@ public class BreakpointManager
 			private DebuggerSession myPreviousSession;
 
 			@Override
-			public void changeEvent(@NotNull DebuggerContextImpl newContext, int event)
+			public void changeEvent(@NotNull DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
-				if(event == DebuggerSession.EVENT_ATTACHED)
+				if(event == DebuggerSession.Event.ATTACHED)
 				{
 					for(XBreakpoint breakpoint : getXBreakpointManager().getAllBreakpoints())
 					{
@@ -131,7 +129,7 @@ public class BreakpointManager
 						}
 					}
 				}
-				if(newContext.getDebuggerSession() != myPreviousSession || event == DebuggerSession.EVENT_DETACHED)
+				if(newContext.getDebuggerSession() != myPreviousSession || event == DebuggerSession.Event.DETACHED)
 				{
 					updateBreakpointsUI();
 					myPreviousSession = newContext.getDebuggerSession();
@@ -142,11 +140,10 @@ public class BreakpointManager
 
 	private static boolean checkAndNotifyPossiblySlowBreakpoint(XBreakpoint breakpoint)
 	{
-		if(breakpoint.isEnabled() && (breakpoint.getType() instanceof JavaMethodBreakpointType || breakpoint.getType() instanceof
-				JavaWildcardMethodBreakpointType))
+		if(breakpoint.isEnabled() && (breakpoint.getType() instanceof JavaMethodBreakpointType || breakpoint.getType() instanceof JavaWildcardMethodBreakpointType))
 		{
-			XDebugSessionImpl.NOTIFICATION_GROUP.createNotification("Method breakpoints may dramatically slow down debugging",
-					MessageType.WARNING).notify(((XBreakpointBase) breakpoint).getProject());
+			XDebugSessionImpl.NOTIFICATION_GROUP.createNotification("Method breakpoints may dramatically slow down debugging", MessageType.WARNING).notify(((XBreakpointBase) breakpoint).getProject
+					());
 			return true;
 		}
 		return false;
@@ -200,8 +197,7 @@ public class BreakpointManager
 						GutterIconRenderer renderer = highlighter.getGutterIconRenderer();
 						if(renderer != null)
 						{
-							DebuggerSupport.getDebuggerSupport(JavaDebuggerSupport.class).getEditBreakpointAction().editBreakpoint(myProject,
-									editor, breakpoint.myXBreakpoint, renderer);
+							DebuggerSupport.getDebuggerSupport(JavaDebuggerSupport.class).getEditBreakpointAction().editBreakpoint(myProject, editor, breakpoint.myXBreakpoint, renderer);
 						}
 					}
 				}
@@ -231,13 +227,11 @@ public class BreakpointManager
 		if(typeCls != null)
 		{
 			XBreakpointType<XBreakpoint<?>, ?> type = XDebuggerUtil.getInstance().findBreakpointType(typeCls);
-			((XBreakpointManagerImpl) getXBreakpointManager()).getBreakpointDefaults(type).setSuspendPolicy(Breakpoint.transformSuspendPolicy
-					(defaults.getSuspendPolicy()));
+			((XBreakpointManagerImpl) getXBreakpointManager()).getBreakpointDefaults(type).setSuspendPolicy(Breakpoint.transformSuspendPolicy(defaults.getSuspendPolicy()));
 		}
 	}
 
 	@Nullable
-	@RequiredReadAction
 	public RunToCursorBreakpoint addRunToCursorBreakpoint(@NotNull XSourcePosition position, final boolean ignoreBreakpoints)
 	{
 		return RunToCursorBreakpoint.create(myProject, position, ignoreBreakpoints);
@@ -250,7 +244,6 @@ public class BreakpointManager
 	}
 
 	@Nullable
-	@RequiredDispatchThread
 	public LineBreakpoint addLineBreakpoint(Document document, int lineIndex)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
@@ -307,15 +300,14 @@ public class BreakpointManager
 	public ExceptionBreakpoint addExceptionBreakpoint(@NotNull final String exceptionClassName, final String packageName)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
-		final JavaExceptionBreakpointType type = (JavaExceptionBreakpointType) XDebuggerUtil.getInstance().findBreakpointType
-				(JavaExceptionBreakpointType.class);
+		final JavaExceptionBreakpointType type = (JavaExceptionBreakpointType) XDebuggerUtil.getInstance().findBreakpointType(JavaExceptionBreakpointType.class);
 		return ApplicationManager.getApplication().runWriteAction(new Computable<ExceptionBreakpoint>()
 		{
 			@Override
 			public ExceptionBreakpoint compute()
 			{
-				XBreakpoint<JavaExceptionBreakpointProperties> xBreakpoint = XDebuggerManager.getInstance(myProject).getBreakpointManager()
-						.addBreakpoint(type, new JavaExceptionBreakpointProperties(exceptionClassName, packageName));
+				XBreakpoint<JavaExceptionBreakpointProperties> xBreakpoint = XDebuggerManager.getInstance(myProject).getBreakpointManager().addBreakpoint(type,
+						new JavaExceptionBreakpointProperties(exceptionClassName, packageName));
 				Breakpoint javaBreakpoint = getJavaBreakpoint(xBreakpoint);
 				if(javaBreakpoint instanceof ExceptionBreakpoint)
 				{
@@ -349,8 +341,7 @@ public class BreakpointManager
 		return null;
 	}
 
-	private <B extends XBreakpoint<?>> XLineBreakpoint addXLineBreakpoint(Class<? extends XBreakpointType<B, ?>> typeCls, Document document,
-			final int lineIndex)
+	private <B extends XBreakpoint<?>> XLineBreakpoint addXLineBreakpoint(Class<? extends XBreakpointType<B, ?>> typeCls, Document document, final int lineIndex)
 	{
 		final XBreakpointType<B, ?> type = XDebuggerUtil.getInstance().findBreakpointType(typeCls);
 		final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
@@ -359,8 +350,8 @@ public class BreakpointManager
 			@Override
 			public XLineBreakpoint compute()
 			{
-				return XDebuggerManager.getInstance(myProject).getBreakpointManager().addLineBreakpoint((XLineBreakpointType) type, file.getUrl(),
-						lineIndex, ((XLineBreakpointType) type).createBreakpointProperties(file, lineIndex));
+				return XDebuggerManager.getInstance(myProject).getBreakpointManager().addLineBreakpoint((XLineBreakpointType) type, file.getUrl(), lineIndex,
+						((XLineBreakpointType) type).createBreakpointProperties(file, lineIndex));
 			}
 		});
 	}
@@ -385,7 +376,7 @@ public class BreakpointManager
 		return null;
 	}
 
-	private HashMap<String, Element> myOriginalBreakpointsNodes = new HashMap<String, Element>();
+	private final Map<String, Element> myOriginalBreakpointsNodes = new LinkedHashMap<String, Element>();
 
 	public void readExternal(@NotNull final Element parentNode)
 	{
@@ -439,8 +430,7 @@ public class BreakpointManager
 						final String categoryName = group.getName();
 						final Key<Breakpoint> breakpointCategory = BreakpointCategory.lookup(categoryName);
 						final String defaultPolicy = group.getAttributeValue(DEFAULT_SUSPEND_POLICY_ATTRIBUTE_NAME);
-						final boolean conditionEnabled = Boolean.parseBoolean(group.getAttributeValue(DEFAULT_CONDITION_STATE_ATTRIBUTE_NAME,
-								"true"));
+						final boolean conditionEnabled = Boolean.parseBoolean(group.getAttributeValue(DEFAULT_CONDITION_STATE_ATTRIBUTE_NAME, "true"));
 						setBreakpointDefaults(breakpointCategory, new BreakpointDefaults(defaultPolicy, conditionEnabled));
 						Element anyExceptionBreakpointGroup;
 						if(!AnyExceptionBreakpoint.ANY_EXCEPTION_BREAKPOINT.equals(breakpointCategory))
@@ -469,8 +459,7 @@ public class BreakpointManager
 							if(breakpointElement != null)
 							{
 								XBreakpointManager manager = XDebuggerManager.getInstance(myProject).getBreakpointManager();
-								JavaExceptionBreakpointType type = (JavaExceptionBreakpointType) XDebuggerUtil.getInstance().findBreakpointType
-										(JavaExceptionBreakpointType.class);
+								JavaExceptionBreakpointType type = (JavaExceptionBreakpointType) XDebuggerUtil.getInstance().findBreakpointType(JavaExceptionBreakpointType.class);
 								XBreakpoint<JavaExceptionBreakpointProperties> xBreakpoint = manager.getDefaultBreakpoint(type);
 								Breakpoint breakpoint = getJavaBreakpoint(xBreakpoint);
 								if(breakpoint != null)
@@ -519,8 +508,7 @@ public class BreakpointManager
 						}
 
 						boolean leaveEnabled = "true".equalsIgnoreCase(rule.getAttributeValue("leaveEnabled"));
-						XDependentBreakpointManager dependentBreakpointManager = ((XBreakpointManagerImpl) getXBreakpointManager())
-								.getDependentBreakpointManager();
+						XDependentBreakpointManager dependentBreakpointManager = ((XBreakpointManagerImpl) getXBreakpointManager()).getDependentBreakpointManager();
 						dependentBreakpointManager.setMasterBreakpoint(slaveBreakpoint.myXBreakpoint, masterBreakpoint.myXBreakpoint, leaveEnabled);
 						//addBreakpointRule(new EnableBreakpointRule(BreakpointManager.this, masterBreakpoint, slaveBreakpoint, leaveEnabled));
 					}
@@ -570,7 +558,7 @@ public class BreakpointManager
 			}
 			else
 			{
-				xBreakpoint = createXBreakpoint(JavaWildcardMethodBreakpointType.class, breakpointNode);
+				xBreakpoint = createXBreakpoint(JavaWildcardMethodBreakpointType.class);
 			}
 		}
 		else if(category.equals(FieldBreakpoint.CATEGORY.toString()))
@@ -579,7 +567,7 @@ public class BreakpointManager
 		}
 		else if(category.equals(ExceptionBreakpoint.CATEGORY.toString()))
 		{
-			xBreakpoint = createXBreakpoint(JavaExceptionBreakpointType.class, breakpointNode);
+			xBreakpoint = createXBreakpoint(JavaExceptionBreakpointType.class);
 		}
 		if(xBreakpoint == null)
 		{
@@ -588,8 +576,7 @@ public class BreakpointManager
 		return getJavaBreakpoint(xBreakpoint);
 	}
 
-	private <B extends XBreakpoint<?>> XBreakpoint createXBreakpoint(Class<? extends XBreakpointType<B, ?>> typeCls,
-			Element breakpointNode) throws InvalidDataException
+	private <B extends XBreakpoint<?>> XBreakpoint createXBreakpoint(Class<? extends XBreakpointType<B, ?>> typeCls)
 	{
 		final XBreakpointType<B, ?> type = XDebuggerUtil.getInstance().findBreakpointType(typeCls);
 		return ApplicationManager.getApplication().runWriteAction(new Computable<XBreakpoint>()
@@ -602,8 +589,7 @@ public class BreakpointManager
 		});
 	}
 
-	private <B extends XBreakpoint<?>> XLineBreakpoint createXLineBreakpoint(Class<? extends XBreakpointType<B, ?>> typeCls,
-			Element breakpointNode) throws InvalidDataException
+	private <B extends XBreakpoint<?>> XLineBreakpoint createXLineBreakpoint(Class<? extends XBreakpointType<B, ?>> typeCls, Element breakpointNode) throws InvalidDataException
 	{
 		final String url = breakpointNode.getAttributeValue("url");
 		VirtualFile vFile = VirtualFileManager.getInstance().findFileByUrl(url);
@@ -662,10 +648,8 @@ public class BreakpointManager
 			{
 				group.setAttribute(CONVERTED_PARAM, "true");
 			}
-			group.detach();
+			parentNode.addContent(group.clone());
 		}
-
-		parentNode.addContent(myOriginalBreakpointsNodes.values());
 	}
 
 	@NotNull
@@ -798,6 +782,10 @@ public class BreakpointManager
 						{
 							LOG.info(e);
 						}
+						catch(InvalidRequestStateException e)
+						{
+							LOG.info(e);
+						}
 					}
 				}
 
@@ -805,33 +793,35 @@ public class BreakpointManager
 			}
 
 			final EventRequestManager eventRequestManager = requestManager.getVMRequestManager();
-
-			new FilterSetter<BreakpointRequest>()
+			if(eventRequestManager != null)
 			{
-				@Override
-				protected void addFilter(@NotNull final BreakpointRequest request, final ThreadReference thread)
+				new FilterSetter<BreakpointRequest>()
 				{
-					request.addThreadFilter(thread);
-				}
-			}.applyFilter(eventRequestManager.breakpointRequests(), newFilterThread);
+					@Override
+					protected void addFilter(@NotNull final BreakpointRequest request, final ThreadReference thread)
+					{
+						request.addThreadFilter(thread);
+					}
+				}.applyFilter(eventRequestManager.breakpointRequests(), newFilterThread);
 
-			new FilterSetter<MethodEntryRequest>()
-			{
-				@Override
-				protected void addFilter(@NotNull final MethodEntryRequest request, final ThreadReference thread)
+				new FilterSetter<MethodEntryRequest>()
 				{
-					request.addThreadFilter(thread);
-				}
-			}.applyFilter(eventRequestManager.methodEntryRequests(), newFilterThread);
+					@Override
+					protected void addFilter(@NotNull final MethodEntryRequest request, final ThreadReference thread)
+					{
+						request.addThreadFilter(thread);
+					}
+				}.applyFilter(eventRequestManager.methodEntryRequests(), newFilterThread);
 
-			new FilterSetter<MethodExitRequest>()
-			{
-				@Override
-				protected void addFilter(@NotNull final MethodExitRequest request, final ThreadReference thread)
+				new FilterSetter<MethodExitRequest>()
 				{
-					request.addThreadFilter(thread);
-				}
-			}.applyFilter(eventRequestManager.methodExitRequests(), newFilterThread);
+					@Override
+					protected void addFilter(@NotNull final MethodExitRequest request, final ThreadReference thread)
+					{
+						request.addThreadFilter(thread);
+					}
+				}.applyFilter(eventRequestManager.methodExitRequests(), newFilterThread);
+			}
 		}
 	}
 
@@ -858,7 +848,6 @@ public class BreakpointManager
 	{
 		breakpoint.reload();
 		breakpoint.updateUI();
-		RequestManagerImpl.updateRequests(breakpoint);
 	}
 
 	public void setBreakpointEnabled(@NotNull final Breakpoint breakpoint, final boolean enabled)

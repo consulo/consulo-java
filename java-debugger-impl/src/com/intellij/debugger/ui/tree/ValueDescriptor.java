@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,35 +15,40 @@
  */
 package com.intellij.debugger.ui.tree;
 
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiElement;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.Value;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+public interface ValueDescriptor extends NodeDescriptor
+{
+	PsiElement getDescriptorEvaluation(DebuggerContext context) throws EvaluateException;
 
-public interface ValueDescriptor extends NodeDescriptor{
-  PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException;
+	Value getValue();
 
-  Value getValue();
+	void setValueLabel(String label);
 
-  String setValueLabel(String label);
+	String setValueLabelFailed(EvaluateException e);
 
-  String setValueLabelFailed(EvaluateException e);
+	Icon setValueIcon(Icon icon);
 
-  Icon setValueIcon(Icon icon);
+	boolean isArray();
 
-  boolean isArray();
-  boolean isLvalue();
-  boolean isNull();
-  boolean isPrimitive();
-  boolean isString();
-  
-  @Nullable
-  ValueMarkup getMarkup(final DebugProcess debugProcess);
-  
-  void setMarkup(final DebugProcess debugProcess, @Nullable ValueMarkup markup);
+	boolean isLvalue();
+
+	boolean isNull();
+
+	boolean isPrimitive();
+
+	boolean isString();
+
+	@Nullable
+	ValueMarkup getMarkup(final DebugProcess debugProcess);
+
+	void setMarkup(final DebugProcess debugProcess, @Nullable ValueMarkup markup);
 }

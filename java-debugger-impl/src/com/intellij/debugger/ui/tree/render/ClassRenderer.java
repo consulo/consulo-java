@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.intellij.debugger.ui.tree.render;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -46,11 +47,13 @@ import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.StringBuilderSpinAllocator;
+import com.intellij.util.containers.HashSet;
+import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 
 /**
@@ -58,240 +61,331 @@ import consulo.internal.com.sun.jdi.*;
  * Date: Sep 17, 2003
  * Time: 2:04:00 PM
  */
-public class ClassRenderer extends NodeRendererImpl{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.ClassRenderer");
-  
-  public static final @NonNls String UNIQUE_ID = "ClassRenderer";
+public class ClassRenderer extends NodeRendererImpl
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.ClassRenderer");
 
-  public boolean SORT_ASCENDING = false;
-  public boolean SHOW_SYNTHETICS = true;
-  public boolean SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES = true;
-  public boolean SHOW_STATIC = false;
-  public boolean SHOW_STATIC_FINAL = false;
+	public static final
+	@NonNls
+	String UNIQUE_ID = "ClassRenderer";
 
-  public boolean SHOW_FQ_TYPE_NAMES = true;
-  public boolean SHOW_DECLARED_TYPE = false;
-  public boolean SHOW_OBJECT_ID = true;
-  
-  public ClassRenderer() {
-    myProperties.setEnabled(true);
-  }
+	public boolean SHOW_SYNTHETICS = true;
+	public boolean SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES = true;
+	public boolean SHOW_STATIC = false;
+	public boolean SHOW_STATIC_FINAL = false;
 
-  public final String renderTypeName(final String typeName) {
-    if (SHOW_FQ_TYPE_NAMES) {
-      return typeName;
-    }
-    final int dotIndex = typeName.lastIndexOf('.');
-    if (dotIndex > 0) {
-      return typeName.substring(dotIndex + 1);
-    }
-    return typeName;
-  }
+	public boolean SHOW_FQ_TYPE_NAMES = false;
+	public boolean SHOW_DECLARED_TYPE = false;
+	public boolean SHOW_OBJECT_ID = true;
 
-  public String getUniqueId() {
-    return UNIQUE_ID;
-  }
+	public boolean SHOW_STRINGS_TYPE = false;
 
-  public boolean isEnabled() {
-    return myProperties.isEnabled();
-  }
+	public ClassRenderer()
+	{
+		myProperties.setEnabled(true);
+	}
 
-  public void setEnabled(boolean enabled) {
-    myProperties.setEnabled(enabled);
-  }
+	public final String renderTypeName(final String typeName)
+	{
+		if(SHOW_FQ_TYPE_NAMES)
+		{
+			return typeName;
+		}
+		final int dotIndex = typeName.lastIndexOf('.');
+		if(dotIndex > 0)
+		{
+			return typeName.substring(dotIndex + 1);
+		}
+		return typeName;
+	}
 
-  public ClassRenderer clone() {
-    return (ClassRenderer) super.clone();
-  }
+	@Override
+	public String getUniqueId()
+	{
+		return UNIQUE_ID;
+	}
 
-  public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener labelListener)  throws EvaluateException {
-    return calcLabel(descriptor);
-  }
+	@Override
+	public boolean isEnabled()
+	{
+		return myProperties.isEnabled();
+	}
 
-  protected static String calcLabel(ValueDescriptor descriptor) {
-    final ValueDescriptorImpl valueDescriptor = (ValueDescriptorImpl)descriptor;
-    final Value value = valueDescriptor.getValue();
-    if (value instanceof ObjectReference) {
-      final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-      try {
-        if (value instanceof StringReference) {
-          buf.append('\"');
-          buf.append(DebuggerUtils.convertToPresentationString(((StringReference)value).value()));
-          buf.append('\"');
-        }
-        else if (value instanceof ClassObjectReference) {
-          ReferenceType type = ((ClassObjectReference)value).reflectedType();
-          buf.append((type != null)?type.name():"{...}");
-        }
-        else {
-          final ObjectReference objRef = (ObjectReference)value;
-          final Type type = objRef.type();
-          if (type instanceof ClassType && ((ClassType)type).isEnum()) {
-            final String name = getEnumConstantName(objRef, (ClassType)type);
-            if (name != null) {
-              buf.append(name);
-            }
-            else {
-              buf.append(type.name());
-            }
-          }
-          else {
-            buf.append(ValueDescriptorImpl.getIdLabel(objRef));
-          }
-        }
-        return buf.toString();
-      }
-      finally {
-        StringBuilderSpinAllocator.dispose(buf);
-      }
-    }
-    else if(value == null) {
-      //noinspection HardCodedStringLiteral
-      return "null";
-    }
-    else {
-      return DebuggerBundle.message("label.undefined");
-    }
-  }
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		myProperties.setEnabled(enabled);
+	}
 
-  public void buildChildren(final Value value, final ChildrenBuilder builder, final EvaluationContext evaluationContext) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    final ValueDescriptorImpl parentDescriptor = (ValueDescriptorImpl)builder.getParentDescriptor();
-    final NodeManager nodeManager = builder.getNodeManager();
-    final NodeDescriptorFactory nodeDescriptorFactory = builder.getDescriptorManager();
+	@Override
+	public ClassRenderer clone()
+	{
+		return (ClassRenderer) super.clone();
+	}
 
-    List<DebuggerTreeNode> children = new ArrayList<DebuggerTreeNode>();
-    if (value instanceof ObjectReference) {
-      final ObjectReference objRef = (ObjectReference)value;
-      final ReferenceType refType = objRef.referenceType();
-      // default ObjectReference processing
-      final List<Field> fields = refType.allFields();
-      if (fields.size() > 0) {
-        for (final Field field : fields) {
-          if (!shouldDisplay(evaluationContext, objRef, field)) {
-            continue;
-          }
-          children.add(nodeManager.createNode(nodeDescriptorFactory.getFieldDescriptor(parentDescriptor, objRef, field), evaluationContext));
-        }
+	@Override
+	public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener labelListener) throws EvaluateException
+	{
+		return calcLabel(descriptor);
+	}
 
-        if(SORT_ASCENDING) {
-          Collections.sort(children, NodeManagerImpl.getNodeComparator());
-        }
-      }
-      else {
-        children.add(nodeManager.createMessageNode(MessageDescriptor.CLASS_HAS_NO_FIELDS.getLabel()));
-      }
-    }
-    builder.setChildren(children);
-  }
+	protected static String calcLabel(ValueDescriptor descriptor)
+	{
+		final ValueDescriptorImpl valueDescriptor = (ValueDescriptorImpl) descriptor;
+		final Value value = valueDescriptor.getValue();
+		if(value instanceof ObjectReference)
+		{
+			if(value instanceof StringReference)
+			{
+				return ((StringReference) value).value();
+			}
+			else if(value instanceof ClassObjectReference)
+			{
+				ReferenceType type = ((ClassObjectReference) value).reflectedType();
+				return (type != null) ? type.name() : "{...}";
+			}
+			else
+			{
+				final ObjectReference objRef = (ObjectReference) value;
+				final Type type = objRef.type();
+				if(type instanceof ClassType && ((ClassType) type).isEnum())
+				{
+					final String name = getEnumConstantName(objRef, (ClassType) type);
+					if(name != null)
+					{
+						return name;
+					}
+					else
+					{
+						return type.name();
+					}
+				}
+				else
+				{
+					return "";
+				}
+			}
+		}
+		else if(value == null)
+		{
+			//noinspection HardCodedStringLiteral
+			return "null";
+		}
+		else
+		{
+			return DebuggerBundle.message("label.undefined");
+		}
+	}
 
-  public boolean shouldDisplay(EvaluationContext context, @NotNull ObjectReference objInstance, @NotNull Field field) {
-    final boolean isSynthetic = DebuggerUtils.isSynthetic(field);
-    if (!SHOW_SYNTHETICS && isSynthetic) {
-      return false;
-    }
-    if (SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES && isSynthetic) {
-      try {
-        final StackFrameProxy frameProxy = context.getFrameProxy();
-        if (frameProxy != null) {
-          final Location location = frameProxy.location();
-          if (location != null && objInstance.equals(context.getThisObject()) && Comparing.equal(objInstance.referenceType(), location.declaringType()) && StringUtil.startsWith(field.name(), FieldDescriptorImpl.OUTER_LOCAL_VAR_FIELD_PREFIX)) {
-            return false;
-          }
-        }
-      }
-      catch (EvaluateException ignored) {
-      }
-    }
-    if(!SHOW_STATIC && field.isStatic()) {
-      return false;
-    }
+	@Override
+	public void buildChildren(final Value value, final ChildrenBuilder builder, final EvaluationContext evaluationContext)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		final ValueDescriptorImpl parentDescriptor = (ValueDescriptorImpl) builder.getParentDescriptor();
+		final NodeManager nodeManager = builder.getNodeManager();
+		final NodeDescriptorFactory nodeDescriptorFactory = builder.getDescriptorManager();
 
-    if(!SHOW_STATIC_FINAL && field.isStatic() && field.isFinal()) {
-      return false;
-    }
+		List<DebuggerTreeNode> children = new ArrayList<DebuggerTreeNode>();
+		if(value instanceof ObjectReference)
+		{
+			final ObjectReference objRef = (ObjectReference) value;
+			final ReferenceType refType = objRef.referenceType();
+			// default ObjectReference processing
+			List<Field> fields = refType.allFields();
+			if(!fields.isEmpty())
+			{
+				Set<String> names = new HashSet<String>();
+				for(Field field : fields)
+				{
+					if(shouldDisplay(evaluationContext, objRef, field))
+					{
+						FieldDescriptor fieldDescriptor = createFieldDescriptor(parentDescriptor, nodeDescriptorFactory, objRef, field, evaluationContext);
+						String name = fieldDescriptor.getName();
+						if(names.contains(name))
+						{
+							fieldDescriptor.putUserData(FieldDescriptor.SHOW_DECLARING_TYPE, Boolean.TRUE);
+						}
+						else
+						{
+							names.add(name);
+						}
+						children.add(nodeManager.createNode(fieldDescriptor, evaluationContext));
+					}
+				}
 
-    return true;
-  }
+				if(children.isEmpty())
+				{
+					children.add(nodeManager.createMessageNode(DebuggerBundle.message("message.node.class.no.fields.to.display")));
+				}
+				else if(XDebuggerSettingsManager.getInstance().getDataViewSettings().isSortValues())
+				{
+					Collections.sort(children, NodeManagerImpl.getNodeComparator());
+				}
+			}
+			else
+			{
+				children.add(nodeManager.createMessageNode(MessageDescriptor.CLASS_HAS_NO_FIELDS.getLabel()));
+			}
+		}
+		builder.setChildren(children);
+	}
 
-  public void readExternal(Element element) throws InvalidDataException {
-    super.readExternal(element);
-    DefaultJDOMExternalizer.readExternal(this, element);
-  }
+	@NotNull
+	protected FieldDescriptor createFieldDescriptor(ValueDescriptorImpl parentDescriptor,
+			NodeDescriptorFactory nodeDescriptorFactory,
+			ObjectReference objRef,
+			Field field,
+			EvaluationContext evaluationContext)
+	{
+		return nodeDescriptorFactory.getFieldDescriptor(parentDescriptor, objRef, field);
+	}
 
-  public void writeExternal(Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    DefaultJDOMExternalizer.writeExternal(this, element);
-  }
+	protected boolean shouldDisplay(EvaluationContext context, @NotNull ObjectReference objInstance, @NotNull Field field)
+	{
+		final boolean isSynthetic = DebuggerUtils.isSynthetic(field);
+		if(!SHOW_SYNTHETICS && isSynthetic)
+		{
+			return false;
+		}
+		if(SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES && isSynthetic)
+		{
+			try
+			{
+				final StackFrameProxy frameProxy = context.getFrameProxy();
+				if(frameProxy != null)
+				{
+					final Location location = frameProxy.location();
+					if(location != null && objInstance.equals(context.getThisObject()) && Comparing.equal(objInstance.referenceType(), location.declaringType()) && StringUtil.startsWith(field.name()
+							, FieldDescriptorImpl.OUTER_LOCAL_VAR_FIELD_PREFIX))
+					{
+						return false;
+					}
+				}
+			}
+			catch(EvaluateException ignored)
+			{
+			}
+		}
+		if(!SHOW_STATIC && field.isStatic())
+		{
+			return false;
+		}
 
-  public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException {
-    FieldDescriptor fieldDescriptor = (FieldDescriptor)node.getDescriptor();
+		if(!SHOW_STATIC_FINAL && field.isStatic() && field.isFinal())
+		{
+			return false;
+		}
 
-    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(node.getProject()).getElementFactory();
-    try {
-      return elementFactory.createExpressionFromText(fieldDescriptor.getField().name(), DebuggerUtils.findClass(
-        fieldDescriptor.getObject().referenceType().name(), context.getProject(), context.getDebugProcess().getSearchScope())
-      );
-    }
-    catch (IncorrectOperationException e) {
-      throw new EvaluateException(DebuggerBundle.message("error.invalid.field.name", fieldDescriptor.getField().name()), null);
-    }
-  }
+		return true;
+	}
 
-  private static boolean valueExpandable(Value value)  {
-    try {
-      if(value instanceof ArrayReference) {
-        return ((ArrayReference)value).length() > 0;
-      }
-      else if(value instanceof ObjectReference) {
-        return ((ObjectReference)value).referenceType().allFields().size() > 0;
-      }
-    }
-    catch (ObjectCollectedException e) {
-      return true;
-    }
+	@Override
+	public void readExternal(Element element) throws InvalidDataException
+	{
+		super.readExternal(element);
+		DefaultJDOMExternalizer.readExternal(this, element);
+	}
 
-    return false;
-  }
+	@Override
+	public void writeExternal(Element element) throws WriteExternalException
+	{
+		super.writeExternal(element);
+		DefaultJDOMExternalizer.writeExternal(this, element);
+	}
 
-  public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    return valueExpandable(value);
-  }
+	@Override
+	public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
+	{
+		FieldDescriptor fieldDescriptor = (FieldDescriptor) node.getDescriptor();
 
-  public boolean isApplicable(Type type) {
-    return type instanceof ReferenceType && !(type instanceof ArrayType);
-  }
+		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(node.getProject()).getElementFactory();
+		try
+		{
+			return elementFactory.createExpressionFromText(fieldDescriptor.getField().name(), DebuggerUtils.findClass(fieldDescriptor.getObject().referenceType().name(), context.getProject(),
+					context.getDebugProcess().getSearchScope()));
+		}
+		catch(IncorrectOperationException e)
+		{
+			throw new EvaluateException(DebuggerBundle.message("error.invalid.field.name", fieldDescriptor.getField().name()), null);
+		}
+	}
 
-  public @NonNls String getName() {
-    return "Object";
-  }
+	private static boolean valueExpandable(Value value)
+	{
+		try
+		{
+			if(value instanceof ArrayReference)
+			{
+				return ((ArrayReference) value).length() > 0;
+			}
+			else if(value instanceof ObjectReference)
+			{
+				return true; // if object has no fields, it contains a child-message about that
+				//return ((ObjectReference)value).referenceType().allFields().size() > 0;
+			}
+		}
+		catch(ObjectCollectedException e)
+		{
+			return true;
+		}
 
-  public void setName(String text) {
-    LOG.assertTrue(false);
-  }
+		return false;
+	}
 
-  @Nullable
-  public static String getEnumConstantName(final ObjectReference objRef, ClassType classType) {
-    do {
-      if (!classType.isPrepared()) {
-        return null;
-      }
-      classType = classType.superclass();
-      if (classType == null) {
-        return null;
-      }
-    }
-    while (!("java.lang.Enum".equals(classType.name())));
-    //noinspection HardCodedStringLiteral
-    final Field field = classType.fieldByName("name");
-    if (field == null) {
-      return null;
-    }
-    final Value value = objRef.getValue(field);
-    if (!(value instanceof StringReference)) {
-      return null;
-    }
-    return ((StringReference)value).value();
-  }
+	@Override
+	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		return valueExpandable(value);
+	}
+
+	@Override
+	public boolean isApplicable(Type type)
+	{
+		return type instanceof ReferenceType && !(type instanceof ArrayType);
+	}
+
+	@Override
+	public
+	@NonNls
+	String getName()
+	{
+		return "Object";
+	}
+
+	@Override
+	public void setName(String text)
+	{
+		LOG.assertTrue(false);
+	}
+
+	@Nullable
+	public static String getEnumConstantName(@NotNull ObjectReference objRef, ClassType classType)
+	{
+		do
+		{
+			if(!classType.isPrepared())
+			{
+				return null;
+			}
+			classType = classType.superclass();
+			if(classType == null)
+			{
+				return null;
+			}
+		}
+		while(!(CommonClassNames.JAVA_LANG_ENUM.equals(classType.name())));
+		//noinspection HardCodedStringLiteral
+		final Field field = classType.fieldByName("name");
+		if(field == null)
+		{
+			return null;
+		}
+		final Value value = objRef.getValue(field);
+		if(!(value instanceof StringReference))
+		{
+			return null;
+		}
+		return ((StringReference) value).value();
+	}
 }

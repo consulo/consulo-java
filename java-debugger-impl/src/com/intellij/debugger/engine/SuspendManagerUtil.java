@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,126 +15,172 @@
  */
 package com.intellij.debugger.engine;
 
-import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
-import com.intellij.openapi.diagnostic.Logger;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Set;
 
-public class SuspendManagerUtil {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.SuspendManagerUtil");
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.util.containers.SmartHashSet;
+import consulo.internal.com.sun.jdi.request.EventRequest;
 
-  public static boolean isEvaluating(SuspendManager suspendManager, ThreadReferenceProxyImpl thread) {
-    for (SuspendContextImpl suspendContext : suspendManager.getEventContexts()) {
-      if (suspendContext.isEvaluating() && thread.equals(suspendContext.getThread())) {
-        return true;
-      }
-    }
-    return false;
-  }
+public class SuspendManagerUtil
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.SuspendManagerUtil");
 
-  public static SuspendContextImpl findContextByThread(SuspendManager suspendManager, ThreadReferenceProxyImpl thread) {
-    for (ListIterator<SuspendContextImpl> iterator = ((SuspendManagerImpl) suspendManager).getPausedContexts().listIterator(); iterator.hasNext();) {
-      SuspendContextImpl context = iterator.next();
-      if(context.getThread() == thread) {
-        return context;
-      }
-    }
+	public static boolean isEvaluating(SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	{
+		for(SuspendContextImpl suspendContext : suspendManager.getEventContexts())
+		{
+			if(suspendContext.isEvaluating() && thread.equals(suspendContext.getThread()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-    return null;
-  }
+	/**
+	 * Returns suspend context that suspends the thread specified (may be currently evaluating)
+	 */
+	@Nullable
+	public static SuspendContextImpl findContextByThread(@NotNull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	{
+		for(SuspendContextImpl context : ((SuspendManagerImpl) suspendManager).getPausedContexts())
+		{
+			if((context.getThread() == thread || context.getSuspendPolicy() == EventRequest.SUSPEND_ALL) && !context.isExplicitlyResumed(thread))
+			{
+				return context;
+			}
+		}
 
-  public static void assertSuspendContext(SuspendContextImpl context) {
-    if(LOG.isDebugEnabled()) {
-      LOG.assertTrue(context.myInProgress, "You can invoke methods only inside commands invoked for SuspendContext");
-    }
-  }
+		return null;
+	}
 
-  public static Set<SuspendContextImpl> getSuspendingContexts(SuspendManager suspendManager, ThreadReferenceProxyImpl thread) {
-    DebuggerManagerThreadImpl.assertIsManagerThread();
-    final Set<SuspendContextImpl> result = new HashSet<SuspendContextImpl>();
-    for (final SuspendContextImpl suspendContext : suspendManager.getEventContexts()) {
-      if (suspendContext.suspends(thread)) {
-        result.add(suspendContext);
-      }
-    }
-    return result;
-  }
+	public static void assertSuspendContext(SuspendContextImpl context)
+	{
+		if(LOG.isDebugEnabled())
+		{
+			LOG.assertTrue(context.myInProgress, "You can invoke methods only inside commands invoked for SuspendContext");
+		}
+	}
 
-  public static void restoreAfterResume(SuspendContextImpl context, Object resumeData) {
-    SuspendManager suspendManager = context.getDebugProcess().getSuspendManager();
-    ResumeData data = (ResumeData) resumeData;
+	@NotNull
+	public static Set<SuspendContextImpl> getSuspendingContexts(@NotNull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		Set<SuspendContextImpl> result = new SmartHashSet<SuspendContextImpl>();
+		for(SuspendContextImpl suspendContext : suspendManager.getEventContexts())
+		{
+			if(suspendContext.suspends(thread))
+			{
+				result.add(suspendContext);
+			}
+		}
+		return result;
+	}
 
-    ThreadReferenceProxyImpl thread = context.getThread();
-    if(data.myIsFrozen && !suspendManager.isFrozen(thread)) {
-      suspendManager.freezeThread(thread);
-    }
+	@Nullable
+	public static SuspendContextImpl getSuspendingContext(@NotNull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		for(SuspendContextImpl suspendContext : suspendManager.getEventContexts())
+		{
+			if(suspendContext.suspends(thread))
+			{
+				return suspendContext;
+			}
+		}
+		return null;
+	}
 
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("RestoreAfterResume SuspendContextImpl...");
-    }
-    LOG.assertTrue(context.myResumedThreads == null);
+	public static void restoreAfterResume(SuspendContextImpl context, Object resumeData)
+	{
+		SuspendManager suspendManager = context.getDebugProcess().getSuspendManager();
+		ResumeData data = (ResumeData) resumeData;
 
-    if(data.myResumedThreads != null) {
-      for (Iterator<ThreadReferenceProxyImpl> iterator = data.myResumedThreads.iterator(); iterator.hasNext();) {
-        ThreadReferenceProxyImpl resumedThreads = iterator.next();
-        resumedThreads.resume();
-      }
-      context.myResumedThreads = data.myResumedThreads;
-    }
-  }
+		ThreadReferenceProxyImpl thread = context.getThread();
+		if(data.myIsFrozen && !suspendManager.isFrozen(thread))
+		{
+			suspendManager.freezeThread(thread);
+		}
 
-  public static Object prepareForResume(SuspendContextImpl context) {
-    SuspendManager suspendManager = context.getDebugProcess().getSuspendManager();
+		if(LOG.isDebugEnabled())
+		{
+			LOG.debug("RestoreAfterResume SuspendContextImpl...");
+		}
+		LOG.assertTrue(context.myResumedThreads == null);
 
-    ThreadReferenceProxyImpl thread = context.getThread();
+		if(data.myResumedThreads != null)
+		{
+			for(ThreadReferenceProxyImpl resumedThreads : data.myResumedThreads)
+			{
+				resumedThreads.resume();
+			}
+			context.myResumedThreads = data.myResumedThreads;
+		}
+	}
 
-    ResumeData resumeData = new ResumeData(suspendManager.isFrozen(thread), context.myResumedThreads);
+	public static Object prepareForResume(SuspendContextImpl context)
+	{
+		SuspendManager suspendManager = context.getDebugProcess().getSuspendManager();
 
-    if(resumeData.myIsFrozen) {
-      suspendManager.unfreezeThread(thread);
-    }
+		ThreadReferenceProxyImpl thread = context.getThread();
 
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("Resuming SuspendContextImpl...");
-    }
-    if(context.myResumedThreads != null) {
-      for (Iterator<ThreadReferenceProxyImpl> iterator = context.myResumedThreads.iterator(); iterator.hasNext();) {
-        ThreadReferenceProxyImpl resumedThreads = iterator.next();
-        resumedThreads.suspend();
-      }
-      context.myResumedThreads = null;
-    }
+		ResumeData resumeData = new ResumeData(suspendManager.isFrozen(thread), context.myResumedThreads);
 
-    return resumeData;
-  }
+		if(resumeData.myIsFrozen)
+		{
+			suspendManager.unfreezeThread(thread);
+		}
 
-  public static SuspendContextImpl getSuspendContextForThread(SuspendContextImpl suspendContext, ThreadReferenceProxyImpl thread) {
-    if (suspendContext == null) {
-      return null;
-    }
-    SuspendContextImpl context = findContextByThread(suspendContext.getDebugProcess().getSuspendManager(), thread);
-    return context != null && !context.myInProgress ? context :  suspendContext;
-  }
+		if(LOG.isDebugEnabled())
+		{
+			LOG.debug("Resuming SuspendContextImpl...");
+		}
+		if(context.myResumedThreads != null)
+		{
+			for(ThreadReferenceProxyImpl resumedThreads : context.myResumedThreads)
+			{
+				resumedThreads.suspend();
+			}
+			context.myResumedThreads = null;
+		}
 
-  public static SuspendContextImpl getEvaluatingContext(SuspendManager suspendManager, ThreadReferenceProxyImpl thread) {
-    for (SuspendContextImpl suspendContext : suspendManager.getEventContexts()) {
-      if (!suspendContext.isResumed() && suspendContext.isEvaluating() && suspendContext.getThread() == thread) {
-        return suspendContext;
-      }
-    }
-    return null;
-  }
+		return resumeData;
+	}
 
-  private static class ResumeData {
-    final boolean myIsFrozen;
-    final Set<ThreadReferenceProxyImpl> myResumedThreads;
+	public static SuspendContextImpl getSuspendContextForThread(SuspendContextImpl suspendContext, ThreadReferenceProxyImpl thread)
+	{
+		if(suspendContext == null)
+		{
+			return null;
+		}
+		SuspendContextImpl context = findContextByThread(suspendContext.getDebugProcess().getSuspendManager(), thread);
+		return context != null && !context.myInProgress ? context : suspendContext;
+	}
 
-    public ResumeData(boolean isFrozen, Set<ThreadReferenceProxyImpl> resumedThreads) {
-      myIsFrozen = isFrozen;
-      myResumedThreads = resumedThreads;
-    }
-  }
+	public static SuspendContextImpl getEvaluatingContext(SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
+	{
+		for(SuspendContextImpl suspendContext : suspendManager.getEventContexts())
+		{
+			if(!suspendContext.isResumed() && suspendContext.isEvaluating() && suspendContext.getThread() == thread)
+			{
+				return suspendContext;
+			}
+		}
+		return null;
+	}
+
+	private static class ResumeData
+	{
+		final boolean myIsFrozen;
+		final Set<ThreadReferenceProxyImpl> myResumedThreads;
+
+		public ResumeData(boolean isFrozen, Set<ThreadReferenceProxyImpl> resumedThreads)
+		{
+			myIsFrozen = isFrozen;
+			myResumedThreads = resumedThreads;
+		}
+	}
 }

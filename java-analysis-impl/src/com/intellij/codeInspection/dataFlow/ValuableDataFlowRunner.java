@@ -36,7 +36,7 @@ public class ValuableDataFlowRunner extends DataFlowRunner
 
 	protected ValuableDataFlowRunner(PsiElement block)
 	{
-		super(block);
+		super();
 	}
 
 	@Override
@@ -89,8 +89,7 @@ public class ValuableDataFlowRunner extends DataFlowRunner
 			myConcatenation = FList.emptyList();
 		}
 
-		private ValuableDfaVariableState(Set<DfaPsiType> instanceofValues, Set<DfaPsiType> notInstanceofValues, Nullness nullability,
-				DfaValue value, @NotNull FList<PsiExpression> concatenation)
+		private ValuableDfaVariableState(Set<DfaPsiType> instanceofValues, Set<DfaPsiType> notInstanceofValues, Nullness nullability, DfaValue value, @NotNull FList<PsiExpression> concatenation)
 		{
 			super(instanceofValues, notInstanceofValues, nullability);
 			myValue = value;

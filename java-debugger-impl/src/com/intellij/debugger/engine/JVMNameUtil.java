@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,10 @@ import com.intellij.ide.util.JavaAnonymousClassesHelper;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -46,6 +48,8 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 public class JVMNameUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.JVMNameUtil");
+
+	public static final String CONSTRUCTOR_NAME = "<init>";
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
 	public static String getPrimitiveSignature(String typeName)
@@ -144,7 +148,7 @@ public class JVMNameUtil
 
 	private static class JVMNameBuffer
 	{
-		List<JVMName> myList = new ArrayList<JVMName>();
+		private final List<JVMName> myList = new ArrayList<JVMName>();
 
 		public void append(@NotNull JVMName evaluator)
 		{
@@ -263,6 +267,24 @@ public class JVMNameUtil
 		public String getName(DebugProcessImpl process) throws EvaluateException
 		{
 			List<ReferenceType> allClasses = process.getPositionManager().getAllClasses(mySourcePosition);
+			// If there are more than one available, try to match by name
+			if(allClasses.size() > 1)
+			{
+				String name = ApplicationManager.getApplication().runReadAction(new Computable<String>()
+				{
+					public String compute()
+					{
+						return getClassVMName(getClassAt(mySourcePosition));
+					}
+				});
+				for(ReferenceType aClass : allClasses)
+				{
+					if(Comparing.equal(aClass.name(), name))
+					{
+						return name;
+					}
+				}
+			}
 			if(!allClasses.isEmpty())
 			{
 				return allClasses.get(0).name();
@@ -311,7 +333,7 @@ public class JVMNameUtil
 		}
 	}
 
-	public static JVMName getJVMQualifiedName(PsiClass psiClass)
+	public static JVMName getJVMQualifiedName(@NotNull PsiClass psiClass)
 	{
 		final String name = getNonAnonymousClassName(psiClass);
 		if(name != null)
@@ -365,15 +387,30 @@ public class JVMNameUtil
 		return DebuggerManager.getInstance(aClass.getProject()).getVMClassQualifiedName(aClass);
 	}
 
+	public static JVMName getJVMConstructorSignature(@Nullable PsiMethod method, @Nullable PsiClass declaringClass)
+	{
+		return getJVMSignature(method, true, declaringClass);
+	}
+
+	public static JVMName getJVMSignature(@NotNull PsiMethod method)
+	{
+		return getJVMSignature(method, method.isConstructor(), method.getContainingClass());
+	}
+
+	@NotNull
+	public static String getJVMMethodName(@NotNull PsiMethod method)
+	{
+		return method.isConstructor() ? CONSTRUCTOR_NAME : method.getName();
+	}
+
 	@SuppressWarnings({"HardCodedStringLiteral"})
-	public static JVMName getJVMSignature(PsiMethod method)
+	private static JVMName getJVMSignature(@Nullable PsiMethod method, boolean constructor, @Nullable PsiClass declaringClass)
 	{
 		JVMNameBuffer signature = new JVMNameBuffer();
 		signature.append("(");
 
-		if(method.isConstructor())
+		if(constructor)
 		{
-			final PsiClass declaringClass = method.getContainingClass();
 			if(declaringClass != null)
 			{
 				final PsiClass outerClass = declaringClass.getContainingClass();
@@ -387,12 +424,15 @@ public class JVMNameUtil
 				}
 			}
 		}
-		for(PsiParameter psiParameter : method.getParameterList().getParameters())
+		if(method != null)
 		{
-			appendJVMSignature(signature, psiParameter.getType());
+			for(PsiParameter psiParameter : method.getParameterList().getParameters())
+			{
+				appendJVMSignature(signature, psiParameter.getType());
+			}
 		}
 		signature.append(")");
-		if(!method.isConstructor())
+		if(!constructor && method != null)
 		{
 			appendJVMSignature(signature, method.getReturnType());
 		}
@@ -528,6 +568,15 @@ public class JVMNameUtil
 			}
 		}
 
+		if(positionFile instanceof PsiClassOwner)
+		{
+			String name = ((PsiClassOwner) positionFile).getPackageName();
+			if(!StringUtil.isEmpty(name))
+			{
+				return name;
+			}
+		}
+
 		if(debugProcess != null && debugProcess.isAttached())
 		{
 			List<ReferenceType> allClasses = debugProcess.getPositionManager().getAllClasses(position);
@@ -544,21 +593,6 @@ public class JVMNameUtil
 		return "";
 	}
 
-	@Nullable
-	public static String getClassVMName(@Nullable PsiClass containingClass)
-	{
-		if(containingClass == null)
-		{
-			return null;
-		}
-		if(containingClass instanceof PsiAnonymousClass)
-		{
-			return getClassVMName(PsiTreeUtil.getParentOfType(containingClass, PsiClass.class)) + JavaAnonymousClassesHelper.getName(
-					(PsiAnonymousClass) containingClass);
-		}
-		return ClassUtil.getJVMClassName(containingClass);
-	}
-
 	public static PsiClass getTopLevelParentClass(PsiClass psiClass)
 	{
 		PsiClass enclosing = PsiTreeUtil.getParentOfType(psiClass, PsiClass.class, true);
@@ -570,4 +604,26 @@ public class JVMNameUtil
 		return psiClass;
 	}
 
+	@Nullable
+	public static String getClassVMName(@Nullable PsiClass containingClass)
+	{
+		// no support for local classes for now
+		if(containingClass == null || PsiUtil.isLocalClass(containingClass))
+		{
+			return null;
+		}
+		if(containingClass instanceof PsiAnonymousClass)
+		{
+			String parentName = getClassVMName(PsiTreeUtil.getParentOfType(containingClass, PsiClass.class));
+			if(parentName == null)
+			{
+				return null;
+			}
+			else
+			{
+				return parentName + JavaAnonymousClassesHelper.getName((PsiAnonymousClass) containingClass);
+			}
+		}
+		return ClassUtil.getJVMClassName(containingClass);
+	}
 }
