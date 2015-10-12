@@ -62,7 +62,7 @@ public class JavaSourceFilterScope extends DelegatingGlobalSearchScope
 			return false;
 		}
 
-		if(JavaClassFileType.INSTANCE == file.getFileType())
+		if(file.getFileType() == JavaClassFileType.INSTANCE)
 		{
 			return myIndex.isInLibraryClasses(file);
 		}

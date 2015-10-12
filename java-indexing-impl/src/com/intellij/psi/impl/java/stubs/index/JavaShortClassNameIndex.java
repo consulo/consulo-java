@@ -33,7 +33,6 @@ import com.intellij.util.indexing.FileBasedIndex;
 
 public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass>
 {
-
 	private static final JavaShortClassNameIndex ourInstance = new JavaShortClassNameIndex();
 
 	public static JavaShortClassNameIndex getInstance()
@@ -55,9 +54,9 @@ public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass>
 	}
 
 	@Override
-	public Collection<PsiClass> get(final String s, final Project project, @NotNull final GlobalSearchScope scope)
+	public Collection<PsiClass> get(@NotNull final String s, @NotNull final Project project, @NotNull final GlobalSearchScope scope)
 	{
-		return StubIndex.getInstance().safeGet(getKey(), s, project, new JavaSourceFilterScope(scope), PsiClass.class);
+		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiClass.class);
 	}
 
 	@Override

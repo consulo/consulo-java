@@ -32,7 +32,6 @@ import com.intellij.psi.stubs.StubIndexKey;
 
 public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
 {
-
 	private static final JavaAnnotationIndex ourInstance = new JavaAnnotationIndex();
 
 	public static JavaAnnotationIndex getInstance()
@@ -48,8 +47,8 @@ public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
 	}
 
 	@Override
-	public Collection<PsiAnnotation> get(final String s, final Project project, @NotNull final GlobalSearchScope scope)
+	public Collection<PsiAnnotation> get(@NotNull final String s, @NotNull final Project project, @NotNull final GlobalSearchScope scope)
 	{
-		return StubIndex.getInstance().safeGet(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
+		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
 	}
 }

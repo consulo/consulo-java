@@ -32,7 +32,6 @@ import com.intellij.psi.stubs.StubIndexKey;
 
 public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass>
 {
-
 	private static final JavaFullClassNameIndex ourInstance = new JavaFullClassNameIndex();
 
 	public static JavaFullClassNameIndex getInstance()
@@ -48,8 +47,8 @@ public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass>
 	}
 
 	@Override
-	public Collection<PsiClass> get(final Integer integer, final Project project, @NotNull final GlobalSearchScope scope)
+	public Collection<PsiClass> get(@NotNull final Integer integer, @NotNull final Project project, @NotNull final GlobalSearchScope scope)
 	{
-		return StubIndex.getInstance().safeGet(getKey(), integer, project, new JavaSourceFilterScope(scope), PsiClass.class);
+		return StubIndex.getElements(getKey(), integer, project, new JavaSourceFilterScope(scope), PsiClass.class);
 	}
 }
