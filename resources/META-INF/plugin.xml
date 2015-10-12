@@ -469,6 +469,8 @@
 
 		<extensionPoint name="debugger.nodeRenderer" interface="com.intellij.debugger.ui.tree.render.NodeRenderer"/>
 
+		<extensionPoint name="debugger.sourcePositionProvider" interface="com.intellij.debugger.engine.SourcePositionProvider"/>
+
 		<extensionPoint name="debugger.nodeNameAdjuster" interface="com.intellij.debugger.ui.tree.NodeDescriptorNameAdjuster"/>
 
 		<extensionPoint name="debugger.syntheticProvider" interface="com.intellij.debugger.engine.SyntheticTypeComponentProvider"/>

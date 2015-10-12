@@ -45,6 +45,7 @@ import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.containers.InternalIterator;
+import com.intellij.util.ui.JBUI;
 
 public final class UserRenderersConfigurable extends JPanel implements ConfigurableUi<NodeRendererSettings>, Disposable
 {
@@ -56,7 +57,7 @@ public final class UserRenderersConfigurable extends JPanel implements Configura
 
 	public UserRenderersConfigurable()
 	{
-		super(new BorderLayout(4, 0));
+		super(new BorderLayout(JBUI.scale(4), 0));
 
 		myRendererChooser = new ElementsChooser<NodeRenderer>(true);
 		setupRenderersList();
