@@ -28,7 +28,6 @@ import org.jetbrains.concurrency.Promise;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.actions.JavaReferringObjectsValue;
-import com.intellij.debugger.actions.JavaValueModifier;
 import com.intellij.debugger.actions.JumpToObjectAction;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;

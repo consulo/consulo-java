@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -33,11 +34,13 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.xdebugger.frame.XCompositeNode;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
 import com.intellij.xdebugger.frame.XValueChildrenList;
+import com.intellij.xdebugger.frame.XValueModifier;
 import com.intellij.xdebugger.frame.XValueNode;
 import com.intellij.xdebugger.frame.XValuePlace;
 import com.intellij.xdebugger.frame.presentation.XValuePresentation;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodePresentationConfigurator;
 import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 
@@ -46,8 +49,11 @@ public class JavaReferringObjectsValue extends JavaValue
 	private static final long MAX_REFERRING = 100;
 	private final boolean myIsField;
 
-	private JavaReferringObjectsValue(@Nullable JavaValue parent, @NotNull ValueDescriptorImpl valueDescriptor,
-			@NotNull EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager, boolean isField)
+	private JavaReferringObjectsValue(@Nullable JavaValue parent,
+			@NotNull ValueDescriptorImpl valueDescriptor,
+			@NotNull EvaluationContextImpl evaluationContext,
+			NodeManagerImpl nodeManager,
+			boolean isField)
 	{
 		super(parent, valueDescriptor, evaluationContext, nodeManager, false);
 		myIsField = isField;
@@ -55,7 +61,7 @@ public class JavaReferringObjectsValue extends JavaValue
 
 	public JavaReferringObjectsValue(@NotNull JavaValue javaValue, boolean isField)
 	{
-		super(null, javaValue.getDescriptor(), javaValue.getEvaluationContext(), null, false);
+		super(null, javaValue.getDescriptor(), javaValue.getEvaluationContext(), javaValue.getNodeManager(), false);
 		myIsField = isField;
 	}
 
@@ -68,12 +74,7 @@ public class JavaReferringObjectsValue extends JavaValue
 	@Override
 	public void computeChildren(@NotNull final XCompositeNode node)
 	{
-		if(checkContextNotResumed(node))
-		{
-			return;
-		}
-		getEvaluationContext().getDebugProcess().getManagerThread().schedule(new SuspendContextCommandImpl(getEvaluationContext()
-				.getSuspendContext())
+		scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext())
 		{
 			@Override
 			public Priority getPriority()
@@ -87,7 +88,18 @@ public class JavaReferringObjectsValue extends JavaValue
 				final XValueChildrenList children = new XValueChildrenList();
 
 				Value value = getDescriptor().getValue();
-				List<ObjectReference> references = ((ObjectReference) value).referringObjects(MAX_REFERRING);
+
+				List<ObjectReference> references;
+				try
+				{
+					references = ((ObjectReference) value).referringObjects(MAX_REFERRING);
+				}
+				catch(ObjectCollectedException e)
+				{
+					node.setErrorMessage(DebuggerBundle.message("evaluation.error.object.collected"));
+					return;
+				}
+
 				int i = 1;
 				for(final ObjectReference reference : references)
 				{
@@ -103,7 +115,7 @@ public class JavaReferringObjectsValue extends JavaValue
 								return reference;
 							}
 						};
-						children.add(new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), null, true));
+						children.add(new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), true));
 						i++;
 					}
 					else
@@ -123,18 +135,12 @@ public class JavaReferringObjectsValue extends JavaValue
 							}
 
 							@Override
-							public String calcValueName()
-							{
-								return "Ref";
-							}
-
-							@Override
 							public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException
 							{
 								return null;
 							}
 						};
-						children.add("Referrer " + i++, new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), null, false));
+						children.add("Referrer " + i++, new JavaReferringObjectsValue(null, descriptor, getEvaluationContext(), getNodeManager(), false));
 					}
 				}
 
@@ -204,6 +210,13 @@ public class JavaReferringObjectsValue extends JavaValue
 				return field;
 			}
 		}
+		return null;
+	}
+
+	@Nullable
+	@Override
+	public XValueModifier getModifier()
+	{
 		return null;
 	}
 }

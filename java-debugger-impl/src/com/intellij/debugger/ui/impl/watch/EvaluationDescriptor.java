@@ -33,14 +33,11 @@ import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.impl.PositionUtil;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionCodeFragment;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.extractMethod.PrepareFailedException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.Value;
 
@@ -100,41 +97,7 @@ public abstract class EvaluationDescriptor extends ValueDescriptorImpl
 			}
 			catch(UnsupportedExpressionException ex)
 			{
-				if(Registry.is("debugger.compiling.evaluator"))
-				{
-					evaluator = DebuggerInvocationUtil.commitAndRunReadAction(myProject, new EvaluatingComputable<ExpressionEvaluator>()
-					{
-						@Override
-						public ExpressionEvaluator compute() throws EvaluateException
-						{
-							final PsiElement psiContext = PositionUtil.getContextElement(evaluationContext);
-							if(psiContext == null)
-							{
-								return null;
-							}
-							PsiFile psiFile = psiContext.getContainingFile();
-							PsiCodeFragment fragment = createCodeFragment(psiContext);
-							try
-							{
-								ExtractLightMethodObjectHandler.ExtractedData data = ExtractLightMethodObjectHandler.extractLightMethodObject(myProject, psiFile, fragment,
-										CompilingEvaluator.getGeneratedClassName());
-								if(data != null)
-								{
-									return new CompilingEvaluatorImpl(evaluationContext, psiContext, data);
-								}
-							}
-							catch(PrepareFailedException e)
-							{
-								LOG.info(e);
-							}
-							return null;
-						}
-					});
-				}
-				if(evaluator == null)
-				{
-					throw ex;
-				}
+				throw ex;
 			}
 
 			if(!thisEvaluationContext.getDebugProcess().isAttached())

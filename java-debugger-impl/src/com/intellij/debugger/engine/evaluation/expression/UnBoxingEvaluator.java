@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2010 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,79 +15,94 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.Couple;
+import com.intellij.psi.CommonClassNames;
 import com.intellij.util.containers.HashMap;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Feb 8, 2010
  */
-public class UnBoxingEvaluator implements Evaluator{
-  private final Evaluator myOperand;
-  private static final Map<String, Pair<String, String>> TYPES_TO_CONVERSION_METHOD_MAP = new HashMap<String, Pair<String, String>>();
-  static {
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Boolean", new Pair<String, String>("booleanValue", "()Z"));
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Byte", new Pair<String, String>("byteValue", "()B"));
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Character", new Pair<String, String>("charValue", "()C"));
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Short", new Pair<String, String>("shortValue", "()S"));
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Integer", new Pair<String, String>("intValue", "()I"));
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Long", new Pair<String, String>("longValue", "()J"));
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Float", new Pair<String, String>("floatValue", "()F"));
-    TYPES_TO_CONVERSION_METHOD_MAP.put("java.lang.Double", new Pair<String, String>("doubleValue", "()D"));
-  }
+public class UnBoxingEvaluator implements Evaluator
+{
+	private final Evaluator myOperand;
+	private static final Map<String, Couple<String>> TYPES_TO_CONVERSION_METHOD_MAP = new HashMap<String, Couple<String>>();
 
-  public static boolean isTypeUnboxable(String typeName) {
-    return TYPES_TO_CONVERSION_METHOD_MAP.containsKey(typeName);
-  }
+	static
+	{
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_BOOLEAN, Couple.of("booleanValue", "()Z"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_BYTE, Couple.of("byteValue", "()B"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_CHARACTER, Couple.of("charValue", "()C"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_SHORT, Couple.of("shortValue", "()S"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_INTEGER, Couple.of("intValue", "()I"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_LONG, Couple.of("longValue", "()J"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_FLOAT, Couple.of("floatValue", "()F"));
+		TYPES_TO_CONVERSION_METHOD_MAP.put(CommonClassNames.JAVA_LANG_DOUBLE, Couple.of("doubleValue", "()D"));
+	}
 
-  public UnBoxingEvaluator(Evaluator operand) {
-    myOperand = new DisableGC(operand);
-  }
+	public static boolean isTypeUnboxable(String typeName)
+	{
+		return TYPES_TO_CONVERSION_METHOD_MAP.containsKey(typeName);
+	}
 
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    final Value result = (Value)myOperand.evaluate(context);
-    if (result == null) {
-      throw new EvaluateException("java.lang.NullPointerException: cannot unbox null value");
-    }
-    if (result instanceof ObjectReference) {
-      final String valueTypeName = result.type().name();
-      final Pair<String, String> pair = TYPES_TO_CONVERSION_METHOD_MAP.get(valueTypeName);
-      if (pair != null) {
-        return convertToPrimitive(context, (ObjectReference)result, pair.getFirst(), pair.getSecond());
-      }
-    }
-    return result;
-  }
-                                          
-  @Nullable
-  public Modifier getModifier() {
-    return null;
-  }
+	public UnBoxingEvaluator(@NotNull Evaluator operand)
+	{
+		myOperand = new DisableGC(operand);
+	}
 
-  private static Value convertToPrimitive(EvaluationContextImpl context, ObjectReference value, final String conversionMethodName,
-                                          String conversionMethodSignature) throws EvaluateException {
-    final DebugProcessImpl process = context.getDebugProcess();
-    final ClassType wrapperClass = (ClassType)value.referenceType();
-    final List<Method> methods = wrapperClass.methodsByName(conversionMethodName, conversionMethodSignature);
-    if (methods.size() == 0) { 
-      throw new EvaluateException("Cannot convert to primitive value of type " + value.type() + ": Unable to find method " +
-                                  conversionMethodName + conversionMethodSignature);
-    }
+	public Object evaluate(EvaluationContextImpl context) throws EvaluateException
+	{
+		return unbox(myOperand.evaluate(context), context);
+	}
 
-    final Method method = methods.get(0);
+	public static Object unbox(@Nullable Object value, EvaluationContextImpl context) throws EvaluateException
+	{
+		if(value == null)
+		{
+			throw new EvaluateException("java.lang.NullPointerException: cannot unbox null value");
+		}
+		if(value instanceof ObjectReference)
+		{
+			final String valueTypeName = ((ObjectReference) value).type().name();
+			final Couple<String> pair = TYPES_TO_CONVERSION_METHOD_MAP.get(valueTypeName);
+			if(pair != null)
+			{
+				return convertToPrimitive(context, (ObjectReference) value, pair.getFirst(), pair.getSecond());
+			}
+		}
+		return value;
+	}
 
-    return process.invokeMethod(context, value, method, new ArrayList());
-  }
+	@Nullable
+	public Modifier getModifier()
+	{
+		return null;
+	}
+
+	private static Value convertToPrimitive(EvaluationContextImpl context, ObjectReference value, final String conversionMethodName, String conversionMethodSignature) throws EvaluateException
+	{
+		final DebugProcessImpl process = context.getDebugProcess();
+		final ClassType wrapperClass = (ClassType) value.referenceType();
+		final List<Method> methods = wrapperClass.methodsByName(conversionMethodName, conversionMethodSignature);
+		if(methods.size() == 0)
+		{
+			throw new EvaluateException("Cannot convert to primitive value of type " + value.type() + ": Unable to find method " +
+					conversionMethodName + conversionMethodSignature);
+		}
+
+		return process.invokeMethod(context, value, methods.get(0), Collections.emptyList());
+	}
 }

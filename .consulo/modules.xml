@@ -207,6 +207,7 @@
               </binaries>
             </library>
           </orderEntry>
+          <orderEntry type="library" name="jetbrains-asm5" level="project" />
         </module-layer>
       </module>
       <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl" current-layer="Default">
@@ -229,6 +230,7 @@
         <module-layer name="Default">
           <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+          <extension id="lombok" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />

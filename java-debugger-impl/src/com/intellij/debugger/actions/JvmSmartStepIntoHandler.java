@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,9 @@
  */
 package com.intellij.debugger.actions;
 
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -30,19 +26,16 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.AnonymousClassMethodFilter;
 import com.intellij.debugger.engine.BasicStepMethodFilter;
+import com.intellij.debugger.engine.ClassInstanceMethodFilter;
 import com.intellij.debugger.engine.LambdaMethodFilter;
 import com.intellij.debugger.engine.MethodFilter;
 import com.intellij.debugger.impl.DebuggerSession;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.fileEditor.TextEditor;
-import com.intellij.openapi.keymap.KeymapUtil;
-import com.intellij.openapi.ui.popup.ListPopup;
+import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.xdebugger.impl.actions.XDebuggerActions;
@@ -54,8 +47,7 @@ import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
  */
 public abstract class JvmSmartStepIntoHandler
 {
-	public static ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME =
-			ExtensionPointName.create("org.consulo.java.debugger.jvmSmartStepIntoHandler");
+	public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create("com.intellij.debugger.jvmSmartStepIntoHandler");
 
 	@NotNull
 	public abstract List<SmartStepTarget> findSmartStepTargets(SourcePosition position);
@@ -78,6 +70,7 @@ public abstract class JvmSmartStepIntoHandler
 			final SmartStepTarget firstTarget = targets.get(0);
 			if(targets.size() == 1)
 			{
+				session.sessionResumed();
 				session.stepInto(true, createMethodFilter(firstTarget));
 			}
 			else
@@ -87,39 +80,15 @@ public abstract class JvmSmartStepIntoHandler
 				{
 					public void execute(SmartStepTarget chosenTarget)
 					{
+						session.sessionResumed();
 						session.stepInto(true, createMethodFilter(chosenTarget));
 					}
 				});
-				final ListPopup popup = new ListPopupImpl(popupStep)
-				{
-					@Override
-					protected JComponent createContent()
-					{
-						registerExtraHandleShortcuts(XDebuggerActions.STEP_INTO);
-						registerExtraHandleShortcuts(XDebuggerActions.SMART_STEP_INTO);
-						return super.createContent();
-					}
-
-					private void registerExtraHandleShortcuts(String actionName)
-					{
-						AnAction action = ActionManager.getInstance().getAction(actionName);
-						KeyStroke stroke = KeymapUtil.getKeyStroke(action.getShortcutSet());
-						if(stroke != null)
-						{
-							registerAction("handleSelection " + stroke, stroke, new AbstractAction()
-							{
-								@Override
-								public void actionPerformed(ActionEvent e)
-								{
-									handleSelect(true);
-								}
-							});
-						}
-					}
-				};
+				ListPopupImpl popup = new ListPopupImpl(popupStep);
+				DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
+				DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
 				popup.addListSelectionListener(new ListSelectionListener()
 				{
-					@Override
 					public void valueChanged(ListSelectionEvent e)
 					{
 						popupStep.getScopeHighlighter().dropHighlight();
@@ -134,8 +103,7 @@ public abstract class JvmSmartStepIntoHandler
 					}
 				});
 				highlightTarget(popupStep, firstTarget);
-				final RelativePoint point = DebuggerUIUtil.calcPopupLocation(editor, position.getLine());
-				popup.show(point);
+				DebuggerUIUtil.showPopupForEditorLine(popup, editor, position.getLine());
 			}
 			return true;
 		}
@@ -147,7 +115,7 @@ public abstract class JvmSmartStepIntoHandler
 		final PsiElement highlightElement = target.getHighlightElement();
 		if(highlightElement != null)
 		{
-			popupStep.getScopeHighlighter().highlight(highlightElement, Arrays.asList(highlightElement));
+			popupStep.getScopeHighlighter().highlight(highlightElement, Collections.singletonList(highlightElement));
 		}
 	}
 
@@ -163,8 +131,15 @@ public abstract class JvmSmartStepIntoHandler
 		if(stepTarget instanceof MethodSmartStepTarget)
 		{
 			final PsiMethod method = ((MethodSmartStepTarget) stepTarget).getMethod();
-			return stepTarget.needsBreakpointRequest() ? new AnonymousClassMethodFilter(method, stepTarget.getCallingExpressionLines()) : new
-					BasicStepMethodFilter(method, stepTarget.getCallingExpressionLines());
+			if(stepTarget.needsBreakpointRequest())
+			{
+				return method.getContainingClass() instanceof PsiAnonymousClass ? new ClassInstanceMethodFilter(method, stepTarget.getCallingExpressionLines()) : new AnonymousClassMethodFilter
+						(method, stepTarget.getCallingExpressionLines());
+			}
+			else
+			{
+				return new BasicStepMethodFilter(method, stepTarget.getCallingExpressionLines());
+			}
 		}
 		if(stepTarget instanceof LambdaSmartStepTarget)
 		{

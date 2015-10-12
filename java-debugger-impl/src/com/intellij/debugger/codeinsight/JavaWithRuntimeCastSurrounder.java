@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger.codeinsight;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.generation.surroundWith.JavaExpressionSurrounder;
 import com.intellij.debugger.DebuggerBundle;
@@ -31,89 +33,122 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiCodeFragment;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiParenthesizedExpression;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeCastExpression;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * User: lex
  * Date: Jul 17, 2003
  * Time: 7:51:01 PM
  */
-public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
+public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder
+{
 
-  public String getTemplateDescription() {
-    return CodeInsightBundle.message("surround.with.runtime.type.template");
-  }
+	@Override
+	public String getTemplateDescription()
+	{
+		return CodeInsightBundle.message("surround.with.runtime.type.template");
+	}
 
-  public boolean isApplicable(PsiExpression expr) {
-    if (!expr.isPhysical()) return false;
-    PsiFile file = expr.getContainingFile();
-    if (!(file instanceof PsiCodeFragment)) return false;
-    if (file.getUserData(DebuggerExpressionComboBox.KEY) == null) {
-      return false;
-    }
+	@Override
+	public boolean isApplicable(PsiExpression expr)
+	{
+		if(!expr.isPhysical())
+		{
+			return false;
+		}
+		PsiFile file = expr.getContainingFile();
+		if(!(file instanceof PsiCodeFragment))
+		{
+			return false;
+		}
+		if(file.getUserData(DebuggerExpressionComboBox.KEY) == null)
+		{
+			return false;
+		}
 
-    return RuntimeTypeEvaluator.isSubtypeable(expr);
-  }
+		return RuntimeTypeEvaluator.isSubtypeable(expr);
+	}
 
-  public TextRange surroundExpression(Project project, Editor editor, PsiExpression expr) throws IncorrectOperationException {
-    DebuggerContextImpl debuggerContext = (DebuggerManagerEx.getInstanceEx(project)).getContext();
-    DebuggerSession debuggerSession = debuggerContext.getDebuggerSession();
-    if (debuggerSession != null) {
-      final ProgressWindowWithNotification progressWindow = new ProgressWindowWithNotification(true, expr.getProject());
-      SurroundWithCastWorker worker = new SurroundWithCastWorker(editor, expr, debuggerContext, progressWindow);
-      progressWindow.setTitle(DebuggerBundle.message("title.evaluating"));
-      debuggerContext.getDebugProcess().getManagerThread().startProgress(worker, progressWindow);
-    }
-    return null;
-  }
+	@Override
+	public TextRange surroundExpression(Project project, Editor editor, PsiExpression expr) throws IncorrectOperationException
+	{
+		DebuggerContextImpl debuggerContext = (DebuggerManagerEx.getInstanceEx(project)).getContext();
+		DebuggerSession debuggerSession = debuggerContext.getDebuggerSession();
+		if(debuggerSession != null)
+		{
+			final ProgressWindowWithNotification progressWindow = new ProgressWindowWithNotification(true, expr.getProject());
+			SurroundWithCastWorker worker = new SurroundWithCastWorker(editor, expr, debuggerContext, progressWindow);
+			progressWindow.setTitle(DebuggerBundle.message("title.evaluating"));
+			debuggerContext.getDebugProcess().getManagerThread().startProgress(worker, progressWindow);
+		}
+		return null;
+	}
 
-  private class SurroundWithCastWorker extends RuntimeTypeEvaluator {
-    private final Editor myEditor;
+	private static class SurroundWithCastWorker extends RuntimeTypeEvaluator
+	{
+		private final Editor myEditor;
 
-    public SurroundWithCastWorker(Editor editor, PsiExpression expression, DebuggerContextImpl context, final ProgressIndicator indicator) {
-      super(editor, expression, context, indicator);
-      myEditor = editor;
-    }
+		public SurroundWithCastWorker(Editor editor, PsiExpression expression, DebuggerContextImpl context, final ProgressIndicator indicator)
+		{
+			super(editor, expression, context, indicator);
+			myEditor = editor;
+		}
 
-    @Override
-    protected void typeCalculationFinished(@Nullable final PsiClass type) {
-      if (type == null) {
-        return;
-      }
+		@Override
+		protected void typeCalculationFinished(@Nullable final PsiType type)
+		{
+			if(type == null)
+			{
+				return;
+			}
 
-      hold();
-      final Project project = myElement.getProject();
-      DebuggerInvocationUtil.invokeLater(project, new Runnable() {
-        public void run() {
-          new WriteCommandAction(project, CodeInsightBundle.message("command.name.surround.with.runtime.cast")) {
-            protected void run(Result result) throws Throwable {
-              try {
-                PsiElementFactory factory = JavaPsiFacade.getInstance(myElement.getProject()).getElementFactory();
-                PsiParenthesizedExpression parenth =
-                  (PsiParenthesizedExpression)factory.createExpressionFromText("((" + type.getQualifiedName() + ")expr)", null);
-                PsiTypeCastExpression cast = (PsiTypeCastExpression)parenth.getExpression();
-                cast.getOperand().replace(myElement);
-                parenth = (PsiParenthesizedExpression)JavaCodeStyleManager.getInstance(project).shortenClassReferences(parenth);
-                PsiExpression expr = (PsiExpression)myElement.replace(parenth);
-                TextRange range = expr.getTextRange();
-                myEditor.getSelectionModel().setSelection(range.getStartOffset(), range.getEndOffset());
-                myEditor.getCaretModel().moveToOffset(range.getEndOffset());
-                myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-              }
-              catch (IncorrectOperationException e) {
-                // OK here. Can be caused by invalid type like one for proxy starts with . '.Proxy34'
-              }
-              finally {
-                release();
-              }
-            }
-          }.execute();
-        }
-      }, myProgressIndicator.getModalityState());
-    }
+			hold();
+			final Project project = myElement.getProject();
+			DebuggerInvocationUtil.invokeLater(project, new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					new WriteCommandAction(project, CodeInsightBundle.message("command.name.surround.with.runtime.cast"))
+					{
+						@Override
+						protected void run(@NotNull Result result) throws Throwable
+						{
+							try
+							{
+								PsiElementFactory factory = JavaPsiFacade.getInstance(myElement.getProject()).getElementFactory();
+								PsiParenthesizedExpression parenth = (PsiParenthesizedExpression) factory.createExpressionFromText("((" + type.getCanonicalText() + ")expr)", null);
+								//noinspection ConstantConditions
+								((PsiTypeCastExpression) parenth.getExpression()).getOperand().replace(myElement);
+								parenth = (PsiParenthesizedExpression) JavaCodeStyleManager.getInstance(project).shortenClassReferences(parenth);
+								PsiExpression expr = (PsiExpression) myElement.replace(parenth);
+								TextRange range = expr.getTextRange();
+								myEditor.getSelectionModel().setSelection(range.getStartOffset(), range.getEndOffset());
+								myEditor.getCaretModel().moveToOffset(range.getEndOffset());
+								myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+							}
+							catch(IncorrectOperationException e)
+							{
+								// OK here. Can be caused by invalid type like one for proxy starts with . '.Proxy34'
+							}
+							finally
+							{
+								release();
+							}
+						}
+					}.execute();
+				}
+			}, myProgressIndicator.getModalityState());
+		}
 
-  }
+	}
 }

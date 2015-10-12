@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,14 +50,15 @@ import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
+import com.intellij.debugger.engine.evaluation.expression.UnBoxingEvaluator;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
-import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.debugger.requests.ClassPrepareRequestor;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
@@ -88,7 +89,7 @@ import consulo.internal.com.sun.jdi.event.LocatableEvent;
 
 public abstract class Breakpoint<P extends JavaBreakpointProperties> implements FilteredRequestor, ClassPrepareRequestor
 {
-	public static Key<Breakpoint> DATA_KEY = Key.create("JavaBreakpoint");
+	public static final Key<Breakpoint> DATA_KEY = Key.create("JavaBreakpoint");
 
 	final XBreakpoint<P> myXBreakpoint;
 	protected final Project myProject;
@@ -104,11 +105,13 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		myXBreakpoint = xBreakpoint;
 	}
 
+	@NotNull
 	public Project getProject()
 	{
 		return myProject;
 	}
 
+	@NotNull
 	protected P getProperties()
 	{
 		return myXBreakpoint.getProperties();
@@ -129,11 +132,18 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	 */
 	public abstract void createRequest(DebugProcessImpl debugProcess);
 
-	protected boolean shouldCreateRequest(DebugProcessImpl debugProcess)
+	protected boolean shouldCreateRequest(final DebugProcessImpl debugProcess)
 	{
-		JavaDebugProcess process = debugProcess.getXdebugProcess();
-		return process != null && debugProcess.isAttached() && ((XDebugSessionImpl) process.getSession()).isBreakpointActive(myXBreakpoint) &&
-				debugProcess.getRequestsManager().findRequests(this).isEmpty();
+		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
+		{
+			@Override
+			public Boolean compute()
+			{
+				JavaDebugProcess process = debugProcess.getXdebugProcess();
+				return process != null && debugProcess.isAttached() && ((XDebugSessionImpl) process.getSession()).isBreakpointActive(myXBreakpoint) && debugProcess.getRequestsManager().findRequests
+						(Breakpoint.this).isEmpty();
+			}
+		});
 	}
 
 	/**
@@ -276,8 +286,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 				return false;
 			}
 
-			final EvaluationContextImpl evaluationContext = new EvaluationContextImpl(action.getSuspendContext(), frameProxy, getThisObject(context,
-					event));
+			final EvaluationContextImpl evaluationContext = new EvaluationContextImpl(action.getSuspendContext(), frameProxy, getThisObject(context, event));
 
 			if(!evaluateCondition(evaluationContext, event))
 			{
@@ -324,14 +333,12 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 					final TextWithImports expressionToEvaluate = getLogMessage();
 					try
 					{
-						ExpressionEvaluator evaluator = DebuggerInvocationUtil.commitAndRunReadAction(getProject(),
-								new EvaluatingComputable<ExpressionEvaluator>()
+						ExpressionEvaluator evaluator = DebuggerInvocationUtil.commitAndRunReadAction(getProject(), new EvaluatingComputable<ExpressionEvaluator>()
 						{
 							@Override
 							public ExpressionEvaluator compute() throws EvaluateException
 							{
-								return EvaluatorBuilderImpl.build(expressionToEvaluate, ContextUtil.getContextElement(context),
-										ContextUtil.getSourcePosition(context));
+								return EvaluatorBuilderImpl.build(expressionToEvaluate, ContextUtil.getContextElement(context), ContextUtil.getSourcePosition(context));
 							}
 						});
 						final Value eval = evaluator.evaluate(context);
@@ -433,8 +440,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 		try
 		{
-			ExpressionEvaluator evaluator = DebuggerInvocationUtil.commitAndRunReadAction(context.getProject(),
-					new EvaluatingComputable<ExpressionEvaluator>()
+			ExpressionEvaluator evaluator = DebuggerInvocationUtil.commitAndRunReadAction(context.getProject(), new EvaluatingComputable<ExpressionEvaluator>()
 			{
 				@Override
 				public ExpressionEvaluator compute() throws EvaluateException
@@ -451,7 +457,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 					return EvaluatorBuilderImpl.build(getCondition(), contextPsiElement, contextSourcePosition);
 				}
 			});
-			final Value value = evaluator.evaluate(context);
+			Object value = UnBoxingEvaluator.unbox(evaluator.evaluate(context), context);
 			if(!(value instanceof BooleanValue))
 			{
 				throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.boolean.expected"));
@@ -467,8 +473,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			{
 				return false;
 			}
-			throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("error.failed.evaluating.breakpoint.condition",
-					getCondition(), ex.getMessage()));
+			throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("error.failed.evaluating.breakpoint.condition", getCondition(), ex.getMessage()));
 		}
 		return true;
 	}
@@ -513,6 +518,9 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	private void handleTemporaryBreakpointHit(final DebugProcessImpl debugProcess)
 	{
+		// need to delete the request immediately, see IDEA-133978
+		debugProcess.getRequestsManager().deleteRequest(this);
+
 		debugProcess.addDebugProcessListener(new DebugProcessAdapter()
 		{
 			@Override
@@ -546,11 +554,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	{
 	}
 
-	public void delete()
-	{
-		RequestManagerImpl.deleteRequests(this);
-	}
-
 	public void readExternal(Element parentNode) throws InvalidDataException
 	{
 		FilteredRequestorImpl requestor = new FilteredRequestorImpl(myProject);
@@ -577,8 +580,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 				XExpressionImpl expression = XExpressionImpl.fromText(logMessage);
 				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XBreakpointActionsPanel.LOG_EXPRESSION_HISTORY_ID, expression);
 				myXBreakpoint.setLogExpressionObject(expression);
-				((XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode,
-						"LOG_EXPRESSION_ENABLED")));
+				((XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")));
 			}
 		}
 		catch(Exception ignored)
@@ -639,10 +641,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	@Override
 	public boolean isCountFilterEnabled()
 	{
-		if(getProperties() == null)
-		{
-			return false;
-		}
 		return getProperties().isCOUNT_FILTER_ENABLED();
 	}
 
@@ -671,10 +669,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	@Override
 	public boolean isClassFiltersEnabled()
 	{
-		if(getProperties() == null)
-		{
-			return false;
-		}
 		return getProperties().isCLASS_FILTERS_ENABLED();
 	}
 
@@ -717,10 +711,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	@Override
 	public boolean isInstanceFiltersEnabled()
 	{
-		if(getProperties() == null)
-		{
-			return false;
-		}
 		return getProperties().isINSTANCE_FILTERS_ENABLED();
 	}
 
@@ -813,7 +803,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		myXBreakpoint.setConditionExpression(TextWithImportsImpl.toXExpression(condition));
 	}
 
-	protected void addInstanceFilter(long l)
+	public void addInstanceFilter(long l)
 	{
 		getProperties().addInstanceFilter(l);
 	}

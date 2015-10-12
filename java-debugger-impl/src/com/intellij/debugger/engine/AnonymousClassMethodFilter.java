@@ -47,8 +47,7 @@ public class AnonymousClassMethodFilter extends BasicStepMethodFilter implements
 				if(firstStatementPosition != null)
 				{
 					final PsiStatement lastStatement = statements[statements.length - 1];
-					lastStatementPosition = SourcePosition.createFromOffset(firstStatementPosition.getFile(),
-							lastStatement.getTextRange().getEndOffset());
+					lastStatementPosition = SourcePosition.createFromOffset(firstStatementPosition.getFile(), lastStatement.getTextRange().getEndOffset());
 				}
 			}
 		}

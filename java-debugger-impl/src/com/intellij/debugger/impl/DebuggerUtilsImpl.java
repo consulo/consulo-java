@@ -18,6 +18,7 @@ package com.intellij.debugger.impl;
 import java.io.IOException;
 
 import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.apiAdapters.TransportServiceWrapper;
 import com.intellij.debugger.engine.DebugProcess;
@@ -29,6 +30,7 @@ import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilderImpl;
+import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeExpression;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.render.BatchEvaluator;
@@ -141,10 +143,12 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 	}
 
 	@Override
-	public String findAvailableDebugAddress(final boolean useSockets) throws ExecutionException
+	@NotNull
+	public TransportService.ListenKey findAvailableDebugAddress(final int type) throws ExecutionException
 	{
-		final TransportServiceWrapper transportService = TransportServiceWrapper.getTransportService(useSockets);
-		if(useSockets)
+		final TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(type);
+
+		if(type == DebuggerSettings.SOCKET_TRANSPORT)
 		{
 			final int freePort;
 			try
@@ -155,36 +159,25 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 			{
 				throw new ExecutionException(DebugProcessImpl.processError(e));
 			}
-			return Integer.toString(freePort);
+			return new TransportService.ListenKey()
+			{
+				@Override
+				public String address()
+				{
+					return Integer.toString(freePort);
+				}
+			};
 		}
 
 		try
 		{
-			TransportService.ListenKey listenKey = transportService.startListening();
-			final String address = listenKey.address();
-			transportService.stopListening(listenKey);
+			TransportService.ListenKey address = transportService.startListening();
+			transportService.stopListening(address);
 			return address;
 		}
 		catch(IOException e)
 		{
-			int tryNum = 0;
-			while(true)
-			{
-				try
-				{
-					TransportService.ListenKey listenKey = transportService.startListening("javadebug_" + (int) (Math.random() * 1000));
-					final String address = listenKey.address();
-					transportService.stopListening(listenKey);
-					return address;
-				}
-				catch(Exception ex)
-				{
-					if(tryNum++ > 10)
-					{
-						throw new ExecutionException(DebugProcessImpl.processError(ex));
-					}
-				}
-			}
+			throw new ExecutionException(DebugProcessImpl.processError(e));
 		}
 	}
 

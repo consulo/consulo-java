@@ -537,6 +537,7 @@
 		</extensionPoint>
 
 		<extensionPoint name="getterSetterProvider" interface="com.intellij.codeInsight.generation.GetterSetterPrototypeProvider"/>
+		<extensionPoint name="generation.toStringClassFilter" interface="org.jetbrains.generate.tostring.GenerateToStringClassFilter"/>
 		<extensionPoint name="classTypePointerFactory" interface="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
 
@@ -844,6 +845,19 @@
 
 		<applicationService serviceInterface="com.intellij.util.descriptors.ConfigFileFactory"
 							serviceImplementation="com.intellij.util.descriptors.impl.ConfigFileFactoryImpl"/>
+
+		<applicationService serviceInterface="org.jetbrains.java.generate.template.toString.ToStringTemplatesManager"
+							serviceImplementation="org.jetbrains.java.generate.template.toString.ToStringTemplatesManager"/>
+		<applicationService serviceInterface="com.intellij.codeInsight.generation.EqualsHashCodeTemplatesManager"
+							serviceImplementation="com.intellij.codeInsight.generation.EqualsHashCodeTemplatesManager"/>
+		<applicationService serviceInterface="com.intellij.codeInsight.generation.GetterTemplatesManager"
+							serviceImplementation="com.intellij.codeInsight.generation.GetterTemplatesManager"/>
+		<applicationService serviceInterface="com.intellij.codeInsight.generation.SetterTemplatesManager"
+							serviceImplementation="com.intellij.codeInsight.generation.SetterTemplatesManager"/>
+		<applicationService serviceInterface="org.jetbrains.java.generate.GenerateToStringActionHandler"
+							serviceImplementation="org.jetbrains.java.generate.GenerateToStringActionHandlerImpl"/>
+		<applicationService serviceInterface="org.jetbrains.java.generate.GenerateToStringContext"
+							serviceImplementation="org.jetbrains.java.generate.GenerateToStringContext"/>
 
 		<applicationService serviceInterface="com.intellij.debugger.settings.NodeRendererSettings"
 							serviceImplementation="com.intellij.debugger.settings.NodeRendererSettings"/>
@@ -1954,6 +1968,8 @@
 		<targetElementUtilEx implementation="com.intellij.codeInsight.JavaTargetElementUtilEx" />
 
 		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
+
+		<generation.toStringClassFilter implementation="org.jetbrains.generate.tostring.GenerateToStringInterfaceFilter" order="last"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

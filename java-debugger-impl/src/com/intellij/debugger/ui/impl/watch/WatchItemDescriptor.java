@@ -20,6 +20,7 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.StackFrameContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
@@ -28,66 +29,74 @@ import com.intellij.debugger.impl.PositionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.Value;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * update(Value, boolean) method must be called whenever the state of the target VM changes
  */
-public class WatchItemDescriptor extends EvaluationDescriptor {
+public class WatchItemDescriptor extends EvaluationDescriptor
+{
 
-  @Nullable
-  private final String myCustomName;
+	@Nullable
+	private final String myCustomName;
 
-  public WatchItemDescriptor(Project project, TextWithImports text) {
-    this(project, text, (String)null);
-  }
+	public WatchItemDescriptor(Project project, TextWithImports text)
+	{
+		this(project, text, (String) null);
+	}
 
-  public WatchItemDescriptor(Project project, TextWithImports text, @Nullable String customName) {
-    super(text, project);
-    myCustomName = customName;
-    setValueLabel("");
-  }
+	public WatchItemDescriptor(Project project, TextWithImports text, @Nullable String customName)
+	{
+		super(text, project);
+		myCustomName = customName;
+		setValueLabel("");
+	}
 
-  public WatchItemDescriptor(Project project, TextWithImports text, Value value) {
-    this(project, text, value, null);
-  }
+	public WatchItemDescriptor(Project project, TextWithImports text, Value value)
+	{
+		this(project, text, value, null);
+	}
 
-  public WatchItemDescriptor(Project project, TextWithImports text, Value value, @Nullable String customName) {
-    super(text, project, value);
-    myCustomName = customName;
-    setValueLabel("");
-  }
+	public WatchItemDescriptor(Project project, TextWithImports text, Value value, @Nullable String customName)
+	{
+		super(text, project, value);
+		myCustomName = customName;
+		setValueLabel("");
+	}
 
-  public String getName() {
-    final String customName = myCustomName;
-    return customName == null? getEvaluationText().getText() : customName;
-  }
+	@Override
+	public String getName()
+	{
+		final String customName = myCustomName;
+		return customName == null ? getEvaluationText().getText() : customName;
+	}
 
-  public void setNew() {
-    myIsNew = true;
-  }
+	public void setNew()
+	{
+		myIsNew = true;
+	}
 
-  // call update() after setting a new expression
-  public void setEvaluationText(TextWithImports evaluationText) {
-    if (!Comparing.equal(getEvaluationText(), evaluationText)) {
-      setLvalue(false);
-    }
-    myText = evaluationText;
-    myIsNew = true;
-    setValueLabel("");
-  }
+	// call update() after setting a new expression
+	public void setEvaluationText(TextWithImports evaluationText)
+	{
+		if(!Comparing.equal(getEvaluationText(), evaluationText))
+		{
+			setLvalue(false);
+		}
+		myText = evaluationText;
+		myIsNew = true;
+		setValueLabel("");
+	}
 
-  protected EvaluationContextImpl getEvaluationContext(EvaluationContextImpl evaluationContext) {
-    return evaluationContext;
-  }
+	@Override
+	protected EvaluationContextImpl getEvaluationContext(EvaluationContextImpl evaluationContext)
+	{
+		return evaluationContext;
+	}
 
-  protected PsiCodeFragment getEvaluationCode(StackFrameContext context) throws EvaluateException {
-    final PsiElement psiContext = PositionUtil.getContextElement(context);
-    final PsiCodeFragment fragment = getEffectiveCodeFragmentFactory(psiContext).createCodeFragment(getEvaluationText(), psiContext, myProject);
-    fragment.forceResolveScope(GlobalSearchScope.allScope(myProject));
-    return fragment;
-  }
+	@Override
+	protected PsiCodeFragment getEvaluationCode(StackFrameContext context) throws EvaluateException
+	{
+		return createCodeFragment(PositionUtil.getContextElement(context));
+	}
 }

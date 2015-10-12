@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,22 +38,25 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 	protected final JVMName myTargetMethodSignature;
 	private final Range<Integer> myCallingExpressionLines;
 
-	public BasicStepMethodFilter(PsiMethod psiMethod, Range<Integer> callingExpressionLines)
+	public BasicStepMethodFilter(@NotNull PsiMethod psiMethod, Range<Integer> callingExpressionLines)
 	{
-		myDeclaringClassName = JVMNameUtil.getJVMQualifiedName(psiMethod.getContainingClass());
-		myTargetMethodName = psiMethod.isConstructor() ? "<init>" : psiMethod.getName();
-		myTargetMethodSignature = JVMNameUtil.getJVMSignature(psiMethod);
+		this(JVMNameUtil.getJVMQualifiedName(psiMethod.getContainingClass()), JVMNameUtil.getJVMMethodName(psiMethod), JVMNameUtil.getJVMSignature(psiMethod), callingExpressionLines);
+	}
+
+	protected BasicStepMethodFilter(@NotNull JVMName declaringClassName, @NotNull String targetMethodName, @Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
+	{
+		myDeclaringClassName = declaringClassName;
+		myTargetMethodName = targetMethodName;
+		myTargetMethodSignature = targetMethodSignature;
 		myCallingExpressionLines = callingExpressionLines;
 	}
 
-	@Override
 	@NotNull
 	public String getMethodName()
 	{
 		return myTargetMethodName;
 	}
 
-	@Override
 	public boolean locationMatches(DebugProcessImpl process, Location location) throws EvaluateException
 	{
 		final Method method = location.method();
@@ -88,6 +91,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		return false;
 	}
 
+	@Nullable
 	@Override
 	public Range<Integer> getCallingExpressionLines()
 	{

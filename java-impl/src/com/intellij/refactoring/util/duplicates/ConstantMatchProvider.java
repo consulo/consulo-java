@@ -15,60 +15,72 @@
  */
 package com.intellij.refactoring.util.duplicates;
 
+import java.util.List;
+
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMember;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.util.IncorrectOperationException;
 
-import java.util.List;
-
 /**
-* User: anna
-* Date: 1/16/12
-*/
-class ConstantMatchProvider implements MatchProvider {
-  private final PsiField myField;
-  private final Project myProject;
-  private final List<Match> myMatches;
-  private static final Logger LOG = Logger.getInstance("#" + ConstantMatchProvider.class.getName());
+ * User: anna
+ * Date: 1/16/12
+ */
+class ConstantMatchProvider implements MatchProvider
+{
+	private final PsiField myField;
+	private final Project myProject;
+	private final List<Match> myMatches;
+	private static final Logger LOG = Logger.getInstance("#" + ConstantMatchProvider.class.getName());
 
-  public ConstantMatchProvider(PsiMember member, Project project, List<Match> matches) {
-    myField = (PsiField)member;
-    myProject = project;
-    myMatches = matches;
-  }
+	public ConstantMatchProvider(PsiMember member, Project project, List<Match> matches)
+	{
+		myField = (PsiField) member;
+		myProject = project;
+		myMatches = matches;
+	}
 
-  @Override
-  public PsiElement processMatch(Match match) throws IncorrectOperationException {
-    final PsiClass containingClass = myField.getContainingClass();
-    LOG.assertTrue(containingClass != null, myField);
-    String fieldReference = myField.getName();
-    final PsiElement start = match.getMatchStart();
-    if (!PsiTreeUtil.isAncestor(containingClass, start, false)) {
-      fieldReference = containingClass.getQualifiedName() + "." + fieldReference; 
-    }
-    return match.replaceWithExpression(JavaPsiFacade.getElementFactory(myProject).createExpressionFromText(fieldReference, myField));
-  }
+	@Override
+	public PsiElement processMatch(Match match) throws IncorrectOperationException
+	{
+		final PsiClass containingClass = myField.getContainingClass();
+		LOG.assertTrue(containingClass != null, myField);
+		String fieldReference = myField.getName();
+		final PsiElement start = match.getMatchStart();
+		if(!PsiTreeUtil.isAncestor(containingClass, start, false))
+		{
+			fieldReference = containingClass.getQualifiedName() + "." + fieldReference;
+		}
+		return match.replaceWithExpression(JavaPsiFacade.getElementFactory(myProject).createExpressionFromText(fieldReference, myField));
+	}
 
-  @Override
-  public List<Match> getDuplicates() {
-    return myMatches;
-  }
+	@Override
+	public List<Match> getDuplicates()
+	{
+		return myMatches;
+	}
 
-  @Override
-  public boolean hasDuplicates() {
-    return !myMatches.isEmpty();
-  }
+	@Override
+	public Boolean hasDuplicates()
+	{
+		return !myMatches.isEmpty();
+	}
 
-  @Override
-  public String getConfirmDuplicatePrompt(Match match) {
-    return null;
-  }
+	@Override
+	public String getConfirmDuplicatePrompt(Match match)
+	{
+		return null;
+	}
 
-  @Override
-  public String getReplaceDuplicatesTitle(int idx, int size) {
-    return RefactoringBundle.message("process.duplicates.title", idx, size);
-  }
+	@Override
+	public String getReplaceDuplicatesTitle(int idx, int size)
+	{
+		return RefactoringBundle.message("process.duplicates.title", idx, size);
+	}
 }

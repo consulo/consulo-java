@@ -21,6 +21,7 @@
  */
 package com.intellij.debugger.engine;
 
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.SourcePosition;
@@ -44,8 +45,19 @@ import consulo.internal.com.sun.jdi.request.StepRequest;
 public class RequestHint
 {
 	public static final int STOP = 0;
+	public static final int RESUME = -100;
+
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.engine.RequestHint");
+	@MagicConstant(intValues = {
+			StepRequest.STEP_MIN,
+			StepRequest.STEP_LINE
+	})
 	private final int mySize;
+	@MagicConstant(intValues = {
+			StepRequest.STEP_INTO,
+			StepRequest.STEP_OVER,
+			StepRequest.STEP_OUT
+	})
 	private final int myDepth;
 	private final SourcePosition myPosition;
 	private final int myFrameCount;
@@ -59,22 +71,33 @@ public class RequestHint
 	private boolean myResetIgnoreFilters = false;
 	private boolean myRestoreBreakpoints = false;
 
-	public RequestHint(final ThreadReferenceProxyImpl stepThread,
-			final SuspendContextImpl suspendContext,
-			@NotNull MethodFilter methodFilter)
+	public RequestHint(final ThreadReferenceProxyImpl stepThread, final SuspendContextImpl suspendContext, @NotNull MethodFilter methodFilter)
 	{
 		this(stepThread, suspendContext, StepRequest.STEP_LINE, StepRequest.STEP_INTO, methodFilter);
 	}
 
-	public RequestHint(final ThreadReferenceProxyImpl stepThread, final SuspendContextImpl suspendContext, int depth)
+	public RequestHint(final ThreadReferenceProxyImpl stepThread,
+			final SuspendContextImpl suspendContext,
+			@MagicConstant(intValues = {
+					StepRequest.STEP_INTO,
+					StepRequest.STEP_OVER,
+					StepRequest.STEP_OUT
+			}) int depth)
 	{
 		this(stepThread, suspendContext, StepRequest.STEP_LINE, depth, null);
 	}
 
 	private RequestHint(final ThreadReferenceProxyImpl stepThread,
 			final SuspendContextImpl suspendContext,
-			int stepSize,
-			int depth,
+			@MagicConstant(intValues = {
+					StepRequest.STEP_MIN,
+					StepRequest.STEP_LINE
+			}) int stepSize,
+			@MagicConstant(intValues = {
+					StepRequest.STEP_INTO,
+					StepRequest.STEP_OVER,
+					StepRequest.STEP_OUT
+			}) int depth,
 			@Nullable MethodFilter methodFilter)
 	{
 		mySize = stepSize;
@@ -159,11 +182,20 @@ public class RequestHint
 		return myIgnoreFilters;
 	}
 
+	@MagicConstant(intValues = {
+			StepRequest.STEP_MIN,
+			StepRequest.STEP_LINE
+	})
 	public int getSize()
 	{
 		return mySize;
 	}
 
+	@MagicConstant(intValues = {
+			StepRequest.STEP_INTO,
+			StepRequest.STEP_OVER,
+			StepRequest.STEP_OUT
+	})
 	public int getDepth()
 	{
 		return myDepth;
@@ -218,6 +250,15 @@ public class RequestHint
 		}
 	}
 
+	private static int reached(MethodFilter filter, SuspendContextImpl context)
+	{
+		if(filter instanceof ActionMethodFilter)
+		{
+			return ((ActionMethodFilter) filter).onReached(context);
+		}
+		return STOP;
+	}
+
 	public int getNextStepDepth(final SuspendContextImpl context)
 	{
 		try
@@ -232,7 +273,7 @@ public class RequestHint
 					!isTheSameFrame(context))
 			{
 				myTargetMethodMatched = true;
-				return STOP;
+				return reached(myMethodFilter, context);
 			}
 
 			if((myDepth == StepRequest.STEP_OVER || myDepth == StepRequest.STEP_INTO) && myPosition != null)
@@ -244,8 +285,7 @@ public class RequestHint
 						final SourcePosition locationPosition = ContextUtil.getSourcePosition(context);
 						if(locationPosition != null)
 						{
-							if(myPosition.getFile().equals(locationPosition.getFile()) && isTheSameFrame(context) &&
-									!mySteppedOut)
+							if(myPosition.getFile().equals(locationPosition.getFile()) && isTheSameFrame(context) && !mySteppedOut)
 							{
 								return isOnTheSameLine(locationPosition) ? myDepth : STOP;
 							}
@@ -312,8 +352,7 @@ public class RequestHint
 					if(settings.SKIP_CLASSLOADERS)
 					{
 						final Location location = frameProxy.location();
-						if(location != null && DebuggerUtilsEx.isAssignableFrom("java.lang.ClassLoader",
-								location.declaringType()))
+						if(location != null && DebuggerUtilsEx.isAssignableFrom("java.lang.ClassLoader", location.declaringType()))
 						{
 							return StepRequest.STEP_OUT;
 						}

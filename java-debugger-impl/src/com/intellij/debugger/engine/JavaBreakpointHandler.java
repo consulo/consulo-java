@@ -61,14 +61,19 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 		{
 			final Breakpoint bpt = javaBreakpoint;
 			BreakpointManager.addBreakpoint(bpt);
-			// must use invoke to stay in the current request,
-			// otherwise dependent breakpoints do not get enabled on not-suspending parents hit
-			myProcess.getManagerThread().invoke(new DebuggerCommandImpl()
+			// use schedule not to block initBreakpoints
+			myProcess.getManagerThread().schedule(new DebuggerCommandImpl()
 			{
 				@Override
 				protected void action() throws Exception
 				{
 					bpt.createRequest(myProcess);
+				}
+
+				@Override
+				public Priority getPriority()
+				{
+					return Priority.HIGH;
 				}
 			});
 		}
@@ -80,13 +85,19 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 		final Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint != null)
 		{
-			// must use invoke to stay in the current request, see comment in registerBreakpoint
-			myProcess.getManagerThread().invoke(new DebuggerCommandImpl()
+			// use schedule not to block initBreakpoints
+			myProcess.getManagerThread().schedule(new DebuggerCommandImpl()
 			{
 				@Override
 				protected void action() throws Exception
 				{
-					javaBreakpoint.delete();
+					myProcess.getRequestsManager().deleteRequest(javaBreakpoint);
+				}
+
+				@Override
+				public Priority getPriority()
+				{
+					return Priority.HIGH;
 				}
 			});
 		}
