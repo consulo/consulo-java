@@ -24,10 +24,23 @@
  */
 package com.intellij.codeInspection.visibility;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.List;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandler;
+import com.intellij.codeInsight.daemon.impl.IdentifierUtil;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.reference.*;
@@ -40,15 +53,6 @@ import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.util.List;
 
 public class VisibilityInspection extends GlobalJavaInspectionTool {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.visibility.VisibilityInspection");
@@ -184,7 +188,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool {
       String access = getPossibleAccess(refElement);
       if (access != refElement.getAccessModifier() && access != null) {
         final PsiElement element = refElement.getElement();
-        final PsiElement nameIdentifier = element != null ? HighlightUsagesHandler.getNameIdentifier(element) : null;
+        final PsiElement nameIdentifier = element != null ? IdentifierUtil.getNameIdentifier(element) : null;
         if (nameIdentifier != null) {
           return new ProblemDescriptor[]{manager.createProblemDescriptor(nameIdentifier,
                                                                          access.equals(PsiModifier.PRIVATE)
