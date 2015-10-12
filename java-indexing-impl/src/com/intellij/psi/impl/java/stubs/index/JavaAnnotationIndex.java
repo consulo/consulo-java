@@ -19,6 +19,9 @@
  */
 package com.intellij.psi.impl.java.stubs.index;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.impl.search.JavaSourceFilterScope;
@@ -26,25 +29,27 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StringStubIndexExtension;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
+{
 
-public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation> {
+	private static final JavaAnnotationIndex ourInstance = new JavaAnnotationIndex();
 
-  private static final JavaAnnotationIndex ourInstance = new JavaAnnotationIndex();
-  public static JavaAnnotationIndex getInstance() {
-    return ourInstance;
-  }
+	public static JavaAnnotationIndex getInstance()
+	{
+		return ourInstance;
+	}
 
-  @NotNull
-  @Override
-  public StubIndexKey<String, PsiAnnotation> getKey() {
-    return JavaStubIndexKeys.ANNOTATIONS;
-  }
+	@NotNull
+	@Override
+	public StubIndexKey<String, PsiAnnotation> getKey()
+	{
+		return JavaStubIndexKeys.ANNOTATIONS;
+	}
 
-  @Override
-  public Collection<PsiAnnotation> get(final String s, final Project project, @NotNull final GlobalSearchScope scope) {
-    return StubIndex.getInstance().safeGet(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
-  }
+	@Override
+	public Collection<PsiAnnotation> get(final String s, final Project project, @NotNull final GlobalSearchScope scope)
+	{
+		return StubIndex.getInstance().safeGet(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
+	}
 }

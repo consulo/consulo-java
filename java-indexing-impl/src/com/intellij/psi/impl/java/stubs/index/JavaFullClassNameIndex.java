@@ -19,6 +19,9 @@
  */
 package com.intellij.psi.impl.java.stubs.index;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.impl.search.JavaSourceFilterScope;
@@ -26,25 +29,27 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.IntStubIndexExtension;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass>
+{
 
-public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass> {
+	private static final JavaFullClassNameIndex ourInstance = new JavaFullClassNameIndex();
 
-  private static final JavaFullClassNameIndex ourInstance = new JavaFullClassNameIndex();
-  public static JavaFullClassNameIndex getInstance() {
-    return ourInstance;
-  }
+	public static JavaFullClassNameIndex getInstance()
+	{
+		return ourInstance;
+	}
 
-  @NotNull
-  @Override
-  public StubIndexKey<Integer, PsiClass> getKey() {
-    return JavaStubIndexKeys.CLASS_FQN;
-  }
+	@NotNull
+	@Override
+	public StubIndexKey<Integer, PsiClass> getKey()
+	{
+		return JavaStubIndexKeys.CLASS_FQN;
+	}
 
-  @Override
-  public Collection<PsiClass> get(final Integer integer, final Project project, @NotNull final GlobalSearchScope scope) {
-    return StubIndex.getInstance().safeGet(getKey(), integer, project, new JavaSourceFilterScope(scope), PsiClass.class);
-  }
+	@Override
+	public Collection<PsiClass> get(final Integer integer, final Project project, @NotNull final GlobalSearchScope scope)
+	{
+		return StubIndex.getInstance().safeGet(getKey(), integer, project, new JavaSourceFilterScope(scope), PsiClass.class);
+	}
 }
