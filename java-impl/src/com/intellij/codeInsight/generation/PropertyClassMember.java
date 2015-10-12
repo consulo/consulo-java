@@ -15,23 +15,27 @@
  */
 package com.intellij.codeInsight.generation;
 
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiClass;
+import com.intellij.util.IncorrectOperationException;
 
 /**
  * User: anna
  * Date: 3/4/13
  */
-public interface PropertyClassMember extends EncapsulatableClassMember {
-  /**
-   * @return PsiElement or TemplateGenerationInfo
-   */
-  @Nullable
-  GenerationInfo[] generateGetters() throws IncorrectOperationException;
+public interface PropertyClassMember extends EncapsulatableClassMember
+{
+	/**
+	 * @param aClass
+	 * @return PsiElement or TemplateGenerationInfo
+	 */
+	@Nullable
+	GenerationInfo[] generateGetters(PsiClass aClass) throws IncorrectOperationException;
 
-  /**
-   * @return PsiElement or TemplateGenerationInfo
-   */
-  @Nullable
-  GenerationInfo[] generateSetters() throws IncorrectOperationException;
+	/**
+	 * @param aClass
+	 * @return PsiElement or TemplateGenerationInfo
+	 */
+	@Nullable
+	GenerationInfo[] generateSetters(PsiClass aClass) throws IncorrectOperationException;
 }

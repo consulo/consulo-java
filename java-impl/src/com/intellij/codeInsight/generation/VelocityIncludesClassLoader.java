@@ -25,6 +25,6 @@ public class VelocityIncludesClassLoader extends ClasspathResourceLoader
 	@Override
 	public InputStream getResourceStream(String name) throws ResourceNotFoundException
 	{
-		return super.getResourceStream("com/intellij/codeInsight/generation/" + name);
+		return VelocityIncludesClassLoader.class.getResourceAsStream("/com/intellij/codeInsight/generation/" + name);
 	}
 }

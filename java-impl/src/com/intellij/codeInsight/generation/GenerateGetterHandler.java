@@ -15,49 +15,72 @@
  */
 package com.intellij.codeInsight.generation;
 
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.codeInsight.JavaCodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.util.IncorrectOperationException;
 
-public class GenerateGetterHandler extends GenerateGetterSetterHandlerBase {
-  public GenerateGetterHandler() {
-    super(CodeInsightBundle.message("generate.getter.fields.chooser.title"));
-  }
+public class GenerateGetterHandler extends GenerateGetterSetterHandlerBase
+{
+	public GenerateGetterHandler()
+	{
+		super(CodeInsightBundle.message("generate.getter.fields.chooser.title"));
+	}
 
-  @Override
-  protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project) {
-    if (aClass.isInterface()) {
-      return ClassMember.EMPTY_ARRAY; // TODO
-    }
-    return super.chooseOriginalMembers(aClass, project);
-  }
+	@Override
+	protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project)
+	{
+		if(aClass.isInterface())
+		{
+			return ClassMember.EMPTY_ARRAY; // TODO
+		}
+		return super.chooseOriginalMembers(aClass, project);
+	}
 
-  @Override
-  protected GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember original) throws IncorrectOperationException {
-    if (original instanceof PropertyClassMember) {
-      final PropertyClassMember propertyClassMember = (PropertyClassMember)original;
-      final GenerationInfo[] getters = propertyClassMember.generateGetters();
-      if (getters != null) {
-        return getters;
-      }
-    } else if (original instanceof EncapsulatableClassMember) {
-      final EncapsulatableClassMember encapsulatableClassMember = (EncapsulatableClassMember)original;
-      final GenerationInfo getter = encapsulatableClassMember.generateGetter();
-      if (getter != null) {
-        return new GenerationInfo[]{getter};
-      }
-    }
-    return GenerationInfo.EMPTY_ARRAY;
-  }
+	@Nullable
+	@Override
+	protected JComponent getHeaderPanel(final Project project)
+	{
+		return getHeaderPanel(project, GetterTemplatesManager.getInstance(), JavaCodeInsightBundle.message("generate.equals.hashcode.template"));
+	}
 
-  @Override
-  protected String getNothingFoundMessage() {
-    return "No fields have been found to generate getters for";
-  }
+	@Override
+	protected GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember original) throws IncorrectOperationException
+	{
+		if(original instanceof PropertyClassMember)
+		{
+			final PropertyClassMember propertyClassMember = (PropertyClassMember) original;
+			final GenerationInfo[] getters = propertyClassMember.generateGetters(aClass);
+			if(getters != null)
+			{
+				return getters;
+			}
+		}
+		else if(original instanceof EncapsulatableClassMember)
+		{
+			final EncapsulatableClassMember encapsulatableClassMember = (EncapsulatableClassMember) original;
+			final GenerationInfo getter = encapsulatableClassMember.generateGetter();
+			if(getter != null)
+			{
+				return new GenerationInfo[]{getter};
+			}
+		}
+		return GenerationInfo.EMPTY_ARRAY;
+	}
 
-  @Override
-  protected String getNothingAcceptedMessage() {
-    return "No fields without getter were found";
-  }
+	@Override
+	protected String getNothingFoundMessage()
+	{
+		return "No fields have been found to generate getters for";
+	}
+
+	@Override
+	protected String getNothingAcceptedMessage()
+	{
+		return "No fields without getter were found";
+	}
 }

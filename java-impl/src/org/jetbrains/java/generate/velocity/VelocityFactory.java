@@ -53,7 +53,7 @@ public class VelocityFactory
 		prop.addProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SimpleLog4JLogSystem.class.getName());
 		prop.addProperty("runtime.log.logsystem.log4j.category", "GenerateToString");
 		prop.addProperty(RuntimeConstants.RESOURCE_LOADER, "includes");
-		prop.addProperty("includes.resource.loader.class", VelocityIncludesClassLoader.class.getName());
+		prop.addProperty("includes.resource.loader.instance", new VelocityIncludesClassLoader());
 		VelocityEngine velocity = new VelocityEngine();
 		velocity.setExtendedProperties(prop);
 		velocity.init();

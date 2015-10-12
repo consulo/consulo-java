@@ -28,7 +28,6 @@
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 
 	<xi:include href="/META-INF/JvmByteCodeViewer.xml" xpointer="xpointer(/idea-plugin/*)"/>
-	<xi:include href="/META-INF/GenerateToString.xml" xpointer="xpointer(/idea-plugin/*)"/>
 	<xi:include href="/META-INF/Coverage.xml" xpointer="xpointer(/idea-plugin/*)"/>
 	<xi:include href="/META-INF/InspectionGadgets.xml" xpointer="xpointer(/idea-plugin/*)"/>
 	<xi:include href="/META-INF/IntentionPowerPack.xml" xpointer="xpointer(/idea-plugin/*)"/>
@@ -46,6 +45,7 @@
 			<action id="GenerateSetter" class="com.intellij.codeInsight.generation.actions.GenerateSetterAction"/>
 			<action id="GenerateGetterAndSetter" class="com.intellij.codeInsight.generation.actions.GenerateGetterAndSetterAction"/>
 			<action id="GenerateEquals" class="com.intellij.codeInsight.generation.actions.GenerateEqualsAction"/>
+			<action id="Actions.ActionsPlugin.GenerateToString" class="org.jetbrains.java.generate.GenerateToStringAction" text="to_String()" description="Generate toString() method"/>
 			<action id="GenerateCreateUI" class="com.intellij.codeInsight.generation.actions.GenerateCreateUIAction"/>
 			<add-to-group group-id="GenerateGroup" anchor="first"/>
 		</group>
@@ -388,7 +388,7 @@
 		</extensionPoint>
 
 		<extensionPoint name="augmentProvider" interface="com.intellij.psi.augment.PsiAugmentProvider"/>
-		<extensionPoint name="cantBeStatic" interface="com.intellij.openapi.util.Condition" />
+		<extensionPoint name="cantBeStatic" interface="com.intellij.openapi.util.Condition"/>
 
 		<extensionPoint name="allOverridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="annotatedElementsSearch" interface="com.intellij.util.QueryExecutor"/>
@@ -471,18 +471,18 @@
 
 		<extensionPoint name="debugger.nodeNameAdjuster" interface="com.intellij.debugger.ui.tree.NodeDescriptorNameAdjuster"/>
 
-		<extensionPoint name="debugger.syntheticProvider" interface="com.intellij.debugger.engine.SyntheticTypeComponentProvider" />
+		<extensionPoint name="debugger.syntheticProvider" interface="com.intellij.debugger.engine.SyntheticTypeComponentProvider"/>
 
-		<extensionPoint name="debugger.sourcePositionHighlighter" interface="com.intellij.debugger.engine.SourcePositionHighlighter" />
-		<extensionPoint name="debugger.extraSteppingFilter" interface="com.intellij.debugger.engine.ExtraSteppingFilter" />
-		<extensionPoint name="debugger.simplePropertyGetterProvider" interface="com.intellij.debugger.engine.SimplePropertyGetterProvider" />
-		<extensionPoint name="debugger.frameExtraVarsProvider" interface="com.intellij.debugger.engine.FrameExtraVariablesProvider" />
+		<extensionPoint name="debugger.sourcePositionHighlighter" interface="com.intellij.debugger.engine.SourcePositionHighlighter"/>
+		<extensionPoint name="debugger.extraSteppingFilter" interface="com.intellij.debugger.engine.ExtraSteppingFilter"/>
+		<extensionPoint name="debugger.simplePropertyGetterProvider" interface="com.intellij.debugger.engine.SimplePropertyGetterProvider"/>
+		<extensionPoint name="debugger.frameExtraVarsProvider" interface="com.intellij.debugger.engine.FrameExtraVariablesProvider"/>
 
 		<extensionPoint name="debugger.positionManagerFactory"
 						interface="com.intellij.debugger.PositionManagerFactory"
 						area="CONSULO_PROJECT"/>
 		<extensionPoint name="debugger.javaBreakpointHandlerFactory"
-						interface="com.intellij.debugger.engine.JavaBreakpointHandlerFactory" />
+						interface="com.intellij.debugger.engine.JavaBreakpointHandlerFactory"/>
 		<extensionPoint name="debugger.jvmSmartStepIntoHandler"
 						interface="com.intellij.debugger.actions.JvmSmartStepIntoHandler"/>
 
@@ -497,7 +497,7 @@
 		<extensionPoint name="unscrambleSupport" interface="com.intellij.unscramble.UnscrambleSupport"/>
 
 		<extensionPoint name="mainMethodProvider" interface="com.intellij.codeInsight.runner.JavaMainMethodProvider"/>
-		<extensionPoint name="psi.classFileDecompiler" interface="com.intellij.psi.compiled.ClassFileDecompilers$Decompiler" />
+		<extensionPoint name="psi.classFileDecompiler" interface="com.intellij.psi.compiled.ClassFileDecompilers$Decompiler"/>
 
 		<extensionPoint name="debuggerClassFilterProvider" interface="com.intellij.ui.classFilter.DebuggerClassFilterProvider"/>
 		<extensionPoint name="topLevelClassProvider" interface="com.intellij.debugger.engine.TopLevelParentClassProvider"/>
@@ -593,7 +593,7 @@
 						interface="com.intellij.lang.properties.psi.ResourceBundleManager"
 						area="CONSULO_PROJECT"/>
 		<extensionPoint name="i18nizeHandlerProvider" interface="com.intellij.codeInspection.i18n.I18nizeHandlerProvider"/>
-		<extensionPoint name="smartPointer.anchorProvider" interface="com.intellij.psi.impl.smartPointers.SmartPointerAnchorProvider" />
+		<extensionPoint name="smartPointer.anchorProvider" interface="com.intellij.psi.impl.smartPointers.SmartPointerAnchorProvider"/>
 	</extensionPoints>
 
 	<extensions defaultExtensionNs="org.consulo.java">
@@ -660,11 +660,11 @@
 
 		<debugger.jvmSmartStepIntoHandler implementation="com.intellij.debugger.actions.JavaSmartStepIntoHandler"/>
 
-		<debugger.syntheticProvider implementation="com.intellij.debugger.engine.DefaultSyntheticProvider" />
+		<debugger.syntheticProvider implementation="com.intellij.debugger.engine.DefaultSyntheticProvider"/>
 
-		<debugger.sourcePositionHighlighter implementation="com.intellij.debugger.engine.JavaSourcePositionHighlighter" />
+		<debugger.sourcePositionHighlighter implementation="com.intellij.debugger.engine.JavaSourcePositionHighlighter"/>
 
-		<debugger.simplePropertyGetterProvider implementation="com.intellij.debugger.engine.JavaSimpleGetterProvider" />
+		<debugger.simplePropertyGetterProvider implementation="com.intellij.debugger.engine.JavaSimpleGetterProvider"/>
 
 		<generation.topLevelFactory language="JAVA" implementationClass="com.intellij.psi.impl.JavaFactoryProvider"/>
 
@@ -679,12 +679,12 @@
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.FileObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.StackTraceElementObjectRenderer"/>
 
-		<augmentProvider implementation="com.intellij.psi.augment.JavaEnumAugmentProvider" />
+		<augmentProvider implementation="com.intellij.psi.augment.JavaEnumAugmentProvider"/>
 
 		<smartPointer.anchorProvider implementation="com.intellij.psi.impl.smartPointers.JavaAnchorProvider"/>
 		<smartPointer.anchorProvider implementation="com.intellij.psi.impl.smartPointers.XmlAnchorProvider"/>
 
-		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory" />
+		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
 		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
 	</extensions>
@@ -867,6 +867,7 @@
 							serviceImplementation="com.intellij.debugger.settings.DebuggerSettings"/>
 		<applicationService serviceInterface="com.intellij.debugger.settings.ThreadsViewSettings"
 							serviceImplementation="com.intellij.debugger.settings.ThreadsViewSettings"/>
+		<applicationService serviceImplementation="org.mustbe.consulo.java.codeInsight.JavaCodeInsightSettings" />
 
 		<projectService serviceInterface="com.intellij.ide.util.TreeClassChooserFactory"
 						serviceImplementation="com.intellij.ide.util.TreeClassChooserFactoryImpl"/>
@@ -886,7 +887,7 @@
 						serviceImplementation="com.intellij.psi.impl.migration.PsiMigrationManager"/>
 		<projectService serviceInterface="com.intellij.psi.PsiResolveHelper"
 						serviceImplementation="com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl"/>
-		<projectService serviceImplementation="com.intellij.psi.util.ProjectIconsAccessor" />
+		<projectService serviceImplementation="com.intellij.psi.util.ProjectIconsAccessor"/>
 
 		<projectService serviceInterface="com.intellij.psi.JavaCodeFragmentFactory"
 						serviceImplementation="com.intellij.psi.impl.JavaCodeFragmentFactoryImpl"/>
@@ -1516,7 +1517,7 @@
 		<typedHandler implementation="com.intellij.codeInsight.editorActions.JavaTypedHandler" id="java"/>
 		<typedHandler implementation="com.intellij.codeInsight.editorActions.JavadocTypedHandler" id="javadoc"/>
 		<applicationService serviceInterface="com.intellij.application.options.JavaSmartKeysSettings"
-							serviceImplementation="com.intellij.application.options.JavaSmartKeysSettings" />
+							serviceImplementation="com.intellij.application.options.JavaSmartKeysSettings"/>
 		<applicationConfigurable id="editor.preferences.smartKeys.java"
 								 parentId="editor.preferences.smartKeys"
 								 displayName="Java"
@@ -1902,7 +1903,7 @@
 						serviceImplementation="com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"/>
 
 		<projectService serviceInterface="com.intellij.psi.PsiNameHelper"
-						serviceImplementation="com.intellij.psi.impl.PsiNameHelperImpl" />
+						serviceImplementation="com.intellij.psi.impl.PsiNameHelperImpl"/>
 
 		<projectService serviceInterface="com.intellij.psi.impl.file.impl.JavaFileManager"
 						serviceImplementation="com.intellij.psi.impl.file.impl.JavaFileManagerImpl"/>
@@ -1945,7 +1946,7 @@
 		<orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
 		<orderRootTypeEditor key="javaExternalAnnotations"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
-		<contentFolderSupportPatcher implementation="org.mustbe.consulo.java.module.extension.JavaContentFolderSupportPatcher" />
+		<contentFolderSupportPatcher implementation="org.mustbe.consulo.java.module.extension.JavaContentFolderSupportPatcher"/>
 		<pathMacroExpendableProtocol protocol="jar"/>
 		<pathMacroExpendableProtocol protocol="jimage"/>
 
@@ -1962,10 +1963,10 @@
 													  implementationClass="com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider"/>
 
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
-		<newModuleBuilder implementation="org.mustbe.consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder" />
+		<newModuleBuilder implementation="org.mustbe.consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder"/>
 		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.codeInspection.SuppressManagerImpl"/>
 
-		<targetElementUtilEx implementation="com.intellij.codeInsight.JavaTargetElementUtilEx" />
+		<targetElementUtilEx implementation="com.intellij.codeInsight.JavaTargetElementUtilEx"/>
 
 		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
 

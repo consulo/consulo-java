@@ -29,7 +29,6 @@
           <orderEntry type="module" module-name="java-analysis-impl" />
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-psi-impl" />
-          <orderEntry type="module" module-name="java-generate-tostring" />
           <orderEntry type="module" module-name="java-manifest" />
           <orderEntry type="module-library">
             <library name="consulo:Spellchecker">
@@ -270,20 +269,6 @@
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="library" name="jetbrains-asm5" level="project" />
           <orderEntry type="module" module-name="java-indexing-api" />
-        </module-layer>
-      </module>
-      <module name="java-generate-tostring" dirurl="file://$PROJECT_DIR$/java-generate-tostring" current-layer="Default">
-        <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
-          <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
-          <content url="file://$MODULE_DIR$">
-            <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
-            <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
-          </content>
-          <orderEntry type="module-extension-sdk" extension-id="java" />
-          <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="sourceFolder" />
-          <orderEntry type="module" module-name="java-impl" />
         </module-layer>
       </module>
       <module name="java-intellilang" dirurl="file://$PROJECT_DIR$/java-intellilang" current-layer="Default">

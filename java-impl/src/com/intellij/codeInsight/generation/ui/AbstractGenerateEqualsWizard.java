@@ -23,8 +23,7 @@ import com.intellij.util.containers.HashMap;
  * Nikolay.Tropin
  * 8/20/13
  */
-public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M extends PsiElement,
-		I extends MemberInfoBase<M>> extends AbstractWizard<Step>
+public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M extends PsiElement, I extends MemberInfoBase<M>> extends AbstractWizard<Step>
 {
 
 	protected final C myClass;
@@ -139,8 +138,7 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 		}
 		else if(getCurrentStep() == getHashCodeStepCode() && myHashCodePanel != null)
 		{
-			Collection<I> selectedMemberInfos = myEqualsPanel != null ? myEqualsPanel.getTable().getSelectedMemberInfos() : myHashCodePanel.getTable
-					().getSelectedMemberInfos();
+			Collection<I> selectedMemberInfos = myEqualsPanel != null ? myEqualsPanel.getTable().getSelectedMemberInfos() : myHashCodePanel.getTable().getSelectedMemberInfos();
 			updateNonNullMemberInfos(selectedMemberInfos);
 		}
 
@@ -215,7 +213,6 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 
 	private class MyTableModelListener implements TableModelListener
 	{
-		@Override
 		public void tableChanged(TableModelEvent modelEvent)
 		{
 			updateButtons();

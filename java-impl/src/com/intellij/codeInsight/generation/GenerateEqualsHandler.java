@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,128 +15,161 @@
  */
 package com.intellij.codeInsight.generation;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.codeInsight.JavaCodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.generation.ui.GenerateEqualsWizard;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Computable;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author dsl
  */
-public class GenerateEqualsHandler extends GenerateMembersHandlerBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.GenerateEqualsHandler");
-  private PsiField[] myEqualsFields = null;
-  private PsiField[] myHashCodeFields = null;
-  private PsiField[] myNonNullFields = null;
-  private static final PsiElementClassMember[] DUMMY_RESULT = new PsiElementClassMember[1]; //cannot return empty array, but this result won't be used anyway
+public class GenerateEqualsHandler extends GenerateMembersHandlerBase
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.GenerateEqualsHandler");
+	private PsiField[] myEqualsFields = null;
+	private PsiField[] myHashCodeFields = null;
+	private PsiField[] myNonNullFields = null;
+	private static final PsiElementClassMember[] DUMMY_RESULT = new PsiElementClassMember[1]; //cannot return empty array, but this result won't be used anyway
 
-  public GenerateEqualsHandler() {
-    super("");
-  }
+	public GenerateEqualsHandler()
+	{
+		super("");
+	}
 
-  @Override
-  protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project, Editor editor) {
-    myEqualsFields = null;
-    myHashCodeFields = null;
-    myNonNullFields = PsiField.EMPTY_ARRAY;
+	@Override
+	protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project, Editor editor)
+	{
+		myEqualsFields = null;
+		myHashCodeFields = null;
+		myNonNullFields = PsiField.EMPTY_ARRAY;
 
 
-    GlobalSearchScope scope = aClass.getResolveScope();
-    final PsiMethod equalsMethod = GenerateEqualsHelper.findMethod(aClass, GenerateEqualsHelper.getEqualsSignature(project, scope));
-    final PsiMethod hashCodeMethod = GenerateEqualsHelper.findMethod(aClass, GenerateEqualsHelper.getHashCodeSignature());
+		GlobalSearchScope scope = aClass.getResolveScope();
+		final PsiMethod equalsMethod = GenerateEqualsHelper.findMethod(aClass, GenerateEqualsHelper.getEqualsSignature(project, scope));
+		final PsiMethod hashCodeMethod = GenerateEqualsHelper.findMethod(aClass, GenerateEqualsHelper.getHashCodeSignature());
 
-    boolean needEquals = equalsMethod == null;
-    boolean needHashCode = hashCodeMethod == null;
-    if (!needEquals && !needHashCode) {
-      String text = aClass instanceof PsiAnonymousClass
-                    ? CodeInsightBundle.message("generate.equals.and.hashcode.already.defined.warning.anonymous")
-                    : CodeInsightBundle.message("generate.equals.and.hashcode.already.defined.warning", aClass.getQualifiedName());
+		boolean needEquals = equalsMethod == null;
+		boolean needHashCode = hashCodeMethod == null;
+		if(!needEquals && !needHashCode)
+		{
+			String text = aClass instanceof PsiAnonymousClass ? CodeInsightBundle.message("generate.equals.and.hashcode.already.defined.warning.anonymous") : CodeInsightBundle.message("generate" +
+					".equals.and.hashcode.already.defined.warning", aClass.getQualifiedName());
 
-      if (Messages.showYesNoDialog(project, text,
-                                   CodeInsightBundle.message("generate.equals.and.hashcode.already.defined.title"),
-                                   Messages.getQuestionIcon()) == DialogWrapper.OK_EXIT_CODE) {
-        if (!ApplicationManager.getApplication().runWriteAction(new Computable<Boolean>() {
-            @Override
-            public Boolean compute() {
-              try {
-                equalsMethod.delete();
-                hashCodeMethod.delete();
-                return Boolean.TRUE;
-              }
-              catch (IncorrectOperationException e) {
-                LOG.error(e);
-                return Boolean.FALSE;
-              }
-            }
-          }).booleanValue()) {
-          return null;
-        } else {
-          needEquals = needHashCode = true;
-        }
-      } else {
-        return null;
-      }
-    }
-    boolean hasNonStaticFields = false;
-    for (PsiField field : aClass.getFields()) {
-      if (!field.hasModifierProperty(PsiModifier.STATIC)){
-        hasNonStaticFields = true;
-        break;
-      }
-    }
-    if (!hasNonStaticFields) {
-      HintManager.getInstance().showErrorHint(editor, "No fields to include in equals/hashCode have been found");
-      return null;
-    }
+			if(Messages.showYesNoDialog(project, text, CodeInsightBundle.message("generate.equals.and.hashcode.already.defined.title"), Messages.getQuestionIcon()) == Messages.YES)
+			{
+				if(!ApplicationManager.getApplication().runWriteAction(new Computable<Boolean>()
+				{
+					@Override
+					public Boolean compute()
+					{
+						try
+						{
+							equalsMethod.delete();
+							hashCodeMethod.delete();
+							return Boolean.TRUE;
+						}
+						catch(IncorrectOperationException e)
+						{
+							LOG.error(e);
+							return Boolean.FALSE;
+						}
+					}
+				}).booleanValue())
+				{
+					return null;
+				}
+				else
+				{
+					needEquals = needHashCode = true;
+				}
+			}
+			else
+			{
+				return null;
+			}
+		}
+		boolean hasNonStaticFields = hasNonStaticFields(aClass);
+		if(!hasNonStaticFields)
+		{
+			HintManager.getInstance().showErrorHint(editor, "No fields to include in equals/hashCode have been found");
+			return null;
+		}
 
-    GenerateEqualsWizard wizard = new GenerateEqualsWizard(project, aClass, needEquals, needHashCode);
-    wizard.show();
-    if (!wizard.isOK()) return null;
-    myEqualsFields = wizard.getEqualsFields();
-    myHashCodeFields = wizard.getHashCodeFields();
-    myNonNullFields = wizard.getNonNullFields();
-    return DUMMY_RESULT;
-  }
+		GenerateEqualsWizard wizard = new GenerateEqualsWizard(project, aClass, needEquals, needHashCode);
+		if(!wizard.showAndGet())
+		{
+			return null;
+		}
+		myEqualsFields = wizard.getEqualsFields();
+		myHashCodeFields = wizard.getHashCodeFields();
+		myNonNullFields = wizard.getNonNullFields();
+		return DUMMY_RESULT;
+	}
 
-  @Override
-  @NotNull
-  protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] originalMembers) throws IncorrectOperationException {
-    Project project = aClass.getProject();
-    final boolean useInstanceofToCheckParameterType = CodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER;
+	private static boolean hasNonStaticFields(PsiClass aClass)
+	{
+		for(PsiField field : aClass.getFields())
+		{
+			if(!field.hasModifierProperty(PsiModifier.STATIC))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-    GenerateEqualsHelper helper = new GenerateEqualsHelper(project, aClass, myEqualsFields, myHashCodeFields, myNonNullFields,
-                                                           useInstanceofToCheckParameterType);
-    return OverrideImplementUtil.convert2GenerationInfos(helper.generateMembers());
-  }
+	@Override
+	protected boolean hasMembers(@NotNull PsiClass aClass)
+	{
+		return hasNonStaticFields(aClass);
+	}
 
-  @Override
-  protected ClassMember[] getAllOriginalMembers(PsiClass aClass) {
-    return null;
-  }
+	@Override
+	@NotNull
+	protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] originalMembers) throws IncorrectOperationException
+	{
+		Project project = aClass.getProject();
+		final boolean useInstanceofToCheckParameterType = JavaCodeInsightSettings.getInstance().USE_INSTANCEOF_ON_EQUALS_PARAMETER;
+		final boolean useAccessors = JavaCodeInsightSettings.getInstance().USE_ACCESSORS_IN_EQUALS_HASHCODE;
 
-  @Override
-  protected GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember originalMember) {
-    return null;
-  }
+		GenerateEqualsHelper helper = new GenerateEqualsHelper(project, aClass, myEqualsFields, myHashCodeFields, myNonNullFields, useInstanceofToCheckParameterType, useAccessors);
+		return OverrideImplementUtil.convert2GenerationInfos(helper.generateMembers());
+	}
 
-  @Override
-  protected void cleanup() {
-    super.cleanup();
-    myEqualsFields = null;
-    myHashCodeFields = null;
-    myNonNullFields = null;
-  }
+	@Override
+	protected ClassMember[] getAllOriginalMembers(PsiClass aClass)
+	{
+		return null;
+	}
+
+	@Override
+	protected GenerationInfo[] generateMemberPrototypes(PsiClass aClass, ClassMember originalMember)
+	{
+		return null;
+	}
+
+	@Override
+	protected void cleanup()
+	{
+		super.cleanup();
+		myEqualsFields = null;
+		myHashCodeFields = null;
+		myNonNullFields = null;
+	}
 }

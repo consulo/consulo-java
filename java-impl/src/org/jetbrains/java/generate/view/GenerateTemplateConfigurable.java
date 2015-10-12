@@ -60,7 +60,7 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable
 {
 	private final TemplateResource template;
 	private final Editor myEditor;
-	private final List<String> availableImplicits = new ArrayList<String>();
+	private final List<String> myAvailableImplicits = new ArrayList<String>();
 
 	public GenerateTemplateConfigurable(TemplateResource template, Map<String, PsiType> contextMap, Project project)
 	{
@@ -92,7 +92,7 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable
 				map.put("helper", TemplatesManager.createElementType(project, GenerationHelper.class));
 				map.put("settings", PsiType.NULL);
 				map.putAll(contextMap);
-				availableImplicits.addAll(map.keySet());
+				myAvailableImplicits.addAll(map.keySet());
 				file.getViewProvider().putUserData(TemplatesManager.TEMPLATE_IMPLICITS, map);
 			}
 			final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
@@ -108,13 +108,13 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable
 	public JComponent createComponent()
 	{
 		final JComponent component = myEditor.getComponent();
-		if(availableImplicits.isEmpty())
+		if(myAvailableImplicits.isEmpty())
 		{
 			return component;
 		}
 		final JPanel panel = new JPanel(new BorderLayout());
 		panel.add(component, BorderLayout.CENTER);
-		MultiLineLabel label = new MultiLineLabel("<html>Available implicit variables:\n" + StringUtil.join(availableImplicits, ", ") + "</html>");
+		MultiLineLabel label = new MultiLineLabel("<html>Available implicit variables:\n" + StringUtil.join(myAvailableImplicits, ", ") + "</html>");
 		label.setPreferredSize(JBUI.size(250, 30));
 		panel.add(label, BorderLayout.SOUTH);
 		return panel;
