@@ -16,6 +16,8 @@
 
 package com.intellij.lang.java;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -27,45 +29,72 @@ import com.intellij.psi.PsiImportList;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
  */
-public class JavaImportOptimizer implements ImportOptimizer {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.lang.java.JavaImportOptimizer");
+public class JavaImportOptimizer implements ImportOptimizer
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.lang.java.JavaImportOptimizer");
 
-  @Override
-  @NotNull
-  public Runnable processFile(final PsiFile file) {
-    if (!(file instanceof PsiJavaFile)) {
-      return EmptyRunnable.getInstance();
-    }
-    Project project = file.getProject();
-    final PsiImportList newImportList = JavaCodeStyleManager.getInstance(project).prepareOptimizeImportsResult((PsiJavaFile)file);
-    if (newImportList == null) return EmptyRunnable.getInstance();
-    return new Runnable() {
-      @Override
-      public void run() {
-        try {
-          final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
-          final Document document = manager.getDocument(file);
-          if (document != null) {
-            manager.commitDocument(document);
-          }
-          final PsiImportList oldImportList = ((PsiJavaFile)file).getImportList();
-          assert oldImportList != null;
-          oldImportList.replace(newImportList);
-        }
-        catch (IncorrectOperationException e) {
-          LOG.error(e);
-        }
-      }
-    };
-  }
+	@Override
+	@NotNull
+	public Runnable processFile(final PsiFile file)
+	{
+		if(!(file instanceof PsiJavaFile))
+		{
+			return EmptyRunnable.getInstance();
+		}
+		Project project = file.getProject();
+		final PsiImportList newImportList = JavaCodeStyleManager.getInstance(project).prepareOptimizeImportsResult((PsiJavaFile) file);
+		if(newImportList == null)
+		{
+			return EmptyRunnable.getInstance();
+		}
 
-  @Override
-  public boolean supports(PsiFile file) {
-    return file instanceof PsiJavaFile;
-  }
+		return new CollectingInfoRunnable()
+		{
+			private int myImportListLengthDiff = 0;
+
+			@Override
+			public void run()
+			{
+				try
+				{
+					final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
+					final Document document = manager.getDocument(file);
+					if(document != null)
+					{
+						manager.commitDocument(document);
+					}
+					final PsiImportList oldImportList = ((PsiJavaFile) file).getImportList();
+					assert oldImportList != null;
+					int importsBefore = oldImportList.getAllImportStatements().length;
+					oldImportList.replace(newImportList);
+					myImportListLengthDiff = importsBefore - newImportList.getAllImportStatements().length;
+				}
+				catch(IncorrectOperationException e)
+				{
+					LOG.error(e);
+				}
+			}
+
+			@Nullable
+			@Override
+			public String getUserNotificationInfo()
+			{
+				if(myImportListLengthDiff > 0)
+				{
+					return "removed " + myImportListLengthDiff + " import" + (myImportListLengthDiff > 1 ? "s" : "");
+				}
+				return null;
+			}
+		};
+	}
+
+	@Override
+	public boolean supports(PsiFile file)
+	{
+		return file instanceof PsiJavaFile;
+	}
 }
