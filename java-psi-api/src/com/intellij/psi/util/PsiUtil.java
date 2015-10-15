@@ -911,7 +911,7 @@ public final class PsiUtil extends PsiUtilCore
 	/**
 	 * JLS 15.28
 	 */
-	public static boolean isCompileTimeConstant(@NotNull final PsiField field)
+	public static boolean isCompileTimeConstant(@NotNull final PsiVariable field)
 	{
 		return field.hasModifierProperty(PsiModifier.FINAL) && (TypeConversionUtil.isPrimitiveAndNotNull(field.getType
 				()) || field.getType().equalsToText("java.lang.String")) && field.hasInitializer() &&
