@@ -23,7 +23,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
  */
 public abstract class NodeDescriptorNameAdjuster
 {
-	public static ExtensionPointName<NodeDescriptorNameAdjuster> EP_NAME = ExtensionPointName.create("com.intellij.debugger.nodeNameAdjuster");
+	public static ExtensionPointName<NodeDescriptorNameAdjuster> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.nodeNameAdjuster");
 
 	public abstract boolean isApplicable(@NotNull NodeDescriptor descriptor);
 
