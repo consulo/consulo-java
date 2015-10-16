@@ -16,6 +16,12 @@
 
 package com.intellij.psi.impl.source.resolve.reference.impl.providers;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
@@ -26,54 +32,59 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.util.ReferenceSetBase;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 
 /**
  * @author Dmitry Avdeev
  */
-public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
+public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
+{
+	public PackageReferenceSet(@NotNull final String str, @NotNull final PsiElement element, final int startInElement)
+	{
+		super(str, element, startInElement, DOT_SEPARATOR);
+	}
 
-  public PackageReferenceSet(@NotNull final String str, @NotNull final PsiElement element, final int startInElement) {
-    super(str, element, startInElement, DOT_SEPARATOR);
-  }
+	@Override
+	@NotNull
+	protected PsiPackageReference createReference(final TextRange range, final int index)
+	{
+		return new PsiPackageReference(this, range, index);
+	}
 
-  @Override
-  @NotNull
-  protected PsiPackageReference createReference(final TextRange range, final int index) {
-    return new PsiPackageReference(this, range, index);
-  }
+	public Collection<PsiJavaPackage> resolvePackageName(@Nullable PsiJavaPackage context, final String packageName)
+	{
+		if(context != null)
+		{
+			return ContainerUtil.filter(context.getSubPackages(), new Condition<PsiJavaPackage>()
+			{
+				@Override
+				public boolean value(PsiJavaPackage aPackage)
+				{
+					return Comparing.equal(aPackage.getName(), packageName);
+				}
+			});
+		}
+		return Collections.emptyList();
+	}
 
-  public Collection<PsiJavaPackage> resolvePackageName(@Nullable PsiJavaPackage context, final String packageName) {
-    if (context != null) {
-      return ContainerUtil.filter(context.getSubPackages(), new Condition<PsiJavaPackage>() {
-        @Override
-        public boolean value(PsiJavaPackage aPackage) {
-          return Comparing.equal(aPackage.getName(), packageName);
-        }
-      });
-    }
-    return Collections.emptyList();
-  }
+	public Collection<PsiJavaPackage> resolvePackage()
+	{
+		final PsiPackageReference packageReference = getLastReference();
+		if(packageReference == null)
+		{
+			return Collections.emptyList();
+		}
+		return ContainerUtil.map2List(packageReference.multiResolve(false), new NullableFunction<ResolveResult, PsiJavaPackage>()
+		{
+			@Override
+			public PsiJavaPackage fun(final ResolveResult resolveResult)
+			{
+				return (PsiJavaPackage) resolveResult.getElement();
+			}
+		});
+	}
 
-  public Collection<PsiJavaPackage> resolvePackage() {
-    final PsiPackageReference packageReference = getLastReference();
-    if (packageReference == null) {
-      return Collections.emptyList();
-    }
-    return ContainerUtil.map2List(packageReference.multiResolve(false), new NullableFunction<ResolveResult, PsiJavaPackage>() {
-      @Override
-      public PsiJavaPackage fun(final ResolveResult resolveResult) {
-        return (PsiJavaPackage)resolveResult.getElement();
-      }
-    });
-  }
-
-  public Set<PsiJavaPackage> getInitialContext() {
-    return Collections.singleton(JavaPsiFacade.getInstance(getElement().getProject()).findPackage(""));
-  }
+	public Set<PsiJavaPackage> getInitialContext()
+	{
+		return Collections.singleton(JavaPsiFacade.getInstance(getElement().getProject()).findPackage(""));
+	}
 }
