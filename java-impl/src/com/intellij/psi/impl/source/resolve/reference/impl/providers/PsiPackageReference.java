@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
@@ -55,7 +56,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 			return myReferenceSet.getInitialContext();
 		}
 		Set<PsiJavaPackage> psiPackages = new HashSet<PsiJavaPackage>();
-		for(ResolveResult resolveResult : myReferenceSet.getReference(myIndex - 1).multiResolve(false))
+		for(ResolveResult resolveResult : myReferenceSet.getReference(myIndex - 1).doMultiResolve())
 		{
 			PsiElement psiElement = resolveResult.getElement();
 			if(psiElement instanceof PsiJavaPackage)
@@ -73,7 +74,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 		Set<PsiJavaPackage> subPackages = new HashSet<PsiJavaPackage>();
 		for(PsiJavaPackage psiPackage : getContext())
 		{
-			subPackages.addAll(Arrays.asList(psiPackage.getSubPackages()));
+			subPackages.addAll(Arrays.asList(psiPackage.getSubPackages(myReferenceSet.getResolveScope())));
 		}
 
 		return subPackages.toArray();
@@ -89,6 +90,12 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 	@Override
 	@NotNull
 	public ResolveResult[] multiResolve(final boolean incompleteCode)
+	{
+		return doMultiResolve();
+	}
+
+	@NotNull
+	protected ResolveResult[] doMultiResolve()
 	{
 		final Collection<PsiJavaPackage> packages = new HashSet<PsiJavaPackage>();
 		for(PsiJavaPackage parentPackage : getContext())

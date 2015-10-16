@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.ResolveResult;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ReferenceSetBase;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.containers.ContainerUtil;
@@ -38,9 +39,17 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
 {
+	private final GlobalSearchScope mySearchScope;
+
 	public PackageReferenceSet(@NotNull final String str, @NotNull final PsiElement element, final int startInElement)
 	{
+		this(str, element, startInElement, element.getResolveScope());
+	}
+
+	public PackageReferenceSet(@NotNull final String str, @NotNull final PsiElement element, final int startInElement, @NotNull GlobalSearchScope scope)
+	{
 		super(str, element, startInElement, DOT_SEPARATOR);
+		mySearchScope = scope;
 	}
 
 	@Override
@@ -54,7 +63,7 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
 	{
 		if(context != null)
 		{
-			return ContainerUtil.filter(context.getSubPackages(), new Condition<PsiJavaPackage>()
+			return ContainerUtil.filter(context.getSubPackages(getResolveScope()), new Condition<PsiJavaPackage>()
 			{
 				@Override
 				public boolean value(PsiJavaPackage aPackage)
@@ -64,6 +73,12 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
 			});
 		}
 		return Collections.emptyList();
+	}
+
+	@NotNull
+	protected GlobalSearchScope getResolveScope()
+	{
+		return mySearchScope;
 	}
 
 	public Collection<PsiJavaPackage> resolvePackage()
