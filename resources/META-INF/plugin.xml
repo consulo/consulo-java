@@ -148,7 +148,7 @@
 			<add-to-group group-id="RunMenu" anchor="last"/>
 		</action>
 
-		<action id="GenerateJavadoc" class="com.intellij.javadoc.actions.GenerateJavadocAction">
+		<action id="GenerateJavadoc" class="com.intellij.javadoc.actions.GenerateJavadocAction" can-use-project-as-default="true" require-module-extensions="java">
 			<add-to-group group-id="ToolsBasicGroup" anchor="after" relative-to-action="SaveFileAsTemplate"/>
 		</action>
 
