@@ -15,15 +15,15 @@
  */
 package com.intellij.compiler.cache;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.KeyDescriptor;
 import com.intellij.util.io.PersistentHashMap;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author Eugene Zhuravlev
@@ -110,6 +110,8 @@ public class CachedPersistentHashMap<Key, Value> extends PersistentHashMap<Key, 
   }
 
   private void clearCache() {
-    myCache.clear();
+    if(myCache != null) {
+      myCache.clear();
+    }
   }
 }
