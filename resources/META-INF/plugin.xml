@@ -1679,6 +1679,7 @@
 		<configurationProducer implementation="com.intellij.execution.applet.AppletConfigurationProducer"/>
 
 		<configurationType implementation="com.intellij.execution.remote.RemoteConfigurationType"/>
+		<runLineMarkerContributor language="JAVA" implementationClass="com.intellij.execution.application.ApplicationRunLineMarkerProvider"/>
 
 		<!--TODO [VISTALL] core depend?? <applicationService serviceInterface="com.intellij.packageDependencies.DependenciesVisitorFactory"
 							 serviceImplementation="com.intellij.packageDependencies.JavaDependenciesVisitorFactory"/> -->
