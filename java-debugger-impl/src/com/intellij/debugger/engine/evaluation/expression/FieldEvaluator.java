@@ -20,6 +20,8 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
@@ -35,218 +37,278 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
 import consulo.internal.com.sun.jdi.*;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
-public class FieldEvaluator implements Evaluator {
-  private final Evaluator myObjectEvaluator;
-  private final TargetClassFilter myTargetClassFilter;
-  private final String myFieldName;
-  private Object myEvaluatedQualifier;
-  private Field myEvaluatedField;
+public class FieldEvaluator implements Evaluator
+{
+	private final Evaluator myObjectEvaluator;
+	private final TargetClassFilter myTargetClassFilter;
+	private final String myFieldName;
+	private Object myEvaluatedQualifier;
+	private Field myEvaluatedField;
 
-  public interface TargetClassFilter {
-    TargetClassFilter ALL = new TargetClassFilter() {
-      public boolean acceptClass(final ReferenceType refType) {
-        return true;
-      }
-    };
-    boolean acceptClass(ReferenceType refType);
-  }
-  
-  public FieldEvaluator(Evaluator objectEvaluator, TargetClassFilter filter, @NonNls String fieldName) {
-    myObjectEvaluator = objectEvaluator;
-    myFieldName = fieldName;
-    myTargetClassFilter = filter;
-  }
+	public interface TargetClassFilter
+	{
+		TargetClassFilter ALL = new TargetClassFilter()
+		{
+			@Override
+			public boolean acceptClass(final ReferenceType refType)
+			{
+				return true;
+			}
+		};
 
-  public static TargetClassFilter createClassFilter(PsiType psiType) {
-    if(psiType instanceof PsiArrayType) {
-      return TargetClassFilter.ALL;
-    }
-    PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
-    if (psiClass != null) {
-      return createClassFilter(psiClass);
-    }
-    return new FQNameClassFilter(psiType.getCanonicalText());
-  }
+		boolean acceptClass(ReferenceType refType);
+	}
 
-  public static TargetClassFilter createClassFilter(PsiClass psiClass) {
-    if (psiClass instanceof PsiAnonymousClass) {
-      return TargetClassFilter.ALL;
-    }
-    if (PsiUtil.isLocalClass(psiClass)) {
-      return new LocalClassFilter(psiClass.getName());
-    }
-    final String name = JVMNameUtil.getNonAnonymousClassName(psiClass);
-    return name != null? new FQNameClassFilter(name) : TargetClassFilter.ALL;
-  }
+	public FieldEvaluator(Evaluator objectEvaluator, TargetClassFilter filter, @NonNls String fieldName)
+	{
+		myObjectEvaluator = objectEvaluator;
+		myFieldName = fieldName;
+		myTargetClassFilter = filter;
+	}
 
-  @Nullable
-  private Field findField(Type t, final EvaluationContextImpl context) throws EvaluateException {
-    if(t instanceof ClassType) {
-      ClassType cls = (ClassType) t;
-      if(myTargetClassFilter.acceptClass(cls)) {
-        return cls.fieldByName(myFieldName);
-      }
-      for (final InterfaceType interfaceType : cls.interfaces()) {
-        final Field field = findField(interfaceType, context);
-        if (field != null) {
-          return field;
-        }
-      }
-      return findField(cls.superclass(), context);
-    }
-    else if(t instanceof InterfaceType) {
-      InterfaceType iface = (InterfaceType) t;
-      if(myTargetClassFilter.acceptClass(iface)) {
-        return iface.fieldByName(myFieldName);
-      }
-      for (final InterfaceType interfaceType : iface.superinterfaces()) {
-        final Field field = findField(interfaceType, context);
-        if (field != null) {
-          return field;
-        }
-      }
-    }
-    return null;
-  }
+	public static TargetClassFilter createClassFilter(PsiType psiType)
+	{
+		if(psiType instanceof PsiArrayType)
+		{
+			return TargetClassFilter.ALL;
+		}
+		PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
+		if(psiClass != null)
+		{
+			return createClassFilter(psiClass);
+		}
+		return new FQNameClassFilter(psiType.getCanonicalText());
+	}
 
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    myEvaluatedField = null;
-    myEvaluatedQualifier = null;
-    Object object = myObjectEvaluator.evaluate(context);
+	public static TargetClassFilter createClassFilter(PsiClass psiClass)
+	{
+		if(psiClass instanceof PsiAnonymousClass)
+		{
+			return TargetClassFilter.ALL;
+		}
+		if(PsiUtil.isLocalClass(psiClass))
+		{
+			return new LocalClassFilter(psiClass.getName());
+		}
+		final String name = JVMNameUtil.getNonAnonymousClassName(psiClass);
+		return name != null ? new FQNameClassFilter(name) : TargetClassFilter.ALL;
+	}
 
-    return evaluateField(object, context);
+	@Nullable
+	private Field findField(Type t, final EvaluationContextImpl context) throws EvaluateException
+	{
+		if(t instanceof ClassType)
+		{
+			ClassType cls = (ClassType) t;
+			if(myTargetClassFilter.acceptClass(cls))
+			{
+				return cls.fieldByName(myFieldName);
+			}
+			for(final InterfaceType interfaceType : cls.interfaces())
+			{
+				final Field field = findField(interfaceType, context);
+				if(field != null)
+				{
+					return field;
+				}
+			}
+			return findField(cls.superclass(), context);
+		}
+		else if(t instanceof InterfaceType)
+		{
+			InterfaceType iface = (InterfaceType) t;
+			if(myTargetClassFilter.acceptClass(iface))
+			{
+				return iface.fieldByName(myFieldName);
+			}
+			for(final InterfaceType interfaceType : iface.superinterfaces())
+			{
+				final Field field = findField(interfaceType, context);
+				if(field != null)
+				{
+					return field;
+				}
+			}
+		}
+		return null;
+	}
 
-  }
+	@Override
+	public Object evaluate(EvaluationContextImpl context) throws EvaluateException
+	{
+		myEvaluatedField = null;
+		myEvaluatedQualifier = null;
+		Object object = myObjectEvaluator.evaluate(context);
 
-  private Object evaluateField(Object object, EvaluationContextImpl context) throws EvaluateException {
-    if (object instanceof ReferenceType) {
-      ReferenceType refType = (ReferenceType)object;
-      Field field = findField(refType, context);
-      if (field == null || !field.isStatic()) {
-        field = refType.fieldByName(myFieldName);
-      }
-      if (field == null || !field.isStatic()) {
-        throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.no.static.field", myFieldName));
-      }
-      myEvaluatedField = field;
-      myEvaluatedQualifier = refType;
-      return refType.getValue(field);
-    }
+		return evaluateField(object, context);
 
-    if (object instanceof ObjectReference) {
-      ObjectReference objRef = (ObjectReference)object;
-      ReferenceType refType = objRef.referenceType();
-      if (!(refType instanceof ClassType || refType instanceof ArrayType)) {
-        throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.class.or.array.expected", myFieldName));
-      }
+	}
 
-      // expressions like 'array.length' must be treated separately
-      //noinspection HardCodedStringLiteral
-      if (objRef instanceof ArrayReference && "length".equals(myFieldName)) {
-        //noinspection HardCodedStringLiteral
-        return DebuggerUtilsEx.createValue(
-          context.getDebugProcess().getVirtualMachineProxy(),
-          "int",
-          ((ArrayReference)objRef).length()
-        );
-      }
+	private Object evaluateField(Object object, EvaluationContextImpl context) throws EvaluateException
+	{
+		if(object instanceof ReferenceType)
+		{
+			ReferenceType refType = (ReferenceType) object;
+			Field field = findField(refType, context);
+			if(field == null || !field.isStatic())
+			{
+				field = refType.fieldByName(myFieldName);
+			}
+			if(field == null || !field.isStatic())
+			{
+				throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.no.static.field", myFieldName));
+			}
+			myEvaluatedField = field;
+			myEvaluatedQualifier = refType;
+			return refType.getValue(field);
+		}
 
-      Field field = findField(refType, context);
-      if (field == null) {
-        field = refType.fieldByName(myFieldName);
-      }
+		if(object instanceof ObjectReference)
+		{
+			ObjectReference objRef = (ObjectReference) object;
+			ReferenceType refType = objRef.referenceType();
+			if(!(refType instanceof ClassType || refType instanceof ArrayType))
+			{
+				throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.class.or.array.expected", myFieldName));
+			}
 
-      if (field == null) {
-        throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.no.instance.field", myFieldName));
-      }
-      myEvaluatedQualifier = field.isStatic()? (Object)refType : (Object)objRef;
-      myEvaluatedField = field;
-      return field.isStatic()? refType.getValue(field) : objRef.getValue(field);
-    }
+			// expressions like 'array.length' must be treated separately
+			//noinspection HardCodedStringLiteral
+			if(objRef instanceof ArrayReference && "length".equals(myFieldName))
+			{
+				//noinspection HardCodedStringLiteral
+				return DebuggerUtilsEx.createValue(context.getDebugProcess().getVirtualMachineProxy(), "int", ((ArrayReference) objRef).length());
+			}
 
-    if(object == null) {
-      throw EvaluateExceptionUtil.createEvaluateException(new NullPointerException());
-    }
+			Field field = findField(refType, context);
+			if(field == null)
+			{
+				field = refType.fieldByName(myFieldName);
+			}
 
-    throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.evaluating.field", myFieldName));
-  }
+			if(field == null)
+			{
+				throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.no.instance.field", myFieldName));
+			}
+			myEvaluatedQualifier = field.isStatic() ? (Object) refType : (Object) objRef;
+			myEvaluatedField = field;
+			return field.isStatic() ? refType.getValue(field) : objRef.getValue(field);
+		}
 
-  public Modifier getModifier() {
-    Modifier modifier = null;
-    if (myEvaluatedField != null && (myEvaluatedQualifier instanceof ClassType || myEvaluatedQualifier instanceof ObjectReference)) {
-      modifier = new Modifier() {
-        public boolean canInspect() {
-          return myEvaluatedQualifier instanceof ObjectReference;
-        }
+		if(object == null)
+		{
+			throw EvaluateExceptionUtil.createEvaluateException(new NullPointerException());
+		}
 
-        public boolean canSetValue() {
-          return true;
-        }
+		throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.evaluating.field", myFieldName));
+	}
 
-        public void setValue(Value value) throws ClassNotLoadedException, InvalidTypeException {
-          if (myEvaluatedQualifier instanceof ReferenceType) {
-            ClassType classType = (ClassType)myEvaluatedQualifier;
-            classType.setValue(myEvaluatedField, value);
-          }
-          else {
-            ObjectReference objRef = (ObjectReference)myEvaluatedQualifier;
-            objRef.setValue(myEvaluatedField, value);
-          }
-        }
+	@Override
+	public Modifier getModifier()
+	{
+		Modifier modifier = null;
+		if(myEvaluatedField != null && (myEvaluatedQualifier instanceof ClassType || myEvaluatedQualifier instanceof ObjectReference))
+		{
+			modifier = new Modifier()
+			{
+				@Override
+				public boolean canInspect()
+				{
+					return myEvaluatedQualifier instanceof ObjectReference;
+				}
 
-        public Type getExpectedType() throws ClassNotLoadedException {
-          return myEvaluatedField.type();
-        }
+				@Override
+				public boolean canSetValue()
+				{
+					return true;
+				}
 
-        public NodeDescriptorImpl getInspectItem(Project project) {
-          if(myEvaluatedQualifier instanceof ObjectReference) {
-            return new FieldDescriptorImpl(project, (ObjectReference)myEvaluatedQualifier, myEvaluatedField);
-          } else
-            return null;
-        }
-      };
-    }
-    return modifier;
-  }
+				@Override
+				public void setValue(Value value) throws ClassNotLoadedException, InvalidTypeException
+				{
+					if(myEvaluatedQualifier instanceof ReferenceType)
+					{
+						ClassType classType = (ClassType) myEvaluatedQualifier;
+						classType.setValue(myEvaluatedField, value);
+					}
+					else
+					{
+						ObjectReference objRef = (ObjectReference) myEvaluatedQualifier;
+						objRef.setValue(myEvaluatedField, value);
+					}
+				}
 
-  private static final class FQNameClassFilter implements TargetClassFilter {
-    private final String myQName;
+				@Override
+				public Type getExpectedType() throws ClassNotLoadedException
+				{
+					return myEvaluatedField.type();
+				}
 
-    private FQNameClassFilter(String qName) {
-      myQName = qName;
-    }
+				@Override
+				public NodeDescriptorImpl getInspectItem(Project project)
+				{
+					if(myEvaluatedQualifier instanceof ObjectReference)
+					{
+						return new FieldDescriptorImpl(project, (ObjectReference) myEvaluatedQualifier, myEvaluatedField);
+					}
+					else
+					{
+						return null;
+					}
+				}
+			};
+		}
+		return modifier;
+	}
 
-    public boolean acceptClass(final ReferenceType refType) {
-      return refType.name().equals(myQName);
-    }
-  }
+	private static final class FQNameClassFilter implements TargetClassFilter
+	{
+		private final String myQName;
 
-  private static final class LocalClassFilter implements TargetClassFilter{
-    private final String myLocalClassShortName;
+		private FQNameClassFilter(String qName)
+		{
+			myQName = qName;
+		}
 
-    private LocalClassFilter(String localClassShortName) {
-      myLocalClassShortName = localClassShortName;
-    }
+		@Override
+		public boolean acceptClass(final ReferenceType refType)
+		{
+			return refType.name().equals(myQName);
+		}
+	}
 
-    public boolean acceptClass(final ReferenceType refType) {
-      final String name = refType.name();
-      final int index = name.lastIndexOf(myLocalClassShortName);
-      if (index < 0) {
-        return false;
-      }
-      for (int idx = index - 1; idx >= 0; idx--) {
-        final char ch = name.charAt(idx);
-        if (ch == '$') {
-          return idx < (index - 1);
-        }
-        if (!Character.isDigit(ch)) {
-          return false;
-        }
-      }
-      return false;
-    }
-  }
+	private static final class LocalClassFilter implements TargetClassFilter
+	{
+		private final String myLocalClassShortName;
+
+		private LocalClassFilter(String localClassShortName)
+		{
+			myLocalClassShortName = localClassShortName;
+		}
+
+		@Override
+		public boolean acceptClass(final ReferenceType refType)
+		{
+			final String name = refType.name();
+			final int index = name.lastIndexOf(myLocalClassShortName);
+			if(index < 0)
+			{
+				return false;
+			}
+			for(int idx = index - 1; idx >= 0; idx--)
+			{
+				final char ch = name.charAt(idx);
+				if(ch == '$')
+				{
+					return idx < (index - 1);
+				}
+				if(!Character.isDigit(ch))
+				{
+					return false;
+				}
+			}
+			return false;
+		}
+	}
 }
