@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package com.intellij.debugger.engine.evaluation.expression;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.JVMNameUtil;
@@ -67,9 +68,10 @@ public class FieldEvaluator implements Evaluator
 		myTargetClassFilter = filter;
 	}
 
-	public static TargetClassFilter createClassFilter(PsiType psiType)
+	@NotNull
+	public static TargetClassFilter createClassFilter(@Nullable PsiType psiType)
 	{
-		if(psiType instanceof PsiArrayType)
+		if(psiType == null || psiType instanceof PsiArrayType)
 		{
 			return TargetClassFilter.ALL;
 		}
@@ -96,7 +98,7 @@ public class FieldEvaluator implements Evaluator
 	}
 
 	@Nullable
-	private Field findField(Type t, final EvaluationContextImpl context) throws EvaluateException
+	private Field findField(@Nullable Type t)
 	{
 		if(t instanceof ClassType)
 		{
@@ -107,13 +109,13 @@ public class FieldEvaluator implements Evaluator
 			}
 			for(final InterfaceType interfaceType : cls.interfaces())
 			{
-				final Field field = findField(interfaceType, context);
+				final Field field = findField(interfaceType);
 				if(field != null)
 				{
 					return field;
 				}
 			}
-			return findField(cls.superclass(), context);
+			return findField(cls.superclass());
 		}
 		else if(t instanceof InterfaceType)
 		{
@@ -124,7 +126,7 @@ public class FieldEvaluator implements Evaluator
 			}
 			for(final InterfaceType interfaceType : iface.superinterfaces())
 			{
-				final Field field = findField(interfaceType, context);
+				final Field field = findField(interfaceType);
 				if(field != null)
 				{
 					return field;
@@ -150,7 +152,7 @@ public class FieldEvaluator implements Evaluator
 		if(object instanceof ReferenceType)
 		{
 			ReferenceType refType = (ReferenceType) object;
-			Field field = findField(refType, context);
+			Field field = findField(refType);
 			if(field == null || !field.isStatic())
 			{
 				field = refType.fieldByName(myFieldName);
@@ -181,7 +183,7 @@ public class FieldEvaluator implements Evaluator
 				return DebuggerUtilsEx.createValue(context.getDebugProcess().getVirtualMachineProxy(), "int", ((ArrayReference) objRef).length());
 			}
 
-			Field field = findField(refType, context);
+			Field field = findField(refType);
 			if(field == null)
 			{
 				field = refType.fieldByName(myFieldName);
@@ -191,7 +193,7 @@ public class FieldEvaluator implements Evaluator
 			{
 				throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.no.instance.field", myFieldName));
 			}
-			myEvaluatedQualifier = field.isStatic() ? (Object) refType : (Object) objRef;
+			myEvaluatedQualifier = field.isStatic() ? refType : objRef;
 			myEvaluatedField = field;
 			return field.isStatic() ? refType.getValue(field) : objRef.getValue(field);
 		}
