@@ -15,7 +15,16 @@
  */
 package com.intellij.debugger.actions;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
+import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.SwingUtilities;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
@@ -28,6 +37,7 @@ import com.intellij.debugger.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
+import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
@@ -39,16 +49,15 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.util.containers.HashMap;
 import com.intellij.xdebugger.impl.actions.MarkObjectActionHandler;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import consulo.internal.com.sun.jdi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ClassLoaderReference;
+import consulo.internal.com.sun.jdi.ClassObjectReference;
+import consulo.internal.com.sun.jdi.Field;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.ThreadGroupReference;
+import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.Value;
 
 /*
  * Class SetValueAction
@@ -267,7 +276,7 @@ public class JavaMarkObjectActionHandler extends MarkObjectActionHandler {
 
   public static Color getAutoMarkupColor() {
     final EditorColorsManager manager = EditorColorsManager.getInstance();
-    final TextAttributes textAttributes = manager.getGlobalScheme().getAttributes(HighlightInfoType.STATIC_FIELD.getAttributesKey());
+    final TextAttributes textAttributes = manager.getGlobalScheme().getAttributes(JavaHighlightingColors.STATIC_FIELD);
     return textAttributes.getForegroundColor();
   }
 }

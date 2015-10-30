@@ -26,9 +26,10 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.application.options.colors.ScopeAttributesUtil;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.JavaHighlightInfoTypes;
+import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.colors.TextAttributesScheme;
 import com.intellij.openapi.editor.markup.TextAttributes;
@@ -46,7 +47,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 public class HighlightNamesUtil
 {
-	private static final Logger LOG = Logger.getInstance("#" + HighlightNamesUtil.class.getName());
+	private static final Logger LOG = Logger.getInstance(HighlightNamesUtil.class);
 
 	@Nullable
 	public static HighlightInfo highlightMethodName(@NotNull PsiMethod method, final PsiElement elementToHighlight, final boolean isDeclaration, @NotNull TextAttributesScheme colorsScheme)
@@ -72,11 +73,11 @@ public class HighlightNamesUtil
 			}
 		}
 
-		HighlightInfoType type = getMethodNameHighlightType(method, isDeclaration, isInherited);
-		if(type != null && elementToHighlight != null)
+		TextAttributesKey attributesKey = getMethodNameHighlightKey(method, isDeclaration, isInherited).getAttributesKey();
+		if(elementToHighlight != null)
 		{
-			TextAttributes attributes = mergeWithScopeAttributes(method, type, colorsScheme);
-			HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(type).range(range);
+			TextAttributes attributes = mergeWithScopeAttributes(method, attributesKey, colorsScheme);
+			HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).range(range);
 			if(attributes != null)
 			{
 				builder.textAttributes(attributes);
@@ -100,9 +101,9 @@ public class HighlightNamesUtil
 		return false;
 	}
 
-	private static TextAttributes mergeWithScopeAttributes(final PsiElement element, @NotNull HighlightInfoType type, @NotNull TextAttributesScheme colorsScheme)
+	private static TextAttributes mergeWithScopeAttributes(final PsiElement element, @NotNull TextAttributesKey attributesKey, @NotNull TextAttributesScheme colorsScheme)
 	{
-		TextAttributes regularAttributes = HighlightInfo.getAttributesByType(element, type, colorsScheme);
+		TextAttributes regularAttributes = colorsScheme.getAttributes(attributesKey);
 		if(element == null)
 		{
 			return regularAttributes;
@@ -114,7 +115,7 @@ public class HighlightNamesUtil
 	@Nullable
 	public static HighlightInfo highlightClassName(PsiClass aClass, PsiElement elementToHighlight, @NotNull TextAttributesScheme colorsScheme)
 	{
-		HighlightInfoType type = getClassNameHighlightType(aClass, elementToHighlight);
+		TextAttributesKey type = getClassNameHighlightKey(aClass, elementToHighlight);
 		if(elementToHighlight != null)
 		{
 			TextAttributes attributes = mergeWithScopeAttributes(aClass, type, colorsScheme);
@@ -141,7 +142,7 @@ public class HighlightNamesUtil
 				range = new TextRange(psiAnnotation.getTextRange().getStartOffset(), range.getEndOffset());
 			}
 
-			HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(type).range(range);
+			HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).range(range);
 			if(attributes != null)
 			{
 				builder.textAttributes(attributes);
@@ -154,20 +155,20 @@ public class HighlightNamesUtil
 	@Nullable
 	public static HighlightInfo highlightVariableName(final PsiVariable variable, final PsiElement elementToHighlight, @NotNull TextAttributesScheme colorsScheme)
 	{
-		HighlightInfoType varType = getVariableNameHighlightType(variable);
-		if(varType != null)
+		TextAttributesKey highlightKey = getVariableNameHighlightKey(variable);
+		if(highlightKey != null)
 		{
 			if(variable instanceof PsiField)
 			{
-				TextAttributes attributes = mergeWithScopeAttributes(variable, varType, colorsScheme);
-				HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(varType).range(elementToHighlight.getTextRange());
+				TextAttributes attributes = mergeWithScopeAttributes(variable, highlightKey, colorsScheme);
+				HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).range(elementToHighlight.getTextRange());
 				if(attributes != null)
 				{
 					builder.textAttributes(attributes);
 				}
 				return builder.createUnconditionally();
 			}
-			return HighlightInfo.newHighlightInfo(varType).range(elementToHighlight).create();
+			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).range(elementToHighlight).create();
 		}
 		return null;
 	}
@@ -191,7 +192,9 @@ public class HighlightNamesUtil
 		return null;
 	}
 
-	private static HighlightInfoType getMethodNameHighlightType(@NotNull PsiMethod method, boolean isDeclaration, boolean isInheritedMethod)
+	//TODO [VISTALL] migrate to text attribute keys
+	@NotNull
+	private static HighlightInfoType getMethodNameHighlightKey(@NotNull PsiMethod method, boolean isDeclaration, boolean isInheritedMethod)
 	{
 		if(method.isConstructor())
 		{
@@ -217,71 +220,72 @@ public class HighlightNamesUtil
 	}
 
 	@Nullable
-	private static HighlightInfoType getVariableNameHighlightType(PsiVariable var)
+	private static TextAttributesKey getVariableNameHighlightKey(PsiVariable var)
 	{
 		if(var instanceof PsiLocalVariable || var instanceof PsiParameter && ((PsiParameter) var).getDeclarationScope() instanceof PsiForeachStatement)
 		{
-			return HighlightInfoType.LOCAL_VARIABLE;
+			return JavaHighlightingColors.LOCAL_VARIABLE;
 		}
 		if(var instanceof PsiField)
 		{
-			return var.hasModifierProperty(PsiModifier.STATIC) ? var.hasModifierProperty(PsiModifier.FINAL) ? HighlightInfoType.STATIC_FINAL_FIELD : HighlightInfoType.STATIC_FIELD :
-					HighlightInfoType.INSTANCE_FIELD;
+			return var.hasModifierProperty(PsiModifier.STATIC) ? var.hasModifierProperty(PsiModifier.FINAL) ? JavaHighlightingColors.STATIC_FINAL_FIELD : JavaHighlightingColors.STATIC_FIELD :
+					JavaHighlightingColors.INSTANCE_FIELD;
 		}
 		if(var instanceof PsiParameter)
 		{
-			return HighlightInfoType.PARAMETER;
+			return JavaHighlightingColors.PARAMETER;
 		}
 		return null;
 	}
 
-	@NotNull
-	private static HighlightInfoType getClassNameHighlightType(@Nullable PsiClass aClass, @Nullable PsiElement element)
-	{
-		if(element instanceof PsiJavaCodeReferenceElement && element.getParent() instanceof PsiAnonymousClass)
-		{
-			return JavaHighlightInfoTypes.ANONYMOUS_CLASS_NAME;
-		}
-		if(aClass != null)
-		{
-			if(aClass.isAnnotationType())
-			{
-				return JavaHighlightInfoTypes.ANNOTATION_NAME;
-			}
-			if(aClass.isInterface())
-			{
-				return JavaHighlightInfoTypes.INTERFACE_NAME;
-			}
-			if(aClass.isEnum())
-			{
-				return JavaHighlightInfoTypes.ENUM_NAME;
-			}
-			if(aClass instanceof PsiTypeParameter)
-			{
-				return JavaHighlightInfoTypes.TYPE_PARAMETER_NAME;
-			}
-			final PsiModifierList modList = aClass.getModifierList();
-			if(modList != null && modList.hasModifierProperty(PsiModifier.ABSTRACT))
-			{
-				return JavaHighlightInfoTypes.ABSTRACT_CLASS_NAME;
-			}
-		}
-		// use class by default
-		return JavaHighlightInfoTypes.CLASS_NAME;
-	}
-
+	//TODO [VISTALL] migrate to text attribute keys
 	@Nullable
 	public static HighlightInfo highlightReassignedVariable(PsiVariable variable, PsiElement elementToHighlight)
 	{
 		if(variable instanceof PsiLocalVariable)
 		{
-			return HighlightInfo.newHighlightInfo(HighlightInfoType.REASSIGNED_LOCAL_VARIABLE).range(elementToHighlight).create();
+			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).textAttributes(CodeInsightColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES).range(elementToHighlight).create();
 		}
 		if(variable instanceof PsiParameter)
 		{
-			return HighlightInfo.newHighlightInfo(HighlightInfoType.REASSIGNED_PARAMETER).range(elementToHighlight).create();
+			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).textAttributes(CodeInsightColors.REASSIGNED_PARAMETER_ATTRIBUTES).range(elementToHighlight).create();
 		}
 		return null;
+	}
+
+	@NotNull
+	private static TextAttributesKey getClassNameHighlightKey(@Nullable PsiClass aClass, @Nullable PsiElement element)
+	{
+		if(element instanceof PsiJavaCodeReferenceElement && element.getParent() instanceof PsiAnonymousClass)
+		{
+			return JavaHighlightingColors.ANONYMOUS_CLASS_NAME;
+		}
+		if(aClass != null)
+		{
+			if(aClass.isAnnotationType())
+			{
+				return JavaHighlightingColors.ANNOTATION_NAME;
+			}
+			if(aClass.isInterface())
+			{
+				return JavaHighlightingColors.INTERFACE_NAME;
+			}
+			if(aClass.isEnum())
+			{
+				return JavaHighlightingColors.ENUM_NAME;
+			}
+			if(aClass instanceof PsiTypeParameter)
+			{
+				return JavaHighlightingColors.TYPE_PARAMETER_NAME;
+			}
+			final PsiModifierList modList = aClass.getModifierList();
+			if(modList != null && modList.hasModifierProperty(PsiModifier.ABSTRACT))
+			{
+				return JavaHighlightingColors.ABSTRACT_CLASS_NAME;
+			}
+		}
+		// use class by default
+		return JavaHighlightingColors.CLASS_NAME;
 	}
 
 	private static TextAttributes getScopeAttributes(@NotNull PsiElement element, @NotNull TextAttributesScheme colorsScheme)

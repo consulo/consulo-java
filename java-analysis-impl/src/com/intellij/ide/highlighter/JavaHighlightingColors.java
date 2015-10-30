@@ -24,47 +24,38 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
  *
  * @author Rustam Vishnyakov
  */
-public interface JavaHighlightingColors {
-  TextAttributesKey LINE_COMMENT =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.LINE_COMMENT);
-  TextAttributesKey JAVA_BLOCK_COMMENT =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.BLOCK_COMMENT);
-  TextAttributesKey DOC_COMMENT =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOC_COMMENT);
-  TextAttributesKey NUMBER = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.NUMBER);
-  TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.STRING);
-  TextAttributesKey OPERATION_SIGN =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.OPERATION_SIGN);
-  TextAttributesKey PARENTHS =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.PARENTHESES);
-  TextAttributesKey BRACKETS = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.BRACKETS);
-  TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.BRACES);
-  TextAttributesKey COMMA = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.COMMA);
-  TextAttributesKey DOT = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOT);
-  TextAttributesKey JAVA_SEMICOLON =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.SEMICOLON);
-  TextAttributesKey DOC_COMMENT_TAG =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOC_COMMENT_TAG);
-  TextAttributesKey DOC_COMMENT_MARKUP =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOC_COMMENT_MARKUP);
-  TextAttributesKey VALID_STRING_ESCAPE =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
-  TextAttributesKey INVALID_STRING_ESCAPE =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
-  TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.KEYWORD);
+public interface JavaHighlightingColors
+{
+	TextAttributesKey LINE_COMMENT = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.LINE_COMMENT);
+	TextAttributesKey JAVA_BLOCK_COMMENT = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.BLOCK_COMMENT);
+	TextAttributesKey DOC_COMMENT = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOC_COMMENT);
+	TextAttributesKey NUMBER = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.NUMBER);
+	TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.STRING);
+	TextAttributesKey OPERATION_SIGN = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.OPERATION_SIGN);
+	TextAttributesKey PARENTHS = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.PARENTHESES);
+	TextAttributesKey BRACKETS = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.BRACKETS);
+	TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.BRACES);
+	TextAttributesKey COMMA = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.COMMA);
+	TextAttributesKey DOT = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOT);
+	TextAttributesKey JAVA_SEMICOLON = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.SEMICOLON);
+	TextAttributesKey DOC_COMMENT_TAG = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOC_COMMENT_TAG);
+	TextAttributesKey DOC_COMMENT_MARKUP = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.DOC_COMMENT_MARKUP);
+	TextAttributesKey VALID_STRING_ESCAPE = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
+	TextAttributesKey INVALID_STRING_ESCAPE = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
+	TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.KEYWORD);
 
-  TextAttributesKey ANNOTATION_NAME =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.METADATA);
-  TextAttributesKey ENUM_NAME =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
-  TextAttributesKey CLASS_NAME =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
-  TextAttributesKey INTERFACE_NAME =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
-  TextAttributesKey ANONYMOUS_CLASS_NAME =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
-  TextAttributesKey TYPE_PARAMETER_NAME =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.TYPE_ALIAS_NAME);
-  TextAttributesKey ABSTRACT_CLASS_NAME =
-    TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
+	TextAttributesKey ANNOTATION_NAME = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.METADATA);
+	TextAttributesKey ENUM_NAME = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
+	TextAttributesKey CLASS_NAME = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
+	TextAttributesKey INTERFACE_NAME = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
+	TextAttributesKey ANONYMOUS_CLASS_NAME = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
+	TextAttributesKey TYPE_PARAMETER_NAME = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.TYPE_ALIAS_NAME);
+	TextAttributesKey ABSTRACT_CLASS_NAME = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.CLASS_NAME);
+
+	TextAttributesKey LOCAL_VARIABLE = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+	TextAttributesKey PARAMETER = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.PARAMETER);
+	TextAttributesKey FIELD = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.INSTANCE_FIELD);
+	TextAttributesKey STATIC_FIELD = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.STATIC_FIELD);
+	TextAttributesKey STATIC_FINAL_FIELD = TextAttributesKey.createTextAttributesKey("JAVA_STATIC_FINAL_FIELD", STATIC_FIELD);
+	TextAttributesKey INSTANCE_FIELD = TextAttributesKey.createTextAttributesKey(JavaLanguage.INSTANCE, DefaultLanguageHighlighterColors.INSTANCE_FIELD);
 }

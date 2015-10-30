@@ -897,7 +897,7 @@ public class JavaCompletionUtil
 		if(hasParams)
 		{
 			// Invoke parameters popup
-			AutoPopupController.getInstance(file.getProject()).autoPopupParameterInfo(editor, overloadsMatter ? null : (PsiElement) item.getObject());
+			AutoPopupController.getInstance(file.getProject()).autoPopupParameterInfo(editor, overloadsMatter ? null : item.getObject());
 		}
 
 		if(smart || !needRightParenth || !insertTail(context, item, tailType, hasTail))

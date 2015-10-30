@@ -67,14 +67,14 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.abstract.class"), JavaHighlightingColors.ABSTRACT_CLASS_NAME),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.interface"), JavaHighlightingColors.INTERFACE_NAME),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.enum"), JavaHighlightingColors.ENUM_NAME),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.local.variable"), CodeInsightColors.LOCAL_VARIABLE_ATTRIBUTES),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.local.variable"), JavaHighlightingColors.LOCAL_VARIABLE),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.reassigned.local.variable"), CodeInsightColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.reassigned.parameter"), CodeInsightColors.REASSIGNED_PARAMETER_ATTRIBUTES),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.implicit.anonymous.parameter"), CodeInsightColors.IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.instance.field"), CodeInsightColors.INSTANCE_FIELD_ATTRIBUTES),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.static.field"), CodeInsightColors.STATIC_FIELD_ATTRIBUTES),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.static.final.field"), CodeInsightColors.STATIC_FINAL_FIELD_ATTRIBUTES),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.parameter"), CodeInsightColors.PARAMETER_ATTRIBUTES),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.instance.field"), JavaHighlightingColors.INSTANCE_FIELD),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.static.field"), JavaHighlightingColors.STATIC_FIELD),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.static.final.field"), JavaHighlightingColors.STATIC_FINAL_FIELD),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.parameter"), JavaHighlightingColors.PARAMETER),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.method.call"), CodeInsightColors.METHOD_CALL_ATTRIBUTES),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.method.declaration"), CodeInsightColors.METHOD_DECLARATION_ATTRIBUTES),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.constructor.call"), CodeInsightColors.CONSTRUCTOR_CALL_ATTRIBUTES),
@@ -89,7 +89,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
 
   @NonNls private static final Map<String, TextAttributesKey> ourTags = new HashMap<String, TextAttributesKey>();
   static {
-    ourTags.put("field", CodeInsightColors.INSTANCE_FIELD_ATTRIBUTES);
+    ourTags.put("field", JavaHighlightingColors.INSTANCE_FIELD);
 
     // TODO [VISTALL] jump to general tab
     ourTags.put("unusedField", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
@@ -100,12 +100,12 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
     ourTags.put("server_duplicate", CodeInsightColors.DUPLICATE_FROM_SERVER);
     ourTags.put("unknownType", CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES);
 
-    ourTags.put("localVar", CodeInsightColors.LOCAL_VARIABLE_ATTRIBUTES);
+    ourTags.put("localVar", JavaHighlightingColors.LOCAL_VARIABLE);
     ourTags.put("reassignedLocalVar", CodeInsightColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES);
     ourTags.put("reassignedParameter", CodeInsightColors.REASSIGNED_PARAMETER_ATTRIBUTES);
     ourTags.put("implicitAnonymousParameter", CodeInsightColors.IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES);
-    ourTags.put("static", CodeInsightColors.STATIC_FIELD_ATTRIBUTES);
-    ourTags.put("static_final", CodeInsightColors.STATIC_FINAL_FIELD_ATTRIBUTES);
+    ourTags.put("static", JavaHighlightingColors.STATIC_FIELD);
+    ourTags.put("static_final", JavaHighlightingColors.STATIC_FINAL_FIELD);
     ourTags.put("deprecated", CodeInsightColors.DEPRECATED_ATTRIBUTES);
     ourTags.put("constructorCall", CodeInsightColors.CONSTRUCTOR_CALL_ATTRIBUTES);
     ourTags.put("constructorDeclaration", CodeInsightColors.CONSTRUCTOR_DECLARATION_ATTRIBUTES);
@@ -114,7 +114,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
     ourTags.put("static_method", CodeInsightColors.STATIC_METHOD_ATTRIBUTES);
     ourTags.put("abstract_method", CodeInsightColors.ABSTRACT_METHOD_ATTRIBUTES);
     ourTags.put("inherited_method", CodeInsightColors.INHERITED_METHOD_ATTRIBUTES);
-    ourTags.put("param", CodeInsightColors.PARAMETER_ATTRIBUTES);
+    ourTags.put("param", JavaHighlightingColors.PARAMETER);
     ourTags.put("class", JavaHighlightingColors.CLASS_NAME);
     ourTags.put("anonymousClass", JavaHighlightingColors.ANONYMOUS_CLASS_NAME);
     ourTags.put("typeParameter", JavaHighlightingColors.TYPE_PARAMETER_NAME);
@@ -172,7 +172,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
       "  public static int <static>staticField</static> = 0;\n" +
       "\n" +
       "  public <constructorDeclaration>SomeClass</constructorDeclaration>(<interface>AnInterface</interface> <param>param</param>, int[] <reassignedParameter>reassignedParam</reassignedParameter>) {\n" +
-      "    <error>int <localVar>localVar</localVar> = \"IntelliJ\"</error>; // Error, incompatible types\n" +
+      "    <error>int <localVar>localVar</localVar> = \"Consulo\"</error>; // Error, incompatible types\n" +
       "    <class>System</class>.<static>out</static>.<methodCall>println</methodCall>(<field>anotherString</field> + <inherited_method>toString</inherited_method>() + <localVar>localVar</localVar>);\n" +
       "    long <localVar>time</localVar> = <class>Date</class>.<static_method><deprecated>parse</deprecated></static_method>(\"1.2.3\"); // Method is deprecated\n" +
       "    int <reassignedLocalVar>reassignedValue</reassignedLocalVar> = this.<warning>staticField</warning>; \n" +
