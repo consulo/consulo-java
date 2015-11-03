@@ -29,7 +29,7 @@ import com.intellij.psi.PsiVariable;
 /**
  * @author Dennis.Ushakov
  */
-public class JavaAnchorProvider extends SmartPointerAnchorProvider
+public class JavaAnchorProvider implements SmartPointerAnchorProvider
 {
 	@Override
 	public PsiElement getAnchor(@NotNull PsiElement element)
