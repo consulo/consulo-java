@@ -24,6 +24,7 @@
 	<depends optional="true" config-file="org.intellij.intellilang.xml">org.intellij.intelliLang</depends>
 	<depends optional="true" config-file="Spellchecker.xml">com.intellij.spellchecker</depends>
 	<depends optional="true" config-file="Properties.xml">com.intellij.properties</depends>
+	<depends optional="true" config-file="org.mustbe.consulo.javascript.xml">org.mustbe.consulo.javascript</depends>
 	<depends>com.intellij.xml</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 

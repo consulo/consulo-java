@@ -439,6 +439,31 @@
           <orderEntry type="module" module-name="java-impl" />
         </module-layer>
       </module>
+      <module name="json-descriptor-impl" dirurl="file://$PROJECT_DIR$/json-descriptor-impl" current-layer="Default">
+        <module-layer name="Default">
+          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
+          <content url="file://$MODULE_DIR$">
+            <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+          </content>
+          <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+          <orderEntry type="module-extension-sdk" extension-id="java" />
+          <orderEntry type="sourceFolder" />
+          <orderEntry type="module-library">
+            <library name="consulo:JavaScript">
+              <binaries>
+                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/debugger-impl.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/javascript.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/json-impl.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/json_simple-1.1.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/lib.org.chromium.sdk.jar!/" />
+                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/lib.org.chromium.sdk.wipbackend.protocol_1_0.jar!/" />
+              </binaries>
+            </library>
+          </orderEntry>
+          <orderEntry type="module" module-name="java-psi-impl" />
+        </module-layer>
+      </module>
     </modules>
   </component>
 </project>

@@ -13,7 +13,6 @@
             <element id="module-output" name="java-debugger-impl" />
             <element id="module-output" name="java-execution-api" />
             <element id="module-output" name="java-execution-impl" />
-            <element id="module-output" name="java-generate-tostring" />
             <element id="module-output" name="java-impl" />
             <element id="module-output" name="java-indexing-api" />
             <element id="module-output" name="java-indexing-impl" />
@@ -22,7 +21,6 @@
             <element id="module-output" name="java-psi-impl" />
             <element id="module-output" name="jvm-bytecode-viewer" />
             <element id="module-production-resource-output" name="consulo-java" />
-            <element id="module-production-resource-output" name="java-generate-tostring" />
             <element id="module-output" name="java-intellilang" />
             <element id="module-production-resource-output" name="java-psi-impl" />
             <element id="module-production-resource-output" name="java-impl" />
@@ -54,6 +52,9 @@
           </element>
           <element id="library" level="project" name="jimage-jdk6-sources" />
           <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/jacocoant.jar" />
+          <element id="zip-archive" name="javascript-impl.jar">
+            <element id="module-output" name="json-descriptor-impl" />
+          </element>
         </element>
         <element id="directory" name="coverage-lib">
           <element id="dir-copy" path="$PROJECT_DIR$/java-coverage-impl/libRt" />

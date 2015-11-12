@@ -1,0 +1,5 @@
+<idea-plugin>
+	<extensions defaultExtensionNs="org.mustbe.consulo.javascript">
+		<jsonDescriptionByAnotherPsiElementProvider implementation="org.mustbe.consulo.json.GsonDescriptionByAnotherPsiElementProvider" />
+	</extensions>
+</idea-plugin>
