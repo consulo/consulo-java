@@ -33,15 +33,7 @@ import org.mustbe.consulo.module.extension.ModuleExtensionHelper;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
@@ -231,7 +223,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 
 							JsonObjectDescriptor objectDescriptor = new JsonObjectDescriptor();
 							Object valueJsonType = toType(project, valueType);
-							addIfNotNull(objectDescriptor, valueJsonType, null);
+							addIfNotNull(objectDescriptor, valueJsonType, null, null);
 							return objectDescriptor;
 						}
 
@@ -249,7 +241,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 					}
 					Object classType = toType(project, psiField.getType());
 
-					addIfNotNull(objectDescriptor, classType, psiField.getName());
+					addIfNotNull(objectDescriptor, classType, psiField, psiField.getName());
 				}
 
 				return objectDescriptor;
@@ -270,15 +262,21 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		return null;
 	}
 
-	private static void addIfNotNull(@NotNull JsonObjectDescriptor objectDescriptor, @Nullable Object classType, @Nullable String fieldName)
+	private static void addIfNotNull(@NotNull JsonObjectDescriptor objectDescriptor, @Nullable Object classType, @Nullable PsiElement navElement, @Nullable String fieldName)
 	{
+		JsonPropertyDescriptor propertyDescriptor = null;
 		if(classType instanceof Class)
 		{
-			objectDescriptor.addProperty(fieldName, (Class<?>) classType);
+			propertyDescriptor = objectDescriptor.addProperty(fieldName, (Class<?>) classType);
 		}
 		else if(classType instanceof JsonObjectDescriptor)
 		{
-			objectDescriptor.addProperty(fieldName, (JsonObjectDescriptor) classType);
+			propertyDescriptor = objectDescriptor.addProperty(fieldName, (JsonObjectDescriptor) classType);
+		}
+
+		if(propertyDescriptor != null && navElement != null)
+		{
+			propertyDescriptor.setNavigationElement(navElement);
 		}
 	}
 }
