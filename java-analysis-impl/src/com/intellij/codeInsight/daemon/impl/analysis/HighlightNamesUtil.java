@@ -29,7 +29,6 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.colors.TextAttributesScheme;
 import com.intellij.openapi.editor.markup.TextAttributes;
@@ -238,17 +237,16 @@ public class HighlightNamesUtil
 		return null;
 	}
 
-	//TODO [VISTALL] migrate to text attribute keys
 	@Nullable
 	public static HighlightInfo highlightReassignedVariable(PsiVariable variable, PsiElement elementToHighlight)
 	{
 		if(variable instanceof PsiLocalVariable)
 		{
-			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).textAttributes(CodeInsightColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES).range(elementToHighlight).create();
+			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).textAttributes(JavaHighlightingColors.REASSIGNED_LOCAL_VARIABLE).range(elementToHighlight).create();
 		}
 		if(variable instanceof PsiParameter)
 		{
-			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).textAttributes(CodeInsightColors.REASSIGNED_PARAMETER_ATTRIBUTES).range(elementToHighlight).create();
+			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).textAttributes(JavaHighlightingColors.REASSIGNED_PARAMETER).range(elementToHighlight).create();
 		}
 		return null;
 	}

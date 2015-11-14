@@ -51,11 +51,11 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.braces"), JavaHighlightingColors.BRACES),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.brackets"), JavaHighlightingColors.BRACKETS),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.comma"), JavaHighlightingColors.COMMA),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.semicolon"), JavaHighlightingColors.JAVA_SEMICOLON),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.semicolon"), JavaHighlightingColors.SEMICOLON),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.dot"), JavaHighlightingColors.DOT),
 
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.line.comment"), JavaHighlightingColors.LINE_COMMENT),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.block.comment"), JavaHighlightingColors.JAVA_BLOCK_COMMENT),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.block.comment"), JavaHighlightingColors.BLOCK_COMMENT),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.javadoc.comment"), JavaHighlightingColors.DOC_COMMENT),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.javadoc.tag"), JavaHighlightingColors.DOC_COMMENT_TAG),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.javadoc.tag.value"), CodeInsightColors.DOC_COMMENT_TAG_VALUE),
@@ -68,8 +68,8 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.interface"), JavaHighlightingColors.INTERFACE_NAME),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.enum"), JavaHighlightingColors.ENUM_NAME),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.local.variable"), JavaHighlightingColors.LOCAL_VARIABLE),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.reassigned.local.variable"), CodeInsightColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES),
-    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.reassigned.parameter"), CodeInsightColors.REASSIGNED_PARAMETER_ATTRIBUTES),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.reassigned.local.variable"), JavaHighlightingColors.REASSIGNED_LOCAL_VARIABLE),
+    new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.reassigned.parameter"), JavaHighlightingColors.REASSIGNED_PARAMETER),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.implicit.anonymous.parameter"), CodeInsightColors.IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.instance.field"), JavaHighlightingColors.INSTANCE_FIELD),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.static.field"), JavaHighlightingColors.STATIC_FIELD),
@@ -101,8 +101,8 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
     ourTags.put("unknownType", CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES);
 
     ourTags.put("localVar", JavaHighlightingColors.LOCAL_VARIABLE);
-    ourTags.put("reassignedLocalVar", CodeInsightColors.REASSIGNED_LOCAL_VARIABLE_ATTRIBUTES);
-    ourTags.put("reassignedParameter", CodeInsightColors.REASSIGNED_PARAMETER_ATTRIBUTES);
+    ourTags.put("reassignedLocalVar", JavaHighlightingColors.REASSIGNED_LOCAL_VARIABLE);
+    ourTags.put("reassignedParameter", JavaHighlightingColors.REASSIGNED_PARAMETER);
     ourTags.put("implicitAnonymousParameter", CodeInsightColors.IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES);
     ourTags.put("static", JavaHighlightingColors.STATIC_FIELD);
     ourTags.put("static_final", JavaHighlightingColors.STATIC_FINAL_FIELD);
