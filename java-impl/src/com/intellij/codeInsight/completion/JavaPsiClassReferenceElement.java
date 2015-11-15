@@ -206,12 +206,8 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 			@NotNull String locationString,
 			@NotNull PsiSubstitutor substitutor)
 	{
-		if(!(psiClass instanceof PsiTypeParameter))
-		{
-			presentation.setIcon(DefaultLookupItemRenderer.getRawIcon(item, presentation.isReal()));
-		}
-
 		boolean strikeout = JavaElementLookupRenderer.isToStrikeout(item);
+		presentation.setIcon(DefaultLookupItemRenderer.getRawIcon(item, presentation.isReal()));
 		presentation.setItemText(getName(psiClass, item, diamond, substitutor));
 		presentation.setStrikeout(strikeout);
 
