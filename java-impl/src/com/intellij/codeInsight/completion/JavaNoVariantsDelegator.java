@@ -263,4 +263,3 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		}
 	}
 }
-

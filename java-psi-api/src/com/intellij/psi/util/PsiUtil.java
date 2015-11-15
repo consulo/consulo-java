@@ -28,6 +28,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -1338,32 +1339,38 @@ public final class PsiUtil extends PsiUtilCore
 
 	public static final Key<LanguageLevel> FILE_LANGUAGE_LEVEL_KEY = Key.create("FORCE_LANGUAGE_LEVEL");
 
+	@RequiredReadAction
 	public static boolean isLanguageLevel5OrHigher(@NotNull final PsiElement element)
 	{
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_5);
 	}
 
+	@RequiredReadAction
 	public static boolean isLanguageLevel6OrHigher(@NotNull final PsiElement element)
 	{
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_6);
 	}
 
+	@RequiredReadAction
 	public static boolean isLanguageLevel7OrHigher(@NotNull final PsiElement element)
 	{
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_7);
 	}
 
+	@RequiredReadAction
 	public static boolean isLanguageLevel8OrHigher(@NotNull final PsiElement element)
 	{
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_8);
 	}
 
+	@RequiredReadAction
 	public static boolean isLanguageLevel9OrHigher(@NotNull final PsiElement element)
 	{
 		return getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_9);
 	}
 
 	@NotNull
+	@RequiredReadAction
 	public static LanguageLevel getLanguageLevel(@NotNull PsiElement element)
 	{
 		if(element instanceof PsiDirectory)
