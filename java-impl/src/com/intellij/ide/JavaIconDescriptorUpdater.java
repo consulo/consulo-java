@@ -16,6 +16,7 @@
 package com.intellij.ide;
 
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.JavaIcons;
 import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
 import com.intellij.icons.AllIcons;
@@ -34,129 +35,163 @@ import com.intellij.psi.util.PsiMethodUtil;
  * @author VISTALL
  * @since 0:45/19.07.13
  */
-public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
-  @Override
-  public void updateIcon(@NotNull IconDescriptor iconDescriptor, @NotNull PsiElement element, int flags) {
-    if (element instanceof PsiClass) {
-      if(processedFile(element, iconDescriptor)) {
-        return;
-      }
+public class JavaIconDescriptorUpdater implements IconDescriptorUpdater
+{
+	@RequiredReadAction
+	@Override
+	public void updateIcon(@NotNull IconDescriptor iconDescriptor, @NotNull PsiElement element, int flags)
+	{
+		if(element instanceof PsiClass)
+		{
+			if(processedFile(element, iconDescriptor))
+			{
+				return;
+			}
 
-      if(element instanceof PsiTypeParameter) {
-        iconDescriptor.setMainIcon(AllIcons.Nodes.TypeAlias);
-        return;
-      }
-      final PsiClass psiClass = (PsiClass)element;
-      if(psiClass.isEnum()) {
-        iconDescriptor.setMainIcon(AllIcons.Nodes.Enum);
-      }
-      else if(psiClass.isAnnotationType()) {
-        iconDescriptor.setMainIcon(AllIcons.Nodes.Annotationtype);
-      }
-      else if(psiClass.isInterface()) {
-        iconDescriptor.setMainIcon(AllIcons.Nodes.Interface);
-      }
-      else if(psiClass instanceof PsiAnonymousClass) {
-        iconDescriptor.setMainIcon(AllIcons.Nodes.AnonymousClass);
-      }
-      else {
-        final boolean abst = psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
-        iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractClass : AllIcons.Nodes.Class);
+			if(element instanceof PsiTypeParameter)
+			{
+				iconDescriptor.setMainIcon(AllIcons.Nodes.TypeAlias);
+				return;
+			}
+			final PsiClass psiClass = (PsiClass) element;
+			if(psiClass.isEnum())
+			{
+				iconDescriptor.setMainIcon(AllIcons.Nodes.Enum);
+			}
+			else if(psiClass.isAnnotationType())
+			{
+				iconDescriptor.setMainIcon(AllIcons.Nodes.Annotationtype);
+			}
+			else if(psiClass.isInterface())
+			{
+				iconDescriptor.setMainIcon(AllIcons.Nodes.Interface);
+			}
+			else if(psiClass instanceof PsiAnonymousClass)
+			{
+				iconDescriptor.setMainIcon(AllIcons.Nodes.AnonymousClass);
+			}
+			else
+			{
+				final boolean abst = psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
+				iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractClass : AllIcons.Nodes.Class);
 
-        if (!DumbService.getInstance(element.getProject()).isDumb()) {
-          final PsiManager manager = psiClass.getManager();
-          final PsiClass javaLangTrowable =
-            JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
-          final boolean isException = javaLangTrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangTrowable, true);
-          if (isException) {
-            iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractException : AllIcons.Nodes.ExceptionClass);
-          }
+				if(!DumbService.getInstance(element.getProject()).isDumb())
+				{
+					final PsiManager manager = psiClass.getManager();
+					final PsiClass javaLangTrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
+					final boolean isException = javaLangTrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangTrowable, true);
+					if(isException)
+					{
+						iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractException : AllIcons.Nodes.ExceptionClass);
+					}
 
-          if (PsiClassUtil.isRunnableClass(psiClass, false) && PsiMethodUtil.findMainMethod(psiClass) != null) {
-            iconDescriptor.addLayerIcon(AllIcons.Nodes.RunnableMark);
-          }
-        }
-      }
+					if(PsiClassUtil.isRunnableClass(psiClass, false) && PsiMethodUtil.findMainMethod(psiClass) != null)
+					{
+						iconDescriptor.addLayerIcon(AllIcons.Nodes.RunnableMark);
+					}
+				}
+			}
 
-      processModifierList(element, iconDescriptor, flags);
-    }
-    else if(element instanceof PsiLambdaExpression) {
-		iconDescriptor.setMainIcon(AllIcons.Nodes.Lambda);
+			processModifierList(element, iconDescriptor, flags);
+		}
+		else if(element instanceof PsiLambdaExpression)
+		{
+			iconDescriptor.setMainIcon(AllIcons.Nodes.Lambda);
+		}
+		else if(element instanceof PsiJavaFile)
+		{
+			if(processedFile(element, iconDescriptor))
+			{
+				return;
+			}
+
+			final PsiClass[] classes = ((PsiJavaFile) element).getClasses();
+			if(classes.length == 1)
+			{
+				IconDescriptorUpdaters.processExistingDescriptor(iconDescriptor, classes[0], flags);
+			}
+		}
+		else if(element instanceof PsiMethod)
+		{
+			iconDescriptor.setMainIcon(((PsiMethod) element).hasModifierProperty(PsiModifier.ABSTRACT) ? AllIcons.Nodes.AbstractMethod : AllIcons.Nodes.Method);
+
+			processModifierList(element, iconDescriptor, flags);
+		}
+		else if(element instanceof PsiField)
+		{
+			iconDescriptor.setMainIcon(AllIcons.Nodes.Field);
+			processModifierList(element, iconDescriptor, flags);
+		}
+		else if(element instanceof PsiLocalVariable)
+		{
+			iconDescriptor.setMainIcon(AllIcons.Nodes.Variable);
+			processModifierList(element, iconDescriptor, flags);
+		}
+		else if(element instanceof PsiParameter)
+		{
+			iconDescriptor.setMainIcon(AllIcons.Nodes.Parameter);
+			processModifierList(element, iconDescriptor, flags);
+		}
 	}
-    else if(element instanceof PsiJavaFile) {
-      if(processedFile(element, iconDescriptor)) {
-        return;
-      }
 
-      final PsiClass[] classes = ((PsiJavaFile)element).getClasses();
-      if(classes.length == 1) {
-        IconDescriptorUpdaters.processExistingDescriptor(iconDescriptor, classes[0], flags);
-      }
-    }
-    else if(element instanceof PsiMethod) {
-      iconDescriptor.setMainIcon(((PsiMethod)element).hasModifierProperty(PsiModifier.ABSTRACT) ? AllIcons.Nodes.AbstractMethod : AllIcons.Nodes.Method);
+	public static void processModifierList(PsiElement element, IconDescriptor iconDescriptor, int flags)
+	{
+		PsiModifierListOwner owner = (PsiModifierListOwner) element;
 
-      processModifierList(element, iconDescriptor, flags);
-    }
-    else if(element instanceof PsiField) {
-      iconDescriptor.setMainIcon(AllIcons.Nodes.Field);
-      processModifierList(element, iconDescriptor, flags);
-    }
-    else if(element instanceof PsiLocalVariable) {
-      iconDescriptor.setMainIcon(AllIcons.Nodes.Variable);
-      processModifierList(element, iconDescriptor, flags);
-    }
-    else if(element instanceof PsiParameter) {
-      iconDescriptor.setMainIcon(AllIcons.Nodes.Parameter);
-      processModifierList(element, iconDescriptor, flags);
-    }
-  }
+		if(owner.hasModifierProperty(PsiModifier.FINAL))
+		{
+			iconDescriptor.addLayerIcon(AllIcons.Nodes.FinalMark);
+		}
 
-  public static void processModifierList(PsiElement element, IconDescriptor iconDescriptor, int flags) {
-    PsiModifierListOwner owner = (PsiModifierListOwner) element;
+		if(owner.hasModifierProperty(PsiModifier.STATIC))
+		{
+			iconDescriptor.addLayerIcon(AllIcons.Nodes.StaticMark);
+		}
 
-    if(owner.hasModifierProperty(PsiModifier.FINAL)) {
-      iconDescriptor.addLayerIcon(AllIcons.Nodes.FinalMark);
-    }
+		if((flags & Iconable.ICON_FLAG_VISIBILITY) != 0)
+		{
+			if(owner.hasModifierProperty(PsiModifier.PUBLIC))
+			{
+				iconDescriptor.setRightIcon(AllIcons.Nodes.C_public);
+			}
+			else if(owner.hasModifierProperty(PsiModifier.PRIVATE))
+			{
+				iconDescriptor.setRightIcon(AllIcons.Nodes.C_private);
+			}
+			else if(owner.hasModifierProperty(PsiModifier.PROTECTED))
+			{
+				iconDescriptor.setRightIcon(AllIcons.Nodes.C_protected);
+			}
+			else if(owner.hasModifierProperty(PsiModifier.PACKAGE_LOCAL))
+			{
+				iconDescriptor.setRightIcon(AllIcons.Nodes.C_plocal);
+			}
+		}
+	}
 
-    if(owner.hasModifierProperty(PsiModifier.STATIC)) {
-      iconDescriptor.addLayerIcon(AllIcons.Nodes.StaticMark);
-    }
+	private static boolean processedFile(PsiElement element, IconDescriptor iconDescriptor)
+	{
+		final PsiFile containingFile = element.getContainingFile();
+		if(containingFile == null)
+		{
+			return false;
+		}
+		final FileType fileType = containingFile.getFileType();
+		if(fileType != JavaFileType.INSTANCE && fileType != JavaClassFileType.INSTANCE)
+		{
+			return false;
+		}
 
-    if((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
-      if (owner.hasModifierProperty(PsiModifier.PUBLIC)) {
-        iconDescriptor.setRightIcon(AllIcons.Nodes.C_public);
-      }
-      else if (owner.hasModifierProperty(PsiModifier.PRIVATE)) {
-        iconDescriptor.setRightIcon(AllIcons.Nodes.C_private);
-      }
-      else if (owner.hasModifierProperty(PsiModifier.PROTECTED)) {
-        iconDescriptor.setRightIcon(AllIcons.Nodes.C_protected);
-      }
-      else if (owner.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)) {
-        iconDescriptor.setRightIcon(AllIcons.Nodes.C_plocal);
-      }
-    }
-  }
-
-  private static boolean processedFile(PsiElement element, IconDescriptor iconDescriptor) {
-    final PsiFile containingFile = element.getContainingFile();
-    if(containingFile == null) {
-      return false;
-    }
-    final FileType fileType = containingFile.getFileType();
-    if (fileType != JavaFileType.INSTANCE && fileType != JavaClassFileType.INSTANCE) {
-      return false;
-    }
-
-    final VirtualFile virtualFile = containingFile.getVirtualFile();
-    if(virtualFile == null) {
-      return false;
-    }
-    if (!JavaProjectRootsUtil.isJavaSourceFile(element.getProject(), virtualFile, true)) {
-      iconDescriptor.setMainIcon(JavaIcons.FileTypes.JavaOutsideSource);
-      return true;
-    }
-    return false;
-  }
+		final VirtualFile virtualFile = containingFile.getVirtualFile();
+		if(virtualFile == null)
+		{
+			return false;
+		}
+		if(!JavaProjectRootsUtil.isJavaSourceFile(element.getProject(), virtualFile, true))
+		{
+			iconDescriptor.setMainIcon(JavaIcons.FileTypes.JavaOutsideSource);
+			return true;
+		}
+		return false;
+	}
 }
