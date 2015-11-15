@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiClass;
@@ -42,18 +43,20 @@ public class MethodElement extends CompositeElement implements Constants
 		super(type);
 	}
 
+	@RequiredReadAction
 	@Override
 	public int getTextOffset()
 	{
-		return findChildByRole(ChildRole.NAME).getStartOffset();
+		ASTNode name = findChildByType(IDENTIFIER);
+		return name != null ? name.getStartOffset() : this.getStartOffset();
 	}
 
 	@Override
 	public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before)
 	{
-		if(first == last && first.getElementType() == ElementType.CODE_BLOCK)
+		if(first == last && first.getElementType() == JavaElementType.CODE_BLOCK)
 		{
-			ASTNode semicolon = findChildByRole(ChildRole.CLOSING_SEMICOLON);
+			ASTNode semicolon = TreeUtil.findChildBackward(this, SEMICOLON);
 			if(semicolon != null)
 			{
 				deleteChildInternal(semicolon);
