@@ -15,6 +15,20 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredDispatchThread;
+import org.mustbe.consulo.editor.notifications.EditorNotificationProvider;
 import com.intellij.ProjectTopics;
 import com.intellij.codeEditor.JavaEditorFileSwapper;
 import com.intellij.codeInsight.AttachSourcesProvider;
@@ -29,7 +43,12 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.LibraryOrderEntry;
+import com.intellij.openapi.roots.ModuleRootAdapter;
+import com.intellij.openapi.roots.ModuleRootEvent;
+import com.intellij.openapi.roots.OrderEntry;
+import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.ui.configuration.PathUIUtils;
 import com.intellij.openapi.ui.Messages;
@@ -50,274 +69,379 @@ import com.intellij.ui.EditorNotifications;
 import com.intellij.ui.GuiUtils;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.*;
 
 /**
  * @author Dmitry Avdeev
  */
-public class AttachSourcesNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> {
+public class AttachSourcesNotificationProvider implements EditorNotificationProvider<EditorNotificationPanel>
+{
 
-  private static final Key<EditorNotificationPanel> KEY = Key.create("add sources to class");
+	private static final Key<EditorNotificationPanel> KEY = Key.create("add sources to class");
 
-  private final Project myProject;
+	private final Project myProject;
 
-  public AttachSourcesNotificationProvider(Project project, final EditorNotifications notifications) {
-    myProject = project;
-    myProject.getMessageBus().connect(project).subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
-      public void rootsChanged(ModuleRootEvent event) {
-        notifications.updateAllNotifications();
-      }
-    });
-  }
+	public AttachSourcesNotificationProvider(Project project, final EditorNotifications notifications)
+	{
+		myProject = project;
+		myProject.getMessageBus().connect(project).subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter()
+		{
+			@Override
+			public void rootsChanged(ModuleRootEvent event)
+			{
+				notifications.updateAllNotifications();
+			}
+		});
+	}
 
-  public Key<EditorNotificationPanel> getKey() {
-    return KEY;
-  }
+	@NotNull
+	@Override
+	public Key<EditorNotificationPanel> getKey()
+	{
+		return KEY;
+	}
 
-  public EditorNotificationPanel createNotificationPanel(final VirtualFile file, FileEditor fileEditor) {
-    if (file.getFileType() != JavaClassFileType.INSTANCE) return null;
-    final List<LibraryOrderEntry> libraries = findOrderEntriesContainingFile(file);
-    if (libraries == null) return null;
+	@RequiredDispatchThread
+	@Override
+	public EditorNotificationPanel createNotificationPanel(@NotNull final VirtualFile file, @NotNull FileEditor fileEditor)
+	{
+		if(file.getFileType() != JavaClassFileType.INSTANCE)
+		{
+			return null;
+		}
+		final List<LibraryOrderEntry> libraries = findOrderEntriesContainingFile(file);
+		if(libraries == null)
+		{
+			return null;
+		}
 
-    PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
-    final String fqn = JavaEditorFileSwapper.getFQN(psiFile);
-    if (fqn == null) return null;
+		PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
+		final String fqn = JavaEditorFileSwapper.getFQN(psiFile);
+		if(fqn == null)
+		{
+			return null;
+		}
 
-    if (JavaEditorFileSwapper.findSourceFile(myProject, file) != null) return null;
+		if(JavaEditorFileSwapper.findSourceFile(myProject, file) != null)
+		{
+			return null;
+		}
 
-    final EditorNotificationPanel panel = new EditorNotificationPanel();
-    final VirtualFile sourceFile = findSourceFile(file);
+		final EditorNotificationPanel panel = new EditorNotificationPanel();
+		final VirtualFile sourceFile = findSourceFile(file);
 
-    final AttachSourcesProvider.AttachSourcesAction defaultAction;
-    if (sourceFile != null) {
-      panel.setText(ProjectBundle.message("library.sources.not.attached"));
-      defaultAction = new AttachJarAsSourcesAction(file);
-    }
-    else {
-      panel.setText(ProjectBundle.message("library.sources.not.found"));
-      defaultAction = new ChooseAndAttachSourcesAction(myProject, panel);
-    }
+		final AttachSourcesProvider.AttachSourcesAction defaultAction;
+		if(sourceFile != null)
+		{
+			panel.setText(ProjectBundle.message("library.sources.not.attached"));
+			defaultAction = new AttachJarAsSourcesAction(file);
+		}
+		else
+		{
+			panel.setText(ProjectBundle.message("library.sources.not.found"));
+			defaultAction = new ChooseAndAttachSourcesAction(myProject, panel);
+		}
 
-    List<AttachSourcesProvider.AttachSourcesAction> actions = new ArrayList<AttachSourcesProvider.AttachSourcesAction>();
+		List<AttachSourcesProvider.AttachSourcesAction> actions = new ArrayList<AttachSourcesProvider.AttachSourcesAction>();
 
-    boolean hasNonLightAction = false;
+		boolean hasNonLightAction = false;
 
-    for (AttachSourcesProvider each : AttachSourcesProvider.EP_NAME.getExtensions()) {
-      for (AttachSourcesProvider.AttachSourcesAction action : each.getActions(libraries, psiFile)) {
-        if (hasNonLightAction) {
-          if (action instanceof AttachSourcesProvider.LightAttachSourcesAction) {
-            continue; // Don't add LightAttachSourcesAction if non light action exists.
-          }
-        }
-        else {
-          if (!(action instanceof AttachSourcesProvider.LightAttachSourcesAction)) {
-            actions.clear(); // All previous actions is LightAttachSourcesAction and should be removed.
-            hasNonLightAction = true;
-          }
-        }
+		for(AttachSourcesProvider each : AttachSourcesProvider.EP_NAME.getExtensions())
+		{
+			for(AttachSourcesProvider.AttachSourcesAction action : each.getActions(libraries, psiFile))
+			{
+				if(hasNonLightAction)
+				{
+					if(action instanceof AttachSourcesProvider.LightAttachSourcesAction)
+					{
+						continue; // Don't add LightAttachSourcesAction if non light action exists.
+					}
+				}
+				else
+				{
+					if(!(action instanceof AttachSourcesProvider.LightAttachSourcesAction))
+					{
+						actions.clear(); // All previous actions is LightAttachSourcesAction and should be removed.
+						hasNonLightAction = true;
+					}
+				}
 
-        actions.add(action);
-      }
-    }
+				actions.add(action);
+			}
+		}
 
-    Collections.sort(actions, new Comparator<AttachSourcesProvider.AttachSourcesAction>() {
-      public int compare(AttachSourcesProvider.AttachSourcesAction o1, AttachSourcesProvider.AttachSourcesAction o2) {
-        return o1.getName().compareToIgnoreCase(o2.getName());
-      }
-    });
+		Collections.sort(actions, new Comparator<AttachSourcesProvider.AttachSourcesAction>()
+		{
+			@Override
+			public int compare(AttachSourcesProvider.AttachSourcesAction o1, AttachSourcesProvider.AttachSourcesAction o2)
+			{
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
 
-    actions.add(defaultAction);
+		actions.add(defaultAction);
 
-    for (final AttachSourcesProvider.AttachSourcesAction each : actions) {
-      panel.createActionLabel(GuiUtils.getTextWithoutMnemonicEscaping(each.getName()), new Runnable() {
-        public void run() {
-          if (!Comparing.equal(libraries, findOrderEntriesContainingFile(file))) {
-            Messages.showErrorDialog(myProject, "Cannot find library for " + StringUtil.getShortName(fqn), "Error");
-            return;
-          }
+		for(final AttachSourcesProvider.AttachSourcesAction each : actions)
+		{
+			panel.createActionLabel(GuiUtils.getTextWithoutMnemonicEscaping(each.getName()), new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					if(!Comparing.equal(libraries, findOrderEntriesContainingFile(file)))
+					{
+						Messages.showErrorDialog(myProject, "Cannot find library for " + StringUtil.getShortName(fqn), "Error");
+						return;
+					}
 
-          panel.setText(each.getBusyText());
+					panel.setText(each.getBusyText());
 
-          Runnable onFinish = new Runnable() {
-            public void run() {
-              SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                  panel.setText(ProjectBundle.message("library.sources.not.found"));
-                }
-              });
-            }
-          };
-          ActionCallback callback = each.perform(findOrderEntriesContainingFile(file));
-          callback.doWhenRejected(onFinish);
-          callback.doWhenDone(onFinish);
-        }
-      });
-    }
+					Runnable onFinish = new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							SwingUtilities.invokeLater(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									panel.setText(ProjectBundle.message("library.sources.not.found"));
+								}
+							});
+						}
+					};
+					ActionCallback callback = each.perform(findOrderEntriesContainingFile(file));
+					callback.doWhenRejected(onFinish);
+					callback.doWhenDone(onFinish);
+				}
+			});
+		}
 
-    return panel;
-  }
+		return panel;
+	}
 
-  @Nullable
-  private static VirtualFile findSourceFile(VirtualFile classFile) {
-    final VirtualFile parent = classFile.getParent();
-    String name = classFile.getName();
-    int i = name.indexOf('$');
-    if (i != -1) name = name.substring(0, i);
-    i = name.indexOf('.');
-    if (i != -1) name = name.substring(0, i);
-    return parent.findChild(name + JavaFileType.DOT_DEFAULT_EXTENSION);
-  }
+	@Nullable
+	private static VirtualFile findSourceFile(VirtualFile classFile)
+	{
+		final VirtualFile parent = classFile.getParent();
+		String name = classFile.getName();
+		int i = name.indexOf('$');
+		if(i != -1)
+		{
+			name = name.substring(0, i);
+		}
+		i = name.indexOf('.');
+		if(i != -1)
+		{
+			name = name.substring(0, i);
+		}
+		return parent.findChild(name + JavaFileType.DOT_DEFAULT_EXTENSION);
+	}
 
-  private static void appendSources(final Library library, final VirtualFile[] files) {
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      public void run() {
-        Library.ModifiableModel model = library.getModifiableModel();
-        for (VirtualFile virtualFile : files) {
-          model.addRoot(virtualFile, OrderRootType.SOURCES);
-        }
-        model.commit();
-      }
-    });
-  }
+	@RequiredDispatchThread
+	private static void appendSources(final Library library, final VirtualFile[] files)
+	{
+		ApplicationManager.getApplication().runWriteAction(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Library.ModifiableModel model = library.getModifiableModel();
+				for(VirtualFile virtualFile : files)
+				{
+					model.addRoot(virtualFile, OrderRootType.SOURCES);
+				}
+				model.commit();
+			}
+		});
+	}
 
-  @Nullable
-  private List<LibraryOrderEntry> findOrderEntriesContainingFile(VirtualFile file) {
-    final List<LibraryOrderEntry> libs = new ArrayList<LibraryOrderEntry>();
-    List<OrderEntry> entries = ProjectRootManager.getInstance(myProject).getFileIndex().getOrderEntriesForFile(file);
-    for (OrderEntry entry : entries) {
-      if (entry instanceof LibraryOrderEntry) {
-        libs.add ((LibraryOrderEntry)entry);
-      }
-    }
-    return libs.isEmpty() ? null : libs;
-  }
+	@Nullable
+	private List<LibraryOrderEntry> findOrderEntriesContainingFile(VirtualFile file)
+	{
+		final List<LibraryOrderEntry> libs = new ArrayList<LibraryOrderEntry>();
+		List<OrderEntry> entries = ProjectRootManager.getInstance(myProject).getFileIndex().getOrderEntriesForFile(file);
+		for(OrderEntry entry : entries)
+		{
+			if(entry instanceof LibraryOrderEntry)
+			{
+				libs.add((LibraryOrderEntry) entry);
+			}
+		}
+		return libs.isEmpty() ? null : libs;
+	}
 
-  private static class AttachJarAsSourcesAction implements AttachSourcesProvider.AttachSourcesAction {
-    private final VirtualFile myClassFile;
+	private static class AttachJarAsSourcesAction implements AttachSourcesProvider.AttachSourcesAction
+	{
+		private final VirtualFile myClassFile;
 
-    public AttachJarAsSourcesAction(VirtualFile classFile) {
-      myClassFile = classFile;
-    }
+		public AttachJarAsSourcesAction(VirtualFile classFile)
+		{
+			myClassFile = classFile;
+		}
 
-    public String getName() {
-      return ProjectBundle.message("module.libraries.attach.sources.immediately.button");
-    }
+		@Override
+		public String getName()
+		{
+			return ProjectBundle.message("module.libraries.attach.sources.immediately.button");
+		}
 
-    public String getBusyText() {
-      return ProjectBundle.message("library.attach.sources.action.busy.text");
-    }
+		@Override
+		public String getBusyText()
+		{
+			return ProjectBundle.message("library.attach.sources.action.busy.text");
+		}
 
-    @Override
-    public ActionCallback perform(List<LibraryOrderEntry> orderEntriesContainingFile) {
-      final List<Library.ModifiableModel> modelsToCommit = new ArrayList<Library.ModifiableModel>();
-      for (LibraryOrderEntry orderEntry : orderEntriesContainingFile) {
-        final Library library = orderEntry.getLibrary();
-        if (library == null) continue;
-        final VirtualFile root = findRoot(library);
-        if (root == null) continue;
-        final Library.ModifiableModel model = library.getModifiableModel();
-        model.addRoot(root, OrderRootType.SOURCES);
-        modelsToCommit.add(model);
-      }
-      if (modelsToCommit.isEmpty()) return new ActionCallback.Rejected();
-      new WriteAction() {
-        protected void run(final Result result) {
-          for (Library.ModifiableModel model : modelsToCommit) {
-            model.commit();
-          }
-        }
-      }.execute();
+		@Override
+		public ActionCallback perform(List<LibraryOrderEntry> orderEntriesContainingFile)
+		{
+			final List<Library.ModifiableModel> modelsToCommit = new ArrayList<Library.ModifiableModel>();
+			for(LibraryOrderEntry orderEntry : orderEntriesContainingFile)
+			{
+				final Library library = orderEntry.getLibrary();
+				if(library == null)
+				{
+					continue;
+				}
+				final VirtualFile root = findRoot(library);
+				if(root == null)
+				{
+					continue;
+				}
+				final Library.ModifiableModel model = library.getModifiableModel();
+				model.addRoot(root, OrderRootType.SOURCES);
+				modelsToCommit.add(model);
+			}
+			if(modelsToCommit.isEmpty())
+			{
+				return new ActionCallback.Rejected();
+			}
+			new WriteAction()
+			{
+				@Override
+				protected void run(final Result result)
+				{
+					for(Library.ModifiableModel model : modelsToCommit)
+					{
+						model.commit();
+					}
+				}
+			}.execute();
 
-      return new ActionCallback.Done();
-    }
+			return new ActionCallback.Done();
+		}
 
-    @Nullable
-    private VirtualFile findRoot(Library library) {
-      for (VirtualFile classesRoot : library.getFiles(OrderRootType.CLASSES)) {
-        if (VfsUtil.isAncestor(classesRoot, myClassFile, true)) {
-          return classesRoot;
-        }
-      }
-      return null;
-    }
-  }
+		@Nullable
+		private VirtualFile findRoot(Library library)
+		{
+			for(VirtualFile classesRoot : library.getFiles(OrderRootType.CLASSES))
+			{
+				if(VfsUtil.isAncestor(classesRoot, myClassFile, true))
+				{
+					return classesRoot;
+				}
+			}
+			return null;
+		}
+	}
 
-  private static class ChooseAndAttachSourcesAction implements AttachSourcesProvider.AttachSourcesAction {
-    private final Project myProject;
-    private final JComponent myParentComponent;
+	private static class ChooseAndAttachSourcesAction implements AttachSourcesProvider.AttachSourcesAction
+	{
+		private final Project myProject;
+		private final JComponent myParentComponent;
 
-    public ChooseAndAttachSourcesAction(Project project, JComponent parentComponent) {
-      myProject = project;
-      myParentComponent = parentComponent;
-    }
+		public ChooseAndAttachSourcesAction(Project project, JComponent parentComponent)
+		{
+			myProject = project;
+			myParentComponent = parentComponent;
+		}
 
-    public String getName() {
-      return ProjectBundle.message("module.libraries.attach.sources.button");
-    }
+		@Override
+		public String getName()
+		{
+			return ProjectBundle.message("module.libraries.attach.sources.button");
+		}
 
-    public String getBusyText() {
-      return ProjectBundle.message("library.attach.sources.action.busy.text");
-    }
+		@Override
+		public String getBusyText()
+		{
+			return ProjectBundle.message("library.attach.sources.action.busy.text");
+		}
 
-    public ActionCallback perform(final List<LibraryOrderEntry> libraries) {
-      FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createMultipleJavaPathDescriptor();
-      descriptor.setTitle(ProjectBundle.message("library.attach.sources.action"));
-      descriptor.setDescription(ProjectBundle.message("library.attach.sources.description"));
-      final Library firstLibrary = libraries.get(0).getLibrary();
-      VirtualFile[] roots = firstLibrary != null ? firstLibrary.getFiles(OrderRootType.CLASSES) : VirtualFile.EMPTY_ARRAY;
-      VirtualFile[] candidates = FileChooser.chooseFiles(descriptor, myProject, roots.length == 0 ? null : PathUtil.getLocalFile(roots[0]));
-      final VirtualFile[] files = PathUIUtils.scanAndSelectDetectedJavaSourceRoots(myParentComponent, candidates);
-      if (files.length == 0) {
-        return new ActionCallback.Rejected();
-      }
-      final Map<Library, LibraryOrderEntry> librariesToAppendSourcesTo = new HashMap<Library, LibraryOrderEntry>();
-      for (LibraryOrderEntry library : libraries) {
-        librariesToAppendSourcesTo.put(library.getLibrary(), library);
-      }
-      if (librariesToAppendSourcesTo.size() == 1) {
-        appendSources(firstLibrary, files);
-      } else {
-        librariesToAppendSourcesTo.put(null, null);
-        final Collection<LibraryOrderEntry> orderEntries = librariesToAppendSourcesTo.values();
-        JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<LibraryOrderEntry>("<html><body>Multiple libraries contain file.<br> Choose libraries to attach sources to</body></html>",
-                                                                                              orderEntries.toArray(new LibraryOrderEntry[orderEntries.size()])){
-          @Override
-          public ListSeparator getSeparatorAbove(LibraryOrderEntry value) {
-            return value == null ? new ListSeparator() : null;
-          }
+		@Override
+		@RequiredDispatchThread
+		public ActionCallback perform(final List<LibraryOrderEntry> libraries)
+		{
+			FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createMultipleJavaPathDescriptor();
+			descriptor.setTitle(ProjectBundle.message("library.attach.sources.action"));
+			descriptor.setDescription(ProjectBundle.message("library.attach.sources.description"));
+			final Library firstLibrary = libraries.get(0).getLibrary();
+			VirtualFile[] roots = firstLibrary != null ? firstLibrary.getFiles(OrderRootType.CLASSES) : VirtualFile.EMPTY_ARRAY;
+			VirtualFile[] candidates = FileChooser.chooseFiles(descriptor, myProject, roots.length == 0 ? null : PathUtil.getLocalFile(roots[0]));
+			final VirtualFile[] files = PathUIUtils.scanAndSelectDetectedJavaSourceRoots(myParentComponent, candidates);
+			if(files.length == 0)
+			{
+				return new ActionCallback.Rejected();
+			}
+			final Map<Library, LibraryOrderEntry> librariesToAppendSourcesTo = new HashMap<Library, LibraryOrderEntry>();
+			for(LibraryOrderEntry library : libraries)
+			{
+				librariesToAppendSourcesTo.put(library.getLibrary(), library);
+			}
+			if(librariesToAppendSourcesTo.size() == 1)
+			{
+				appendSources(firstLibrary, files);
+			}
+			else
+			{
+				librariesToAppendSourcesTo.put(null, null);
+				final Collection<LibraryOrderEntry> orderEntries = librariesToAppendSourcesTo.values();
+				JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<LibraryOrderEntry>("<html><body>Multiple libraries contain file.<br> Choose libraries to attach sources " +
+						"to</body></html>", orderEntries.toArray(new LibraryOrderEntry[orderEntries.size()]))
+				{
+					@Override
+					public ListSeparator getSeparatorAbove(LibraryOrderEntry value)
+					{
+						return value == null ? new ListSeparator() : null;
+					}
 
-          @NotNull
-          @Override
-          public String getTextFor(LibraryOrderEntry value) {
-            if (value != null) {
-              return value.getPresentableName() + " (" + value.getOwnerModule().getName() + ")";
-            }
-            else {
-              return "All";
-            }
-          }
+					@NotNull
+					@Override
+					public String getTextFor(LibraryOrderEntry value)
+					{
+						if(value != null)
+						{
+							return value.getPresentableName() + " (" + value.getOwnerModule().getName() + ")";
+						}
+						else
+						{
+							return "All";
+						}
+					}
 
-          @Override
-          public PopupStep onChosen(LibraryOrderEntry libraryOrderEntry, boolean finalChoice) {
-            if (libraryOrderEntry != null) {
-              appendSources(libraryOrderEntry.getLibrary(), files);
-            } else {
-              for (Library libOrderEntry : librariesToAppendSourcesTo.keySet()) {
-                if (libOrderEntry != null) {
-                  appendSources(libOrderEntry, files);
-                }
-              }
-            }
-            return FINAL_CHOICE;
-          }
-        }).showCenteredInCurrentWindow(myProject);
-      }
+					@Override
+					public PopupStep onChosen(LibraryOrderEntry libraryOrderEntry, boolean finalChoice)
+					{
+						if(libraryOrderEntry != null)
+						{
+							appendSources(libraryOrderEntry.getLibrary(), files);
+						}
+						else
+						{
+							for(Library libOrderEntry : librariesToAppendSourcesTo.keySet())
+							{
+								if(libOrderEntry != null)
+								{
+									appendSources(libOrderEntry, files);
+								}
+							}
+						}
+						return FINAL_CHOICE;
+					}
+				}).showCenteredInCurrentWindow(myProject);
+			}
 
-      return new ActionCallback.Done();
-    }
-  }
+			return new ActionCallback.Done();
+		}
+	}
 }
