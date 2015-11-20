@@ -15,7 +15,6 @@ public class JavaParser implements PsiParser {
   @NotNull
   @Override
   public ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder, @NotNull LanguageVersion languageVersion) {
-    builder.setDebugMode(true);
     final PsiBuilder.Marker marker = builder.mark();
     com.intellij.lang.java.parser.JavaParser.INSTANCE.getFileParser().parse(builder);
     marker.done(root);
