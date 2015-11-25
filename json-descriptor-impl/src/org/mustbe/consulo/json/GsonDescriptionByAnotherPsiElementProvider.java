@@ -30,6 +30,7 @@ import org.mustbe.consulo.json.validation.descriptionByAnotherPsiElement.Descrip
 import org.mustbe.consulo.json.validation.descriptor.JsonObjectDescriptor;
 import org.mustbe.consulo.json.validation.descriptor.JsonPropertyDescriptor;
 import org.mustbe.consulo.module.extension.ModuleExtensionHelper;
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
@@ -241,7 +242,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 					}
 					Object classType = toType(project, psiField.getType());
 
-					addIfNotNull(objectDescriptor, classType, psiField, psiField.getName());
+					addIfNotNull(objectDescriptor, classType, psiField, psiField);
 				}
 
 				return objectDescriptor;
@@ -262,21 +263,37 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		return null;
 	}
 
-	private static void addIfNotNull(@NotNull JsonObjectDescriptor objectDescriptor, @Nullable Object classType, @Nullable PsiElement navElement, @Nullable String fieldName)
+	private static void addIfNotNull(@NotNull JsonObjectDescriptor objectDescriptor, @Nullable Object classType, @Nullable PsiElement navElement, @Nullable PsiField field)
 	{
+		String propertyName = field == null ? null : getPropertyNameFromField(field);
 		JsonPropertyDescriptor propertyDescriptor = null;
 		if(classType instanceof Class)
 		{
-			propertyDescriptor = objectDescriptor.addProperty(fieldName, (Class<?>) classType);
+			propertyDescriptor = objectDescriptor.addProperty(propertyName, (Class<?>) classType);
 		}
 		else if(classType instanceof JsonObjectDescriptor)
 		{
-			propertyDescriptor = objectDescriptor.addProperty(fieldName, (JsonObjectDescriptor) classType);
+			propertyDescriptor = objectDescriptor.addProperty(propertyName, (JsonObjectDescriptor) classType);
 		}
 
 		if(propertyDescriptor != null && navElement != null)
 		{
 			propertyDescriptor.setNavigationElement(navElement);
 		}
+	}
+
+	@NotNull
+	private static String getPropertyNameFromField(@NotNull PsiField field)
+	{
+		PsiAnnotation annotation = AnnotationUtil.findAnnotation(field, "com.google.gson.annotations.SerializedName");
+		if(annotation != null)
+		{
+			String value = AnnotationUtil.getStringAttributeValue(annotation, PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);
+			if(value != null)
+			{
+				return value;
+			}
+		}
+		return field.getName();
 	}
 }
