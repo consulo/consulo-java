@@ -16,7 +16,6 @@
 
 package org.mustbe.consulo.json;
 
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
 
@@ -26,6 +25,7 @@ import org.mustbe.consulo.RequiredDispatchThread;
 import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.mustbe.consulo.java.util.JavaClassNames;
+import org.mustbe.consulo.json.validation.NativeArray;
 import org.mustbe.consulo.json.validation.descriptionByAnotherPsiElement.DescriptionByAnotherPsiElementProvider;
 import org.mustbe.consulo.json.validation.descriptor.JsonObjectDescriptor;
 import org.mustbe.consulo.json.validation.descriptor.JsonPropertyDescriptor;
@@ -205,7 +205,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 							return toType(project, new PsiArrayType(firstItem));
 						}
 
-						return Object[].class;
+						return new NativeArray(Object.class);
 					}
 				}
 
@@ -253,12 +253,11 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 			PsiType componentType = ((PsiArrayType) type).getComponentType();
 
 			Object aClass = toType(project, componentType);
-			if(!(aClass instanceof Class))
+			if(aClass == null)
 			{
 				return null;
 			}
-			Object o = Array.newInstance((Class<?>) aClass, 0);
-			return o.getClass();
+			return new NativeArray(aClass);
 		}
 		return null;
 	}
@@ -270,6 +269,10 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		if(classType instanceof Class)
 		{
 			propertyDescriptor = objectDescriptor.addProperty(propertyName, (Class<?>) classType);
+		}
+		else if(classType instanceof NativeArray)
+		{
+			propertyDescriptor = objectDescriptor.addProperty(propertyName, (NativeArray) classType);
 		}
 		else if(classType instanceof JsonObjectDescriptor)
 		{
