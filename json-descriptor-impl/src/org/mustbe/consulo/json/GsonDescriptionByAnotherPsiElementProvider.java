@@ -130,31 +130,31 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	{
 		if(PsiType.BYTE.equals(type))
 		{
-			return new PropertyType(true, Number.class);
+			return new PropertyType(false, Number.class);
 		}
 		else if(PsiType.SHORT.equals(type))
 		{
-			return new PropertyType(true, Number.class);
+			return new PropertyType(false, Number.class);
 		}
 		else if(PsiType.INT.equals(type))
 		{
-			return new PropertyType(true, Number.class);
+			return new PropertyType(false, Number.class);
 		}
 		else if(PsiType.LONG.equals(type))
 		{
-			return new PropertyType(true, Number.class);
+			return new PropertyType(false, Number.class);
 		}
 		else if(PsiType.FLOAT.equals(type))
 		{
-			return new PropertyType(true, Number.class);
+			return new PropertyType(false, Number.class);
 		}
 		else if(PsiType.DOUBLE.equals(type))
 		{
-			return new PropertyType(true, Number.class);
+			return new PropertyType(false, Number.class);
 		}
 		else if(PsiType.BOOLEAN.equals(type))
 		{
-			return new PropertyType(true, Boolean.class);
+			return new PropertyType(false, Boolean.class);
 		}
 		else if(type instanceof PsiClassType)
 		{
