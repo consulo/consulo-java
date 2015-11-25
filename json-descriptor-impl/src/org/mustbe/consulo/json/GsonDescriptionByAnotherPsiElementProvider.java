@@ -47,6 +47,23 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionByAnotherPsiElementProvider<PsiClass>
 {
+	public static class PropertyType
+	{
+		private final boolean myNullable;
+		private final Object myValue;
+
+		public PropertyType(Object value)
+		{
+			this(true, value);
+		}
+
+		public PropertyType(boolean nullable, Object value)
+		{
+			myNullable = nullable;
+			myValue = value;
+		}
+	}
+
 	@NotNull
 	@Override
 	public String getId()
@@ -97,11 +114,11 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	@Override
 	public void fillRootObject(@NotNull PsiClass psiClass, @NotNull JsonObjectDescriptor jsonObjectDescriptor)
 	{
-		Object type = toType(psiClass.getProject(), new PsiImmediateClassType(psiClass, PsiSubstitutor.EMPTY));
+		PropertyType type = toType(psiClass.getProject(), new PsiImmediateClassType(psiClass, PsiSubstitutor.EMPTY));
 
-		if(type instanceof JsonObjectDescriptor)
+		if(type != null && type.myValue instanceof JsonObjectDescriptor)
 		{
-			for(Map.Entry<String, JsonPropertyDescriptor> entry : ((JsonObjectDescriptor) type).getProperties().entrySet())
+			for(Map.Entry<String, JsonPropertyDescriptor> entry : ((JsonObjectDescriptor) type.myValue).getProperties().entrySet())
 			{
 				jsonObjectDescriptor.getProperties().put(entry.getKey(), entry.getValue());
 			}
@@ -109,35 +126,35 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	}
 
 	@Nullable
-	private static Object toType(@NotNull Project project, @NotNull PsiType type)
+	private static PropertyType toType(@NotNull Project project, @NotNull PsiType type)
 	{
 		if(PsiType.BYTE.equals(type))
 		{
-			return Number.class;
+			return new PropertyType(true, Number.class);
 		}
 		else if(PsiType.SHORT.equals(type))
 		{
-			return Number.class;
+			return new PropertyType(true, Number.class);
 		}
 		else if(PsiType.INT.equals(type))
 		{
-			return Number.class;
+			return new PropertyType(true, Number.class);
 		}
 		else if(PsiType.LONG.equals(type))
 		{
-			return Number.class;
+			return new PropertyType(true, Number.class);
 		}
 		else if(PsiType.FLOAT.equals(type))
 		{
-			return Number.class;
+			return new PropertyType(true, Number.class);
 		}
 		else if(PsiType.DOUBLE.equals(type))
 		{
-			return Number.class;
+			return new PropertyType(true, Number.class);
 		}
 		else if(PsiType.BOOLEAN.equals(type))
 		{
-			return Boolean.class;
+			return new PropertyType(true, Boolean.class);
 		}
 		else if(type instanceof PsiClassType)
 		{
@@ -148,47 +165,47 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 				String qualifiedName = psiClass.getQualifiedName();
 				if(JavaClassNames.JAVA_LANG_STRING.equals(qualifiedName))
 				{
-					return String.class;
+					return new PropertyType(String.class);
 				}
 				else if(JavaClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicBoolean".equals(qualifiedName))
 				{
-					return Boolean.class;
+					return new PropertyType(Boolean.class);
 				}
 				else if(JavaClassNames.JAVA_LANG_BYTE.equals(qualifiedName))
 				{
-					return Number.class;
+					return new PropertyType(Number.class);
 				}
 				else if(JavaClassNames.JAVA_LANG_SHORT.equals(qualifiedName))
 				{
-					return Number.class;
+					return new PropertyType(Number.class);
 				}
 				else if(JavaClassNames.JAVA_LANG_INTEGER.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicInteger".equals(qualifiedName))
 				{
-					return Number.class;
+					return new PropertyType(Number.class);
 				}
 				else if(JavaClassNames.JAVA_LANG_LONG.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicLong".equals(qualifiedName))
 				{
-					return Number.class;
+					return new PropertyType(Number.class);
 				}
 				else if(JavaClassNames.JAVA_LANG_FLOAT.equals(qualifiedName))
 				{
-					return Number.class;
+					return new PropertyType(Number.class);
 				}
 				else if(JavaClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || "java.util.concurrent.atomic.AtomicDouble".equals(qualifiedName))
 				{
-					return Number.class;
+					return new PropertyType(Number.class);
 				}
 				else if("java.util.concurrent.atomic.AtomicIntegerArray".equals(qualifiedName))
 				{
-					return Number[].class;
+					return new PropertyType(new NativeArray(Number.class));
 				}
 				else if("java.util.concurrent.atomic.AtomicLongArray".equals(qualifiedName))
 				{
-					return Number[].class;
+					return new PropertyType(new NativeArray(Number.class));
 				}
 				else if("java.util.concurrent.atomic.AtomicDoubleArray".equals(qualifiedName))
 				{
-					return Number[].class;
+					return new PropertyType(new NativeArray(Number.class));
 				}
 
 				PsiClass collectionClass = JavaPsiFacade.getInstance(project).findClass(JavaClassNames.JAVA_UTIL_COLLECTION, GlobalSearchScope.allScope(project));
@@ -205,7 +222,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 							return toType(project, new PsiArrayType(firstItem));
 						}
 
-						return new NativeArray(Object.class);
+						return new PropertyType(new NativeArray(Object.class));
 					}
 				}
 
@@ -223,12 +240,12 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 							assert valueType != null;
 
 							JsonObjectDescriptor objectDescriptor = new JsonObjectDescriptor();
-							Object valueJsonType = toType(project, valueType);
-							addIfNotNull(objectDescriptor, valueJsonType, null, null);
-							return objectDescriptor;
+							PropertyType valueJsonType = toType(project, valueType);
+							addIfNotNull(objectDescriptor, valueJsonType, null);
+							return new PropertyType(objectDescriptor);
 						}
 
-						return Object[].class;
+						return new PropertyType(new NativeArray(Object.class));
 					}
 				}
 
@@ -240,32 +257,39 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 					{
 						continue;
 					}
-					Object classType = toType(project, psiField.getType());
+					PropertyType classType = toType(project, psiField.getType());
 
-					addIfNotNull(objectDescriptor, classType, psiField, psiField);
+					addIfNotNull(objectDescriptor, classType, psiField);
 				}
 
-				return objectDescriptor;
+				return new PropertyType(objectDescriptor);
 			}
 		}
 		else if(type instanceof PsiArrayType)
 		{
 			PsiType componentType = ((PsiArrayType) type).getComponentType();
 
-			Object aClass = toType(project, componentType);
-			if(aClass == null)
+			PropertyType propertyType = toType(project, componentType);
+			if(propertyType == null)
 			{
 				return null;
 			}
-			return new NativeArray(aClass);
+			return new PropertyType(new NativeArray(propertyType.myValue));
 		}
 		return null;
 	}
 
-	private static void addIfNotNull(@NotNull JsonObjectDescriptor objectDescriptor, @Nullable Object classType, @Nullable PsiElement navElement, @Nullable PsiField field)
+	private static void addIfNotNull(@NotNull JsonObjectDescriptor objectDescriptor, @Nullable PropertyType propertyType, @Nullable PsiField navElement)
 	{
-		String propertyName = field == null ? null : getPropertyNameFromField(field);
+		if(propertyType == null)
+		{
+			return;
+		}
+
+		String propertyName = navElement == null ? null : getPropertyNameFromField(navElement);
 		JsonPropertyDescriptor propertyDescriptor = null;
+
+		Object classType = propertyType.myValue;
 		if(classType instanceof Class)
 		{
 			propertyDescriptor = objectDescriptor.addProperty(propertyName, (Class<?>) classType);
@@ -282,6 +306,14 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		if(propertyDescriptor != null && navElement != null)
 		{
 			propertyDescriptor.setNavigationElement(navElement);
+			if(navElement.isDeprecated())
+			{
+				propertyDescriptor.deprecated();
+			}
+			if(!propertyType.myNullable)
+			{
+				propertyDescriptor.notNull();
+			}
 		}
 	}
 
