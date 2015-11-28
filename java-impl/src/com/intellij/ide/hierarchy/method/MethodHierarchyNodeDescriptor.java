@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  */
 package com.intellij.ide.hierarchy.method;
 
+import java.awt.Font;
+
+import javax.swing.Icon;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.ide.IdeBundle;
@@ -27,148 +31,176 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFunctionalExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.ui.RowIcon;
 
-import javax.swing.*;
-import java.awt.*;
+public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
+{
 
-public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
+	private Icon myRawIcon;
+	private Icon myStateIcon;
+	private MethodHierarchyTreeStructure myTreeStructure;
 
-  private Icon myRawIcon;
-  private Icon myStateIcon;
-  private MethodHierarchyTreeStructure myTreeStructure;
+	public MethodHierarchyNodeDescriptor(final Project project,
+			final HierarchyNodeDescriptor parentDescriptor,
+			final PsiElement aClass,
+			final boolean isBase,
+			final MethodHierarchyTreeStructure treeStructure)
+	{
+		super(project, parentDescriptor, aClass, isBase);
+		myTreeStructure = treeStructure;
+	}
 
-  public MethodHierarchyNodeDescriptor(
-    final Project project,
-    final HierarchyNodeDescriptor parentDescriptor,
-    final PsiClass aClass,
-    final boolean isBase,
-    final MethodHierarchyTreeStructure treeStructure
-  ){
-    super(project, parentDescriptor, aClass, isBase);
-    myTreeStructure = treeStructure;
-  }
+	public final void setTreeStructure(final MethodHierarchyTreeStructure treeStructure)
+	{
+		myTreeStructure = treeStructure;
+	}
 
-  public final void setTreeStructure(final MethodHierarchyTreeStructure treeStructure) {
-    myTreeStructure = treeStructure;
-  }
+	PsiMethod getMethod(final PsiClass aClass, final boolean checkBases)
+	{
+		return MethodHierarchyUtil.findBaseMethodInClass(myTreeStructure.getBaseMethod(), aClass, checkBases);
+	}
 
-  private PsiMethod getMethod(final PsiClass aClass, final boolean checkBases) {
-    return MethodHierarchyUtil.findBaseMethodInClass(myTreeStructure.getBaseMethod(), aClass, checkBases);
-  }
+	public final PsiElement getPsiClass()
+	{
+		return getPsiElement();
+	}
 
-  public final PsiClass getPsiClass() {
-    return (PsiClass)myElement;
-  }
+	/**
+	 * Element for OpenFileDescriptor
+	 */
+	public final PsiElement getTargetElement()
+	{
+		final PsiElement element = getPsiClass();
+		if(!(element instanceof PsiClass))
+		{
+			return element;
+		}
+		final PsiClass aClass = (PsiClass) getPsiClass();
+		if(!aClass.isValid())
+		{
+			return null;
+		}
+		final PsiMethod method = getMethod(aClass, false);
+		if(method != null)
+		{
+			return method;
+		}
+		return aClass;
+	}
 
-  /**
-   * Element for OpenFileDescriptor
-   */
-  public final PsiElement getTargetElement() {
-    final PsiClass aClass = getPsiClass();
-    if (aClass == null || !aClass.isValid()) return null;
-    final PsiMethod method = getMethod(aClass, false);
-    if (method != null) return method;
-    return aClass;
-  }
+	@Override
+	public final boolean update()
+	{
+		int flags = Iconable.ICON_FLAG_VISIBILITY;
+		if(isMarkReadOnly())
+		{
+			flags |= Iconable.ICON_FLAG_READ_STATUS;
+		}
 
-  public final boolean isValid() {
-    final PsiClass aClass = getPsiClass();
-    return aClass != null && aClass.isValid();
-  }
+		boolean changes = super.update();
 
-  public final boolean update() {
-    int flags = Iconable.ICON_FLAG_VISIBILITY;
-    if (isMarkReadOnly()){
-      flags |= Iconable.ICON_FLAG_READ_STATUS;
-    }
+		final PsiElement psiClass = getPsiClass();
 
-    boolean changes = super.update();
+		if(psiClass == null)
+		{
+			final String invalidPrefix = IdeBundle.message("node.hierarchy.invalid");
+			if(!myHighlightedText.getText().startsWith(invalidPrefix))
+			{
+				myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
+			}
+			return true;
+		}
 
-    final PsiClass psiClass = getPsiClass();
+		final Icon newRawIcon = IconDescriptorUpdaters.getIcon(psiClass, flags);
+		final Icon newStateIcon = psiClass instanceof PsiClass ? calculateState((PsiClass) psiClass) : AllIcons.Hierarchy.MethodDefined;
 
-    if (psiClass == null){
-      final String invalidPrefix = IdeBundle.message("node.hierarchy.invalid");
-      if (!myHighlightedText.getText().startsWith(invalidPrefix)) {
-        myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
-      }
-      return true;
-    }
+		if(changes || newRawIcon != myRawIcon || newStateIcon != myStateIcon)
+		{
+			changes = true;
 
-    final Icon newRawIcon = IconDescriptorUpdaters.getIcon(psiClass, flags);
-    final Icon newStateIcon = calculateState(psiClass);
+			myRawIcon = newRawIcon;
+			myStateIcon = newStateIcon;
 
-    if (changes || newRawIcon != myRawIcon || newStateIcon != myStateIcon) {
-      changes = true;
+			Icon newIcon = myRawIcon;
 
-      myRawIcon = newRawIcon;
-      myStateIcon = newStateIcon;
+			if(myIsBase)
+			{
+				final LayeredIcon icon = new LayeredIcon(2);
+				icon.setIcon(newIcon, 0);
+				icon.setIcon(AllIcons.Hierarchy.Base, 1, -AllIcons.Hierarchy.Base.getIconWidth() / 2, 0);
+				newIcon = icon;
+			}
 
-      Icon newIcon = myRawIcon;
+			if(myStateIcon != null)
+			{
+				newIcon = new RowIcon(myStateIcon, newIcon);
+			}
 
-      if (myIsBase) {
-        final LayeredIcon icon = new LayeredIcon(2);
-        icon.setIcon(newIcon, 0);
-        icon.setIcon(AllIcons.Hierarchy.Base, 1, -AllIcons.Hierarchy.Base.getIconWidth() / 2, 0);
-        newIcon = icon;
-      }
+			setIcon(newIcon);
+		}
 
-      if (myStateIcon != null) {
-        final RowIcon icon = new RowIcon(2);
-        icon.setIcon(myStateIcon, 0);
-        icon.setIcon(newIcon, 1);
-        newIcon = icon;
-      }
+		final CompositeAppearance oldText = myHighlightedText;
 
-      setIcon(newIcon);
-    }
+		myHighlightedText = new CompositeAppearance();
+		TextAttributes classNameAttributes = null;
+		if(myColor != null)
+		{
+			classNameAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
+		}
+		if(psiClass instanceof PsiClass)
+		{
+			myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass((PsiClass) psiClass, false), classNameAttributes);
+			myHighlightedText.getEnding().addText("  (" + JavaHierarchyUtil.getPackageName((PsiClass) psiClass) + ")", HierarchyNodeDescriptor.getPackageNameAttributes());
+		}
+		else if(psiClass instanceof PsiFunctionalExpression)
+		{
+			myHighlightedText.getEnding().addText(ClassPresentationUtil.getFunctionalExpressionPresentation((PsiFunctionalExpression) psiClass, false));
+		}
+		myName = myHighlightedText.getText();
 
-    final CompositeAppearance oldText = myHighlightedText;
+		if(!Comparing.equal(myHighlightedText, oldText))
+		{
+			changes = true;
+		}
+		return changes;
+	}
 
-    myHighlightedText = new CompositeAppearance();
-    TextAttributes classNameAttributes = null;
-    if (myColor != null) {
-      classNameAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
-    }
-    myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false), classNameAttributes);
-    myHighlightedText.getEnding().addText("  (" + JavaHierarchyUtil.getPackageName(psiClass) + ")", HierarchyNodeDescriptor.getPackageNameAttributes());
-    myName = myHighlightedText.getText();
+	private Icon calculateState(final PsiClass psiClass)
+	{
+		final PsiMethod method = getMethod(psiClass, false);
+		if(method != null)
+		{
+			if(method.hasModifierProperty(PsiModifier.ABSTRACT))
+			{
+				return null;
+			}
+			return AllIcons.Hierarchy.MethodDefined;
+		}
 
-    if (!Comparing.equal(myHighlightedText, oldText)) {
-      changes = true;
-    }
-    return changes;
-  }
+		if(myTreeStructure.isSuperClassForBaseClass(psiClass))
+		{
+			return AllIcons.Hierarchy.MethodNotDefined;
+		}
 
-  private Icon calculateState(final PsiClass psiClass) {
-    final PsiMethod method = getMethod(psiClass, false);
-    if (method != null) {
-      if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-        return null;
-      }
-      return AllIcons.Hierarchy.MethodDefined;
-    }
+		final boolean isAbstractClass = psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
 
-    if (myTreeStructure.isSuperClassForBaseClass(psiClass)) {
-      return AllIcons.Hierarchy.MethodNotDefined;
-    }
+		// was it implemented is in superclasses?
+		final PsiMethod baseClassMethod = getMethod(psiClass, true);
 
-    final boolean isAbstractClass = psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
+		final boolean hasBaseImplementation = baseClassMethod != null && !baseClassMethod.hasModifierProperty(PsiModifier.ABSTRACT);
 
-    // was it implemented is in superclasses?
-    final PsiMethod baseClassMethod = getMethod(psiClass, true);
-
-    final boolean hasBaseImplementation = baseClassMethod != null && !baseClassMethod.hasModifierProperty(PsiModifier.ABSTRACT);
-
-    if (hasBaseImplementation || isAbstractClass) {
-      return AllIcons.Hierarchy.MethodNotDefined;
-    }
-    else {
-      return AllIcons.Hierarchy.ShouldDefineMethod;
-    }
-  }
+		if(hasBaseImplementation || isAbstractClass)
+		{
+			return AllIcons.Hierarchy.MethodNotDefined;
+		}
+		else
+		{
+			return AllIcons.Hierarchy.ShouldDefineMethod;
+		}
+	}
 }
