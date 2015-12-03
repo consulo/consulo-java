@@ -609,10 +609,12 @@
 		<annotatedElementsSearch implementation="com.intellij.psi.impl.search.AnnotatedElementsSearcher"/>
 		<annotatedPackagesSearch implementation="com.intellij.psi.impl.search.AnnotatedPackagesSearcher"/>
 		<directClassInheritorsSearch implementation="com.intellij.psi.impl.search.JavaDirectInheritorsSearcher"/>
+		<classInheritorsSearch implementation="com.intellij.psi.impl.search.JavaClassInheritorsSearcher"/>
 		<overridingMethodsSearch implementation="com.intellij.psi.impl.search.JavaOverridingMethodsSearcher"/>
 		<allOverridingMethodsSearch implementation="com.intellij.psi.impl.search.JavaAllOverridingMethodsSearcher"/>
 		<methodReferencesSearch implementation="com.intellij.psi.impl.search.MethodUsagesSearcher"/>
 		<deepestSuperMethodsSearch implementation="com.intellij.psi.impl.search.MethodDeepestSuperSearcher"/>
+		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
 
 		<encapsulateFields.helper language="JAVA" implementationClass="com.intellij.refactoring.encapsulateFields.JavaEncapsulateFieldHelper"/>
 		<codeStyle.referenceAdjuster language="JAVA" implementationClass="com.intellij.psi.impl.source.codeStyle.JavaReferenceAdjuster"/>
@@ -687,8 +689,6 @@
 
 		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
-		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
-
 		<generation.toStringClassFilter implementation="org.jetbrains.generate.tostring.GenerateToStringInterfaceFilter" order="last"/>
 	</extensions>
 
@@ -748,8 +748,8 @@
 		<referencesSearch implementation="com.intellij.psi.impl.search.VariableInIncompleteCodeSearcher"/>
 
 
-		<definitionsSearch implementation="com.intellij.codeInsight.navigation.MethodImplementationsSearch"/>
-		<definitionsSearch implementation="com.intellij.codeInsight.navigation.ClassImplementationsSearch"/>
+		<definitionsScopedSearch implementation="com.intellij.codeInsight.navigation.MethodImplementationsSearch"/>
+		<definitionsScopedSearch implementation="com.intellij.codeInsight.navigation.ClassImplementationsSearch"/>
 
 		<fileTypeFactory implementation="com.intellij.openapi.fileTypes.impl.JavaFileTypeFactory"/>
 

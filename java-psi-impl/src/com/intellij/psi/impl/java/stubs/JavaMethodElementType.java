@@ -111,12 +111,10 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 			}
 			else if(type == JavaElementType.PARAMETER_LIST)
 			{
-				final List<LighterASTNode> params = LightTreeUtil.getChildrenOfType(tree, child,
-						JavaElementType.PARAMETER);
+				final List<LighterASTNode> params = LightTreeUtil.getChildrenOfType(tree, child, JavaElementType.PARAMETER);
 				if(!params.isEmpty())
 				{
-					final LighterASTNode pType = LightTreeUtil.firstChildOfType(tree, params.get(params.size() - 1),
-							JavaElementType.TYPE);
+					final LighterASTNode pType = LightTreeUtil.firstChildOfType(tree, params.get(params.size() - 1), JavaElementType.TYPE);
 					if(pType != null)
 					{
 						isVarArgs = (LightTreeUtil.firstChildOfType(tree, pType, JavaTokenType.ELLIPSIS) != null);
@@ -137,16 +135,13 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 
 		TypeInfo typeInfo = isConstructor ? TypeInfo.createConstructorType() : TypeInfo.create(tree, node, parentStub);
 		boolean isAnno = (node.getTokenType() == JavaElementType.ANNOTATION_METHOD);
-		byte flags = PsiMethodStubImpl.packFlags(isConstructor, isAnno, isVarArgs, isDeprecatedByComment,
-				hasDeprecatedAnnotation, hasDocComment);
+		byte flags = PsiMethodStubImpl.packFlags(isConstructor, isAnno, isVarArgs, isDeprecatedByComment, hasDeprecatedAnnotation, hasDocComment);
 
-		return new PsiMethodStubImpl(parentStub, StringRef.fromString(name), typeInfo, flags,
-				StringRef.fromString(defValueText));
+		return new PsiMethodStubImpl(parentStub, name, typeInfo, flags, defValueText);
 	}
 
 	@Override
-	public void serialize(@NotNull final PsiMethodStub stub,
-			@NotNull final StubOutputStream dataStream) throws IOException
+	public void serialize(@NotNull final PsiMethodStub stub, @NotNull final StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getName());
 		TypeInfo.writeTYPE(dataStream, stub.getReturnTypeText(false));
@@ -159,15 +154,13 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 
 	@NotNull
 	@Override
-	public PsiMethodStub deserialize(@NotNull final StubInputStream dataStream,
-			final StubElement parentStub) throws IOException
+	public PsiMethodStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
 	{
 		StringRef name = dataStream.readName();
 		final TypeInfo type = TypeInfo.readTYPE(dataStream);
 		byte flags = dataStream.readByte();
-		final StringRef defaultMethodValue = PsiMethodStubImpl.isAnnotationMethod(flags) ? dataStream.readName() :
-				null;
-		return new PsiMethodStubImpl(parentStub, name, type, flags, defaultMethodValue);
+		final StringRef defaultMethodValue = PsiMethodStubImpl.isAnnotationMethod(flags) ? dataStream.readName() : null;
+		return new PsiMethodStubImpl(parentStub, StringRef.toString(name), type, flags, StringRef.toString(defaultMethodValue));
 	}
 
 	@Override
@@ -180,8 +173,7 @@ public abstract class JavaMethodElementType extends JavaStubElementType<PsiMetho
 			if(RecordUtil.isStaticNonPrivateMember(stub))
 			{
 				sink.occurrence(JavaStubIndexKeys.JVM_STATIC_MEMBERS_NAMES, name);
-				sink.occurrence(JavaStubIndexKeys.JVM_STATIC_MEMBERS_TYPES, stub.getReturnTypeText(false)
-						.getShortTypeText());
+				sink.occurrence(JavaStubIndexKeys.JVM_STATIC_MEMBERS_TYPES, stub.getReturnTypeText(false).getShortTypeText());
 			}
 		}
 

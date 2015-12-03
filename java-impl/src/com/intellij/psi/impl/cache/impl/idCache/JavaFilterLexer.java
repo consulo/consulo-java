@@ -28,50 +28,41 @@ import com.intellij.psi.tree.TokenSet;
 /**
  * @author ven
  */
-public class JavaFilterLexer extends BaseFilterLexer {
-  private static final TokenSet ourSkipWordsScanSet = TokenSet.orSet(
-    TokenSet.create(
-      TokenType.WHITE_SPACE,
-      JavaTokenType.LPARENTH,
-      JavaTokenType.RPARENTH,
-      JavaTokenType.LBRACE,
-      JavaTokenType.RBRACE,
-      JavaTokenType.LBRACKET,
-      JavaTokenType.RBRACKET,
-      JavaTokenType.SEMICOLON,
-      JavaTokenType.COMMA,
-      JavaTokenType.DOT,
-      JavaTokenType.ELLIPSIS,
-      JavaTokenType.AT
-    ),
-    ElementType.OPERATION_BIT_SET
-  );
+public class JavaFilterLexer extends BaseFilterLexer
+{
+	private static final TokenSet ourSkipWordsScanSet = TokenSet.orSet(TokenSet.create(TokenType.WHITE_SPACE, JavaTokenType.LPARENTH, JavaTokenType.RPARENTH, JavaTokenType.LBRACE,
+			JavaTokenType.RBRACE, JavaTokenType.LBRACKET, JavaTokenType.RBRACKET, JavaTokenType.SEMICOLON, JavaTokenType.COMMA, JavaTokenType.DOT, JavaTokenType.ELLIPSIS, JavaTokenType.AT),
+			ElementType.OPERATION_BIT_SET);
 
-  public JavaFilterLexer(final Lexer originalLexer, final OccurrenceConsumer table) {
-    super(originalLexer, table);
-  }
+	public JavaFilterLexer(final Lexer originalLexer, final OccurrenceConsumer table)
+	{
+		super(originalLexer, table);
+	}
 
-  @Override
-  public void advance() {
-    final IElementType tokenType = myDelegate.getTokenType();
+	@Override
+	public void advance()
+	{
+		final IElementType tokenType = myDelegate.getTokenType();
 
-    if (tokenType == JavaTokenType.IDENTIFIER
-        || tokenType == JavaTokenType.LONG_LITERAL
-        || tokenType == JavaTokenType.INTEGER_LITERAL
-        || tokenType == JavaTokenType.CHARACTER_LITERAL) {
-      addOccurrenceInToken(UsageSearchContext.IN_CODE);
-    }
-    else if (tokenType == JavaTokenType.STRING_LITERAL) {
-      scanWordsInToken(UsageSearchContext.IN_STRINGS | UsageSearchContext.IN_FOREIGN_LANGUAGES, false, true);
-    }
-    else if (ElementType.JAVA_COMMENT_BIT_SET.contains(tokenType)) {
-      scanWordsInToken(UsageSearchContext.IN_COMMENTS, false, false);
-      advanceTodoItemCountsInToken();
-    }
-    else if (!ourSkipWordsScanSet.contains(tokenType)) {
-      scanWordsInToken(UsageSearchContext.IN_PLAIN_TEXT, false, false);
-    }
+		if(tokenType == JavaTokenType.IDENTIFIER || tokenType == JavaTokenType.LONG_LITERAL || tokenType == JavaTokenType.INTEGER_LITERAL || tokenType == JavaTokenType.CHARACTER_LITERAL || tokenType
+				== JavaTokenType.ARROW || tokenType == JavaTokenType.DOUBLE_COLON)
+		{
+			addOccurrenceInToken(UsageSearchContext.IN_CODE);
+		}
+		else if(tokenType == JavaTokenType.STRING_LITERAL)
+		{
+			scanWordsInToken(UsageSearchContext.IN_STRINGS | UsageSearchContext.IN_FOREIGN_LANGUAGES, false, true);
+		}
+		else if(ElementType.JAVA_COMMENT_BIT_SET.contains(tokenType))
+		{
+			scanWordsInToken(UsageSearchContext.IN_COMMENTS, false, false);
+			advanceTodoItemCountsInToken();
+		}
+		else if(!ourSkipWordsScanSet.contains(tokenType))
+		{
+			scanWordsInToken(UsageSearchContext.IN_PLAIN_TEXT, false, false);
+		}
 
-    myDelegate.advance();
-  }
+		myDelegate.advance();
+	}
 }

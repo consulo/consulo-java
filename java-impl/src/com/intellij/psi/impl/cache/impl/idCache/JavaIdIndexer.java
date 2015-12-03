@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,17 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
 import com.intellij.psi.impl.cache.impl.id.LexerBasedIdIndexer;
 
-public class JavaIdIndexer extends LexerBasedIdIndexer {
-  @Override
-  public Lexer createLexer(final OccurrenceConsumer consumer) {
-    return createIndexingLexer(consumer);
-  }
+public class JavaIdIndexer extends LexerBasedIdIndexer
+{
+	@Override
+	public Lexer createLexer(final OccurrenceConsumer consumer)
+	{
+		return createIndexingLexer(consumer);
+	}
 
-  public static Lexer createIndexingLexer(OccurrenceConsumer consumer) {
-    final JavaLexer javaLexer = new JavaLexer(LanguageLevel.JDK_1_3);
-    return new JavaFilterLexer(javaLexer, consumer);
-  }
+	public static Lexer createIndexingLexer(OccurrenceConsumer consumer)
+	{
+		Lexer javaLexer = new JavaLexer(LanguageLevel.JDK_1_3);
+		return new JavaFilterLexer(javaLexer, consumer);
+	}
 }

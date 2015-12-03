@@ -49,7 +49,7 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
 		CharTableImpl.addStringsFromClassToStatics(JavaClassNames.class);
 	}
 
-	public static final int STUB_VERSION = 16;
+	public static final int STUB_VERSION = 17;
 
 	public JavaFileElementType()
 	{

@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -34,7 +34,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.file.PsiPackageImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.NonClasspathDirectoryScope;
+import com.intellij.psi.search.NonClasspathDirectoriesScope;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -336,7 +336,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 		{
 			if(finder instanceof NonClasspathClassFinder)
 			{
-				scope = scope.uniteWith(NonClasspathDirectoryScope.compose(((NonClasspathClassFinder) finder).getClassRoots()));
+				scope = scope.uniteWith(NonClasspathDirectoriesScope.compose(((NonClasspathClassFinder) finder).getClassRoots()));
 			}
 		}
 		return scope;

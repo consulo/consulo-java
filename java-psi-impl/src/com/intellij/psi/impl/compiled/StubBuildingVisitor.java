@@ -15,22 +15,10 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiNameHelper;
-import com.intellij.psi.PsiReferenceList;
-import com.intellij.psi.impl.cache.ModifierFlags;
-import com.intellij.psi.impl.cache.TypeInfo;
-import com.intellij.psi.impl.java.stubs.*;
-import com.intellij.psi.impl.java.stubs.impl.*;
-import com.intellij.psi.stubs.PsiFileStub;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.cls.ClsFormatException;
-import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.org.objectweb.asm.*;
+import static com.intellij.psi.CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION;
+import static com.intellij.psi.CommonClassNames.JAVA_LANG_ENUM;
+import static com.intellij.psi.CommonClassNames.JAVA_LANG_OBJECT;
+import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
 
 import java.lang.reflect.Array;
 import java.text.CharacterIterator;
@@ -39,7 +27,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.intellij.psi.CommonClassNames.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.org.objectweb.asm.AnnotationVisitor;
+import org.jetbrains.org.objectweb.asm.ClassVisitor;
+import org.jetbrains.org.objectweb.asm.FieldVisitor;
+import org.jetbrains.org.objectweb.asm.Label;
+import org.jetbrains.org.objectweb.asm.MethodVisitor;
+import org.jetbrains.org.objectweb.asm.Opcodes;
+import org.jetbrains.org.objectweb.asm.Type;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.PsiReferenceList;
+import com.intellij.psi.impl.cache.ModifierFlags;
+import com.intellij.psi.impl.cache.TypeInfo;
+import com.intellij.psi.impl.java.stubs.JavaClassReferenceListElementType;
+import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.psi.impl.java.stubs.PsiAnnotationStub;
+import com.intellij.psi.impl.java.stubs.PsiClassStub;
+import com.intellij.psi.impl.java.stubs.PsiFieldStub;
+import com.intellij.psi.impl.java.stubs.PsiMethodStub;
+import com.intellij.psi.impl.java.stubs.PsiModifierListStub;
+import com.intellij.psi.impl.java.stubs.impl.PsiAnnotationStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiClassReferenceListStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiClassStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiFieldStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiMethodStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiModifierListStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiParameterListStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiParameterStubImpl;
+import com.intellij.psi.impl.java.stubs.impl.PsiTypeParameterListStubImpl;
+import com.intellij.psi.stubs.PsiFileStub;
+import com.intellij.psi.stubs.StubElement;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.cls.ClsFormatException;
 
 /**
  * @author max
@@ -69,11 +91,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	private PsiClassStub myResult;
 	private PsiModifierListStub myModList;
 
-	public StubBuildingVisitor(T classSource,
-			InnerClassSourceStrategy<T> innersStrategy,
-			StubElement parent,
-			int access,
-			String shortName)
+	public StubBuildingVisitor(T classSource, InnerClassSourceStrategy<T> innersStrategy, StubElement parent, int access, String shortName)
 	{
 		super(ASM_API);
 		mySource = classSource;
@@ -105,7 +123,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 
 		LanguageLevel languageLevel = ClsParsingUtil.getLanguageLevelByVersion(version);
 		if(languageLevel == null)
+		{
 			languageLevel = LanguageLevel.HIGHEST;
+		}
 		((PsiClassStubImpl) myResult).setLanguageLevel(languageLevel);
 
 		myModList = new PsiModifierListStubImpl(myResult, packClassFlags(flags));
@@ -196,23 +216,31 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		PsiReferenceList.Role role;
 
 		if(type == JavaStubElementTypes.EXTENDS_LIST)
+		{
 			role = PsiReferenceList.Role.EXTENDS_LIST;
+		}
 		else if(type == JavaStubElementTypes.IMPLEMENTS_LIST)
+		{
 			role = PsiReferenceList.Role.IMPLEMENTS_LIST;
+		}
 		else if(type == JavaStubElementTypes.THROWS_LIST)
+		{
 			role = PsiReferenceList.Role.THROWS_LIST;
+		}
 		else if(type == JavaStubElementTypes.EXTENDS_BOUND_LIST)
+		{
 			role = PsiReferenceList.Role.EXTENDS_BOUNDS_LIST;
+		}
 		else
+		{
 			throw new IllegalArgumentException("Unknown type: " + type);
+		}
 
 		new PsiClassReferenceListStubImpl(type, parent, types, role);
 	}
 
 	@Nullable
-	private static String parseClassDescription(final String superName,
-			final String[] interfaces,
-			final List<String> convertedInterfaces)
+	private static String parseClassDescription(final String superName, final String[] interfaces, final List<String> convertedInterfaces)
 	{
 		final String convertedSuper = superName != null ? getClassName(superName) : null;
 		for(String anInterface : interfaces)
@@ -223,15 +251,16 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	}
 
 	@Nullable
-	private static String parseClassSignature(final CharacterIterator signatureIterator,
-			final List<String> convertedInterfaces) throws ClsFormatException
+	private static String parseClassSignature(final CharacterIterator signatureIterator, final List<String> convertedInterfaces) throws ClsFormatException
 	{
 		final String convertedSuper = SignatureParsing.parseTopLevelClassRefSignature(signatureIterator);
 		while(signatureIterator.current() != CharacterIterator.DONE)
 		{
 			final String ifs = SignatureParsing.parseTopLevelClassRefSignature(signatureIterator);
 			if(ifs == null)
+			{
 				throw new ClsFormatException();
+			}
 
 			convertedInterfaces.add(ifs);
 		}
@@ -359,9 +388,13 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	public void visitInnerClass(final String name, final String outerName, final String innerName, final int access)
 	{
 		if((access & Opcodes.ACC_SYNTHETIC) != 0)
+		{
 			return;
+		}
 		if(!isCorrectName(innerName) || outerName == null)
+		{
 			return;
+		}
 
 		if((getClassName(outerName) + "." + innerName).equals(myResult.getQualifiedName()))
 		{
@@ -392,9 +425,13 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	private static boolean namesEqual(String signature, String fqn)
 	{
 		if(fqn == null)
+		{
 			return true;  // impossible case, just ignore
+		}
 		if(fqn.length() != signature.length())
+		{
 			return false;
+		}
 
 		int p = 0;
 		int dot;
@@ -419,20 +456,24 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value)
 	{
 		if((access & Opcodes.ACC_SYNTHETIC) != 0)
+		{
 			return null;
+		}
 		if(!isCorrectName(name))
+		{
 			return null;
+		}
 
 		byte flags = PsiFieldStubImpl.packFlags((access & Opcodes.ACC_ENUM) != 0, (access & Opcodes.ACC_DEPRECATED) != 0, false, false);
 		TypeInfo type = fieldType(desc, signature);
-		String initializer = constToString(value, type.text.getString(), false);
+		String initializer = constToString(value, type.text, false);
 		PsiFieldStub stub = new PsiFieldStubImpl(myResult, name, type, initializer, flags);
 		PsiModifierListStub modList = new PsiModifierListStubImpl(stub, packFieldFlags(access));
 		return new AnnotationCollectingVisitor(modList);
 	}
 
 	@NotNull
-	private static TypeInfo fieldType(String desc, String signature)
+	public static TypeInfo fieldType(String desc, String signature)
 	{
 		if(signature != null)
 		{
@@ -477,30 +518,34 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 
 	@Override
 	@Nullable
-	public MethodVisitor visitMethod(final int access,
-			final String name,
-			final String desc,
-			final String signature,
-			final String[] exceptions)
+	public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature, final String[] exceptions)
 	{
 		// JLS 13.1 says: Any constructs introduced by the compiler that do not have a corresponding construct in the source code
 		// must be marked as synthetic, except for default constructors and the class initialization method.
 		// However Scala compiler erroneously generates ACC_BRIDGE instead of ACC_SYNTHETIC flag for in-trait implementation delegation.
 		// See IDEA-78649
 		if((access & Opcodes.ACC_SYNTHETIC) != 0)
+		{
 			return null;
+		}
 
 		if(SYNTHETIC_CLASS_INIT_METHOD.equals(name))
+		{
 			return null;
+		}
 
 		// skip semi-synthetic enum methods
 		boolean isEnum = myResult.isEnum();
 		if(isEnum)
 		{
 			if("values".equals(name) && desc.startsWith("()"))
+			{
 				return null;
+			}
 			if("valueOf".equals(name) && desc.startsWith("(Ljava/lang/String;)"))
+			{
 				return null;
+			}
 		}
 
 		boolean isDeprecated = (access & Opcodes.ACC_DEPRECATED) != 0;
@@ -509,7 +554,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		boolean isAnnotationMethod = myResult.isAnnotationType();
 
 		if(!isConstructor && !isCorrectName(name))
+		{
 			return null;
+		}
 
 		final byte flags = PsiMethodStubImpl.packFlags(isConstructor, isAnnotationMethod, isVarargs, isDeprecated, false, false);
 
@@ -517,9 +564,8 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		List<String> args = new ArrayList<String>();
 		List<String> throwables = exceptions != null ? new ArrayList<String>() : null;
 
-		StringRef stringRef = StringRef.fromString(canonicalMethodName);
 		int modifiersMask = packMethodFlags(access, myResult.isInterface());
-		PsiMethodStubImpl stub = new PsiMethodStubImpl(myResult, stringRef, flags, signature, args, throwables, desc, modifiersMask);
+		PsiMethodStubImpl stub = new PsiMethodStubImpl(myResult, canonicalMethodName, flags, signature, args, throwables, desc, modifiersMask);
 
 		PsiModifierListStub modList = (PsiModifierListStub) stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
 		assert modList != null : stub;
@@ -540,7 +586,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		for(int i = 0; i < paramCount; i++)
 		{
 			if(shouldSkipFirstParamForNonStaticInnerClassConstructor && i == 0)
+			{
 				continue;
+			}
 
 			String arg = args.get(i);
 			boolean isEllipsisParam = isVarargs && i == paramCount - 1;
@@ -560,12 +608,12 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 		return new AnnotationParamCollectingVisitor(stub, modList, localVarIgnoreCount, paramIgnoreCount, paramCount, paramStubs);
 	}
 
-	private static String[] buildThrowsList(String[] exceptions,
-			List<String> throwables,
-			boolean parsedViaGenericSignature)
+	private static String[] buildThrowsList(String[] exceptions, List<String> throwables, boolean parsedViaGenericSignature)
 	{
 		if(exceptions == null)
+		{
 			return ArrayUtil.EMPTY_STRING_ARRAY;
+		}
 
 		if(parsedViaGenericSignature && throwables != null && exceptions.length > throwables.size())
 		{
@@ -591,9 +639,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	}
 
 	@NotNull
-	public static String parseMethodViaDescription(@NotNull String desc,
-			@NotNull PsiMethodStubImpl stub,
-			@NotNull List<String> args)
+	public static String parseMethodViaDescription(@NotNull String desc, @NotNull PsiMethodStubImpl stub, @NotNull List<String> args)
 	{
 		final String returnType = getTypeText(Type.getReturnType(desc));
 		final Type[] argTypes = Type.getArgumentTypes(desc);
@@ -826,7 +872,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 				// long and double variables increase the index by 2, not by 1
 				int paramIndex = (index - myIgnoreCount == myUsedParamSize) ? myUsedParamCount : index - myIgnoreCount;
 				if(paramIndex >= myParamCount)
+				{
 					return;
+				}
 
 				if(ClsParsingUtil.isJavaIdentifier(name, LanguageLevel.HIGHEST))
 				{
@@ -872,7 +920,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 	private static String constToString(@Nullable Object value, @Nullable String type, boolean anno)
 	{
 		if(value == null)
+		{
 			return null;
+		}
 
 		if(value instanceof String)
 		{
@@ -899,9 +949,13 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 			if("boolean".equals(type))
 			{
 				if(value.equals(0))
+				{
 					return "false";
+				}
 				if(value.equals(1))
+				{
 					return "true";
+				}
 			}
 			if("char".equals(type))
 			{
@@ -950,7 +1004,9 @@ public class StubBuildingVisitor<T> extends ClassVisitor
 			for(int i = 0, length = Array.getLength(value); i < length; i++)
 			{
 				if(i > 0)
+				{
 					buffer.append(", ");
+				}
 				buffer.append(constToString(Array.get(value, i), type, anno));
 			}
 			buffer.append('}');

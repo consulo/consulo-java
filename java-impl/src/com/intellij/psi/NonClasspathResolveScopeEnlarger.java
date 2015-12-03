@@ -1,34 +1,51 @@
 package com.intellij.psi;
 
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.NonClasspathDirectoryScope;
-import com.intellij.psi.search.SearchScope;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.search.NonClasspathDirectoriesScope;
+import com.intellij.psi.search.SearchScope;
 
 /**
  * @author peter
  */
-public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
+public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger
+{
+	@Override
+	public SearchScope getAdditionalResolveScope(@NotNull VirtualFile file, Project project)
+	{
+		ProjectFileIndex index = ProjectFileIndex.SERVICE.getInstance(project);
+		if(index.isInLibraryClasses(file) || index.isInContent(file))
+		{
+			return null;
+		}
 
-  @Override
-  public SearchScope getAdditionalResolveScope(@NotNull VirtualFile file, Project project) {
-    if ("class".equals(file.getExtension())) {
-      for (PsiElementFinder finder : Extensions.getExtensions(PsiElementFinder.EP_NAME, project)) {
-        if (finder instanceof NonClasspathClassFinder) {
-          final List<VirtualFile> roots = ((NonClasspathClassFinder)finder).getClassRoots();
-          for (VirtualFile root : roots) {
-            if (VfsUtil.isAncestor(root, file, true)) {
-              return NonClasspathDirectoryScope.compose(roots);
-            }
-          }
-        }
-      }
-    }
-    return null;
-  }
+		FileType fileType = file.getFileType();
+		if(fileType == JavaFileType.INSTANCE || fileType == JavaClassFileType.INSTANCE)
+		{
+			for(PsiElementFinder finder : Extensions.getExtensions(PsiElementFinder.EP_NAME, project))
+			{
+				if(finder instanceof NonClasspathClassFinder)
+				{
+					final List<VirtualFile> roots = ((NonClasspathClassFinder) finder).getClassRoots();
+					for(VirtualFile root : roots)
+					{
+						if(VfsUtilCore.isAncestor(root, file, true))
+						{
+							return NonClasspathDirectoriesScope.compose(roots);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 }
