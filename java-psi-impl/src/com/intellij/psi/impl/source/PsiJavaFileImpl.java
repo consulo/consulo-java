@@ -15,48 +15,28 @@
  */
 package com.intellij.psi.impl.source;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.lexer.JavaLexer;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.roots.FileIndexFacade;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.testFramework.LightVirtualFile;
-import org.jetbrains.annotations.NotNull;
 
-public class PsiJavaFileImpl extends PsiJavaFileBaseImpl {
-  public PsiJavaFileImpl(FileViewProvider file) {
-    super(JavaStubElementTypes.JAVA_FILE, JavaStubElementTypes.JAVA_FILE, file);
-  }
+public class PsiJavaFileImpl extends PsiJavaFileBaseImpl
+{
+	public PsiJavaFileImpl(FileViewProvider file)
+	{
+		super(JavaStubElementTypes.JAVA_FILE, JavaStubElementTypes.JAVA_FILE, file);
+	}
 
-  public String toString(){
-    return "PsiJavaFile:" + getName();
-  }
+	public String toString()
+	{
+		return "PsiJavaFile:" + getName();
+	}
 
-  public Lexer createLexer() {
-    return new JavaLexer(getLanguageLevel());
-  }
-
-  @NotNull
-  @Override
-  public GlobalSearchScope getResolveScope() {
-    final VirtualFile file = getVirtualFile();
-    if (file != null && !(file instanceof LightVirtualFile)) {
-      final FileIndexFacade index = ServiceManager.getService(getProject(), FileIndexFacade.class);
-      if (!index.isInSource(file) && !index.isInLibraryClasses(file)) {
-        return GlobalSearchScope.fileScope(this);
-      }
-    }
-    return super.getResolveScope();
-  }
-
-  @Override
-  @NotNull
-  public FileType getFileType() {
-    return JavaFileType.INSTANCE;
-  }
+	@Override
+	@NotNull
+	public FileType getFileType()
+	{
+		return JavaFileType.INSTANCE;
+	}
 }
