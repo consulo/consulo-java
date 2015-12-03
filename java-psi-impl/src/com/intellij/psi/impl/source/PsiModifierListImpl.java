@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
@@ -171,6 +172,13 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 					return node.findChildByType(JavaTokenType.DEFAULT_KEYWORD) == null &&
 							node.findChildByType(JavaTokenType.STATIC_KEYWORD) == null &&
 							node.findChildByType(JavaTokenType.PRIVATE_KEYWORD) == null;
+				}
+			}
+			else if(aClass != null && aClass.isEnum() && ((PsiMethod) parent).isConstructor())
+			{
+				if(type == JavaTokenType.PRIVATE_KEYWORD)
+				{
+					return true;
 				}
 			}
 		}
@@ -349,13 +357,13 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 	@NotNull
 	public PsiAnnotation[] getApplicableAnnotations()
 	{
-		final PsiAnnotation.TargetType[] targets = PsiImplUtil.getTargetsForLocation(this);
+		final PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(this);
 		List<PsiAnnotation> filtered = ContainerUtil.findAll(getAnnotations(), new Condition<PsiAnnotation>()
 		{
 			@Override
 			public boolean value(PsiAnnotation annotation)
 			{
-				PsiAnnotation.TargetType target = PsiImplUtil.findApplicableTarget(annotation, targets);
+				PsiAnnotation.TargetType target = AnnotationTargetUtil.findAnnotationTarget(annotation, targets);
 				return target != null && target != PsiAnnotation.TargetType.UNKNOWN;
 			}
 		});
@@ -373,8 +381,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 	@NotNull
 	public PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName)
 	{
-		return (PsiAnnotation) addAfter(JavaPsiFacade.getInstance(getProject()).getElementFactory().createAnnotationFromText("@" + qualifiedName,
-				this), null);
+		return (PsiAnnotation) addAfter(JavaPsiFacade.getInstance(getProject()).getElementFactory().createAnnotationFromText("@" + qualifiedName, this), null);
 	}
 
 	@Override

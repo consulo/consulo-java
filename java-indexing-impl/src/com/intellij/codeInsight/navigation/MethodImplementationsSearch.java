@@ -33,8 +33,7 @@ import com.intellij.util.containers.ContainerUtil;
 public class MethodImplementationsSearch implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final DefinitionsScopedSearch.SearchParameters queryParameters,
-			@NotNull final Processor<PsiElement> consumer)
+	public boolean execute(@NotNull final DefinitionsScopedSearch.SearchParameters queryParameters, @NotNull final Processor<PsiElement> consumer)
 	{
 		final PsiElement sourceElement = queryParameters.getElement();
 		if(sourceElement instanceof PsiMethod)
@@ -44,9 +43,7 @@ public class MethodImplementationsSearch implements QueryExecutor<PsiElement, De
 		return true;
 	}
 
-	public static boolean processImplementations(final PsiMethod psiMethod,
-			final Processor<PsiElement> consumer,
-			final SearchScope searchScope)
+	public static boolean processImplementations(final PsiMethod psiMethod, final Processor<PsiElement> consumer, final SearchScope searchScope)
 	{
 		if(!FunctionalExpressionSearch.search(psiMethod, searchScope).forEach(new Processor<PsiFunctionalExpression>()
 		{

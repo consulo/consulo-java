@@ -176,7 +176,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 			PsiFile file = aClass.getContainingFile();
 			if(file == null)
 			{
-				LOGGER.error("aClass=" + aClass);
+				LOGGER.error("aClass=" + aClass + " of class " + aClass.getClass() + "; valid=" + aClass.isValid());
 				continue;
 			}
 			final boolean valid = aClass.isValid();

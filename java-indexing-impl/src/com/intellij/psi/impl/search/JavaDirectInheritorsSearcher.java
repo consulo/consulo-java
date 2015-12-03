@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicatorProvider;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
@@ -53,12 +53,10 @@ import com.intellij.util.containers.HashMap;
 /**
  * @author max
  */
-public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
-		DirectClassInheritorsSearch.SearchParameters>
+public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, DirectClassInheritorsSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final DirectClassInheritorsSearch.SearchParameters p,
-			@NotNull final Processor<PsiClass> consumer)
+	public boolean execute(@NotNull final DirectClassInheritorsSearch.SearchParameters p, @NotNull final Processor<PsiClass> consumer)
 	{
 		final PsiClass aClass = p.getClassToProcess();
 
@@ -84,8 +82,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 		if(CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName))
 		{
 			//[pasynkov]: WTF?
-			//final SearchScope scope = useScope.intersectWith(GlobalSearchScope.notScope(GlobalSearchScope
-			// .getScopeRestrictedByFileTypes(
+			//final SearchScope scope = useScope.intersectWith(GlobalSearchScope.notScope(GlobalSearchScope.getScopeRestrictedByFileTypes(
 			//    GlobalSearchScope.allScope(psiManager.getProject()), StdFileTypes.JSP, StdFileTypes.JSPX)));
 
 			return AllClassesSearch.search(useScope, project).forEach(new Processor<PsiClass>()
@@ -93,13 +90,13 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 				@Override
 				public boolean process(final PsiClass psiClass)
 				{
+					ProgressManager.checkCanceled();
 					if(psiClass.isInterface())
 					{
 						return consumer.process(psiClass);
 					}
 					final PsiClass superClass = psiClass.getSuperClass();
-					if(superClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(ApplicationManager
-							.getApplication().runReadAction(new Computable<String>()
+					if(superClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(ApplicationManager.getApplication().runReadAction(new Computable<String>()
 					{
 						public String compute()
 						{
@@ -114,8 +111,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 			});
 		}
 
-		final GlobalSearchScope scope = useScope instanceof GlobalSearchScope ? (GlobalSearchScope) useScope : new
-				EverythingGlobalScope(project);
+		final GlobalSearchScope scope = useScope instanceof GlobalSearchScope ? (GlobalSearchScope) useScope : new EverythingGlobalScope(project);
 		final String searchKey = ApplicationManager.getApplication().runReadAction(new Computable<String>()
 		{
 			@Override
@@ -129,8 +125,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 			return true;
 		}
 
-		Collection<PsiReferenceList> candidates = MethodUsagesSearcher.resolveInReadAction(project,
-				new Computable<Collection<PsiReferenceList>>()
+		Collection<PsiReferenceList> candidates = MethodUsagesSearcher.resolveInReadAction(project, new Computable<Collection<PsiReferenceList>>()
 		{
 			@Override
 			public Collection<PsiReferenceList> compute()
@@ -143,9 +138,8 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 
 		for(final PsiReferenceList referenceList : candidates)
 		{
-			ProgressIndicatorProvider.checkCanceled();
-			final PsiClass candidate = (PsiClass) ApplicationManager.getApplication().runReadAction(new
-																											Computable<PsiElement>()
+			ProgressManager.checkCanceled();
+			final PsiClass candidate = (PsiClass) ApplicationManager.getApplication().runReadAction(new Computable<PsiElement>()
 			{
 				@Override
 				public PsiElement compute()
@@ -180,6 +174,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 			final VirtualFile jarFile = getJarFile(aClass);
 			for(List<PsiClass> sameNamedClasses : classes.values())
 			{
+				ProgressManager.checkCanceled();
 				if(!processSameNamedClasses(consumer, sameNamedClasses, jarFile))
 				{
 					return false;
@@ -189,8 +184,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 
 		if(p.includeAnonymous())
 		{
-			Collection<PsiAnonymousClass> anonymousCandidates = MethodUsagesSearcher.resolveInReadAction(project,
-					new Computable<Collection<PsiAnonymousClass>>()
+			Collection<PsiAnonymousClass> anonymousCandidates = MethodUsagesSearcher.resolveInReadAction(project, new Computable<Collection<PsiAnonymousClass>>()
 			{
 				@Override
 				public Collection<PsiAnonymousClass> compute()
@@ -201,7 +195,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 
 			for(PsiAnonymousClass candidate : anonymousCandidates)
 			{
-				ProgressIndicatorProvider.checkCanceled();
+				ProgressManager.checkCanceled();
 				if(!checkInheritance(p, aClass, candidate, project))
 				{
 					continue;
@@ -234,17 +228,17 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 				});
 				for(final PsiField field : fields)
 				{
+					ProgressManager.checkCanceled();
 					if(field instanceof PsiEnumConstant)
 					{
-						PsiEnumConstantInitializer initializingClass = ApplicationManager.getApplication()
-								.runReadAction(new Computable<PsiEnumConstantInitializer>()
-								{
-									@Override
-									public PsiEnumConstantInitializer compute()
-									{
-										return ((PsiEnumConstant) field).getInitializingClass();
-									}
-								});
+						PsiEnumConstantInitializer initializingClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiEnumConstantInitializer>()
+						{
+							@Override
+							public PsiEnumConstantInitializer compute()
+							{
+								return ((PsiEnumConstant) field).getInitializingClass();
+							}
+						});
 						if(initializingClass != null)
 						{
 							if(!consumer.process(initializingClass))
@@ -260,10 +254,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 		return true;
 	}
 
-	private static boolean checkInheritance(final DirectClassInheritorsSearch.SearchParameters p,
-			final PsiClass aClass,
-			final PsiClass candidate,
-			Project project)
+	private static boolean checkInheritance(final DirectClassInheritorsSearch.SearchParameters p, final PsiClass aClass, final PsiClass candidate, Project project)
 	{
 		return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
 		{
@@ -275,9 +266,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 		});
 	}
 
-	private static boolean processSameNamedClasses(Processor<PsiClass> consumer,
-			List<PsiClass> sameNamedClasses,
-			final VirtualFile jarFile)
+	private static boolean processSameNamedClasses(Processor<PsiClass> consumer, List<PsiClass> sameNamedClasses, final VirtualFile jarFile)
 	{
 		// if there is a class from the same jar, prefer it
 		boolean sameJarClassFound = false;
@@ -286,6 +275,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass,
 		{
 			for(PsiClass sameNamedClass : sameNamedClasses)
 			{
+				ProgressManager.checkCanceled();
 				boolean fromSameJar = Comparing.equal(getJarFile(sameNamedClass), jarFile);
 				if(fromSameJar)
 				{

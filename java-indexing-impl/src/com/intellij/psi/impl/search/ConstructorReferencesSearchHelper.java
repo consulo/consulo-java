@@ -44,13 +44,11 @@ public class ConstructorReferencesSearchHelper
 	}
 
 	/*
-	   * Project is passed around explicitly to avoid invoking PsiElement.getProject each time we need it. There are
-	   * two reasons:
-	   * 1. Performance. getProject traverses AST upwards
-	   * 2. Exception avoidance. Project is needed outside of read action (to run it via DumbService in the first
-	   * place),
-	   *    and so getProject would fail with an assertion that read action is required but not present.
-	   */
+	 * Project is passed around explicitly to avoid invoking PsiElement.getProject each time we need it. There are two reasons:
+	 * 1. Performance. getProject traverses AST upwards
+	 * 2. Exception avoidance. Project is needed outside of read action (to run it via DumbService in the first place),
+	 *    and so getProject would fail with an assertion that read action is required but not present.
+	 */
 	public boolean processConstructorReferences(@NotNull final Processor<PsiReference> processor,
 			@NotNull final PsiMethod constructor,
 			@NotNull final PsiClass containingClass,
@@ -85,8 +83,7 @@ public class ConstructorReferencesSearchHelper
 		}
 
 		// search usages like "new XXX(..)"
-		PairProcessor<PsiReference, SearchRequestCollector> processor1 = new PairProcessor<PsiReference,
-				SearchRequestCollector>()
+		PairProcessor<PsiReference, SearchRequestCollector> processor1 = new PairProcessor<PsiReference, SearchRequestCollector>()
 		{
 			@Override
 			public boolean process(PsiReference reference, SearchRequestCollector collector)
@@ -136,8 +133,7 @@ public class ConstructorReferencesSearchHelper
 			@Override
 			public Boolean compute()
 			{
-				return processSuperOrThis(containingClass, constructor, constructorCanBeCalledImplicitly[0],
-						searchScope, project, isStrictSignatureSearch, PsiKeyword.THIS, processor);
+				return processSuperOrThis(containingClass, constructor, constructorCanBeCalledImplicitly[0], searchScope, project, isStrictSignatureSearch, PsiKeyword.THIS, processor);
 			}
 		}))
 		{
@@ -153,9 +149,8 @@ public class ConstructorReferencesSearchHelper
 				final PsiElement navigationElement = inheritor.getNavigationElement();
 				if(navigationElement instanceof PsiClass)
 				{
-					return processSuperOrThis((PsiClass) navigationElement, constructor,
-							constructorCanBeCalledImplicitly[0], searchScope, project, isStrictSignatureSearch,
-							PsiKeyword.SUPER, processor);
+					return processSuperOrThis((PsiClass) navigationElement, constructor, constructorCanBeCalledImplicitly[0], searchScope, project, isStrictSignatureSearch, PsiKeyword.SUPER,
+							processor);
 				}
 				return true;
 			}
@@ -164,9 +159,7 @@ public class ConstructorReferencesSearchHelper
 		return ClassInheritorsSearch.search(containingClass, searchScope, false).forEach(processor2);
 	}
 
-	private static boolean processEnumReferences(@NotNull final Processor<PsiReference> processor,
-			@NotNull final PsiMethod constructor,
-			@NotNull final Project project,
+	private static boolean processEnumReferences(@NotNull final Processor<PsiReference> processor, @NotNull final PsiMethod constructor, @NotNull final Project project,
 			@NotNull final PsiClass aClass)
 	{
 		return MethodUsagesSearcher.resolveInReadAction(project, new Computable<Boolean>()
@@ -213,8 +206,7 @@ public class ConstructorReferencesSearchHelper
 						public Boolean compute()
 						{
 							final PsiElement parent = element.getParent();
-							if(parent instanceof PsiMethodReferenceExpression && ((PsiMethodReferenceExpression)
-									parent).getReferenceNameElement() instanceof PsiKeyword)
+							if(parent instanceof PsiMethodReferenceExpression && ((PsiMethodReferenceExpression) parent).getReferenceNameElement() instanceof PsiKeyword)
 							{
 								if(((PsiMethodReferenceExpression) parent).isReferenceTo(constructor))
 								{
@@ -275,16 +267,14 @@ public class ConstructorReferencesSearchHelper
 								if(referencedElement instanceof PsiMethod)
 								{
 									PsiMethod constructor1 = (PsiMethod) referencedElement;
-									boolean match = isStrictSignatureSearch ? myManager.areElementsEquivalent
-											(constructor1, constructor) : myManager.areElementsEquivalent(constructor
+									boolean match = isStrictSignatureSearch ? myManager.areElementsEquivalent(constructor1, constructor) : myManager.areElementsEquivalent(constructor
 											.getContainingClass(), constructor1.getContainingClass());
 									if(match && !processor.process(refExpr))
 									{
 										return false;
 									}
 								}
-								//as long as we've encountered super/this keyword, no implicit ctr calls are possible
-								// here
+								//as long as we've encountered super/this keyword, no implicit ctr calls are possible here
 								continue;
 							}
 						}
@@ -318,8 +308,7 @@ public class ConstructorReferencesSearchHelper
 			@Override
 			public Boolean compute()
 			{
-				return myManager.areElementsEquivalent(constructor.getContainingClass(),
-						containingClass.getSuperClass());
+				return myManager.areElementsEquivalent(constructor.getContainingClass(), containingClass.getSuperClass());
 			}
 		});
 		if(!same)

@@ -44,11 +44,9 @@ import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 
-public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<String,
-		Collection<JavaFunctionalExpressionIndex.IndexHolder>> implements PsiDependentIndex
+public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<String, Collection<JavaFunctionalExpressionIndex.IndexHolder>> implements PsiDependentIndex
 {
-	public static final ID<String, Collection<IndexHolder>> JAVA_FUNCTIONAL_EXPRESSION_INDEX_ID = ID.create("java" +
-			".functional.expression");
+	public static final ID<String, Collection<IndexHolder>> JAVA_FUNCTIONAL_EXPRESSION_INDEX_ID = ID.create("java.functional.expression");
 	private static final String THIS_REF_NAME = "this";
 	private static final String SUPER_REF_NAME = "super";
 
@@ -69,6 +67,10 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 			@Override
 			public Map<String, Collection<IndexHolder>> map(@NotNull FileContent inputData)
 			{
+				if(!JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(inputData.getFile()))
+				{
+					return Collections.emptyMap();
+				}
 				final CharSequence contentAsText = inputData.getContentAsText();
 				if(!StringUtil.contains(contentAsText, "::") && !StringUtil.contains(contentAsText, "->"))
 				{
@@ -76,18 +78,15 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 				}
 
 				final PsiFile file = ((FileContentImpl) inputData).getPsiFileForPsiDependentIndex();
-				if(!(file instanceof PsiJavaFile) || !JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(inputData
-						.getFile()))
+				if(!(file instanceof PsiJavaFile))
 				{
 					return Collections.emptyMap();
 				}
 
 				final HashMap<String, Collection<IndexHolder>> methodsMap = ContainerUtil.newHashMap();
-				for(PsiFunctionalExpression expression : SyntaxTraverser.psiTraverser().withRoot(file).filter
-						(PsiFunctionalExpression.class))
+				for(PsiFunctionalExpression expression : SyntaxTraverser.psiTraverser().withRoot(file).filter(PsiFunctionalExpression.class))
 				{
-					final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(expression,
-							PsiExpressionList.class, true, PsiStatement.class, PsiModifierListOwner.class);
+					final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(expression, PsiExpressionList.class, true, PsiStatement.class, PsiModifierListOwner.class);
 					if(expressionList != null)
 					{
 						final PsiElement parent = expressionList.getParent();
@@ -101,8 +100,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 								if(thisRef || methodName.equals(SUPER_REF_NAME))
 								{
 									methodName = null;
-									final PsiClass containingClass = PsiTreeUtil.getParentOfType(parent,
-											PsiClass.class);
+									final PsiClass containingClass = PsiTreeUtil.getParentOfType(parent, PsiClass.class);
 									if(containingClass != null)
 									{
 										if(thisRef)
@@ -114,8 +112,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 											final PsiReferenceList extendsList = containingClass.getExtendsList();
 											if(extendsList != null)
 											{
-												final PsiJavaCodeReferenceElement[] referenceElements = extendsList
-														.getReferenceElements();
+												final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
 												if(referenceElements.length > 0)
 												{
 													methodName = referenceElements[0].getReferenceName();
@@ -128,8 +125,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 						}
 						else if(parent instanceof PsiNewExpression)
 						{
-							final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) parent)
-									.getClassOrAnonymousClassReference();
+							final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) parent).getClassOrAnonymousClassReference();
 							if(classReference != null)
 							{
 								methodName = classReference.getReferenceName();
@@ -156,10 +152,8 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 								holders = new HashSet<IndexHolder>();
 								methodsMap.put(methodName, holders);
 							}
-							holders.add(new IndexHolder(expression instanceof PsiLambdaExpression ? (
-									(PsiLambdaExpression) expression).getParameterList().getParametersCount() : -1,
-									expressionList.getExpressions().length, LambdaUtil.getLambdaIdx(expressionList,
-									expression)));
+							holders.add(new IndexHolder(expression instanceof PsiLambdaExpression ? ((PsiLambdaExpression) expression).getParameterList().getParametersCount() : -1,
+									expressionList.getExpressions().length, LambdaUtil.getLambdaIdx(expressionList, expression)));
 						}
 					}
 				}
@@ -201,8 +195,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
 				final Collection<IndexHolder> holders = new HashSet<IndexHolder>(l);
 				while(l-- > 0)
 				{
-					holders.add(new IndexHolder(DataInputOutputUtil.readINT(in), DataInputOutputUtil.readINT(in),
-							DataInputOutputUtil.readINT(in)));
+					holders.add(new IndexHolder(DataInputOutputUtil.readINT(in), DataInputOutputUtil.readINT(in), DataInputOutputUtil.readINT(in)));
 				}
 				return holders;
 			}

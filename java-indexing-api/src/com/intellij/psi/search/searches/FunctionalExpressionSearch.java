@@ -31,11 +31,9 @@ import com.intellij.util.EmptyQuery;
 import com.intellij.util.Query;
 import com.intellij.util.QueryExecutor;
 
-public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFunctionalExpression,
-		FunctionalExpressionSearch.SearchParameters>
+public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters>
 {
-	public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("org.consulo.java" +
-			".functionalInterfaceSearch");
+	public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("org.consulo.java.functionalInterfaceSearch");
 	public static final FunctionalExpressionSearch INSTANCE = new FunctionalExpressionSearch();
 
 	public static class SearchParameters
@@ -57,8 +55,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
 		@NotNull
 		public SearchScope getEffectiveSearchScope()
 		{
-			SearchScope accessScope = PsiSearchHelper.SERVICE.getInstance(myElementToSearch.getProject()).getUseScope
-					(myElementToSearch);
+			SearchScope accessScope = PsiSearchHelper.SERVICE.getInstance(myElementToSearch.getProject()).getUseScope(myElementToSearch);
 			return myScope.intersectWith(accessScope);
 		}
 	}
@@ -78,16 +75,14 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
 		return search(psiMethod, GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(psiMethod)));
 	}
 
-	public static Query<PsiFunctionalExpression> search(@NotNull final PsiMethod psiMethod,
-			@NotNull final SearchScope scope)
+	public static Query<PsiFunctionalExpression> search(@NotNull final PsiMethod psiMethod, @NotNull final SearchScope scope)
 	{
 		return ApplicationManager.getApplication().runReadAction(new Computable<Query<PsiFunctionalExpression>>()
 		{
 			@Override
 			public Query<PsiFunctionalExpression> compute()
 			{
-				if(!psiMethod.hasModifierProperty(PsiModifier.STATIC) && !psiMethod.hasModifierProperty(PsiModifier
-						.DEFAULT))
+				if(!psiMethod.hasModifierProperty(PsiModifier.STATIC) && !psiMethod.hasModifierProperty(PsiModifier.DEFAULT))
 				{
 					final PsiClass containingClass = psiMethod.getContainingClass();
 					if(containingClass != null)

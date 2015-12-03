@@ -37,10 +37,12 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderEntry;
+import com.intellij.openapi.roots.OrderEntryWithTracking;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
+import com.intellij.openapi.roots.types.SourcesOrderRootType;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
@@ -132,25 +134,27 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 	@Override
 	public PsiElement getClsFileNavigationElement(PsiJavaFile clsFile)
 	{
-		String packageName = clsFile.getPackageName();
 		PsiClass[] classes = clsFile.getClasses();
 		if(classes.length == 0)
 		{
 			return clsFile;
 		}
-		String sourceFileName = ((ClsClassImpl) classes[0]).getSourceFileName();
-		String relativeFilePath = packageName.isEmpty() ? sourceFileName : packageName.replace('.', '/') + '/' + sourceFileName;
 
-		final VirtualFile vFile = clsFile.getContainingFile().getVirtualFile();
-		ProjectFileIndex projectFileIndex = ProjectFileIndex.SERVICE.getInstance(clsFile.getProject());
-		final List<OrderEntry> orderEntries = projectFileIndex.getOrderEntriesForFile(vFile);
-		for(OrderEntry orderEntry : orderEntries)
+		String sourceFileName = ((ClsClassImpl) classes[0]).getSourceFileName();
+		String packageName = clsFile.getPackageName();
+		String relativePath = packageName.isEmpty() ? sourceFileName : packageName.replace('.', '/') + '/' + sourceFileName;
+
+		ProjectFileIndex index = ProjectFileIndex.SERVICE.getInstance(clsFile.getProject());
+		for(OrderEntry orderEntry : index.getOrderEntriesForFile(clsFile.getContainingFile().getVirtualFile()))
 		{
-			VirtualFile[] files = orderEntry.getFiles(OrderRootType.SOURCES);
-			for(VirtualFile file : files)
+			if(!(orderEntry instanceof OrderEntryWithTracking))
 			{
-				VirtualFile source = file.findFileByRelativePath(relativeFilePath);
-				if(source != null)
+				continue;
+			}
+			for(VirtualFile root : orderEntry.getFiles(SourcesOrderRootType.getInstance()))
+			{
+				VirtualFile source = root.findFileByRelativePath(relativePath);
+				if(source != null && source.isValid())
 				{
 					PsiFile psiSource = clsFile.getManager().findFile(source);
 					if(psiSource instanceof PsiClassOwner)
@@ -160,6 +164,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 				}
 			}
 		}
+
 		return clsFile;
 	}
 

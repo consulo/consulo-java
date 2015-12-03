@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents a Java lambda expression.
  */
-public interface PsiLambdaExpression extends PsiFunctionalExpression
+public interface PsiLambdaExpression extends PsiFunctionalExpression, PsiParameterListOwner
 {
 	/**
 	 * Returns this lambda expression's parameter list.
@@ -50,13 +50,10 @@ public interface PsiLambdaExpression extends PsiFunctionalExpression
 	boolean hasFormalParameterTypes();
 
 	/**
-	 * A lambda expression (§15.27) is potentially compatible with a functional interface type (§9.8) if all of the
-	 * following are true:
+	 * A lambda expression (§15.27) is potentially compatible with a functional interface type (§9.8) if all of the following are true:
 	 * The arity of the target type's function type is the same as the arity of the lambda expression.
-	 * If the target type's function type has a void return, then the lambda body is either a statement expression
-	 * (§14.8) or a void-compatible block (§15.27.2).
-	 * If the target type's function type has a (non-void) return type, then the lambda body is either an expression
-	 * or a value-compatible block (§15.27.2).
+	 * If the target type's function type has a void return, then the lambda body is either a statement expression (§14.8) or a void-compatible block (§15.27.2).
+	 * If the target type's function type has a (non-void) return type, then the lambda body is either an expression or a value-compatible block (§15.27.2).
 	 */
 	boolean isPotentiallyCompatible(PsiType left);
 }

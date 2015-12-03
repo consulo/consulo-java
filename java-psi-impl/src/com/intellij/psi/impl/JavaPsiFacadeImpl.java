@@ -19,12 +19,12 @@ import gnu.trove.THashSet;
 
 import java.util.*;
 
-import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
+import org.mustbe.consulo.RequiredReadAction;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ReadActionProcessor;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
@@ -270,8 +270,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 		return result == null ? PsiClass.EMPTY_ARRAY : result.toArray(new PsiClass[result.size()]);
 	}
 
-	public boolean processPackageDirectories(
-			@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope, @NotNull Processor<PsiDirectory> consumer)
+	public boolean processPackageDirectories(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope, @NotNull Processor<PsiDirectory> consumer)
 	{
 		for(PsiElementFinder finder : filteredFinders())
 		{
@@ -404,9 +403,9 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 					@Override
 					public int compare(PsiClass o1, PsiClass o2)
 					{
-						VirtualFile file2 = PsiUtilCore.getVirtualFile(o2);
 						VirtualFile file1 = PsiUtilCore.getVirtualFile(o1);
-						return scope.compare(file2, file1);
+						VirtualFile file2 = PsiUtilCore.getVirtualFile(o2);
+						return file1 == null ? file2 == null ? 0 : -1 : file2 == null ? 1 : scope.compare(file2, file1);
 					}
 				});
 			}
@@ -435,8 +434,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 							continue;
 						}
 
-						Set<String> inFile = file instanceof PsiClassOwnerEx ? ((PsiClassOwnerEx) file).getClassNames() : getClassNames((
-								(PsiClassOwner) file).getClasses());
+						Set<String> inFile = file instanceof PsiClassOwnerEx ? ((PsiClassOwnerEx) file).getClassNames() : getClassNames(((PsiClassOwner) file).getClasses());
 
 						if(inFile.isEmpty())
 						{
@@ -456,12 +454,10 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 
 
 		@Override
-		public boolean processPackageDirectories(
-				@NotNull PsiJavaPackage psiPackage, @NotNull final GlobalSearchScope scope, @NotNull final Processor<PsiDirectory> consumer)
+		public boolean processPackageDirectories(@NotNull PsiJavaPackage psiPackage, @NotNull final GlobalSearchScope scope, @NotNull final Processor<PsiDirectory> consumer)
 		{
 			final PsiManager psiManager = PsiManager.getInstance(getProject());
-			return DirectoryIndex.getInstance(getProject()).getDirectoriesByPackageName(psiPackage.getQualifiedName(),
-					false).forEach(new ReadActionProcessor<VirtualFile>()
+			return DirectoryIndex.getInstance(getProject()).getDirectoriesByPackageName(psiPackage.getQualifiedName(), false).forEach(new ReadActionProcessor<VirtualFile>()
 			{
 				@RequiredReadAction
 				@Override

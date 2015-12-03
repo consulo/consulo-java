@@ -36,8 +36,7 @@ import com.intellij.util.SmartList;
 
 public class ClassResolverProcessor extends BaseScopeProcessor implements NameHint, ElementClassHint
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve" +
-			".ClassResolverProcessor");
+	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.resolve.ClassResolverProcessor");
 	private static final String[] DEFAULT_PACKAGES = {CommonClassNames.DEFAULT_PACKAGE};
 
 	private final String myClassName;
@@ -52,14 +51,11 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 	private JavaResolveResult[] myResult = JavaResolveResult.EMPTY_ARRAY;
 	private PsiElement myCurrentFileContext;
 
-	public ClassResolverProcessor(@NotNull String className,
-			@NotNull PsiElement startPlace,
-			@NotNull PsiFile containingFile)
+	public ClassResolverProcessor(@NotNull String className, @NotNull PsiElement startPlace, @NotNull PsiFile containingFile)
 	{
 		myClassName = className;
 		myContainingFile = containingFile;
-		PsiElement place = containingFile instanceof JavaCodeFragment && ((JavaCodeFragment) containingFile)
-				.getVisibilityChecker() != null ? null : startPlace;
+		PsiElement place = containingFile instanceof JavaCodeFragment && ((JavaCodeFragment) containingFile).getVisibilityChecker() != null ? null : startPlace;
 		myPlace = place;
 		if(place instanceof PsiJavaCodeReferenceElement)
 		{
@@ -155,8 +151,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 
 		PsiFile file = myPlace == null ? null : FileContextUtil.getContextFile(myContainingFile);
 
-		String[] defaultPackages = file instanceof PsiJavaFile ? ((PsiJavaFile) file).getImplicitlyImportedPackages()
-				: DEFAULT_PACKAGES;
+		String[] defaultPackages = file instanceof PsiJavaFile ? ((PsiJavaFile) file).getImplicitlyImportedPackages() : DEFAULT_PACKAGES;
 		String packageName = StringUtil.getPackageName(fqn);
 		for(String defaultPackage : defaultPackages)
 		{
@@ -170,10 +165,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 		return file instanceof PsiJavaFile && ((PsiJavaFile) file).getPackageName().equals(packageName);
 	}
 
-	private Domination dominates(@NotNull PsiClass aClass,
-			boolean accessible,
-			@NotNull String fqName,
-			@NotNull ClassCandidateInfo info)
+	private Domination dominates(@NotNull PsiClass aClass, boolean accessible, @NotNull String fqName, @NotNull ClassCandidateInfo info)
 	{
 		final PsiClass otherClass = info.getElement();
 		String otherQName = otherClass.getQualifiedName();
@@ -197,12 +189,9 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 		}
 
 		//JLS 8.5:
-		//A class may inherit two or more type declarations with the same name, either from two interfaces or from its
-		// superclass and an interface.
-		//It is a compile-time error to attempt to refer to any ambiguously inherited class or interface by its simple
-		// name.
-		if(containingClass1 != null && containingClass2 != null && containingClass2.isInheritor(containingClass1,
-				true) &&
+		//A class may inherit two or more type declarations with the same name, either from two interfaces or from its superclass and an interface.
+		//It is a compile-time error to attempt to refer to any ambiguously inherited class or interface by its simple name.
+		if(containingClass1 != null && containingClass2 != null && containingClass2.isInheritor(containingClass1, true) &&
 				!isImported(myCurrentFileContext))
 		{
 			if(!isAmbiguousInherited(containingClass1))
@@ -324,8 +313,7 @@ public class ClassResolverProcessor extends BaseScopeProcessor implements NameHi
 
 		myHasAccessibleCandidate |= accessible;
 		myHasInaccessibleCandidate |= !accessible;
-		myCandidates.add(new ClassCandidateInfo(aClass, state.get(PsiSubstitutor.KEY), !accessible,
-				myCurrentFileContext));
+		myCandidates.add(new ClassCandidateInfo(aClass, state.get(PsiSubstitutor.KEY), !accessible, myCurrentFileContext));
 		myResult = null;
 		if(!accessible)
 		{

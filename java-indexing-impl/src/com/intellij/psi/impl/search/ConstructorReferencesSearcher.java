@@ -19,8 +19,7 @@ import com.intellij.util.Processor;
 public class ConstructorReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>
 {
 	@Override
-	public void processQuery(@NotNull final ReferencesSearch.SearchParameters p,
-			@NotNull Processor<PsiReference> consumer)
+	public void processQuery(@NotNull final ReferencesSearch.SearchParameters p, @NotNull Processor<PsiReference> consumer)
 	{
 		final PsiElement element = p.getElementToSearch();
 		if(!(element instanceof PsiMethod))
@@ -55,7 +54,6 @@ public class ConstructorReferencesSearcher extends QueryExecutorBase<PsiReferenc
 				return p.getEffectiveSearchScope();
 			}
 		});
-		new ConstructorReferencesSearchHelper(manager[0]).processConstructorReferences(consumer, method, aClass,
-				scope, p.getProject(), p.isIgnoreAccessScope(), true, p.getOptimizer());
+		new ConstructorReferencesSearchHelper(manager[0]).processConstructorReferences(consumer, method, aClass, scope, p.getProject(), p.isIgnoreAccessScope(), true, p.getOptimizer());
 	}
 }
