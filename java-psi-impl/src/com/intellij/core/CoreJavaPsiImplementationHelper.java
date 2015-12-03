@@ -15,44 +15,57 @@
  */
 package com.intellij.core;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiCatchSection;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiImportList;
+import com.intellij.psi.PsiImportStatementBase;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMember;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yole
  */
-public class CoreJavaPsiImplementationHelper extends JavaPsiImplementationHelper {
-  @Override
-  public PsiClass getOriginalClass(PsiClass psiClass) {
-    return psiClass;
-  }
+public class CoreJavaPsiImplementationHelper extends JavaPsiImplementationHelper
+{
+	@Override
+	public PsiClass getOriginalClass(PsiClass psiClass)
+	{
+		return psiClass;
+	}
 
-  @Override
-  public PsiElement getClsFileNavigationElement(PsiJavaFile clsFile) {
-    return clsFile;
-  }
+	@Override
+	public PsiElement getClsFileNavigationElement(PsiJavaFile clsFile)
+	{
+		return clsFile;
+	}
 
-  @Override
-  public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile) {
-    return null;
-  }
+	@Override
+	public LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile)
+	{
+		return null;
+	}
 
-  @Override
-  public ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement) {
-    throw new UnsupportedOperationException("TODO");
-  }
+	@Override
+	public ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement)
+	{
+		throw new UnsupportedOperationException("TODO");
+	}
 
-  @Override
-  public PsiElement getDefaultMemberAnchor(@NotNull PsiClass psiClass, @NotNull PsiMember firstPsi) {
-    throw new UnsupportedOperationException("TODO");
-  }
+	@Override
+	public PsiElement getDefaultMemberAnchor(@NotNull PsiClass psiClass, @NotNull PsiMember firstPsi)
+	{
+		throw new UnsupportedOperationException("TODO");
+	}
 
-  @Override
-  public void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element) {
-    throw new UnsupportedOperationException("TODO");
-  }
+	@Override
+	public void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element)
+	{
+		throw new UnsupportedOperationException("TODO");
+	}
 }
