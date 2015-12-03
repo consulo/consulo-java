@@ -39,9 +39,13 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 		this(reference, level, collectAnnotations(reference));
 	}
 
-	public PsiClassReferenceType(@NotNull PsiJavaCodeReferenceElement reference,
-			LanguageLevel level,
-			@NotNull PsiAnnotation[] annotations)
+	public PsiClassReferenceType(@NotNull PsiJavaCodeReferenceElement reference, LanguageLevel level, @NotNull PsiAnnotation[] annotations)
+	{
+		super(level, annotations);
+		myReference = reference;
+	}
+
+	public PsiClassReferenceType(@NotNull PsiJavaCodeReferenceElement reference, LanguageLevel level, @NotNull TypeAnnotationProvider annotations)
 	{
 		super(level, annotations);
 		myReference = reference;
@@ -102,7 +106,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 		{
 			return this;
 		}
-		return new PsiClassReferenceType(myReference, languageLevel, getAnnotations());
+		return new PsiClassReferenceType(myReference, languageLevel, getAnnotationProvider());
 	}
 
 	@Override
@@ -189,7 +193,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 			PsiManager manager = myReference.getManager();
 			final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 			final PsiSubstitutor rawSubstitutor = factory.createRawSubstitutor(aClass);
-			return factory.createType(aClass, rawSubstitutor, getLanguageLevel(), getAnnotations());
+			return new PsiImmediateClassType(aClass, rawSubstitutor, getLanguageLevel(), getAnnotationProvider());
 		}
 		String qualifiedName = myReference.getQualifiedName();
 		String name = myReference.getReferenceName();
@@ -197,9 +201,8 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 		{
 			name = "";
 		}
-		LightClassReference reference = new LightClassReference(myReference.getManager(), name, qualifiedName,
-				myReference.getResolveScope());
-		return new PsiClassReferenceType(reference, null, getAnnotations());
+		LightClassReference reference = new LightClassReference(myReference.getManager(), name, qualifiedName, myReference.getResolveScope());
+		return new PsiClassReferenceType(reference, null, getAnnotationProvider());
 	}
 
 	@Override

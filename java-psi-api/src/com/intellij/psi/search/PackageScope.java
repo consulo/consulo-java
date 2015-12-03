@@ -19,6 +19,9 @@
  */
 package com.intellij.psi.search;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
@@ -29,9 +32,6 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClassOwner;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaPackage;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 public class PackageScope extends GlobalSearchScope {
   private final Collection<VirtualFile> myDirs;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,9 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.impl.compiled.ClsFileImpl;
+import com.intellij.psi.impl.file.PsiBinaryFileImpl;
 
 /**
  * @author max
@@ -34,9 +36,9 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 		super(manager, file);
 	}
 
-	public ClassFileViewProvider(@NotNull final PsiManager manager, @NotNull final VirtualFile virtualFile, final boolean physical)
+	public ClassFileViewProvider(@NotNull final PsiManager manager, @NotNull final VirtualFile virtualFile, final boolean eventSystemEnabled)
 	{
-		super(manager, virtualFile, physical, JavaClassFileType.INSTANCE);
+		super(manager, virtualFile, eventSystemEnabled, JavaClassFileType.INSTANCE);
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 		FileIndexFacade fileIndex = ServiceManager.getService(project, FileIndexFacade.class);
 		if(!fileIndex.isInLibraryClasses(vFile) && fileIndex.isInSource(vFile))
 		{
-			return null;
+			return new PsiBinaryFileImpl((PsiManagerImpl) getManager(), this);
 		}
 
 		// skip inners & anonymous
@@ -57,7 +59,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider
 		return new ClsFileImpl(this);
 	}
 
-	public static boolean isInnerClass(VirtualFile vFile)
+	public static boolean isInnerClass(@NotNull VirtualFile vFile)
 	{
 		String name = vFile.getNameWithoutExtension();
 		int index = name.lastIndexOf('$', name.length());

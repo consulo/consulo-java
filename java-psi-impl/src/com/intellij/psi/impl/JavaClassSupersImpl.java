@@ -36,22 +36,17 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class JavaClassSupersImpl extends JavaClassSupers
 {
-
+	@Override
 	@Nullable
-	public PsiSubstitutor getSuperClassSubstitutor(@NotNull PsiClass superClass,
-			@NotNull PsiClass derivedClass,
-			@NotNull GlobalSearchScope scope,
-			@NotNull PsiSubstitutor derivedSubstitutor)
+	public PsiSubstitutor getSuperClassSubstitutor(@NotNull PsiClass superClass, @NotNull PsiClass derivedClass, @NotNull GlobalSearchScope scope, @NotNull PsiSubstitutor derivedSubstitutor)
 	{
 		if(InheritanceImplUtil.hasObjectQualifiedName(superClass))
 		{
 			return PsiSubstitutor.EMPTY;
 		}
 
-		return derivedClass instanceof PsiTypeParameter ? processTypeParameter((PsiTypeParameter) derivedClass, scope,
-				superClass, ContainerUtil.<PsiTypeParameter>newTroveSet(),
-				derivedSubstitutor) : getSuperSubstitutorWithCaching(superClass, derivedClass, scope,
-				derivedSubstitutor);
+		return derivedClass instanceof PsiTypeParameter ? processTypeParameter((PsiTypeParameter) derivedClass, scope, superClass, ContainerUtil.<PsiTypeParameter>newTroveSet(),
+				derivedSubstitutor) : getSuperSubstitutorWithCaching(superClass, derivedClass, scope, derivedSubstitutor);
 	}
 
 	@Nullable
@@ -60,8 +55,7 @@ public class JavaClassSupersImpl extends JavaClassSupers
 			@NotNull GlobalSearchScope resolveScope,
 			@NotNull PsiSubstitutor derivedSubstitutor)
 	{
-		PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope,
-				superClass);
+		PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope, superClass);
 		if(substitutor == null)
 		{
 			return null;
@@ -97,16 +91,11 @@ public class JavaClassSupersImpl extends JavaClassSupers
 	}
 
 	/**
-	 * Some type parameters (e.g. {@link com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable} change
-	 * their supers at will,
+	 * Some type parameters (e.g. {@link com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable} change their supers at will,
 	 * so caching the hierarchy is impossible.
 	 */
 	@Nullable
-	private static PsiSubstitutor processTypeParameter(PsiTypeParameter parameter,
-			GlobalSearchScope scope,
-			PsiClass superClass,
-			Set<PsiTypeParameter> visited,
-			PsiSubstitutor derivedSubstitutor)
+	private static PsiSubstitutor processTypeParameter(PsiTypeParameter parameter, GlobalSearchScope scope, PsiClass superClass, Set<PsiTypeParameter> visited, PsiSubstitutor derivedSubstitutor)
 	{
 		if(parameter.getManager().areElementsEquivalent(parameter, superClass))
 		{
@@ -129,8 +118,7 @@ public class JavaClassSupersImpl extends JavaClassSupers
 			PsiSubstitutor answer;
 			if(psiClass instanceof PsiTypeParameter)
 			{
-				answer = processTypeParameter((PsiTypeParameter) psiClass, scope, superClass, visited,
-						derivedSubstitutor);
+				answer = processTypeParameter((PsiTypeParameter) psiClass, scope, superClass, visited, derivedSubstitutor);
 				if(answer != null)
 				{
 					return answer;

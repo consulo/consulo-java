@@ -39,8 +39,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.PsiSubstitutorImpl");
 
-	private static final TObjectHashingStrategy<PsiTypeParameter> PSI_EQUIVALENCE = new
-			TObjectHashingStrategy<PsiTypeParameter>()
+	private static final TObjectHashingStrategy<PsiTypeParameter> PSI_EQUIVALENCE = new TObjectHashingStrategy<PsiTypeParameter>()
 	{
 		@Override
 		public int computeHashCode(PsiTypeParameter object)
@@ -93,8 +92,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 
 	private boolean containsInMap(PsiTypeParameter typeParameter)
 	{
-		if(typeParameter instanceof LightTypeParameter && ((LightTypeParameter) typeParameter)
-				.useDelegateToSubstitute())
+		if(typeParameter instanceof LightTypeParameter && ((LightTypeParameter) typeParameter).useDelegateToSubstitute())
 		{
 			typeParameter = ((LightTypeParameter) typeParameter).getDelegate();
 		}
@@ -103,8 +101,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 
 	private PsiType getFromMap(@NotNull PsiTypeParameter typeParameter)
 	{
-		if(typeParameter instanceof LightTypeParameter && ((LightTypeParameter) typeParameter)
-				.useDelegateToSubstitute())
+		if(typeParameter instanceof LightTypeParameter && ((LightTypeParameter) typeParameter).useDelegateToSubstitute())
 		{
 			typeParameter = ((LightTypeParameter) typeParameter).getDelegate();
 		}
@@ -144,7 +141,6 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 		final PsiSubstitutorImpl that = (PsiSubstitutorImpl) o;
 
 		if(mySubstitutionMap != null ? !mySubstitutionMap.equals(that.mySubstitutionMap) : that.mySubstitutionMap != null)
-
 		{
 			return false;
 		}
@@ -202,8 +198,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 				if(newBound instanceof PsiWildcardType)
 				{
 					final PsiType newBoundBound = ((PsiWildcardType) newBound).getBound();
-					return !((PsiWildcardType) newBound).isBounded() ? PsiWildcardType.createUnbounded(wildcardType
-							.getManager()) : rebound(wildcardType, newBoundBound);
+					return !((PsiWildcardType) newBound).isBounded() ? PsiWildcardType.createUnbounded(wildcardType.getManager()) : rebound(wildcardType, newBoundBound);
 				}
 				if(newBound instanceof PsiCapturedWildcardType)
 				{
@@ -270,8 +265,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 			{
 				return null;
 			}
-			PsiClassType result = JavaPsiFacade.getElementFactory(aClass.getProject()).createType(aClass,
-					createSubstitutor(hashMap), classType.getLanguageLevel());
+			PsiClassType result = JavaPsiFacade.getElementFactory(aClass.getProject()).createType(aClass, createSubstitutor(hashMap), classType.getLanguageLevel());
 			PsiUtil.ensureValidType(result);
 			return result;
 		}
@@ -286,9 +280,7 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 			return type.accept(this);
 		}
 
-		private boolean processClass(PsiClass resolve,
-				PsiSubstitutor originalSubstitutor,
-				final Map<PsiTypeParameter, PsiType> substMap)
+		private boolean processClass(PsiClass resolve, PsiSubstitutor originalSubstitutor, final Map<PsiTypeParameter, PsiType> substMap)
 		{
 			final PsiTypeParameter[] params = resolve.getTypeParameters();
 			for(final PsiTypeParameter param : params)
@@ -303,9 +295,8 @@ public class PsiSubstitutorImpl implements PsiSubstitutor
 					PsiType substituted = substituteInternal(original);
 					if(original instanceof PsiWildcardType && substituted instanceof PsiCapturedWildcardType)
 					{
-						final PsiCapturedWildcardType capturedWildcardType = PsiCapturedWildcardType.create((
-								(PsiCapturedWildcardType) substituted).getWildcard(), ((PsiCapturedWildcardType)
-								substituted).getContext(), param);
+						final PsiCapturedWildcardType capturedWildcardType = PsiCapturedWildcardType.create(((PsiCapturedWildcardType) substituted).getWildcard(),
+								((PsiCapturedWildcardType) substituted).getContext(), param);
 						capturedWildcardType.setUpperBound(((PsiCapturedWildcardType) substituted).getUpperBound());
 						substituted = capturedWildcardType;
 					}

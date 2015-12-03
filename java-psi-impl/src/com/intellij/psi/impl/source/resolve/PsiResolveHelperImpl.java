@@ -41,9 +41,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 
 	@Override
 	@NotNull
-	public JavaResolveResult resolveConstructor(PsiClassType classType,
-			PsiExpressionList argumentList,
-			PsiElement place)
+	public JavaResolveResult resolveConstructor(PsiClassType classType, @NotNull PsiExpressionList argumentList, PsiElement place)
 	{
 		JavaResolveResult[] result = multiResolveConstructor(classType, argumentList, place);
 		return result.length == 1 ? result[0] : JavaResolveResult.EMPTY;
@@ -51,9 +49,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 
 	@Override
 	@NotNull
-	public JavaResolveResult[] multiResolveConstructor(@NotNull PsiClassType type,
-			@NotNull PsiExpressionList argumentList,
-			@NotNull PsiElement place)
+	public JavaResolveResult[] multiResolveConstructor(@NotNull PsiClassType type, @NotNull PsiExpressionList argumentList, @NotNull PsiElement place)
 	{
 		PsiClassType.ClassResolveResult classResolveResult = type.resolveGenerics();
 		PsiClass aClass = classResolveResult.getElement();
@@ -122,9 +118,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 	}
 
 	@Nullable
-	private PsiVariable resolveVar(@NotNull String referenceText,
-			final PsiElement context,
-			final boolean[] problemWithAccess)
+	private PsiVariable resolveVar(@NotNull String referenceText, final PsiElement context, final boolean[] problemWithAccess)
 	{
 		final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(myManager.getProject()).getParserFacade();
 		try
@@ -139,9 +133,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 	}
 
 	@Override
-	public boolean isAccessible(@NotNull PsiMember member,
-			@NotNull PsiElement place,
-			@Nullable PsiClass accessObjectClass)
+	public boolean isAccessible(@NotNull PsiMember member, @NotNull PsiElement place, @Nullable PsiClass accessObjectClass)
 	{
 		return isAccessible(member, member.getModifierList(), place, accessObjectClass, null);
 	}
@@ -154,15 +146,12 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 			@Nullable PsiElement currentFileResolveScope)
 	{
 		PsiClass containingClass = member.getContainingClass();
-		return JavaResolveUtil.isAccessible(member, containingClass, modifierList, place, accessObjectClass,
-				currentFileResolveScope);
+		return JavaResolveUtil.isAccessible(member, containingClass, modifierList, place, accessObjectClass, currentFileResolveScope);
 	}
 
 	@NotNull
 	@Override
-	public CandidateInfo[] getReferencedMethodCandidates(@NotNull PsiCallExpression expr,
-			boolean dummyImplicitConstructor,
-			final boolean checkVarargs)
+	public CandidateInfo[] getReferencedMethodCandidates(@NotNull PsiCallExpression expr, boolean dummyImplicitConstructor, final boolean checkVarargs)
 	{
 		PsiFile containingFile = expr.getContainingFile();
 		final MethodCandidatesProcessor processor = new MethodCandidatesProcessor(expr, containingFile)
@@ -186,8 +175,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 
 	@NotNull
 	@Override
-	public CandidateInfo[] getReferencedMethodCandidates(@NotNull PsiCallExpression call,
-			boolean dummyImplicitConstructor)
+	public CandidateInfo[] getReferencedMethodCandidates(@NotNull PsiCallExpression call, boolean dummyImplicitConstructor)
 	{
 		return getReferencedMethodCandidates(call, dummyImplicitConstructor, false);
 	}
@@ -200,9 +188,8 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 			@Nullable PsiElement parent,
 			@NotNull ParameterTypeInferencePolicy policy)
 	{
-		return getInferenceHelper(PsiUtil.getLanguageLevel(parent != null ? parent : typeParameter))
-				.inferTypeForMethodTypeParameter(typeParameter, parameters, arguments, partialSubstitutor, parent,
-						policy);
+		return getInferenceHelper(PsiUtil.getLanguageLevel(parent != null ? parent : typeParameter)).inferTypeForMethodTypeParameter(typeParameter, parameters, arguments, partialSubstitutor, parent,
+				policy);
 	}
 
 	@Override
@@ -214,8 +201,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 			@NotNull PsiElement parent,
 			@NotNull ParameterTypeInferencePolicy policy)
 	{
-		return getInferenceHelper(PsiUtil.getLanguageLevel(parent)).inferTypeArguments(typeParameters, parameters,
-				arguments, partialSubstitutor, parent, policy, PsiUtil.getLanguageLevel(parent));
+		return getInferenceHelper(PsiUtil.getLanguageLevel(parent)).inferTypeArguments(typeParameters, parameters, arguments, partialSubstitutor, parent, policy, PsiUtil.getLanguageLevel(parent));
 	}
 
 	@Override
@@ -228,30 +214,20 @@ public class PsiResolveHelperImpl implements PsiResolveHelper
 			@NotNull ParameterTypeInferencePolicy policy,
 			@NotNull LanguageLevel languageLevel)
 	{
-		return getInferenceHelper(languageLevel).inferTypeArguments(typeParameters, parameters, arguments,
-				partialSubstitutor, parent, policy, languageLevel);
+		return getInferenceHelper(languageLevel).inferTypeArguments(typeParameters, parameters, arguments, partialSubstitutor, parent, policy, languageLevel);
 	}
 
 	@Override
 	@NotNull
-	public PsiSubstitutor inferTypeArguments(@NotNull PsiTypeParameter[] typeParameters,
-			@NotNull PsiType[] leftTypes,
-			@NotNull PsiType[] rightTypes,
-			@NotNull LanguageLevel languageLevel)
+	public PsiSubstitutor inferTypeArguments(@NotNull PsiTypeParameter[] typeParameters, @NotNull PsiType[] leftTypes, @NotNull PsiType[] rightTypes, @NotNull LanguageLevel languageLevel)
 	{
-		return getInferenceHelper(languageLevel).inferTypeArguments(typeParameters, leftTypes, rightTypes,
-				languageLevel);
+		return getInferenceHelper(languageLevel).inferTypeArguments(typeParameters, leftTypes, rightTypes, languageLevel);
 	}
 
 	@Override
-	public PsiType getSubstitutionForTypeParameter(PsiTypeParameter typeParam,
-			PsiType param,
-			PsiType arg,
-			boolean isContraVariantPosition,
-			LanguageLevel languageLevel)
+	public PsiType getSubstitutionForTypeParameter(PsiTypeParameter typeParam, PsiType param, PsiType arg, boolean isContraVariantPosition, LanguageLevel languageLevel)
 	{
-		return getInferenceHelper(languageLevel).getSubstitutionForTypeParameter(typeParam, param, arg,
-				isContraVariantPosition, languageLevel);
+		return getInferenceHelper(languageLevel).getSubstitutionForTypeParameter(typeParam, param, arg, isContraVariantPosition, languageLevel);
 	}
 
 	@NotNull

@@ -58,6 +58,12 @@ public abstract class PsiClassType extends PsiType
 		myLanguageLevel = languageLevel;
 	}
 
+	public PsiClassType(LanguageLevel languageLevel, @NotNull TypeAnnotationProvider annotations)
+	{
+		super(annotations);
+		myLanguageLevel = languageLevel;
+	}
+
 	/**
 	 * Resolves the class reference and returns the resulting class.
 	 *
@@ -76,8 +82,7 @@ public abstract class PsiClassType extends PsiType
 	/**
 	 * Returns the list of type arguments for the type.
 	 *
-	 * @return the array of type arguments, or an empty array if the type does not point to a generic class or
-	 * interface.
+	 * @return the array of type arguments, or an empty array if the type does not point to a generic class or interface.
 	 */
 	@NotNull
 	public abstract PsiType[] getParameters();
@@ -126,9 +131,8 @@ public abstract class PsiClassType extends PsiType
 		{
 			return aClass == otherClass;
 		}
-		return aClass.getManager().areElementsEquivalent(aClass, otherClass) && (PsiUtil.isRawSubstitutor(aClass,
-				result.getSubstitutor()) || PsiUtil.equalOnEquivalentClasses(this, aClass, otherClassType,
-				otherClass));
+		return aClass.getManager().areElementsEquivalent(aClass, otherClass) && (PsiUtil.isRawSubstitutor(aClass, result.getSubstitutor()) || PsiUtil.equalOnEquivalentClasses(this, aClass,
+				otherClassType, otherClass));
 	}
 
 	/**
@@ -157,8 +161,7 @@ public abstract class PsiClassType extends PsiType
 	}
 
 	/**
-	 * Checks if the class type has any parameters which are not unbounded wildcards (and not extends-wildcard with
-	 * the same bound as corresponding type parameter bound)
+	 * Checks if the class type has any parameters which are not unbounded wildcards (and not extends-wildcard with the same bound as corresponding type parameter bound)
 	 * and do not have substituted arguments.
 	 *
 	 * @return true if the class type has nontrivial non-substituted parameters, false otherwise
@@ -355,6 +358,11 @@ public abstract class PsiClassType extends PsiType
 	public static abstract class Stub extends PsiClassType
 	{
 		protected Stub(LanguageLevel languageLevel, @NotNull PsiAnnotation[] annotations)
+		{
+			super(languageLevel, annotations);
+		}
+
+		public Stub(LanguageLevel languageLevel, @NotNull TypeAnnotationProvider annotations)
 		{
 			super(languageLevel, annotations);
 		}

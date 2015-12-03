@@ -27,7 +27,6 @@ import com.intellij.psi.search.GlobalSearchScope;
  */
 public abstract class JavaClassSupers
 {
-
 	public static JavaClassSupers getInstance()
 	{
 		return ServiceManager.getService(JavaClassSupers.class);
@@ -47,6 +46,5 @@ public abstract class JavaClassSupers
 			@NotNull PsiClass derivedClass,
 			@NotNull GlobalSearchScope resolveScope,
 			@NotNull PsiSubstitutor derivedSubstitutor);
-
 
 }

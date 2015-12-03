@@ -15,25 +15,13 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.AbstractBundle;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.PropertyKey;
+import org.consulo.lombok.annotations.Bundle;
 
 /**
  * @author max
  */
-public class JavaErrorMessages extends AbstractBundle {
-  public static final JavaErrorMessages INSTANCE = new JavaErrorMessages();
-
-  @NonNls public static final String BUNDLE = "messages.JavaErrorMessages";
-
-  private JavaErrorMessages() {
-    super(BUNDLE);
-  }
-
-  @NotNull
-  public static String message(@PropertyKey(resourceBundle = BUNDLE)String key, Object... params) {
-    return INSTANCE.getMessage(key, params);
-  }
+@Bundle
+public class JavaErrorMessages
+{
+	public static final String BUNDLE = "messages.JavaErrorMessages";
 }

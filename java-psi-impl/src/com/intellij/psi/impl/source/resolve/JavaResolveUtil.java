@@ -66,8 +66,7 @@ public class JavaResolveUtil
 			@Nullable PsiClass accessObjectClass,
 			@Nullable PsiElement fileResolveScope)
 	{
-		return isAccessible(member, memberClass, modifierList, place, accessObjectClass, fileResolveScope,
-				place.getContainingFile());
+		return isAccessible(member, memberClass, modifierList, place, accessObjectClass, fileResolveScope, place.getContainingFile());
 	}
 
 	public static boolean isAccessible(@NotNull PsiMember member,
@@ -89,8 +88,7 @@ public class JavaResolveUtil
 			JavaCodeFragment.VisibilityChecker visibilityChecker = fragment.getVisibilityChecker();
 			if(visibilityChecker != null)
 			{
-				JavaCodeFragment.VisibilityChecker.Visibility visibility = visibilityChecker.isDeclarationVisible
-						(member, place);
+				JavaCodeFragment.VisibilityChecker.Visibility visibility = visibilityChecker.isDeclarationVisible(member, place);
 				if(visibility == JavaCodeFragment.VisibilityChecker.Visibility.VISIBLE)
 				{
 					return true;
@@ -109,15 +107,13 @@ public class JavaResolveUtil
 		if(accessObjectClass != null)
 		{
 			PsiClass containingClass = accessObjectClass.getContainingClass();
-			if(!isAccessible(accessObjectClass, containingClass, accessObjectClass.getModifierList(), place, null,
-					null, placeFile))
+			if(!isAccessible(accessObjectClass, containingClass, accessObjectClass.getModifierList(), place, null, null, placeFile))
 			{
 				return false;
 			}
 		}
 
-		PsiFile file = placeFile == null ? null : FileContextUtil.getContextFile(placeFile); //TODO: implementation
-		// method!!!!
+		PsiFile file = placeFile == null ? null : FileContextUtil.getContextFile(placeFile); //TODO: implementation method!!!!
 		if(PsiImplUtil.isInServerPage(file) && PsiImplUtil.isInServerPage(member.getContainingFile()))
 		{
 			return true;
@@ -144,8 +140,7 @@ public class JavaResolveUtil
 			}
 			for(PsiElement placeParent = place; placeParent != null; placeParent = placeParent.getContext())
 			{
-				if(placeParent instanceof PsiClass && InheritanceUtil.isInheritorOrSelf((PsiClass) placeParent,
-						memberClass, true))
+				if(placeParent instanceof PsiClass && InheritanceUtil.isInheritorOrSelf((PsiClass) placeParent, memberClass, true))
 				{
 					if(member instanceof PsiClass ||
 							modifierList.hasModifierProperty(PsiModifier.STATIC) ||
@@ -190,8 +185,7 @@ public class JavaResolveUtil
 			}
 			else
 			{
-				return fileResolveScope instanceof PsiClass && !((PsiClass) fileResolveScope).isInheritor(memberClass,
-						true);
+				return fileResolveScope instanceof PsiClass && !((PsiClass) fileResolveScope).isInheritor(memberClass, true);
 			}
 		}
 
@@ -212,8 +206,7 @@ public class JavaResolveUtil
 		{
 			return true;
 		}
-		PsiClass clazz = accessObjectClass != null ? accessObjectClass : placeClass.getSuperClass(); //may start from
-		// super class
+		PsiClass clazz = accessObjectClass != null ? accessObjectClass : placeClass.getSuperClass(); //may start from super class
 		if(clazz != null && clazz.isInheritor(memberClass, true))
 		{
 			PsiClass superClass = clazz;
@@ -285,10 +278,7 @@ public class JavaResolveUtil
 		return lastClass;
 	}
 
-	public static boolean processImplicitlyImportedPackages(final PsiScopeProcessor processor,
-			final ResolveState state,
-			final PsiElement place,
-			PsiManager manager)
+	public static boolean processImplicitlyImportedPackages(final PsiScopeProcessor processor, final ResolveState state, final PsiElement place, PsiManager manager)
 	{
 		PsiPackage defaultPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage("");
 		if(defaultPackage != null)
@@ -299,8 +289,7 @@ public class JavaResolveUtil
 			}
 		}
 
-		PsiJavaPackage langPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage(CommonClassNames
-				.DEFAULT_PACKAGE);
+		PsiPackage langPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage(CommonClassNames.DEFAULT_PACKAGE);
 		if(langPackage != null)
 		{
 			if(!langPackage.processDeclarations(processor, state, null, place))
@@ -312,8 +301,7 @@ public class JavaResolveUtil
 		return true;
 	}
 
-	public static void substituteResults(@NotNull final PsiJavaCodeReferenceElement ref,
-			@NotNull JavaResolveResult[] result)
+	public static void substituteResults(@NotNull final PsiJavaCodeReferenceElement ref, @NotNull JavaResolveResult[] result)
 	{
 		if(result.length > 0 && result[0].getElement() instanceof PsiClass)
 		{
@@ -352,8 +340,7 @@ public class JavaResolveUtil
 			return JavaResolveResult.EMPTY_ARRAY;
 		}
 		Project project = containingFile.getProject();
-		ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(ref, resolver,
-				needToPreventRecursion, incompleteCode, containingFile);
+		ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(ref, resolver, needToPreventRecursion, incompleteCode, containingFile);
 		return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
 	}
 }

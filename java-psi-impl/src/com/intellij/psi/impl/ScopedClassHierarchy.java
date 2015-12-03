@@ -47,8 +47,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 class ScopedClassHierarchy
 {
-	private static final TObjectHashingStrategy<PsiClass> CLASS_HASHING_STRATEGY = new
-			TObjectHashingStrategy<PsiClass>()
+	private static final TObjectHashingStrategy<PsiClass> CLASS_HASHING_STRATEGY = new TObjectHashingStrategy<PsiClass>()
 	{
 		@Override
 		public int computeHashCode(PsiClass object)
@@ -68,21 +67,18 @@ class ScopedClassHierarchy
 			return o1.getManager().areElementsEquivalent(o1, o2);
 		}
 	};
-	private final Map<PsiClass, PsiClassType.ClassResolveResult> mySupersWithSubstitutors = ContainerUtil.newTroveMap
-			(CLASS_HASHING_STRATEGY);
+	private final Map<PsiClass, PsiClassType.ClassResolveResult> mySupersWithSubstitutors = ContainerUtil.newTroveMap(CLASS_HASHING_STRATEGY);
 
 	private ScopedClassHierarchy(PsiClass psiClass, GlobalSearchScope resolveScope)
 	{
-		visitType(resolveScope, JavaPsiFacade.getElementFactory(psiClass.getProject()).createType(psiClass,
-				PsiSubstitutor.EMPTY));
+		visitType(resolveScope, JavaPsiFacade.getElementFactory(psiClass.getProject()).createType(psiClass, PsiSubstitutor.EMPTY));
 	}
 
 	private void visitType(GlobalSearchScope resolveScope, @NotNull PsiClassType type)
 	{
 		PsiClassType.ClassResolveResult resolveResult = type.resolveGenerics();
 		PsiClass psiClass = resolveResult.getElement();
-		if(psiClass == null || InheritanceImplUtil.hasObjectQualifiedName(psiClass) || mySupersWithSubstitutors
-				.containsKey(psiClass))
+		if(psiClass == null || InheritanceImplUtil.hasObjectQualifiedName(psiClass) || mySupersWithSubstitutors.containsKey(psiClass))
 		{
 			return;
 		}
@@ -91,8 +87,7 @@ class ScopedClassHierarchy
 
 		for(PsiType superType : getSuperTypes(psiClass))
 		{
-			superType = type.isRaw() && superType instanceof PsiClassType ? ((PsiClassType) superType).rawType() :
-					resolveResult.getSubstitutor().substitute(superType);
+			superType = type.isRaw() && superType instanceof PsiClassType ? ((PsiClassType) superType).rawType() : resolveResult.getSubstitutor().substitute(superType);
 			superType = PsiClassImplUtil.correctType(superType, resolveScope);
 			if(superType instanceof PsiClassType)
 			{
@@ -115,18 +110,15 @@ class ScopedClassHierarchy
 	}
 
 	@NotNull
-	private static ScopedClassHierarchy getHierarchy(@NotNull final PsiClass psiClass,
-			@NotNull final GlobalSearchScope resolveScope)
+	private static ScopedClassHierarchy getHierarchy(@NotNull final PsiClass psiClass, @NotNull final GlobalSearchScope resolveScope)
 	{
-		return CachedValuesManager.getCachedValue(psiClass, new CachedValueProvider<Map<GlobalSearchScope,
-				ScopedClassHierarchy>>()
+		return CachedValuesManager.getCachedValue(psiClass, new CachedValueProvider<Map<GlobalSearchScope, ScopedClassHierarchy>>()
 		{
 			@Nullable
 			@Override
 			public Result<Map<GlobalSearchScope, ScopedClassHierarchy>> compute()
 			{
-				Map<GlobalSearchScope, ScopedClassHierarchy> result = new ConcurrentFactoryMap<GlobalSearchScope,
-						ScopedClassHierarchy>()
+				Map<GlobalSearchScope, ScopedClassHierarchy> result = new ConcurrentFactoryMap<GlobalSearchScope, ScopedClassHierarchy>()
 				{
 					@Nullable
 					@Override
@@ -141,12 +133,9 @@ class ScopedClassHierarchy
 	}
 
 	@Nullable
-	static PsiSubstitutor getSuperClassSubstitutor(@NotNull PsiClass derivedClass,
-			@NotNull GlobalSearchScope scope,
-			@NotNull PsiClass superClass)
+	static PsiSubstitutor getSuperClassSubstitutor(@NotNull PsiClass derivedClass, @NotNull GlobalSearchScope scope, @NotNull PsiClass superClass)
 	{
-		PsiClassType.ClassResolveResult resolveResult = getHierarchy(derivedClass, scope).mySupersWithSubstitutors.get
-				(superClass);
+		PsiClassType.ClassResolveResult resolveResult = getHierarchy(derivedClass, scope).mySupersWithSubstitutors.get(superClass);
 		if(resolveResult == null)
 		{
 			return null;
@@ -154,14 +143,11 @@ class ScopedClassHierarchy
 
 		PsiClass cachedClass = assertNotNull(resolveResult.getElement());
 		PsiSubstitutor cachedSubstitutor = resolveResult.getSubstitutor();
-		return cachedClass == superClass ? cachedSubstitutor : mirrorSubstitutor(superClass, cachedClass,
-				cachedSubstitutor);
+		return cachedClass == superClass ? cachedSubstitutor : mirrorSubstitutor(superClass, cachedClass, cachedSubstitutor);
 	}
 
 	@NotNull
-	private static PsiSubstitutor mirrorSubstitutor(@NotNull PsiClass from,
-			@NotNull final PsiClass to,
-			@NotNull PsiSubstitutor substitutor)
+	private static PsiSubstitutor mirrorSubstitutor(@NotNull PsiClass from, @NotNull final PsiClass to, @NotNull PsiSubstitutor substitutor)
 	{
 		Iterator<PsiTypeParameter> baseParams = PsiUtil.typeParametersIterator(to);
 		Iterator<PsiTypeParameter> candidateParams = PsiUtil.typeParametersIterator(from);
@@ -169,8 +155,7 @@ class ScopedClassHierarchy
 		PsiSubstitutor answer = PsiSubstitutor.EMPTY;
 		while(baseParams.hasNext())
 		{
-			// if equivalent classes "from" and "to" have different number of type parameters,
-			// then treat "to" as a raw type
+			// if equivalent classes "from" and "to" have different number of type parameters, then treat "to" as a raw type
 			if(!candidateParams.hasNext())
 			{
 				return JavaClassSupersImpl.createRawSubstitutor(to);

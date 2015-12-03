@@ -15,7 +15,15 @@
  */
 package com.intellij.lang.java.parser;
 
-import com.intellij.AbstractBundle;
+import static com.intellij.lang.PsiBuilderUtil.expect;
+import static com.intellij.lang.java.parser.JavaParserUtil.PRECEDING_COMMENT_BINDER;
+import static com.intellij.lang.java.parser.JavaParserUtil.SPECIAL_PRECEDING_COMMENT_BINDER;
+import static com.intellij.lang.java.parser.JavaParserUtil.done;
+import static com.intellij.lang.java.parser.JavaParserUtil.exprType;
+import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.util.Pair;
@@ -24,11 +32,6 @@ import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static com.intellij.lang.PsiBuilderUtil.expect;
-import static com.intellij.lang.java.parser.JavaParserUtil.*;
 
 public class FileParser {
   private static final TokenSet IMPORT_LIST_STOPPER_SET = TokenSet.orSet(
@@ -42,16 +45,15 @@ public class FileParser {
   }
 
   public void parse(final PsiBuilder builder) {
-    parseFile(builder, IMPORT_LIST_STOPPER_SET, JavaErrorMessages.INSTANCE, "expected.class.or.interface");
+    parseFile(builder, IMPORT_LIST_STOPPER_SET, "expected.class.or.interface");
   }
 
-  private static String error(@NotNull AbstractBundle bundle, @NotNull String errorMessageKey) {
-    return bundle.getMessage(errorMessageKey);
+  private static String error(@NotNull String errorMessageKey) {
+    return JavaErrorMessages.message(errorMessageKey);
   }
 
   public void parseFile(@NotNull final PsiBuilder builder,
                         @NotNull final TokenSet importListStoppers,
-                        @NotNull final AbstractBundle bundle,
                         @NotNull final String errorMessageKey) {
     parsePackageStatement(builder);
 
@@ -63,7 +65,7 @@ public class FileParser {
     while (!builder.eof()) {
       if (builder.getTokenType() == JavaTokenType.SEMICOLON) {
         if (invalidElements != null) {
-          invalidElements.error(error(bundle, errorMessageKey));
+          invalidElements.error(error(errorMessageKey));
           invalidElements = null;
         }
         builder.advanceLexer();
@@ -74,7 +76,7 @@ public class FileParser {
       final PsiBuilder.Marker declaration = parseInitial(builder);
       if (declaration != null) {
         if (invalidElements != null) {
-          invalidElements.errorBefore(error(bundle, errorMessageKey), declaration);
+          invalidElements.errorBefore(error(errorMessageKey), declaration);
           invalidElements = null;
         }
         if (firstDeclarationOk == null) {
@@ -94,7 +96,7 @@ public class FileParser {
     }
 
     if (invalidElements != null) {
-      invalidElements.error(error(bundle, errorMessageKey));
+      invalidElements.error(error(errorMessageKey));
     }
 
     if (impListInfo.second && firstDeclarationOk == Boolean.TRUE) {

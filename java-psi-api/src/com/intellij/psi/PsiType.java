@@ -56,11 +56,30 @@ public abstract class PsiType implements PsiAnnotationOwner
 		return ARRAY_FACTORY.create(count);
 	}
 
-	private final PsiAnnotation[] myAnnotations;
+	private final TypeAnnotationProvider myAnnotationProvider;
 
-	protected PsiType(@NotNull PsiAnnotation[] annotations)
+	/**
+	 * Constructs a PsiType with given annotations
+	 */
+	protected PsiType(@NotNull final PsiAnnotation[] annotations)
 	{
-		myAnnotations = annotations;
+		this(annotations.length == 0 ? TypeAnnotationProvider.EMPTY : new TypeAnnotationProvider()
+		{
+			@NotNull
+			@Override
+			public PsiAnnotation[] getAnnotations()
+			{
+				return annotations;
+			}
+		});
+	}
+
+	/**
+	 * Constructs a PsiType that will take its annotations from the given annotation provider.
+	 */
+	protected PsiType(@NotNull TypeAnnotationProvider annotations)
+	{
+		myAnnotationProvider = annotations;
 	}
 
 	/**
@@ -193,8 +212,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	 * @return the class instance.
 	 */
 	@NotNull
-	public static PsiClassType getJavaLangThrowable(@NotNull PsiManager manager,
-			@NotNull GlobalSearchScope resolveScope)
+	public static PsiClassType getJavaLangThrowable(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
 	{
 		return getTypeByName(CommonClassNames.JAVA_LANG_THROWABLE, manager.getProject(), resolveScope);
 	}
@@ -233,8 +251,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	 * @return the class instance.
 	 */
 	@NotNull
-	public static PsiClassType getJavaLangRuntimeException(@NotNull PsiManager manager,
-			@NotNull GlobalSearchScope resolveScope)
+	public static PsiClassType getJavaLangRuntimeException(@NotNull PsiManager manager, @NotNull GlobalSearchScope resolveScope)
 	{
 		return getTypeByName(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, manager.getProject(), resolveScope);
 	}
@@ -297,17 +314,30 @@ public abstract class PsiType implements PsiAnnotationOwner
 	@NotNull
 	public abstract PsiType[] getSuperTypes();
 
+	/**
+	 * @return provider for this type's annotations. Can be used to construct other PsiType instances
+	 * without actually evaluating the annotation array, which can be computationally expensive sometimes.
+	 */
+	@NotNull
+	public final TypeAnnotationProvider getAnnotationProvider()
+	{
+		return myAnnotationProvider;
+	}
+
+	/**
+	 * @return annotations for this type. Uses {@link #getAnnotationProvider()} to retrieve the annotations.
+	 */
 	@Override
 	@NotNull
 	public PsiAnnotation[] getAnnotations()
 	{
-		return myAnnotations;
+		return myAnnotationProvider.getAnnotations();
 	}
 
 	@Override
 	public PsiAnnotation findAnnotation(@NotNull @NonNls String qualifiedName)
 	{
-		for(PsiAnnotation annotation : myAnnotations)
+		for(PsiAnnotation annotation : getAnnotations())
 		{
 			if(qualifiedName.equals(annotation.getQualifiedName()))
 			{
@@ -344,6 +374,11 @@ public abstract class PsiType implements PsiAnnotationOwner
 	protected static abstract class Stub extends PsiType
 	{
 		protected Stub(@NotNull PsiAnnotation[] annotations)
+		{
+			super(annotations);
+		}
+
+		public Stub(@NotNull TypeAnnotationProvider annotations)
 		{
 			super(annotations);
 		}

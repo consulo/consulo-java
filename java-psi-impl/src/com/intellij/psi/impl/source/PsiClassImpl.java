@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.UserDataHolder;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.augment.JavaEnumAugmentProvider;
@@ -50,6 +51,9 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubElement;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -59,7 +63,6 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiClassImpl");
 
 	private final ClassInnerStuffCache myInnersCache = new ClassInnerStuffCache(this);
-
 	private volatile String myCachedName;
 
 	public PsiClassImpl(final PsiClassStub stub)
@@ -142,12 +145,17 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	@Override
 	public PsiElement getOriginalElement()
 	{
-		final JavaPsiImplementationHelper helper = JavaPsiImplementationHelper.getInstance(getProject());
-		if(helper != null)
+		return CachedValuesManager.getCachedValue(this, new CachedValueProvider<PsiClass>()
 		{
-			return helper.getOriginalClass(this);
-		}
-		return this;
+			@Nullable
+			@Override
+			public Result<PsiClass> compute()
+			{
+				final JavaPsiImplementationHelper helper = JavaPsiImplementationHelper.getInstance(getProject());
+				final PsiClass result = helper != null ? helper.getOriginalClass(PsiClassImpl.this) : PsiClassImpl.this;
+				return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+			}
+		});
 	}
 
 	@Override
@@ -221,12 +229,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 		PsiElement parent = getParent();
 		if(parent instanceof PsiJavaFile)
 		{
-			String packageName = ((PsiJavaFile) parent).getPackageName();
-			if(packageName.isEmpty())
-			{
-				return getName();
-			}
-			return packageName + "." + getName();
+			return StringUtil.getQualifiedName(((PsiJavaFile) parent).getPackageName(), getName());
 		}
 		if(parent instanceof PsiClass)
 		{
@@ -235,7 +238,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 			{
 				return null;
 			}
-			return parentQName + "." + getName();
+			return StringUtil.getQualifiedName(parentQName, getName());
 		}
 
 		return null;
@@ -573,15 +576,13 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 		}
 	}
 
-	@Override
 	public String toString()
 	{
 		return "PsiClass:" + getName();
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent,
-			@NotNull PsiElement place)
+	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
 	{
 		LanguageLevel level = PsiUtil.getLanguageLevel(place);
 		return PsiClassImplUtil.processDeclarationsInClass(this, processor, state, null, lastParent, place, level, false);
@@ -673,8 +674,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	}
 
 	@Nullable
-	private static PsiElement calcBasesResolveContext(PsiClass aClass, String className, boolean isInitialClass,
-			final PsiElement defaultResolveContext)
+	private static PsiElement calcBasesResolveContext(PsiClass aClass, String className, boolean isInitialClass, final PsiElement defaultResolveContext)
 	{
 		final PsiClassStub stub = ((PsiClassImpl) aClass).getStub();
 		if(stub == null || stub.isAnonymousInQualifiedNew())
@@ -698,10 +698,14 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 		}
 
 		final StubElement parentStub = stub.getParentStub();
-
-		final StubBasedPsiElementBase<?> context = (StubBasedPsiElementBase) parentStub.getPsi();
-		@SuppressWarnings("unchecked") PsiClass[] classesInScope = (PsiClass[]) parentStub.getChildrenByType(Constants.CLASS_BIT_SET,
-				PsiClass.ARRAY_FACTORY);
+		PsiElement psi = parentStub.getPsi();
+		if(!(psi instanceof StubBasedPsiElementBase))
+		{
+			LOG.error(stub + " parent is " + parentStub);
+			return null;
+		}
+		final StubBasedPsiElementBase<?> context = (StubBasedPsiElementBase) psi;
+		@SuppressWarnings("unchecked") PsiClass[] classesInScope = (PsiClass[]) parentStub.getChildrenByType(Constants.CLASS_BIT_SET, PsiClass.ARRAY_FACTORY);
 
 		boolean needPreciseContext = false;
 		if(classesInScope.length > 1)
@@ -724,8 +728,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 		{
 			if(classesInScope.length != 1)
 			{
-				LOG.assertTrue(classesInScope.length == 1, "Parent stub: " + parentStub.getStubType() + "; children: " + parentStub.getChildrenStubs
-						() + "; \ntext:" + context.getText());
+				LOG.error("Parent stub: " + parentStub.getStubType() + "; children: " + parentStub.getChildrenStubs() + "; \ntext:" + context.getText());
 			}
 			LOG.assertTrue(classesInScope[0] == aClass);
 		}
@@ -788,8 +791,8 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	public PsiQualifiedNamedElement getContainer()
 	{
 		final PsiFile file = getContainingFile();
-		final PsiDirectory dir;
-		return file == null ? null : (dir = file.getContainingDirectory()) == null ? null : JavaDirectoryService.getInstance().getPackage(dir);
+		final PsiDirectory dir = file.getContainingDirectory();
+		return dir == null ? null : JavaDirectoryService.getInstance().getPackage(dir);
 	}
 
 	@Override

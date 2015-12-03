@@ -20,17 +20,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.consulo.lombok.annotations.Logger;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.psi.PsiPackage;
 import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.completion.scope.JavaCompletionHints;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaPsiFacadeImpl;
@@ -51,15 +55,14 @@ import com.intellij.util.ArrayFactory;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.containers.ContainerUtil;
 
+@Logger
 public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Queryable
 {
-	public static boolean DEBUG = false;
 	private volatile CachedValue<PsiModifierList> myAnnotationList;
 	private volatile CachedValue<Collection<PsiDirectory>> myDirectories;
 	private volatile SoftReference<Set<String>> myPublicClassNamesCache;
 
-	public PsiPackageImpl(PsiManager manager, PsiPackageManager packageManager, Class<? extends ModuleExtension> extensionClass,
-			String qualifiedName)
+	public PsiPackageImpl(PsiManager manager, PsiPackageManager packageManager, Class<? extends ModuleExtension> extensionClass, String qualifiedName)
 	{
 		super(manager, packageManager, extensionClass, qualifiedName);
 	}
@@ -69,16 +72,14 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	{
 		if(myDirectories == null)
 		{
-			myDirectories = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new
-																											 CachedValueProvider<Collection<PsiDirectory>>()
+			myDirectories = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new CachedValueProvider<Collection<PsiDirectory>>()
 			{
 				@Override
 				public Result<Collection<PsiDirectory>> compute()
 				{
 					final CommonProcessors.CollectProcessor<PsiDirectory> processor = new CommonProcessors.CollectProcessor<PsiDirectory>();
 					getFacade().processPackageDirectories(PsiPackageImpl.this, allScope(), processor);
-					return Result.create(processor.getResults(), PsiPackageImplementationHelper.getInstance().getDirectoryCachedValueDependencies
-							(PsiPackageImpl.this));
+					return Result.create(processor.getResults(), PsiPackageImplementationHelper.getInstance().getDirectoryCachedValueDependencies(PsiPackageImpl.this));
 				}
 			}, false);
 		}
@@ -104,6 +105,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 
+	@RequiredReadAction
 	@Override
 	@NotNull
 	public Language getLanguage()
@@ -246,46 +248,32 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
-			@NotNull ResolveState state,
-			PsiElement lastParent,
-			@NotNull PsiElement place)
+	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
 	{
 		GlobalSearchScope scope = place.getResolveScope();
 
 		processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 		ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
 
-		final Condition<String> prefixMatcher = processor.getHint(JavaCompletionHints.NAME_FILTER);
+		final Condition<String> nameCondition = processor.getHint(JavaCompletionHints.NAME_FILTER);
+
+		NameHint providedNameHint = processor.getHint(NameHint.KEY);
+		final String providedName = providedNameHint == null ? null : providedNameHint.getName(state);
 
 		if(classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.CLASS))
 		{
-			NameHint nameHint = processor.getHint(NameHint.KEY);
-			if(nameHint != null)
+			if(providedName != null)
 			{
-				final String shortName = nameHint.getName(state);
-				if(containsClassNamed(shortName) && processClassesByName(processor, state, scope, shortName))
+				final PsiClass[] classes = findClassByShortName(providedName, scope);
+				if(!processClasses(processor, state, classes, Conditions.<String>alwaysTrue()))
 				{
 					return false;
-				}
-			}
-			else if(prefixMatcher != null)
-			{
-				for(String className : getClassNamesCache())
-				{
-					if(prefixMatcher.value(className))
-					{
-						if(processClassesByName(processor, state, scope, className))
-						{
-							return false;
-						}
-					}
 				}
 			}
 			else
 			{
 				PsiClass[] classes = getClasses(scope);
-				if(!processClasses(processor, state, classes))
+				if(!processClasses(processor, state, classes, nameCondition != null ? nameCondition : Conditions.<String>alwaysTrue()))
 				{
 					return false;
 				}
@@ -293,10 +281,9 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 		}
 		if(classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.PACKAGE))
 		{
-			NameHint nameHint = processor.getHint(NameHint.KEY);
-			if(nameHint != null)
+			if(providedName != null)
 			{
-				PsiJavaPackage aPackage = findSubPackageByName(nameHint.getName(state));
+				PsiPackage aPackage = findSubPackageByName(providedName);
 				if(aPackage != null)
 				{
 					if(!processor.execute(aPackage, state))
@@ -307,16 +294,15 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 			}
 			else
 			{
-				PsiNameHelper nameHelper = PsiNameHelper.getInstance(getProject());
-				PsiJavaPackage[] packs = getSubPackages(scope);
-				for(PsiJavaPackage pack : packs)
+				PsiPackage[] packs = getSubPackages(scope);
+				for(PsiPackage pack : packs)
 				{
 					final String packageName = pack.getName();
 					if(packageName == null)
 					{
 						continue;
 					}
-					if(!nameHelper.isIdentifier(packageName, PsiUtil.getLanguageLevel(this)))
+					if(!PsiNameHelper.getInstance(myManager.getProject()).isIdentifier(packageName, PsiUtil.getLanguageLevel(this)))
 					{
 						continue;
 					}
@@ -330,19 +316,28 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 		return true;
 	}
 
-	private boolean processClassesByName(PsiScopeProcessor processor, ResolveState state, GlobalSearchScope scope, String className)
-	{
-		final PsiClass[] classes = findClassesByName(className, scope);
-		return !processClasses(processor, state, classes);
-	}
-
-	private static boolean processClasses(PsiScopeProcessor processor, ResolveState state, PsiClass[] classes)
+	private static boolean processClasses(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, @NotNull PsiClass[] classes, @NotNull Condition<String> nameCondition)
 	{
 		for(PsiClass aClass : classes)
 		{
-			if(!processor.execute(aClass, state))
+			String name = aClass.getName();
+			if(name != null && nameCondition.value(name))
 			{
-				return false;
+				try
+				{
+					if(!processor.execute(aClass, state))
+					{
+						return false;
+					}
+				}
+				catch(ProcessCanceledException e)
+				{
+					throw e;
+				}
+				catch(Exception e)
+				{
+					LOGGER.error(e);
+				}
 			}
 		}
 		return true;
