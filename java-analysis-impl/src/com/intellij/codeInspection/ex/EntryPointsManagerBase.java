@@ -35,9 +35,6 @@ import com.intellij.codeInspection.reference.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.ExtensionPointListener;
 import com.intellij.openapi.extensions.Extensions;
@@ -55,9 +52,6 @@ import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 
-@State(
-		name = "EntryPointsManager",
-		storages = {@Storage(file = StoragePathMacros.PROJECT_FILE)})
 public abstract class EntryPointsManagerBase extends EntryPointsManager implements PersistentStateComponent<Element>
 {
 	@NonNls
@@ -145,7 +139,6 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 	}
 
 	@Override
-	@SuppressWarnings({"HardCodedStringLiteral"})
 	public void loadState(Element element)
 	{
 		Element entryPointsElement = element.getChild("entry_points");
@@ -180,15 +173,18 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 	}
 
 	@Override
-	@SuppressWarnings({"HardCodedStringLiteral"})
 	public Element getState()
 	{
+		if(myPersistentEntryPoints.isEmpty())
+		{
+			return null;
+		}
+
 		Element element = new Element("state");
 		writeExternal(element, myPersistentEntryPoints, ADDITIONAL_ANNOTATIONS);
 		return element;
 	}
 
-	@SuppressWarnings({"HardCodedStringLiteral"})
 	public static void writeExternal(
 			final Element element,
 			final Map<String, SmartRefElementPointer> persistentEntryPoints,

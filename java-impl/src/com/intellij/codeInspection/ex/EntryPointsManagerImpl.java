@@ -46,9 +46,10 @@ import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.DialogWrapper;
 
 @State(
-		name = "EntryPointsManager",
-		storages = {@Storage(file = StoragePathMacros.PROJECT_FILE)}
-)
+		name = "JavaEntryPointsManager",
+		storages = {
+				@Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml")
+		})
 public class EntryPointsManagerImpl extends EntryPointsManagerBase implements PersistentStateComponent<Element>
 {
 	public EntryPointsManagerImpl(Project project)
