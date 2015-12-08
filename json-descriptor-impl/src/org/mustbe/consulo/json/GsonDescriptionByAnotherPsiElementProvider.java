@@ -114,7 +114,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	@Override
 	public void fillRootObject(@NotNull PsiClass psiClass, @NotNull JsonObjectDescriptor jsonObjectDescriptor)
 	{
-		PropertyType type = toType(psiClass.getProject(), new PsiImmediateClassType(psiClass, PsiSubstitutor.EMPTY));
+		PropertyType type = toType(psiClass.getProject(), null, new PsiImmediateClassType(psiClass, PsiSubstitutor.EMPTY));
 
 		if(type != null && type.myValue instanceof JsonObjectDescriptor)
 		{
@@ -126,7 +126,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 	}
 
 	@Nullable
-	private static PropertyType toType(@NotNull Project project, @NotNull PsiType type)
+	private static PropertyType toType(@NotNull Project project, @Nullable PsiField field, @NotNull PsiType type)
 	{
 		if(PsiType.BYTE.equals(type))
 		{
@@ -219,7 +219,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 						{
 							PsiType firstItem = ContainerUtil.getFirstItem(values);
 							assert firstItem != null;
-							return toType(project, new PsiArrayType(firstItem));
+							return toType(project, field, new PsiArrayType(firstItem));
 						}
 
 						return new PropertyType(new NativeArray(Object.class));
@@ -240,7 +240,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 							assert valueType != null;
 
 							JsonObjectDescriptor objectDescriptor = new JsonObjectDescriptor();
-							PropertyType valueJsonType = toType(project, valueType);
+							PropertyType valueJsonType = toType(project, field, valueType);
 							addIfNotNull(objectDescriptor, valueJsonType, null);
 							return new PropertyType(objectDescriptor);
 						}
@@ -253,11 +253,11 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 				PsiField[] allFields = psiClass.getAllFields();
 				for(PsiField psiField : allFields)
 				{
-					if(psiField.hasModifierProperty(PsiModifier.STATIC))
+					if(psiField == field || psiField.hasModifierProperty(PsiModifier.STATIC))
 					{
 						continue;
 					}
-					PropertyType classType = toType(project, psiField.getType());
+					PropertyType classType = toType(project, psiField, psiField.getType());
 
 					addIfNotNull(objectDescriptor, classType, psiField);
 				}
@@ -269,7 +269,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 		{
 			PsiType componentType = ((PsiArrayType) type).getComponentType();
 
-			PropertyType propertyType = toType(project, componentType);
+			PropertyType propertyType = toType(project, field, componentType);
 			if(propertyType == null)
 			{
 				return null;
