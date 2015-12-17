@@ -49,7 +49,8 @@ public class JdkVersionUtil
 		});
 		VERSION_STRINGS.put(JavaSdkVersion.JDK_1_9, new String[]{
 				"1.9",
-				"9.0"
+				"9.0",
+				"9-ea"
 		});
 	}
 

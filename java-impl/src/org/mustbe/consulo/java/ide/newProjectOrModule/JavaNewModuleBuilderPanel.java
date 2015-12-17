@@ -46,7 +46,6 @@ public class JavaNewModuleBuilderPanel extends JPanel
 		myComboBox = new ComboBox();
 		myComboBox.setRenderer(new SdkListCellRenderer("<none>"));
 
-		myComboBox.addItem(null);
 		for(Sdk o : sdkTable.getAllSdks())
 		{
 			SdkTypeId sdkType = o.getSdkType();
