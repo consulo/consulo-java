@@ -15,6 +15,8 @@
  */
 package com.intellij.testIntegration;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
@@ -24,93 +26,145 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JVMElementFactory;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public abstract class JavaTestFramework implements TestFramework {
-  public boolean isLibraryAttached(@NotNull Module module) {
-    GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
-    PsiClass c = JavaPsiFacade.getInstance(module.getProject()).findClass(getMarkerClassFQName(), scope);
-    return c != null;
-  }
+public abstract class JavaTestFramework implements TestFramework
+{
+	@Override
+	public boolean isLibraryAttached(@NotNull Module module)
+	{
+		GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
+		PsiClass c = JavaPsiFacade.getInstance(module.getProject()).findClass(getMarkerClassFQName(), scope);
+		return c != null;
+	}
 
-  protected abstract String getMarkerClassFQName();
+	@Nullable
+	@Override
+	public String getLibraryPath()
+	{
+		return null;
+	}
 
-  public boolean isTestClass(@NotNull PsiElement clazz) {
-    return clazz instanceof PsiClass && isTestClass((PsiClass)clazz, false);
-  }
+	protected abstract String getMarkerClassFQName();
 
-  @Override
-  public boolean isPotentialTestClass(@NotNull PsiElement clazz) {
-    return clazz instanceof PsiClass && isTestClass((PsiClass)clazz, true);
-  }
+	@Override
+	public boolean isTestClass(@NotNull PsiElement clazz)
+	{
+		return clazz instanceof PsiClass && isTestClass((PsiClass) clazz, false);
+	}
 
-  protected abstract boolean isTestClass(PsiClass clazz, boolean canBePotential);
+	@Override
+	public boolean isPotentialTestClass(@NotNull PsiElement clazz)
+	{
+		return clazz instanceof PsiClass && isTestClass((PsiClass) clazz, true);
+	}
 
-  protected boolean isUnderTestSources(PsiClass clazz) {
-    PsiFile psiFile = clazz.getContainingFile();
-    VirtualFile vFile = psiFile.getVirtualFile();
-    if (vFile == null) return false;
-    return ProjectRootManager.getInstance(clazz.getProject()).getFileIndex().isInTestSourceContent(vFile);
-  }
+	protected abstract boolean isTestClass(PsiClass clazz, boolean canBePotential);
 
-  @Override
-  @Nullable
-  public PsiElement findSetUpMethod(@NotNull PsiElement clazz) {
-    return clazz instanceof PsiClass ? findSetUpMethod((PsiClass)clazz) : null;
-  }
+	protected boolean isUnderTestSources(PsiClass clazz)
+	{
+		PsiFile psiFile = clazz.getContainingFile();
+		VirtualFile vFile = psiFile.getVirtualFile();
+		if(vFile == null)
+		{
+			return false;
+		}
+		return ProjectRootManager.getInstance(clazz.getProject()).getFileIndex().isInTestSourceContent(vFile);
+	}
 
-  @Nullable
-  protected abstract PsiMethod findSetUpMethod(@NotNull PsiClass clazz);
+	@Override
+	@Nullable
+	public PsiElement findSetUpMethod(@NotNull PsiElement clazz)
+	{
+		return clazz instanceof PsiClass ? findSetUpMethod((PsiClass) clazz) : null;
+	}
 
-  @Override
-  @Nullable
-  public PsiElement findTearDownMethod(@NotNull PsiElement clazz) {
-    return clazz instanceof PsiClass ? findTearDownMethod((PsiClass)clazz) : null;
-  }
+	@Nullable
+	protected abstract PsiMethod findSetUpMethod(@NotNull PsiClass clazz);
 
-  @Nullable
-  protected abstract PsiMethod findTearDownMethod(@NotNull PsiClass clazz);
+	@Override
+	@Nullable
+	public PsiElement findTearDownMethod(@NotNull PsiElement clazz)
+	{
+		return clazz instanceof PsiClass ? findTearDownMethod((PsiClass) clazz) : null;
+	}
 
-  @Override
-  public PsiElement findOrCreateSetUpMethod(@NotNull PsiElement clazz) throws IncorrectOperationException {
-    return clazz instanceof PsiClass ? findOrCreateSetUpMethod((PsiClass)clazz) : null;
-  }
+	@Nullable
+	protected abstract PsiMethod findTearDownMethod(@NotNull PsiClass clazz);
 
-  @Override
-  public boolean isIgnoredMethod(PsiElement element) {
-    return false;
-  }
+	@Override
+	public PsiElement findOrCreateSetUpMethod(@NotNull PsiElement clazz) throws IncorrectOperationException
+	{
+		return clazz instanceof PsiClass ? findOrCreateSetUpMethod((PsiClass) clazz) : null;
+	}
 
-  @Override
-  @NotNull
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+	@Override
+	public boolean isIgnoredMethod(PsiElement element)
+	{
+		return false;
+	}
 
-  @Nullable
-  protected abstract PsiMethod findOrCreateSetUpMethod(PsiClass clazz) throws IncorrectOperationException;
-  
-  public boolean isParameterized(PsiClass clazz) {
-    return false;
-  }
+	@Override
+	@NotNull
+	public Language getLanguage()
+	{
+		return JavaLanguage.INSTANCE;
+	}
 
-  @Nullable
-  public PsiMethod findParametersMethod(PsiClass clazz) {
-    return null;
-  }
+	@Nullable
+	protected abstract PsiMethod findOrCreateSetUpMethod(PsiClass clazz) throws IncorrectOperationException;
 
-  @Nullable
-  public FileTemplateDescriptor getParametersMethodFileTemplateDescriptor() {
-    return null;
-  }
+	public boolean isParameterized(PsiClass clazz)
+	{
+		return false;
+	}
 
-  public PsiMethod createSetUpPatternMethod(JVMElementFactory factory) {
-    final FileTemplate template = FileTemplateManager.getInstance().getCodeTemplate(getSetUpMethodFileTemplateDescriptor().getFileName());
-    final String templateText = StringUtil.replace(StringUtil.replace(template.getText(), "${BODY}\n", ""), "${NAME}", "setUp");
-    return factory.createMethodFromText(templateText, null);
-  }
+	@Nullable
+	public PsiMethod findParametersMethod(PsiClass clazz)
+	{
+		return null;
+	}
+
+	@Nullable
+	public FileTemplateDescriptor getParametersMethodFileTemplateDescriptor()
+	{
+		return null;
+	}
+
+	public abstract char getMnemonic();
+
+	public PsiMethod createSetUpPatternMethod(JVMElementFactory factory)
+	{
+		final FileTemplate template = FileTemplateManager.getInstance().getCodeTemplate(getSetUpMethodFileTemplateDescriptor().getFileName());
+		final String templateText = StringUtil.replace(StringUtil.replace(template.getText(), "${BODY}\n", ""), "${NAME}", "setUp");
+		return factory.createMethodFromText(templateText, null);
+	}
+
+	public FileTemplateDescriptor getTestClassFileTemplateDescriptor()
+	{
+		return null;
+	}
+
+	public void setupLibrary(Module module)
+	{
+	}
+
+	public boolean isSingleConfig()
+	{
+		return false;
+	}
+
+	public boolean isTestMethod(PsiMethod method, PsiClass myClass)
+	{
+		return isTestMethod(method);
+	}
+
+
 }

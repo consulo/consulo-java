@@ -491,6 +491,8 @@
 		<extensionPoint name="debugger.jvmSmartStepIntoHandler"
 						interface="com.intellij.debugger.actions.JvmSmartStepIntoHandler"/>
 
+		<extensionPoint name="testFramework"
+						interface="com.intellij.testIntegration.TestFramework" />
 
 		<extensionPoint name="compiler.inspectionValidator"
 						interface="com.intellij.openapi.compiler.util.InspectionValidator"
@@ -1838,6 +1840,7 @@
 		<basicWordSelectionFilter implementation="com.intellij.codeInsight.editorActions.wordSelection.JavaBasicWordSelectionFilter"/>
 
 		<iconDescriptorUpdater implementation="com.intellij.ide.JavaIconDescriptorUpdater" id="java"/>
+		<iconDescriptorUpdater implementation="com.intellij.execution.testframework.TestIconDescriptorUpdater"/>
 
 		<idIndexer filetype="JAVA" implementationClass="com.intellij.psi.impl.cache.impl.idCache.JavaIdIndexer"/>
 		<todoIndexer filetype="JAVA" implementationClass="com.intellij.psi.impl.cache.impl.idCache.JavaTodoIndexer"/>
