@@ -22,13 +22,13 @@ import java.util.List;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.application.ApplicationManager;
@@ -98,7 +98,7 @@ public class AddImportAction implements QuestionAction {
     CodeInsightUtil.sortIdenticalShortNameClasses(myTargetClasses, myReference);
 
     final BaseListPopupStep<PsiClass> step =
-      new BaseListPopupStep<PsiClass>(QuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses) {
+      new BaseListPopupStep<PsiClass>(JavaQuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses) {
         @Override
         public boolean isAutoSelectionEnabled() {
           return false;
@@ -203,7 +203,7 @@ public class AddImportAction implements QuestionAction {
           }
         });
       }
-    }, QuickFixBundle.message("add.import"), null);
+    }, JavaQuickFixBundle.message("add.import"), null);
   }
 
   private void _addImport(PsiReference ref, PsiClass targetClass) {

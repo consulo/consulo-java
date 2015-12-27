@@ -19,8 +19,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -47,7 +47,7 @@ public class ChangeToAppendFix implements IntentionAction {
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("change.to.append.text",
+    return JavaQuickFixBundle.message("change.to.append.text",
                                   buildAppendExpression(myAssignmentExpression.getRExpression(),
                                                         myLhsType.equalsToText("java.lang.Appendable"),
                                                         new StringBuilder(myAssignmentExpression.getLExpression().getText())));
@@ -56,7 +56,7 @@ public class ChangeToAppendFix implements IntentionAction {
   @NotNull
   @Override
   public String getFamilyName() {
-    return QuickFixBundle.message("change.to.append.family");
+    return JavaQuickFixBundle.message("change.to.append.family");
   }
 
   @Override

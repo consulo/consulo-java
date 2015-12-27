@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -70,19 +70,19 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
         message = "make.final.transform.to.one.element.array";
         break;
       case COPY_TO_FINAL:
-        return QuickFixBundle.message("make.final.copy.to.temp", myVariable.getName());
+        return JavaQuickFixBundle.message("make.final.copy.to.temp", myVariable.getName());
       default:
         return "";
     }
     Collection<PsiVariable> vars = getVariablesToFix();
     String varNames = vars.size() == 1 ? "'"+myVariable.getName()+"'" : "variables";
-    return QuickFixBundle.message(message, varNames);
+    return JavaQuickFixBundle.message(message, varNames);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("make.final.family");
+    return JavaQuickFixBundle.message("make.final.family");
   }
 
   @Override

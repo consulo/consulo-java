@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
 import com.intellij.openapi.application.ApplicationManager;
@@ -264,7 +264,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
   }
 
   protected String getText(final String varName) {
-    return QuickFixBundle.message("create.class.from.new.text", varName);
+    return JavaQuickFixBundle.message("create.class.from.new.text", varName);
   }
 
   protected static PsiJavaCodeReferenceElement getReferenceElement(PsiNewExpression expression) {
@@ -279,7 +279,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.class.from.new.family");
+    return JavaQuickFixBundle.message("create.class.from.new.family");
   }
 
   @Override

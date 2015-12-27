@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.openapi.editor.Editor;
@@ -30,7 +30,7 @@ public class EnableOptimizeImportsOnTheFlyFix implements IntentionAction, LowPri
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("enable.optimize.imports.on.the.fly");
+    return JavaQuickFixBundle.message("enable.optimize.imports.on.the.fly");
   }
 
   @Override

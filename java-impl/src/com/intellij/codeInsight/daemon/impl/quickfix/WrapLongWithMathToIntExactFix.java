@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
@@ -87,7 +87,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 	@Override
 	public String getFamilyName()
 	{
-		return QuickFixBundle.message("wrap.long.with.math.to.int.text");
+		return JavaQuickFixBundle.message("wrap.long.with.math.to.int.text");
 	}
 
 	private static PsiElement getModifiedExpression(PsiElement expression)
@@ -108,7 +108,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 		@Override
 		public String getText()
 		{
-			return myArgList.getExpressions().length == 1 ? QuickFixBundle.message("wrap.long.with.math.to.int.parameter.single.text") : QuickFixBundle.message("wrap.long.with.math.to.int.parameter" +
+			return myArgList.getExpressions().length == 1 ? JavaQuickFixBundle.message("wrap.long.with.math.to.int.parameter.single.text") : JavaQuickFixBundle.message("wrap.long.with.math.to.int.parameter" +
 					".multiple.text", myIndex + 1);
 		}
 

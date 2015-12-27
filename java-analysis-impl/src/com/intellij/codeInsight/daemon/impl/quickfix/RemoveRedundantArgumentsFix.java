@@ -19,8 +19,8 @@ import java.util.Arrays;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -58,13 +58,13 @@ public class RemoveRedundantArgumentsFix implements IntentionAction {
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
+    return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
   }
 
   @NotNull
   @Override
   public String getFamilyName() {
-    return QuickFixBundle.message("remove.redundant.arguments.family");
+    return JavaQuickFixBundle.message("remove.redundant.arguments.family");
   }
 
   @Override

@@ -15,15 +15,23 @@
  */
 package com.intellij.codeInspection.wrongPackageStatement;
 
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiPackageStatement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
 
 public class AdjustPackageNameFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.wrongPackageStatement.AdjustPackageNameFix");
@@ -36,13 +44,13 @@ public class AdjustPackageNameFix implements LocalQuickFix {
   @Override
   @NotNull
   public String getName() {
-    return QuickFixBundle.message("adjust.package.text", myName);
+    return JavaQuickFixBundle.message("adjust.package.text", myName);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("adjust.package.family");
+    return JavaQuickFixBundle.message("adjust.package.family");
   }
 
   @Override

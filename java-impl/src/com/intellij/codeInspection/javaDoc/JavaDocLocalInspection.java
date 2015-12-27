@@ -40,7 +40,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionProfile;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -1258,13 +1258,13 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     @Override
     @NotNull
     public String getName() {
-      return QuickFixBundle.message("add.doctag.to.custom.tags", myTag);
+      return JavaQuickFixBundle.message("add.doctag.to.custom.tags", myTag);
     }
 
     @Override
     @NotNull
     public String getFamilyName() {
-     return QuickFixBundle.message("fix.javadoc.family");
+     return JavaQuickFixBundle.message("fix.javadoc.family");
    }
 
     @Override

@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -61,7 +61,7 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
       messageKey = toAdd ? "add.interface.to.implements.list" : "remove.interface.from.implements.list";
     }
 
-    myName = QuickFixBundle.message(messageKey, aClass.getName(), classToExtendFrom == null ? "" : classToExtendFrom instanceof PsiTypeParameter ? classToExtendFrom.getName()
+    myName = JavaQuickFixBundle.message(messageKey, aClass.getName(), classToExtendFrom == null ? "" : classToExtendFrom instanceof PsiTypeParameter ? classToExtendFrom.getName()
                                                                                                                                                  : classToExtendFrom.getQualifiedName());
   }
 
@@ -75,7 +75,7 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("change.extends.list.family");
+    return JavaQuickFixBundle.message("change.extends.list.family");
   }
 
   @Override

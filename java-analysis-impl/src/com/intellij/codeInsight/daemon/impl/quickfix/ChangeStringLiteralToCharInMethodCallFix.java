@@ -20,8 +20,8 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -47,14 +47,14 @@ public class ChangeStringLiteralToCharInMethodCallFix implements IntentionAction
   public String getText() {
     final String convertedValue = convertedValue();
     final boolean isString = isString(myLiteral.getType());
-    return QuickFixBundle.message("fix.single.character.string.to.char.literal.text", myLiteral.getText(),
+    return JavaQuickFixBundle.message("fix.single.character.string.to.char.literal.text", myLiteral.getText(),
                                   quote(convertedValue, ! isString), isString ? PsiType.CHAR.getCanonicalText() : "String");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.single.character.string.to.char.literal.family");
+    return JavaQuickFixBundle.message("fix.single.character.string.to.char.literal.family");
   }
 
   @Override

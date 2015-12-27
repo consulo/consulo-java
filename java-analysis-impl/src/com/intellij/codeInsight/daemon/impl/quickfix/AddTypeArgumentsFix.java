@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -35,10 +35,10 @@ public class AddTypeArgumentsFix extends MethodArgumentFix {
   @NotNull
   public String getText() {
     if (myArgList.getExpressions().length == 1) {
-      return QuickFixBundle.message("add.type.arguments.single.argument.text");
+      return JavaQuickFixBundle.message("add.type.arguments.single.argument.text");
     }
 
-    return QuickFixBundle.message("add.type.arguments.text", myIndex + 1);
+    return JavaQuickFixBundle.message("add.type.arguments.text", myIndex + 1);
   }
 
   private static class MyFixerActionFactory extends ArgumentFixerActionFactory {

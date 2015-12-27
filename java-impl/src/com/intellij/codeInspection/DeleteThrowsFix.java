@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.MethodThrowsFix;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClassType;
@@ -43,7 +43,7 @@ public class DeleteThrowsFix implements LocalQuickFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.throws.list.family");
+    return JavaQuickFixBundle.message("fix.throws.list.family");
   }
 
   @Override

@@ -21,8 +21,8 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -62,7 +62,7 @@ public class WrapExpressionFix implements IntentionAction {
   public String getText() {
     final PsiMethod wrapper = myExpression.isValid() && myExpectedType != null ? findWrapper(myExpression.getType(), myExpectedType, myPrimitiveExpected) : null;
     final String methodPresentation = wrapper != null ? wrapper.getContainingClass().getName() + "." + wrapper.getName() : "";
-    return QuickFixBundle.message("wrap.expression.using.static.accessor.text", methodPresentation);
+    return JavaQuickFixBundle.message("wrap.expression.using.static.accessor.text", methodPresentation);
   }
 
   @Nullable
@@ -98,7 +98,7 @@ public class WrapExpressionFix implements IntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("wrap.expression.using.static.accessor.family");
+    return JavaQuickFixBundle.message("wrap.expression.using.static.accessor.family");
   }
 
   @Override

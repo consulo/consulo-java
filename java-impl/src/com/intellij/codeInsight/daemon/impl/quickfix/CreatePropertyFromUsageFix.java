@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.completion.JavaLookupElementBuilder;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.impl.TypeExpression;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -71,7 +71,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.property.from.usage.family");
+    return JavaQuickFixBundle.message("create.property.from.usage.family");
   }
 
   @Override
@@ -92,11 +92,11 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
     String getterOrSetter = null;
     if (methodName.startsWith(GET_PREFIX) || methodName.startsWith(IS_PREFIX)) {
       if (myMethodCall.getArgumentList().getExpressions().length != 0) return false;
-      getterOrSetter = QuickFixBundle.message("create.getter");
+      getterOrSetter = JavaQuickFixBundle.message("create.getter");
     }
     else if (methodName.startsWith(SET_PREFIX)) {
       if (myMethodCall.getArgumentList().getExpressions().length != 1) return false;
-      getterOrSetter = QuickFixBundle.message("create.setter");
+      getterOrSetter = JavaQuickFixBundle.message("create.setter");
     }
     else {
       LOG.error("Internal error in create property intention");

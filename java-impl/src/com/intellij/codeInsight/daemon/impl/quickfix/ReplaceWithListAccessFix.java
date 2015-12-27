@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -40,7 +40,7 @@ public class ReplaceWithListAccessFix implements IntentionAction {
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("replace.with.list.access.text");
+    return JavaQuickFixBundle.message("replace.with.list.access.text");
   }
 
   @NotNull

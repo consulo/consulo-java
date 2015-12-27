@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.surroundWith.JavaWithTryCatchSurrounder;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -53,13 +53,13 @@ public class SurroundWithTryCatchFix implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("surround.with.try.catch.fix");
+    return JavaQuickFixBundle.message("surround.with.try.catch.fix");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("surround.with.try.catch.fix");
+    return JavaQuickFixBundle.message("surround.with.try.catch.fix");
   }
 
   @Override

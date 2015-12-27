@@ -15,8 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
@@ -34,11 +39,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AccessStaticViaInstanceFix");
@@ -61,7 +61,7 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   private static String calcText(PsiMember member, PsiSubstitutor substitutor) {
     PsiClass aClass = member.getContainingClass();
     if (aClass == null) return "";
-    return QuickFixBundle.message("access.static.via.class.reference.text",
+    return JavaQuickFixBundle.message("access.static.via.class.reference.text",
                                   HighlightMessageUtil.getSymbolName(member, substitutor),
                                   HighlightUtil.formatClass(aClass),
                                   HighlightUtil.formatClass(aClass, false));
@@ -70,7 +70,7 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("access.static.via.class.reference.family");
+    return JavaQuickFixBundle.message("access.static.via.class.reference.family");
   }
 
   @Override

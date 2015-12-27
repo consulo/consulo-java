@@ -15,12 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.VisibilityUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class AddDefaultConstructorFix extends AddMethodFix {
   public AddDefaultConstructorFix(PsiClass aClass) {
@@ -29,7 +29,7 @@ public class AddDefaultConstructorFix extends AddMethodFix {
 
   public AddDefaultConstructorFix(PsiClass aClass, @NotNull @PsiModifier.ModifierConstant final String modifier) {
     super(generateConstructor(aClass.getName(), modifier), aClass);
-    setText(QuickFixBundle.message("add.default.constructor.text", VisibilityUtil.toPresentableText(modifier), aClass.getName()));
+    setText(JavaQuickFixBundle.message("add.default.constructor.text", VisibilityUtil.toPresentableText(modifier), aClass.getName()));
   }
 
   private static String generateConstructor(final String className, @PsiModifier.ModifierConstant final String modifier) {
@@ -42,6 +42,6 @@ public class AddDefaultConstructorFix extends AddMethodFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("add.default.constructor.family");
+    return JavaQuickFixBundle.message("add.default.constructor.family");
   }
 }

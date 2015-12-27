@@ -17,7 +17,7 @@ package com.intellij.codeInspection.javaDoc;
 
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.ImportClassFix;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -229,13 +229,13 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     @Override
     @NotNull
     public String getName() {
-      return QuickFixBundle.message("add.qualifier");
+      return JavaQuickFixBundle.message("add.qualifier");
     }
 
     @Override
     @NotNull
     public String getFamilyName() {
-      return QuickFixBundle.message("add.qualifier");
+      return JavaQuickFixBundle.message("add.qualifier");
     }
 
     @Override
@@ -269,7 +269,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
           @Override
           public void run(DataContext dataContext) {
             new PopupChooserBuilder(list).
-              setTitle(QuickFixBundle.message("add.qualifier.original.class.chooser.title")).
+              setTitle(JavaQuickFixBundle.message("add.qualifier.original.class.chooser.title")).
               setItemChoosenCallback(runnable).
               createPopup().
               showInBestPositionFor(dataContext);

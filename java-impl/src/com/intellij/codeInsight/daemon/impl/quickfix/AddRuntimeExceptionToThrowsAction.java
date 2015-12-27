@@ -15,17 +15,25 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.Collections;
+
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiThrowStatement;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
 
 /**
  * @author mike
@@ -40,7 +48,7 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("add.runtime.exception.to.throws.text");
+    return JavaQuickFixBundle.message("add.runtime.exception.to.throws.text");
   }
 
   @Override
@@ -100,6 +108,6 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("add.runtime.exception.to.throws.family");
+    return JavaQuickFixBundle.message("add.runtime.exception.to.throws.family");
   }
 }

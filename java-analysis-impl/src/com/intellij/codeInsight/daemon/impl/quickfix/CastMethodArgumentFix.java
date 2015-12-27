@@ -23,11 +23,16 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
-import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
+import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiExpressionList;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
+import com.intellij.util.IncorrectOperationException;
 
 public class CastMethodArgumentFix extends MethodArgumentFix {
   private CastMethodArgumentFix(PsiExpressionList list, int i, PsiType toType, final ArgumentFixerActionFactory factory) {
@@ -38,10 +43,10 @@ public class CastMethodArgumentFix extends MethodArgumentFix {
   @NotNull
   public String getText() {
     if (myArgList.getExpressions().length == 1) {
-      return QuickFixBundle.message("cast.single.parameter.text", JavaHighlightUtil.formatType(myToType));
+      return JavaQuickFixBundle.message("cast.single.parameter.text", JavaHighlightUtil.formatType(myToType));
     }
 
-    return QuickFixBundle.message("cast.parameter.text", myIndex + 1, JavaHighlightUtil.formatType(myToType));
+    return JavaQuickFixBundle.message("cast.parameter.text", myIndex + 1, JavaHighlightUtil.formatType(myToType));
   }
 
   private static class MyFixerActionFactory extends ArgumentFixerActionFactory {

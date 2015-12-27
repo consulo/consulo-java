@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -73,13 +73,13 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("fix.return.type.text", myName, myCanonicalText);
+    return JavaQuickFixBundle.message("fix.return.type.text", myName, myCanonicalText);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.return.type.family");
+    return JavaQuickFixBundle.message("fix.return.type.family");
   }
 
   @Override

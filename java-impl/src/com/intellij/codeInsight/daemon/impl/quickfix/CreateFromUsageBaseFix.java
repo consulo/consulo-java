@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateEditingListener;
@@ -143,7 +143,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
     };
 
     builder.
-      setTitle(QuickFixBundle.message("target.class.chooser.title")).
+      setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
       setItemChoosenCallback(runnable).
       createPopup().
       showInBestPositionFor(editor);

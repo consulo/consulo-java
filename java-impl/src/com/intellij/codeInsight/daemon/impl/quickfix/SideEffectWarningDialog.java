@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
@@ -49,7 +49,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
     myBeforeText = beforeText;
     myAfterText = afterText;
     myCanCopeWithSideEffects = canCopeWithSideEffects;
-    setTitle(QuickFixBundle.message("side.effects.warning.dialog.title"));
+    setTitle(JavaQuickFixBundle.message("side.effects.warning.dialog.title"));
     init();
 
   }
@@ -60,7 +60,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
     List<AbstractAction> actions = new ArrayList<AbstractAction>();
     myRemoveAllAction = new AbstractAction() {
       {
-        UIUtil.setActionNameAndMnemonic(QuickFixBundle.message("side.effect.action.remove"), this);
+        UIUtil.setActionNameAndMnemonic(JavaQuickFixBundle.message("side.effect.action.remove"), this);
         putValue(DEFAULT_ACTION, this);
       }
 
@@ -74,7 +74,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
     if (myCanCopeWithSideEffects) {
       AbstractAction makeStmtAction = new AbstractAction() {
         {
-          UIUtil.setActionNameAndMnemonic(QuickFixBundle.message("side.effect.action.transform"), this);
+          UIUtil.setActionNameAndMnemonic(JavaQuickFixBundle.message("side.effect.action.transform"), this);
         }
 
         @Override
@@ -86,7 +86,7 @@ public class SideEffectWarningDialog extends DialogWrapper {
     }
     myCancelAllAction = new AbstractAction() {
       {
-        UIUtil.setActionNameAndMnemonic(QuickFixBundle.message("side.effect.action.cancel"), this);
+        UIUtil.setActionNameAndMnemonic(JavaQuickFixBundle.message("side.effect.action.cancel"), this);
       }
 
       @Override
@@ -128,14 +128,14 @@ public class SideEffectWarningDialog extends DialogWrapper {
 
   protected String sideEffectsDescription() {
     if (myCanCopeWithSideEffects) {
-      return QuickFixBundle.message("side.effect.message2",
+      return JavaQuickFixBundle.message("side.effect.message2",
                                     myVariable.getName(),
                                     myVariable.getType().getPresentableText(),
                                     myBeforeText,
                                     myAfterText);
     }
     else {
-      return QuickFixBundle.message("side.effect.message1", myVariable.getName());
+      return JavaQuickFixBundle.message("side.effect.message1", myVariable.getName());
     }
   }
 }

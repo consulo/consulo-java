@@ -25,7 +25,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -61,13 +61,13 @@ public class RenameWrongRefFix implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("rename.wrong.reference.text");
+    return JavaQuickFixBundle.message("rename.wrong.reference.text");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("rename.wrong.reference.family");
+    return JavaQuickFixBundle.message("rename.wrong.reference.family");
   }
 
   @Override

@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiMethodMember;
@@ -44,13 +44,13 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("implement.methods.fix");
+    return JavaQuickFixBundle.message("implement.methods.fix");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("implement.methods.fix");
+    return JavaQuickFixBundle.message("implement.methods.fix");
   }
 
   @Override

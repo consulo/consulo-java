@@ -20,7 +20,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -52,7 +52,7 @@ public class VariableTypeFromCallFix implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("fix.variable.type.text",
+    return JavaQuickFixBundle.message("fix.variable.type.text",
                                   UsageViewUtil.getType(myVar),
                                   myVar.getName(),
                                   myExpressionType.getCanonicalText());
@@ -61,7 +61,7 @@ public class VariableTypeFromCallFix implements IntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.variable.type.family");
+    return JavaQuickFixBundle.message("fix.variable.type.family");
   }
 
   @Override

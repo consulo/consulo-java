@@ -18,9 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeUtil;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
 import com.intellij.openapi.diagnostic.Logger;
@@ -29,7 +28,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +41,7 @@ public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implem
 
   @Override
   protected String getText(String varName) {
-    return QuickFixBundle.message("create.enum.constant.from.usage.text", myReferenceExpression.getReferenceName());
+    return JavaQuickFixBundle.message("create.enum.constant.from.usage.text", myReferenceExpression.getReferenceName());
   }
 
   @Override
@@ -107,6 +105,6 @@ public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implem
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.constant.from.usage.family");
+    return JavaQuickFixBundle.message("create.constant.from.usage.family");
   }
 }

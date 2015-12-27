@@ -18,7 +18,7 @@ package com.intellij.codeInspection.emptyMethod;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
@@ -140,8 +140,8 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool {
         @Override
         public boolean process(final String qualifiedName) {
           fixes.add(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
-            QuickFixBundle.message("fix.add.special.annotation.text", qualifiedName),
-            QuickFixBundle.message("fix.add.special.annotation.family"),
+            JavaQuickFixBundle.message("fix.add.special.annotation.text", qualifiedName),
+            JavaQuickFixBundle.message("fix.add.special.annotation.family"),
             EXCLUDE_ANNOS, qualifiedName, refMethod.getElement()));
           return true;
         }

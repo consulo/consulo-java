@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -56,13 +56,13 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
                                                   PsiFormatUtilBase.SHOW_PARAMETERS |
                                                   PsiFormatUtilBase.SHOW_RAW_TYPE,
                                                   PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_RAW_TYPE, 2);
-    return QuickFixBundle.message("create.method.from.usage.text", signature);
+    return JavaQuickFixBundle.message("create.method.from.usage.text", signature);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.method.from.usage.family");
+    return JavaQuickFixBundle.message("create.method.from.usage.family");
   }
 
   @Override

@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -37,13 +37,13 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("remove.redundant.else.fix");
+    return JavaQuickFixBundle.message("remove.redundant.else.fix");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("remove.redundant.else.fix");
+    return JavaQuickFixBundle.message("remove.redundant.else.fix");
   }
 
   @Override

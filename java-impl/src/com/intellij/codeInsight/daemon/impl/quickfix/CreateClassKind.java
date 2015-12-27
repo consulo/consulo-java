@@ -15,15 +15,15 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 
 /**
  * @author ven
 */
 public enum CreateClassKind implements ClassKind {
-  CLASS     (QuickFixBundle.message("create.class")),
-  INTERFACE (QuickFixBundle.message("create.interface")),
-  ENUM      (QuickFixBundle.message("create.enum")),
+  CLASS     (JavaQuickFixBundle.message("create.class")),
+  INTERFACE (JavaQuickFixBundle.message("create.interface")),
+  ENUM      (JavaQuickFixBundle.message("create.enum")),
   ANNOTATION("annotation");
 
   private final String myDescription;

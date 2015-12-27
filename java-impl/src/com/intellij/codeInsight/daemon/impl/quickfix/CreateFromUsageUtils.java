@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.*;
 import com.intellij.codeInsight.completion.proc.VariablesProcessor;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiGenerationInfo;
 import com.intellij.codeInsight.intention.impl.CreateClassDialog;
@@ -169,8 +169,8 @@ public class CreateFromUsageUtils {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
               @Override
               public void run() {
-                Messages.showErrorDialog(QuickFixBundle.message("new.method.body.template.error.text"),
-                                         QuickFixBundle.message("new.method.body.template.error.title"));
+                Messages.showErrorDialog(JavaQuickFixBundle.message("new.method.body.template.error.text"),
+                                         JavaQuickFixBundle.message("new.method.body.template.error.title"));
               }
             });
         return;
@@ -321,7 +321,7 @@ public class CreateFromUsageUtils {
     final PsiDirectory targetDirectory;
     if (!ApplicationManager.getApplication().isUnitTestMode()) {
       Project project = manager.getProject();
-      String title = QuickFixBundle.message("create.class.title", StringUtil.capitalize(classKind.getDescription()));
+      String title = JavaQuickFixBundle.message("create.class.title", StringUtil.capitalize(classKind.getDescription()));
 
       CreateClassDialog dialog = new CreateClassDialog(project, title, name, aPackage.getQualifiedName(), classKind, false, module){
         @Override
@@ -474,9 +474,9 @@ public class CreateFromUsageUtils {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       @Override
       public void run() {
-        Messages.showErrorDialog(QuickFixBundle.message(
+        Messages.showErrorDialog(JavaQuickFixBundle.message(
           isPackage ? "cannot.create.java.package.error.text" : "cannot.create.java.file.error.text", name, directory.getVirtualFile().getName(), e.getLocalizedMessage()),
-                                 QuickFixBundle.message(
+                                 JavaQuickFixBundle.message(
                                    isPackage ? "cannot.create.java.package.error.title" : "cannot.create.java.file.error.title"));
       }
     });

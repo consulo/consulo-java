@@ -17,7 +17,7 @@ package com.intellij.codeInspection;
 
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -42,13 +42,13 @@ public class MoveToPackageFix implements LocalQuickFix {
   @Override
   @NotNull
   public String getName() {
-    return QuickFixBundle.message("move.class.to.package.text", myTargetPackage);
+    return JavaQuickFixBundle.message("move.class.to.package.text", myTargetPackage);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("move.class.to.package.family");
+    return JavaQuickFixBundle.message("move.class.to.package.family");
   }
 
   public boolean isAvailable(PsiFile myFile) {

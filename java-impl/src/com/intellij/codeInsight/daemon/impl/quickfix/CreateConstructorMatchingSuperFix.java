@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.*;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.ide.util.MemberChooser;
@@ -55,13 +55,13 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.constructor.matching.super");
+    return JavaQuickFixBundle.message("create.constructor.matching.super");
   }
 
   @Override
   public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
     if (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) return false;
-    setText(QuickFixBundle.message("create.constructor.matching.super"));
+    setText(JavaQuickFixBundle.message("create.constructor.matching.super"));
     return true;
   }
 
@@ -98,7 +98,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
     boolean isCopyJavadoc = true;
     if (constructors.length > 1 && !ApplicationManager.getApplication().isUnitTestMode()) {
       MemberChooser<PsiMethodMember> chooser = new MemberChooser<PsiMethodMember>(constructors, false, true, project);
-      chooser.setTitle(QuickFixBundle.message("super.class.constructors.chooser.title"));
+      chooser.setTitle(JavaQuickFixBundle.message("super.class.constructors.chooser.title"));
       chooser.show();
       if (chooser.getExitCode() != DialogWrapper.OK_EXIT_CODE) return;
       constructors = chooser.getSelectedElements(new PsiMethodMember[0]);

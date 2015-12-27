@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -37,7 +37,7 @@ public class GenerifyFileFix implements IntentionAction, LocalQuickFix {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("generify.text", myFileName);
+    return JavaQuickFixBundle.message("generify.text", myFileName);
   }
 
   @NotNull
@@ -49,7 +49,7 @@ public class GenerifyFileFix implements IntentionAction, LocalQuickFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("generify.family");
+    return JavaQuickFixBundle.message("generify.family");
   }
 
   @Override

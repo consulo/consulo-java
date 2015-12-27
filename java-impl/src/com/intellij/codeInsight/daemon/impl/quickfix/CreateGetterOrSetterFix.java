@@ -22,7 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.GetterSetterPrototypeProvider;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.LowPriorityAction;
@@ -76,14 +76,14 @@ public class CreateGetterOrSetterFix implements IntentionAction, LowPriorityActi
 			what = "";
 			assert false;
 		}
-		return QuickFixBundle.message(what, myField.getName());
+		return JavaQuickFixBundle.message(what, myField.getName());
 	}
 
 	@Override
 	@NotNull
 	public String getFamilyName()
 	{
-		return QuickFixBundle.message("create.accessor.for.unused.field.family");
+		return JavaQuickFixBundle.message("create.accessor.for.unused.field.family");
 	}
 
 	@Override

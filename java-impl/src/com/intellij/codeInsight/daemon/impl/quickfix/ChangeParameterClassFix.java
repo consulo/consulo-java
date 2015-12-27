@@ -23,9 +23,13 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiMethodMember;
@@ -40,10 +44,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.infos.CandidateInfo;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public class ChangeParameterClassFix extends ExtendsListFix {
   public ChangeParameterClassFix(@NotNull PsiClass aClassToExtend, @NotNull PsiClassType parameterClass) {
@@ -53,7 +53,7 @@ public class ChangeParameterClassFix extends ExtendsListFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("change.parameter.class.family");
+    return JavaQuickFixBundle.message("change.parameter.class.family");
   }
 
   @Override

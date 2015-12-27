@@ -15,7 +15,16 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -23,9 +32,6 @@ import com.intellij.psi.*;
 import com.intellij.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.refactoring.changeClassSignature.TypeParameterInfo;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 /**
  * @author Danila Ponomarenko
@@ -43,7 +49,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction {
   @NotNull
   @Override
   public String getFamilyName() {
-    return QuickFixBundle.message("change.class.signature.family");
+    return JavaQuickFixBundle.message("change.class.signature.family");
   }
 
   @Override
@@ -61,7 +67,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction {
       return false;
     }
 
-    setText(QuickFixBundle.message("change.class.signature.text", myClass.getName(), myParameterList.getText()));
+    setText(JavaQuickFixBundle.message("change.class.signature.text", myClass.getName(), myParameterList.getText()));
 
     return true;
   }

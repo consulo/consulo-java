@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.generation.PsiElementClassMember;
 import com.intellij.codeInsight.generation.PsiFieldMember;
@@ -70,7 +70,7 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction {
   @NotNull
   public String getText() {
     if (getFieldsToFix().size() > 1 && myClass.getConstructors().length <= 1) return "Add constructor parameters";
-    return QuickFixBundle.message("add.constructor.parameter.name");
+    return JavaQuickFixBundle.message("add.constructor.parameter.name");
   }
 
   @Override

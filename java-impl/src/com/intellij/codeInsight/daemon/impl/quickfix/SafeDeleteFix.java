@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
@@ -37,13 +37,13 @@ public class SafeDeleteFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   @NotNull
   public String getText() {
     PsiElement startElement = getStartElement();
-    return QuickFixBundle.message("safe.delete.text", startElement == null ? "" : HighlightMessageUtil.getSymbolName(startElement, PsiSubstitutor.EMPTY));
+    return JavaQuickFixBundle.message("safe.delete.text", startElement == null ? "" : HighlightMessageUtil.getSymbolName(startElement, PsiSubstitutor.EMPTY));
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("safe.delete.family");
+    return JavaQuickFixBundle.message("safe.delete.family");
   }
 
   @Override

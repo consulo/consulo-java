@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -42,7 +42,6 @@ import com.intellij.util.IncorrectOperationException;
 
 public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.SimplifyBooleanExpression");
-  public static final String FAMILY_NAME = QuickFixBundle.message("simplify.boolean.expression.family");
 
   private final Boolean mySubExpressionValue;
 
@@ -57,13 +56,13 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   @NotNull
   public String getText() {
     PsiExpression expression = getSubExpression();
-    return QuickFixBundle.message("simplify.boolean.expression.text", expression.getText(), mySubExpressionValue);
+    return JavaQuickFixBundle.message("simplify.boolean.expression.text", expression.getText(), mySubExpressionValue);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return FAMILY_NAME;
+    return JavaQuickFixBundle.message("simplify.boolean.expression.family");
   }
 
   @Override

@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.JavaPsiFacade;
@@ -53,11 +53,11 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix
 	{
 		if(myArgList.getExpressions().length == 1)
 		{
-			return QuickFixBundle.message("wrap.array.to.arrays.as.list.single.parameter.text");
+			return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.single.parameter.text");
 		}
 		else
 		{
-			return QuickFixBundle.message("wrap.array.to.arrays.as.list.parameter.text", myIndex + 1);
+			return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.parameter.text", myIndex + 1);
 		}
 	}
 

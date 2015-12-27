@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.beanProperties;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -74,7 +74,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
           @Override
           @NotNull
           public String getName() {
-            return QuickFixBundle.message("create.readable.writable.property.with.field", myPropertyName);
+            return JavaQuickFixBundle.message("create.readable.writable.property.with.field", myPropertyName);
           }
 
           @Override
@@ -100,7 +100,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
           @Override
           @NotNull
           public String getName() {
-            return QuickFixBundle.message(createSetter ? "create.writable.property.with.field" : "create.readable.property.with.field", myPropertyName);
+            return JavaQuickFixBundle.message(createSetter ? "create.writable.property.with.field" : "create.readable.property.with.field", myPropertyName);
           }
         }
     };
@@ -246,7 +246,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
     @Override
     @NotNull
     public String getName() {
-      return QuickFixBundle.message(myCreateSetter ? "create.writable.property" : "create.readable.property", myPropertyName);
+      return JavaQuickFixBundle.message(myCreateSetter ? "create.writable.property" : "create.readable.property", myPropertyName);
     }
   }
 }

@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.impl.AddSingleMemberStaticImportAction;
@@ -64,7 +64,7 @@ public class StaticImportMethodFix implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    String text = QuickFixBundle.message("static.import.method.text");
+    String text = JavaQuickFixBundle.message("static.import.method.text");
     if (candidates != null && candidates.size() == 1) {
       text += " '" + PsiFormatUtil.formatMethod(candidates.get(0), PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME |
                                                                                          PsiFormatUtilBase.SHOW_CONTAINING_CLASS |
@@ -287,7 +287,7 @@ public class StaticImportMethodFix implements IntentionAction {
       return;
     }
     final BaseListPopupStep<PsiMethod> step =
-      new BaseListPopupStep<PsiMethod>(QuickFixBundle.message("class.to.import.chooser.title"), candidates) {
+      new BaseListPopupStep<PsiMethod>(JavaQuickFixBundle.message("class.to.import.chooser.title"), candidates) {
 
         @Override
         public PopupStep onChosen(PsiMethod selectedValue, boolean finalChoice) {

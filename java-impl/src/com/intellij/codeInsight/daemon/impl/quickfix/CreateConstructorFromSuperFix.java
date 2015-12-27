@@ -19,7 +19,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +60,6 @@ public class CreateConstructorFromSuperFix extends CreateConstructorFromThisOrSu
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.constructor.from.super.call.family");
+    return JavaQuickFixBundle.message("create.constructor.from.super.call.family");
   }
 }

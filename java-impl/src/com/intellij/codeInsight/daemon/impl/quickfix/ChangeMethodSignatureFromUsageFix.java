@@ -24,9 +24,9 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.JavaTargetElementUtilEx;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.find.FindManager;
@@ -91,7 +91,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
   public String getText() {
     final String shortText = getShortText();
     if (shortText != null) return shortText;
-    return QuickFixBundle.message("change.method.signature.from.usage.text",
+    return JavaQuickFixBundle.message("change.method.signature.from.usage.text",
                                   JavaHighlightUtil.formatMethod(myTargetMethod),
                                   myTargetMethod.getName(),
                                   formatTypesList(myNewParametersInfo, myContext));
@@ -109,15 +109,15 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
     if (myTargetMethod.getContainingClass().findMethodsByName(targetMethodName, true).length == 1) {
       if (newParams.size() == 1) {
         final ParameterInfoImpl p = newParams.iterator().next();
-        return QuickFixBundle.message("add.parameter.from.usage.text", p.getTypeText(), (ArrayUtil.find(myNewParametersInfo, p) + 1), targetMethodName);
+        return JavaQuickFixBundle.message("add.parameter.from.usage.text", p.getTypeText(), (ArrayUtil.find(myNewParametersInfo, p) + 1), targetMethodName);
       }
       if (removedParams.size() == 1) {
         final ParameterInfoImpl p = removedParams.iterator().next();
-        return QuickFixBundle.message("remove.parameter.from.usage.text", (p.getOldIndex() + 1), targetMethodName);
+        return JavaQuickFixBundle.message("remove.parameter.from.usage.text", (p.getOldIndex() + 1), targetMethodName);
       }
       if (changedParams.size() == 1) {
         final ParameterInfoImpl p = changedParams.iterator().next();
-        return QuickFixBundle.message("change.parameter.from.usage.text", (p.getOldIndex() + 1), targetMethodName, myTargetMethod.getParameterList().getParameters()[p.getOldIndex()].getType().getPresentableText(),  p.getTypeText());
+        return JavaQuickFixBundle.message("change.parameter.from.usage.text", (p.getOldIndex() + 1), targetMethodName, myTargetMethod.getParameterList().getParameters()[p.getOldIndex()].getType().getPresentableText(),  p.getTypeText());
       }
     }
     return "<html> Change signature of " + targetMethodName + "(" + buf.toString() + ")</html>";
@@ -144,7 +144,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("change.method.signature.from.usage.family");
+    return JavaQuickFixBundle.message("change.method.signature.from.usage.family");
   }
 
   @Override
@@ -217,7 +217,7 @@ public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, Hig
         handler.processElementUsages(method, processor, options);
       }
     };
-    String progressTitle = QuickFixBundle.message("searching.for.usages.progress.title");
+    String progressTitle = JavaQuickFixBundle.message("searching.for.usages.progress.title");
     if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(runnable, progressTitle, true, project)) return null;
 
     if (ApplicationManager.getApplication().isUnitTestMode() || usagesFound[0] < minUsagesNumber) {

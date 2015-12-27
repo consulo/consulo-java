@@ -17,10 +17,10 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.AnnotationsHighlightUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
@@ -46,7 +46,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     if (name == null || !PsiNameHelper.getInstance(call.getProject()).isIdentifier(name)) return false;
     if (getAnnotationValueType(call.getValue()) == null) return false;
-    setText(QuickFixBundle.message("create.method.from.usage.text", name));
+    setText(JavaQuickFixBundle.message("create.method.from.usage.text", name));
     return true;
   }
 
@@ -133,7 +133,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.method.from.usage.family");
+    return JavaQuickFixBundle.message("create.method.from.usage.family");
   }
 
   @Nullable

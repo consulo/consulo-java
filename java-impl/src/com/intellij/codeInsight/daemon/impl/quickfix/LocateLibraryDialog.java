@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
@@ -54,7 +54,7 @@ public class LocateLibraryDialog extends DialogWrapper {
 
   public LocateLibraryDialog(Module module, String libraryPath, final @NonNls String libraryName, final String libraryDescription ) {
     super (module.getProject(), true);
-    setTitle ( QuickFixBundle.message("add.library.title.dialog"));
+    setTitle ( JavaQuickFixBundle.message("add.library.title.dialog"));
 
     myProject = module.getProject();
 
@@ -69,13 +69,13 @@ public class LocateLibraryDialog extends DialogWrapper {
     myFileLabel.setLabelFor(myLibraryFile.getTextField());
 
     myLibraryFile.setText(new File ( libraryPath, libraryName).getPath() );
-    myLibraryFile.addBrowseFolderListener(QuickFixBundle.message("add.library.title.locate.library"),
-                                          QuickFixBundle.message("add.library.description.locate.library"), myProject,
+    myLibraryFile.addBrowseFolderListener(JavaQuickFixBundle.message("add.library.title.locate.library"),
+                                          JavaQuickFixBundle.message("add.library.description.locate.library"), myProject,
                                           new FileChooserDescriptor(false,false,true,false,false,false));
 
     myCopyToDir.setText(module.getModuleDirPath());
-    myCopyToDir.addBrowseFolderListener(QuickFixBundle.message("add.library.title.choose.folder"),
-                                        QuickFixBundle.message("add.library.description.choose.folder"), myProject,
+    myCopyToDir.addBrowseFolderListener(JavaQuickFixBundle.message("add.library.title.choose.folder"),
+                                        JavaQuickFixBundle.message("add.library.description.choose.folder"), myProject,
                                         FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
     final ActionListener listener = new ActionListener() {
@@ -137,8 +137,8 @@ public class LocateLibraryDialog extends DialogWrapper {
   private String getResultingPath() {
     final File srcFile = new File(myLibraryFile.getText());
     if (!srcFile.exists()) {
-      Messages.showErrorDialog(myProject, QuickFixBundle.message("add.library.error.not.found", srcFile.getPath()),
-                               QuickFixBundle.message("add.library.title.error"));
+      Messages.showErrorDialog(myProject, JavaQuickFixBundle.message("add.library.error.not.found", srcFile.getPath()),
+                               JavaQuickFixBundle.message("add.library.title.error"));
       return null;
     }
 
@@ -158,8 +158,8 @@ public class LocateLibraryDialog extends DialogWrapper {
     }
     catch (IOException e) {
       Messages.showErrorDialog(myProject,
-                               QuickFixBundle.message("add.library.error.cannot.copy", srcFile.getPath(), dstFile.getPath(), e.getMessage()),
-                               QuickFixBundle.message("add.library.title.error"));
+                               JavaQuickFixBundle.message("add.library.error.cannot.copy", srcFile.getPath(), dstFile.getPath(), e.getMessage()),
+                               JavaQuickFixBundle.message("add.library.title.error"));
       return null;
     }
   }

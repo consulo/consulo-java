@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -29,13 +29,13 @@ public class ConvertToStringLiteralAction implements IntentionAction {
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("convert.to.string.text");
+    return JavaQuickFixBundle.message("convert.to.string.text");
   }
 
   @NotNull
   @Override
   public String getFamilyName() {
-    return QuickFixBundle.message("convert.to.string.family");
+    return JavaQuickFixBundle.message("convert.to.string.family");
   }
 
   @Override

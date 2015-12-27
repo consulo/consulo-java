@@ -22,8 +22,8 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.application.ApplicationManager;
@@ -48,16 +48,14 @@ public class AddMethodQualifierFix implements IntentionAction
 
 	public AddMethodQualifierFix(final PsiMethodCallExpression methodCallExpression)
 	{
-		myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer
-				(methodCallExpression);
+		myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
 	}
 
 	@NotNull
 	@Override
 	public String getText()
 	{
-		String text = QuickFixBundle.message("add.method.qualifier.fix.text", myCandidates.size() > 1 ? "" :
-				myCandidates.get(0).getName());
+		String text = JavaQuickFixBundle.message("add.method.qualifier.fix.text", myCandidates.size() > 1 ? "" : myCandidates.get(0).getName());
 		if(myCandidates.size() > 1)
 		{
 			text += "...";
@@ -132,9 +130,7 @@ public class AddMethodQualifierFix implements IntentionAction
 	}
 
 	@Override
-	public void invoke(@NotNull final Project project,
-			final Editor editor,
-			final PsiFile file) throws IncorrectOperationException
+	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
 	{
 		if(!FileModificationService.getInstance().preparePsiElementsForWrite(file))
 		{
@@ -152,8 +148,7 @@ public class AddMethodQualifierFix implements IntentionAction
 
 	private void chooseAndQualify(final Editor editor)
 	{
-		final BaseListPopupStep<PsiVariable> step = new BaseListPopupStep<PsiVariable>(QuickFixBundle.message("add" +
-				".qualifier"), myCandidates)
+		final BaseListPopupStep<PsiVariable> step = new BaseListPopupStep<PsiVariable>(JavaQuickFixBundle.message("add.qualifier"), myCandidates)
 		{
 			@Override
 			public PopupStep onChosen(final PsiVariable selectedValue, final boolean finalChoice)

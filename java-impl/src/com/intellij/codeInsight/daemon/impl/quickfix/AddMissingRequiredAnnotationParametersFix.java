@@ -23,7 +23,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
 import com.intellij.codeInsight.template.TemplateManager;
@@ -65,8 +65,8 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
 	@Override
 	public String getText()
 	{
-		return myMissedElements.size() == 1 ? QuickFixBundle.message("add.missing.annotation.single.parameter.fix",
-				ContainerUtil.getFirstItem(myMissedElements)) : QuickFixBundle.message("add.missing.annotation" +
+		return myMissedElements.size() == 1 ? JavaQuickFixBundle.message("add.missing.annotation.single.parameter.fix",
+				ContainerUtil.getFirstItem(myMissedElements)) : JavaQuickFixBundle.message("add.missing.annotation" +
 				".parameters.fix", StringUtil.join(myMissedElements, ", "));
 	}
 
@@ -74,7 +74,7 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
 	@Override
 	public String getFamilyName()
 	{
-		return QuickFixBundle.message("annotations.fix");
+		return JavaQuickFixBundle.message("annotations.fix");
 	}
 
 	@Override

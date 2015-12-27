@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -57,7 +57,7 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("fix.parameter.type.text",
+    return JavaQuickFixBundle.message("fix.parameter.type.text",
                                   myName,
                                   myParameterType.getCanonicalText() );
   }
@@ -65,7 +65,7 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.parameter.type.family");
+    return JavaQuickFixBundle.message("fix.parameter.type.family");
   }
 
   @Override

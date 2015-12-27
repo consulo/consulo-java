@@ -15,16 +15,16 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
@@ -40,13 +40,13 @@ public class AddNewArrayExpressionFix implements IntentionAction {
   @NotNull
   public String getText() {
     PsiType type = getType();
-    return QuickFixBundle.message("add.new.array.text", type.getPresentableText());
+    return JavaQuickFixBundle.message("add.new.array.text", type.getPresentableText());
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("add.new.array.family");
+    return JavaQuickFixBundle.message("add.new.array.family");
   }
 
   @Override

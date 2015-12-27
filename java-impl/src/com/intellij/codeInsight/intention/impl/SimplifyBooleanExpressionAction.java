@@ -28,6 +28,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 
 public class SimplifyBooleanExpressionAction implements IntentionAction{
   @Override
@@ -39,7 +40,7 @@ public class SimplifyBooleanExpressionAction implements IntentionAction{
   @Override
   @NotNull
   public String getFamilyName() {
-    return SimplifyBooleanExpressionFix.FAMILY_NAME;
+    return JavaQuickFixBundle.message("simplify.boolean.expression.family");
   }
 
   @Override

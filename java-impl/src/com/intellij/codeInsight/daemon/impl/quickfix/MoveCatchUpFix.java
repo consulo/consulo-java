@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -43,7 +43,7 @@ public class MoveCatchUpFix implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("move.catch.up.text",
+    return JavaQuickFixBundle.message("move.catch.up.text",
                                   JavaHighlightUtil.formatType(myCatchSection.getCatchType()),
                                   JavaHighlightUtil.formatType(myMoveBeforeSection.getCatchType()));
   }
@@ -51,7 +51,7 @@ public class MoveCatchUpFix implements IntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("move.catch.up.family");
+    return JavaQuickFixBundle.message("move.catch.up.family");
   }
 
   @Override

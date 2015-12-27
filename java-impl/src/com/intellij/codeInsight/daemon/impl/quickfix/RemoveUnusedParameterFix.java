@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -45,13 +45,13 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("remove.unused.parameter.text", myName);
+    return JavaQuickFixBundle.message("remove.unused.parameter.text", myName);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("remove.unused.parameter.family");
+    return JavaQuickFixBundle.message("remove.unused.parameter.family");
   }
 
   @Override

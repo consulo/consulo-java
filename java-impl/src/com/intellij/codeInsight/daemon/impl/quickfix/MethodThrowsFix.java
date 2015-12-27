@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -51,7 +51,7 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message(myShouldThrow ? "fix.throws.list.add.exception" : "fix.throws.list.remove.exception",
+    return JavaQuickFixBundle.message(myShouldThrow ? "fix.throws.list.add.exception" : "fix.throws.list.remove.exception",
                                   myThrowsCanonicalText,
                                   myMethodName);
   }
@@ -59,7 +59,7 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.throws.list.family");
+    return JavaQuickFixBundle.message("fix.throws.list.family");
   }
 
   @Override

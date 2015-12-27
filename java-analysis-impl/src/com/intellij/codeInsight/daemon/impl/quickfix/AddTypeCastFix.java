@@ -26,8 +26,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -55,13 +55,13 @@ public class AddTypeCastFix extends LocalQuickFixAndIntentionActionOnPsiElement 
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("add.typecast.text", myType.getCanonicalText());
+    return JavaQuickFixBundle.message("add.typecast.text", myType.getCanonicalText());
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("add.typecast.family");
+    return JavaQuickFixBundle.message("add.typecast.family");
   }
 
   @Override

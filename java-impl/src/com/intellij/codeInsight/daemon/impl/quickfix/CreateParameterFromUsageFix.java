@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
@@ -66,7 +66,7 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
 
     @Override
     public String getText(String varName) {
-    return QuickFixBundle.message("create.parameter.from.usage.text", varName);
+    return JavaQuickFixBundle.message("create.parameter.from.usage.text", varName);
   }
 
   @Override
@@ -153,7 +153,7 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.parameter.from.usage.family");
+    return JavaQuickFixBundle.message("create.parameter.from.usage.family");
   }
 
 }

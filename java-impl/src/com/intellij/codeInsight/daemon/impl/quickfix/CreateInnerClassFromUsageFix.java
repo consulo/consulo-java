@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.ide.util.PsiClassListCellRenderer;
 import com.intellij.ide.util.PsiElementListCellRenderer;
 import com.intellij.openapi.application.ApplicationManager;
@@ -49,7 +49,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix {
 
   @Override
   public String getText(String varName) {
-    return QuickFixBundle.message("create.inner.class.from.usage.text", StringUtil.capitalize(myKind.getDescription()), varName);
+    return JavaQuickFixBundle.message("create.inner.class.from.usage.text", StringUtil.capitalize(myKind.getDescription()), varName);
   }
 
   @Override
@@ -141,7 +141,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix {
     };
 
     builder.
-      setTitle(QuickFixBundle.message("target.class.chooser.title")).
+      setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
       setItemChoosenCallback(runnable).
       createPopup().
       showInBestPositionFor(editor);

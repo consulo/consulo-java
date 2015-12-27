@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
@@ -160,7 +160,7 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
     }
 
     if (CreateFromUsageUtils.shouldShowTag(offset, element, myConstructorCall)) {
-      setText(QuickFixBundle.message("create.constructor.from.new.text"));
+      setText(JavaQuickFixBundle.message("create.constructor.from.new.text"));
       return true;
     }
 
@@ -190,6 +190,6 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.constructor.from.new.family");
+    return JavaQuickFixBundle.message("create.constructor.from.new.family");
   }
 }

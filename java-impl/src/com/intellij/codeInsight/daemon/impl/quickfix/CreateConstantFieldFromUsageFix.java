@@ -19,7 +19,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiReferenceExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,12 +42,12 @@ public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
 
   @Override
   protected String getText(String varName) {
-    return QuickFixBundle.message("create.constant.from.usage.text", varName);
+    return JavaQuickFixBundle.message("create.constant.from.usage.text", varName);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.constant.from.usage.family");
+    return JavaQuickFixBundle.message("create.constant.from.usage.family");
   }
 }

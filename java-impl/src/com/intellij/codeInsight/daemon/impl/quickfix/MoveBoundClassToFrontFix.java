@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -33,7 +33,7 @@ public class MoveBoundClassToFrontFix extends ExtendsListFix {
 
   public MoveBoundClassToFrontFix(PsiClass aClass, PsiClassType classToExtendFrom) {
     super(aClass, classToExtendFrom, true);
-    myName = QuickFixBundle.message("move.bound.class.to.front.fix.text",
+    myName = JavaQuickFixBundle.message("move.bound.class.to.front.fix.text",
                                     HighlightUtil.formatClass(myClassToExtendFrom),
                                     HighlightUtil.formatClass(aClass));
   }
@@ -47,7 +47,7 @@ public class MoveBoundClassToFrontFix extends ExtendsListFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("move.class.in.extend.list.family");
+    return JavaQuickFixBundle.message("move.class.in.extend.list.family");
   }
 
   @Override

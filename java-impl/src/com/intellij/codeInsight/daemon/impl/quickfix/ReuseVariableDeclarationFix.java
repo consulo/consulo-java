@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -43,13 +43,13 @@ public class ReuseVariableDeclarationFix implements IntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("reuse.variable.declaration.family");
+    return JavaQuickFixBundle.message("reuse.variable.declaration.family");
   }
 
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("reuse.variable.declaration.text", myVariable.getName());
+    return JavaQuickFixBundle.message("reuse.variable.declaration.text", myVariable.getName());
   }
 
   @Override

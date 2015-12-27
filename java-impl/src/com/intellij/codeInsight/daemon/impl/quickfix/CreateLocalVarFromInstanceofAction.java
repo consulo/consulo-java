@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -67,7 +67,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     if (TypeConversionUtil.isPrimitiveAndNotNull(operandType)) return false;
     PsiType type = checkType.getType();
     String castTo = type.getPresentableText();
-    setText(QuickFixBundle.message("create.local.from.instanceof.usage.text", castTo, operand.getText()));
+    setText(JavaQuickFixBundle.message("create.local.from.instanceof.usage.text", castTo, operand.getText()));
 
     PsiStatement statement = PsiTreeUtil.getParentOfType(instanceOfExpression, PsiStatement.class);
     boolean insideIf = statement instanceof PsiIfStatement
@@ -440,6 +440,6 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.local.from.instanceof.usage.family");
+    return JavaQuickFixBundle.message("create.local.from.instanceof.usage.family");
   }
 }

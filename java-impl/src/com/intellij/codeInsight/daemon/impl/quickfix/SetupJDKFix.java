@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
@@ -47,13 +47,13 @@ public class SetupJDKFix implements IntentionAction, HighPriorityAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("setup.jdk.location.text");
+    return JavaQuickFixBundle.message("setup.jdk.location.text");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("setup.jdk.location.family");
+    return JavaQuickFixBundle.message("setup.jdk.location.family");
   }
 
   @Override

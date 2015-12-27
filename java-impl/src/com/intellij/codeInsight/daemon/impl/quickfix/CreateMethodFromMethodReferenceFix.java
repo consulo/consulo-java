@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -68,7 +68,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix
 		if(call.isConstructor() && name.equals("new") || PsiNameHelper.getInstance(call.getProject()).isIdentifier
 				(name))
 		{
-			setText(call.isConstructor() ? QuickFixBundle.message("create.constructor.from.new.text") : QuickFixBundle
+			setText(call.isConstructor() ? JavaQuickFixBundle.message("create.constructor.from.new.text") : JavaQuickFixBundle
 					.message("create.method.from.usage.text", name));
 			return true;
 		}
@@ -189,7 +189,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix
 	@NotNull
 	public String getFamilyName()
 	{
-		return QuickFixBundle.message("create.method.from.usage.family");
+		return JavaQuickFixBundle.message("create.method.from.usage.family");
 	}
 
 	@Nullable

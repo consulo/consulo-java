@@ -15,7 +15,10 @@
  */
 package com.siyeh.ig.fixes;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtilBase;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.util.Processor;
@@ -23,34 +26,34 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Bas Leijdekkers
  */
-public class AddToIgnoreIfAnnotatedByListQuickFix {
+public class AddToIgnoreIfAnnotatedByListQuickFix
+{
 
-  private AddToIgnoreIfAnnotatedByListQuickFix() {}
+	private AddToIgnoreIfAnnotatedByListQuickFix()
+	{
+	}
 
-  public static InspectionGadgetsFix[] build(PsiModifierListOwner modifierListOwner, List<String> configurationList) {
-    final List<InspectionGadgetsFix> fixes = build(modifierListOwner, configurationList, new ArrayList());
-    return fixes.isEmpty() ? InspectionGadgetsFix.EMPTY_ARRAY : fixes.toArray(new InspectionGadgetsFix[fixes.size()]);
-  }
+	public static InspectionGadgetsFix[] build(PsiModifierListOwner modifierListOwner, List<String> configurationList)
+	{
+		final List<InspectionGadgetsFix> fixes = build(modifierListOwner, configurationList, new ArrayList());
+		return fixes.isEmpty() ? InspectionGadgetsFix.EMPTY_ARRAY : fixes.toArray(new InspectionGadgetsFix[fixes.size()]);
+	}
 
-  public static List<InspectionGadgetsFix> build(final PsiModifierListOwner modifierListOwner,
-                                                 final List<String> configurationList,
-                                                 final List<InspectionGadgetsFix> fixes) {
-    SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(modifierListOwner, new Processor<String>() {
-      @Override
-      public boolean process(String qualifiedName) {
-        fixes.add(new DelegatingFix(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(
-          InspectionGadgetsBundle.message("add.0.to.ignore.if.annotated.by.list.quickfix", qualifiedName),
-          QuickFixBundle.message("fix.add.special.annotation.family"),
-          configurationList, qualifiedName, modifierListOwner)));
-        return true;
-      }
-    });
-    return fixes;
-  }
+	public static List<InspectionGadgetsFix> build(final PsiModifierListOwner modifierListOwner, final List<String> configurationList, final List<InspectionGadgetsFix> fixes)
+	{
+		SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(modifierListOwner, new Processor<String>()
+		{
+			@Override
+			public boolean process(String qualifiedName)
+			{
+				fixes.add(new DelegatingFix(SpecialAnnotationsUtilBase.createAddToSpecialAnnotationsListQuickFix(InspectionGadgetsBundle.message("add.0.to.ignore.if.annotated.by.list.quickfix",
+						qualifiedName), JavaQuickFixBundle.message("fix.add.special.annotation.family"), configurationList, qualifiedName, modifierListOwner)));
+				return true;
+			}
+		});
+		return fixes;
+	}
 }

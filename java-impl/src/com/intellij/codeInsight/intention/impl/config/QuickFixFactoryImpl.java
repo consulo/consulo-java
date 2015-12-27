@@ -22,10 +22,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx;
 import com.intellij.codeInsight.daemon.impl.DaemonListeners;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -768,8 +768,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	public IntentionAction createAddToDependencyInjectionAnnotationsFix(@NotNull Project project, @NotNull String qualifiedName, @NotNull String element)
 	{
 		final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
-		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(QuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName),
-				QuickFixBundle.message("fix.unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
+		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName),
+				JavaQuickFixBundle.message("fix.unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
 	}
 
 	@NotNull

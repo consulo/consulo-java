@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -39,13 +39,13 @@ public class DeleteMultiCatchFix implements IntentionAction {
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myTypeElement.getType()));
+    return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myTypeElement.getType()));
   }
 
   @NotNull
   @Override
   public String getFamilyName() {
-    return QuickFixBundle.message("delete.catch.family");
+    return JavaQuickFixBundle.message("delete.catch.family");
   }
 
   @Override

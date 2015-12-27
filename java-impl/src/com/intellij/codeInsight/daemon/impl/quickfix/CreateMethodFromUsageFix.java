@@ -21,9 +21,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.template.Template;
@@ -73,7 +73,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
   protected String getDisplayString(String name) {
-    return QuickFixBundle.message("create.method.from.usage.text", name);
+    return JavaQuickFixBundle.message("create.method.from.usage.text", name);
   }
 
   private static boolean isMethodSignatureExists(PsiMethodCallExpression call, PsiClass target) {
@@ -360,7 +360,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.method.from.usage.family");
+    return JavaQuickFixBundle.message("create.method.from.usage.family");
   }
 
   @Nullable

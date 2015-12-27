@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.undo.UndoUtil;
@@ -92,22 +92,22 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
       else if (parent instanceof PsiClassInitializer) {
         PsiClass containingClass = ((PsiClassInitializer)parent).getContainingClass();
         String className = containingClass instanceof PsiAnonymousClass
-                           ? QuickFixBundle.message("anonymous.class.presentation",
+                           ? JavaQuickFixBundle.message("anonymous.class.presentation",
                                                     ((PsiAnonymousClass)containingClass).getBaseClassType().getPresentableText())
                            : containingClass != null ? containingClass.getName() : "unknown";
-        name = QuickFixBundle.message("class.initializer.presentation", className);
+        name = JavaQuickFixBundle.message("class.initializer.presentation", className);
       }
     }
 
     String modifierText = VisibilityUtil.toPresentableText(myModifier);
 
-    return QuickFixBundle.message(myShouldHave ? "add.modifier.fix" : "remove.modifier.fix", name, modifierText);
+    return JavaQuickFixBundle.message(myShouldHave ? "add.modifier.fix" : "remove.modifier.fix", name, modifierText);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.modifiers.family");
+    return JavaQuickFixBundle.message("fix.modifiers.family");
   }
 
   @Override
@@ -184,8 +184,8 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     if (!modifierLists.isEmpty()) {
       if (Messages.showYesNoDialog(project,
-                                   QuickFixBundle.message("change.inheritors.visibility.warning.text"),
-                                   QuickFixBundle.message("change.inheritors.visibility.warning.title"),
+                                   JavaQuickFixBundle.message("change.inheritors.visibility.warning.text"),
+                                   JavaQuickFixBundle.message("change.inheritors.visibility.warning.title"),
                                    Messages.getQuestionIcon()) == DialogWrapper.OK_EXIT_CODE) {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
           @Override

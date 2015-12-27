@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.generation.PsiMethodMember;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.ide.util.MemberChooser;
@@ -52,7 +52,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("initialize.final.field.in.constructor.name");
+    return JavaQuickFixBundle.message("initialize.final.field.in.constructor.name");
   }
 
   @NotNull
@@ -178,7 +178,7 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
 
     if (ctors.length > 1) {
       final MemberChooser<PsiMethodMember> chooser = new MemberChooser<PsiMethodMember>(toPsiMethodMemberArray(ctors), false, true, project);
-      chooser.setTitle(QuickFixBundle.message("initialize.final.field.in.constructor.choose.dialog.title"));
+      chooser.setTitle(JavaQuickFixBundle.message("initialize.final.field.in.constructor.choose.dialog.title"));
       chooser.show();
 
       final List<PsiMethodMember> chosenMembers = chooser.getSelectedElements();

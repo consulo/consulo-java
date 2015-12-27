@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -52,7 +52,7 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message("fix.variable.type.text",
+    return JavaQuickFixBundle.message("fix.variable.type.text",
                                   myName,
                                   getReturnType().getCanonicalText());
   }
@@ -60,7 +60,7 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.variable.type.family");
+    return JavaQuickFixBundle.message("fix.variable.type.family");
   }
 
   @Override

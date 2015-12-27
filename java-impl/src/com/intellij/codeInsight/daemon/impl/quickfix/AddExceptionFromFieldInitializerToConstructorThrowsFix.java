@@ -22,9 +22,9 @@ import java.util.Set;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -79,7 +79,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
 			return false;
 		}
 		final PsiMethod[] existedConstructors = containingClass.getConstructors();
-		setText(QuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.text", existedConstructors.length));
+		setText(JavaQuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.text", existedConstructors.length));
 		return true;
 	}
 
@@ -128,7 +128,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
 	@Override
 	public String getFamilyName()
 	{
-		return QuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.family.text");
+		return JavaQuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.family.text");
 	}
 
 	@Override

@@ -19,11 +19,11 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiKeyword;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * changes 'class a extends b' to 'class a implements b' or vice versa
@@ -33,7 +33,7 @@ public class ChangeExtendsToImplementsFix extends ExtendsListFix {
 
   public ChangeExtendsToImplementsFix(PsiClass aClass, PsiClassType classToExtendFrom) {
     super(aClass, classToExtendFrom, true);
-    myName = QuickFixBundle.message("exchange.extends.implements.keyword",
+    myName = JavaQuickFixBundle.message("exchange.extends.implements.keyword",
                                     aClass.isInterface() == myClassToExtendFrom.isInterface() ? PsiKeyword.IMPLEMENTS : PsiKeyword.EXTENDS,
                                     aClass.isInterface() == myClassToExtendFrom.isInterface() ? PsiKeyword.EXTENDS : PsiKeyword.IMPLEMENTS,
                                     myClassToExtendFrom.getName());

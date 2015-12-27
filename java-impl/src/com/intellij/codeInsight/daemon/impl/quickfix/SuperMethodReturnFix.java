@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
@@ -50,7 +50,7 @@ public class SuperMethodReturnFix implements IntentionAction {
             PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
             0
     );
-    return QuickFixBundle.message("fix.super.method.return.type.text",
+    return JavaQuickFixBundle.message("fix.super.method.return.type.text",
                                   name,
                                   JavaHighlightUtil.formatType(mySuperMethodType));
   }
@@ -58,7 +58,7 @@ public class SuperMethodReturnFix implements IntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("fix.super.method.return.type.family");
+    return JavaQuickFixBundle.message("fix.super.method.return.type.family");
   }
 
   @Override

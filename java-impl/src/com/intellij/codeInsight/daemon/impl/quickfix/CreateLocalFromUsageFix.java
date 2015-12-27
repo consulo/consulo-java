@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.impl.TypeExpression;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
@@ -46,7 +46,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
 
   @Override
   public String getText(String varName) {
-    return QuickFixBundle.message("create.local.from.usage.text", varName);
+    return JavaQuickFixBundle.message("create.local.from.usage.text", varName);
   }
 
   @Override
@@ -166,7 +166,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.local.from.usage.family");
+    return JavaQuickFixBundle.message("create.local.from.usage.family");
   }
 
 }

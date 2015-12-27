@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateEditingAdapter;
 import com.intellij.openapi.application.ApplicationManager;
@@ -39,7 +39,7 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
 
   @Override
   protected String getText(String varName) {
-    return QuickFixBundle.message("create.field.from.usage.text", varName);
+    return JavaQuickFixBundle.message("create.field.from.usage.text", varName);
   }
 
   protected boolean createConstantField() {
@@ -145,6 +145,6 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("create.field.from.usage.family");
+    return JavaQuickFixBundle.message("create.field.from.usage.family");
   }
 }

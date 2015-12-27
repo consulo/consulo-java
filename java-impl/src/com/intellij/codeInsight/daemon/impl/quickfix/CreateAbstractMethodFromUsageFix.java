@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethodCallExpression;
@@ -37,7 +37,7 @@ public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
 	@Override
 	protected String getDisplayString(String name)
 	{
-		return QuickFixBundle.message("create.abstract.method.from.usage.text", name);
+		return JavaQuickFixBundle.message("create.abstract.method.from.usage.text", name);
 	}
 
 	@NotNull

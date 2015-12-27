@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -44,13 +44,13 @@ public class MoveClassToSeparateFileFix implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("move.class.to.separate.file.text", myClass.getName());
+    return JavaQuickFixBundle.message("move.class.to.separate.file.text", myClass.getName());
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("move.class.to.separate.file.family");
+    return JavaQuickFixBundle.message("move.class.to.separate.file.family");
   }
 
   @Override

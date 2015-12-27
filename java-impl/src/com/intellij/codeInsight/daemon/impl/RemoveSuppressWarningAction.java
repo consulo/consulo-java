@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.SuppressManager;
@@ -64,7 +64,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("remove.suppression.action.family");
+    return JavaQuickFixBundle.message("remove.suppression.action.family");
   }
 
   @Override
@@ -111,7 +111,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
   @Override
   @NotNull
   public String getName() {
-    return QuickFixBundle.message("remove.suppression.action.name", myID);
+    return JavaQuickFixBundle.message("remove.suppression.action.name", myID);
   }
 
   private void removeFromComment(final PsiComment comment, final boolean checkLine) throws IncorrectOperationException {

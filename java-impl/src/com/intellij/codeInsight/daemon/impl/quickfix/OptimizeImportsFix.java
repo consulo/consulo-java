@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -33,13 +33,13 @@ public class OptimizeImportsFix implements IntentionAction{
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("optimize.imports.fix");
+    return JavaQuickFixBundle.message("optimize.imports.fix");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("optimize.imports.fix");
+    return JavaQuickFixBundle.message("optimize.imports.fix");
   }
 
   @Override

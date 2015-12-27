@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -40,7 +40,7 @@ public class GeneralizeCatchFix implements IntentionAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("generalize.catch.text",
+    return JavaQuickFixBundle.message("generalize.catch.text",
                                   JavaHighlightUtil.formatType(myCatchParameter == null ? null : myCatchParameter.getType()),
                                   JavaHighlightUtil.formatType(myUnhandledException));
   }
@@ -48,7 +48,7 @@ public class GeneralizeCatchFix implements IntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("generalize.catch.family");
+    return JavaQuickFixBundle.message("generalize.catch.family");
   }
 
   @Override

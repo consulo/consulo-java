@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -99,7 +99,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix {
         @Override
         @NotNull
         public String getText() {
-          return QuickFixBundle.message("orderEntry.fix.add.junit.jar.to.classpath");
+          return JavaQuickFixBundle.message("orderEntry.fix.add.junit.jar.to.classpath");
         }
 
         @Override
@@ -132,7 +132,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix {
         @Override
         @NotNull
         public String getText() {
-          return QuickFixBundle.message("orderEntry.fix.add.annotations.jar.to.classpath");
+          return JavaQuickFixBundle.message("orderEntry.fix.add.annotations.jar.to.classpath");
         }
 
         @Override
@@ -152,7 +152,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix {
             @Override
             public void run() {
               final LocateLibraryDialog dialog = new LocateLibraryDialog(currentModule, PathManager.getLibPath(), "annotations.jar",
-                                                                         QuickFixBundle.message("add.library.annotations.description"));
+                                                                         JavaQuickFixBundle.message("add.library.annotations.description"));
               dialog.show();
               if (dialog.isOK()) {
                 new WriteCommandAction(project) {
@@ -209,13 +209,13 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix {
             @Override
             @NotNull
             public String getText() {
-              return QuickFixBundle.message("orderEntry.fix.add.library.to.classpath", libraryEntry.getPresentableName());
+              return JavaQuickFixBundle.message("orderEntry.fix.add.library.to.classpath", libraryEntry.getPresentableName());
             }
 
             @Override
             @NotNull
             public String getFamilyName() {
-              return QuickFixBundle.message("orderEntry.fix.family.add.library.to.classpath");
+              return JavaQuickFixBundle.message("orderEntry.fix.family.add.library.to.classpath");
             }
 
             @Override
@@ -301,7 +301,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix {
     if (module == null) return false;
     final LocateLibraryDialog dialog = new LocateLibraryDialog(
       module, PathManager.getLibPath(), "annotations.jar",
-      QuickFixBundle.message("add.library.annotations.description"));
+      JavaQuickFixBundle.message("add.library.annotations.description"));
     dialog.show();
     if (dialog.isOK()) {
       new WriteCommandAction(module.getProject()) {

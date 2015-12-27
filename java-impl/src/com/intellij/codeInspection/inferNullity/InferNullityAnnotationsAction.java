@@ -20,7 +20,7 @@ import com.intellij.analysis.BaseAnalysisAction;
 import com.intellij.analysis.BaseAnalysisActionDialog;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.LocateLibraryDialog;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.openapi.application.ApplicationManager;
@@ -151,7 +151,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
           public void run() {
             final LocateLibraryDialog dialog =
               new LocateLibraryDialog(modulesWithoutAnnotations.iterator().next(), PathManager.getLibPath(), "annotations.jar",
-                                      QuickFixBundle.message("add.library.annotations.description"));
+                                      JavaQuickFixBundle.message("add.library.annotations.description"));
             dialog.show();
             if (dialog.isOK()) {
               final String path = dialog.getResultingLibraryPath();

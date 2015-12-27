@@ -15,9 +15,14 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.generation.surroundWith.SurroundWithUtil;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.openapi.diagnostic.Logger;
@@ -32,11 +37,6 @@ import com.intellij.psi.codeStyle.VariableKind;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author mike
@@ -153,7 +153,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
 
     if (element == null) return false;
 
-    setText(QuickFixBundle.message("add.catch.clause.text"));
+    setText(JavaQuickFixBundle.message("add.catch.clause.text"));
     return true;
   }
 
@@ -188,6 +188,6 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("add.catch.clause.family");
+    return JavaQuickFixBundle.message("add.catch.clause.family");
   }
 }

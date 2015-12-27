@@ -20,7 +20,7 @@ import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.DaemonListeners;
 import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
@@ -344,13 +344,13 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("import.class.fix");
+    return JavaQuickFixBundle.message("import.class.fix");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("import.class.fix");
+    return JavaQuickFixBundle.message("import.class.fix");
   }
 
   @Override

@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.undo.UndoUtil;
@@ -41,13 +41,13 @@ public class InsertSuperFix implements IntentionAction, HighPriorityAction {
   @Override
   @NotNull
   public String getText() {
-    return QuickFixBundle.message("insert.super.constructor.call.text");
+    return JavaQuickFixBundle.message("insert.super.constructor.call.text");
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("insert.super.constructor.call.family");
+    return JavaQuickFixBundle.message("insert.super.constructor.call.family");
   }
 
   @Override

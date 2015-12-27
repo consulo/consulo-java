@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
+import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -43,13 +43,13 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
   @NotNull
   @Override
   public String getText() {
-    return QuickFixBundle.message(myMakeInterface? "make.class.an.interface.text":"make.interface.an.class.text", myName);
+    return JavaQuickFixBundle.message(myMakeInterface? "make.class.an.interface.text":"make.interface.an.class.text", myName);
   }
 
   @Override
   @NotNull
   public String getFamilyName() {
-    return QuickFixBundle.message("make.class.an.interface.family");
+    return JavaQuickFixBundle.message("make.class.an.interface.family");
   }
 
   @Override
