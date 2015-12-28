@@ -18,6 +18,7 @@ package com.intellij.ide;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.JavaIcons;
+import org.mustbe.consulo.java.util.JavaClassNames;
 import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaClassFileType;
@@ -78,7 +79,7 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater
 				if(!DumbService.getInstance(element.getProject()).isDumb())
 				{
 					final PsiManager manager = psiClass.getManager();
-					final PsiClass javaLangTrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
+					final PsiClass javaLangTrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(JavaClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
 					final boolean isException = javaLangTrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangTrowable, true);
 					if(isException)
 					{
@@ -97,6 +98,10 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater
 		else if(element instanceof PsiLambdaExpression)
 		{
 			iconDescriptor.setMainIcon(AllIcons.Nodes.Lambda);
+		}
+		else if(element instanceof PsiMethodReferenceExpression)
+		{
+			iconDescriptor.setMainIcon(AllIcons.Nodes.MethodReference);
 		}
 		else if(element instanceof PsiJavaFile)
 		{
