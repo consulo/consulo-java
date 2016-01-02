@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -42,7 +42,7 @@ import com.intellij.util.IncorrectOperationException;
 public class JavaFilePasteProvider implements PasteProvider {
   public void performPaste(@NotNull final DataContext dataContext) {
     final Project project = CommonDataKeys.PROJECT.getData(dataContext);
-    final IdeView ideView = DataKeys.IDE_VIEW.getData(dataContext);
+    final IdeView ideView = LangDataKeys.IDE_VIEW.getData(dataContext);
     if (project == null || ideView == null) return;
     final PsiJavaFile javaFile = createJavaFileFromClipboardContent(project);
     if (javaFile == null) return;
@@ -115,7 +115,7 @@ public class JavaFilePasteProvider implements PasteProvider {
 
   public boolean isPasteEnabled(@NotNull final DataContext dataContext) {
     final Project project = CommonDataKeys.PROJECT.getData(dataContext);
-    final IdeView ideView = DataKeys.IDE_VIEW.getData(dataContext);
+    final IdeView ideView = LangDataKeys.IDE_VIEW.getData(dataContext);
     if (project == null || ideView == null || ideView.getDirectories().length == 0) {
       return false;
     }
