@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
@@ -30,8 +31,10 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
+import com.intellij.psi.search.searches.FunctionalExpressionSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
@@ -56,6 +59,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 	}
 
 	@Override
+	@RequiredReadAction
 	public boolean canInlineElement(final PsiElement element)
 	{
 		if(element.getLanguage() != JavaLanguage.INSTANCE)
@@ -88,7 +92,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 
 	private static boolean findClassInheritors(final PsiClass element)
 	{
-		final Collection<PsiClass> inheritors = new ArrayList<PsiClass>();
+		final Collection<PsiElement> inheritors = new ArrayList<PsiElement>();
 		if(!ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable()
 		{
 			@Override
@@ -99,7 +103,19 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 					@Override
 					public void run()
 					{
-						inheritors.addAll(ClassInheritorsSearch.search(element).findAll());
+						final PsiClass inheritor = ClassInheritorsSearch.search(element).findFirst();
+						if(inheritor != null)
+						{
+							inheritors.add(inheritor);
+						}
+						else
+						{
+							final PsiFunctionalExpression functionalExpression = FunctionalExpressionSearch.search(element).findFirst();
+							if(functionalExpression != null)
+							{
+								inheritors.add(functionalExpression);
+							}
+						}
 					}
 				});
 			}
@@ -107,7 +123,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		{
 			return false;
 		}
-		return inheritors.size() == 0;
+		return inheritors.isEmpty();
 	}
 
 	@Override
@@ -148,7 +164,14 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 			@Override
 			public void run()
 			{
-				errorMessage.set(getCannotInlineMessage(psiClass));
+				ApplicationManager.getApplication().runReadAction(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						errorMessage.set(getCannotInlineMessage(psiClass));
+					}
+				});
 			}
 		}, "Check if inline is possible...", true, project))
 		{
@@ -242,6 +265,10 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 	@Nullable
 	public static String getCannotInlineMessage(final PsiClass psiClass)
 	{
+		if(psiClass instanceof PsiTypeParameter)
+		{
+			return "Type parameters cannot be inlined";
+		}
 		if(psiClass.isAnnotationType())
 		{
 			return "Annotation types cannot be inlined";
@@ -300,8 +327,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		{
 			if(method.isConstructor())
 			{
-				PsiReturnStatement stmt = findReturnStatement(method);
-				if(stmt != null)
+				if(PsiUtil.findReturnStatements(method).length > 0)
 				{
 					return "Class cannot be inlined because its constructor contains 'return' statements";
 				}
@@ -386,21 +412,6 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 			}
 		}
 		return redundantImplements;
-	}
-
-	private static PsiReturnStatement findReturnStatement(final PsiMethod method)
-	{
-		final Ref<PsiReturnStatement> stmt = Ref.create(null);
-		method.accept(new JavaRecursiveElementWalkingVisitor()
-		{
-			@Override
-			public void visitReturnStatement(final PsiReturnStatement statement)
-			{
-				super.visitReturnStatement(statement);
-				stmt.set(statement);
-			}
-		});
-		return stmt.get();
 	}
 
 	@Nullable
