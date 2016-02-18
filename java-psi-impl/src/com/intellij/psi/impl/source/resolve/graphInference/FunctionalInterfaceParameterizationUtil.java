@@ -21,13 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
-import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 public class FunctionalInterfaceParameterizationUtil
 {
-	private static final Logger LOG = Logger.getInstance("#" + FunctionalInterfaceParameterizationUtil.class.getName
-			());
+	private static final Logger LOG = Logger.getInstance("#" + FunctionalInterfaceParameterizationUtil.class.getName());
 
 	public static boolean isWildcardParameterized(@Nullable PsiType classType)
 	{
@@ -72,9 +70,7 @@ public class FunctionalInterfaceParameterizationUtil
 	}
 
 	@Nullable
-	public static PsiType getGroundTargetType(@Nullable PsiType psiClassType,
-			@Nullable PsiLambdaExpression expr,
-			boolean performFinalCheck)
+	public static PsiType getGroundTargetType(@Nullable PsiType psiClassType, @Nullable PsiLambdaExpression expr, boolean performFinalCheck)
 	{
 		if(!isWildcardParameterized(psiClassType))
 		{
@@ -86,16 +82,13 @@ public class FunctionalInterfaceParameterizationUtil
 			return getFunctionalTypeExplicit(psiClassType, expr, performFinalCheck);
 		}
 
-		return psiClassType instanceof PsiClassType ? getNonWildcardParameterization((PsiClassType) psiClassType) :
-				null;
+		return psiClassType instanceof PsiClassType ? getNonWildcardParameterization((PsiClassType) psiClassType) : null;
 	}
 
 	/**
 	 * 18.5.3. Functional Interface Parameterization Inference
 	 */
-	private static PsiType getFunctionalTypeExplicit(PsiType psiClassType,
-			PsiLambdaExpression expr,
-			boolean performFinalCheck)
+	private static PsiType getFunctionalTypeExplicit(PsiType psiClassType, PsiLambdaExpression expr, boolean performFinalCheck)
 	{
 		final PsiParameter[] lambdaParams = expr.getParameterList().getParameters();
 		if(psiClassType instanceof PsiIntersectionType)
@@ -137,22 +130,19 @@ public class FunctionalInterfaceParameterizationUtil
 				return null;
 			}
 
-			final InferenceSession session = new InferenceSession(typeParameters, PsiSubstitutor.EMPTY,
-					expr.getManager(), expr);
+			final InferenceSession session = new InferenceSession(typeParameters, PsiSubstitutor.EMPTY, expr.getManager(), expr);
 
 			for(int i = 0; i < targetMethodParams.length; i++)
 			{
-				session.addConstraint(new TypeEqualityConstraint(lambdaParams[i].getType(),
-						session.substituteWithInferenceVariables(targetMethodParams[i].getType())));
+				session.addConstraint(new TypeEqualityConstraint(lambdaParams[i].getType(), session.substituteWithInferenceVariables(targetMethodParams[i].getType())));
 			}
 
-			if(!session.repeatInferencePhases(false))
+			if(!session.repeatInferencePhases())
 			{
 				return null;
 			}
 
-			final PsiSubstitutor substitutor = session.retrieveNonPrimitiveEqualsBounds(session.getInferenceVariables
-					());
+			final PsiSubstitutor substitutor = session.getInstantiations(session.getInferenceVariables());
 			final PsiType[] newTypeParameters = new PsiType[parameters.length];
 			for(int i = 0; i < typeParameters.length; i++)
 			{
@@ -171,28 +161,24 @@ public class FunctionalInterfaceParameterizationUtil
 
 			//If F<A'1, ..., A'm> is not a well-formed type (that is, the type arguments are not within their bounds),
 			// or if F<A'1, ..., A'm> is not a subtype of F<A1, ..., Am>, no valid parameterization exists.
-			if(!isWellFormed(psiClass, typeParameters, newTypeParameters) || performFinalCheck && !psiClassType
-					.isAssignableFrom(parameterization))
+			if(!isWellFormed(psiClass, typeParameters, newTypeParameters) || performFinalCheck && !psiClassType.isAssignableFrom(parameterization))
 			{
 				return null;
 			}
 
 			//Otherwise, the inferred parameterization is either F<A'1, ..., A'm>, if all the type arguments are types,
-			if(!TypeConversionUtil.containsWildcards(parameterization))
+			if(!isWildcardParameterized(parameterization))
 			{
 				return parameterization;
 			}
 
-			//or the non-wildcard parameterization (§9.8) of F<A'1, ..., A'm>, if one or more type arguments are still
-			// wildcards.
+			//or the non-wildcard parameterization (§9.8) of F<A'1, ..., A'm>, if one or more type arguments are still wildcards.
 			return getNonWildcardParameterization(parameterization);
 		}
 		return null;
 	}
 
-	private static boolean isWellFormed(PsiClass psiClass,
-			PsiTypeParameter[] typeParameters,
-			PsiType[] newTypeParameters)
+	private static boolean isWellFormed(PsiClass psiClass, PsiTypeParameter[] typeParameters, PsiType[] newTypeParameters)
 	{
 		final PsiSubstitutor substitutor = PsiSubstitutor.EMPTY.putAll(psiClass, newTypeParameters);
 		for(int i = 0; i < typeParameters.length; i++)
@@ -209,14 +195,12 @@ public class FunctionalInterfaceParameterizationUtil
 	}
 
 	/**
-	 * The function type of a parameterized functional interface, F<A1...An>, where one or more of A1...An is a
-	 * wildcard, is the function type of the non-wildcard parameterization of F, F<T1...Tn> determined as follows.
-	 * Let P1, ..., Pn be the type parameters of F and B1, ..., Bn be the corresponding bounds. For all i, 1 ≤ i ≤ n,
-	 * Ti is derived according to the form of Ai:
+	 * The function type of a parameterized functional interface, F<A1...An>, where one or more of A1...An is a wildcard, is the function type of the non-wildcard parameterization of F,
+	 * F<T1...Tn> determined as follows.
+	 * Let P1, ..., Pn be the type parameters of F and B1, ..., Bn be the corresponding bounds. For all i, 1 ≤ i ≤ n, Ti is derived according to the form of Ai:
 	 * <p/>
 	 * If Ai is a type, then Ti = Ai.
-	 * If Ai is a wildcard, and the corresponding type parameter bound, Bi, mentions one of P1...Pn,
-	 * then Ti is undefined and there is no function type.
+	 * If Ai is a wildcard, and the corresponding type parameter bound, Bi, mentions one of P1...Pn, then Ti is undefined and there is no function type.
 	 * Otherwise:
 	 * If Ai is an unbound wildcard ?, then Ti = Bi.
 	 * If Ai is a upper-bounded wildcard ? extends Ui, then Ti = glb(Ui, Bi).
@@ -243,22 +227,24 @@ public class FunctionalInterfaceParameterizationUtil
 				PsiType paramType = parameters[i];
 				if(paramType instanceof PsiWildcardType)
 				{
-					final PsiType bound = GenericsUtil.eliminateWildcards(((PsiWildcardType) paramType).getBound(),
-							false);
+					for(PsiClassType paramBound : typeParameters[i].getExtendsListTypes())
+					{
+						if(PsiPolyExpressionUtil.mentionsTypeParameters(paramBound, typeParametersSet))
+						{
+							return null;
+						}
+					}
+					final PsiType bound = ((PsiWildcardType) paramType).getBound();
 					if(((PsiWildcardType) paramType).isSuper())
 					{
 						newParameters[i] = bound;
 					}
 					else
 					{
-						newParameters[i] = bound != null ? bound : PsiType.getJavaLangObject(psiClass.getManager(),
-								psiClassType.getResolveScope());
+						newParameters[i] = bound != null ? bound : PsiType.getJavaLangObject(psiClass.getManager(), psiClassType.getResolveScope());
 						for(PsiClassType paramBound : typeParameters[i].getExtendsListTypes())
 						{
-							if(!PsiPolyExpressionUtil.mentionsTypeParameters(paramBound, typeParametersSet))
-							{
-								newParameters[i] = GenericsUtil.getGreatestLowerBound(paramBound, newParameters[i]);
-							}
+							newParameters[i] = GenericsUtil.getGreatestLowerBound(newParameters[i], paramBound);
 						}
 					}
 				}
@@ -273,8 +259,7 @@ public class FunctionalInterfaceParameterizationUtil
 				return null;
 			}
 
-			final PsiClassType parameterization = JavaPsiFacade.getElementFactory(psiClass.getProject()).createType
-					(psiClass, newParameters);
+			final PsiClassType parameterization = JavaPsiFacade.getElementFactory(psiClass.getProject()).createType(psiClass, newParameters);
 			if(!psiClassType.isAssignableFrom(parameterization))
 			{
 				return null;

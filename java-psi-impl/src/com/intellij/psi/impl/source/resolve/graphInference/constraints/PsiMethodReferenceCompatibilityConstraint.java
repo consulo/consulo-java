@@ -15,19 +15,21 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -37,8 +39,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class PsiMethodReferenceCompatibilityConstraint implements ConstraintFormula
 {
-	private static final Logger LOG = Logger.getInstance("#" + PsiMethodReferenceCompatibilityConstraint.class.getName
-			());
+	private static final Logger LOG = Logger.getInstance("#" + PsiMethodReferenceCompatibilityConstraint.class.getName());
 	private final PsiMethodReferenceExpression myExpression;
 	private PsiType myT;
 
@@ -53,15 +54,16 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 	{
 		if(!LambdaUtil.isFunctionalType(myT))
 		{
+			session.registerIncompatibleErrorMessage(session.getPresentableText(myT) + " is not a functional interface");
 			return false;
 		}
 
 		final PsiType groundTargetType = FunctionalInterfaceParameterizationUtil.getGroundTargetType(myT);
-		final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType
-				(groundTargetType);
+		final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType(groundTargetType);
 		final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(classResolveResult);
 		if(interfaceMethod == null)
 		{
+			session.registerIncompatibleErrorMessage("No valid function type can be found for " + session.getPresentableText(myT));
 			return false;
 		}
 
@@ -72,8 +74,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 		final PsiType returnType = substitutor.substitute(interfaceMethodReturnType);
 		final PsiType[] typeParameters = myExpression.getTypeParameters();
 
-		final PsiMethodReferenceUtil.QualifierResolveResult qualifierResolveResult = PsiMethodReferenceUtil
-				.getQualifierResolveResult(myExpression);
+		final PsiMethodReferenceUtil.QualifierResolveResult qualifierResolveResult = PsiMethodReferenceUtil.getQualifierResolveResult(myExpression);
 
 		if(myExpression.isExact())
 		{
@@ -83,11 +84,8 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 			final PsiClass applicableMemberContainingClass = applicableMember.getContainingClass();
 			final PsiClass containingClass = qualifierResolveResult.getContainingClass();
 
-			PsiSubstitutor psiSubstitutor = getSubstitutor(signature, qualifierResolveResult, applicableMember,
-					applicableMemberContainingClass);
+			PsiSubstitutor psiSubstitutor = getSubstitutor(signature, qualifierResolveResult, applicableMember, applicableMemberContainingClass);
 
-			PsiType applicableMethodReturnType = applicableMember instanceof PsiMethod ? ((PsiMethod)
-					applicableMember).getReturnType() : null;
 			int idx = 0;
 			for(PsiTypeParameter param : ((PsiTypeParameterListOwner) applicableMember).getTypeParameters())
 			{
@@ -96,8 +94,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 					psiSubstitutor = psiSubstitutor.put(param, typeParameters[idx++]);
 				}
 			}
-			final PsiParameter[] parameters = applicableMember instanceof PsiMethod ? ((PsiMethod) applicableMember)
-					.getParameterList().getParameters() : PsiParameter.EMPTY_ARRAY;
+			final PsiParameter[] parameters = applicableMember instanceof PsiMethod ? ((PsiMethod) applicableMember).getParameterList().getParameters() : PsiParameter.EMPTY_ARRAY;
 			if(targetParameters.length == parameters.length + 1)
 			{
 				final PsiType qualifierType = PsiMethodReferenceUtil.getQualifierType(myExpression);
@@ -105,52 +102,54 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 				if(qualifierClass != null)
 				{
 					final PsiType pType = signature.getParameterTypes()[0];
-					constraints.add(new StrictSubtypingConstraint(session.substituteWithInferenceVariables
-							(qualifierType), pType));
+					constraints.add(new StrictSubtypingConstraint(session.substituteWithInferenceVariables(qualifierType), pType));
 				}
 				for(int i = 1; i < targetParameters.length; i++)
 				{
-					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables
-							(psiSubstitutor.substitute(parameters[i - 1].getType())), signature.getParameterTypes()
-							[i]));
+					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables(psiSubstitutor.substitute(parameters[i - 1].getType())),
+							PsiUtil.captureToplevelWildcards(signature.getParameterTypes()[i], myExpression)));
 				}
 			}
 			else if(targetParameters.length == parameters.length)
 			{
 				for(int i = 0; i < targetParameters.length; i++)
 				{
-					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables
-							(psiSubstitutor.substitute(parameters[i].getType())), signature.getParameterTypes()[i]));
+					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables(psiSubstitutor.substitute(parameters[i].getType())),
+							PsiUtil.captureToplevelWildcards(signature.getParameterTypes()[i], myExpression)));
 				}
 			}
 			else
 			{
+				session.registerIncompatibleErrorMessage("Incompatible parameter types in method reference expression");
 				return false;
 			}
-			if(returnType != PsiType.VOID && returnType != null)
+			if(!PsiType.VOID.equals(returnType) && returnType != null)
 			{
-				if(applicableMethodReturnType == PsiType.VOID)
+				PsiType applicableMethodReturnType = null;
+				if(applicableMember instanceof PsiMethod)
 				{
+					final PsiType getClassReturnType = PsiTypesUtil.patchMethodGetClassReturnType(myExpression, (PsiMethod) applicableMember);
+					applicableMethodReturnType = getClassReturnType != null ? getClassReturnType : ((PsiMethod) applicableMember).getReturnType();
+				}
+
+				if(PsiType.VOID.equals(applicableMethodReturnType))
+				{
+					session.registerIncompatibleErrorMessage("Incompatible types: expected not void but compile-time declaration for the method reference has void return type");
 					return false;
+				}
+
+				if(applicableMethodReturnType == null && (applicableMember instanceof PsiClass || applicableMember instanceof PsiMethod && ((PsiMethod) applicableMember).isConstructor()))
+				{
+					if(containingClass != null)
+					{
+						applicableMethodReturnType = JavaPsiFacade.getElementFactory(applicableMember.getProject()).createType(containingClass, PsiSubstitutor.EMPTY);
+					}
 				}
 
 				if(applicableMethodReturnType != null)
 				{
-					constraints.add(new TypeCompatibilityConstraint(returnType,
-							session.substituteWithInferenceVariables(psiSubstitutor.substitute
-									(applicableMethodReturnType))));
-				}
-				else if(applicableMember instanceof PsiClass || applicableMember instanceof PsiMethod && ((PsiMethod)
-						applicableMember).isConstructor())
-				{
-					final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(applicableMember
-							.getProject());
-					if(containingClass != null)
-					{
-						final PsiType classType = session.substituteWithInferenceVariables(elementFactory.createType
-								(containingClass, psiSubstitutor));
-						constraints.add(new TypeCompatibilityConstraint(returnType, classType));
-					}
+					final PsiType capturedReturnType = PsiUtil.captureToplevelWildcards(psiSubstitutor.substitute(applicableMethodReturnType), myExpression);
+					constraints.add(new TypeCompatibilityConstraint(returnType, session.substituteWithInferenceVariables(capturedReturnType)));
 				}
 			}
 			return true;
@@ -162,6 +161,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 		{
 			if(!session.isProperType(paramType))
 			{
+				//session.registerIncompatibleErrorMessage("Parameter type in not yet inferred: " + session.getPresentableText(paramType));
 				return false;
 			}
 		}
@@ -181,8 +181,9 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 			}
 		}
 		final PsiElement element = resolve.getElement();
-		if(element == null)
+		if(element == null || resolve instanceof MethodCandidateInfo && !((MethodCandidateInfo) resolve).isApplicable())
 		{
+			session.registerIncompatibleErrorMessage("No compile-time declaration for the method reference is found");
 			return false;
 		}
 
@@ -201,47 +202,37 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 
 			if(method.isConstructor())
 			{
-				referencedMethodReturnType = JavaPsiFacade.getElementFactory(method.getProject()).createType
-						(containingClass, PsiSubstitutor.EMPTY);
+				referencedMethodReturnType = JavaPsiFacade.getElementFactory(method.getProject()).createType(containingClass, PsiSubstitutor.EMPTY);
 			}
 			else
 			{
-				referencedMethodReturnType = method.getReturnType();
+				final PsiType getClassReturnType = PsiTypesUtil.patchMethodGetClassReturnType(myExpression, method);
+				referencedMethodReturnType = getClassReturnType != null ? getClassReturnType : method.getReturnType();
 			}
 			LOG.assertTrue(referencedMethodReturnType != null, method);
 
-			if(!PsiTreeUtil.isContextAncestor(containingClass, myExpression,
-					false) || PsiUtil.getEnclosingStaticElement(myExpression, containingClass) != null)
-			{
-				session.initBounds(myExpression, containingClass.getTypeParameters());
-			}
-
-			session.initBounds(myExpression, method.getTypeParameters());
-
 			//if i) the method reference elides NonWildTypeArguments,
 			//  ii) the compile-time declaration is a generic method, and
-			// iii) the return type of the compile-time declaration mentions at least one of the method's type
-			// parameters;
+			// iii) the return type of the compile-time declaration mentions at least one of the method's type parameters;
 			if(typeParameters.length == 0 && method.getTypeParameters().length > 0)
 			{
 				final PsiClass interfaceClass = classResolveResult.getElement();
 				LOG.assertTrue(interfaceClass != null);
-				if(PsiPolyExpressionUtil.mentionsTypeParameters(referencedMethodReturnType,
-						ContainerUtil.newHashSet(method.getTypeParameters())))
+				if(PsiPolyExpressionUtil.mentionsTypeParameters(referencedMethodReturnType, ContainerUtil.newHashSet(method.getTypeParameters())))
 				{
-					//the constraint reduces to the bound set B3 which would be used to determine the method
-					// reference's invocation type
+					session.registerSiteSubstitutor(psiSubstitutor);
+					session.initBounds(myExpression, method.getTypeParameters());
+					//the constraint reduces to the bound set B3 which would be used to determine the method reference's invocation type
 					//when targeting the return type of the function type, as defined in 18.5.2.
-					session.collectApplicabilityConstraints(myExpression, ((MethodCandidateInfo) resolve),
-							groundTargetType);
-					session.registerReturnTypeConstraints(psiSubstitutor.substitute(referencedMethodReturnType),
-							returnType);
+					session.collectApplicabilityConstraints(myExpression, ((MethodCandidateInfo) resolve), groundTargetType);
+					session.registerReturnTypeConstraints(psiSubstitutor.substitute(referencedMethodReturnType), returnType);
 					return true;
 				}
 			}
 
 			if(PsiType.VOID.equals(referencedMethodReturnType))
 			{
+				session.registerIncompatibleErrorMessage("Incompatible types: expected not void but compile-time declaration for the method reference has void return type");
 				return false;
 			}
 
@@ -254,55 +245,46 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 				}
 			}
 
-			constraints.add(new TypeCompatibilityConstraint(returnType, session.substituteWithInferenceVariables
-					(psiSubstitutor.substitute(referencedMethodReturnType))));
+			if(myExpression.isConstructor() && PsiUtil.isRawSubstitutor(containingClass, qualifierResolveResult.getSubstitutor()))
+			{
+				session.initBounds(myExpression, containingClass.getTypeParameters());
+			}
+
+			final PsiType capturedReturnType = PsiUtil.captureToplevelWildcards(psiSubstitutor.substitute(referencedMethodReturnType), myExpression);
+			constraints.add(new TypeCompatibilityConstraint(returnType, session.substituteWithInferenceVariables(capturedReturnType)));
 		}
 
 		return true;
 	}
 
-	private PsiSubstitutor getSubstitutor(MethodSignature signature,
-			PsiMethodReferenceUtil.QualifierResolveResult qualifierResolveResult,
-			PsiMember member,
-			@Nullable PsiClass containingClass)
+	private PsiSubstitutor getSubstitutor(MethodSignature signature, PsiMethodReferenceUtil.QualifierResolveResult qualifierResolveResult, PsiMember member, @Nullable PsiClass containingClass)
 	{
 		final PsiClass qContainingClass = qualifierResolveResult.getContainingClass();
 		PsiSubstitutor psiSubstitutor = qualifierResolveResult.getSubstitutor();
 		if(qContainingClass != null && containingClass != null)
 		{
-			// 15.13.1 If the ReferenceType is a raw type, and there exists a parameterization of this type, T,
-			// that is a supertype of P1,
+			// 15.13.1 If the ReferenceType is a raw type, and there exists a parameterization of this type, T, that is a supertype of P1,
 			// the type to search is the result of capture conversion (5.1.10) applied to T;
-			// otherwise, the type to search is the same as the type of the first search. Again, the type arguments,
-			// if any, are given by the method reference.
+			// otherwise, the type to search is the same as the type of the first search. Again, the type arguments, if any, are given by the method reference.
 			if(PsiUtil.isRawSubstitutor(qContainingClass, psiSubstitutor))
 			{
-				if(member instanceof PsiMethod && PsiMethodReferenceUtil.isSecondSearchPossible(signature
-						.getParameterTypes(), qualifierResolveResult, myExpression))
+				if(member instanceof PsiMethod && PsiMethodReferenceUtil.isSecondSearchPossible(signature.getParameterTypes(), qualifierResolveResult, myExpression))
 				{
-					final PsiType pType = signature.getParameterTypes()[0];
-					PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(PsiImplUtil
-							.normalizeWildcardTypeByPosition(pType, myExpression));
-					PsiClass paramClass = resolveResult.getElement();
-					LOG.assertTrue(paramClass != null);
-					psiSubstitutor = TypeConversionUtil.getClassSubstitutor(qContainingClass, paramClass,
-							resolveResult.getSubstitutor());
-					LOG.assertTrue(psiSubstitutor != null);
+					final PsiType pType = PsiUtil.captureToplevelWildcards(signature.getParameterTypes()[0], myExpression);
+					psiSubstitutor = getParameterizedTypeSubstitutor(qContainingClass, pType);
 				}
-				else if(member instanceof PsiMethod && ((PsiMethod) member).isConstructor() || member instanceof
-						PsiClass)
+				else if(member instanceof PsiMethod && ((PsiMethod) member).isConstructor() || member instanceof PsiClass)
 				{
 					//15.13.1
 					//If ClassType is a raw type, but is not a non-static member type of a raw type,
-					//the candidate notional member methods are those specified in §15.9.3 for a class instance
-					// creation expression that uses <>
+					//the candidate notional member methods are those specified in §15.9.3 for a class instance creation expression that uses <>
 					//to elide the type arguments to a class.
-					final PsiResolveHelper helper = JavaPsiFacade.getInstance(myExpression.getProject())
-							.getResolveHelper();
-					final PsiType[] paramTypes = member instanceof PsiMethod ? ((PsiMethod) member).getSignature
-							(PsiSubstitutor.EMPTY).getParameterTypes() : PsiType.EMPTY_ARRAY;
-					psiSubstitutor = helper.inferTypeArguments(qContainingClass.getTypeParameters(), paramTypes,
-							signature.getParameterTypes(), PsiUtil.getLanguageLevel(myExpression));
+					final PsiResolveHelper helper = JavaPsiFacade.getInstance(myExpression.getProject()).getResolveHelper();
+					final PsiType[] paramTypes = member instanceof PsiMethod ? ((PsiMethod) member).getSignature(PsiSubstitutor.EMPTY).getParameterTypes() : PsiType.EMPTY_ARRAY;
+					LOG.assertTrue(paramTypes.length == signature.getParameterTypes().length, "expr: " + myExpression + "; " +
+							paramTypes.length + "; " +
+							Arrays.toString(signature.getParameterTypes()));
+					psiSubstitutor = helper.inferTypeArguments(qContainingClass.getTypeParameters(), paramTypes, signature.getParameterTypes(), PsiUtil.getLanguageLevel(myExpression));
 				}
 				else
 				{
@@ -312,11 +294,36 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 
 			if(qContainingClass.isInheritor(containingClass, true))
 			{
-				psiSubstitutor = TypeConversionUtil.getClassSubstitutor(containingClass, qContainingClass,
-						psiSubstitutor);
+				psiSubstitutor = TypeConversionUtil.getClassSubstitutor(containingClass, qContainingClass, psiSubstitutor);
 				LOG.assertTrue(psiSubstitutor != null);
 			}
 		}
+		return psiSubstitutor;
+	}
+
+	public static PsiSubstitutor getParameterizedTypeSubstitutor(PsiClass qContainingClass, @NotNull PsiType pType)
+	{
+		if(pType instanceof PsiIntersectionType)
+		{
+			for(PsiType type : ((PsiIntersectionType) pType).getConjuncts())
+			{
+				PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(type);
+				if(InheritanceUtil.isInheritorOrSelf(resolveResult.getElement(), qContainingClass, true))
+				{
+					return getParameterizedTypeSubstitutor(qContainingClass, type);
+				}
+			}
+		}
+		else if(pType instanceof PsiCapturedWildcardType)
+		{
+			pType = ((PsiCapturedWildcardType) pType).getUpperBound();
+		}
+
+		PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(pType);
+		PsiClass paramClass = resolveResult.getElement();
+		LOG.assertTrue(paramClass != null, pType.getCanonicalText());
+		PsiSubstitutor psiSubstitutor = TypeConversionUtil.getClassSubstitutor(qContainingClass, paramClass, resolveResult.getSubstitutor());
+		LOG.assertTrue(psiSubstitutor != null);
 		return psiSubstitutor;
 	}
 

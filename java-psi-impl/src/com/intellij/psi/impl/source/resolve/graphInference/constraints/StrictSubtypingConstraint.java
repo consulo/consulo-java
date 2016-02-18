@@ -15,17 +15,10 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
+import java.util.HashSet;
 import java.util.List;
 
-import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiIntersectionType;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceBound;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable;
@@ -40,6 +33,7 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 	private PsiType myS;
 	private PsiType myT;
 
+	//t < s
 	public StrictSubtypingConstraint(PsiType t, PsiType s)
 	{
 		myT = t;
@@ -57,7 +51,18 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 	@Override
 	public boolean reduce(InferenceSession session, List<ConstraintFormula> constraints)
 	{
-		if(session.isProperType(myS) && session.isProperType(myT))
+		final HashSet<InferenceVariable> dependencies = new HashSet<InferenceVariable>();
+		final boolean reduceResult = doReduce(session, dependencies, constraints);
+		if(!reduceResult)
+		{
+			session.registerIncompatibleErrorMessage(dependencies, session.getPresentableText(myS) + " conforms to " + session.getPresentableText(myT));
+		}
+		return reduceResult;
+	}
+
+	private boolean doReduce(InferenceSession session, HashSet<InferenceVariable> dependencies, List<ConstraintFormula> constraints)
+	{
+		if(!session.collectDependencies(myS, dependencies) && !session.collectDependencies(myT, dependencies))
 		{
 			if(myT == null)
 			{
@@ -87,23 +92,32 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 		InferenceVariable inferenceVariable = session.getInferenceVariable(myS);
 		if(inferenceVariable != null)
 		{
-			inferenceVariable.addBound(myT, InferenceBound.UPPER);
+			inferenceVariable.addBound(myT, InferenceBound.UPPER, session.myIncorporationPhase);
 			return true;
 		}
 		inferenceVariable = session.getInferenceVariable(myT);
 		if(inferenceVariable != null)
 		{
-			inferenceVariable.addBound(myS, InferenceBound.LOWER);
+			inferenceVariable.addBound(myS, InferenceBound.LOWER, session.myIncorporationPhase);
 			return true;
 		}
 		if(myT instanceof PsiArrayType)
 		{
-			if(!(myS instanceof PsiArrayType))
+			PsiType sType = myS;
+			if(myS instanceof PsiCapturedWildcardType)
+			{
+				final PsiType upperBound = ((PsiCapturedWildcardType) myS).getUpperBound();
+				if(upperBound instanceof PsiArrayType)
+				{
+					sType = upperBound;
+				}
+			}
+			if(!(sType instanceof PsiArrayType))
 			{
 				return false; //todo most specific array supertype
 			}
 			final PsiType tComponentType = ((PsiArrayType) myT).getComponentType();
-			final PsiType sComponentType = ((PsiArrayType) myS).getComponentType();
+			final PsiType sComponentType = ((PsiArrayType) sType).getComponentType();
 			if(!(tComponentType instanceof PsiPrimitiveType) && !(sComponentType instanceof PsiPrimitiveType))
 			{
 				constraints.add(new StrictSubtypingConstraint(tComponentType, sComponentType));
@@ -138,18 +152,17 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 					return false;
 				}
 
-				PsiClassType.ClassResolveResult SResult = null;
+				PsiClassType sType = null;
 				if(myS instanceof PsiIntersectionType)
 				{
 					for(PsiType conjunct : ((PsiIntersectionType) myS).getConjuncts())
 					{
 						if(conjunct instanceof PsiClassType)
 						{
-							final PsiClassType.ClassResolveResult conjunctResult = ((PsiClassType) conjunct)
-									.resolveGenerics();
+							final PsiClassType.ClassResolveResult conjunctResult = ((PsiClassType) conjunct).resolveGenerics();
 							if(InheritanceUtil.isInheritorOrSelf(conjunctResult.getElement(), CClass, true))
 							{
-								SResult = conjunctResult;
+								sType = (PsiClassType) conjunct;
 								break;
 							}
 						}
@@ -157,27 +170,44 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 				}
 				else if(myS instanceof PsiClassType)
 				{
-					SResult = ((PsiClassType) myS).resolveGenerics();
+					sType = (PsiClassType) myS;
+				}
+				else if(myS instanceof PsiArrayType)
+				{
+					return myT.isAssignableFrom(myS);
+				}
+				else if(myS instanceof PsiCapturedWildcardType)
+				{
+					final PsiType upperBound = ((PsiCapturedWildcardType) myS).getUpperBound();
+					if(upperBound instanceof PsiClassType)
+					{
+						sType = (PsiClassType) upperBound;
+					}
 				}
 
-				if(SResult == null)
+				if(sType == null)
 				{
 					return false;
 				}
+				final PsiClassType.ClassResolveResult SResult = sType.resolveGenerics();
 				PsiClass SClass = SResult.getElement();
 				if(((PsiClassType) myT).isRaw())
 				{
 					return SClass != null && InheritanceUtil.isInheritorOrSelf(SClass, CClass, true);
 				}
 				final PsiSubstitutor tSubstitutor = TResult.getSubstitutor();
-				final PsiSubstitutor sSubstitutor = SClass != null ? TypeConversionUtil.getClassSubstitutor(CClass,
-						SClass, SResult.getSubstitutor()) : null;
+				final PsiSubstitutor sSubstitutor = SClass != null ? TypeConversionUtil.getClassSubstitutor(CClass, SClass, SResult.getSubstitutor()) : null;
 				if(sSubstitutor != null)
 				{
 					for(PsiTypeParameter parameter : CClass.getTypeParameters())
 					{
 						final PsiType tSubstituted = tSubstitutor.substitute(parameter);
 						final PsiType sSubstituted = sSubstitutor.substituteWithBoundsPromotion(parameter);
+						if(tSubstituted == null ^ sSubstituted == null)
+						{
+							session.setErased();
+							return true;
+						}
 						constraints.add(new SubtypingConstraint(tSubstituted, sSubstituted));
 					}
 					return true;
@@ -235,6 +265,6 @@ public class StrictSubtypingConstraint implements ConstraintFormula
 	@Override
 	public String toString()
 	{
-		return myS.getPresentableText() + " < " + myT.getPresentableText();
+		return myT.getPresentableText() + " < " + myS.getPresentableText();
 	}
 }

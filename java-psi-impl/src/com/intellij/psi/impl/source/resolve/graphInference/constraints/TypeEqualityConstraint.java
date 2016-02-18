@@ -19,10 +19,10 @@ import java.util.List;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
@@ -73,8 +73,7 @@ public class TypeEqualityConstraint implements ConstraintFormula
 				return true;
 			}
 
-			if(((PsiWildcardType) myT).isExtends() && ((PsiWildcardType) myS).isExtends() || ((PsiWildcardType) myT)
-					.isSuper() && ((PsiWildcardType) myS).isSuper())
+			if(((PsiWildcardType) myT).isExtends() && ((PsiWildcardType) myS).isExtends() || ((PsiWildcardType) myT).isSuper() && ((PsiWildcardType) myS).isSuper())
 			{
 
 				LOG.assertTrue(tBound != null);
@@ -86,31 +85,39 @@ public class TypeEqualityConstraint implements ConstraintFormula
 
 		if(myT instanceof PsiWildcardType || myS instanceof PsiWildcardType)
 		{
+			session.registerIncompatibleErrorMessage("Incompatible equality constraint: " + session.getPresentableText(myT) + " and " + session.getPresentableText(myS));
 			return false;
 		}
 
 		if(session.isProperType(myT) && session.isProperType(myS))
 		{
-			if(myT == null)
+			final boolean equal = Comparing.equal(myT, myS);
+			if(!equal)
 			{
-				return myS == null || myS.equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+				session.registerIncompatibleErrorMessage("Incompatible equality constraint: " + session.getPresentableText(myT) + " and " + session.getPresentableText(myS));
 			}
-			if(myS == null)
-			{
-				return true;
-			}
-			return Comparing.equal(myT, myS);
+			return equal;
 		}
-		InferenceVariable inferenceVariable = session.getInferenceVariable(myS);
-		if(inferenceVariable != null)
+
+		if(myT == null || myT == PsiType.NULL)
 		{
-			inferenceVariable.addBound(myT, InferenceBound.EQ);
+			return false;
+		}
+		if(myS == null || myS == PsiType.NULL)
+		{
+			return false;
+		}
+
+		InferenceVariable inferenceVariable = session.getInferenceVariable(myS);
+		if(inferenceVariable != null && !(myT instanceof PsiPrimitiveType))
+		{
+			inferenceVariable.addBound(myT, InferenceBound.EQ, session.myIncorporationPhase);
 			return true;
 		}
 		inferenceVariable = session.getInferenceVariable(myT);
-		if(inferenceVariable != null)
+		if(inferenceVariable != null && !(myS instanceof PsiPrimitiveType))
 		{
-			inferenceVariable.addBound(myS, InferenceBound.EQ);
+			inferenceVariable.addBound(myS, InferenceBound.EQ, session.myIncorporationPhase);
 			return true;
 		}
 		if(myT instanceof PsiClassType && myS instanceof PsiClassType)
@@ -126,10 +133,15 @@ public class TypeEqualityConstraint implements ConstraintFormula
 				for(PsiTypeParameter typeParameter : tClass.getTypeParameters())
 				{
 					final PsiType tSubstituted = tSubstitutor.substitute(typeParameter);
-					final PsiType sSubstituted = sSubstitutor.substituteWithBoundsPromotion(typeParameter);
+					final PsiType sSubstituted = sSubstitutor.substitute(typeParameter);
 					if(tSubstituted != null && sSubstituted != null)
 					{
 						constraints.add(new TypeEqualityConstraint(tSubstituted, sSubstituted));
+					}
+					if(tSubstituted == null ^ sSubstituted == null)
+					{
+						session.registerIncompatibleErrorMessage("Incompatible equality constraint: " + session.getPresentableText(myT) + " and " + session.getPresentableText(myS));
+						return false;
 					}
 				}
 				return true;
@@ -137,11 +149,11 @@ public class TypeEqualityConstraint implements ConstraintFormula
 		}
 		if(myT instanceof PsiArrayType && myS instanceof PsiArrayType)
 		{
-			constraints.add(new TypeEqualityConstraint(((PsiArrayType) myT).getComponentType(),
-					((PsiArrayType) myS).getComponentType()));
+			constraints.add(new TypeEqualityConstraint(((PsiArrayType) myT).getComponentType(), ((PsiArrayType) myS).getComponentType()));
 			return true;
 		}
 
+		session.registerIncompatibleErrorMessage(session.getInferenceVariables(), session.getPresentableText(myS) + " conforms to " + session.getPresentableText(myT));
 		return false;
 	}
 

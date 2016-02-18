@@ -36,11 +36,14 @@ import com.intellij.util.containers.ContainerUtil;
 
 public class InferenceVariablesOrder
 {
-
 	public static List<InferenceVariable> resolveOrder(Collection<InferenceVariable> vars, InferenceSession session)
 	{
-		Map<InferenceVariable, InferenceGraphNode<InferenceVariable>> nodes = new LinkedHashMap<InferenceVariable,
-				InferenceGraphNode<InferenceVariable>>();
+		return resolveOrderIterator(vars, session).next();
+	}
+
+	public static Iterator<List<InferenceVariable>> resolveOrderIterator(Collection<InferenceVariable> vars, InferenceSession session)
+	{
+		Map<InferenceVariable, InferenceGraphNode<InferenceVariable>> nodes = new LinkedHashMap<InferenceVariable, InferenceGraphNode<InferenceVariable>>();
 		for(InferenceVariable var : vars)
 		{
 			nodes.put(var, new InferenceGraphNode<InferenceVariable>(var));
@@ -64,15 +67,14 @@ public class InferenceVariablesOrder
 			}
 		}
 		final ArrayList<InferenceGraphNode<InferenceVariable>> acyclicNodes = initNodes(nodes.values());
-		return ContainerUtil.map(acyclicNodes, new Function<InferenceGraphNode<InferenceVariable>,
-				List<InferenceVariable>>()
+		return ContainerUtil.map(acyclicNodes, new Function<InferenceGraphNode<InferenceVariable>, List<InferenceVariable>>()
 		{
 			@Override
 			public List<InferenceVariable> fun(InferenceGraphNode<InferenceVariable> node)
 			{
 				return node.getValue();
 			}
-		}).iterator().next();
+		}).iterator();
 	}
 
 	public static <T> List<List<InferenceGraphNode<T>>> tarjan(Collection<InferenceGraphNode<T>> nodes)
@@ -130,8 +132,7 @@ public class InferenceVariablesOrder
 		}
 
 
-		private static <T> InferenceGraphNode<T> merge(final List<InferenceGraphNode<T>> cycle,
-				final Collection<InferenceGraphNode<T>> allNodes)
+		private static <T> InferenceGraphNode<T> merge(final List<InferenceGraphNode<T>> cycle, final Collection<InferenceGraphNode<T>> allNodes)
 		{
 			assert !cycle.isEmpty();
 			final InferenceGraphNode<T> root = cycle.get(0);
@@ -183,10 +184,7 @@ public class InferenceVariablesOrder
 			myDependencies.addAll(cycleNode.myDependencies);
 		}
 
-		private static <T> int strongConnect(InferenceGraphNode<T> currentNode,
-				int index,
-				Stack<InferenceGraphNode<T>> currentStack,
-				ArrayList<List<InferenceGraphNode<T>>> result)
+		private static <T> int strongConnect(InferenceGraphNode<T> currentNode, int index, Stack<InferenceGraphNode<T>> currentStack, ArrayList<List<InferenceGraphNode<T>>> result)
 		{
 			currentNode.index = index;
 			currentNode.lowlink = index;

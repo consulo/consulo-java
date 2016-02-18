@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +32,7 @@ import com.intellij.psi.util.PsiUtil;
 public abstract class InputOutputConstraintFormula implements ConstraintFormula
 {
 
-	protected abstract PsiExpression getExpression();
+	public abstract PsiExpression getExpression();
 
 	protected abstract PsiType getT();
 
@@ -41,10 +40,7 @@ public abstract class InputOutputConstraintFormula implements ConstraintFormula
 
 	protected abstract InputOutputConstraintFormula createSelfConstraint(PsiType type, PsiExpression expression);
 
-	protected abstract void collectReturnTypeVariables(InferenceSession session,
-			PsiExpression psiExpression,
-			PsiType returnType,
-			Set<InferenceVariable> result);
+	protected abstract void collectReturnTypeVariables(InferenceSession session, PsiExpression psiExpression, PsiType returnType, Set<InferenceVariable> result);
 
 	public Set<InferenceVariable> getInputVariables(InferenceSession session)
 	{
@@ -55,13 +51,14 @@ public abstract class InputOutputConstraintFormula implements ConstraintFormula
 			final InferenceVariable inferenceVariable = session.getInferenceVariable(type);
 			if(inferenceVariable != null)
 			{
-				return Collections.singleton(inferenceVariable);
+				final HashSet<InferenceVariable> result = new HashSet<InferenceVariable>();
+				result.add(inferenceVariable);
+				return result;
 			}
 			if(LambdaUtil.isFunctionalType(type))
 			{
-				final PsiType functionType = psiExpression instanceof PsiLambdaExpression ?
-						FunctionalInterfaceParameterizationUtil.getGroundTargetType(type,
-								(PsiLambdaExpression) psiExpression, false) : type;
+				final PsiType functionType = psiExpression instanceof PsiLambdaExpression ? FunctionalInterfaceParameterizationUtil.getGroundTargetType(type, (PsiLambdaExpression) psiExpression,
+						false) : type;
 				final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionType);
 				final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(resolveResult);
 				if(interfaceMethod != null)
@@ -69,8 +66,7 @@ public abstract class InputOutputConstraintFormula implements ConstraintFormula
 
 					final Set<InferenceVariable> result = new HashSet<InferenceVariable>();
 					final PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(interfaceMethod, resolveResult);
-					if(psiExpression instanceof PsiLambdaExpression && !((PsiLambdaExpression) psiExpression)
-							.hasFormalParameterTypes() || psiExpression instanceof PsiMethodReferenceExpression && !(
+					if(psiExpression instanceof PsiLambdaExpression && !((PsiLambdaExpression) psiExpression).hasFormalParameterTypes() || psiExpression instanceof PsiMethodReferenceExpression && !(
 							(PsiMethodReferenceExpression) psiExpression).isExact())
 					{
 						for(PsiParameter parameter : interfaceMethod.getParameterList().getParameters())
@@ -100,10 +96,8 @@ public abstract class InputOutputConstraintFormula implements ConstraintFormula
 		{
 			final PsiExpression thenExpression = ((PsiConditionalExpression) psiExpression).getThenExpression();
 			final PsiExpression elseExpression = ((PsiConditionalExpression) psiExpression).getElseExpression();
-			final Set<InferenceVariable> thenResult = thenExpression != null ? createSelfConstraint(type,
-					thenExpression).getInputVariables(session) : null;
-			final Set<InferenceVariable> elseResult = elseExpression != null ? createSelfConstraint(type,
-					elseExpression).getInputVariables(session) : null;
+			final Set<InferenceVariable> thenResult = thenExpression != null ? createSelfConstraint(type, thenExpression).getInputVariables(session) : null;
+			final Set<InferenceVariable> elseResult = elseExpression != null ? createSelfConstraint(type, elseExpression).getInputVariables(session) : null;
 			if(thenResult == null)
 			{
 				return elseResult;

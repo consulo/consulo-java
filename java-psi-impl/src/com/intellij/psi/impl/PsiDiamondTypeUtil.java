@@ -39,9 +39,7 @@ public class PsiDiamondTypeUtil
 	{
 	}
 
-	public static boolean canCollapseToDiamond(final PsiNewExpression expression,
-			final PsiNewExpression context,
-			@Nullable final PsiType expectedType)
+	public static boolean canCollapseToDiamond(final PsiNewExpression expression, final PsiNewExpression context, @Nullable final PsiType expectedType)
 	{
 		return canCollapseToDiamond(expression, context, expectedType, false);
 	}
@@ -52,10 +50,7 @@ public class PsiDiamondTypeUtil
 		return canCollapseToDiamond(copy, copy, expectedType, true);
 	}
 
-	private static boolean canCollapseToDiamond(final PsiNewExpression expression,
-			final PsiNewExpression context,
-			@Nullable final PsiType expectedType,
-			boolean skipDiamonds)
+	private static boolean canCollapseToDiamond(final PsiNewExpression expression, final PsiNewExpression context, @Nullable final PsiType expectedType, boolean skipDiamonds)
 	{
 		if(PsiUtil.getLanguageLevel(context).isAtLeast(LanguageLevel.JDK_1_7))
 		{
@@ -69,12 +64,10 @@ public class PsiDiamondTypeUtil
 					if(typeElements.length > 0)
 					{
 						if(!skipDiamonds && typeElements.length == 1 && typeElements[0].getType() instanceof PsiDiamondType)
-
 						{
 							return false;
 						}
-						final PsiDiamondTypeImpl.DiamondInferenceResult inferenceResult = PsiDiamondTypeImpl
-								.resolveInferredTypes(expression, context);
+						final PsiDiamondTypeImpl.DiamondInferenceResult inferenceResult = PsiDiamondTypeImpl.resolveInferredTypes(expression, context);
 						if(inferenceResult.getErrorMessage() == null)
 						{
 							final List<PsiType> types = inferenceResult.getInferredTypes();
@@ -89,8 +82,7 @@ public class PsiDiamondTypeUtil
 							}
 							if(types.size() == typeArguments.length)
 							{
-								for(int i = 0, typeArgumentsLength = typeArguments.length; i < typeArgumentsLength;
-										i++)
+								for(int i = 0, typeArgumentsLength = typeArguments.length; i < typeArgumentsLength; i++)
 								{
 									PsiType typeArgument = typeArguments[i];
 									if(types.get(i) instanceof PsiWildcardType)
@@ -138,8 +130,7 @@ public class PsiDiamondTypeUtil
 			{
 				return psiElement;
 			}
-			final PsiNewExpression expression = (PsiNewExpression) JavaPsiFacade.getElementFactory(psiElement
-					.getProject()).createExpressionFromText("new a<>()", psiElement);
+			final PsiNewExpression expression = (PsiNewExpression) JavaPsiFacade.getElementFactory(psiElement.getProject()).createExpressionFromText("new a<>()", psiElement);
 			final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
 			LOG.assertTrue(classReference != null);
 			final PsiReferenceParameterList parameterList = classReference.getParameterList();
@@ -161,8 +152,7 @@ public class PsiDiamondTypeUtil
 		text.append(javaCodeReferenceElement.getQualifiedName());
 		text.append('<');
 		final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
-		final PsiDiamondType.DiamondInferenceResult result = PsiDiamondTypeImpl.resolveInferredTypesNoCheck
-				(newExpression, newExpression);
+		final PsiDiamondType.DiamondInferenceResult result = PsiDiamondTypeImpl.resolveInferredTypesNoCheck(newExpression, newExpression);
 		text.append(StringUtil.join(result.getInferredTypes(), new Function<PsiType, String>()
 		{
 			@Override
@@ -173,10 +163,8 @@ public class PsiDiamondTypeUtil
 		}, ","));
 		text.append('>');
 		final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(element.getProject());
-		final PsiJavaCodeReferenceElement newReference = elementFactory.createReferenceFromText(text.toString(),
-				element);
-		return CodeStyleManager.getInstance(javaCodeReferenceElement.getProject()).reformat(javaCodeReferenceElement
-				.replace(newReference));
+		final PsiJavaCodeReferenceElement newReference = elementFactory.createReferenceFromText(text.toString(), element);
+		return CodeStyleManager.getInstance(javaCodeReferenceElement.getProject()).reformat(javaCodeReferenceElement.replace(newReference));
 	}
 
 	public static PsiExpression expandTopLevelDiamondsInside(PsiExpression expr)
@@ -190,8 +178,7 @@ public class PsiDiamondTypeUtil
 				if(parameterList != null)
 				{
 					final PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
-					if(typeParameterElements.length == 1 && typeParameterElements[0].getType() instanceof
-							PsiDiamondType)
+					if(typeParameterElements.length == 1 && typeParameterElements[0].getType() instanceof PsiDiamondType)
 					{
 						return (PsiExpression) replaceDiamondWithExplicitTypes(parameterList).getParent();
 					}
@@ -213,5 +200,32 @@ public class PsiDiamondTypeUtil
 			}
 		}
 		return typeText;
+	}
+
+	public static boolean hasDiamond(PsiNewExpression expression)
+	{
+		return getDiamondType(expression) != null;
+	}
+
+	public static PsiDiamondType getDiamondType(PsiNewExpression expression)
+	{
+		if(PsiUtil.isLanguageLevel7OrHigher(expression))
+		{
+			final PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
+			if(classReference != null)
+			{
+				final PsiReferenceParameterList parameterList = classReference.getParameterList();
+				if(parameterList != null)
+				{
+					final PsiTypeElement[] parameterElements = parameterList.getTypeParameterElements();
+					if(parameterElements.length == 1)
+					{
+						final PsiType type = parameterElements[0].getType();
+						return type instanceof PsiDiamondType ? (PsiDiamondType) type : null;
+					}
+				}
+			}
+		}
+		return null;
 	}
 }

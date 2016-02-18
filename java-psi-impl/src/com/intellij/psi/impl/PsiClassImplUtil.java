@@ -26,7 +26,6 @@ import java.util.Set;
 
 import javax.swing.Icon;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.UserDataHolderEx;
@@ -43,9 +41,7 @@ import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.ClassInnerStuffCache;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
-import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.scope.ElementClassFilter;
 import com.intellij.psi.scope.ElementClassHint;
@@ -67,11 +63,7 @@ import com.intellij.psi.util.ParameterizedCachedValueProvider;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.ui.IconDeferrer;
-import com.intellij.ui.RowIcon;
-import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.NullableFunction;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
@@ -899,7 +891,7 @@ public class PsiClassImplUtil
 		return new TypeCorrector(resolveScope).correctType(originalType);
 	}
 
-	private static List<PsiClassType.ClassResolveResult> getScopeCorrectedSuperTypes(final PsiClass aClass, GlobalSearchScope resolveScope)
+	public static List<PsiClassType.ClassResolveResult> getScopeCorrectedSuperTypes(final PsiClass aClass, GlobalSearchScope resolveScope)
 	{
 		Map<GlobalSearchScope, List<PsiClassType.ClassResolveResult>> cache = CachedValuesManager.getCachedValue(aClass, new CachedValueProvider<Map<GlobalSearchScope,
 				List<PsiClassType.ClassResolveResult>>>()
@@ -935,7 +927,7 @@ public class PsiClassImplUtil
 				continue;
 			}
 
-			PsiClassType.ClassResolveResult result = corrected.resolveGenerics();
+			PsiClassType.ClassResolveResult result = ((PsiClassType) PsiUtil.captureToplevelWildcards(corrected, aClass)).resolveGenerics();
 			PsiClass superClass = result.getElement();
 			if(superClass == null || !PsiSearchScopeUtil.isInScope(resolveScope, superClass))
 			{
@@ -1355,7 +1347,7 @@ public class PsiClassImplUtil
 				PsiTypeParameter p1 = (PsiTypeParameter) aClass;
 				PsiTypeParameter p2 = (PsiTypeParameter) another;
 
-				return p1.getIndex() == p2.getIndex() && (aClass.getManager().areElementsEquivalent(p1.getOwner(), p2.getOwner()) || InferenceSession.areSameFreshVariables(p1, p2));
+				return p1.getIndex() == p2.getIndex() && (aClass.getManager().areElementsEquivalent(p1.getOwner(), p2.getOwner()) || TypeConversionUtil.areSameFreshVariables(p1, p2));
 			}
 			else
 			{

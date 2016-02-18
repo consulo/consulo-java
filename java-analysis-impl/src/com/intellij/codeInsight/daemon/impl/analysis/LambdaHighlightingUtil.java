@@ -15,23 +15,28 @@
  */
 package com.intellij.codeInsight.daemon.impl.analysis;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * User: anna
  */
 public class LambdaHighlightingUtil
 {
+	private static final Logger LOG = Logger.getInstance("#" + LambdaHighlightingUtil.class.getName());
+
 	@Nullable
 	public static String checkInterfaceFunctional(@NotNull PsiClass psiClass)
 	{
@@ -42,12 +47,18 @@ public class LambdaHighlightingUtil
 	static String checkInterfaceFunctional(@NotNull PsiClass psiClass, String interfaceNonFunctionalMessage)
 	{
 		if(psiClass instanceof PsiTypeParameter)
+		{
 			return null; //should be logged as cyclic inference
+		}
 		final List<HierarchicalMethodSignature> signatures = LambdaUtil.findFunctionCandidates(psiClass);
 		if(signatures == null)
+		{
 			return interfaceNonFunctionalMessage;
+		}
 		if(signatures.isEmpty())
+		{
 			return "No target method found";
+		}
 		if(signatures.size() == 1)
 		{
 			return null;
@@ -56,9 +67,7 @@ public class LambdaHighlightingUtil
 	}
 
 	@Nullable
-	static HighlightInfo checkParametersCompatible(PsiLambdaExpression expression,
-			PsiParameter[] methodParameters,
-			PsiSubstitutor substitutor)
+	static HighlightInfo checkParametersCompatible(PsiLambdaExpression expression, PsiParameter[] methodParameters, PsiSubstitutor substitutor)
 	{
 		final PsiParameter[] lambdaParameters = expression.getParameterList().getParameters();
 		String incompatibleTypesMessage = "Incompatible parameter types in lambda expression: ";
@@ -77,7 +86,8 @@ public class LambdaHighlightingUtil
 			{
 				final String expectedType = substitutedParamType != null ? substitutedParamType.getPresentableText() : null;
 				final String actualType = lambdaParameterType.getPresentableText();
-				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression.getParameterList()).descriptionAndTooltip(incompatibleTypesMessage + "expected " + expectedType + " but found " + actualType).create();
+				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression.getParameterList()).descriptionAndTooltip(incompatibleTypesMessage + "expected " + expectedType + " " +
+						"but found " + actualType).create();
 			}
 		}
 		return null;
@@ -98,16 +108,18 @@ public class LambdaHighlightingUtil
 	{
 		if(functionalInterfaceType instanceof PsiIntersectionType)
 		{
-			int count = 0;
+			final Set<MethodSignature> signatures = new HashSet<MethodSignature>();
 			for(PsiType type : ((PsiIntersectionType) functionalInterfaceType).getConjuncts())
 			{
 				if(checkInterfaceFunctional(type) == null)
 				{
-					count++;
+					final MethodSignature signature = LambdaUtil.getFunction(PsiUtil.resolveClassInType(type));
+					LOG.assertTrue(signature != null, type.getCanonicalText());
+					signatures.add(signature);
 				}
 			}
 
-			if(count > 1)
+			if(signatures.size() > 1)
 			{
 				return "Multiple non-overriding abstract methods found in " + functionalInterfaceType.getPresentableText();
 			}
@@ -118,13 +130,17 @@ public class LambdaHighlightingUtil
 		if(aClass != null)
 		{
 			if(aClass instanceof PsiTypeParameter)
+			{
 				return null; //should be logged as cyclic inference
+			}
 			final List<HierarchicalMethodSignature> signatures = LambdaUtil.findFunctionCandidates(aClass);
 			if(signatures != null && signatures.size() == 1)
 			{
 				final MethodSignature functionalMethod = signatures.get(0);
 				if(functionalMethod.getTypeParameters().length > 0)
+				{
 					return "Target method is generic";
+				}
 			}
 			if(checkReturnTypeApplicable(resolveResult, aClass))
 			{
@@ -135,17 +151,20 @@ public class LambdaHighlightingUtil
 		return functionalInterfaceType.getPresentableText() + " is not a functional interface";
 	}
 
-	private static boolean checkReturnTypeApplicable(PsiClassType.ClassResolveResult resolveResult,
-			final PsiClass aClass)
+	private static boolean checkReturnTypeApplicable(PsiClassType.ClassResolveResult resolveResult, final PsiClass aClass)
 	{
 		final MethodSignature methodSignature = LambdaUtil.getFunction(aClass);
 		if(methodSignature == null)
+		{
 			return false;
+		}
 
 		for(PsiTypeParameter parameter : aClass.getTypeParameters())
 		{
 			if(parameter.getExtendsListTypes().length == 0)
+			{
 				continue;
+			}
 			final PsiType substitution = resolveResult.getSubstitutor().substitute(parameter);
 			if(substitution instanceof PsiWildcardType && !((PsiWildcardType) substitution).isBounded())
 			{
@@ -166,7 +185,9 @@ public class LambdaHighlightingUtil
 					}
 				}
 				if(!depends)
+				{
 					return true;
+				}
 			}
 		}
 		return false;
