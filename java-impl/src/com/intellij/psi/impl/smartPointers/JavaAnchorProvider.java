@@ -34,7 +34,7 @@ public class JavaAnchorProvider implements SmartPointerAnchorProvider
 	@Override
 	public PsiElement getAnchor(@NotNull PsiElement element)
 	{
-		if(!element.getLanguage().isKindOf(JavaLanguage.INSTANCE))
+		if(!element.getLanguage().isKindOf(JavaLanguage.INSTANCE) || !element.isPhysical())
 		{
 			return null;
 		}
@@ -68,14 +68,9 @@ public class JavaAnchorProvider implements SmartPointerAnchorProvider
 		if(anchor instanceof PsiIdentifier)
 		{
 			PsiElement parent = anchor.getParent();
-			if(parent instanceof PsiJavaCodeReferenceElement)
-			{ // anonymous class, type
-				parent = parent.getParent();
-			}
-
-			if(!anchor.equals(AnchorElementInfoFactory.getAnchor(parent)))
+			if(parent instanceof PsiJavaCodeReferenceElement)   // anonymous class, type
 			{
-				return null;
+				parent = parent.getParent();
 			}
 
 			return parent;
