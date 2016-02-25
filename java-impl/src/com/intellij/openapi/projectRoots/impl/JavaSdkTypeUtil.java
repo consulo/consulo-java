@@ -62,6 +62,7 @@ public class JavaSdkTypeUtil
 		return new File(new File(new File(homePath, "jre"), "lib"), "rt.jar").exists() ||
 				new File(new File(homePath, "lib"), "rt.jar").exists() ||
 				new File(homePath, "lib/modules/bootmodules.jimage").exists() || // java 1.9
+				new File(homePath, "jmods/java.base.jmod").exists() || // java 1.9 Project Jigsaw
 				new File(new File(new File(homePath, ".."), "Classes"), "classes.jar").exists() ||  // Apple JDK
 				new File(new File(new File(homePath, "jre"), "lib"), "vm.jar").exists() ||  // IBM JDK
 				new File(homePath, "classes").isDirectory();  // custom build

@@ -350,7 +350,7 @@ public class JavaSdkImpl extends JavaSdk
 		addJavaFxSources(jdkHome, sdkModificator);
 
 		File modulesDir = new File(jdkHome, "lib/modules");
-		if(modulesDir.exists())
+		if(modulesDir.exists() && modulesDir.isDirectory())
 		{
 			for(File file : modulesDir.listFiles())
 			{
@@ -360,6 +360,16 @@ public class JavaSdkImpl extends JavaSdk
 					continue;
 				}
 				sdkModificator.addRoot(maybeJImageFile, BinariesOrderRootType.getInstance());
+			}
+		}
+
+		File jmodsFile = new File(jdkHome, "jmods");
+		if(jmodsFile.exists() && jmodsFile.isDirectory())
+		{
+			VirtualFile javaBaseModule = LocalFileSystem.getInstance().findFileByIoFile(new File(jmodsFile, "java.base.jmod"));
+			if(javaBaseModule != null)
+			{
+				sdkModificator.addRoot(javaBaseModule, BinariesOrderRootType.getInstance());
 			}
 		}
 
