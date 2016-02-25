@@ -21,11 +21,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 
-import javax.annotation.Generated;
-
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.intention.AddAnnotationPsiFix;
@@ -127,7 +126,7 @@ public class JavaSuppressionUtil {
   }
 
   static PsiElement getAnnotationMemberSuppressedIn(@NotNull PsiModifierListOwner owner, String inspectionToolID) {
-    final PsiAnnotation generatedAnnotation = AnnotationUtil.findAnnotation(owner, Generated.class.getName());
+    final PsiAnnotation generatedAnnotation = AnnotationUtil.findAnnotation(owner, JavaClassNames.JAVAX_ANNOTATION_GENERATED);
     if (generatedAnnotation != null) return generatedAnnotation;
     PsiModifierList modifierList = owner.getModifierList();
     Collection<String> suppressedIds = getInspectionIdsSuppressedInAnnotation(modifierList);

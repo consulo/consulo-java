@@ -108,4 +108,7 @@ public interface JavaClassNames {
 	@NonNls String CLASS_FILE_EXTENSION = ".class";
 
 	@NonNls String JAVA_LANG_FUNCTIONAL_INTERFACE = "java.lang.FunctionalInterface";
+
+	@NonNls
+	String JAVAX_ANNOTATION_GENERATED = "javax.annotation.Generated";
 }
