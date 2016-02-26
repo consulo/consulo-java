@@ -39,20 +39,14 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 		this(place, place.getArgumentList(), placeFile);
 	}
 
-	public MethodResolverProcessor(@NotNull PsiCallExpression place,
-			@NotNull PsiExpressionList argumentList,
-			@NotNull PsiFile placeFile)
+	public MethodResolverProcessor(@NotNull PsiCallExpression place, @NotNull PsiExpressionList argumentList, @NotNull PsiFile placeFile)
 	{
-		this(place, placeFile, new PsiConflictResolver[]{new JavaMethodsConflictResolver(argumentList,
-				PsiUtil.getLanguageLevel(placeFile))});
+		this(place, placeFile, new PsiConflictResolver[]{new JavaMethodsConflictResolver(argumentList, PsiUtil.getLanguageLevel(placeFile))});
 		setArgumentList(argumentList);
 		obtainTypeArguments(place);
 	}
 
-	public MethodResolverProcessor(PsiClass classConstr,
-			@NotNull PsiExpressionList argumentList,
-			@NotNull PsiElement place,
-			@NotNull PsiFile placeFile)
+	public MethodResolverProcessor(PsiClass classConstr, @NotNull PsiExpressionList argumentList, @NotNull PsiElement place, @NotNull PsiFile placeFile)
 	{
 		super(place, placeFile, new PsiConflictResolver[]{
 				new JavaMethodsConflictResolver(argumentList, PsiUtil.getLanguageLevel(placeFile))
@@ -62,9 +56,7 @@ public class MethodResolverProcessor extends MethodCandidatesProcessor
 		setArgumentList(argumentList);
 	}
 
-	public MethodResolverProcessor(@NotNull PsiElement place,
-			@NotNull PsiFile placeFile,
-			@NotNull PsiConflictResolver[] resolvers)
+	public MethodResolverProcessor(@NotNull PsiElement place, @NotNull PsiFile placeFile, @NotNull PsiConflictResolver[] resolvers)
 	{
 		super(place, placeFile, resolvers, new SmartList<CandidateInfo>());
 	}

@@ -56,10 +56,7 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 	private PsiType[] myTypeArguments;
 	private final LanguageLevel myLanguageLevel;
 
-	public MethodsProcessor(@NotNull PsiConflictResolver[] resolvers,
-			@NotNull List<CandidateInfo> container,
-			@NotNull PsiElement place,
-			@NotNull PsiFile placeFile)
+	public MethodsProcessor(@NotNull PsiConflictResolver[] resolvers, @NotNull List<CandidateInfo> container, @NotNull PsiElement place, @NotNull PsiFile placeFile)
 	{
 		super(null, ourFilter, resolvers, container, place, placeFile);
 		myLanguageLevel = PsiUtil.getLanguageLevel(placeFile);

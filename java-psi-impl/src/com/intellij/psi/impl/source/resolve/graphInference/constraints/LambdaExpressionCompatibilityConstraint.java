@@ -2,7 +2,6 @@ package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
 import java.util.List;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
@@ -17,7 +16,6 @@ import com.intellij.util.Function;
  */
 public class LambdaExpressionCompatibilityConstraint implements ConstraintFormula
 {
-	private static final Logger LOG = Logger.getInstance("#" + LambdaExpressionCompatibilityConstraint.class.getName());
 	private final PsiLambdaExpression myExpression;
 	private PsiType myT;
 

@@ -36,18 +36,14 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 {
 	protected boolean myHasAccessibleStaticCorrectCandidate = false;
 
-	public MethodCandidatesProcessor(@NotNull PsiElement place,
-			PsiFile placeFile,
-			@NotNull PsiConflictResolver[] resolvers,
-			@NotNull List<CandidateInfo> container)
+	public MethodCandidatesProcessor(@NotNull PsiElement place, PsiFile placeFile, @NotNull PsiConflictResolver[] resolvers, @NotNull List<CandidateInfo> container)
 	{
 		super(resolvers, container, place, placeFile);
 	}
 
 	public MethodCandidatesProcessor(@NotNull PsiElement place, PsiFile placeFile)
 	{
-		super(new PsiConflictResolver[]{DuplicateConflictResolver.INSTANCE}, new SmartList<CandidateInfo>(), place,
-				placeFile);
+		super(new PsiConflictResolver[]{DuplicateConflictResolver.INSTANCE}, new SmartList<CandidateInfo>(), place, placeFile);
 	}
 
 	@Override
@@ -62,16 +58,17 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 
 	public void addMethod(@NotNull PsiMethod method, final PsiSubstitutor substitutor, boolean staticProblem)
 	{
-		final boolean isAccessible = JavaResolveUtil.isAccessible(method, getContainingClass(method),
-				method.getModifierList(), myPlace, myAccessClass, myCurrentFileContext,
+		final boolean isAccessible = JavaResolveUtil.isAccessible(method, getContainingClass(method), method.getModifierList(), myPlace, myAccessClass, myCurrentFileContext,
 				myPlaceFile) && !isShadowed(method);
-		if(isAccepted(method) && !(isInterfaceStaticMethodAccessibleThroughInheritance(method) && ImportsUtil
-				.hasStaticImportOn(myPlace, method, true)))
+		if(isAccepted(method) && !(isInterfaceStaticMethodAccessibleThroughInheritance(method) && ImportsUtil.hasStaticImportOn(myPlace, method, true)))
 		{
 			if(!staticProblem && myAccessClass != null && method.hasModifierProperty(PsiModifier.STATIC))
 			{
 				final PsiClass containingClass = method.getContainingClass();
-				if(containingClass != null && containingClass.isInterface() && !containingClass.equals(myAccessClass))
+				if(containingClass != null &&
+						containingClass.isInterface() &&
+						!(myAccessClass instanceof PsiTypeParameter) &&
+						!containingClass.equals(myAccessClass))
 				{
 					staticProblem = true;
 				}
@@ -108,15 +105,10 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 		return false;
 	}
 
-	protected MethodCandidateInfo createCandidateInfo(@NotNull PsiMethod method,
-			@NotNull PsiSubstitutor substitutor,
-			final boolean staticProblem,
-			final boolean accessible,
-			final boolean varargs)
+	protected MethodCandidateInfo createCandidateInfo(@NotNull PsiMethod method, @NotNull PsiSubstitutor substitutor, final boolean staticProblem, final boolean accessible, final boolean varargs)
 	{
 		final PsiExpressionList argumentList = getArgumentList();
-		return new MethodCandidateInfo(method, substitutor, !accessible, staticProblem, argumentList,
-				myCurrentFileContext, null, getTypeArguments(), getLanguageLevel())
+		return new MethodCandidateInfo(method, substitutor, !accessible, staticProblem, argumentList, myCurrentFileContext, null, getTypeArguments(), getLanguageLevel())
 		{
 
 			private PsiType[] myExpressionTypes;

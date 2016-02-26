@@ -15,120 +15,175 @@
  */
 package com.intellij.psi;
 
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PsiDiamondType extends PsiType {
-  public static final RecursionGuard ourDiamondGuard = RecursionManager.createGuard("diamondInference");
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.util.RecursionGuard;
+import com.intellij.openapi.util.RecursionManager;
 
-  public PsiDiamondType(PsiAnnotation[] annotations) {
-    super(annotations);
-  }
+public abstract class PsiDiamondType extends PsiType
+{
+	public static final RecursionGuard ourDiamondGuard = RecursionManager.createGuard("diamondInference");
 
-  public abstract DiamondInferenceResult resolveInferredTypes();
+	public PsiDiamondType(PsiAnnotation[] annotations)
+	{
+		super(annotations);
+	}
 
-  public static class DiamondInferenceResult {
-    public static final DiamondInferenceResult EXPLICIT_CONSTRUCTOR_TYPE_ARGS = new DiamondInferenceResult() {
-      @NotNull
-      @Override
-      public PsiType[] getTypes() {
-        return PsiType.EMPTY_ARRAY;
-      }
+	public abstract DiamondInferenceResult resolveInferredTypes();
 
-      @Override
-      public String getErrorMessage() {
-        return "Cannot use diamonds with explicit type parameters for constructor";
-      }
-    };
+	public static class DiamondInferenceResult
+	{
+		public static final DiamondInferenceResult EXPLICIT_CONSTRUCTOR_TYPE_ARGS = new DiamondInferenceResult()
+		{
+			@NotNull
+			@Override
+			public PsiType[] getTypes()
+			{
+				return PsiType.EMPTY_ARRAY;
+			}
 
-    public static final DiamondInferenceResult NULL_RESULT = new DiamondInferenceResult() {
-      @NotNull
-      @Override
-      public PsiType[] getTypes() {
-        return PsiType.EMPTY_ARRAY;
-      }
+			@Override
+			public String getErrorMessage()
+			{
+				return "Cannot use diamonds with explicit type parameters for constructor";
+			}
+		};
 
-      @Override
-      public String getErrorMessage() {
-        return "Cannot infer arguments";
-      }
-    };
+		public static final DiamondInferenceResult NULL_RESULT = new DiamondInferenceResult()
+		{
+			@NotNull
+			@Override
+			public PsiType[] getTypes()
+			{
+				return PsiType.EMPTY_ARRAY;
+			}
 
-    public static final DiamondInferenceResult ANONYMOUS_INNER_RESULT = new DiamondInferenceResult() {
-      @NotNull
-      @Override
-      public PsiType[] getTypes() {
-        return PsiType.EMPTY_ARRAY;
-      }
+			@Override
+			public String getErrorMessage()
+			{
+				return "Cannot infer arguments";
+			}
+		};
 
-      @Override
-      public String getErrorMessage() {
-        return "Cannot use ''<>'' with anonymous inner classes";
-      }
-    };
+		public static final DiamondInferenceResult UNRESOLVED_CONSTRUCTOR = new DiamondInferenceResult()
+		{
+			@NotNull
+			@Override
+			public PsiType[] getTypes()
+			{
+				return PsiType.EMPTY_ARRAY;
+			}
 
-    private final List<PsiType> myInferredTypes = new ArrayList<PsiType>();
-    private String myErrorMessage;
-    private String myNewExpressionPresentableText;
+			@Override
+			public String getErrorMessage()
+			{
+				return "Cannot infer arguments (unable to resolve constructor)";
+			}
+		};
 
-    public DiamondInferenceResult() { }
+		public static final DiamondInferenceResult ANONYMOUS_INNER_RESULT = new DiamondInferenceResult()
+		{
+			@NotNull
+			@Override
+			public PsiType[] getTypes()
+			{
+				return PsiType.EMPTY_ARRAY;
+			}
 
-    public DiamondInferenceResult(String expressionPresentableText) {
-      myNewExpressionPresentableText = expressionPresentableText;
-    }
+			@Override
+			public String getErrorMessage()
+			{
+				return "Cannot use ''<>'' with anonymous inner classes";
+			}
+		};
 
-    @NotNull
-    public PsiType[] getTypes() {
-      return myErrorMessage == null ? myInferredTypes.toArray(createArray(myInferredTypes.size())) : PsiType.EMPTY_ARRAY;
-    }
+		private final List<PsiType> myInferredTypes = new ArrayList<PsiType>();
+		private String myErrorMessage;
+		private String myNewExpressionPresentableText;
 
-    /**
-     * @return all inferred types even if inference failed
-     */
-    public List<PsiType> getInferredTypes() {
-      return myInferredTypes;
-    }
+		public DiamondInferenceResult()
+		{
+		}
 
-    public String getErrorMessage() {
-      return myErrorMessage;
-    }
+		public DiamondInferenceResult(String expressionPresentableText)
+		{
+			myNewExpressionPresentableText = expressionPresentableText;
+		}
 
-    public boolean failedToInfer() {
-      return myErrorMessage != null;
-    }
+		@NotNull
+		public PsiType[] getTypes()
+		{
+			return myErrorMessage == null ? myInferredTypes.toArray(createArray(myInferredTypes.size())) : PsiType.EMPTY_ARRAY;
+		}
 
-    public void addInferredType(PsiType psiType) {
-      if (myErrorMessage != null) return;
-      if (psiType == null) {
-        myErrorMessage = "Cannot infer type arguments for " + myNewExpressionPresentableText;
-      }
-      else {
-        myInferredTypes.add(psiType);
-      }
-    }
+		/**
+		 * @return all inferred types even if inference failed
+		 */
+		public List<PsiType> getInferredTypes()
+		{
+			return myInferredTypes;
+		}
 
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+		public String getErrorMessage()
+		{
+			return myErrorMessage;
+		}
 
-      DiamondInferenceResult that = (DiamondInferenceResult)o;
+		public boolean failedToInfer()
+		{
+			return myErrorMessage != null;
+		}
 
-      if (myErrorMessage != null ? !myErrorMessage.equals(that.myErrorMessage) : that.myErrorMessage != null) return false;
-      if (!myInferredTypes.equals(that.myInferredTypes)) return false;
+		protected void addInferredType(PsiType psiType)
+		{
+			if(myErrorMessage != null)
+			{
+				return;
+			}
+			if(psiType == null)
+			{
+				myErrorMessage = "Cannot infer type arguments for " + myNewExpressionPresentableText;
+			}
+			else
+			{
+				myInferredTypes.add(psiType);
+			}
+		}
 
-      return true;
-    }
+		@Override
+		public boolean equals(Object o)
+		{
+			if(this == o)
+			{
+				return true;
+			}
+			if(o == null || getClass() != o.getClass())
+			{
+				return false;
+			}
 
-    @Override
-    public int hashCode() {
-      int result = myInferredTypes.hashCode();
-      result = 31 * result + (myErrorMessage != null ? myErrorMessage.hashCode() : 0);
-      return result;
-    }
-  }
+			DiamondInferenceResult that = (DiamondInferenceResult) o;
+
+			if(myErrorMessage != null ? !myErrorMessage.equals(that.myErrorMessage) : that.myErrorMessage != null)
+			{
+				return false;
+			}
+			if(!myInferredTypes.equals(that.myInferredTypes))
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			int result = myInferredTypes.hashCode();
+			result = 31 * result + (myErrorMessage != null ? myErrorMessage.hashCode() : 0);
+			return result;
+		}
+	}
 }

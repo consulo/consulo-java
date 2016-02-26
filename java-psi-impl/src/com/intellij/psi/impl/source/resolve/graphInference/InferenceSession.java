@@ -15,15 +15,7 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -448,7 +440,7 @@ public class InferenceSession
 				return;
 			}
 
-			if(parameters != null && args != null && !MethodCandidateInfo.isOverloadCheck())
+			if(parameters != null && args != null && !isOverloadCheck())
 			{
 				final Set<ConstraintFormula> additionalConstraints = new LinkedHashSet<ConstraintFormula>();
 				if(parameters.length > 0)
@@ -492,6 +484,26 @@ public class InferenceSession
 				mySiteSubstitutor = mySiteSubstitutor.put(param, mapping);
 			}
 		}
+	}
+
+	private boolean isOverloadCheck()
+	{
+		if(myContext != null)
+		{
+			for(Object o : MethodCandidateInfo.ourOverloadGuard.currentStack())
+			{
+				final PsiExpressionList element = (PsiExpressionList) o;
+				for(PsiExpression expression : element.getExpressions())
+				{
+					if(expression == myContext)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		return MethodCandidateInfo.isOverloadCheck();
 	}
 
 	private void collectAdditionalConstraints(PsiParameter[] parameters,
@@ -1450,6 +1462,15 @@ public class InferenceSession
 
 	public void registerIncompatibleErrorMessage(Collection<InferenceVariable> variables, String incompatibleTypesMessage)
 	{
+		variables = new ArrayList<InferenceVariable>(variables);
+		Collections.sort((ArrayList<InferenceVariable>) variables, new Comparator<InferenceVariable>()
+		{
+			@Override
+			public int compare(InferenceVariable v1, InferenceVariable v2)
+			{
+				return Comparing.compare(v1.getName(), v2.getName());
+			}
+		});
 		final String variablesEnumeration = StringUtil.join(variables, new Function<InferenceVariable, String>()
 		{
 			@Override
@@ -2210,9 +2231,10 @@ public class InferenceSession
 		return myContext;
 	}
 
-	public void propagateVariables(Collection<InferenceVariable> variables)
+	public void propagateVariables(Collection<InferenceVariable> variables, PsiSubstitutor substitution)
 	{
 		myInferenceVariables.addAll(variables);
+		myRestoreNameSubstitution = myRestoreNameSubstitution.putAll(substitution);
 	}
 
 	public PsiType substituteWithInferenceVariables(PsiType type)
@@ -2223,6 +2245,11 @@ public class InferenceSession
 	public PsiSubstitutor getInferenceSubstitution()
 	{
 		return myInferenceSubstitution;
+	}
+
+	public PsiSubstitutor getRestoreNameSubstitution()
+	{
+		return myRestoreNameSubstitution;
 	}
 
 	public InferenceSessionContainer getInferenceSessionContainer()
