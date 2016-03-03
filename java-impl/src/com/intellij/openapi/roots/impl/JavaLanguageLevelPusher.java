@@ -31,7 +31,6 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.newvfs.FileAttribute;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.messages.MessageBus;
 
@@ -138,7 +137,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 		{
 			if(!child.isDirectory() && JavaFileType.INSTANCE == child.getFileType())
 			{
-				FileBasedIndex.getInstance().requestReindex(child);
+				PushedFilePropertiesUpdater.getInstance(project).filePropertiesChanged(child);
 			}
 		}
 	}
