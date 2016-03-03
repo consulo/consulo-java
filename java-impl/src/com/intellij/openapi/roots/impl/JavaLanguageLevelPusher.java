@@ -19,8 +19,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -38,91 +38,113 @@ import com.intellij.util.messages.MessageBus;
 /**
  * @author Gregory.Shrago
  */
-public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel> {
+public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel>
+{
 
-  public static void pushLanguageLevel(final Project project) {
-    PushedFilePropertiesUpdater.getInstance(project).pushAll(new JavaLanguageLevelPusher());
-  }
+	public static void pushLanguageLevel(final Project project)
+	{
+		PushedFilePropertiesUpdater.getInstance(project).pushAll(new JavaLanguageLevelPusher());
+	}
 
-  @Override
-  public void initExtra(@NotNull Project project, @NotNull MessageBus bus, @NotNull Engine languageLevelUpdater) {
-    // nothing
-  }
+	@Override
+	public void initExtra(@NotNull Project project, @NotNull MessageBus bus, @NotNull Engine languageLevelUpdater)
+	{
+		// nothing
+	}
 
-  @Override
-  @NotNull
-  public Key<LanguageLevel> getFileDataKey() {
-    return LanguageLevel.KEY;
-  }
+	@Override
+	@NotNull
+	public Key<LanguageLevel> getFileDataKey()
+	{
+		return LanguageLevel.KEY;
+	}
 
-  @Override
-  public boolean pushDirectoriesOnly() {
-    return true;
-  }
+	@Override
+	public boolean pushDirectoriesOnly()
+	{
+		return true;
+	}
 
-  @Override
-  @NotNull
-  public LanguageLevel getDefaultValue() {
-    return LanguageLevel.HIGHEST;
-  }
+	@Override
+	@NotNull
+	public LanguageLevel getDefaultValue()
+	{
+		return LanguageLevel.HIGHEST;
+	}
 
-  @Override
-  public LanguageLevel getImmediateValue(@NotNull Project project, VirtualFile file) {
-    if(file == null) {
-      return null;
-    }
-    final Module moduleForFile = ModuleUtil.findModuleForFile(file, project);
-    if(moduleForFile == null) {
-      return null;
-    }
-    return getImmediateValue(moduleForFile);
-  }
+	@Override
+	public LanguageLevel getImmediateValue(@NotNull Project project, VirtualFile file)
+	{
+		if(file == null)
+		{
+			return null;
+		}
+		final Module moduleForFile = ModuleUtil.findModuleForFile(file, project);
+		if(moduleForFile == null)
+		{
+			return null;
+		}
+		return getImmediateValue(moduleForFile);
+	}
 
-  @Override
-  public LanguageLevel getImmediateValue(@NotNull Module module) {
-    ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
+	@Override
+	public LanguageLevel getImmediateValue(@NotNull Module module)
+	{
+		ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
-    final JavaModuleExtension extension = moduleRootManager.getExtension(JavaModuleExtension.class);
-    return extension == null ? null : extension.getLanguageLevel();
-  }
+		final JavaModuleExtension extension = moduleRootManager.getExtension(JavaModuleExtension.class);
+		return extension == null ? null : extension.getLanguageLevel();
+	}
 
-  @Override
-  public boolean acceptsFile(@NotNull VirtualFile file) {
-    return false;
-  }
+	@Override
+	public boolean acceptsFile(@NotNull VirtualFile file)
+	{
+		return false;
+	}
 
-  @Override
-  public boolean acceptsDirectory(@NotNull VirtualFile file, @NotNull Project project) {
-    return ProjectFileIndex.SERVICE.getInstance(project).isInSourceContent(file);
-  }
+	@Override
+	public boolean acceptsDirectory(@NotNull VirtualFile file, @NotNull Project project)
+	{
+		return ProjectFileIndex.SERVICE.getInstance(project).isInSourceContent(file);
+	}
 
-  private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
+	private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
 
-  @Override
-  public void persistAttribute(@NotNull Project project, @NotNull VirtualFile fileOrDir, @NotNull LanguageLevel level)  throws IOException {
-    final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
-    if (iStream != null) {
-      try {
-        final int oldLevelOrdinal = DataInputOutputUtil.readINT(iStream);
-        if (oldLevelOrdinal == level.ordinal()) return;
-      }
-      finally {
-        iStream.close();
-      }
-    }
+	@Override
+	public void persistAttribute(@NotNull Project project, @NotNull VirtualFile fileOrDir, @NotNull LanguageLevel level) throws IOException
+	{
+		final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
+		if(iStream != null)
+		{
+			try
+			{
+				final int oldLevelOrdinal = DataInputOutputUtil.readINT(iStream);
+				if(oldLevelOrdinal == level.ordinal())
+				{
+					return;
+				}
+			}
+			finally
+			{
+				iStream.close();
+			}
+		}
 
-    final DataOutputStream oStream = PERSISTENCE.writeAttribute(fileOrDir);
-    DataInputOutputUtil.writeINT(oStream, level.ordinal());
-    oStream.close();
+		final DataOutputStream oStream = PERSISTENCE.writeAttribute(fileOrDir);
+		DataInputOutputUtil.writeINT(oStream, level.ordinal());
+		oStream.close();
 
-    for (VirtualFile child : fileOrDir.getChildren()) {
-      if (!child.isDirectory() && JavaFileType.INSTANCE == child.getFileType()) {
-        FileBasedIndex.getInstance().requestReindex(child);
-      }
-    }
-  }
+		for(VirtualFile child : fileOrDir.getChildren())
+		{
+			if(!child.isDirectory() && JavaFileType.INSTANCE == child.getFileType())
+			{
+				FileBasedIndex.getInstance().requestReindex(child);
+			}
+		}
+	}
 
-  @Override
-  public void afterRootsChanged(@NotNull Project project) {
-  }
+	@Override
+	public void afterRootsChanged(@NotNull Project project)
+	{
+	}
 }
