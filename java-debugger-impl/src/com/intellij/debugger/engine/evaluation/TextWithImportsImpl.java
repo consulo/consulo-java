@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.DebuggerEditorImpl;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.util.Comparing;
@@ -31,7 +32,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.xdebugger.XExpression;
 import com.intellij.xdebugger.evaluation.EvaluationMode;
 import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
-import com.intellij.xdebugger.impl.ui.XDebuggerEditorBase;
 
 public final class TextWithImportsImpl implements TextWithImports
 {
@@ -162,7 +162,7 @@ public final class TextWithImportsImpl implements TextWithImports
 	{
 		if(text != null && !text.getText().isEmpty())
 		{
-			return new XExpressionImpl(text.getText(), XDebuggerEditorBase.getFileTypeLanguage(text.getFileType()), StringUtil.nullize(text.getImports()), getMode(text.getKind()));
+			return new XExpressionImpl(text.getText(), LanguageUtil.getFileTypeLanguage(text.getFileType()), StringUtil.nullize(text.getImports()), getMode(text.getKind()));
 		}
 		return null;
 	}
