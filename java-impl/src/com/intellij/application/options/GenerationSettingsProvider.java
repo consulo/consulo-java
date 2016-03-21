@@ -15,14 +15,13 @@
  */
 package com.intellij.application.options;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.psi.codeStyle.DisplayPriority;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
 
 /**
  * @author yole
@@ -36,11 +35,6 @@ public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
   @Override
   public String getConfigurableDisplayName() {
     return ApplicationBundle.message("title.code.generation");
-  }
-
-  @Override
-  public DisplayPriority getPriority() {
-    return DisplayPriority.CODE_SETTINGS;
   }
 
   @Override

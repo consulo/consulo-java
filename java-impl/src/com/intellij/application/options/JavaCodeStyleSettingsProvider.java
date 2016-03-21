@@ -15,11 +15,10 @@
  */
 package com.intellij.application.options;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
-import com.intellij.psi.codeStyle.DisplayPriority;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Rustam Vishnyakov
@@ -36,11 +35,6 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
         return "reference.settingsdialog.codestyle.java";
       }
     };
-  }
-
-  @Override
-  public DisplayPriority getPriority() {
-    return DisplayPriority.LANGUAGE_SETTINGS;
   }
 
   @Override

@@ -34,10 +34,8 @@ import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.codeStyle.DisplayPriority;
-import com.intellij.psi.codeStyle.DisplayPrioritySortable;
 
-public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColorSettingsPage, DisplayPrioritySortable {
+public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColorSettingsPage {
   private static final AttributesDescriptor[] ourDescriptors = {
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.keyword"), JavaHighlightingColors.KEYWORD),
     new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.number"), JavaHighlightingColors.NUMBER),
@@ -198,10 +196,5 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
   @Override
   public Map<String,TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
     return ourTags;
-  }
-
-  @Override
-  public DisplayPriority getPriority() {
-    return DisplayPriority.LANGUAGE_SETTINGS;
   }
 }
