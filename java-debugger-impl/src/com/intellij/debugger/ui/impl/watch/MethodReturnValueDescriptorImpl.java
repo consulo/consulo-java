@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,12 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.ClassNotLoadedException;
@@ -30,45 +33,62 @@ import consulo.internal.com.sun.jdi.Value;
  * Date: Oct 8, 2003
  * Time: 5:08:07 PM
  */
-public class MethodReturnValueDescriptorImpl extends ValueDescriptorImpl{
-  private final Method myMethod;
-  private final Value myValue;
+public class MethodReturnValueDescriptorImpl extends ValueDescriptorImpl
+{
+	private final Method myMethod;
+	private final Value myValue;
 
-  public MethodReturnValueDescriptorImpl(Project project, final Method method, Value value) {
-    super(project);
-    myMethod = method;
-    myValue = value;
-  }
+	public MethodReturnValueDescriptorImpl(Project project, @NotNull Method method, Value value)
+	{
+		super(project);
+		myMethod = method;
+		myValue = value;
+	}
 
-  public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException {
-    return myValue;
-  }
+	@Override
+	public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException
+	{
+		return myValue;
+	}
 
-  public String getName() {
-    //noinspection HardCodedStringLiteral
-    return myMethod.toString();
-  }
+	@NotNull
+	public Method getMethod()
+	{
+		return myMethod;
+	}
 
-  public String calcValueName() {
-    return getName();
-  }
+	@Override
+	public String getName()
+	{
+		return NodeRendererSettings.getInstance().getClassRenderer().renderTypeName(myMethod.declaringType().name()) + "." +
+				DebuggerUtilsEx.methodNameWithArguments(myMethod);
+	}
 
-  public Type getType() {
-    if (myValue == null) {
-      try {
-        return myMethod.returnType();
-      }
-      catch (ClassNotLoadedException ignored) {
-      }
-    }
-    return super.getType();
-  }
+	@Override
+	public Type getType()
+	{
+		if(myValue == null)
+		{
+			try
+			{
+				return myMethod.returnType();
+			}
+			catch(ClassNotLoadedException ignored)
+			{
+			}
+		}
+		return super.getType();
+	}
 
-  public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException {
-    throw new EvaluateException("Evaluation not supported for method return value");
-  }
+	@Override
+	public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException
+	{
+		return null;
+	}
 
-  public boolean canSetValue() {
-    return false;
-  }
+	@Override
+	public boolean canSetValue()
+	{
+		return false;
+	}
 }

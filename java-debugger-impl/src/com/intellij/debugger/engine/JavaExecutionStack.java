@@ -24,16 +24,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
-import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.impl.watch.MethodsTracker;
+import com.intellij.debugger.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.xdebugger.frame.XExecutionStack;
+import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
+import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ThreadReference;
 
 /**
@@ -41,30 +44,26 @@ import consulo.internal.com.sun.jdi.ThreadReference;
  */
 public class JavaExecutionStack extends XExecutionStack
 {
+	private static final Logger LOG = Logger.getInstance(JavaExecutionStack.class);
+
 	private final ThreadReferenceProxyImpl myThreadProxy;
 	private final DebugProcessImpl myDebugProcess;
-	private volatile JavaStackFrame myTopFrame;
+	private volatile XStackFrame myTopFrame;
 	private volatile boolean myTopFrameReady = false;
 	private final MethodsTracker myTracker = new MethodsTracker();
 
-	public JavaExecutionStack(@NotNull ThreadReferenceProxyImpl threadProxy,
-			@NotNull DebugProcessImpl debugProcess,
-			boolean current)
+	public JavaExecutionStack(@NotNull ThreadReferenceProxyImpl threadProxy, @NotNull DebugProcessImpl debugProcess, boolean current)
 	{
 		super(calcRepresentation(threadProxy), calcIcon(threadProxy, current));
 		myThreadProxy = threadProxy;
 		myDebugProcess = debugProcess;
-		if(current)
-		{
-			initTopFrame();
-		}
 	}
 
 	private static Icon calcIcon(ThreadReferenceProxyImpl threadProxy, boolean current)
 	{
 		if(current)
 		{
-			return AllIcons.Debugger.ThreadCurrent;
+			return threadProxy.isSuspended() ? AllIcons.Debugger.ThreadCurrent : AllIcons.Debugger.ThreadRunning;
 		}
 		else if(threadProxy.isAtBreakpoint())
 		{
@@ -94,12 +93,12 @@ public class JavaExecutionStack extends XExecutionStack
 			StackFrameProxyImpl frame = myThreadProxy.frame(0);
 			if(frame != null)
 			{
-				myTopFrame = new JavaStackFrame(frame, myTracker);
+				myTopFrame = createStackFrame(frame, myTracker);
 			}
 		}
 		catch(EvaluateException e)
 		{
-			e.printStackTrace();
+			LOG.info(e);
 		}
 		finally
 		{
@@ -107,9 +106,25 @@ public class JavaExecutionStack extends XExecutionStack
 		}
 	}
 
+	private static XStackFrame createStackFrame(@NotNull StackFrameProxyImpl stackFrameProxy, @NotNull MethodsTracker tracker)
+	{
+		StackFrameDescriptorImpl descriptor = new StackFrameDescriptorImpl(stackFrameProxy, tracker);
+		DebugProcessImpl debugProcess = (DebugProcessImpl) descriptor.getDebugProcess();
+		Location location = descriptor.getLocation();
+		if(location != null)
+		{
+			XStackFrame customFrame = debugProcess.getPositionManager().createStackFrame(stackFrameProxy, debugProcess, location);
+			if(customFrame != null)
+			{
+				return customFrame;
+			}
+		}
+		return new JavaStackFrame(descriptor, true);
+	}
+
 	@Nullable
 	@Override
-	public JavaStackFrame getTopFrame()
+	public XStackFrame getTopFrame()
 	{
 		assert myTopFrameReady : "Top frame must be already calculated here";
 		return myTopFrame;
@@ -118,7 +133,11 @@ public class JavaExecutionStack extends XExecutionStack
 	@Override
 	public void computeStackFrames(final int firstFrameIndex, final XStackFrameContainer container)
 	{
-		myDebugProcess.getManagerThread().schedule(new DebuggerContextCommandImpl(myDebugProcess.getDebuggerContext())
+		if(container.isObsolete())
+		{
+			return;
+		}
+		myDebugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(myDebugProcess.getDebuggerContext().getSuspendContext())
 		{
 			@Override
 			public Priority getPriority()
@@ -127,8 +146,12 @@ public class JavaExecutionStack extends XExecutionStack
 			}
 
 			@Override
-			public void threadAction()
+			public void contextAction() throws Exception
 			{
+				if(container.isObsolete())
+				{
+					return;
+				}
 				if(!myThreadProxy.isCollected() && myDebugProcess.getSuspendManager().isSuspended(myThreadProxy))
 				{
 					int status = myThreadProxy.status();
@@ -145,8 +168,7 @@ public class JavaExecutionStack extends XExecutionStack
 								iterator.next();
 								added++;
 							}
-							myDebugProcess.getManagerThread().schedule(new AppendFrameCommand(getSuspendContext(),
-									iterator, container, added, firstFrameIndex));
+							myDebugProcess.getManagerThread().schedule(new AppendFrameCommand(getSuspendContext(), iterator, container, added, firstFrameIndex));
 						}
 						catch(EvaluateException e)
 						{
@@ -169,11 +191,7 @@ public class JavaExecutionStack extends XExecutionStack
 		private int myAdded;
 		private final int mySkip;
 
-		public AppendFrameCommand(SuspendContextImpl suspendContext,
-				Iterator<StackFrameProxyImpl> stackFramesIterator,
-				XStackFrameContainer container,
-				int added,
-				int skip)
+		public AppendFrameCommand(SuspendContextImpl suspendContext, Iterator<StackFrameProxyImpl> stackFramesIterator, XStackFrameContainer container, int added, int skip)
 		{
 			super(suspendContext);
 			myStackFramesIterator = stackFramesIterator;
@@ -191,9 +209,13 @@ public class JavaExecutionStack extends XExecutionStack
 		@Override
 		public void contextAction() throws Exception
 		{
+			if(myContainer.isObsolete())
+			{
+				return;
+			}
 			if(myStackFramesIterator.hasNext())
 			{
-				JavaStackFrame frame;
+				XStackFrame frame;
 				boolean first = myAdded == 0;
 				if(first && myTopFrameReady)
 				{
@@ -202,29 +224,41 @@ public class JavaExecutionStack extends XExecutionStack
 				}
 				else
 				{
-					frame = new JavaStackFrame(myStackFramesIterator.next(), myTracker);
+					frame = createStackFrame(myStackFramesIterator.next(), myTracker);
 					if(first && !myTopFrameReady)
 					{
 						myTopFrame = frame;
 						myTopFrameReady = true;
 					}
 				}
-				if(first || DebuggerSettings.getInstance().SHOW_LIBRARY_STACKFRAMES || (!frame.getDescriptor()
-						.isSynthetic() && !frame.getDescriptor().isInLibraryContent()))
+				if(first || showFrame(frame))
 				{
 					if(++myAdded > mySkip)
 					{
 						myContainer.addStackFrames(Collections.singletonList(frame), false);
 					}
 				}
-				myDebugProcess.getManagerThread().schedule(new AppendFrameCommand(getSuspendContext(),
-						myStackFramesIterator, myContainer, myAdded, mySkip));
+				myDebugProcess.getManagerThread().schedule(new AppendFrameCommand(getSuspendContext(), myStackFramesIterator, myContainer, myAdded, mySkip));
 			}
 			else
 			{
 				myContainer.addStackFrames(Collections.<JavaStackFrame>emptyList(), true);
 			}
 		}
+	}
+
+	private static boolean showFrame(@NotNull XStackFrame frame)
+	{
+		if(XDebuggerSettingsManager.getInstance().getDataViewSettings().isShowLibraryStackFrames())
+		{
+			return true;
+		}
+		if(frame instanceof JavaStackFrame)
+		{
+			StackFrameDescriptorImpl descriptor = ((JavaStackFrame) frame).getDescriptor();
+			return !descriptor.isSynthetic() && !descriptor.isInLibraryContent();
+		}
+		return true;
 	}
 
 	private static String calcRepresentation(ThreadReferenceProxyImpl thread)
@@ -237,8 +271,7 @@ public class JavaExecutionStack extends XExecutionStack
 		//noinspection HardCodedStringLiteral
 		if(grname != null && !"SYSTEM".equalsIgnoreCase(grname))
 		{
-			return DebuggerBundle.message("label.thread.node.in.group", name, thread.uniqueID(), threadStatusText,
-					grname);
+			return DebuggerBundle.message("label.thread.node.in.group", name, thread.uniqueID(), threadStatusText, grname);
 		}
 		return DebuggerBundle.message("label.thread.node", name, thread.uniqueID(), threadStatusText);
 	}
@@ -269,5 +302,11 @@ public class JavaExecutionStack extends XExecutionStack
 	public int hashCode()
 	{
 		return myThreadProxy.hashCode();
+	}
+
+	@Override
+	public String toString()
+	{
+		return getDisplayName();
 	}
 }

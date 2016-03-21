@@ -670,6 +670,7 @@
 
 		<debugger.syntheticProvider implementation="com.intellij.debugger.engine.DefaultSyntheticProvider"/>
 
+		<debugger.sourcePositionProvider implementation="com.intellij.debugger.engine.DefaultSourcePositionProvider" order="last"/>
 		<debugger.sourcePositionHighlighter implementation="com.intellij.debugger.engine.JavaSourcePositionHighlighter"/>
 
 		<debugger.simplePropertyGetterProvider implementation="com.intellij.debugger.engine.JavaSimpleGetterProvider"/>

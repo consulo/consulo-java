@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,6 +160,10 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 			@Override
 			public void contextAction() throws Exception
 			{
+				if(node.isObsolete())
+				{
+					return;
+				}
 				if(!myContextSet)
 				{
 					myValueDescriptor.setContext(myEvaluationContext);
@@ -352,7 +356,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 				String value = myValue;
 				if(myValueDescriptor.isString())
 				{
-					renderer.renderStringValue(myValue, "\"\\", XValueNode.MAX_VALUE_LENGTH);
+					renderer.renderStringValue(myValue, "\"", XValueNode.MAX_VALUE_LENGTH);
 					return;
 				}
 				else if(myValueDescriptor.getLastRenderer() instanceof ToStringRenderer || myValueDescriptor.getLastRenderer() instanceof ToStringBasedRenderer)
@@ -475,11 +479,19 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
 	protected static boolean scheduleCommand(EvaluationContextImpl evaluationContext, @NotNull final XCompositeNode node, final SuspendContextCommandImpl command)
 	{
+		if(node.isObsolete())
+		{
+			return false;
+		}
 		evaluationContext.getManagerThread().schedule(new SuspendContextCommandImpl(command.getSuspendContext())
 		{
 			@Override
 			public void contextAction() throws Exception
 			{
+				if(node.isObsolete())
+				{
+					return;
+				}
 				command.contextAction();
 			}
 
@@ -610,7 +622,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 	@Override
 	public XValueModifier getModifier()
 	{
-		return myValueDescriptor.canSetValue() ? new JavaValueModifier(this) : null;
+		return myValueDescriptor.canSetValue() ? myValueDescriptor.getModifier(this) : null;
 	}
 
 	private volatile XExpression evaluationExpression = null;
@@ -728,7 +740,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 								}
 							}
 						}
-						EvaluationContextImpl evaluationContext = ((JavaStackFrame) frame).getFrameDebuggerContext().createEvaluationContext();
+						EvaluationContextImpl evaluationContext = ((JavaStackFrame) frame).getFrameDebuggerContext(null).createEvaluationContext();
 						if(evaluationContext != null)
 						{
 							callback.evaluated(create(inspectDescriptor, evaluationContext, myNodeManager));

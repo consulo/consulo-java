@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.intellij.debugger.engine.evaluation;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionService;
@@ -32,11 +33,13 @@ import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaCodeFragment;
 import com.intellij.psi.JavaCodeFragmentFactory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiType;
 import com.intellij.util.PairFunction;
 import com.intellij.util.concurrency.Semaphore;
@@ -86,7 +89,7 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory
 		}
 		fragment.setVisibilityChecker(JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE);
 		//noinspection HardCodedStringLiteral
-		fragment.putUserData(DebuggerExpressionComboBox.KEY, "DebuggerComboBoxEditor.IS_DEBUGGER_EDITOR");
+		fragment.putUserData(KEY, "DebuggerComboBoxEditor.IS_DEBUGGER_EDITOR");
 		fragment.putCopyableUserData(JavaCompletionUtil.DYNAMIC_TYPE_EVALUATOR, new PairFunction<PsiExpression, CompletionParameters, PsiType>()
 		{
 			@Override
@@ -109,7 +112,7 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory
 
 				final DebuggerContextImpl debuggerContext = DebuggerManagerEx.getInstanceEx(project).getContext();
 				DebuggerSession debuggerSession = debuggerContext.getDebuggerSession();
-				if(debuggerSession != null)
+				if(debuggerSession != null && debuggerContext.getSuspendContext() != null)
 				{
 					final Semaphore semaphore = new Semaphore();
 					semaphore.down();
@@ -148,6 +151,7 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory
 	}
 
 	@Override
+	@NotNull
 	public LanguageFileType getFileType()
 	{
 		return JavaFileType.INSTANCE;
@@ -157,5 +161,12 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory
 	public EvaluatorBuilder getEvaluatorBuilder()
 	{
 		return EvaluatorBuilderImpl.getInstance();
+	}
+
+	public static final Key<String> KEY = Key.create("DefaultCodeFragmentFactory.KEY");
+
+	public static boolean isDebuggerFile(PsiFile file)
+	{
+		return file.getUserData(KEY) != null || file.getUserData(DebuggerExpressionComboBox.KEY) != null;
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package com.intellij.debugger.engine;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,9 +43,7 @@ import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
-import com.intellij.debugger.ui.impl.watch.LocalVariableDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.MessageDescriptor;
-import com.intellij.debugger.ui.impl.watch.MethodsTracker;
 import com.intellij.debugger.ui.impl.watch.NodeManagerImpl;
 import com.intellij.debugger.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.StaticDescriptorImpl;
@@ -67,6 +65,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.xdebugger.XDebugSession;
@@ -101,11 +100,6 @@ public class JavaStackFrame extends XStackFrame
 	private static final JavaFramesListRenderer FRAME_RENDERER = new JavaFramesListRenderer();
 	private JavaDebuggerEvaluator myEvaluator = null;
 	private final String myEqualityObject;
-
-	public JavaStackFrame(@NotNull StackFrameProxyImpl stackFrameProxy, @NotNull MethodsTracker tracker)
-	{
-		this(new StackFrameDescriptorImpl(stackFrameProxy, tracker), true);
-	}
 
 	public JavaStackFrame(@NotNull StackFrameDescriptorImpl descriptor, boolean update)
 	{
@@ -172,12 +166,6 @@ public class JavaStackFrame extends XStackFrame
 		{
 			return;
 		}
-		XStackFrame xFrame = getDescriptor().getXStackFrame();
-		if(xFrame != null)
-		{
-			xFrame.computeChildren(node);
-			return;
-		}
 		myDebugProcess.getManagerThread().schedule(new DebuggerContextCommandImpl(myDebugProcess.getDebuggerContext(), myDescriptor.getFrameProxy().threadProxy())
 		{
 			@Override
@@ -194,19 +182,22 @@ public class JavaStackFrame extends XStackFrame
 					return;
 				}
 				XValueChildrenList children = new XValueChildrenList();
-				buildVariablesThreadAction(getFrameDebuggerContext(), children, node);
+				buildVariablesThreadAction(getFrameDebuggerContext(getDebuggerContext()), children, node);
 				node.addChildren(children, true);
 			}
 		});
 	}
 
-	DebuggerContextImpl getFrameDebuggerContext()
+	DebuggerContextImpl getFrameDebuggerContext(@Nullable DebuggerContextImpl context)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
-		DebuggerContextImpl context = myDebugProcess.getDebuggerContext();
+		if(context == null)
+		{
+			context = myDebugProcess.getDebuggerContext();
+		}
 		if(context.getFrameProxy() != getStackFrameProxy())
 		{
-			SuspendContextImpl threadSuspendContext = SuspendManagerUtil.getSuspendContextForThread(context.getSuspendContext(), getStackFrameProxy().threadProxy());
+			SuspendContextImpl threadSuspendContext = SuspendManagerUtil.findContextByThread(myDebugProcess.getSuspendManager(), getStackFrameProxy().threadProxy());
 			context = DebuggerContextImpl.createDebuggerContext(myDebugProcess.mySession, threadSuspendContext, getStackFrameProxy().threadProxy(), getStackFrameProxy());
 			context.setPositionCache(myDescriptor.getSourcePosition());
 			context.initCaches();
@@ -255,7 +246,7 @@ public class JavaStackFrame extends XStackFrame
 
 			// add last method return value if any
 			final Pair<Method, Value> methodValuePair = debugProcess.getLastExecutedMethod();
-			if(methodValuePair != null)
+			if(methodValuePair != null && myDescriptor.getUiIndex() == 0)
 			{
 				ValueDescriptorImpl returnValueDescriptor = myNodeManager.getMethodReturnValueDescriptor(myDescriptor, methodValuePair.getFirst(), methodValuePair.getSecond());
 				children.add(JavaValue.create(returnValueDescriptor, evaluationContext, myNodeManager));
@@ -356,7 +347,14 @@ public class JavaStackFrame extends XStackFrame
 			else
 			{
 				final SourcePosition sourcePosition = debuggerContext.getSourcePosition();
-				final Map<String, LocalVariableProxyImpl> visibleVariables = getVisibleVariables(getStackFrameProxy());
+				final Map<String, LocalVariableProxyImpl> visibleVariables = ContainerUtil.map2Map(getVisibleVariables(), new Function<LocalVariableProxyImpl, Pair<String, LocalVariableProxyImpl>>()
+				{
+					@Override
+					public Pair<String, LocalVariableProxyImpl> fun(LocalVariableProxyImpl var)
+					{
+						return Pair.create(var.name(), var);
+					}
+				});
 
 				Pair<Set<String>, Set<TextWithImports>> usedVars = EMPTY_USED_VARS;
 				if(sourcePosition != null)
@@ -487,11 +485,9 @@ public class JavaStackFrame extends XStackFrame
 
 	protected void superBuildVariables(final EvaluationContextImpl evaluationContext, XValueChildrenList children) throws EvaluateException
 	{
-		final StackFrameProxyImpl frame = getStackFrameProxy();
-		for(final LocalVariableProxyImpl local : frame.visibleVariables())
+		for(LocalVariableProxyImpl local : getVisibleVariables())
 		{
-			final LocalVariableDescriptorImpl descriptor = myNodeManager.getLocalVariableDescriptor(null, local);
-			children.add(JavaValue.create(descriptor, evaluationContext, myNodeManager));
+			children.add(JavaValue.create(myNodeManager.getLocalVariableDescriptor(null, local), evaluationContext, myNodeManager));
 		}
 	}
 
@@ -665,14 +661,9 @@ public class JavaStackFrame extends XStackFrame
 		}
 	}
 
-	private static Map<String, LocalVariableProxyImpl> getVisibleVariables(final StackFrameProxyImpl frame) throws EvaluateException
+	protected List<LocalVariableProxyImpl> getVisibleVariables() throws EvaluateException
 	{
-		final Map<String, LocalVariableProxyImpl> vars = new HashMap<String, LocalVariableProxyImpl>();
-		for(LocalVariableProxyImpl localVariableProxy : frame.visibleVariables())
-		{
-			vars.put(localVariableProxy.name(), localVariableProxy);
-		}
-		return vars;
+		return getStackFrameProxy().visibleVariables();
 	}
 
 	private static boolean shouldSkipLine(final PsiFile file, Document doc, int line)
@@ -726,7 +717,7 @@ public class JavaStackFrame extends XStackFrame
 			return Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
 		}
 		final PsiFile positionFile = position.getFile();
-		if(!positionFile.getLanguage().isKindOf(JavaLanguage.INSTANCE))
+		if(!positionFile.isValid() || !positionFile.getLanguage().isKindOf(JavaLanguage.INSTANCE))
 		{
 			return Pair.create(visibleVars, Collections.<TextWithImports>emptySet());
 		}

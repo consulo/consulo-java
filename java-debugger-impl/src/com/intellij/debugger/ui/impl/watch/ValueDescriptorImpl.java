@@ -48,11 +48,13 @@ import com.intellij.debugger.ui.tree.render.NodeRendererImpl;
 import com.intellij.debugger.ui.tree.render.Renderer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.concurrency.Semaphore;
+import com.intellij.xdebugger.frame.XValueModifier;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
 
@@ -159,7 +161,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 
 	public boolean isShowIdLabel()
 	{
-		return myShowIdLabel;
+		return myShowIdLabel && Registry.is("debugger.showTypes", true);
 	}
 
 	public void setShowIdLabel(boolean showIdLabel)
@@ -643,6 +645,11 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	public boolean canSetValue()
 	{
 		return myValueReady && !myIsSynthetic && isLvalue();
+	}
+
+	public XValueModifier getModifier(JavaValue value)
+	{
+		return null;
 	}
 
 	@NotNull

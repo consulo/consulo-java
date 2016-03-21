@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.settings.ThreadsViewSettings;
 import com.intellij.debugger.ui.tree.StackFrameDescriptor;
@@ -41,9 +42,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.FileColorManager;
 import com.intellij.util.StringBuilderSpinAllocator;
-import com.intellij.util.ui.TextTransferable;
+import com.intellij.util.ui.EmptyIcon;
 import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.frame.XStackFrame;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.frame.XValueMarkers;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
@@ -63,7 +63,6 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	private int myUiIndex;
 	private String myName = null;
 	private Location myLocation;
-	private final XStackFrame myXStackFrame;
 	private MethodsTracker.MethodOccurrence myMethodOccurrence;
 	private boolean myIsSynthetic;
 	private boolean myIsInLibraryContent;
@@ -111,11 +110,9 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 					{
 						myBackgroundColor = FileColorManager.getInstance(file.getProject()).getFileColor(file);
 
-						final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(getDebugProcess()
-								.getProject()).getFileIndex();
+						final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(StackFrameDescriptorImpl.this.getDebugProcess().getProject()).getFileIndex();
 						final VirtualFile vFile = file.getVirtualFile();
-						myIsInLibraryContent = vFile != null && (projectFileIndex.isInLibraryClasses(vFile) ||
-								projectFileIndex.isInLibrarySource(vFile));
+						myIsInLibraryContent = vFile != null && (projectFileIndex.isInLibraryClasses(vFile) || projectFileIndex.isInLibrarySource(vFile));
 					}
 				}
 			});
@@ -136,15 +133,6 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 			myIsSynthetic = false;
 			myIsInLibraryContent = false;
 		}
-
-		myXStackFrame = myLocation == null ? null : ((DebugProcessImpl) getDebugProcess()).getPositionManager()
-				.createStackFrame(frame, (DebugProcessImpl) getDebugProcess(), myLocation);
-	}
-
-	@Nullable
-	public XStackFrame getXStackFrame()
-	{
-		return myXStackFrame;
 	}
 
 	public int getUiIndex()
@@ -217,17 +205,9 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 	}
 
 	@Override
-	protected String calcRepresentation(EvaluationContextImpl context,
-			DescriptorLabelListener descriptorLabelListener) throws EvaluateException
+	protected String calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener descriptorLabelListener) throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
-
-		if(myXStackFrame != null)
-		{
-			TextTransferable.ColoredStringBuilder builder = new TextTransferable.ColoredStringBuilder();
-			myXStackFrame.customizePresentation(builder);
-			return builder.getBuilder().toString();
-		}
 
 		if(myLocation == null)
 		{
@@ -241,8 +221,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 			if(method != null)
 			{
 				myName = method.name();
-				label.append(myName);
-				label.append("()");
+				label.append(settings.SHOW_ARGUMENTS_TYPES ? DebuggerUtilsEx.methodNameWithArguments(method) : myName);
 			}
 			if(settings.SHOW_LINE_NUMBER)
 			{
@@ -284,9 +263,12 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 					else
 					{
 						label.append(name.substring(dotIndex + 1));
-						label.append(" {");
-						label.append(name.substring(0, dotIndex));
-						label.append("}");
+						if(settings.SHOW_PACKAGE_NAME)
+						{
+							label.append(" {");
+							label.append(name.substring(0, dotIndex));
+							label.append("}");
+						}
 					}
 				}
 			}
@@ -368,7 +350,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		catch(EvaluateException ignored)
 		{
 		}
-		return AllIcons.Debugger.StackFrame;
+		return EmptyIcon.create(6);//AllIcons.Debugger.StackFrame;
 	}
 
 	public Icon getIcon()
