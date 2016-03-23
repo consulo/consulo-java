@@ -31,6 +31,7 @@ import javax.swing.event.ChangeListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.JavaDebuggerSupport;
@@ -54,15 +55,12 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 	private JCheckBox myCbShowSyntheticFields;
 	private StateRestoringCheckBox myCbShowValFieldsAsLocalVariables;
 	private JCheckBox myCbHideNullArrayElements;
-	private JCheckBox myCbShowStatic;
 	private JCheckBox myCbShowDeclaredType;
 	private JCheckBox myCbShowFQNames;
 	private JCheckBox myCbShowObjectId;
 	private JCheckBox myCbShowStringsType;
 	private JCheckBox myCbHexValue;
 
-	private StateRestoringCheckBox myCbShowStaticFinalFields;
-	//private final ArrayRendererConfigurable myArrayRendererConfigurable;
 	private JCheckBox myCbEnableAlternateViews;
 
 	private JCheckBox myCbEnableToString;
@@ -75,13 +73,12 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 	public DebuggerDataViewsConfigurable(@Nullable Project project)
 	{
 		myProject = project;
-		//myArrayRendererConfigurable = new ArrayRendererConfigurable(NodeRendererSettings.getInstance().getArrayRenderer());
 	}
 
+	@RequiredDispatchThread
 	@Override
 	public void disposeUIResources()
 	{
-		//myArrayRendererConfigurable.disposeUIResources();
 		myToStringFilterEditor = null;
 		myProject = null;
 	}
@@ -92,6 +89,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		return OptionsBundle.message("options.java.display.name");
 	}
 
+	@RequiredDispatchThread
 	@Override
 	public JComponent createComponent()
 	{
@@ -105,24 +103,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		myCbShowSyntheticFields = new JCheckBox(DebuggerBundle.message("label.base.renderer.configurable.show.synthetic.fields"));
 		myCbShowValFieldsAsLocalVariables = new StateRestoringCheckBox(DebuggerBundle.message("label.base.renderer.configurable.show.val.fields.as.locals"));
 		myCbHideNullArrayElements = new JCheckBox(DebuggerBundle.message("label.base.renderer.configurable.hide.null.array.elements"));
-		myCbShowStatic = new JCheckBox(DebuggerBundle.message("label.base.renderer.configurable.show.static.fields"));
-		myCbShowStaticFinalFields = new StateRestoringCheckBox(DebuggerBundle.message("label.base.renderer.configurable.show.static.final.fields"));
 		myCbEnableAlternateViews = new JCheckBox(DebuggerBundle.message("label.base.renderer.configurable.alternate.view"));
-		myCbShowStatic.addChangeListener(new ChangeListener()
-		{
-			@Override
-			public void stateChanged(ChangeEvent e)
-			{
-				if(myCbShowStatic.isSelected())
-				{
-					myCbShowStaticFinalFields.makeSelectable();
-				}
-				else
-				{
-					myCbShowStaticFinalFields.makeUnselectable(false);
-				}
-			}
-		});
 		myCbShowSyntheticFields.addChangeListener(new ChangeListener()
 		{
 			@Override
@@ -181,11 +162,8 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		showPanel.add(myCbShowObjectId, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(4, 0, 0, 0), 0, 0));
 		showPanel.add(myCbShowSyntheticFields, new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0,
 				0));
-		showPanel.add(myCbShowStatic, new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(4, 10, 0, 0), 0, 0));
 		showPanel.add(myCbShowValFieldsAsLocalVariables, new GridBagConstraints(2, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(4, 10, 0,
 				0), 0, 0));
-		showPanel.add(myCbShowStaticFinalFields, new GridBagConstraints(2, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(4, 10, 0, 0), 0,
-				0));
 		showPanel.add(myCbShowFQNames, new GridBagConstraints(3, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 0, 0));
 
 		panel.add(showPanel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(4, 0, 0, 0), 0, 0));
@@ -213,6 +191,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		return panel;
 	}
 
+	@RequiredDispatchThread
 	@Override
 	public void apply()
 	{
@@ -224,8 +203,6 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		generalSettings.HIDE_NULL_ARRAY_ELEMENTS = myCbHideNullArrayElements.isSelected();
 
 		final ClassRenderer classRenderer = rendererSettings.getClassRenderer();
-		classRenderer.SHOW_STATIC = myCbShowStatic.isSelected();
-		classRenderer.SHOW_STATIC_FINAL = myCbShowStaticFinalFields.isSelectedWhenSelectable();
 		classRenderer.SHOW_SYNTHETICS = myCbShowSyntheticFields.isSelected();
 		classRenderer.SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES = myCbShowValFieldsAsLocalVariables.isSelectedWhenSelectable();
 		classRenderer.SHOW_DECLARED_TYPE = myCbShowDeclaredType.isSelected();
@@ -244,6 +221,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		rendererSettings.fireRenderersChanged();
 	}
 
+	@RequiredDispatchThread
 	@Override
 	public void reset()
 	{
@@ -261,12 +239,6 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		if(!classRenderer.SHOW_SYNTHETICS)
 		{
 			myCbShowValFieldsAsLocalVariables.makeUnselectable(false);
-		}
-		myCbShowStatic.setSelected(classRenderer.SHOW_STATIC);
-		myCbShowStaticFinalFields.setSelected(classRenderer.SHOW_STATIC_FINAL);
-		if(!classRenderer.SHOW_STATIC)
-		{
-			myCbShowStaticFinalFields.makeUnselectable(false);
 		}
 		myCbShowDeclaredType.setSelected(classRenderer.SHOW_DECLARED_TYPE);
 		myCbShowFQNames.setSelected(classRenderer.SHOW_FQ_TYPE_NAMES);
@@ -288,6 +260,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		myCbHexValue.setSelected(primitiveRenderer.isShowHexValue());
 	}
 
+	@RequiredDispatchThread
 	@Override
 	public boolean isModified()
 	{
@@ -309,8 +282,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		final NodeRendererSettings rendererSettings = NodeRendererSettings.getInstance();
 
 		final ClassRenderer classRenderer = rendererSettings.getClassRenderer();
-		final boolean isClassRendererModified = (classRenderer.SHOW_STATIC != myCbShowStatic.isSelected()) ||
-				(classRenderer.SHOW_STATIC_FINAL != myCbShowStaticFinalFields.isSelectedWhenSelectable()) ||
+		final boolean isClassRendererModified =
 				(classRenderer.SHOW_SYNTHETICS != myCbShowSyntheticFields.isSelected()) ||
 				(classRenderer.SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES != myCbShowValFieldsAsLocalVariables.isSelectedWhenSelectable()) ||
 				(classRenderer.SHOW_DECLARED_TYPE != myCbShowDeclaredType.isSelected()) ||
@@ -346,7 +318,6 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 		return false;
 	}
 
-	@SuppressWarnings("SpellCheckingInspection")
 	@Override
 	@NotNull
 	public String getHelpTopic()

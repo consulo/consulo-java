@@ -229,7 +229,8 @@ public class JavaStackFrame extends XStackFrame
 				ValueDescriptorImpl thisDescriptor = myNodeManager.getThisDescriptor(null, thisObjectReference);
 				children.add(JavaValue.create(thisDescriptor, evaluationContext, myNodeManager));
 			}
-			else if(location != null)
+
+			if(location != null)
 			{
 				StaticDescriptorImpl staticDecriptor = myNodeManager.getStaticDescriptor(myDescriptor, location.declaringType());
 				if(staticDecriptor.isExpandable())
