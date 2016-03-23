@@ -17,7 +17,10 @@ package com.intellij.debugger.engine;
 
 import java.util.List;
 
+import javax.swing.Icon;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.ui.impl.watch.FieldDescriptorImpl;
@@ -25,6 +28,7 @@ import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorProvider;
 import com.intellij.debugger.ui.impl.watch.NodeManagerImpl;
 import com.intellij.debugger.ui.impl.watch.StaticDescriptorImpl;
+import com.intellij.icons.AllIcons;
 import com.intellij.xdebugger.frame.XCompositeNode;
 import com.intellij.xdebugger.frame.XValueChildrenList;
 import com.intellij.xdebugger.frame.XValueGroup;
@@ -47,6 +51,20 @@ public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvid
 		myStaticDescriptor = staticDescriptor;
 		myEvaluationContext = evaluationContext;
 		myNodeManager = nodeManager;
+	}
+
+	@NotNull
+	@Override
+	public String getSeparator()
+	{
+		return "";
+	}
+
+	@Nullable
+	@Override
+	public Icon getIcon()
+	{
+		return AllIcons.Nodes.Static;
 	}
 
 	@Override
