@@ -15,9 +15,9 @@
  */
 package com.intellij.execution.filters;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,9 +25,10 @@ import org.jetbrains.annotations.NotNull;
  * Date: 8/5/11
  * Time: 7:46 PM
  */
-public interface ExceptionFilterFactory {
-  ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create("org.consulo.java.exceptionFilter");
+public interface ExceptionFilterFactory
+{
+	ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create("org.consulo.java.exceptionFilter");
 
-  @NotNull
-  Filter create(@NotNull GlobalSearchScope searchScope);
+	@NotNull
+	Filter create(@NotNull GlobalSearchScope searchScope);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,104 +15,158 @@
  */
 package com.intellij.execution.filters;
 
+import gnu.trove.THashMap;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.Trinity;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiCompiledFile;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiTryStatement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ui.UIUtil;
-import gnu.trove.THashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.*;
-import java.util.Map;
 
 /**
  * @author gregsh
  */
-public class ExceptionExFilterFactory implements ExceptionFilterFactory {
-  @Override
-  public Filter create(GlobalSearchScope searchScope) {
-    return new MyFilter(searchScope);
-  }
+public class ExceptionExFilterFactory implements ExceptionFilterFactory
+{
+	@NotNull
+	@Override
+	public Filter create(@NotNull GlobalSearchScope searchScope)
+	{
+		return new MyFilter(searchScope);
+	}
 
-  private static class MyFilter implements Filter, FilterMixin {
-    private final GlobalSearchScope myScope;
+	private static class MyFilter implements Filter, FilterMixin
+	{
+		private final ExceptionInfoCache myCache;
 
-    public MyFilter(@NotNull final GlobalSearchScope scope) {
-      myScope = scope;
-    }
+		public MyFilter(@NotNull final GlobalSearchScope scope)
+		{
+			myCache = new ExceptionInfoCache(scope);
+		}
 
-    public Result applyFilter(final String line, final int textEndOffset) {
-      return null;
-    }
+		@Override
+		public Result applyFilter(final String line, final int textEndOffset)
+		{
+			return null;
+		}
 
-    @Override
-    public boolean shouldRunHeavy() {
-      return true;
-    }
+		@Override
+		public boolean shouldRunHeavy()
+		{
+			return true;
+		}
 
-    @Override
-    public void applyHeavyFilter(final Document copiedFragment,
-                                 final int startOffset,
-                                 int startLineNumber,
-                                 final Consumer<AdditionalHighlight> consumer) {
-      Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new THashMap<String, Trinity<TextRange, TextRange, TextRange>>();
-      final Trinity<TextRange, TextRange, TextRange> emptyInfo = Trinity.create(null, null, null);
+		@Override
+		public void applyHeavyFilter(@NotNull final Document copiedFragment, final int startOffset, int startLineNumber, @NotNull final Consumer<AdditionalHighlight> consumer)
+		{
+			Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new THashMap<String, Trinity<TextRange, TextRange, TextRange>>();
+			final Trinity<TextRange, TextRange, TextRange> emptyInfo = Trinity.create(null, null, null);
 
-      final ExceptionWorker worker = new ExceptionWorker(myScope.getProject(), myScope);
-      for (int i = 0; i < copiedFragment.getLineCount(); i++) {
-        final int lineStartOffset = copiedFragment.getLineStartOffset(i);
-        final int lineEndOffset = copiedFragment.getLineEndOffset(i);
+			final ExceptionWorker worker = new ExceptionWorker(myCache);
+			for(int i = 0; i < copiedFragment.getLineCount(); i++)
+			{
+				final int lineStartOffset = copiedFragment.getLineStartOffset(i);
+				final int lineEndOffset = copiedFragment.getLineEndOffset(i);
 
-        String text = copiedFragment.getText(new TextRange(lineStartOffset, lineEndOffset));
-        if (!text.contains(".java:")) continue;
-        Trinity<TextRange, TextRange, TextRange> info = visited.get(text);
-        if (info == emptyInfo) continue;
+				String text = copiedFragment.getText(new TextRange(lineStartOffset, lineEndOffset));
+				if(!text.contains(".java:"))
+				{
+					continue;
+				}
+				Trinity<TextRange, TextRange, TextRange> info = visited.get(text);
+				if(info == emptyInfo)
+				{
+					continue;
+				}
 
-        if (info == null) {
-          info = emptyInfo;
-          AccessToken token = ApplicationManager.getApplication().acquireReadActionLock();
-          try {
-            worker.execute(text, lineEndOffset);
-            Result result = worker.getResult();
-            if (result == null) continue;
-            OpenFileHyperlinkInfo hyperlinkInfo = ExceptionWorker.getOpenFileHyperlinkInfo(result);
-            int offset = hyperlinkInfo == null? -1 : hyperlinkInfo.getDescriptor().getOffset();
-            PsiFile psiFile = worker.getFile();
-            if (offset <= 0 || psiFile == null) continue;
-            PsiElement element = psiFile.findElementAt(offset);
-            PsiTryStatement parent = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class, true, PsiClass.class);
-            PsiCodeBlock tryBlock = parent != null? parent.getTryBlock() : null;
-            if (tryBlock == null || !tryBlock.getTextRange().contains(offset)) continue;
-            info = worker.getInfo();
-          }
-          finally {
-            token.finish();
-            visited.put(text, info);
-          }
-        }
-        int off = startOffset + lineStartOffset;
-        final Color color = UIUtil.getInactiveTextColor();
-        consumer.consume(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset()) {
-          @Override
-          public TextAttributes getTextAttributes(@Nullable TextAttributes source) {
-            return new TextAttributes(null, null, color, EffectType.BOLD_DOTTED_LINE, Font.PLAIN);
-          }
-        });
-      }
-    }
+				if(info == null)
+				{
+					info = emptyInfo;
+					AccessToken token = ApplicationManager.getApplication().acquireReadActionLock();
+					try
+					{
+						worker.execute(text, lineEndOffset);
+						Result result = worker.getResult();
+						if(result == null)
+						{
+							continue;
+						}
+						HyperlinkInfo hyperlinkInfo = result.getHyperlinkInfo();
+						if(!(hyperlinkInfo instanceof FileHyperlinkInfo))
+						{
+							continue;
+						}
 
-    @Override
-    public String getUpdateMessage() {
-      return "Highlighting try blocks...";
-    }
-  }
+						OpenFileDescriptor descriptor = ((FileHyperlinkInfo) hyperlinkInfo).getDescriptor();
+						if(descriptor == null)
+						{
+							continue;
+						}
+
+						PsiFile psiFile = worker.getFile();
+						if(psiFile == null || psiFile instanceof PsiCompiledFile)
+						{
+							continue;
+						}
+						int offset = descriptor.getOffset();
+						if(offset <= 0)
+						{
+							continue;
+						}
+
+						PsiElement element = psiFile.findElementAt(offset);
+						PsiTryStatement parent = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class, true, PsiClass.class);
+						PsiCodeBlock tryBlock = parent != null ? parent.getTryBlock() : null;
+						if(tryBlock == null || !tryBlock.getTextRange().contains(offset))
+						{
+							continue;
+						}
+						info = worker.getInfo();
+					}
+					finally
+					{
+						token.finish();
+						visited.put(text, info);
+					}
+				}
+				int off = startOffset + lineStartOffset;
+				final Color color = UIUtil.getInactiveTextColor();
+				consumer.consume(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset())
+				{
+					@NotNull
+					@Override
+					public TextAttributes getTextAttributes(@Nullable TextAttributes source)
+					{
+						return new TextAttributes(null, null, color, EffectType.BOLD_DOTTED_LINE, Font.PLAIN);
+					}
+				});
+			}
+		}
+
+		@NotNull
+		@Override
+		public String getUpdateMessage()
+		{
+			return "Highlighting try blocks...";
+		}
+	}
 }

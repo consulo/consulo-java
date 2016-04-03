@@ -15,6 +15,7 @@
  */
 package com.intellij.execution.filters;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.search.GlobalSearchScope;
 
 /**
@@ -23,9 +24,12 @@ import com.intellij.psi.search.GlobalSearchScope;
  * Date: 8/8/11
  * Time: 12:11 PM
  */
-public class ExceptionBaseFilterFactory implements ExceptionFilterFactory {
-  @Override
-  public Filter create(GlobalSearchScope searchScope) {
-    return new ExceptionFilter(searchScope);
-  }
+public class ExceptionBaseFilterFactory implements ExceptionFilterFactory
+{
+	@NotNull
+	@Override
+	public Filter create(@NotNull GlobalSearchScope searchScope)
+	{
+		return new ExceptionFilter(searchScope);
+	}
 }

@@ -15,6 +15,7 @@
  */
 package com.intellij.openapi.vcs.contentAnnotation;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.filters.ExceptionFilterFactory;
 import com.intellij.execution.filters.Filter;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -25,9 +26,12 @@ import com.intellij.psi.search.GlobalSearchScope;
  * Date: 8/5/11
  * Time: 8:03 PM
  */
-public class VcsContentAnnotationExceptionFilterFactory implements ExceptionFilterFactory {
-  @Override
-  public Filter create(GlobalSearchScope searchScope) {
-    return new VcsContentAnnotationExceptionFilter(searchScope);
-  }
+public class VcsContentAnnotationExceptionFilterFactory implements ExceptionFilterFactory
+{
+	@NotNull
+	@Override
+	public Filter create(@NotNull GlobalSearchScope searchScope)
+	{
+		return new VcsContentAnnotationExceptionFilter(searchScope);
+	}
 }
