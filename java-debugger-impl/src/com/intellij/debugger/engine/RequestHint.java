@@ -112,10 +112,12 @@ public class RequestHint
 
 			position = ApplicationManager.getApplication().runReadAction(new Computable<SourcePosition>()
 			{
+				@Override
 				public SourcePosition compute()
 				{
 					return ContextUtil.getSourcePosition(new StackFrameContext()
 					{
+						@Override
 						public StackFrameProxy getFrameProxy()
 						{
 							try
@@ -132,6 +134,7 @@ public class RequestHint
 							}
 						}
 
+						@Override
 						@NotNull
 						public DebugProcess getDebugProcess()
 						{
@@ -280,6 +283,7 @@ public class RequestHint
 			{
 				final Integer resultDepth = ApplicationManager.getApplication().runReadAction(new Computable<Integer>()
 				{
+					@Override
 					public Integer compute()
 					{
 						final SourcePosition locationPosition = ContextUtil.getSourcePosition(context);
@@ -321,6 +325,7 @@ public class RequestHint
 				{
 					boolean isGetter = ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
 					{
+						@Override
 						public Boolean compute()
 						{
 							PsiElement contextElement = PositionUtil.getContextElement(context);

@@ -20,31 +20,41 @@ import com.intellij.debugger.impl.DebuggerTaskImpl;
 /**
  * @author lex
  */
-public abstract class DebuggerCommandImpl extends DebuggerTaskImpl {
-  protected abstract void action() throws Exception;
+public abstract class DebuggerCommandImpl extends DebuggerTaskImpl
+{
+	protected abstract void action() throws Exception;
 
-  protected void commandCancelled() {
-  }
+	protected void commandCancelled()
+	{
+	}
 
-  public Priority getPriority() {
-    return Priority.LOW;
-  }
+	@Override
+	public Priority getPriority()
+	{
+		return Priority.LOW;
+	}
 
-  public final void notifyCancelled() {
-    try {
-      commandCancelled();
-    }
-    finally {
-      release();
-    }
-  }
+	public final void notifyCancelled()
+	{
+		try
+		{
+			commandCancelled();
+		}
+		finally
+		{
+			release();
+		}
+	}
 
-  public final void run() throws Exception{
-    try {
-      action();
-    }
-    finally {
-      release();
-    }
-  }
+	public final void run() throws Exception
+	{
+		try
+		{
+			action();
+		}
+		finally
+		{
+			release();
+		}
+	}
 }

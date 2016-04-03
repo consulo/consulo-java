@@ -35,10 +35,7 @@ class JavaFramesListRenderer /*extends ColoredListCellRenderer*/
 		myColorScheme = EditorColorsManager.getInstance().getGlobalScheme();
 	}
 
-	public void customizePresentation(
-			StackFrameDescriptorImpl descriptor,
-			@NotNull ColoredTextContainer component,
-			StackFrameDescriptorImpl selectedDescriptor)
+	public void customizePresentation(StackFrameDescriptorImpl descriptor, @NotNull ColoredTextContainer component, StackFrameDescriptorImpl selectedDescriptor)
 	{
 		component.setIcon(descriptor.getIcon());
 		//final Object selectedValue = list.getSelectedValue();

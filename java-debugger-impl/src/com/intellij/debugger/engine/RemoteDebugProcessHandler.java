@@ -15,61 +15,81 @@
  */
 package com.intellij.debugger.engine;
 
+import java.io.OutputStream;
+
 import com.intellij.debugger.DebuggerManager;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.project.Project;
 
-import java.io.OutputStream;
+public class RemoteDebugProcessHandler extends ProcessHandler
+{
+	private final Project myProject;
 
-public class RemoteDebugProcessHandler extends ProcessHandler{
-  private final Project myProject;
+	public RemoteDebugProcessHandler(Project project)
+	{
+		myProject = project;
+	}
 
-  public RemoteDebugProcessHandler(Project project) {
-    myProject = project;
-  }
+	@Override
+	public void startNotify()
+	{
+		final DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(this);
+		final DebugProcessAdapter listener = new DebugProcessAdapter()
+		{
+			//executed in manager thread
+			@Override
+			public void processDetached(DebugProcess process, boolean closedByUser)
+			{
+				debugProcess.removeDebugProcessListener(this);
+				notifyProcessDetached();
+			}
+		};
+		debugProcess.addDebugProcessListener(listener);
+		try
+		{
+			super.startNotify();
+		}
+		finally
+		{
+			// in case we added our listener too late, we may have lost processDetached notification,
+			// so check here if process is detached
+			if(debugProcess.isDetached())
+			{
+				debugProcess.removeDebugProcessListener(listener);
+				notifyProcessDetached();
+			}
+		}
+	}
 
-  public void startNotify() {
-    final DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(this);
-    final DebugProcessAdapter listener = new DebugProcessAdapter() {
-      //executed in manager thread
-      public void processDetached(DebugProcess process, boolean closedByUser) {
-        debugProcess.removeDebugProcessListener(this);
-        notifyProcessDetached();
-      }
-    };
-    debugProcess.addDebugProcessListener(listener);
-    try {
-      super.startNotify();
-    }
-    finally {
-      // in case we added our listener too late, we may have lost processDetached notification,
-      // so check here if process is detached
-      if (debugProcess.isDetached()) {
-        debugProcess.removeDebugProcessListener(listener);
-        notifyProcessDetached();
-      }
-    }
-  }
+	@Override
+	protected void destroyProcessImpl()
+	{
+		DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(this);
+		if(debugProcess != null)
+		{
+			debugProcess.stop(true);
+		}
+	}
 
-  protected void destroyProcessImpl() {
-    DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(this);
-    if(debugProcess != null) {
-      debugProcess.stop(true);
-    }
-  }
+	@Override
+	protected void detachProcessImpl()
+	{
+		DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(this);
+		if(debugProcess != null)
+		{
+			debugProcess.stop(false);
+		}
+	}
 
-  protected void detachProcessImpl() {
-    DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(this);
-    if(debugProcess != null) {
-      debugProcess.stop(false);
-    }
-  }
+	@Override
+	public boolean detachIsDefault()
+	{
+		return true;
+	}
 
-  public boolean detachIsDefault() {
-    return true;
-  }
-
-  public OutputStream getProcessInput() {
-    return null;
-  }
+	@Override
+	public OutputStream getProcessInput()
+	{
+		return null;
+	}
 }

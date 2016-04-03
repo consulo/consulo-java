@@ -27,12 +27,9 @@ import com.intellij.openapi.extensions.ExtensionPointName;
  */
 public interface FrameExtraVariablesProvider
 {
-	ExtensionPointName<FrameExtraVariablesProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger" +
-			".frameExtraVarsProvider");
+	ExtensionPointName<FrameExtraVariablesProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.frameExtraVarsProvider");
 
 	boolean isAvailable(SourcePosition sourcePosition, EvaluationContext evalContext);
 
-	Set<TextWithImports> collectVariables(SourcePosition sourcePosition,
-			EvaluationContext evalContext,
-			Set<String> alreadyCollected);
+	Set<TextWithImports> collectVariables(SourcePosition sourcePosition, EvaluationContext evalContext, Set<String> alreadyCollected);
 }
