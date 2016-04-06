@@ -15,6 +15,17 @@
  */
 package com.intellij.execution.application;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.execution.ui.AlternativeJREPanel;
@@ -33,117 +44,134 @@ import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public class ApplicationConfigurable extends SettingsEditor<ApplicationConfiguration> implements PanelWithAnchor
+{
+	private CommonJavaParametersPanel myCommonProgramParameters;
+	private LabeledComponent<EditorTextFieldWithBrowseButton> myMainClass;
+	private LabeledComponent<JComboBox> myModule;
+	private JPanel myWholePanel;
 
-public class ApplicationConfigurable extends SettingsEditor<ApplicationConfiguration> implements PanelWithAnchor {
-  private CommonJavaParametersPanel myCommonProgramParameters;
-  private LabeledComponent<EditorTextFieldWithBrowseButton> myMainClass;
-  private LabeledComponent<JComboBox> myModule;
-  private JPanel myWholePanel;
+	private final ConfigurationModuleSelector myModuleSelector;
+	private AlternativeJREPanel myAlternativeJREPanel;
+	private JCheckBox myShowSwingInspectorCheckbox;
+	private final JreVersionDetector myVersionDetector;
+	private final Project myProject;
+	private JComponent myAnchor;
 
-  private final ConfigurationModuleSelector myModuleSelector;
-  private AlternativeJREPanel myAlternativeJREPanel;
-  private JCheckBox myShowSwingInspectorCheckbox;
-  private final JreVersionDetector myVersionDetector;
-  private final Project myProject;
-  private JComponent myAnchor;
+	public ApplicationConfigurable(final Project project)
+	{
+		myProject = project;
+		myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
+		myCommonProgramParameters.setModuleContext(myModuleSelector.getModule());
+		myModule.setLabelLocation(BorderLayout.WEST);
+		myModule.getComponent().addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				myCommonProgramParameters.setModuleContext(myModuleSelector.getModule());
+			}
+		});
+		ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
+		myVersionDetector = new JreVersionDetector();
 
-  public ApplicationConfigurable(final Project project) {
-    myProject = project;
-    myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
-    myCommonProgramParameters.setModuleContext(myModuleSelector.getModule());
-    myModule.getComponent().addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        myCommonProgramParameters.setModuleContext(myModuleSelector.getModule());
-      }
-    });
-    ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
-    myVersionDetector = new JreVersionDetector();
+		myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myCommonProgramParameters, myAlternativeJREPanel, myModule);
+	}
 
-    myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myCommonProgramParameters, myAlternativeJREPanel, myModule);
-  }
+	@Override
+	public void applyEditorTo(final ApplicationConfiguration configuration) throws ConfigurationException
+	{
+		myCommonProgramParameters.applyTo(configuration);
+		myModuleSelector.applyTo(configuration);
+		configuration.MAIN_CLASS_NAME = getMainClassField().getText();
+		configuration.ALTERNATIVE_JRE_PATH = myAlternativeJREPanel.getPath();
+		configuration.ALTERNATIVE_JRE_PATH_ENABLED = myAlternativeJREPanel.isPathEnabled();
+		configuration.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) && myShowSwingInspectorCheckbox
+				.isSelected();
 
-  public void applyEditorTo(final ApplicationConfiguration configuration) throws ConfigurationException {
-    myCommonProgramParameters.applyTo(configuration);
-    myModuleSelector.applyTo(configuration);
-    configuration.MAIN_CLASS_NAME = getMainClassField().getText();
-    configuration.ALTERNATIVE_JRE_PATH = myAlternativeJREPanel.getPath();
-    configuration.ALTERNATIVE_JRE_PATH_ENABLED = myAlternativeJREPanel.isPathEnabled();
-    configuration.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) && myShowSwingInspectorCheckbox.isSelected();
+		updateShowSwingInspector(configuration);
+	}
 
-    updateShowSwingInspector(configuration);
-  }
+	@Override
+	public void resetEditorFrom(final ApplicationConfiguration configuration)
+	{
+		myCommonProgramParameters.reset(configuration);
+		myModuleSelector.reset(configuration);
+		getMainClassField().setText(configuration.MAIN_CLASS_NAME);
+		myAlternativeJREPanel.init(configuration.ALTERNATIVE_JRE_PATH, configuration.ALTERNATIVE_JRE_PATH_ENABLED);
 
-  public void resetEditorFrom(final ApplicationConfiguration configuration) {
-    myCommonProgramParameters.reset(configuration);
-    myModuleSelector.reset(configuration);
-    getMainClassField().setText(configuration.MAIN_CLASS_NAME);
-    myAlternativeJREPanel.init(configuration.ALTERNATIVE_JRE_PATH, configuration.ALTERNATIVE_JRE_PATH_ENABLED);
+		updateShowSwingInspector(configuration);
+	}
 
-    updateShowSwingInspector(configuration);
-  }
+	private void updateShowSwingInspector(final ApplicationConfiguration configuration)
+	{
+		if(myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration))
+		{
+			myShowSwingInspectorCheckbox.setEnabled(true);
+			myShowSwingInspectorCheckbox.setSelected(configuration.ENABLE_SWING_INSPECTOR);
+			myShowSwingInspectorCheckbox.setText(ExecutionBundle.message("show.swing.inspector"));
+		}
+		else
+		{
+			myShowSwingInspectorCheckbox.setEnabled(false);
+			myShowSwingInspectorCheckbox.setSelected(false);
+			myShowSwingInspectorCheckbox.setText(ExecutionBundle.message("show.swing.inspector.disabled"));
+		}
+	}
 
-  private void updateShowSwingInspector(final ApplicationConfiguration configuration) {
-    if (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) {
-      myShowSwingInspectorCheckbox.setEnabled(true);
-      myShowSwingInspectorCheckbox.setSelected(configuration.ENABLE_SWING_INSPECTOR);
-      myShowSwingInspectorCheckbox.setText(ExecutionBundle.message("show.swing.inspector"));
-    }
-    else {
-      myShowSwingInspectorCheckbox.setEnabled(false);
-      myShowSwingInspectorCheckbox.setSelected(false);
-      myShowSwingInspectorCheckbox.setText(ExecutionBundle.message("show.swing.inspector.disabled"));
-    }
-  }
+	public EditorTextFieldWithBrowseButton getMainClassField()
+	{
+		return myMainClass.getComponent();
+	}
 
-  public EditorTextFieldWithBrowseButton getMainClassField() {
-    return myMainClass.getComponent();
-  }
+	public CommonJavaParametersPanel getCommonProgramParameters()
+	{
+		return myCommonProgramParameters;
+	}
 
-  public CommonJavaParametersPanel getCommonProgramParameters() {
-    return myCommonProgramParameters;
-  }
+	@Override
+	@NotNull
+	public JComponent createEditor()
+	{
+		return myWholePanel;
+	}
 
-  @NotNull
-  public JComponent createEditor() {
-    return myWholePanel;
-  }
+	private void createUIComponents()
+	{
+		myMainClass = new LabeledComponent<EditorTextFieldWithBrowseButton>();
+		myMainClass.setLabelLocation(BorderLayout.WEST);
+		myMainClass.setComponent(new EditorTextFieldWithBrowseButton(myProject, true, new JavaCodeFragment.VisibilityChecker()
+		{
+			@Override
+			public Visibility isDeclarationVisible(PsiElement declaration, PsiElement place)
+			{
+				if(declaration instanceof PsiClass)
+				{
+					final PsiClass aClass = (PsiClass) declaration;
+					if(ConfigurationUtil.MAIN_CLASS.value(aClass) && PsiMethodUtil.findMainMethod(aClass) != null)
+					{
+						return Visibility.VISIBLE;
+					}
+				}
+				return Visibility.NOT_VISIBLE;
+			}
+		}));
+	}
 
-  public void disposeEditor() {
-  }
+	@Override
+	public JComponent getAnchor()
+	{
+		return myAnchor;
+	}
 
-  private void createUIComponents() {
-    myMainClass = new LabeledComponent<EditorTextFieldWithBrowseButton>();
-    myMainClass.setComponent(new EditorTextFieldWithBrowseButton(myProject, true, new JavaCodeFragment.VisibilityChecker() {
-      @Override
-      public Visibility isDeclarationVisible(PsiElement declaration, PsiElement place) {
-        if (declaration instanceof PsiClass) {
-          final PsiClass aClass = (PsiClass)declaration;
-          if (ConfigurationUtil.MAIN_CLASS.value(aClass) && PsiMethodUtil.findMainMethod(aClass) != null) {
-            return Visibility.VISIBLE;
-          }
-        }
-        return Visibility.NOT_VISIBLE;
-      }
-    }));
-  }
-
-  @Override
-  public JComponent getAnchor() {
-    return myAnchor;
-  }
-
-  @Override
-  public void setAnchor(@Nullable JComponent anchor) {
-    this.myAnchor = anchor;
-    myMainClass.setAnchor(anchor);
-    myCommonProgramParameters.setAnchor(anchor);
-    myAlternativeJREPanel.setAnchor(anchor);
-    myModule.setAnchor(anchor);
-  }
+	@Override
+	public void setAnchor(@Nullable JComponent anchor)
+	{
+		this.myAnchor = anchor;
+		myMainClass.setAnchor(anchor);
+		myCommonProgramParameters.setAnchor(anchor);
+		myAlternativeJREPanel.setAnchor(anchor);
+		myModule.setAnchor(anchor);
+	}
 }

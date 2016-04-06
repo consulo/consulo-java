@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="All Tests" type="#ConsuloTestRunConfigurationType" factoryName="Consulo In Sandbox (Test)" singleton="true" target-type="PACKAGE">
-    <option name="PLUGIN_ID" value="org.consulo.java" />
     <option name="CLASS_NAME" value="com.intellij.lang.java.parser.ExpressionParsingTest" />
     <option name="PACKAGE_NAME" />
     <option name="VM_PARAMETERS" value="" />
