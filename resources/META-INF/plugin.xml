@@ -741,9 +741,7 @@
 				displayName="Java"
 				instance="com.intellij.application.options.editor.JavaCodeFoldingConfigurable"/>
 
-		<codeInsight.lineMarkerProvider language="" implementationClass="com.intellij.ui.ColorLineMarkerProvider"/>
 		<!--<expectedTypesProvider implementation="com.intellij.codeInsight.JavaExpectedTypesProvider"/>-->
-
 
 		<referencesSearch implementation="com.intellij.psi.impl.search.PsiAnnotationMethodReferencesSearcher"/>
 		<referencesSearch implementation="com.intellij.psi.impl.search.ConstructorReferencesSearcher"/>
