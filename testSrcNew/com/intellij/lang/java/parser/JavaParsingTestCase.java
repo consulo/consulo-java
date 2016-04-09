@@ -106,7 +106,7 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 		TEST_PARSER = parser;
 
 		final LightVirtualFile virtualFile = new LightVirtualFile(name + JavaFileType.DOT_DEFAULT_EXTENSION, JavaFileType.INSTANCE, text, -1);
-		final FileViewProvider viewProvider = new SingleRootFileViewProvider(PsiManager.getInstance(getProject()), virtualFile, true);
+		final FileViewProvider viewProvider = new SingleRootFileViewProvider(PsiManager.getInstance(myProject), virtualFile, true);
 		return new PsiJavaFileImpl(viewProvider)
 		{
 			@NotNull
