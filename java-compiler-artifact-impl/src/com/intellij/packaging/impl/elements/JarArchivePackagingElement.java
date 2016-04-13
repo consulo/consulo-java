@@ -37,7 +37,7 @@ public class JarArchivePackagingElement extends ArchivePackagingElement
 	@Override
 	public ArchivePackageWriter<?> getPackageWriter()
 	{
-		// use zip - later write own with manifect correction
+		// use zip - later write own with manifest correction
 		return ZipArchivePackagingElement.ZipArchivePackageWriter.INSTANCE;
 	}
 }
