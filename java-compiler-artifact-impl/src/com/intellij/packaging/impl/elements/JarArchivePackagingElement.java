@@ -16,6 +16,7 @@
 package com.intellij.packaging.impl.elements;
 
 import org.jetbrains.annotations.NotNull;
+import com.intellij.packaging.elements.ArchivePackageWriter;
 
 /**
  * @author VISTALL
@@ -31,5 +32,12 @@ public class JarArchivePackagingElement extends ArchivePackagingElement
 	public JarArchivePackagingElement(@NotNull String archiveFileName)
 	{
 		super(JarArchiveElementType.getInstance(), archiveFileName);
+	}
+
+	@Override
+	public ArchivePackageWriter<?> getPackageWriter()
+	{
+		// use zip - later write own with manifect correction
+		return ZipArchivePackagingElement.ZipArchivePackageWriter.INSTANCE;
 	}
 }
