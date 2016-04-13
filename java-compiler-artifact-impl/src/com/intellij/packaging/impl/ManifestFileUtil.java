@@ -37,7 +37,6 @@ import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.compiler.make.ManifestBuilder;
 import com.intellij.openapi.deployment.DeploymentUtil;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -88,15 +87,13 @@ public class ManifestFileUtil
 	}
 
 	@Nullable
-	public static VirtualFile findManifestFile(@NotNull CompositePackagingElement<?> root, PackagingElementResolvingContext context,
-			ArtifactType artifactType)
+	public static VirtualFile findManifestFile(@NotNull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
 	{
 		return ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_PATH, context, artifactType);
 	}
 
 	@Nullable
-	public static VirtualFile suggestManifestFileDirectory(@NotNull CompositePackagingElement<?> root, PackagingElementResolvingContext context,
-			ArtifactType artifactType)
+	public static VirtualFile suggestManifestFileDirectory(@NotNull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
 	{
 		final VirtualFile metaInfDir = ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_DIR_NAME, context, artifactType);
 		if(metaInfDir != null)
@@ -106,8 +103,7 @@ public class ManifestFileUtil
 
 		final Ref<VirtualFile> sourceDir = Ref.create(null);
 		final Ref<VirtualFile> sourceFile = Ref.create(null);
-		ArtifactUtil.processElementsWithSubstitutions(root.getChildren(), context, artifactType, PackagingElementPath.EMPTY,
-				new PackagingElementProcessor<PackagingElement<?>>()
+		ArtifactUtil.processElementsWithSubstitutions(root.getChildren(), context, artifactType, PackagingElementPath.EMPTY, new PackagingElementProcessor<PackagingElement<?>>()
 		{
 			@Override
 			public boolean process(@NotNull PackagingElement<?> element, @NotNull PackagingElementPath path)
@@ -201,8 +197,7 @@ public class ManifestFileUtil
 		}
 	}
 
-	public static void updateManifest(@NotNull VirtualFile file, final @Nullable String mainClass, final @Nullable List<String> classpath,
-			final boolean replaceValues)
+	public static void updateManifest(@NotNull VirtualFile file, final @Nullable String mainClass, final @Nullable List<String> classpath, final boolean replaceValues)
 	{
 		final Manifest manifest = readManifest(file);
 		final Attributes mainAttributes = manifest.getMainAttributes();
@@ -281,8 +276,7 @@ public class ManifestFileUtil
 		return new ManifestFileConfiguration(path, classpath, mainClass, manifestFile.isWritable());
 	}
 
-	public static List<String> getClasspathForElements(List<? extends PackagingElement<?>> elements, PackagingElementResolvingContext context,
-			final ArtifactType artifactType)
+	public static List<String> getClasspathForElements(List<? extends PackagingElement<?>> elements, PackagingElementResolvingContext context, final ArtifactType artifactType)
 	{
 		final List<String> classpath = new ArrayList<String>();
 		final PackagingElementProcessor<PackagingElement<?>> processor = new PackagingElementProcessor<PackagingElement<?>>()
@@ -382,8 +376,7 @@ public class ManifestFileUtil
 		return descriptor;
 	}
 
-	public static void addManifestFileToLayout(final @NotNull String path, final @NotNull ArtifactEditorContext context,
-			final @NotNull CompositePackagingElement<?> element)
+	public static void addManifestFileToLayout(final @NotNull String path, final @NotNull ArtifactEditorContext context, final @NotNull CompositePackagingElement<?> element)
 	{
 		context.editLayout(context.getArtifact(), new Runnable()
 		{
@@ -404,8 +397,7 @@ public class ManifestFileUtil
 		final TreeClassChooserFactory chooserFactory = TreeClassChooserFactory.getInstance(project);
 		final GlobalSearchScope searchScope = GlobalSearchScope.allScope(project);
 		final PsiClass aClass = initialClassName != null ? JavaPsiFacade.getInstance(project).findClass(initialClassName, searchScope) : null;
-		final TreeClassChooser chooser = chooserFactory.createWithInnerClassesScopeChooser("Select Main Class", searchScope, new MainClassFilter(),
-				aClass);
+		final TreeClassChooser chooser = chooserFactory.createWithInnerClassesScopeChooser("Select Main Class", searchScope, new MainClassFilter(), aClass);
 		chooser.showDialog();
 		return chooser.getSelected();
 	}

@@ -15,47 +15,21 @@
  */
 package com.intellij.packaging.impl.elements;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
-import com.intellij.compiler.ant.BuildProperties;
-import com.intellij.compiler.ant.Generator;
-import com.intellij.compiler.ant.Tag;
-import com.intellij.compiler.ant.artifacts.ArchiveAntCopyInstructionCreator;
-import com.intellij.compiler.ant.taskdefs.Jar;
-import com.intellij.packaging.artifacts.ArtifactType;
-import com.intellij.packaging.elements.AntCopyInstructionCreator;
-import com.intellij.packaging.elements.ArtifactAntGenerationContext;
-import com.intellij.packaging.elements.PackagingElementResolvingContext;
 
 /**
  * @author VISTALL
  * @since 16:05/18.06.13
  */
-public class JarArchivePackagingElement extends ArchivePackagingElement {
-  public JarArchivePackagingElement() {
-    super(JarArchiveElementType.getInstance());
-  }
+public class JarArchivePackagingElement extends ArchivePackagingElement
+{
+	public JarArchivePackagingElement()
+	{
+		super(JarArchiveElementType.getInstance());
+	}
 
-  public JarArchivePackagingElement(@NotNull String archiveFileName) {
-    super(JarArchiveElementType.getInstance(), archiveFileName);
-  }
-
-  @Override
-  public List<? extends Generator> computeAntInstructions(@NotNull PackagingElementResolvingContext resolvingContext,
-                                                          @NotNull AntCopyInstructionCreator creator,
-                                                          @NotNull ArtifactAntGenerationContext generationContext,
-                                                          @NotNull ArtifactType artifactType) {
-    final String tempJarProperty = generationContext.createNewTempFileProperty("temp.jar.path." + myArchiveFileName, myArchiveFileName);
-    String jarPath = BuildProperties.propertyRef(tempJarProperty);
-    final Tag jar = new Jar(jarPath, "preserve", true);
-
-    for (Generator generator : computeChildrenGenerators(resolvingContext, new ArchiveAntCopyInstructionCreator(""), generationContext,
-                                                         artifactType)) {
-      jar.add(generator);
-    }
-    generationContext.runBeforeCurrentArtifact(jar);
-    return Collections.singletonList(creator.createFileCopyInstruction(jarPath, myArchiveFileName));
-  }
+	public JarArchivePackagingElement(@NotNull String archiveFileName)
+	{
+		super(JarArchiveElementType.getInstance(), archiveFileName);
+	}
 }
