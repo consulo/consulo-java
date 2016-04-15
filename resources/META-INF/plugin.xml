@@ -173,7 +173,6 @@
 		</action>
 
 		<group id="JavaDebuggerActions">
-			<action id="Debugger.Inspect" class="com.intellij.debugger.actions.InspectAction"/>
 			<action id="Debugger.CustomizeContextView" class="com.intellij.debugger.actions.CustomizeContextViewAction">
 				<add-to-group group-id="XDebugger.Variables.Tree.Popup" anchor="last"/>
 				<add-to-group group-id="XDebugger.Watches.Tree.Popup" anchor="last"/>
@@ -242,7 +241,7 @@
 
 		<group id="Debugger.FramePanelPopup">
 			<reference ref="Debugger.AdjustArrayRange"/>
-			<reference ref="Debugger.Inspect"/>
+			<reference ref="XDebugger.Inspect"/>
 			<reference ref="Debugger.MarkObject"/>
 			<!--<reference ref="Debugger.SetValue"/> -->
 			<reference ref="Debugger.EditNodeSource"/>
@@ -262,7 +261,7 @@
 
 		<group id="Debugger.EvaluationDialogPopup">
 			<reference ref="Debugger.AdjustArrayRange"/>
-			<reference ref="Debugger.Inspect"/>
+			<reference ref="XDebugger.Inspect"/>
 			<reference ref="Debugger.MarkObject"/>
 			<!--<reference ref="Debugger.SetValue"/> -->
 			<reference ref="Debugger.EditNodeSource"/>
@@ -283,7 +282,7 @@
 
 		<group id="Debugger.InspectPanelPopup">
 			<reference ref="Debugger.AdjustArrayRange"/>
-			<reference ref="Debugger.Inspect"/>
+			<reference ref="XDebugger.Inspect"/>
 			<reference ref="Debugger.MarkObject"/>
 			<!--<reference ref="Debugger.SetValue"/> -->
 			<reference ref="Debugger.EditNodeSource"/>
