@@ -15,128 +15,166 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.FileModificationService;
+import java.util.ArrayList;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.java.JavaQuickFixBundle;
+import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.GenericsUtil;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.JavaChangeSignatureDialog;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
+import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
+{
+	static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.VariableTypeFix");
 
-public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-  static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.VariableTypeFix");
+	private final PsiType myReturnType;
+	protected final String myName;
 
-  private final PsiType myReturnType;
-  protected final String myName;
+	public VariableTypeFix(@NotNull PsiVariable variable, PsiType toReturn)
+	{
+		super(variable);
+		myReturnType = GenericsUtil.getVariableTypeByExpressionType(toReturn);
+		myName = variable.getName();
+	}
 
-  public VariableTypeFix(@NotNull PsiVariable variable, PsiType toReturn) {
-    super(variable);
-    myReturnType = GenericsUtil.getVariableTypeByExpressionType(toReturn);
-    myName = variable.getName();
-  }
+	@NotNull
+	@Override
+	public String getText()
+	{
+		return JavaQuickFixBundle.message("fix.variable.type.text", UsageViewUtil.getType(getStartElement()), myName, getReturnType().getCanonicalText());
+	}
 
-  @NotNull
-  @Override
-  public String getText() {
-    return JavaQuickFixBundle.message("fix.variable.type.text",
-                                  myName,
-                                  getReturnType().getCanonicalText());
-  }
+	@Override
+	@NotNull
+	public String getFamilyName()
+	{
+		return JavaQuickFixBundle.message("fix.variable.type.family");
+	}
 
-  @Override
-  @NotNull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("fix.variable.type.family");
-  }
+	@Override
+	public boolean startInWriteAction()
+	{
+		return false;
+	}
 
-  @Override
-  public boolean isAvailable(@NotNull Project project,
-                             @NotNull PsiFile file,
-                             @NotNull PsiElement startElement,
-                             @NotNull PsiElement endElement) {
-    final PsiVariable myVariable = (PsiVariable)startElement;
-    return myVariable.isValid()
-        && myVariable.getTypeElement() != null
-        && myVariable.getManager().isInProject(myVariable)
-        && getReturnType() != null
-        && getReturnType().isValid()
-        && !TypeConversionUtil.isNullType(getReturnType())
-        && !TypeConversionUtil.isVoidType(getReturnType());
-  }
+	@Override
+	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
+	{
+		final PsiVariable myVariable = (PsiVariable) startElement;
+		return myVariable.isValid() && myVariable.getTypeElement() != null && myVariable.getManager().isInProject(myVariable) && getReturnType() != null && getReturnType().isValid() &&
+				!TypeConversionUtil.isNullType(getReturnType()) && !TypeConversionUtil.isVoidType(getReturnType());
+	}
 
-  @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
-    final PsiVariable myVariable = (PsiVariable)startElement;
-    if (changeMethodSignatureIfNeeded(myVariable)) return;
-    if (!FileModificationService.getInstance().prepareFileForWrite(myVariable.getContainingFile())) return;
-    try {
-      myVariable.normalizeDeclaration();
-      final PsiTypeElement typeElement = myVariable.getTypeElement();
-      LOG.assertTrue(typeElement != null, myVariable.getClass());
-      final PsiTypeElement newTypeElement = JavaPsiFacade.getInstance(file.getProject()).getElementFactory().createTypeElement(getReturnType());
-      typeElement.replace(newTypeElement);
-      JavaCodeStyleManager.getInstance(project).shortenClassReferences(myVariable);
-      UndoUtil.markPsiFileForUndo(file);
-    } catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
+	@Override
+	public void invoke(@NotNull final Project project,
+			@NotNull final PsiFile file,
+			@Nullable("is null when called from inspection") Editor editor,
+			@NotNull PsiElement startElement,
+			@NotNull PsiElement endElement)
+	{
+		final PsiVariable myVariable = (PsiVariable) startElement;
+		if(changeMethodSignatureIfNeeded(myVariable))
+		{
+			return;
+		}
+		if(!FileModificationService.getInstance().prepareFileForWrite(myVariable.getContainingFile()))
+		{
+			return;
+		}
+		new WriteCommandAction.Simple(project, getText(), file)
+		{
 
-  private boolean changeMethodSignatureIfNeeded(PsiVariable myVariable) {
-    if (myVariable instanceof PsiParameter) {
-      final PsiElement scope = ((PsiParameter)myVariable).getDeclarationScope();
-      if (scope instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)scope;
-        final PsiMethod psiMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
-        if (psiMethod == null) return true;
-        final int parameterIndex = method.getParameterList().getParameterIndex((PsiParameter)myVariable);
-        if (!FileModificationService.getInstance().prepareFileForWrite(psiMethod.getContainingFile())) return true;
-        final ArrayList<ParameterInfoImpl> infos = new ArrayList<ParameterInfoImpl>();
-        int i = 0;
-        for (PsiParameter parameter : psiMethod.getParameterList().getParameters()) {
-          final boolean changeType = i == parameterIndex;
-          infos.add(new ParameterInfoImpl(i++, parameter.getName(), changeType ? getReturnType() : parameter.getType()));
-        }
+			@Override
+			protected void run() throws Throwable
+			{
+				try
+				{
+					myVariable.normalizeDeclaration();
+					final PsiTypeElement typeElement = myVariable.getTypeElement();
+					LOG.assertTrue(typeElement != null, myVariable.getClass());
+					final PsiTypeElement newTypeElement = JavaPsiFacade.getInstance(file.getProject()).getElementFactory().createTypeElement(getReturnType());
+					typeElement.replace(newTypeElement);
+					JavaCodeStyleManager.getInstance(project).shortenClassReferences(myVariable);
+					UndoUtil.markPsiFileForUndo(file);
+				}
+				catch(IncorrectOperationException e)
+				{
+					LOG.error(e);
+				}
+			}
+		}.execute();
+	}
 
-        if (!ApplicationManager.getApplication().isUnitTestMode()) {
-          final JavaChangeSignatureDialog dialog = new JavaChangeSignatureDialog(psiMethod.getProject(), psiMethod, false, myVariable);
-          dialog.setParameterInfos(infos);
-          dialog.show();
-        }
-        else {
-          ChangeSignatureProcessor processor = new ChangeSignatureProcessor(psiMethod.getProject(),
-                                                                            psiMethod,
-                                                                            false, null,
-                                                                            psiMethod.getName(),
-                                                                            psiMethod.getReturnType(),
-                                                                            infos.toArray(new ParameterInfoImpl[infos.size()]));
-          processor.run();
-        }
-        return true;
-      }
-    }
-    return false;
-  }
+	private boolean changeMethodSignatureIfNeeded(PsiVariable myVariable)
+	{
+		if(myVariable instanceof PsiParameter)
+		{
+			final PsiElement scope = ((PsiParameter) myVariable).getDeclarationScope();
+			if(scope instanceof PsiMethod)
+			{
+				final PsiMethod method = (PsiMethod) scope;
+				final PsiMethod psiMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
+				if(psiMethod == null)
+				{
+					return true;
+				}
+				final int parameterIndex = method.getParameterList().getParameterIndex((PsiParameter) myVariable);
+				if(!FileModificationService.getInstance().prepareFileForWrite(psiMethod.getContainingFile()))
+				{
+					return true;
+				}
+				final ArrayList<ParameterInfoImpl> infos = new ArrayList<ParameterInfoImpl>();
+				int i = 0;
+				for(PsiParameter parameter : psiMethod.getParameterList().getParameters())
+				{
+					final boolean changeType = i == parameterIndex;
+					infos.add(new ParameterInfoImpl(i++, parameter.getName(), changeType ? getReturnType() : parameter.getType()));
+				}
 
-  protected PsiType getReturnType() {
-    return myReturnType;
-  }
+				if(!ApplicationManager.getApplication().isUnitTestMode())
+				{
+					final JavaChangeSignatureDialog dialog = new JavaChangeSignatureDialog(psiMethod.getProject(), psiMethod, false, myVariable);
+					dialog.setParameterInfos(infos);
+					dialog.show();
+				}
+				else
+				{
+					ChangeSignatureProcessor processor = new ChangeSignatureProcessor(psiMethod.getProject(), psiMethod, false, null, psiMethod.getName(), psiMethod.getReturnType(),
+							infos.toArray(new ParameterInfoImpl[infos.size()]));
+					processor.run();
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected PsiType getReturnType()
+	{
+		return myReturnType;
+	}
 }

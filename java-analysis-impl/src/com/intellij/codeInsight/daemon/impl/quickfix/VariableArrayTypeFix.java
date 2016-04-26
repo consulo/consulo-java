@@ -20,16 +20,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
+import com.intellij.ide.TypePresentationService;
+import com.intellij.lang.findUsages.FindUsagesProvider;
+import com.intellij.lang.findUsages.LanguageFindUsages;
 import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 
-public class VariableArrayTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
+public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement
 {
-
 	@NotNull
 	private final PsiArrayType myTargetType;
 	private final String myName;
@@ -50,10 +52,22 @@ public class VariableArrayTypeFix extends LocalQuickFixAndIntentionActionOnPsiEl
 		PsiExpression myNewExpression = getNewExpressionLocal(arrayInitializer);
 		PsiVariable myVariable = getVariableLocal(arrayInitializer);
 		myName = myVariable == null ? null : myTargetType.equals(myVariable.getType()) && myNewExpression != null ? JavaQuickFixBundle.message("change.new.operator.type.text",
-				getNewText(myNewExpression, arrayInitializer), myTargetType.getCanonicalText(), "") : JavaQuickFixBundle.message("fix.variable.type.text", myVariable.getName(),
-				myTargetType.getCanonicalText());
+				getNewText(myNewExpression, arrayInitializer), myTargetType.getCanonicalText(), "") : JavaQuickFixBundle.message("fix.variable.type.text", formatType(myVariable),
+				myVariable.getName(), myTargetType.getCanonicalText());
 		myFamilyName = myVariable == null ? null : myTargetType.equals(myVariable.getType()) && myNewExpression != null ? JavaQuickFixBundle.message("change.new.operator.type.family") :
 				JavaQuickFixBundle.message("fix.variable.type.family");
+	}
+
+	private static String formatType(@NotNull PsiVariable variable)
+	{
+		FindUsagesProvider provider = LanguageFindUsages.INSTANCE.forLanguage(variable.getLanguage());
+		final String type = provider.getType(variable);
+		if(StringUtil.isNotEmpty(type))
+		{
+			return type;
+		}
+
+		return TypePresentationService.getInstance().getTypePresentableName(variable.getClass());
 	}
 
 	private static PsiArrayInitializerExpression getInitializer(PsiArrayInitializerExpression initializer)
@@ -67,7 +81,7 @@ public class VariableArrayTypeFix extends LocalQuickFixAndIntentionActionOnPsiEl
 		return arrayInitializer;
 	}
 
-	private static PsiVariable getVariableLocal(PsiArrayInitializerExpression initializer)
+	private static PsiVariable getVariableLocal(@NotNull PsiArrayInitializerExpression initializer)
 	{
 		PsiVariable variableLocal = null;
 
@@ -96,7 +110,7 @@ public class VariableArrayTypeFix extends LocalQuickFixAndIntentionActionOnPsiEl
 		return variableLocal;
 	}
 
-	private static PsiNewExpression getNewExpressionLocal(PsiArrayInitializerExpression initializer)
+	private static PsiNewExpression getNewExpressionLocal(@NotNull PsiArrayInitializerExpression initializer)
 	{
 		PsiNewExpression newExpressionLocal = null;
 
@@ -156,11 +170,7 @@ public class VariableArrayTypeFix extends LocalQuickFixAndIntentionActionOnPsiEl
 	}
 
 	@Override
-	public void invoke(@NotNull Project project,
-			@NotNull PsiFile file,
-			@Nullable("is null when called from inspection") Editor editor,
-			@NotNull PsiElement startElement,
-			@NotNull PsiElement endElement)
+	public void invoke(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
 	{
 		final PsiArrayInitializerExpression myInitializer = (PsiArrayInitializerExpression) startElement;
 		final PsiVariable myVariable = getVariableLocal(myInitializer);
