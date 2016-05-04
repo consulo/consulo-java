@@ -34,8 +34,6 @@ public interface MethodImplementor extends MemberImplementorExplorer
 	@NotNull
 	PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
 
-	boolean isBodyGenerated();
-
 	@Nullable
 	GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);
 
