@@ -28,7 +28,10 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.generate.GenerationUtil;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.template.TemplatesManager;
+import com.intellij.codeInsight.AnnotationTargetUtil;
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
@@ -37,6 +40,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
@@ -48,7 +53,6 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.codeStyle.VariableKind;
-import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.light.LightTypeElement;
 import com.intellij.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl;
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl;
@@ -716,10 +720,16 @@ public class GenerateMembersUtil
 
 		if(sourceModifierList != null && targetModifierList != null)
 		{
+			final Module module = ModuleUtilCore.findModuleForPsiElement(targetModifierList);
+			final GlobalSearchScope moduleScope = module != null ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module) : null;
+			final Project project = targetModifierList.getProject();
+			final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
 			JVMElementFactory factory = JVMElementFactories.requireFactory(targetParam.getLanguage(), targetParam.getProject());
-			for(PsiAnnotation annotation : sourceModifierList.getAnnotations())
+			for(PsiAnnotation annotation : AnnotationUtil.getAllAnnotations(sourceParam, false, null, false))
 			{
-				if(!PsiImplUtil.isTypeAnnotation(annotation))
+				final String qualifiedName = annotation.getQualifiedName();
+				if(qualifiedName != null && (moduleScope == null || facade.findClass(qualifiedName, moduleScope) != null) &&
+						!AnnotationTargetUtil.isTypeAnnotation(annotation))
 				{
 					targetModifierList.add(factory.createAnnotationFromText(annotation.getText(), sourceParam));
 				}
@@ -855,23 +865,21 @@ public class GenerateMembersUtil
 		}
 		result = (PsiMethod) CodeStyleManager.getInstance(project).reformat(result);
 
-		PsiModifierListOwner listOwner = null;
+		PsiModifierListOwner annotationTarget;
 		if(isGetter)
 		{
-			listOwner = result;
+			annotationTarget = result;
 		}
 		else
 		{
 			final PsiParameter[] parameters = result.getParameterList().getParameters();
-			if(parameters.length == 1)
-			{
-				listOwner = parameters[0];
-			}
+			annotationTarget = parameters.length == 1 ? parameters[0] : null;
 		}
-		if(listOwner != null)
+		if(annotationTarget != null)
 		{
-			PropertyUtil.annotateWithNullableStuff(field, listOwner);
+			NullableNotNullManager.getInstance(project).copyNullableOrNotNullAnnotation(field, annotationTarget);
 		}
+
 		return generatePrototype(field, result);
 	}
 

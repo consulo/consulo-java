@@ -24,31 +24,33 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.usageView.UsageInfo;
+import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 
-public class BeanClassVisibilityUsageInfo extends FixableUsageInfo {
-  private final PsiClass existingClass;
-  private final UsageInfo[] usages;
-  private final String myNewVisibility;
-  private final PsiMethod myExistingClassCompatibleConstructor;
+public class BeanClassVisibilityUsageInfo extends FixableUsageInfo
+{
+	private final PsiClass existingClass;
+	private final UsageInfo[] usages;
+	private final String myNewVisibility;
+	private final PsiMethod myExistingClassCompatibleConstructor;
 
-  public BeanClassVisibilityUsageInfo(PsiClass existingClass,
-                                      UsageInfo[] usages,
-                                      String newVisibility,
-                                      PsiMethod existingClassCompatibleConstructor) {
-    super(existingClass);
-    this.existingClass = existingClass;
-    this.usages = usages;
-    myNewVisibility = newVisibility;
-    myExistingClassCompatibleConstructor = existingClassCompatibleConstructor;
-  }
+	public BeanClassVisibilityUsageInfo(PsiClass existingClass, UsageInfo[] usages, String newVisibility, PsiMethod existingClassCompatibleConstructor)
+	{
+		super(existingClass);
+		this.existingClass = existingClass;
+		this.usages = usages;
+		myNewVisibility = newVisibility;
+		myExistingClassCompatibleConstructor = existingClassCompatibleConstructor;
+	}
 
-  @Override
-  public void fixUsage() throws IncorrectOperationException {
-    VisibilityUtil.fixVisibility(usages, existingClass, myNewVisibility);
-    if (myExistingClassCompatibleConstructor != null) {
-      VisibilityUtil.fixVisibility(usages, myExistingClassCompatibleConstructor, myNewVisibility);
-    }
-  }
+	@Override
+	public void fixUsage() throws IncorrectOperationException
+	{
+		VisibilityUtil.fixVisibility(UsageViewUtil.toElements(usages), existingClass, myNewVisibility);
+		if(myExistingClassCompatibleConstructor != null)
+		{
+			VisibilityUtil.fixVisibility(UsageViewUtil.toElements(usages), myExistingClassCompatibleConstructor, myNewVisibility);
+		}
+	}
 }

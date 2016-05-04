@@ -170,23 +170,45 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 		return findNullabilityAnnotationWithDefault(owner, checkBases, false);
 	}
 
-	public PsiAnnotation copyNotNullAnnotation(PsiModifierListOwner owner)
+	@Nullable
+	public PsiAnnotation copyNotNullAnnotation(@NotNull PsiModifierListOwner original, @NotNull PsiModifierListOwner generated)
 	{
-		return copyAnnotation(owner, getNotNullAnnotation(owner, false));
+		return copyAnnotation(getNotNullAnnotation(original, false), generated);
 	}
 
-	public PsiAnnotation copyNullableAnnotation(PsiModifierListOwner owner)
+	@Nullable
+	public PsiAnnotation copyNullableAnnotation(@NotNull PsiModifierListOwner original, @NotNull PsiModifierListOwner generated)
 	{
-		return copyAnnotation(owner, getNullableAnnotation(owner, false));
+		return copyAnnotation(getNullableAnnotation(original, false), generated);
 	}
 
-	private PsiAnnotation copyAnnotation(PsiModifierListOwner owner, PsiAnnotation annotation)
+	@Nullable
+	public PsiAnnotation copyNullableOrNotNullAnnotation(@NotNull PsiModifierListOwner original, @NotNull PsiModifierListOwner generated)
 	{
-		final String notNull = checkContainer(annotation, false);
-		if(notNull != null)
+		PsiAnnotation annotation = getNullableAnnotation(original, false);
+		if(annotation == null)
 		{
-			return JavaPsiFacade.getElementFactory(owner.getProject()).createAnnotationFromText("@" + notNull, owner);
+			annotation = getNotNullAnnotation(original, false);
 		}
+		return copyAnnotation(annotation, generated);
+	}
+
+	private PsiAnnotation copyAnnotation(PsiAnnotation annotation, PsiModifierListOwner target)
+	{
+		// type annotations are part of target's type and should not to be copied explicitly to avoid duplication
+		if(annotation != null && !AnnotationTargetUtil.isTypeAnnotation(annotation))
+		{
+			String qualifiedName = checkContainer(annotation, false);
+			if(qualifiedName != null)
+			{
+				PsiModifierList modifierList = target.getModifierList();
+				if(modifierList != null && modifierList.findAnnotation(qualifiedName) == null)
+				{
+					return modifierList.addAnnotation(qualifiedName);
+				}
+			}
+		}
+
 		return null;
 	}
 
@@ -204,9 +226,7 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 	}
 
 	@Nullable
-	private PsiAnnotation findNullabilityAnnotationWithDefault(@NotNull PsiModifierListOwner owner,
-			boolean checkBases,
-			boolean nullable)
+	private PsiAnnotation findNullabilityAnnotationWithDefault(@NotNull PsiModifierListOwner owner, boolean checkBases, boolean nullable)
 	{
 		PsiAnnotation annotation = findPlainNullabilityAnnotation(owner, checkBases);
 		if(annotation != null)
@@ -234,8 +254,7 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 
 		// even if javax.annotation.Nullable is not configured, it should still take precedence over ByDefault
 		// annotations
-		if(AnnotationUtil.isAnnotated(owner, nullable ? Arrays.asList(DEFAULT_NOT_NULLS) : Arrays.asList
-				(DEFAULT_NULLABLES), checkBases, false))
+		if(AnnotationUtil.isAnnotated(owner, nullable ? Arrays.asList(DEFAULT_NOT_NULLS) : Arrays.asList(DEFAULT_NULLABLES), checkBases, false))
 		{
 			return null;
 		}
@@ -252,8 +271,7 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 	{
 		Set<String> qNames = ContainerUtil.newHashSet(getNullables());
 		qNames.addAll(getNotNulls());
-		return checkBases && owner instanceof PsiMethod ? AnnotationUtil.findAnnotationInHierarchy(owner,
-				qNames) : AnnotationUtil.findAnnotation(owner, qNames);
+		return checkBases && owner instanceof PsiMethod ? AnnotationUtil.findAnnotationInHierarchy(owner, qNames) : AnnotationUtil.findAnnotation(owner, qNames);
 	}
 
 	protected boolean hasHardcodedContracts(PsiElement element)
@@ -288,16 +306,14 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 	@Nullable
 	private static PsiAnnotation findNullabilityDefaultInHierarchy(PsiModifierListOwner owner, boolean nullable)
 	{
-		PsiAnnotation.TargetType[] placeTargetTypes = AnnotationTargetUtil.getTargetsForLocation(owner.getModifierList
-				());
+		PsiAnnotation.TargetType[] placeTargetTypes = AnnotationTargetUtil.getTargetsForLocation(owner.getModifierList());
 
 		PsiElement element = owner.getParent();
 		while(element != null)
 		{
 			if(element instanceof PsiModifierListOwner)
 			{
-				PsiAnnotation annotation = getNullabilityDefault((PsiModifierListOwner) element, nullable,
-						placeTargetTypes);
+				PsiAnnotation annotation = getNullabilityDefault((PsiModifierListOwner) element, nullable, placeTargetTypes);
 				if(annotation != null)
 				{
 					return annotation;
@@ -316,9 +332,7 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 		return null;
 	}
 
-	private static PsiAnnotation getNullabilityDefault(@NotNull PsiModifierListOwner container,
-			boolean nullable,
-			PsiAnnotation.TargetType[] placeTargetTypes)
+	private static PsiAnnotation getNullabilityDefault(@NotNull PsiModifierListOwner container, boolean nullable, PsiAnnotation.TargetType[] placeTargetTypes)
 	{
 		PsiModifierList modifierList = container.getModifierList();
 		if(modifierList == null)
@@ -335,9 +349,7 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 		return null;
 	}
 
-	private static boolean isNullabilityDefault(@NotNull PsiAnnotation annotation,
-			boolean nullable,
-			PsiAnnotation.TargetType[] placeTargetTypes)
+	private static boolean isNullabilityDefault(@NotNull PsiAnnotation annotation, boolean nullable, PsiAnnotation.TargetType[] placeTargetTypes)
 	{
 		PsiJavaCodeReferenceElement element = annotation.getNameReferenceElement();
 		PsiElement declaration = element == null ? null : element.resolve();
@@ -346,21 +358,18 @@ public abstract class NullableNotNullManager implements PersistentStateComponent
 			return false;
 		}
 
-		if(!AnnotationUtil.isAnnotated((PsiClass) declaration, nullable ? JAVAX_ANNOTATION_NULLABLE :
-				JAVAX_ANNOTATION_NONNULL, false, true))
+		if(!AnnotationUtil.isAnnotated((PsiClass) declaration, nullable ? JAVAX_ANNOTATION_NULLABLE : JAVAX_ANNOTATION_NONNULL, false, true))
 		{
 			return false;
 		}
 
-		PsiAnnotation tqDefault = AnnotationUtil.findAnnotation((PsiClass) declaration, true,
-				"javax.annotation.meta.TypeQualifierDefault");
+		PsiAnnotation tqDefault = AnnotationUtil.findAnnotation((PsiClass) declaration, true, "javax.annotation.meta.TypeQualifierDefault");
 		if(tqDefault == null)
 		{
 			return false;
 		}
 
-		Set<PsiAnnotation.TargetType> required = AnnotationTargetUtil.extractRequiredAnnotationTargets(tqDefault
-				.findAttributeValue(null));
+		Set<PsiAnnotation.TargetType> required = AnnotationTargetUtil.extractRequiredAnnotationTargets(tqDefault.findAttributeValue(null));
 		if(required == null)
 		{
 			return false;

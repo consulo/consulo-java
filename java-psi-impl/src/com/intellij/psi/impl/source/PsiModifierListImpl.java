@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,7 +93,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 				{
 					return true;
 				}
-				if(type == null /* package local */)
+				if(type == null /* package-private */)
 				{
 					return false;
 				}
@@ -162,7 +162,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 				{
 					return true;
 				}
-				if(type == null /* package local */)
+				if(type == null /* package-private */)
 				{
 					return false;
 				}
@@ -197,7 +197,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 					{
 						return true;
 					}
-					if(type == null /* package local */)
+					if(type == null /* package-private */)
 					{
 						return false;
 					}
@@ -227,7 +227,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 			}
 		}
 
-		if(type == null /* package local */)
+		if(type == null /* package-private */)
 		{
 			return !hasModifierProperty(PsiModifier.PUBLIC) &&
 					!hasModifierProperty(PsiModifier.PRIVATE) &&
@@ -268,7 +268,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 			if(type == JavaTokenType.PUBLIC_KEYWORD ||
 					type == JavaTokenType.PRIVATE_KEYWORD ||
 					type == JavaTokenType.PROTECTED_KEYWORD ||
-					type == null /* package local */)
+					type == null /* package-private */)
 			{
 				if(type != JavaTokenType.PUBLIC_KEYWORD)
 				{
@@ -325,9 +325,9 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 		}
 		else
 		{
-			if(type == null /* package local */)
+			if(type == null /* package-private */)
 			{
-				throw new IncorrectOperationException("Cannot reset package local modifier."); //?
+				throw new IncorrectOperationException("Cannot reset package-private modifier."); //?
 			}
 
 			ASTNode child = treeElement.findChildByType(type);
@@ -397,6 +397,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		return "PsiModifierList:" + getText();

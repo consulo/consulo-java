@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,9 @@ import gnu.trove.THashSet;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -119,13 +117,13 @@ public class AnnotationUtil
 	}
 
 	@Nullable
-	public static PsiAnnotation findAnnotation(@Nullable PsiModifierListOwner listOwner, final boolean skipExternal, @NotNull String... annotationNames)
+	public static PsiAnnotation findAnnotation(@Nullable PsiModifierListOwner listOwner, boolean skipExternal, @NotNull String... annotationNames)
 	{
 		if(annotationNames.length == 0)
 		{
 			return null;
 		}
-		Set<String> set = annotationNames.length == 1 ? Collections.singleton(annotationNames[0]) : new HashSet<String>(Arrays.asList(annotationNames));
+		Set<String> set = annotationNames.length == 1 ? Collections.singleton(annotationNames[0]) : ContainerUtil.newHashSet(annotationNames);
 		return findAnnotation(listOwner, set, skipExternal);
 	}
 
@@ -142,7 +140,7 @@ public class AnnotationUtil
 	}
 
 	@Nullable
-	public static PsiAnnotation findAnnotation(@Nullable PsiModifierListOwner listOwner, @NotNull Collection<String> annotationNames, final boolean skipExternal)
+	public static PsiAnnotation findAnnotation(@Nullable PsiModifierListOwner listOwner, @NotNull Collection<String> annotationNames, boolean skipExternal)
 	{
 		if(listOwner == null)
 		{
@@ -271,7 +269,7 @@ public class AnnotationUtil
 			@Override
 			public Result<List<T>> compute()
 			{
-				LinkedHashSet<PsiModifierListOwner> result = ContainerUtil.newLinkedHashSet();
+				Set<PsiModifierListOwner> result = ContainerUtil.newLinkedHashSet();
 				if(element instanceof PsiMethod)
 				{
 					collectSuperMethods(result, ((PsiMethod) element).getHierarchicalMethodSignature(), element, JavaPsiFacade.getInstance(element.getProject()).getResolveHelper());
@@ -335,7 +333,7 @@ public class AnnotationUtil
 		return map.get(annotationNames);
 	}
 
-	private static void collectSuperParameters(LinkedHashSet<PsiModifierListOwner> result, @NotNull PsiParameter parameter)
+	private static void collectSuperParameters(@NotNull Set<PsiModifierListOwner> result, @NotNull PsiParameter parameter)
 	{
 		PsiElement scope = parameter.getDeclarationScope();
 		if(!(scope instanceof PsiMethod))
@@ -360,7 +358,7 @@ public class AnnotationUtil
 		}
 	}
 
-	private static void collectSuperMethods(LinkedHashSet<PsiModifierListOwner> result,
+	private static void collectSuperMethods(@NotNull Set<PsiModifierListOwner> result,
 			@NotNull HierarchicalMethodSignature signature,
 			@NotNull PsiElement place,
 			@NotNull PsiResolveHelper resolveHelper)

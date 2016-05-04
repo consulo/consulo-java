@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,11 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.AddAnnotationPsiFix");
 	protected final String myAnnotation;
-	protected final String[] myAnnotationsToRemove;
-	protected final PsiNameValuePair[] myPairs; // not used when registering local quick fix
+	private final String[] myAnnotationsToRemove;
+	private final PsiNameValuePair[] myPairs; // not used when registering local quick fix
 	protected final String myText;
 
-	public AddAnnotationPsiFix(@NotNull String fqn, @NotNull PsiModifierListOwner modifierListOwner, @NotNull PsiNameValuePair[] values,
-			@NotNull String... annotationsToRemove)
+	public AddAnnotationPsiFix(@NotNull String fqn, @NotNull PsiModifierListOwner modifierListOwner, @NotNull PsiNameValuePair[] values, @NotNull String... annotationsToRemove)
 	{
 		super(modifierListOwner);
 		myAnnotation = fqn;
@@ -59,8 +58,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 			if(name != null)
 			{
 				FindUsagesProvider provider = LanguageFindUsages.INSTANCE.forLanguage(modifierListOwner.getLanguage());
-				return CodeInsightBundle.message("inspection.i18n.quickfix.annotate.element.as", provider.getType(modifierListOwner), name,
-						shortName);
+				return CodeInsightBundle.message("inspection.i18n.quickfix.annotate.element.as", provider.getType(modifierListOwner), name, shortName);
 			}
 		}
 		return CodeInsightBundle.message("inspection.i18n.quickfix.annotate.as", shortName);
@@ -136,7 +134,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 
 		final ExternalAnnotationsManager annotationsManager = ExternalAnnotationsManager.getInstance(project);
 		final PsiModifierList modifierList = myModifierListOwner.getModifierList();
-		LOG.assertTrue(modifierList != null);
+		LOG.assertTrue(modifierList != null, myModifierListOwner + " (" + myModifierListOwner.getClass() + ")");
 		if(modifierList.findAnnotation(myAnnotation) != null)
 		{
 			return;
@@ -182,12 +180,12 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement
 		return inserted;
 	}
 
-	public static void removePhysicalAnnotations(PsiModifierListOwner owner, String... fqns)
+	public static void removePhysicalAnnotations(@NotNull PsiModifierListOwner owner, @NotNull String... fqns)
 	{
 		for(String fqn : fqns)
 		{
-			PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, fqn);
-			if(annotation != null)
+			PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, true, fqn);
+			if(annotation != null && !AnnotationUtil.isInferredAnnotation(annotation))
 			{
 				annotation.delete();
 			}
