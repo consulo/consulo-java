@@ -15,25 +15,30 @@
  */
 package com.intellij.codeInsight;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.generation.GenerationInfo;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author peter
  */
-public interface MethodImplementor extends MemberImplementorExplorer {
-  ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create("org.consulo.java.methodImplementor");
+public interface MethodImplementor extends MemberImplementorExplorer
+{
+	ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create("org.consulo.java.methodImplementor");
 
-  @NotNull
-  PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
+	@NotNull
+	PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
 
-  boolean isBodyGenerated();
+	boolean isBodyGenerated();
 
-  @Nullable
-  GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);
+	@Nullable
+	GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);
+
+	@NotNull
+	Consumer<PsiMethod> createDecorator(PsiClass targetClass, PsiMethod baseMethod, boolean toCopyJavaDoc, boolean insertOverrideIfPossible);
 }
