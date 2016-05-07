@@ -18,6 +18,7 @@ package com.intellij.debugger.ui.breakpoints;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
+import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaFieldBreakpointProperties;
@@ -48,6 +49,13 @@ import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
  */
 public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFieldBreakpointProperties> implements JavaBreakpointType
 {
+	@NotNull
+	@LazyInstance
+	public static JavaFieldBreakpointType getInstance()
+	{
+		return EXTENSION_POINT_NAME.findExtension(JavaFieldBreakpointType.class);
+	}
+
 	public JavaFieldBreakpointType()
 	{
 		super("java-field", DebuggerBundle.message("field.watchpoints.tab.title"));

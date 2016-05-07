@@ -674,17 +674,4 @@ public abstract class DebuggerUtils
 	public abstract PsiElement getContextElement(final StackFrameContext context);
 
 	public abstract PsiClass chooseClassDialog(String title, Project project);
-
-
-	public static boolean isSupportJVMDebugging(@NotNull PsiFile file)
-	{
-		for(JVMDebugProvider provider : JVMDebugProvider.EP_NAME.getExtensions())
-		{
-			if(provider.supportsJVMDebugging(file))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 }

@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
@@ -56,6 +57,13 @@ import com.intellij.xdebugger.impl.XSourcePositionImpl;
  */
 public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineBreakpointProperties> implements JavaBreakpointType
 {
+	@NotNull
+	@LazyInstance
+	public static JavaLineBreakpointType getInstance()
+	{
+		return EXTENSION_POINT_NAME.findExtension(JavaLineBreakpointType.class);
+	}
+
 	public JavaLineBreakpointType()
 	{
 		super("java-line", DebuggerBundle.message("line.breakpoints.tab.title"));
