@@ -36,6 +36,7 @@ import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RemoteConnection;
+import com.intellij.execution.configurations.RemoteRunProfile;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -49,7 +50,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 
 public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements
-		RunConfigurationWithSuppressedDefaultRunAction, CompileStepBeforeRun.Suppressor, GenericDebugRunnerConfiguration
+		RunConfigurationWithSuppressedDefaultRunAction, CompileStepBeforeRun.Suppressor, GenericDebugRunnerConfiguration, RemoteRunProfile
 {
 
 	@Override
