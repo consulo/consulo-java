@@ -268,16 +268,6 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	public String getGeneratedName()
-	{
-		if(MAIN_CLASS_NAME == null)
-		{
-			return null;
-		}
-		return JavaExecutionUtil.getPresentableClassName(MAIN_CLASS_NAME, getConfigurationModule());
-	}
-
-	@Override
 	public RefactoringElementListener getRefactoringElementListener(final PsiElement element)
 	{
 		if(HTML_USED)
@@ -291,18 +281,6 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	public PsiClass getMainClass()
 	{
 		return getConfigurationModule().findClass(MAIN_CLASS_NAME);
-	}
-
-	@Override
-	public void setGeneratedName()
-	{
-		setName(getGeneratedName());
-	}
-
-	@Override
-	public boolean isGeneratedName()
-	{
-		return Comparing.equal(getName(), getGeneratedName());
 	}
 
 	@Override

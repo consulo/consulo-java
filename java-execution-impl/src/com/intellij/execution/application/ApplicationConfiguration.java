@@ -37,7 +37,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
@@ -109,23 +108,6 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	@Nullable
-	public String getGeneratedName()
-	{
-		if(MAIN_CLASS_NAME == null)
-		{
-			return null;
-		}
-		return JavaExecutionUtil.getPresentableClassName(MAIN_CLASS_NAME, getConfigurationModule());
-	}
-
-	@Override
-	public void setGeneratedName()
-	{
-		setName(getGeneratedName());
-	}
-
-	@Override
 	public RefactoringElementListener getRefactoringElementListener(final PsiElement element)
 	{
 		final RefactoringElementListener listener = RefactoringListeners.getClassOrPackageListener(element,
@@ -138,16 +120,6 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	public PsiClass getMainClass()
 	{
 		return getConfigurationModule().findClass(MAIN_CLASS_NAME);
-	}
-
-	@Override
-	public boolean isGeneratedName()
-	{
-		if(MAIN_CLASS_NAME == null || MAIN_CLASS_NAME.length() == 0)
-		{
-			return JavaExecutionUtil.isNewName(getName());
-		}
-		return Comparing.equal(getName(), getGeneratedName());
 	}
 
 	@Override
