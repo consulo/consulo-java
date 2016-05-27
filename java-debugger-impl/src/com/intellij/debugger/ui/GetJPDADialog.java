@@ -21,17 +21,24 @@
  */
 package com.intellij.debugger.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.DoubleClickListener;
 import com.intellij.ui.JBColor;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
 
 public class GetJPDADialog extends DialogWrapper {
   private static final @NonNls String JPDA_URL = "http://java.sun.com/products/jpda";
@@ -60,7 +67,7 @@ public class GetJPDADialog extends DialogWrapper {
     new DoubleClickListener() {
       @Override
       protected boolean onDoubleClick(MouseEvent e) {
-        BrowserUtil.launchBrowser(JPDA_URL);
+        BrowserUtil.browse(JPDA_URL);
         return true;
       }
     }.installOn(label2);
