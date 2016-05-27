@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,20 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator;
 import com.intellij.codeInsight.daemon.impl.FileStatusMap;
+import com.intellij.codeInsight.daemon.impl.GlobalUsageHelper;
+import com.intellij.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.UserDataHolderEx;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiMatcherImpl;
@@ -43,16 +50,16 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.containers.MultiMap;
+import com.intellij.util.containers.Predicate;
 
-public class RefCountHolder
+class RefCountHolder
 {
 	private final PsiFile myFile;
 	// resolved elements -> list of their references
 	private final MultiMap<PsiElement, PsiReference> myLocalRefsMap = MultiMap.createSet();
 
 	private final Map<PsiAnchor, Boolean> myDclsUsedMap = new THashMap<PsiAnchor, Boolean>();
-	private final Map<PsiReference, PsiImportStatementBase> myImportStatements = new THashMap<PsiReference,
-			PsiImportStatementBase>();
+	private final Map<PsiReference, PsiImportStatementBase> myImportStatements = new THashMap<PsiReference, PsiImportStatementBase>();
 	private final AtomicReference<ProgressIndicator> myState = new AtomicReference<ProgressIndicator>(EMPTY);
 	// contains useful information
 	private static final ProgressIndicator READY = new DaemonProgressIndicator()
@@ -81,8 +88,7 @@ public class RefCountHolder
 		}
 	};
 
-	private static final Key<Reference<RefCountHolder>> REF_COUNT_HOLDER_IN_FILE_KEY = Key.create
-			("REF_COUNT_HOLDER_IN_FILE_KEY");
+	private static final Key<Reference<RefCountHolder>> REF_COUNT_HOLDER_IN_FILE_KEY = Key.create("REF_COUNT_HOLDER_IN_FILE_KEY");
 
 	@NotNull
 	static RefCountHolder get(@NotNull PsiFile file)
@@ -118,6 +124,48 @@ public class RefCountHolder
 		log("c: created for ", file);
 	}
 
+	@NotNull
+	GlobalUsageHelper getGlobalUsageHelper(@NotNull PsiFile file, @Nullable final UnusedDeclarationInspectionBase deadCodeInspection, boolean isUnusedToolEnabled)
+	{
+		final FileViewProvider viewProvider = file.getViewProvider();
+		Project project = file.getProject();
+
+		ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+		VirtualFile virtualFile = viewProvider.getVirtualFile();
+		final boolean inLibrary = fileIndex.isInLibraryClasses(virtualFile) || fileIndex.isInLibrarySource(virtualFile);
+
+		final boolean myDeadCodeEnabled = deadCodeInspection != null && isUnusedToolEnabled && deadCodeInspection.isGlobalEnabledInEditor();
+		@NotNull final Predicate<PsiElement> myIsEntryPointPredicate = new Predicate<PsiElement>()
+		{
+			@Override
+			public boolean apply(@Nullable PsiElement member)
+			{
+				return !myDeadCodeEnabled || deadCodeInspection.isEntryPoint(member);
+			}
+		};
+
+		return new GlobalUsageHelper()
+		{
+			@Override
+			public boolean shouldCheckUsages(@NotNull PsiMember member)
+			{
+				return !inLibrary && !myIsEntryPointPredicate.apply(member);
+			}
+
+			@Override
+			public boolean isCurrentFileAlreadyChecked()
+			{
+				return true;
+			}
+
+			@Override
+			public boolean isLocallyUsed(@NotNull PsiNamedElement member)
+			{
+				return isReferenced(member);
+			}
+		};
+	}
+
 	private void clear()
 	{
 		synchronized(myLocalRefsMap)
@@ -139,9 +187,8 @@ public class RefCountHolder
 		PsiFile psiFile = refElement == null ? null : refElement.getContainingFile();
 		if(psiFile != null)
 		{
-			psiFile = (PsiFile) psiFile.getNavigationElement(); // look at navigation elements because all references
+			psiFile = (PsiFile) psiFile.getNavigationElement(); // look at navigation elements because all references resolve into Cls elements when highlighting library source
 		}
-			// resolve into Cls elements when highlighting library source
 		if(refElement != null && psiFile != null && myFile.getViewProvider().equals(psiFile.getViewProvider()))
 		{
 			registerLocalRef(ref, refElement.getNavigationElement());
@@ -268,8 +315,7 @@ public class RefCountHolder
 		return false;
 	}
 
-	private static boolean isParameterUsedRecursively(@NotNull PsiElement element,
-			@NotNull Collection<PsiReference> array)
+	private static boolean isParameterUsedRecursively(@NotNull PsiElement element, @NotNull Collection<PsiReference> array)
 	{
 		if(!(element instanceof PsiParameter))
 		{
@@ -292,9 +338,8 @@ public class RefCountHolder
 			}
 			PsiElement argument = (PsiElement) reference;
 
-			PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) new PsiMatcherImpl(argument).dot
-					(PsiMatchers.hasClass(PsiReferenceExpression.class)).parent(PsiMatchers.hasClass(PsiExpressionList
-					.class)).parent(PsiMatchers.hasClass(PsiMethodCallExpression.class)).getElement();
+			PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) new PsiMatcherImpl(argument).dot(PsiMatchers.hasClass(PsiReferenceExpression.class)).parent(PsiMatchers.hasClass
+					(PsiExpressionList.class)).parent(PsiMatchers.hasClass(PsiMethodCallExpression.class)).getElement();
 			if(methodCallExpression == null)
 			{
 				return false;
@@ -374,10 +419,7 @@ public class RefCountHolder
 		return false;
 	}
 
-	boolean analyze(@NotNull PsiFile file,
-			TextRange dirtyScope,
-			@NotNull ProgressIndicator indicator,
-			@NotNull Runnable analyze)
+	boolean analyze(@NotNull PsiFile file, TextRange dirtyScope, @NotNull ProgressIndicator indicator, @NotNull Runnable analyze)
 	{
 		ProgressIndicator result;
 		if(myState.compareAndSet(EMPTY, indicator))

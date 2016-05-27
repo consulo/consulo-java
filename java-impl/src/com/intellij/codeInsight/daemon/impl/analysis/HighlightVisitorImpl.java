@@ -33,8 +33,6 @@ import com.intellij.codeInsight.daemon.impl.FileStatusMap;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.HighlightVisitor;
-import com.intellij.codeInsight.daemon.impl.HighlightingSession;
-import com.intellij.codeInsight.daemon.impl.HighlightingSessionImpl;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil.Feature;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
@@ -219,9 +217,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 					{
 						highlight.run();
 						progress.checkCanceled();
-						HighlightingSession highlightingSession = HighlightingSessionImpl.getHighlightingSession(file, progress);
 						PostHighlightingVisitor highlightingVisitor = new PostHighlightingVisitor(file, document, refCountHolder);
-						highlightingVisitor.collectHighlights(file, holder, progress);
+						highlightingVisitor.collectHighlights(holder, progress);
 					}
 				});
 			}
@@ -1884,7 +1881,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 				final boolean notFunctional = !LambdaUtil.isFunctionalType(functionalInterfaceType);
 				if(notFunctional)
 				{
-					myHolder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(functionalInterfaceType.getPresentableText() + " is not a functional " +
+					myHolder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(functionalInterfaceType.getPresentableText() + " is not a functional" +
+							" " +
 							"interface").create());
 				}
 			}
