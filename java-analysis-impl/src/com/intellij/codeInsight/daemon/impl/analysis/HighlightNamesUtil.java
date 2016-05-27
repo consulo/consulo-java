@@ -29,6 +29,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.colors.TextAttributesScheme;
 import com.intellij.openapi.editor.markup.TextAttributes;
@@ -55,7 +56,7 @@ public class HighlightNamesUtil
 	}
 
 	@Nullable
-	public static HighlightInfo highlightMethodName(@NotNull PsiMethod method,
+	public static HighlightInfo highlightMethodName(@NotNull PsiMember methodOrClass,
 			final PsiElement elementToHighlight,
 			TextRange range,
 			@NotNull TextAttributesScheme colorsScheme,
@@ -67,15 +68,26 @@ public class HighlightNamesUtil
 		{
 			if(isCalledOnThis(elementToHighlight))
 			{
-				PsiClass enclosingClass = PsiTreeUtil.getParentOfType(elementToHighlight, PsiClass.class);
-				isInherited = enclosingClass != null && enclosingClass.isInheritor(method.getContainingClass(), true);
+				final PsiClass containingClass = methodOrClass instanceof PsiMethod ? methodOrClass.getContainingClass() : null;
+				PsiClass enclosingClass = containingClass == null ? null : PsiTreeUtil.getParentOfType(elementToHighlight, PsiClass.class);
+				while(enclosingClass != null)
+				{
+					isInherited = enclosingClass.isInheritor(containingClass, true);
+					if(isInherited)
+					{
+						break;
+					}
+					enclosingClass = PsiTreeUtil.getParentOfType(enclosingClass, PsiClass.class, true);
+				}
 			}
 		}
 
-		TextAttributesKey attributesKey = getMethodNameHighlightKey(method, isDeclaration, isInherited).getAttributesKey();
-		if(elementToHighlight != null)
+		LOG.assertTrue(methodOrClass instanceof PsiMethod || !isDeclaration);
+		TextAttributesKey attributesKey = methodOrClass instanceof PsiMethod ? getMethodNameHighlightKey((PsiMethod) methodOrClass, isDeclaration,
+				isInherited).getAttributesKey() : CodeInsightColors.CONSTRUCTOR_CALL_ATTRIBUTES;
+		if(attributesKey != null)
 		{
-			TextAttributes attributes = mergeWithScopeAttributes(method, attributesKey, colorsScheme);
+			TextAttributes attributes = mergeWithScopeAttributes(methodOrClass, attributesKey, colorsScheme);
 			HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).range(range);
 			if(attributes != null)
 			{

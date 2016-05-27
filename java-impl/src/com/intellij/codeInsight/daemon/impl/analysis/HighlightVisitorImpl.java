@@ -965,8 +965,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 					final PsiClass aClass = imported == null ? null : imported.getSecond();
 					if(aClass != null && !manager.areElementsEquivalent(aClass, element))
 					{
-						description = imported.first == null ? JavaErrorMessages.message("single.import.class.conflict", refName) : imported.first.equals(ref) ? JavaErrorMessages.message("class.is" +
-								".ambiguous.in.single.static.import", refName) : JavaErrorMessages.message("class.is.already.defined.in.single.static.import", refName);
+						description = imported.first == null ? JavaErrorMessages.message("single.import.class.conflict", refName) : imported.first.equals(ref) ? JavaErrorMessages.message("class.is"
+								+ ".ambiguous.in.single.static.import", refName) : JavaErrorMessages.message("class.is.already.defined.in.single.static.import", refName);
 					}
 					mySingleImportedClasses.put(refName, Pair.create(ref, (PsiClass) element));
 				}
@@ -977,6 +977,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 					if(field != null && !manager.areElementsEquivalent(field, element))
 					{
 						description = imported.first.equals(ref) ? JavaErrorMessages.message("field.is.ambiguous.in.single.static.import", refName) : JavaErrorMessages.message("field.is.already" +
+								"" +
 								".defined.in.single.static.import", refName);
 					}
 					mySingleImportedFields.put(refName, Pair.create(ref, (PsiField) element));
@@ -1157,7 +1158,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 		}
 	}
 
-	private void highlightReferencedMethodOrClassName(PsiJavaCodeReferenceElement element, PsiElement resolved)
+	private void highlightReferencedMethodOrClassName(@NotNull PsiJavaCodeReferenceElement element, PsiElement resolved)
 	{
 		PsiElement parent = element.getParent();
 		if(parent instanceof PsiReferenceExpression || parent instanceof PsiJavaCodeReferenceElement)
@@ -1180,21 +1181,15 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 			try
 			{
 				PsiMethod method = ((PsiConstructorCall) parent).resolveConstructor();
-				if(method == null)
-				{
-					if(resolved instanceof PsiClass)
-					{
-						myHolder.add(HighlightNamesUtil.highlightClassName((PsiClass) resolved, element, colorsScheme));
-					}
-				}
-				else
+				PsiMember methodOrClass = method != null ? method : resolved instanceof PsiClass ? (PsiClass) resolved : null;
+				if(methodOrClass != null)
 				{
 					final PsiElement referenceNameElement = element.getReferenceNameElement();
 					if(referenceNameElement != null)
 					{
 						// exclude type parameters from the highlighted text range
 						TextRange range = new TextRange(element.getTextRange().getStartOffset(), referenceNameElement.getTextRange().getEndOffset());
-						myHolder.add(HighlightNamesUtil.highlightMethodName(method, referenceNameElement, range, colorsScheme, false));
+						myHolder.add(HighlightNamesUtil.highlightMethodName(methodOrClass, referenceNameElement, range, colorsScheme, false));
 					}
 				}
 			}
@@ -1874,7 +1869,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 		else
 		{
 			final TextAttributesScheme colorsScheme = myHolder.getColorsScheme();
-			if(method instanceof PsiMethod)
+			if(method instanceof PsiMethod && !expression.isConstructor())
 			{
 				final PsiElement methodNameElement = expression.getReferenceNameElement();
 				myHolder.add(HighlightNamesUtil.highlightMethodName((PsiMethod) method, methodNameElement, false, colorsScheme));
