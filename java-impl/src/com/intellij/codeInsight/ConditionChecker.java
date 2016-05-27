@@ -326,7 +326,7 @@ public class ConditionChecker implements Serializable {
 
       if (returnType == null) throw new IllegalArgumentException("PsiMethod " + psiMethod + " has a null return type PsiType.");
 
-      if (returnType != PsiType.BOOLEAN && !returnType.getCanonicalText().equals(Boolean.class.toString())) {
+      if (!PsiType.BOOLEAN.equals(returnType) && !returnType.getCanonicalText().equals(Boolean.class.toString())) {
         throw new IllegalArgumentException("PsiMethod " + psiMethod + " must have a null return type PsiType of boolean or Boolean.");
       }
     }

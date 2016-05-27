@@ -68,7 +68,7 @@ public class PsiConcatenationUtil {
                 addFormatParameter(subExpression, formatString, formatParameters, printfFormat);
               }
               if (stringStarted) {
-                if (optype != null && (optype.equalsToText("java.lang.String") || optype == PsiType.CHAR)) {
+                if (optype != null && (optype.equalsToText("java.lang.String") || PsiType.CHAR.equals(optype))) {
                   buildFormatString(op, formatString, formatParameters, printfFormat);
                 }
                 else {

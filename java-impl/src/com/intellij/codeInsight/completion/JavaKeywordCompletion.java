@@ -537,7 +537,7 @@ public class JavaKeywordCompletion
 		for(ExpectedTypeInfo info : JavaSmartCompletionContributor.getExpectedTypes(parameters))
 		{
 			PsiType type = info.getType();
-			if(type instanceof PsiClassType || type == PsiType.BOOLEAN)
+			if(type instanceof PsiClassType || PsiType.BOOLEAN.equals(type))
 			{
 				return true;
 			}

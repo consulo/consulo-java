@@ -723,7 +723,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     PsiType returnType = callSubstitutor.substitute(myMethod.getReturnType());
     String resultName = null;
     final int applicabilityLevel = PsiUtil.getApplicabilityLevel(myMethod, callSubstitutor, argumentList);
-    if (returnType != null && returnType != PsiType.VOID && tailCallType == InlineUtil.TailCallType.None) {
+    if (returnType != null && !PsiType.VOID.equals(returnType) && tailCallType == InlineUtil.TailCallType.None) {
       resultName = myJavaCodeStyle.propertyNameToVariableName("result", VariableKind.LOCAL_VARIABLE);
       resultName = myJavaCodeStyle.suggestUniqueVariableName(resultName, block.getFirstChild(), true);
       PsiDeclarationStatement declaration = myFactory.createVariableDeclarationStatement(resultName, returnType, null);
@@ -1266,7 +1266,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
           final PsiLambdaExpression newLambdaExpr = (PsiLambdaExpression)myFactory.createExpressionFromText(
             ((PsiLambdaExpression)lambdaExpr).getParameterList().getText() + " -> " + "{\n}", lambdaExpr);
           final PsiStatement statementFromText;
-          if (LambdaUtil.getFunctionalInterfaceReturnType((PsiLambdaExpression)lambdaExpr) == PsiType.VOID ) {
+          if (PsiType.VOID.equals(LambdaUtil.getFunctionalInterfaceReturnType((PsiLambdaExpression) lambdaExpr))) {
             statementFromText = myFactory.createStatementFromText("a;", lambdaExpr);
             ((PsiExpressionStatement)statementFromText).getExpression().replace(parentStatement);
           } else {

@@ -415,7 +415,7 @@ class MethodCheckerDetailsDialog extends DialogWrapper implements PropertyChange
 
       if (myType == IS_NULL_METHOD || myType == IS_NOT_NULL_METHOD) {
         PsiType returnType = psiMethod.getReturnType();
-        if (returnType != PsiType.BOOLEAN && (returnType == null || !returnType.getCanonicalText().equals(Boolean.class.toString()))) {
+        if (!PsiType.BOOLEAN.equals(returnType) && (returnType == null || !returnType.getCanonicalText().equals(Boolean.class.toString()))) {
           return false;
         }
       }

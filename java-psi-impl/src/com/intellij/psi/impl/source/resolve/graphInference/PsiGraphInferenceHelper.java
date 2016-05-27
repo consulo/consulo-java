@@ -104,7 +104,7 @@ public class PsiGraphInferenceHelper implements PsiInferenceHelper
 			boolean isContraVariantPosition,
 			LanguageLevel languageLevel)
 	{
-		if(arg == PsiType.VOID || param == PsiType.VOID)
+		if(PsiType.VOID.equals(arg) || PsiType.VOID.equals(param))
 		{
 			return PsiType.NULL;
 		}

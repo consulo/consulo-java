@@ -620,7 +620,7 @@ public class PsiMethodReferenceExpressionImpl extends PsiReferenceExpressionBase
 		{
 			final PsiType interfaceReturnType = LambdaUtil.getFunctionalInterfaceReturnType(left);
 
-			if(interfaceReturnType == PsiType.VOID || interfaceReturnType == null)
+			if(PsiType.VOID.equals(interfaceReturnType) || interfaceReturnType == null)
 			{
 				return true;
 			}
@@ -641,7 +641,7 @@ public class PsiMethodReferenceExpressionImpl extends PsiReferenceExpressionBase
 					returnType = ((PsiMethod) resolve).getReturnType();
 				}
 
-				if(returnType == PsiType.VOID)
+				if(PsiType.VOID.equals(returnType))
 				{
 					return false;
 				}

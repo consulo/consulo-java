@@ -645,7 +645,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
     boolean isReturnRequired = false;
     boolean isReturnAbsent = true;
-    if (superMethods.length == 0 && !psiMethod.isConstructor() && PsiType.VOID != psiMethod.getReturnType() && isTagRequired(psiMethod, "return")) {
+    if (superMethods.length == 0 && !psiMethod.isConstructor() && !PsiType.VOID.equals(psiMethod.getReturnType()) && isTagRequired(psiMethod, "return")) {
       isReturnRequired = true;
       for (PsiDocTag tag : tags) {
         if ("return".equals(tag.getName())) {

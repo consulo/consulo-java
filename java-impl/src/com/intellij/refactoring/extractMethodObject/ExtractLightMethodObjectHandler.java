@@ -326,7 +326,7 @@ public class ExtractLightMethodObjectHandler
 	{
 		if(type instanceof PsiClassType ||
 				type instanceof PsiArrayType ||
-				type instanceof PsiPrimitiveType && type != PsiType.VOID)
+				type instanceof PsiPrimitiveType && !PsiType.VOID.equals(type))
 		{
 			return true;
 		}

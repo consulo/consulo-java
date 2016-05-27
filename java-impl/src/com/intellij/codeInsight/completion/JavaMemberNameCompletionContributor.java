@@ -397,7 +397,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 			}
 		}
 
-		if(!hasStartMatches(matcher, result) && PsiType.VOID != varType && includeOverlapped)
+		if(!hasStartMatches(matcher, result) && !PsiType.VOID.equals(varType) && includeOverlapped)
 		{
 			// use suggested names as suffixes
 			final String requiredSuffix = codeStyleManager.getSuffixByVariableKind(varKind);

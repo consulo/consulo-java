@@ -93,7 +93,7 @@ class SmartCastProvider extends CompletionProvider<CompletionParameters>
 				type = ((PsiWildcardType) type).getBound();
 			}
 
-			if(type == null || type == PsiType.VOID)
+			if(type == null || PsiType.VOID.equals(type))
 			{
 				continue;
 			}

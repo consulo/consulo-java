@@ -163,7 +163,7 @@ public class SimplifiableConditionalExpressionInspection
         return;
       }
       final PsiType thenType = thenExpression.getType();
-      if (thenType != PsiType.BOOLEAN) {
+      if (!PsiType.BOOLEAN.equals(thenType)) {
         return;
       }
       final PsiExpression elseExpression = expression.getElseExpression();
@@ -171,7 +171,7 @@ public class SimplifiableConditionalExpressionInspection
         return;
       }
       final PsiType elseType = elseExpression.getType();
-      if (elseType != PsiType.BOOLEAN) {
+      if (!PsiType.BOOLEAN.equals(elseType)) {
         return;
       }
       final boolean thenConstant = BoolUtils.isFalse(thenExpression) ||

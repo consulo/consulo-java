@@ -53,7 +53,7 @@ class ReturnDocTagInfo implements JavadocTagInfo {
     PsiMethod method = (PsiMethod)element;
     final PsiType type = method.getReturnType();
     if (type == null) return false;
-    return type != PsiType.VOID;
+    return !PsiType.VOID.equals(type);
   }
 
   @Override

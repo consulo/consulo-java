@@ -401,7 +401,7 @@ public class UncheckedWarningLocalInspection extends BaseJavaLocalInspectionTool
       final PsiMethod method = PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
       if (method != null) {
         final PsiType returnType = method.getReturnType();
-        if (returnType != null && returnType != PsiType.VOID) {
+        if (returnType != null && !PsiType.VOID.equals(returnType)) {
           final PsiExpression returnValue = statement.getReturnValue();
           if (returnValue != null) {
             final PsiType valueType = returnValue.getType();

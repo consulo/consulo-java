@@ -190,7 +190,7 @@ public class AddClarifyingParenthesesIntention extends Intention {
       if (operand == null) {
         continue;
       }
-      if (operand.getType() == PsiType.VOID) {
+      if (PsiType.VOID.equals(operand.getType())) {
         throw new ProcessCanceledException();
       }
       if (operands.length == 1) {

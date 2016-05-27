@@ -743,7 +743,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 		PsiType returnType = method.getReturnType();
 		// no warnings in void lambdas, where the expression is not returned anyway
-		if(block instanceof PsiExpression && block.getParent() instanceof PsiLambdaExpression && returnType == PsiType.VOID)
+		if(block instanceof PsiExpression && block.getParent() instanceof PsiLambdaExpression && PsiType.VOID.equals(returnType))
 		{
 			return;
 		}

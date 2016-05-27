@@ -20,6 +20,7 @@
  */
 package com.intellij.codeInspection.reference;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -27,7 +28,6 @@ import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.VisibilityUtil;
-import org.jetbrains.annotations.Nullable;
 
 public class RefJavaUtilImpl extends RefJavaUtil{
 
@@ -181,7 +181,7 @@ public class RefJavaUtilImpl extends RefJavaUtil{
     );
     if (call != null) {
       PsiType returnType = psiMethod.getReturnType();
-      if (!psiMethod.isConstructor() && returnType != PsiType.VOID) {
+      if (!psiMethod.isConstructor() && !PsiType.VOID.equals(returnType)) {
         if (!(call.getParent() instanceof PsiExpressionStatement)) {
           refMethod.setReturnValueUsed(true);
         }
