@@ -74,8 +74,8 @@ public class JavaDebuggerSupport extends DebuggerSupport
 		public void createBreakpointsGroupingRules(Collection<XBreakpointGroupingRule> rules)
 		{
 			//rules.add(new XBreakpointGroupingByCategoryRule());
-			rules.add(new XBreakpointGroupingByPackageRule());
-			rules.add(new XBreakpointGroupingByClassRule());
+			//rules.add(new XBreakpointGroupingByPackageRule());
+			//rules.add(new XBreakpointGroupingByClassRule());
 		}
 
 		@Override
