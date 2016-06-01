@@ -47,7 +47,7 @@ import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
  */
 public abstract class JvmSmartStepIntoHandler
 {
-	public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create("com.intellij.debugger.jvmSmartStepIntoHandler");
+	public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.jvmSmartStepIntoHandler");
 
 	@NotNull
 	public abstract List<SmartStepTarget> findSmartStepTargets(SourcePosition position);
