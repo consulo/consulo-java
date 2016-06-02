@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -24,11 +25,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
-import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author mike
@@ -58,12 +55,13 @@ public class SetupJDKFix implements IntentionAction, HighPriorityAction {
 
   @Override
   public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-    return JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_OBJECT, file.getResolveScope()) == null;
+    return false;
+    //return JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_OBJECT, file.getResolveScope()) == null;
   }
 
   @Override
   public void invoke(@NotNull Project project, Editor editor, final PsiFile file) {
-    Sdk projectJdk = ProjectSettingsService.getInstance(project).chooseAndSetSdk();
+    Sdk projectJdk = null;
     if (projectJdk == null) return;
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override

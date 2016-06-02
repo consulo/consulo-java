@@ -57,7 +57,6 @@ import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.SdkOrderEntry;
 import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -141,7 +140,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
       while (isBadSdk(project, modules)) {
         Messages.showMessageDialog(project, InspectionsBundle.message("inspection.no.jdk.error.message"),
                                    CommonBundle.message("title.error"), Messages.getErrorIcon());
-        final Sdk projectJdk = ProjectSettingsService.getInstance(project).chooseAndSetSdk();
+        final Sdk projectJdk = null;
         if (projectJdk == null) return false;
       }
     }
