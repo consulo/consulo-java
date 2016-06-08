@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.consulo.compiler.CompilerPathsManager;
+import org.consulo.compiler.ModuleCompilerPathsManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;
@@ -177,14 +177,14 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
       final PsiFile containingFile = containingClass.getContainingFile();
       final VirtualFile virtualFile = containingFile.getVirtualFile();
       if (virtualFile == null) return null;
-      final CompilerPathsManager compilerPathsManager = CompilerPathsManager.getInstance(psiElement.getProject());
+      final ModuleCompilerPathsManager compilerPathsManager = ModuleCompilerPathsManager.getInstance(module);
       String classPath;
       if (ProjectRootManager.getInstance(module.getProject()).getFileIndex().isInTestSourceContent(virtualFile)) {
-        final VirtualFile pathForTests = compilerPathsManager.getCompilerOutput(module, TestContentFolderTypeProvider.getInstance());
+        final VirtualFile pathForTests = compilerPathsManager.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
         if (pathForTests == null) return null;
         classPath = pathForTests.getPath();
       } else {
-        final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(module, ProductionContentFolderTypeProvider.getInstance());
+        final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
         if (compilerOutputPath == null) return null;
         classPath = compilerOutputPath.getPath();
       }

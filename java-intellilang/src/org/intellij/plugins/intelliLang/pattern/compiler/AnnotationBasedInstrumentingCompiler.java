@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.consulo.compiler.CompilerPathsManager;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import org.consulo.compiler.ModuleCompilerPathsManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.PsiClassWriter;
 import com.intellij.lang.java.JavaLanguage;
@@ -118,8 +118,8 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
       final Sdk jdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
       final boolean jdk6 = jdk != null && JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
 
-      final CompilerPathsManager compilerPathsManager = CompilerPathsManager.getInstance(project);
-      final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(module, ProductionContentFolderTypeProvider.getInstance());
+      final ModuleCompilerPathsManager compilerPathsManager = ModuleCompilerPathsManager.getInstance(module);
+      final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
       if (compilerOutputPath != null) {
         final String packageName = srcFile.getPackageName();
         final VirtualFile packageDir =

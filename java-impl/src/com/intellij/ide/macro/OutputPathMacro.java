@@ -17,7 +17,8 @@ package com.intellij.ide.macro;
 
 import java.io.File;
 
-import org.consulo.compiler.CompilerPathsManager;
+import org.consulo.compiler.ModuleCompilerPathsManager;
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
@@ -33,46 +34,64 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 
-public final class OutputPathMacro extends Macro {
-  public String getName() {
-    return "OutputPath";
-  }
+public final class OutputPathMacro extends Macro
+{
+	@Override
+	public String getName()
+	{
+		return "OutputPath";
+	}
 
-  public String getDescription() {
-    return IdeBundle.message("macro.output.path");
-  }
+	@Override
+	public String getDescription()
+	{
+		return IdeBundle.message("macro.output.path");
+	}
 
-  public String expand(DataContext dataContext) {
-    Project project = CommonDataKeys.PROJECT.getData(dataContext);
-    if (project == null) {
-      return null;
-    }
+	@Override
+	@RequiredReadAction
+	public String expand(DataContext dataContext)
+	{
+		Project project = CommonDataKeys.PROJECT.getData(dataContext);
+		if(project == null)
+		{
+			return null;
+		}
 
-    VirtualFile file = PlatformDataKeys.VIRTUAL_FILE.getData(dataContext);
-    if (file != null) {
-      ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-      Module module = projectFileIndex.getModuleForFile(file);
-      if (module != null){
-        boolean isTest = projectFileIndex.isInTestSourceContent(file);
-        String outputPathUrl = CompilerPathsManager.getInstance(project).getCompilerOutputUrl(module, isTest ? TestContentFolderTypeProvider.getInstance() : ProductionContentFolderTypeProvider.getInstance());
-        if (outputPathUrl == null) return null;
-        return VirtualFileManager.extractPath(outputPathUrl).replace('/', File.separatorChar);
-      }
-    }
+		VirtualFile file = PlatformDataKeys.VIRTUAL_FILE.getData(dataContext);
+		if(file != null)
+		{
+			ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+			Module module = projectFileIndex.getModuleForFile(file);
+			if(module != null)
+			{
+				boolean isTest = projectFileIndex.isInTestSourceContent(file);
+				String outputPathUrl = ModuleCompilerPathsManager.getInstance(module).getCompilerOutputUrl(isTest ? TestContentFolderTypeProvider.getInstance() : ProductionContentFolderTypeProvider
+						.getInstance());
+				if(outputPathUrl == null)
+				{
+					return null;
+				}
+				return VirtualFileManager.extractPath(outputPathUrl).replace('/', File.separatorChar);
+			}
+		}
 
-    Module[] allModules = ModuleManager.getInstance(project).getSortedModules();
-    if (allModules.length == 0) {
-      return null;
-    }
-    String[] paths = CompilerPathsImpl.getOutputPaths(allModules);
-    final StringBuffer outputPath = new StringBuffer();
-    for (int idx = 0; idx < paths.length; idx++) {
-      String path = paths[idx];
-      if (idx > 0) {
-        outputPath.append(File.pathSeparator);
-      }
-      outputPath.append(path);
-    }
-    return outputPath.toString();
-  }
+		Module[] allModules = ModuleManager.getInstance(project).getSortedModules();
+		if(allModules.length == 0)
+		{
+			return null;
+		}
+		String[] paths = CompilerPathsImpl.getOutputPaths(allModules);
+		final StringBuffer outputPath = new StringBuffer();
+		for(int idx = 0; idx < paths.length; idx++)
+		{
+			String path = paths[idx];
+			if(idx > 0)
+			{
+				outputPath.append(File.pathSeparator);
+			}
+			outputPath.append(path);
+		}
+		return outputPath.toString();
+	}
 }

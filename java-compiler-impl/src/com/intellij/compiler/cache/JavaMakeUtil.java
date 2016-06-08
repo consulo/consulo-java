@@ -20,7 +20,7 @@
  */
 package com.intellij.compiler.cache;
 
-import org.consulo.compiler.CompilerPathsManager;
+import org.consulo.compiler.ModuleCompilerPathsManager;
 import org.consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
@@ -271,7 +271,7 @@ public class JavaMakeUtil extends MakeUtil {
   public static String getModuleOutputDirPath(final Module module) {
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
       public String compute() {
-        final String url = CompilerPathsManager.getInstance(module.getProject()).getCompilerOutputUrl(module, ProductionContentFolderTypeProvider.getInstance());
+        final String url = ModuleCompilerPathsManager.getInstance(module).getCompilerOutputUrl(ProductionContentFolderTypeProvider.getInstance());
         if (url == null) {
           return null;
         }
