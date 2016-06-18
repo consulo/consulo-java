@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
@@ -46,9 +47,9 @@ import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;
+import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.roots.SdkOrderEntry;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
@@ -259,9 +260,9 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 		Sdk jdk = null;
 		for(OrderEntry orderEntry : entries)
 		{
-			if(orderEntry instanceof SdkOrderEntry)
+			if(orderEntry instanceof ModuleExtensionWithSdkOrderEntry)
 			{
-				Sdk temp = ((SdkOrderEntry) orderEntry).getSdk();
+				Sdk temp = ((ModuleExtensionWithSdkOrderEntry) orderEntry).getSdk();
 				if(temp != null && temp.getSdkType() == JavaSdk.getInstance())
 				{
 					jdk = temp;
@@ -282,7 +283,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 		final Sdk finalJdk = jdk;
 
 		String path = finalJdk.getHomePath();
-		String text = "No IDEA annotations attached to the JDK " + finalJdk.getName() + (path == null ? "" : " (" + FileUtil.toSystemDependentName(path) + ")") + ", some issues will not be found";
+		String text = "No external annotations attached to the JDK " + finalJdk.getName() + (path == null ? "" : " (" + FileUtil.toSystemDependentName(path) + ")") + ", some issues will not be found";
 		holder.registerProblem(file, text, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new LocalQuickFix()
 		{
 			@NotNull
@@ -300,6 +301,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 			}
 
 			@Override
+			@RequiredDispatchThread
 			public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
 			{
 				ApplicationManager.getApplication().runWriteAction(new Runnable()
