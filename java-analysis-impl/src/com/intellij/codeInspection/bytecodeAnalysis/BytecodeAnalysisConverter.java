@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,600 +15,495 @@
  */
 package com.intellij.codeInspection.bytecodeAnalysis;
 
+import static com.intellij.codeInspection.bytecodeAnalysis.Direction.In;
+import static com.intellij.codeInspection.bytecodeAnalysis.Direction.InOut;
+import static com.intellij.codeInspection.bytecodeAnalysis.Direction.NullableOut;
+import static com.intellij.codeInspection.bytecodeAnalysis.Direction.Out;
+import static com.intellij.codeInspection.bytecodeAnalysis.Direction.Pure;
 import static com.intellij.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis.LOG;
 
-import gnu.trove.TIntHashSet;
-import gnu.trove.TIntObjectHashMap;
-import gnu.trove.TIntObjectIterator;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.File;
-import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.org.objectweb.asm.Type;
-import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.openapi.util.ThreadLocalCachedValue;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.io.CachingEnumerator;
-import com.intellij.util.io.DataEnumerator;
-import com.intellij.util.io.DataInputOutputUtil;
-import com.intellij.util.io.IOUtil;
-import com.intellij.util.io.KeyDescriptor;
-import com.intellij.util.io.PersistentEnumeratorDelegate;
-import com.intellij.util.io.PersistentStringEnumerator;
 
 /**
  * @author lambdamix
  */
-public class BytecodeAnalysisConverter implements ApplicationComponent
-{
+public class BytecodeAnalysisConverter {
 
-	private static final String VERSION = "BytecodeAnalysisConverter.Enumerators";
+  // how many bytes are taken from class fqn digest
+  public static final int CLASS_HASH_SIZE = 10;
+  // how many bytes are taken from signature digest
+  public static final int SIGNATURE_HASH_SIZE = 4;
+  public static final int HASH_SIZE = CLASS_HASH_SIZE + SIGNATURE_HASH_SIZE;
 
-	public static BytecodeAnalysisConverter getInstance()
-	{
-		return ApplicationManager.getApplication().getComponent(BytecodeAnalysisConverter.class);
-	}
+  private static final ThreadLocalCachedValue<MessageDigest> HASHER_CACHE = new ThreadLocalCachedValue<MessageDigest>() {
+    @Override
+    public MessageDigest create() {
+      try {
+        return MessageDigest.getInstance("MD5");
+      } catch (NoSuchAlgorithmException exception) {
+        throw new RuntimeException(exception);
+      }
+    }
 
-	private PersistentStringEnumerator myNamesEnumerator;
-	private PersistentEnumeratorDelegate<int[]> myCompoundKeyEnumerator;
-	private int version;
+    @Override
+    protected void init(MessageDigest value) {
+      value.reset();
+    }
+  };
 
-	@Override
-	public void initComponent()
-	{
-		version = PropertiesComponent.getInstance().getOrInitInt(VERSION, 0);
-		final File keysDir = new File(PathManager.getIndexRoot(), "bytecodekeys");
-		final File namesFile = new File(keysDir, "names");
-		final File compoundKeysFile = new File(keysDir, "compound");
+  public static MessageDigest getMessageDigest() throws NoSuchAlgorithmException {
+    return HASHER_CACHE.getValue();
+  }
 
-		try
-		{
-			IOUtil.openCleanOrResetBroken(new ThrowableComputable<Void, IOException>()
-										  {
-											  @Override
-											  public Void compute() throws IOException
-											  {
-												  myNamesEnumerator = new PersistentStringEnumerator(namesFile, true);
-												  myCompoundKeyEnumerator = new IntArrayPersistentEnumerator(compoundKeysFile,
-														  new IntArrayKeyDescriptor());
-												  return null;
-											  }
-										  }, new Runnable()
-										  {
-											  @Override
-											  public void run()
-											  {
-												  LOG.info("Error during initialization of enumerators in bytecode analysis. Re-initializing.");
-												  IOUtil.deleteAllFilesStartingWith(keysDir);
-												  version++;
-											  }
-										  }
-			);
-		}
-		catch(IOException e)
-		{
-			LOG.error("Re-initialization of enumerators in bytecode analysis failed.", e);
-		}
-		// TODO: is it enough for rebuilding indices?
-		PropertiesComponent.getInstance().setValue(VERSION, String.valueOf(version));
-	}
+  /**
+   * Converts an equation over asm keys into equation over small hash keys.
+   */
+  @NotNull
+  static DirectionResultPair convert(@NotNull Equation equation, @NotNull MessageDigest md) {
+    ProgressManager.checkCanceled();
 
-	@Override
-	public void disposeComponent()
-	{
-		try
-		{
-			myNamesEnumerator.close();
-			myCompoundKeyEnumerator.close();
-		}
-		catch(IOException e)
-		{
-			LOG.debug(e);
-		}
-	}
+    Result rhs = equation.rhs;
+    HResult hResult;
+    if (rhs instanceof Final) {
+      hResult = new HFinal(((Final)rhs).value);
+    }
+    else if (rhs instanceof Pending) {
+      Pending pending = (Pending)rhs;
+      Set<Product> sumOrigin = pending.sum;
+      HComponent[] components = new HComponent[sumOrigin.size()];
+      int componentI = 0;
+      for (Product prod : sumOrigin) {
+        HKey[] intProd = new HKey[prod.ids.size()];
+        int idI = 0;
+        for (Key key : prod.ids) {
+          intProd[idI] = asmKey(key, md);
+          idI++;
+        }
+        HComponent intIdComponent = new HComponent(prod.value, intProd);
+        components[componentI] = intIdComponent;
+        componentI++;
+      }
+      hResult = new HPending(components);
+    } else {
+      Effects wrapper = (Effects)rhs;
+      Set<EffectQuantum> effects = wrapper.effects;
+      Set<HEffectQuantum> hEffects = new HashSet<HEffectQuantum>();
+      for (EffectQuantum effect : effects) {
+        if (effect == EffectQuantum.TopEffectQuantum) {
+          hEffects.add(HEffectQuantum.TopEffectQuantum);
+        }
+        else if (effect == EffectQuantum.ThisChangeQuantum) {
+          hEffects.add(HEffectQuantum.ThisChangeQuantum);
+        }
+        else if (effect instanceof EffectQuantum.ParamChangeQuantum) {
+          EffectQuantum.ParamChangeQuantum paramChangeQuantum = (EffectQuantum.ParamChangeQuantum)effect;
+          hEffects.add(new HEffectQuantum.ParamChangeQuantum(paramChangeQuantum.n));
+        }
+        else if (effect instanceof EffectQuantum.CallQuantum) {
+          EffectQuantum.CallQuantum callQuantum = (EffectQuantum.CallQuantum)effect;
+          hEffects.add(new HEffectQuantum.CallQuantum(asmKey(callQuantum.key, md), callQuantum.data, callQuantum.isStatic));
+        }
+      }
+      hResult = new HEffects(hEffects);
+    }
+    return new DirectionResultPair(mkDirectionKey(equation.id.direction), hResult);
+  }
 
-	@NotNull
-	@Override
-	public String getComponentName()
-	{
-		return "BytecodeAnalysisConverter";
-	}
+  /**
+   * Converts an asm method key to a small hash key (HKey)
+   */
+  @NotNull
+  public static HKey asmKey(@NotNull Key key, @NotNull MessageDigest md) {
+    byte[] classDigest = md.digest(key.method.internalClassName.getBytes(CharsetToolkit.UTF8_CHARSET));
+    md.update(key.method.methodName.getBytes(CharsetToolkit.UTF8_CHARSET));
+    md.update(key.method.methodDesc.getBytes(CharsetToolkit.UTF8_CHARSET));
+    byte[] sigDigest = md.digest();
+    byte[] digest = new byte[HASH_SIZE];
+    System.arraycopy(classDigest, 0, digest, 0, CLASS_HASH_SIZE);
+    System.arraycopy(sigDigest, 0, digest, CLASS_HASH_SIZE, SIGNATURE_HASH_SIZE);
+    return new HKey(digest, mkDirectionKey(key.direction), key.stable, key.negated);
+  }
 
-	IntIdEquation convert(Equation<Key, Value> equation) throws IOException
-	{
-		ProgressManager.checkCanceled();
+  /**
+   * Converts a Psi method to a small hash key (HKey).
+   * Returns null if conversion is impossible (something is not resolvable).
+   */
+  @Nullable
+  public static HKey psiKey(@NotNull PsiMethod psiMethod, @NotNull Direction direction, @NotNull MessageDigest md) {
+    final PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class, false);
+    if (psiClass == null) {
+      return null;
+    }
+    byte[] classDigest = psiClassDigest(psiClass, md);
+    if (classDigest == null) {
+      return null;
+    }
+    byte[] sigDigest = methodDigest(psiMethod, md);
+    if (sigDigest == null) {
+      return null;
+    }
+    byte[] digest = new byte[HASH_SIZE];
+    System.arraycopy(classDigest, 0, digest, 0, CLASS_HASH_SIZE);
+    System.arraycopy(sigDigest, 0, digest, CLASS_HASH_SIZE, SIGNATURE_HASH_SIZE);
+    return new HKey(digest, mkDirectionKey(direction), true, false);
+  }
 
-		Result<Key, Value> rhs = equation.rhs;
-		IntIdResult result;
-		if(rhs instanceof Final)
-		{
-			result = new IntIdFinal(((Final<Key, Value>) rhs).value);
-		}
-		else
-		{
-			Pending<Key, Value> pending = (Pending<Key, Value>) rhs;
-			Set<Product<Key, Value>> sumOrigin = pending.sum;
-			IntIdComponent[] components = new IntIdComponent[sumOrigin.size()];
-			int componentI = 0;
-			for(Product<Key, Value> prod : sumOrigin)
-			{
-				int[] intProd = new int[prod.ids.size()];
-				int idI = 0;
-				for(Key id : prod.ids)
-				{
-					int rawId = mkAsmKey(id);
-					if(rawId <= 0)
-					{
-						LOG.error("raw key should be positive. rawId = " + rawId);
-					}
-					intProd[idI] = id.stable ? rawId : -rawId;
-					idI++;
-				}
-				IntIdComponent intIdComponent = new IntIdComponent(prod.value, intProd);
-				components[componentI] = intIdComponent;
-				componentI++;
-			}
-			result = new IntIdPending(components);
-		}
+  @Nullable
+  private static byte[] psiClassDigest(@NotNull PsiClass psiClass, @NotNull MessageDigest md) {
+    String descriptor = descriptor(psiClass, 0, false);
+    if (descriptor == null) {
+      return null;
+    }
+    return md.digest(descriptor.getBytes(CharsetToolkit.UTF8_CHARSET));
+  }
 
-		int rawKey = mkAsmKey(equation.id);
-		if(rawKey <= 0)
-		{
-			LOG.error("raw key should be positive. rawKey = " + rawKey);
-		}
+  @Nullable
+  private static byte[] methodDigest(@NotNull PsiMethod psiMethod, @NotNull MessageDigest md) {
+    String descriptor = descriptor(psiMethod);
+    if (descriptor == null) {
+      return null;
+    }
+    return md.digest(descriptor.getBytes(CharsetToolkit.UTF8_CHARSET));
+  }
 
-		int key = equation.id.stable ? rawKey : -rawKey;
-		return new IntIdEquation(key, result);
-	}
+  @Nullable
+  private static String descriptor(@NotNull PsiMethod psiMethod) {
+    StringBuilder sb = new StringBuilder();
+    final PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class, false);
+    if (psiClass == null) {
+      return null;
+    }
+    PsiClass outerClass = psiClass.getContainingClass();
+    boolean isInnerClassConstructor = psiMethod.isConstructor() && (outerClass != null) && !psiClass.hasModifierProperty(PsiModifier.STATIC);
+    PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+    PsiType returnType = psiMethod.getReturnType();
 
-	public int mkAsmKey(@NotNull Key key) throws IOException
-	{
-		return myCompoundKeyEnumerator.enumerate(new int[]{
-				mkDirectionKey(key.direction),
-				mkAsmSignatureKey(key.method)
-		});
-	}
+    sb.append(returnType == null ? "<init>" : psiMethod.getName());
+    sb.append('(');
 
-	private int mkDirectionKey(Direction dir) throws IOException
-	{
-		return myCompoundKeyEnumerator.enumerate(new int[]{
-				dir.directionId(),
-				dir.paramId(),
-				dir.valueId()
-		});
-	}
+    String desc;
 
-	// class + short signature
-	private int mkAsmSignatureKey(@NotNull Method method) throws IOException
-	{
-		int[] sigKey = new int[2];
-		sigKey[0] = mkAsmTypeKey(Type.getObjectType(method.internalClassName));
-		sigKey[1] = mkAsmShortSignatureKey(method);
-		return myCompoundKeyEnumerator.enumerate(sigKey);
-	}
+    if (isInnerClassConstructor) {
+      desc = descriptor(outerClass, 0, true);
+      if (desc == null) {
+        return null;
+      }
+      sb.append(desc);
+    }
+    for (PsiParameter parameter : parameters) {
+      desc = descriptor(parameter.getType());
+      if (desc == null) {
+        return null;
+      }
+      sb.append(desc);
+    }
+    sb.append(')');
+    if (returnType == null) {
+      sb.append('V');
+    } else {
+      desc = descriptor(returnType);
+      if (desc == null) {
+        return null;
+      } else {
+        sb.append(desc);
+      }
+    }
+    return sb.toString();
+  }
 
-	private int mkAsmShortSignatureKey(@NotNull Method method) throws IOException
-	{
-		Type[] argTypes = Type.getArgumentTypes(method.methodDesc);
-		int arity = argTypes.length;
-		int[] sigKey = new int[3 + arity];
-		sigKey[0] = mkAsmTypeKey(Type.getReturnType(method.methodDesc));
-		sigKey[1] = myNamesEnumerator.enumerate(method.methodName);
-		sigKey[2] = argTypes.length;
-		for(int i = 0; i < argTypes.length; i++)
-		{
-			sigKey[3 + i] = mkAsmTypeKey(argTypes[i]);
-		}
-		return myCompoundKeyEnumerator.enumerate(sigKey);
-	}
+  @Nullable
+  private static String descriptor(@NotNull PsiClass psiClass, int dimensions, boolean full) {
+    PsiFile containingFile = psiClass.getContainingFile();
+    if (!(containingFile instanceof PsiClassOwner)) {
+      LOG.debug("containingFile was not resolved for " + psiClass.getQualifiedName());
+      return null;
+    }
+    PsiClassOwner psiFile = (PsiClassOwner)containingFile;
+    String packageName = psiFile.getPackageName();
+    String qname = psiClass.getQualifiedName();
+    if (qname == null) {
+      return null;
+    }
+    String className;
+    if (packageName.length() > 0) {
+      className = qname.substring(packageName.length() + 1).replace('.', '$');
+    } else {
+      className = qname.replace('.', '$');
+    }
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < dimensions; i++) {
+      sb.append('[');
+    }
+    if (full) {
+      sb.append('L');
+    }
+    if (packageName.length() > 0) {
+      sb.append(packageName.replace('.', '/'));
+      sb.append('/');
+    }
+    sb.append(className);
+    if (full) {
+      sb.append(';');
+    }
+    return sb.toString();
+  }
 
-	@Nullable
-	private static Direction extractDirection(int[] directionKey)
-	{
-		switch(directionKey[0])
-		{
-			case Direction.OUT_DIRECTION:
-				return new Out();
-			case Direction.IN_DIRECTION:
-				return new In(directionKey[1]);
-			case Direction.INOUT_DIRECTION:
-				return new InOut(directionKey[1], Value.values()[directionKey[2]]);
-		}
-		return null;
-	}
+  @Nullable
+  private static String descriptor(@NotNull PsiType psiType) {
+    int dimensions = 0;
+    psiType = TypeConversionUtil.erasure(psiType);
+    if (psiType instanceof PsiArrayType) {
+      PsiArrayType arrayType = (PsiArrayType)psiType;
+      psiType = arrayType.getDeepComponentType();
+      dimensions = arrayType.getArrayDimensions();
+    }
 
-	private int mkAsmTypeKey(Type type) throws IOException
-	{
-		String className = type.getClassName();
-		int dotIndex = className.lastIndexOf('.');
-		String packageName;
-		String simpleName;
-		if(dotIndex > 0)
-		{
-			packageName = className.substring(0, dotIndex);
-			simpleName = className.substring(dotIndex + 1);
-		}
-		else
-		{
-			packageName = "";
-			simpleName = className;
-		}
-		int[] classKey = new int[]{
-				myNamesEnumerator.enumerate(packageName),
-				myNamesEnumerator.enumerate(simpleName)
-		};
-		return myCompoundKeyEnumerator.enumerate(classKey);
-	}
-
-	public int mkPsiKey(@NotNull PsiMethod psiMethod, Direction direction) throws IOException
-	{
-		final PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class, false);
-		if(psiClass == null)
-		{
-			LOG.debug("PsiClass was null for " + psiMethod.getName());
-			return -1;
-		}
-		int sigKey = mkPsiSignatureKey(psiMethod);
-		if(sigKey == -1)
-		{
-			return -1;
-		}
-		return myCompoundKeyEnumerator.enumerate(new int[]{
-				mkDirectionKey(direction),
-				sigKey
-		});
-
-	}
-
-	private int mkPsiSignatureKey(@NotNull PsiMethod psiMethod) throws IOException
-	{
-		final PsiClass psiClass = PsiTreeUtil.getParentOfType(psiMethod, PsiClass.class, false);
-		if(psiClass == null)
-		{
-			LOG.debug("PsiClass was null for " + psiMethod.getName());
-			return -1;
-		}
-		PsiClass outerClass = psiClass.getContainingClass();
-		boolean isInnerClassConstructor = psiMethod.isConstructor() && (outerClass != null) && !psiClass.hasModifierProperty(PsiModifier.STATIC);
-		PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
-		PsiType returnType = psiMethod.getReturnType();
-
-		final int shift = isInnerClassConstructor ? 1 : 0;
-		final int arity = parameters.length + shift;
-		int[] shortSigKey = new int[3 + arity];
-		if(returnType == null)
-		{
-			shortSigKey[0] = mkPsiTypeKey(PsiType.VOID);
-			shortSigKey[1] = myNamesEnumerator.enumerate("<init>");
-		}
-		else
-		{
-			shortSigKey[0] = mkPsiTypeKey(returnType);
-			shortSigKey[1] = myNamesEnumerator.enumerate(psiMethod.getName());
-		}
-		shortSigKey[2] = arity;
-		if(isInnerClassConstructor)
-		{
-			shortSigKey[3] = mkPsiClassKey(outerClass, 0);
-		}
-		for(int i = 0; i < parameters.length; i++)
-		{
-			PsiParameter parameter = parameters[i];
-			shortSigKey[3 + i + shift] = mkPsiTypeKey(parameter.getType());
-		}
-		for(int aShortSigKey : shortSigKey)
-		{
-			if(aShortSigKey == -1)
-			{
-				return -1;
-			}
-		}
-
-		int[] sigKey = new int[2];
-		int classKey = mkPsiClassKey(psiClass, 0);
-		if(classKey == -1)
-		{
-			return -1;
-		}
-		sigKey[0] = classKey;
-		sigKey[1] = myCompoundKeyEnumerator.enumerate(shortSigKey);
-
-		return myCompoundKeyEnumerator.enumerate(sigKey);
-	}
+    if (psiType instanceof PsiClassType) {
+      PsiClass psiClass = ((PsiClassType)psiType).resolve();
+      if (psiClass != null) {
+        return descriptor(psiClass, dimensions, true);
+      }
+      else {
+        LOG.debug("resolve was null for " + ((PsiClassType)psiType).getClassName());
+        return null;
+      }
+    }
+    else if (psiType instanceof PsiPrimitiveType) {
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < dimensions; i++) {
+         sb.append('[');
+      }
+      if (PsiType.VOID.equals(psiType)) {
+        sb.append('V');
+      }
+      else if (PsiType.BOOLEAN.equals(psiType)) {
+        sb.append('Z');
+      }
+      else if (PsiType.CHAR.equals(psiType)) {
+        sb.append('C');
+      }
+      else if (PsiType.BYTE.equals(psiType)) {
+        sb.append('B');
+      }
+      else if (PsiType.SHORT.equals(psiType)) {
+        sb.append('S');
+      }
+      else if (PsiType.INT.equals(psiType)) {
+        sb.append('I');
+      }
+      else if (PsiType.FLOAT.equals(psiType)) {
+        sb.append('F');
+      }
+      else if (PsiType.LONG.equals(psiType)) {
+        sb.append('J');
+      }
+      else if (PsiType.DOUBLE.equals(psiType)) {
+        sb.append('D');
+      }
+      return sb.toString();
+    }
+    return null;
+  }
 
 
-	private int mkPsiClassKey(PsiClass psiClass, int dimensions) throws IOException
-	{
-		PsiFile containingFile = psiClass.getContainingFile();
-		if(!(containingFile instanceof PsiClassOwner))
-		{
-			return -1;
-		}
-		PsiClassOwner psiFile = (PsiClassOwner) containingFile;
-		String packageName = psiFile.getPackageName();
-		String qname = psiClass.getQualifiedName();
-		if(qname == null)
-		{
-			return -1;
-		}
-		String className = qname;
-		if(packageName.length() > 0)
-		{
-			className = qname.substring(packageName.length() + 1).replace('.', '$');
-		}
-		int[] classKey = new int[2];
-		classKey[0] = myNamesEnumerator.enumerate(packageName);
-		if(dimensions == 0)
-		{
-			classKey[1] = myNamesEnumerator.enumerate(className);
-		}
-		else
-		{
-			StringBuilder sb = new StringBuilder(className);
-			for(int j = 0; j < dimensions; j++)
-			{
-				sb.append("[]");
-			}
-			classKey[1] = myNamesEnumerator.enumerate(sb.toString());
-		}
-		return myCompoundKeyEnumerator.enumerate(classKey);
-	}
+  /**
+   * Converts Direction object to int.
+   *
+   * 0 - Out
+   * 1 - NullableOut
+   * 2 - Pure
+   *
+   * 3 - 0-th NOT_NULL
+   * 4 - 0-th NULLABLE
+   * ...
+   *
+   * 11 - 1-st NOT_NULL
+   * 12 - 1-st NULLABLE
+   *
+   * @param dir direction of analysis
+   * @return unique int for direction
+   */
+  static int mkDirectionKey(Direction dir) {
+    if (dir == Out) {
+      return 0;
+    }
+    else if (dir == NullableOut) {
+      return 1;
+    }
+    else if (dir == Pure) {
+      return 2;
+    }
+    else if (dir instanceof In) {
+      In in = (In)dir;
+      // nullity mask is 0/1
+      return 3 + 8 * in.paramId() + in.nullityMask;
+    }
+    else {
+      // valueId is [1-5]
+      InOut inOut = (InOut)dir;
+      return 3 + 8 * inOut.paramId() + 2 + inOut.valueId();
+    }
+  }
 
-	private int mkPsiTypeKey(PsiType psiType) throws IOException
-	{
-		int dimensions = 0;
-		psiType = TypeConversionUtil.erasure(psiType);
-		if(psiType instanceof PsiArrayType)
-		{
-			PsiArrayType arrayType = (PsiArrayType) psiType;
-			psiType = arrayType.getDeepComponentType();
-			dimensions = arrayType.getArrayDimensions();
-		}
+  /**
+   * Converts int to Direction object.
+   *
+   * @param  directionKey int representation of direction
+   * @return Direction object
+   * @see    #mkDirectionKey(Direction)
+   */
+  @NotNull
+  static Direction extractDirection(int directionKey) {
+    if (directionKey == 0) {
+      return Out;
+    }
+    else if (directionKey == 1) {
+      return NullableOut;
+    }
+    else if (directionKey == 2) {
+      return Pure;
+    }
+    else {
+      int paramKey = directionKey - 3;
+      int paramId = paramKey / 8;
+      // shifting first 3 values - now we have key [0 - 7]
+      int subDirectionId = paramKey % 8;
+      // 0 - 1 - @NotNull, @Nullable, parameter
+      if (subDirectionId <= 1) {
+        return new In(paramId, subDirectionId);
+      }
+      else {
+        int valueId = subDirectionId - 2;
+        return new InOut(paramId, Value.values()[valueId]);
+      }
+    }
+  }
 
-		if(psiType instanceof PsiClassType)
-		{
-			// no resolve() -> no package/class split
-			PsiClass psiClass = ((PsiClassType) psiType).resolve();
-			if(psiClass != null)
-			{
-				return mkPsiClassKey(psiClass, dimensions);
-			}
-			else
-			{
-				LOG.debug("resolve was null for " + ((PsiClassType) psiType).getClassName());
-				return -1;
-			}
-		}
-		else if(psiType instanceof PsiPrimitiveType)
-		{
-			String packageName = "";
-			String className = psiType.getPresentableText();
-			int[] classKey = new int[2];
-			classKey[0] = myNamesEnumerator.enumerate(packageName);
-			if(dimensions == 0)
-			{
-				classKey[1] = myNamesEnumerator.enumerate(className);
-			}
-			else
-			{
-				StringBuilder sb = new StringBuilder(className);
-				for(int j = 0; j < dimensions; j++)
-				{
-					sb.append("[]");
-				}
-				classKey[1] = myNamesEnumerator.enumerate(sb.toString());
-			}
-			return myCompoundKeyEnumerator.enumerate(classKey);
-		}
-		return -1;
-	}
+  /**
+   * Given a PSI method and its primary HKey enumerate all contract keys for it.
+   *
+   * @param psiMethod psi method
+   * @param primaryKey primary stable keys
+   * @return corresponding (stable!) keys
+   */
+  @NotNull
+  public static ArrayList<HKey> mkInOutKeys(@NotNull PsiMethod psiMethod, @NotNull HKey primaryKey) {
+    PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+    ArrayList<HKey> keys = new ArrayList<HKey>(parameters.length * 2 + 2);
+    keys.add(primaryKey);
+    for (int i = 0; i < parameters.length; i++) {
+      if (!(parameters[i].getType() instanceof PsiPrimitiveType)) {
+        keys.add(primaryKey.updateDirection(mkDirectionKey(new InOut(i, Value.NotNull))));
+        keys.add(primaryKey.updateDirection(mkDirectionKey(new InOut(i, Value.Null))));
+      }
+    }
+    return keys;
+  }
 
-	public void addAnnotations(TIntObjectHashMap<Value> internalIdSolutions, Annotations annotations)
-	{
+  /**
+   * Given `solution` of all dependencies of a method with the `methodKey`, converts this solution into annotations.
+   *
+   * @param solution solution of equations
+   * @param methodAnnotations annotations to which corresponding solutions should be added
+   * @param methodKey a primary key of a method being analyzed. not it is stable
+   * @param arity arity of this method (hint for constructing @Contract annotations)
+   */
+  public static void addMethodAnnotations(@NotNull Map<HKey, Value> solution, @NotNull MethodAnnotations methodAnnotations, @NotNull HKey methodKey, int arity) {
+    List<String> contractClauses = new ArrayList<String>(arity * 2);
+    Set<HKey> notNulls = methodAnnotations.notNulls;
+    Set<HKey> pures = methodAnnotations.pures;
+    Map<HKey, String> contracts = methodAnnotations.contractsValues;
 
-		TIntObjectHashMap<List<String>> contractClauses = new TIntObjectHashMap<List<String>>();
-		TIntObjectIterator<Value> solutionsIterator = internalIdSolutions.iterator();
+    for (Map.Entry<HKey, Value> entry : solution.entrySet()) {
+      // NB: keys from Psi are always stable, so we need to stabilize keys from equations
+      Value value = entry.getValue();
+      if (value == Value.Top || value == Value.Bot) {
+        continue;
+      }
+      HKey key = entry.getKey().mkStable();
+      Direction direction = extractDirection(key.dirKey);
+      HKey baseKey = key.mkBase();
+      if (!methodKey.equals(baseKey)) {
+        continue;
+      }
+      if (value == Value.NotNull && direction == Out) {
+        notNulls.add(methodKey);
+      }
+      else if (value == Value.Pure && direction == Pure) {
+        pures.add(methodKey);
+      }
+      else if (direction instanceof InOut) {
+        contractClauses.add(contractElement(arity, (InOut)direction, value));
+      }
+    }
 
-		TIntHashSet notNulls = annotations.notNulls;
-		TIntObjectHashMap<String> contracts = annotations.contracts;
+    if (!notNulls.contains(methodKey) && !contractClauses.isEmpty()) {
+      // no contract clauses for @NotNull methods
+      Collections.sort(contractClauses);
+      StringBuilder sb = new StringBuilder("\"");
+      StringUtil.join(contractClauses, ";", sb);
+      sb.append('"');
+      contracts.put(methodKey, sb.toString().intern());
+    }
 
-		for(int i = internalIdSolutions.size(); i-- > 0; )
-		{
-			solutionsIterator.advance();
-			int key = Math.abs(solutionsIterator.key());
-			Value value = solutionsIterator.value();
-			if(value == Value.Top || value == Value.Bot)
-			{
-				continue;
-			}
-			try
-			{
-				int[] compoundKey = myCompoundKeyEnumerator.valueOf(key);
-				Direction direction = extractDirection(myCompoundKeyEnumerator.valueOf(compoundKey[0]));
-				if(value == Value.NotNull && (direction instanceof In || direction instanceof Out))
-				{
-					notNulls.add(key);
-				}
-				else if(direction instanceof InOut)
-				{
-					compoundKey = new int[]{
-							mkDirectionKey(new Out()),
-							compoundKey[1]
-					};
-					try
-					{
-						int baseKey = myCompoundKeyEnumerator.enumerate(compoundKey);
-						List<String> clauses = contractClauses.get(baseKey);
-						if(clauses == null)
-						{
-							clauses = new ArrayList<String>();
-							contractClauses.put(baseKey, clauses);
-						}
-						int[] sig = myCompoundKeyEnumerator.valueOf(compoundKey[1]);
-						int[] shortSig = myCompoundKeyEnumerator.valueOf(sig[1]);
-						int arity = shortSig[2];
-						clauses.add(contractElement(arity, (InOut) direction, value));
-					}
-					catch(IOException e)
-					{
-						LOG.debug(e);
-					}
-				}
-			}
-			catch(IOException e)
-			{
-				LOG.debug(e);
-			}
-		}
+  }
 
-		TIntObjectIterator<List<String>> buildersIterator = contractClauses.iterator();
-		for(int i = contractClauses.size(); i-- > 0; )
-		{
-			buildersIterator.advance();
-			int key = buildersIterator.key();
-			if(!notNulls.contains(key))
-			{
-				List<String> clauses = buildersIterator.value();
-				Collections.sort(clauses);
-				StringBuilder sb = new StringBuilder("\"");
-				StringUtil.join(clauses, ";", sb);
-				sb.append('"');
-				contracts.put(key, sb.toString().intern());
-			}
-		}
-	}
+  public static void addEffectAnnotations(Map<HKey, Set<HEffectQuantum>> puritySolutions, MethodAnnotations result, HKey methodKey, int arity) {
+    for (Map.Entry<HKey, Set<HEffectQuantum>> entry : puritySolutions.entrySet()) {
+      Set<HEffectQuantum> effects = entry.getValue();
+      HKey key = entry.getKey().mkStable();
+      HKey baseKey = key.mkBase();
+      if (!methodKey.equals(baseKey)) {
+        continue;
+      }
+      if (effects.isEmpty()) {
+        result.pures.add(methodKey);
+      }
+    }
+  }
 
-	static String contractValueString(Value v)
-	{
-		switch(v)
-		{
-			case False:
-				return "false";
-			case True:
-				return "true";
-			case NotNull:
-				return "!null";
-			case Null:
-				return "null";
-			default:
-				return "_";
-		}
-	}
+  private static String contractValueString(@NotNull Value v) {
+    switch (v) {
+      case False: return "false";
+      case True: return "true";
+      case NotNull: return "!null";
+      case Null: return "null";
+      default: return "_";
+    }
+  }
 
-	static String contractElement(int arity, InOut inOut, Value value)
-	{
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < arity; i++)
-		{
-			Value currentValue = Value.Top;
-			if(i == inOut.paramIndex)
-			{
-				currentValue = inOut.inValue;
-			}
-			if(i > 0)
-			{
-				sb.append(',');
-			}
-			sb.append(contractValueString(currentValue));
-		}
-		sb.append("->");
-		sb.append(contractValueString(value));
-		return sb.toString();
-	}
+  private static String contractElement(int arity, InOut inOut, Value value) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < arity; i++) {
+      Value currentValue = Value.Top;
+      if (i == inOut.paramIndex) {
+        currentValue = inOut.inValue;
+      }
+      if (i > 0) {
+        sb.append(',');
+      }
+      sb.append(contractValueString(currentValue));
+    }
+    sb.append("->");
+    sb.append(contractValueString(value));
+    return sb.toString();
+  }
 
-	public int getVersion()
-	{
-		return version;
-	}
-
-	private static class IntArrayKeyDescriptor implements KeyDescriptor<int[]>
-	{
-
-		@Override
-		public void save(@NotNull DataOutput out, int[] value) throws IOException
-		{
-			DataInputOutputUtil.writeINT(out, value.length);
-			for(int i : value)
-			{
-				DataInputOutputUtil.writeINT(out, i);
-			}
-		}
-
-		@Override
-		public int[] read(@NotNull DataInput in) throws IOException
-		{
-			int[] value = new int[DataInputOutputUtil.readINT(in)];
-			for(int i = 0; i < value.length; i++)
-			{
-				value[i] = DataInputOutputUtil.readINT(in);
-			}
-			return value;
-		}
-
-		@Override
-		public int getHashCode(int[] value)
-		{
-			return Arrays.hashCode(value);
-		}
-
-		@Override
-		public boolean isEqual(int[] val1, int[] val2)
-		{
-			return Arrays.equals(val1, val2);
-		}
-	}
-
-	private static class IntArrayPersistentEnumerator extends PersistentEnumeratorDelegate<int[]>
-	{
-		private final CachingEnumerator<int[]> myCache;
-
-		public IntArrayPersistentEnumerator(File compoundKeysFile, IntArrayKeyDescriptor descriptor) throws IOException
-		{
-			super(compoundKeysFile, descriptor, 1024 * 4);
-			myCache = new CachingEnumerator<int[]>(new DataEnumerator<int[]>()
-			{
-				@Override
-				public int enumerate(@Nullable int[] value) throws IOException
-				{
-					return IntArrayPersistentEnumerator.super.enumerate(value);
-				}
-
-				@Nullable
-				@Override
-				public int[] valueOf(int idx) throws IOException
-				{
-					return IntArrayPersistentEnumerator.super.valueOf(idx);
-				}
-			}, descriptor);
-		}
-
-		@Override
-		public int enumerate(@Nullable int[] value) throws IOException
-		{
-			return myCache.enumerate(value);
-		}
-
-		@Nullable
-		@Override
-		public int[] valueOf(int idx) throws IOException
-		{
-			return myCache.valueOf(idx);
-		}
-	}
 }

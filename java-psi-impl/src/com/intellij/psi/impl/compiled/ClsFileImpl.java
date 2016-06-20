@@ -51,6 +51,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.compiled.ClassFileDecompilers;
+import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import com.intellij.psi.impl.PsiFileEx;
 import com.intellij.psi.impl.java.stubs.PsiClassStub;
@@ -78,8 +79,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.cls.ClsFormatException;
 
-public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub> implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx,
-		Queryable, PsiClassOwnerEx, PsiCompiledFile
+public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub> implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx, Queryable, PsiClassOwnerEx, PsiCompiledFile
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.compiled.ClsFileImpl");
 
@@ -96,6 +96,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	private volatile ClsPackageStatementImpl myPackageStatement = null;
 	private volatile LanguageLevel myLanguageLevel = null;
 	private boolean myIsPhysical = true;
+	private boolean myInvalidated;
 
 	public ClsFileImpl(@NotNull FileViewProvider viewProvider)
 	{
@@ -160,7 +161,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	@Override
 	public boolean isValid()
 	{
-		return myIsForDecompiling || getVirtualFile().isValid();
+		return !myInvalidated && (myIsForDecompiling || getVirtualFile().isValid());
 	}
 
 	protected boolean isForDecompiling()
@@ -499,10 +500,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
-			@NotNull ResolveState state,
-			PsiElement lastParent,
-			@NotNull PsiElement place)
+	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
 	{
 		processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 		final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
@@ -595,6 +593,13 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		}
 
 		myLanguageLevel = null;
+	}
+
+	@Override
+	public void markInvalidated()
+	{
+		myInvalidated = true;
+		DebugUtil.onInvalidated(this);
 	}
 
 	@Override

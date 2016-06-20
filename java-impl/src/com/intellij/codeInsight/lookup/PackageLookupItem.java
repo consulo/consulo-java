@@ -19,22 +19,34 @@ import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceCodeFragment;
 import com.intellij.psi.PsiJavaPackage;
 
 /**
-* @author peter
-*/
-class PackageLookupItem extends LookupItem<PsiJavaPackage> {
-  public PackageLookupItem(PsiJavaPackage pkg) {
-    super(pkg, StringUtil.notNullize(pkg.getName()));
-    setTailType(TailType.DOT);
-  }
+ * @author peter
+ */
+class PackageLookupItem extends LookupItem<PsiJavaPackage>
+{
+	public PackageLookupItem(PsiJavaPackage pkg)
+	{
+		super(pkg, StringUtil.notNullize(pkg.getName()));
+		setTailType(TailType.DOT);
+	}
 
-  @Override
-  public void handleInsert(InsertionContext context) {
-    super.handleInsert(context);
-    if (getTailType() == TailType.DOT || context.getCompletionChar() == '.') {
-      AutoPopupController.getInstance(context.getProject()).scheduleAutoPopup(context.getEditor(), null);
-    }
-  }
+	@Override
+	public void handleInsert(InsertionContext context)
+	{
+		PsiFile file = context.getFile();
+		boolean addDot = !(file instanceof PsiJavaCodeReferenceCodeFragment) || ((PsiJavaCodeReferenceCodeFragment) file).isClassesAccepted();
+		if(addDot)
+		{
+			context.setAddCompletionChar(false);
+			TailType.DOT.processTail(context.getEditor(), context.getTailOffset());
+		}
+		if(addDot || context.getCompletionChar() == '.')
+		{
+			AutoPopupController.getInstance(context.getProject()).scheduleAutoPopup(context.getEditor());
+		}
+	}
 }

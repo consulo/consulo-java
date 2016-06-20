@@ -50,6 +50,7 @@ import com.intellij.lang.Language;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.TransactionGuard;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
@@ -104,7 +105,7 @@ class PostHighlightingVisitor
 				public void dispose()
 				{
 					// later because should invoke when highlighting is finished
-					ApplicationManager.getApplication().invokeLater(new Runnable()
+					TransactionGuard.getInstance().submitTransactionLater(myProject, new Runnable()
 					{
 						@Override
 						public void run()
