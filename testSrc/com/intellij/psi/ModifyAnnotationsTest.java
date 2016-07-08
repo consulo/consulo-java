@@ -24,7 +24,7 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 
 /**
  * @author ven

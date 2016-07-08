@@ -16,7 +16,7 @@
 
 package com.intellij.refactoring;
 
-import org.consulo.lombok.annotations.Bundle;
+import consulo.lombok.annotations.Bundle;
 
 /**
  * @author VISTALL

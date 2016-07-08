@@ -15,12 +15,12 @@
  */
 package org.jetbrains.java.generate;
 
-import org.consulo.lombok.annotations.ApplicationService;
 import org.jetbrains.java.generate.config.Config;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
+import consulo.lombok.annotations.ApplicationService;
 
 /**
  * Application context for this plugin.

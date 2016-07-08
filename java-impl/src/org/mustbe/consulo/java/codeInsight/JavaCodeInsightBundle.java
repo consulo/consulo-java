@@ -1,6 +1,6 @@
 package org.mustbe.consulo.java.codeInsight;
 
-import org.consulo.lombok.annotations.Bundle;
+import consulo.lombok.annotations.Bundle;
 
 /**
  * @author VISTALL

@@ -93,6 +93,8 @@ public class HighlightNamesUtil
 			{
 				builder.textAttributes(attributes);
 			}
+			builder = builder.needsUpdateOnTyping(false);
+			builder = builder.severity(HighlightInfoType.SYMBOL_TYPE_SEVERITY);
 			return builder.createUnconditionally();
 		}
 		return null;
@@ -154,6 +156,8 @@ public class HighlightNamesUtil
 			}
 
 			HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).range(range);
+			builder = builder.needsUpdateOnTyping(false);
+			builder = builder.severity(HighlightInfoType.SYMBOL_TYPE_SEVERITY);
 			if(attributes != null)
 			{
 				builder.textAttributes(attributes);
@@ -177,6 +181,8 @@ public class HighlightNamesUtil
 				{
 					builder.textAttributes(attributes);
 				}
+				builder = builder.needsUpdateOnTyping(false);
+				builder = builder.severity(HighlightInfoType.SYMBOL_TYPE_SEVERITY);
 				return builder.createUnconditionally();
 			}
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).range(elementToHighlight).create();

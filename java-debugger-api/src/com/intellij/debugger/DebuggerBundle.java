@@ -15,7 +15,7 @@
  */
 package com.intellij.debugger;
 
-import org.consulo.lombok.annotations.Bundle;
+import consulo.lombok.annotations.Bundle;
 import com.intellij.execution.configurations.RemoteConnection;
 
 @Bundle

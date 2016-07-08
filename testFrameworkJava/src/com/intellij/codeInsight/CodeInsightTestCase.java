@@ -59,7 +59,7 @@ import com.intellij.testFramework.VfsTestUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

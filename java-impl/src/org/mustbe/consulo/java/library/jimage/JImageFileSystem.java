@@ -16,7 +16,7 @@
 
 package org.mustbe.consulo.java.library.jimage;
 
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.consulo.vfs.ArchiveFileSystemBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

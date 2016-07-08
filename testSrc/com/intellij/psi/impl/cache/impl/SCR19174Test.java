@@ -9,7 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 
 import java.io.File;
 import java.io.IOException;

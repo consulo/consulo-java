@@ -15,7 +15,7 @@
  */
 package com.intellij.core;
 
-import org.consulo.lombok.annotations.Bundle;
+import consulo.lombok.annotations.Bundle;
 
 @Bundle("messages.JavaCoreBundle")
 public class JavaCoreBundle {

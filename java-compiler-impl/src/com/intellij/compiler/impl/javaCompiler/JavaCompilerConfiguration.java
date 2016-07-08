@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.consulo.lombok.annotations.ProjectService;
+import consulo.lombok.annotations.ProjectService;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

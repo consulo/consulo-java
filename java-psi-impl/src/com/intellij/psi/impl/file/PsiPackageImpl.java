@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.psi.PsiPackage;
 import org.consulo.psi.PsiPackageManager;

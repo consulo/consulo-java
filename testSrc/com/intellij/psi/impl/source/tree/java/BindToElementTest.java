@@ -11,7 +11,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 
 import java.io.File;
 

@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.ExecutionException;

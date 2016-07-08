@@ -23,7 +23,7 @@ import com.intellij.psi.codeStyle.*;
 import com.intellij.psi.impl.source.codeStyle.ImportHelper;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ui.UIUtil;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.File;

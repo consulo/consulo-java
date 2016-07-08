@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.consulo.lombok.annotations.ApplicationService;
+import consulo.lombok.annotations.ApplicationService;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.exception.TemplateResourceException;

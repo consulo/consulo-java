@@ -16,7 +16,7 @@
 
 package org.mustbe.consulo.java;
 
-import org.consulo.lombok.annotations.Bundle;
+import consulo.lombok.annotations.Bundle;
 
 /**
  * @author VISTALL

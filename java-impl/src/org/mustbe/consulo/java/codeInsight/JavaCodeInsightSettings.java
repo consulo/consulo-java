@@ -1,6 +1,6 @@
 package org.mustbe.consulo.java.codeInsight;
 
-import org.consulo.lombok.annotations.ApplicationService;
+import consulo.lombok.annotations.ApplicationService;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;

@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.consulo.lombok.annotations.ProjectService;
+import consulo.lombok.annotations.ProjectService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.pom.java.LanguageLevel;

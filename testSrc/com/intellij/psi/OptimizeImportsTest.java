@@ -21,7 +21,7 @@ import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.testFramework.PsiTestCase;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 
 @Logger
 public class OptimizeImportsTest extends PsiTestCase{

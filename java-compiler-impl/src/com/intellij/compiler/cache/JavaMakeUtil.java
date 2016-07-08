@@ -21,7 +21,7 @@
 package com.intellij.compiler.cache;
 
 import org.consulo.compiler.ModuleCompilerPathsManager;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;

@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
+import consulo.lombok.annotations.Lazy;
 
 /**
  * @author yole
@@ -31,7 +31,7 @@ import com.intellij.util.ArrayUtil;
 public class AnnotationOrderRootType extends OrderRootTypeWithConvert
 {
 	@NotNull
-	@LazyInstance
+	@Lazy
 	public static OrderRootType getInstance()
 	{
 		return getOrderRootType(AnnotationOrderRootType.class);

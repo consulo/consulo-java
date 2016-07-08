@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import org.consulo.lombok.annotations.ArrayFactoryFields;
+import consulo.lombok.annotations.ArrayFactoryFields;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.stubs.StubElement;
 

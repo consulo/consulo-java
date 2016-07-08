@@ -45,7 +45,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.indexing.FileBasedIndex;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.File;

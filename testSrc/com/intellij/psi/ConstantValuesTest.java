@@ -9,7 +9,7 @@ import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 
 import java.io.IOException;
 

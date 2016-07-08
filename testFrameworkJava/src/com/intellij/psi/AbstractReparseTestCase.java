@@ -9,7 +9,7 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.text.BlockSupport;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.util.IncorrectOperationException;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NonNls;
 
 /**

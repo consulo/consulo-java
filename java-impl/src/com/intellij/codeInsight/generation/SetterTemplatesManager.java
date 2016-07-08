@@ -17,7 +17,7 @@ package com.intellij.codeInsight.generation;
 
 import java.io.IOException;
 
-import org.consulo.lombok.annotations.ApplicationService;
+import consulo.lombok.annotations.ApplicationService;
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;

@@ -37,7 +37,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.xdebugger.impl.settings.DebuggerConfigurable;
 
-@org.consulo.lombok.annotations.Logger
+@consulo.lombok.annotations.Logger
 public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<GenericDebuggerRunnerSettings>
 {
 	private JPanel myPanel;

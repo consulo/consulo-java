@@ -18,8 +18,8 @@ package org.mustbe.consulo.java.library.jimage;
 
 import java.io.IOException;
 
-import org.consulo.lombok.annotations.LazyInstance;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Lazy;
+import consulo.lombok.annotations.Logger;
 import com.intellij.openapi.vfs.ArchiveEntry;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.jdk.internal.jimage.ImageReader;
@@ -66,7 +66,7 @@ public class JImageFileArchiveEntry implements ArchiveEntry
 		return false;
 	}
 
-	@LazyInstance
+	@Lazy
 	public byte[] getBytes()
 	{
 		try

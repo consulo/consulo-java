@@ -16,7 +16,7 @@
 
 package com.intellij.debugger.apiAdapters;
 
-import org.consulo.lombok.annotations.LazyInstance;
+import consulo.lombok.annotations.Lazy;
 
 /**
  * @author VISTALL
@@ -24,7 +24,7 @@ import org.consulo.lombok.annotations.LazyInstance;
  */
 public class TransportClassDelegates
 {
-	@LazyInstance
+	@Lazy
 	public static Class<?> getSocketTransportServiceClass()
 	{
 		try
@@ -37,7 +37,7 @@ public class TransportClassDelegates
 		}
 	}
 
-	@LazyInstance(notNull = false)
+	@Lazy(notNull = false)
 	public static Class<?> getSharedMemoryTransportServiceClass()
 	{
 		try

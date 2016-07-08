@@ -13,7 +13,7 @@ import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtensionImpl;
 import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtensionImpl;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 
 import java.io.File;
 import java.io.IOException;

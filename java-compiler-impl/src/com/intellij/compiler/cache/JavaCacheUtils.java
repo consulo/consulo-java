@@ -19,7 +19,7 @@ import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ArrayUtil;
-import org.consulo.lombok.annotations.Logger;
+import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

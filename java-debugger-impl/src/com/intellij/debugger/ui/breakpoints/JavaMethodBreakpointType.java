@@ -17,7 +17,7 @@ package com.intellij.debugger.ui.breakpoints;
 
 import javax.swing.Icon;
 
-import org.consulo.lombok.annotations.LazyInstance;
+import consulo.lombok.annotations.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaMethodBreakpointProperties;
@@ -38,7 +38,7 @@ import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
 public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMethodBreakpointProperties> implements JavaBreakpointType
 {
 	@NotNull
-	@LazyInstance
+	@Lazy
 	public static JavaMethodBreakpointType getInstance()
 	{
 		return EXTENSION_POINT_NAME.findExtension(JavaMethodBreakpointType.class);

@@ -24,7 +24,7 @@ import java.util.Locale;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.consulo.lombok.annotations.ProjectService;
+import consulo.lombok.annotations.ProjectService;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

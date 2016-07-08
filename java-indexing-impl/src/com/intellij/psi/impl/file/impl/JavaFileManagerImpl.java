@@ -49,7 +49,7 @@ import com.intellij.util.containers.ContainerUtil;
 /**
  * Author: dmitrylomov
  */
-@org.consulo.lombok.annotations.Logger
+@consulo.lombok.annotations.Logger
 public class JavaFileManagerImpl implements JavaFileManager, Disposable
 {
 	private final ConcurrentHashMap<GlobalSearchScope, PsiClass> myCachedObjectClassMap = new ConcurrentHashMap<GlobalSearchScope, PsiClass>();
