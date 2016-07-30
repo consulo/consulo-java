@@ -20,12 +20,14 @@ import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ModuleRootLayer;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -35,8 +37,11 @@ import com.intellij.pom.java.LanguageLevel;
 public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl>
 {
 	private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
+	private static final String BYTECODE_VERSION = "bytecode-version";
+
 	protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
 	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
+	protected String myBytecodeVersion;
 
 	public JavaModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer moduleRootLayer)
 	{
@@ -51,6 +56,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 		myLanguageLevel.set(mutableModuleExtension.getInheritableLanguageLevel());
 		mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
+		myBytecodeVersion = mutableModuleExtension.getBytecodeVersion();
 	}
 
 	@Override
@@ -72,6 +78,13 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	public Sdk getSdkForCompilation()
 	{
 		return getSdk();
+	}
+
+	@Nullable
+	@Override
+	public String getBytecodeVersion()
+	{
+		return myBytecodeVersion;
 	}
 
 	@NotNull
@@ -108,8 +121,13 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 		myLanguageLevel.toXml(element);
 		element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+		if(!StringUtil.isEmpty(myBytecodeVersion))
+		{
+			element.setAttribute(BYTECODE_VERSION, myBytecodeVersion);
+		}
 	}
 
+	@RequiredReadAction
 	@Override
 	protected void loadStateImpl(@NotNull Element element)
 	{
@@ -117,5 +135,6 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 		myLanguageLevel.fromXml(element);
 		mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.MODULE_DIR.name()));
+		myBytecodeVersion = element.getAttributeValue(BYTECODE_VERSION, (String) null);
 	}
 }

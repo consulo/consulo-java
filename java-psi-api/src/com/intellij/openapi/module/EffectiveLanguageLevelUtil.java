@@ -15,6 +15,7 @@
  */
 package com.intellij.openapi.module;
 
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.ApplicationManager;
@@ -23,6 +24,7 @@ import com.intellij.pom.java.LanguageLevel;
 public class EffectiveLanguageLevelUtil
 {
 	@NotNull
+	@RequiredReadAction
 	public static LanguageLevel getEffectiveLanguageLevel(@NotNull final Module module)
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();

@@ -323,7 +323,7 @@ public class TargetOptionsComponent extends JPanel
 			"1.8",
 			"1.9"
 	};
-	private static final String COMPILER_DEFAULT = "JDK default";
+	private static final String COMPILER_DEFAULT = "SDK default";
 	private final Project myProject;
 	private ComboBox myCbProjectTargetLevel;
 	private JBTable myTable;
@@ -355,7 +355,7 @@ public class TargetOptionsComponent extends JPanel
 
 		add(new JLabel("Project bytecode version (leave blank for jdk default): "), constraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NONE));
 		add(myCbProjectTargetLevel, constraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NONE));
-		add(new JLabel("Per-module bytecode version:"), constraints(0, 1, 2, 1, 1.0, 0.0, GridBagConstraints.NONE));
+		add(new JLabel("Per-module bytecode version(obsolete - use module extension settings):"), constraints(0, 1, 2, 1, 1.0, 0.0, GridBagConstraints.NONE));
 		final JPanel tableComp = ToolbarDecorator.createDecorator(myTable).disableUpAction().disableDownAction().setAddAction(new AnActionButtonRunnable()
 		{
 			@Override
@@ -381,7 +381,7 @@ public class TargetOptionsComponent extends JPanel
 		return new GridBagConstraints(gridx, gridy, gridwidth, gridheight, weightx, weighty, GridBagConstraints.WEST, fill, new Insets(5, 5, 0, 0), 0, 0);
 	}
 
-	private static ComboBox createTargetOptionsCombo()
+	public static ComboBox createTargetOptionsCombo()
 	{
 		final ComboBox combo = new ComboBox(new TargetLevelComboboxModel());
 		//combo.setRenderer(new DefaultListCellRenderer() {

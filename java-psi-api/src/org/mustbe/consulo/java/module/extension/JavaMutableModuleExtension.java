@@ -19,6 +19,7 @@ package org.mustbe.consulo.java.module.extension;
 import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -31,4 +32,6 @@ public interface JavaMutableModuleExtension<T extends JavaModuleExtension<T>> ex
 	MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel();
 
 	void setSpecialDirLocation(@NotNull SpecialDirLocation location);
+
+	void setBytecodeVersion(@Nullable String version);
 }

@@ -26,15 +26,16 @@ import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
-import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
-import org.mustbe.consulo.java.module.extension.SpecialDirLocation;
 import org.consulo.module.extension.ModuleExtension;
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.consulo.module.extension.ui.ModuleExtensionSdkBoxBuilder;
 import org.mustbe.consulo.RequiredDispatchThread;
 import org.mustbe.consulo.RequiredReadAction;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
+import org.mustbe.consulo.java.module.extension.SpecialDirLocation;
+import com.intellij.compiler.impl.javaCompiler.TargetOptionsComponent;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
@@ -46,10 +47,11 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.VerticalFlowLayout;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.ui.ColoredListCellRendererWrapper;
-import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.TitledSeparator;
 import com.intellij.util.PairConsumer;
 
 /**
@@ -58,19 +60,19 @@ import com.intellij.util.PairConsumer;
  */
 public class JavaModuleExtensionPanel extends JPanel
 {
-	private final JavaMutableModuleExtension<?> myMutableModuleExtension;
+	private final JavaMutableModuleExtension<?> myExtension;
 
 	private ComboBox myLanguageLevelComboBox;
 	private JRadioButton myModuleDirRadioButton;
 	private JRadioButton mySourceDirRadioButton;
 
 	@RequiredDispatchThread
-	public JavaModuleExtensionPanel(final JavaMutableModuleExtension<?> mutableModuleExtension, Runnable classpathStateUpdater)
+	public JavaModuleExtensionPanel(final JavaMutableModuleExtension<?> extension, Runnable classpathStateUpdater)
 	{
 		super(new VerticalFlowLayout());
-		myMutableModuleExtension = mutableModuleExtension;
+		myExtension = extension;
 
-		ModuleExtensionSdkBoxBuilder sdkBoxBuilder = ModuleExtensionSdkBoxBuilder.createAndDefine(mutableModuleExtension, classpathStateUpdater);
+		ModuleExtensionSdkBoxBuilder sdkBoxBuilder = ModuleExtensionSdkBoxBuilder.createAndDefine(extension, classpathStateUpdater);
 
 		myLanguageLevelComboBox = new ComboBox();
 		myLanguageLevelComboBox.setRenderer(new ColoredListCellRendererWrapper<Object>()
@@ -141,8 +143,7 @@ public class JavaModuleExtensionPanel extends JPanel
 		buttonGroup.add(myModuleDirRadioButton);
 		buttonGroup.add(mySourceDirRadioButton);
 
-		final JRadioButton radioButton = mutableModuleExtension.getSpecialDirLocation() == SpecialDirLocation.MODULE_DIR ? myModuleDirRadioButton :
-				mySourceDirRadioButton;
+		final JRadioButton radioButton = extension.getSpecialDirLocation() == SpecialDirLocation.MODULE_DIR ? myModuleDirRadioButton : mySourceDirRadioButton;
 		radioButton.setSelected(true);
 
 		ChangeListener changeListener = new ChangeListener()
@@ -152,11 +153,11 @@ public class JavaModuleExtensionPanel extends JPanel
 			{
 				if(mySourceDirRadioButton.isSelected())
 				{
-					mutableModuleExtension.setSpecialDirLocation(SpecialDirLocation.SOURCE_DIR);
+					extension.setSpecialDirLocation(SpecialDirLocation.SOURCE_DIR);
 				}
 				else if(myModuleDirRadioButton.isSelected())
 				{
-					mutableModuleExtension.setSpecialDirLocation(SpecialDirLocation.MODULE_DIR);
+					extension.setSpecialDirLocation(SpecialDirLocation.MODULE_DIR);
 				}
 			}
 		};
@@ -165,12 +166,23 @@ public class JavaModuleExtensionPanel extends JPanel
 		mySourceDirRadioButton.addChangeListener(changeListener);
 
 
+		add(new TitledSeparator(JavaCoreBundle.message("paths.to.special.roots")));
 		JPanel specialRootPanel = new JPanel(new VerticalFlowLayout());
-		specialRootPanel.setBorder(IdeBorderFactory.createTitledBorder(JavaCoreBundle.message("paths.to.special.roots")));
 		specialRootPanel.add(myModuleDirRadioButton);
 		specialRootPanel.add(mySourceDirRadioButton);
-
 		add(specialRootPanel);
+
+		add(new TitledSeparator("Compiler Options"));
+		ComboBox targetOptionsCombo = TargetOptionsComponent.createTargetOptionsCombo();
+		targetOptionsCombo.setSelectedItem(StringUtil.notNullize(myExtension.getBytecodeVersion()));
+
+		targetOptionsCombo.addItemListener(e -> {
+			Object selectedItem = targetOptionsCombo.getSelectedItem();
+
+			myExtension.setBytecodeVersion(StringUtil.nullize((String) selectedItem, true));
+		});
+
+		add(LabeledComponent.left(targetOptionsCombo, "Bytecode version"));
 	}
 
 	@RequiredReadAction
@@ -181,20 +193,20 @@ public class JavaModuleExtensionPanel extends JPanel
 			myLanguageLevelComboBox.addItem(languageLevel);
 		}
 
-		for(Module module : ModuleManager.getInstance(myMutableModuleExtension.getModule().getProject()).getModules())
+		for(Module module : ModuleManager.getInstance(myExtension.getModule().getProject()).getModules())
 		{
 			// dont add self module
-			if(module == myMutableModuleExtension.getModule())
+			if(module == myExtension.getModule())
 			{
 				continue;
 			}
 
-			final ModuleExtension extension = ModuleUtilCore.getExtension(module, myMutableModuleExtension.getId());
+			final ModuleExtension extension = ModuleUtilCore.getExtension(module, myExtension.getId());
 			if(extension instanceof ModuleExtensionWithSdk)
 			{
 				final ModuleExtensionWithSdk sdkExtension = (ModuleExtensionWithSdk) extension;
 				// recursive depend
-				if(sdkExtension.getInheritableSdk().getModule() == myMutableModuleExtension.getModule())
+				if(sdkExtension.getInheritableSdk().getModule() == myExtension.getModule())
 				{
 					continue;
 				}
@@ -202,7 +214,7 @@ public class JavaModuleExtensionPanel extends JPanel
 			}
 		}
 
-		final MutableModuleInheritableNamedPointer<LanguageLevel> inheritableLanguageLevel = myMutableModuleExtension.getInheritableLanguageLevel();
+		final MutableModuleInheritableNamedPointer<LanguageLevel> inheritableLanguageLevel = myExtension.getInheritableLanguageLevel();
 
 		final String moduleName = inheritableLanguageLevel.getModuleName();
 		if(moduleName != null)

@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootLayer;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -59,6 +60,12 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 	}
 
 	@Override
+	public void setBytecodeVersion(@Nullable String version)
+	{
+		myBytecodeVersion = version;
+	}
+
+	@Override
 	public void setSpecialDirLocation(@NotNull SpecialDirLocation specialDirLocation)
 	{
 		mySpecialDirLocation = specialDirLocation;
@@ -73,6 +80,11 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
 		}
 
 		if(!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel()))
+		{
+			return true;
+		}
+
+		if(!Comparing.equal(myBytecodeVersion, javaModuleExtension.getBytecodeVersion()))
 		{
 			return true;
 		}

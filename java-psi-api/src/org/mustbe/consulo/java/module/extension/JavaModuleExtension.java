@@ -43,4 +43,7 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
 
 	@NotNull
 	String getCompilationBootClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk);
+
+	@Nullable
+	String getBytecodeVersion();
 }

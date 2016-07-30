@@ -15,6 +15,7 @@
  */
 package com.intellij.compiler;
 
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -246,6 +247,7 @@ public class JavaCompilerUtil
 	}
 
 	@Nullable
+	@RequiredReadAction
 	public static LanguageLevel getLanguageLevelForCompilation(final ModuleChunk chunk)
 	{
 		return EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(chunk.getModule());
