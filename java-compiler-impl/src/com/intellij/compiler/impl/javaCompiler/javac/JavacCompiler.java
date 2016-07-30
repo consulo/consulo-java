@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -239,6 +240,7 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@NotNull
+	@RequiredReadAction
 	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
 			final String outputPath,
 			final CompileContext compileContext,
@@ -443,6 +445,7 @@ public class JavacCompiler extends ExternalCompiler
 		return additionalOptions;
 	}
 
+	@RequiredReadAction
 	public static void addCommandLineOptions(CompileContext compileContext,
 			ModuleChunk chunk,
 			@NonNls ParametersList commandLine,

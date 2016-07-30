@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import consulo.lombok.annotations.ProjectService;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.DeprecationInfo;
+import org.mustbe.consulo.RequiredReadAction;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -24,9 +26,11 @@ import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.components.StorageScheme;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
+import consulo.lombok.annotations.ProjectService;
 
 @ProjectService
 @State(
@@ -63,6 +67,9 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
 	@Nullable
 	private String myBytecodeTargetLevel = null;  // null means compiler default
+
+	@Deprecated
+	@DeprecationInfo("We used JavaModuleExtension for store info about bytecode version")
 	private final Map<String, String> myModuleBytecodeTarget = new HashMap<String, String>();
 
 	public JavaCompilerConfiguration(@NotNull Project project)
@@ -71,16 +78,28 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 	}
 
 	@Nullable
-	public String getBytecodeTargetLevel(Module module)
+	@RequiredReadAction
+	public String getBytecodeTargetLevel(@NotNull Module module)
 	{
 		String level = myModuleBytecodeTarget.get(module.getName());
 		if(level != null)
 		{
 			return level.isEmpty() ? null : level;
 		}
+
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+		if(extension != null)
+		{
+			String bytecodeVersion = extension.getBytecodeVersion();
+			if(bytecodeVersion != null)
+			{
+				return StringUtil.nullize(bytecodeVersion);
+			}
+		}
 		return myBytecodeTargetLevel;
 	}
 
+	@Deprecated
 	public void setBytecodeTargetLevel(Module module, String level)
 	{
 		final String previous;
@@ -448,12 +467,14 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 		return myAddNotNullAssertions;
 	}
 
+	@Deprecated
 	public void setModulesBytecodeTargetMap(@NotNull Map<String, String> mapping)
 	{
 		myModuleBytecodeTarget.clear();
 		myModuleBytecodeTarget.putAll(mapping);
 	}
 
+	@Deprecated
 	public Map<String, String> getModulesBytecodeTargetMap()
 	{
 		return myModuleBytecodeTarget;

@@ -41,6 +41,7 @@ import com.intellij.pom.java.LanguageLevel;
  */
 public class JavaCompilerUtil
 {
+	@RequiredReadAction
 	public static void addTargetCommandLineSwitch(final ModuleChunk chunk, final ParametersList parametersList)
 	{
 		String optionValue = null;
