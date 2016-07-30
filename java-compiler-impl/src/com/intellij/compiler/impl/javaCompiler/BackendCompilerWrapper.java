@@ -37,7 +37,6 @@ import java.util.concurrent.Future;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.compiler.CompilerEncodingService;
@@ -54,6 +53,7 @@ import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
+import com.intellij.compiler.instrumentation.FailSafeClassReader;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.make.impl.CompositeDependencyCache;
 import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
@@ -946,7 +946,7 @@ public class BackendCompilerWrapper {
 
           if (haveToInstrument) {
             try {
-              ClassReader reader = new ClassReader(fileContent, 0, fileContent.length);
+              FailSafeClassReader reader = new FailSafeClassReader(fileContent, 0, fileContent.length);
               ClassWriter writer = new PsiClassWriter(myProject, myIsJdk16);
 
               if (NotNullVerifyingInstrumenter.processClassFile(reader, writer)) {

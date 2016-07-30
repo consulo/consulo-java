@@ -45,7 +45,7 @@
             <element id="module-output" name="coverage_rt" />
           </element>
           <element id="library" level="project" name="jdi" />
-          <element id="library" level="project" name="jetbrains-asm5" />
+          <element id="library" level="project" name="jetbrains-asm" />
           <element id="library" level="project" name="instrumentation-util" />
           <element id="zip-archive" name="java-i18n.jar">
             <element id="module-output" name="java-i18n" />

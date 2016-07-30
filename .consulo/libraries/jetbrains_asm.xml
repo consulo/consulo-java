@@ -1,10 +1,10 @@
 <component name="libraryTable">
-  <library name="jetbrains-asm5">
+  <library name="jetbrains-asm">
     <binaries>
       <root url="jar://$PROJECT_DIR$/lib/asm-all.jar!/" />
     </binaries>
     <sources>
-      <root url="zip://$PROJECT_DIR$/libSrc/asm5-src.zip!/" />
+      <root url="zip://$PROJECT_DIR$/libSrc/asm-src.zip!/" />
     </sources>
   </library>
 </component>

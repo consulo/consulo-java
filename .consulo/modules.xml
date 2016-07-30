@@ -105,7 +105,7 @@
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-api" />
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="library" name="jetbrains-asm" level="project" />
           <orderEntry type="module" module-name="java-debugger-impl" />
         </module-layer>
       </module>
@@ -166,7 +166,7 @@
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-rt" />
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="library" name="jetbrains-asm" level="project" />
           <orderEntry type="library" name="instrumentation-util" level="project" />
         </module-layer>
       </module>
@@ -206,7 +206,7 @@
               </binaries>
             </library>
           </orderEntry>
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="library" name="jetbrains-asm" level="project" />
         </module-layer>
       </module>
       <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl" current-layer="Default">
@@ -237,7 +237,7 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="library" name="jetbrains-asm" level="project" />
           <orderEntry type="module" module-name="java-analysis-api" exported="" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-indexing-api" />
@@ -265,7 +265,7 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="library" name="jetbrains-asm" level="project" />
           <orderEntry type="module" module-name="java-psi-api" exported="" />
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="module" module-name="java-indexing-api" />
@@ -291,7 +291,7 @@
           </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-compiler-impl" />
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="library" name="jetbrains-asm" level="project" />
         </module-layer>
       </module>
       <module name="java-impl" dirurl="file://$PROJECT_DIR$/java-impl" current-layer="Default">
@@ -359,7 +359,7 @@
           <orderEntry type="module" module-name="java-execution-impl" />
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="coverage_rt" />
-          <orderEntry type="library" name="jetbrains-asm5" level="project" />
+          <orderEntry type="library" name="jetbrains-asm" level="project" />
           <orderEntry type="module-library">
             <library>
               <binaries>
