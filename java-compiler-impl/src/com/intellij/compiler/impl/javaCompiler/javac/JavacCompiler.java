@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,11 +31,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.JavaCompilerBundle;
@@ -42,9 +43,11 @@ import com.intellij.compiler.JavaCompilerUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
+import com.intellij.compiler.impl.javaCompiler.BackendCompilerWrapper;
 import com.intellij.compiler.impl.javaCompiler.ExternalCompiler;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
+import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.openapi.application.ApplicationManager;
@@ -67,9 +70,12 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.PathsList;
 
 public class JavacCompiler extends ExternalCompiler
 {
@@ -121,8 +127,8 @@ public class JavacCompiler extends ExternalCompiler
 			final Sdk javaSdk = JavaCompilerUtil.getSdkForCompilation(module);
 			if(javaSdk == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()),
-						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.is.not.set.for.module", module.getName()), JavaCompilerBundle.message("compiler.javac.name"),
+						Messages.getErrorIcon());
 				return false;
 			}
 
@@ -138,29 +144,29 @@ public class JavacCompiler extends ExternalCompiler
 			final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
 			if(homeDirectory == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath()),
-						JavaCompilerBundle.message("compiler.javac" + ".name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath()), JavaCompilerBundle.message("compiler.javac" + ".name"),
+						Messages.getErrorIcon());
 				return false;
 			}
 			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(javaSdk);
 			if(toolsJarPath == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()),
-						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"),
+						Messages.getErrorIcon());
 				return false;
 			}
 			final String versionString = javaSdk.getVersionString();
 			if(versionString == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()),
-						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"),
+						Messages.getErrorIcon());
 				return false;
 			}
 
 			if(CompilerUtil.isOfVersion(versionString, "1.0"))
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"),
-						JavaCompilerBundle.message("compiler.javac.name"), Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"), JavaCompilerBundle.message("compiler.javac.name"),
+						Messages.getErrorIcon());
 				return false;
 			}
 		}
@@ -204,9 +210,7 @@ public class JavacCompiler extends ExternalCompiler
 
 	@Override
 	@NotNull
-	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
-			final CompileContext context,
-			final String outputPath) throws IOException, IllegalArgumentException
+	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
 	{
 
 		try
@@ -218,8 +222,8 @@ public class JavacCompiler extends ExternalCompiler
 				{
 					try
 					{
-						return createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject),
-								JavaCompilerConfiguration.getInstance(myProject).isAnnotationProcessorsEnabled());
+						return createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
+								.isAnnotationProcessorsEnabled());
 					}
 					catch(IOException e)
 					{
@@ -277,8 +281,7 @@ public class JavacCompiler extends ExternalCompiler
 			parametersList.add("-mx" + javacOptions.MAXIMUM_HEAP_SIZE + "m");
 		}
 
-		final List<String> additionalOptions = addAdditionalSettings(parametersList, javacOptions, myAnnotationProcessorMode, version, chunk,
-				annotationProcessorsEnabled);
+		final List<String> additionalOptions = addAdditionalSettings(parametersList, javacOptions, myAnnotationProcessorMode, version, chunk, annotationProcessorsEnabled);
 
 		JavaCompilerUtil.addLocaleOptions(parametersList, false);
 
@@ -367,8 +370,7 @@ public class JavacCompiler extends ExternalCompiler
 		}
 		if(isAnnotationProcessing)
 		{
-			final AnnotationProcessingConfiguration config = JavaCompilerConfiguration.getInstance(chunk.getProject())
-					.getAnnotationProcessingConfiguration(chunk.getModules()[0]);
+			final AnnotationProcessingConfiguration config = JavaCompilerConfiguration.getInstance(chunk.getProject()).getAnnotationProcessingConfiguration(chunk.getModules()[0]);
 			additionalOptions.add("-Xprefer:source");
 			additionalOptions.add("-implicit:none");
 			additionalOptions.add("-proc:only");
@@ -464,19 +466,21 @@ public class JavacCompiler extends ExternalCompiler
 
 		commandLine.add("-verbose");
 
-		final String cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
-		final String bootCp = JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk);
+		final Set<VirtualFile> cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
+		final Set<VirtualFile> bootCp = JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk);
+
+		compileContext.putUserData(BackendCompilerWrapper.ourInstrumentationClassFinderKey, new InstrumentationClassFinder(toUrls(bootCp), ArrayUtil.append(toUrls(cp), new File(outputPath).toURI().toURL())));
 
 		final String classPath;
 		if(version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1)
 		{
-			classPath = bootCp + File.pathSeparator + cp;
+			classPath = asString(bootCp) + File.pathSeparator + asString(cp);
 		}
 		else
 		{
-			classPath = cp;
+			classPath = asString(cp);
 			commandLine.add("-bootclasspath");
-			addClassPathValue(jdk, version, commandLine, bootCp, "javac_bootcp", tempFiles, useTempFile);
+			addClassPathValue(jdk, version, commandLine, asString(bootCp), "javac_bootcp", tempFiles, useTempFile);
 		}
 
 		commandLine.add("-classpath");
@@ -509,8 +513,7 @@ public class JavacCompiler extends ExternalCompiler
 		{
 			commandLine.add("-s");
 			commandLine.add(outputPath.replace('/', File.separatorChar));
-			final String moduleOutputPath = CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0],
-					ProductionContentFolderTypeProvider.getInstance());
+			final String moduleOutputPath = CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0], ProductionContentFolderTypeProvider.getInstance());
 			if(moduleOutputPath != null)
 			{
 				commandLine.add("-d");
@@ -522,6 +525,26 @@ public class JavacCompiler extends ExternalCompiler
 			commandLine.add("-d");
 			commandLine.add(outputPath.replace('/', File.separatorChar));
 		}
+	}
+
+	@NotNull
+	private static String asString(Set<VirtualFile> files)
+	{
+		PathsList pathsList = new PathsList();
+		pathsList.addVirtualFiles(files);
+		return pathsList.getPathsString();
+	}
+
+	@NotNull
+	private static URL[] toUrls(Set<VirtualFile> files)
+	{
+		List<URL> urls = new ArrayList<>(files.size());
+		for(VirtualFile file : files)
+		{
+			URL url = VfsUtilCore.convertToURL(file.getUrl());
+			urls.add(url);
+		}
+		return urls.toArray(new URL[urls.size()]);
 	}
 
 	private static void addClassPathValue(final Sdk jdk,

@@ -15,6 +15,8 @@
  */
 package org.mustbe.consulo.java.module.extension;
 
+import java.util.Set;
+
 import org.consulo.module.extension.ModuleInheritableNamedPointer;
 import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
@@ -28,6 +30,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -89,16 +92,16 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
 	@NotNull
 	@Override
-	public String getCompilationClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
+	public Set<VirtualFile> getCompilationClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
 	{
-		return moduleChunk.getCompilationClasspath(JavaSdk.getInstance());
+		return moduleChunk.getCompilationClasspathFiles(JavaSdk.getInstance());
 	}
 
 	@NotNull
 	@Override
-	public String getCompilationBootClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
+	public Set<VirtualFile> getCompilationBootClasspath(@NotNull CompileContext compileContext, @NotNull ModuleChunk moduleChunk)
 	{
-		return moduleChunk.getCompilationBootClasspath(JavaSdk.getInstance());
+		return moduleChunk.getCompilationBootClasspathFiles(JavaSdk.getInstance());
 	}
 
 	@NotNull

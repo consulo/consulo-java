@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2016 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.intellij.compiler;
 
+import org.mustbe.consulo.DeprecationInfo;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
@@ -33,6 +34,8 @@ import com.intellij.psi.util.ClassUtil;
 /**
  * @author yole
  */
+@Deprecated
+@DeprecationInfo("Replaced by #InstrumentationClassFinder. Usage only by PatternValidationCompiler")
 public class PsiClassWriter extends ClassWriter
 {
   private final Project myProject;

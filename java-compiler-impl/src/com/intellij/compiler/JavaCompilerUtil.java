@@ -15,11 +15,13 @@
  */
 package com.intellij.compiler;
 
-import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import java.util.Set;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.execution.configurations.ParametersList;
@@ -31,13 +33,14 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
  * @author VISTALL
  * @since 0:37/26.05.13
- *        <p/>
- *        This class is split part of {com.intellij.compiler.impl.CompilerUtil}
+ * <p>
+ * This class is split part of {com.intellij.compiler.impl.CompilerUtil}
  */
 public class JavaCompilerUtil
 {
@@ -128,8 +131,7 @@ public class JavaCompilerUtil
 	{
 		// need to specify default encoding so that javac outputs messages in 'correct' language
 		//noinspection HardCodedStringLiteral
-		parametersList.add((launcherUsed ? "-J" : "") + "-D" + CharsetToolkit.FILE_ENCODING_PROPERTY + "=" + CharsetToolkit.getDefaultSystemCharset()
-				.name());
+		parametersList.add((launcherUsed ? "-J" : "") + "-D" + CharsetToolkit.FILE_ENCODING_PROPERTY + "=" + CharsetToolkit.getDefaultSystemCharset().name());
 		// javac's VM should use the same default locale that IDEA uses in order for javac to print messages in 'correct' language
 		//noinspection HardCodedStringLiteral
 		final String lang = System.getProperty("user.language");
@@ -226,9 +228,9 @@ public class JavaCompilerUtil
 	}
 
 	@Nullable
-	public static String getCompilationClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
+	public static Set<VirtualFile> getCompilationClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
-		JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
+		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
 		if(extension == null)
 		{
 			return null;
@@ -237,9 +239,9 @@ public class JavaCompilerUtil
 	}
 
 	@Nullable
-	public static String getCompilationBootClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
+	public static Set<VirtualFile> getCompilationBootClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
-		JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
+		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
 		if(extension == null)
 		{
 			return null;
