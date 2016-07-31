@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="jimage-jdk6-sources">
+  <library name="jimage-jdk6">
     <binaries>
       <root url="jar://$PROJECT_DIR$/lib/jimage-jdk6.jar!/" />
     </binaries>
