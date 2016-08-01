@@ -25,6 +25,7 @@ import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.util.UserDataHolderBase;
 
 public interface BackendCompiler
 {
@@ -45,7 +46,7 @@ public interface BackendCompiler
 	boolean checkCompiler(final CompileScope scope);
 
 	@NotNull
-	Process launchProcess(@NotNull ModuleChunk chunk, @NotNull String outputDir, @NotNull CompileContext compileContext) throws IOException;
+	Process launchProcess(@NotNull UserDataHolderBase data, @NotNull ModuleChunk chunk, @NotNull String outputDir, @NotNull CompileContext compileContext) throws IOException;
 
 	void compileFinished();
 }

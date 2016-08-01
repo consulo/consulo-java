@@ -15,14 +15,8 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,13 +62,13 @@ import com.intellij.openapi.projectRoots.impl.MockSdkWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.PathsList;
 
 public class JavacCompiler extends ExternalCompiler
@@ -210,7 +204,10 @@ public class JavacCompiler extends ExternalCompiler
 
 	@Override
 	@NotNull
-	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
+	public GeneralCommandLine createStartupCommand(@NotNull UserDataHolderBase data,
+			final ModuleChunk chunk,
+			final CompileContext context,
+			final String outputPath) throws IOException, IllegalArgumentException
 	{
 
 		try
@@ -222,7 +219,7 @@ public class JavacCompiler extends ExternalCompiler
 				{
 					try
 					{
-						return createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
+						return createStartupCommand(data, chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
 								.isAnnotationProcessorsEnabled());
 					}
 					catch(IOException e)
@@ -245,7 +242,8 @@ public class JavacCompiler extends ExternalCompiler
 
 	@NotNull
 	@RequiredReadAction
-	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
+	private GeneralCommandLine createStartupCommand(UserDataHolderBase data,
+			final ModuleChunk chunk,
 			final String outputPath,
 			final CompileContext compileContext,
 			JpsJavaCompilerOptions javacOptions,
@@ -307,7 +305,7 @@ public class JavacCompiler extends ExternalCompiler
 			parametersList.add(JAVAC_MAIN_CLASS_OLD);
 		}
 
-		addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, true, myAnnotationProcessorMode);
+		addCommandLineOptions(data, compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, true, myAnnotationProcessorMode);
 
 		parametersList.addAll(additionalOptions);
 
@@ -448,7 +446,8 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@RequiredReadAction
-	public static void addCommandLineOptions(CompileContext compileContext,
+	public static void addCommandLineOptions(@NotNull UserDataHolderBase data,
+			CompileContext compileContext,
 			ModuleChunk chunk,
 			@NonNls ParametersList commandLine,
 			String outputPath,
@@ -469,7 +468,27 @@ public class JavacCompiler extends ExternalCompiler
 		final Set<VirtualFile> cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
 		final Set<VirtualFile> bootCp = JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk);
 
-		compileContext.putUserData(BackendCompilerWrapper.ourInstrumentationClassFinderKey, new InstrumentationClassFinder(toUrls(bootCp), ArrayUtil.append(toUrls(cp), new File(outputPath).toURI().toURL())));
+		InstrumentationClassFinder classFinder = new InstrumentationClassFinder(toUrls(bootCp), toUrls(cp))
+		{
+			@Override
+			protected InputStream lookupClassAfterClasspath(String internalClassName)
+			{
+				File targetFile = new File(outputPath, internalClassName + ".class");
+				if(targetFile.exists())
+				{
+					try
+					{
+						return new FileInputStream(targetFile);
+					}
+					catch(FileNotFoundException e)
+					{
+						throw new RuntimeException(e);
+					}
+				}
+				return null;
+			}
+		};
+		data.putUserData(BackendCompilerWrapper.ourInstrumentationClassFinderKey, classFinder);
 
 		final String classPath;
 		if(version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1)
@@ -541,8 +560,14 @@ public class JavacCompiler extends ExternalCompiler
 		List<URL> urls = new ArrayList<>(files.size());
 		for(VirtualFile file : files)
 		{
-			URL url = VfsUtilCore.convertToURL(file.getUrl());
-			urls.add(url);
+			try
+			{
+				urls.add(VfsUtilCore.virtualToIoFile(file).toURI().toURL());
+			}
+			catch(MalformedURLException e)
+			{
+				LOG.error(e);
+			}
 		}
 		return urls.toArray(new URL[urls.size()]);
 	}

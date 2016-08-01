@@ -85,6 +85,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -496,9 +497,10 @@ public class BackendCompilerWrapper
 		int exitValue = 0;
 		try
 		{
-			final Process process = myCompiler.launchProcess(chunk, outputDir, myCompileContext);
+			UserDataHolderBase data = new UserDataHolderBase();
+			final Process process = myCompiler.launchProcess(data, chunk, outputDir, myCompileContext);
 			final long compilationStart = System.currentTimeMillis();
-			final ClassParsingThread classParsingThread = new ClassParsingThread(isJdk6(JavaCompilerUtil.getSdkForCompilation(chunk)), outputDir);
+			final ClassParsingThread classParsingThread = new ClassParsingThread(data, isJdk6(JavaCompilerUtil.getSdkForCompilation(chunk)), outputDir);
 			final Future<?> classParsingThreadFuture = ApplicationManager.getApplication().executeOnPooledThread(classParsingThread);
 
 			OutputParser errorParser = myCompiler.createErrorParser(outputDir, process);
@@ -1083,11 +1085,13 @@ public class BackendCompilerWrapper
 		private final BlockingQueue<FileObject> myPaths = new ArrayBlockingQueue<FileObject>(50000);
 		private CacheCorruptedException myError = null;
 		private final boolean myAddNotNullAssertions;
+		private final UserDataHolderBase myData;
 		private final boolean myIsJdk16;
 		private final String myOutputDir;
 
-		private ClassParsingThread(final boolean isJdk16, String outputDir)
+		private ClassParsingThread(UserDataHolderBase data, final boolean isJdk16, String outputDir)
 		{
+			myData = data;
 			myIsJdk16 = isJdk16;
 			myOutputDir = FileUtil.toSystemIndependentName(outputDir);
 			myAddNotNullAssertions = JavaCompilerConfiguration.getInstance(myProject).isAddNotNullAssertions();
@@ -1165,7 +1169,7 @@ public class BackendCompilerWrapper
 						{
 							FailSafeClassReader reader = new FailSafeClassReader(fileContent, 0, fileContent.length);
 
-							InstrumentationClassFinder classFinder = myCompileContext.getUserData(ourInstrumentationClassFinderKey);
+							InstrumentationClassFinder classFinder = myData.getUserData(ourInstrumentationClassFinderKey);
 
 							assert classFinder != null;
 
