@@ -112,7 +112,7 @@
       <module name="java-rt" dirurl="file://$PROJECT_DIR$/java-rt" current-layer="Default">
         <module-layer name="Default">
           <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
-          <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" />
+          <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" bytecode-version="1.6" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
           </content>
@@ -371,7 +371,7 @@
       </module>
       <module name="coverage_rt" dirurl="file://$PROJECT_DIR$/java-coverage-impl/coverage_rt" current-layer="Default">
         <module-layer name="Default">
-          <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" />
+          <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" bytecode-version="1.6" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
           </content>
