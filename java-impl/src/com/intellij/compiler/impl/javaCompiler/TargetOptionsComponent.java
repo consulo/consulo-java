@@ -24,7 +24,13 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
@@ -44,10 +50,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.ChooseModulesDialog;
 import com.intellij.openapi.ui.ComboBox;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.TableUtil;
 import com.intellij.ui.ToolbarDecorator;
@@ -356,21 +359,7 @@ public class TargetOptionsComponent extends JPanel
 		add(new JLabel("Project bytecode version (leave blank for jdk default): "), constraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NONE));
 		add(myCbProjectTargetLevel, constraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NONE));
 		add(new JLabel("Per-module bytecode version(obsolete - use module extension settings):"), constraints(0, 1, 2, 1, 1.0, 0.0, GridBagConstraints.NONE));
-		final JPanel tableComp = ToolbarDecorator.createDecorator(myTable).disableUpAction().disableDownAction().setAddAction(new AnActionButtonRunnable()
-		{
-			@Override
-			public void run(AnActionButton anActionButton)
-			{
-				addModules();
-			}
-		}).setRemoveAction(new AnActionButtonRunnable()
-		{
-			@Override
-			public void run(AnActionButton anActionButton)
-			{
-				removeSelectedModules();
-			}
-		}).createPanel();
+		final JPanel tableComp = ToolbarDecorator.createDecorator(myTable).disableUpAction().disableDownAction().setRemoveAction(anActionButton -> removeSelectedModules()).createPanel();
 
 		tableComp.setPreferredSize(new Dimension(myTable.getWidth(), 150));
 		add(tableComp, constraints(0, 2, 2, 1, 1.0, 1.0, GridBagConstraints.BOTH));
@@ -418,39 +407,6 @@ public class TargetOptionsComponent extends JPanel
 		}
 	}
 
-	private void addModules()
-	{
-		TargetLevelTableModel model = (TargetLevelTableModel) myTable.getModel();
-		List<Module> items = new ArrayList<Module>(Arrays.asList(ModuleManager.getInstance(myProject).getModules()));
-		Set<Module> alreadyAdded = new HashSet<Module>();
-		for(TargetLevelTableModel.Item item : model.getItems())
-		{
-			alreadyAdded.add(item.module);
-		}
-		for(Iterator<Module> it = items.iterator(); it.hasNext(); )
-		{
-			Module module = it.next();
-			if(alreadyAdded.contains(module))
-			{
-				it.remove();
-			}
-		}
-		Collections.sort(items, new Comparator<Module>()
-		{
-			@Override
-			public int compare(Module o1, Module o2)
-			{
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-		ChooseModulesDialog chooser = new ChooseModulesDialog(this, items, "Choose module");
-		chooser.show();
-		List<Module> elements = chooser.getChosenElements();
-		if(!elements.isEmpty())
-		{
-			model.addItems(elements);
-		}
-	}
 
 	public void setProjectBytecodeTargetLevel(String level)
 	{

@@ -12,6 +12,7 @@ import com.intellij.compiler.JavaCompilerBundle;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.ui.ListCellRendererWrapper;
@@ -67,7 +68,7 @@ public class JavaCompilerConfigurable implements Configurable
 
 		myComboBox.setSelectedItem(myCompilerConfiguration.getActiveCompiler());
 
-		panel.add(myComboBox);
+		panel.add(LabeledComponent.left(myComboBox, "Compiler"));
 
 		myNotNullAssertion = new JCheckBox(JavaCompilerBundle.message("add.notnull.assertions"), myCompilerConfiguration.isAddNotNullAssertions());
 		panel.add(myNotNullAssertion);
