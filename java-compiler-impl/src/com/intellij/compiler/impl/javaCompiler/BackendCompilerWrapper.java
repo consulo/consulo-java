@@ -37,7 +37,6 @@ import java.util.concurrent.Future;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.compiler.CompilerEncodingService;
 import com.intellij.compiler.CompilerException;
@@ -52,12 +51,9 @@ import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.impl.CompileDriver;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.instrumentation.FailSafeClassReader;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
-import com.intellij.compiler.instrumentation.InstrumenterClassWriter;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.make.impl.CompositeDependencyCache;
-import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
@@ -1163,7 +1159,7 @@ public class BackendCompilerWrapper
 					putName(sourceFileName, newClassQName, relativePathToSource, path);
 					boolean haveToInstrument = myAddNotNullAssertions && hasNotNullAnnotations(newClassesCache, dependencyCache.getSymbolTable(), newClassQName, project);
 
-					if(haveToInstrument)
+					/*if(haveToInstrument)
 					{
 						try
 						{
@@ -1184,7 +1180,7 @@ public class BackendCompilerWrapper
 						{
 							LOG.info(ignored);
 						}
-					}
+					} */
 
 					fileObject.save();
 				}
