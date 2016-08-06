@@ -153,7 +153,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
   @Nullable
   private PsiType getClassType() {
     final Document document = myClassField.getEditorTextField().getDocument();
-    final PsiDocumentManager dm = PsiDocumentManager.getInstance(myProject);
+    final PsiDocumentManager dm = PsiDocumentManager.getInstance(getProject());
     dm.commitDocument(document);
     final PsiFile psiFile = dm.getPsiFile(document);
     if (psiFile == null) return null;
@@ -182,8 +182,8 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     ApplicationManager.getApplication().runReadAction(new Runnable() {
       public void run() {
         final PsiType classType = getClassType();
-        final PsiClass[] classes = classType instanceof PsiClassType? JavaPsiFacade.getInstance(myProject).
-          findClasses(classType.getCanonicalText(), GlobalSearchScope.allScope(myProject)) : PsiClass.EMPTY_ARRAY;
+        final PsiClass[] classes = classType instanceof PsiClassType? JavaPsiFacade.getInstance(getProject()).
+          findClasses(classType.getCanonicalText(), GlobalSearchScope.allScope(getProject())) : PsiClass.EMPTY_ARRAY;
         if (classes.length == 0) return;
         final THashSet<String> visitedSignatures = new THashSet<String>();
         for (PsiClass psiClass : classes) {
@@ -256,7 +256,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
   }
 
   protected void resetImpl() {
-    setPsiClass(myOrigInjection.getClassName());
+    setPsiClass(getOrigInjection().getClassName());
 
     rebuildTreeModel();
     final THashMap<String, MethodParameterInjection.MethodInfo> map = new THashMap<String, MethodParameterInjection.MethodInfo>();
@@ -264,14 +264,14 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
       final MethodParameterInjection.MethodInfo methodInfo = myData.get(method);
       map.put(methodInfo.getMethodSignature(), methodInfo);
     }
-    for (MethodParameterInjection.MethodInfo info : myOrigInjection.getMethodInfos()) {
+    for (MethodParameterInjection.MethodInfo info : getOrigInjection().getMethodInfos()) {
       final MethodParameterInjection.MethodInfo curInfo = map.get(info.getMethodSignature());
       if (curInfo != null) {
         System.arraycopy(info.getParamFlags(), 0, curInfo.getParamFlags(), 0, Math.min(info.getParamFlags().length, curInfo.getParamFlags().length));
         curInfo.setReturnFlag(info.isReturnFlag());
       }
       else {
-        final PsiMethod missingMethod = MethodParameterInjection.makeMethod(myProject, info.getMethodSignature());
+        final PsiMethod missingMethod = MethodParameterInjection.makeMethod(getProject(), info.getMethodSignature());
         myData.put(missingMethod, info.copy());
       }
     }
@@ -288,10 +288,10 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
   }
 
   private void createUIComponents() {
-    myLanguagePanel = new LanguagePanel(myProject, myOrigInjection);
+    myLanguagePanel = new LanguagePanel(getProject(), getOrigInjection());
     myRootNode = new DefaultMutableTreeNode(null, true);
     myParamsTable = new MyView(new ListTreeTableModelOnColumns(myRootNode, createColumnInfos()));
-    myAdvancedPanel = new AdvancedPanel(myProject, myOrigInjection);    
+    myAdvancedPanel = new AdvancedPanel(getProject(), getOrigInjection());    
   }
 
   @Nullable
