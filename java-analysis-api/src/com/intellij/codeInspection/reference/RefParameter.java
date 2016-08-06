@@ -24,45 +24,48 @@ import com.intellij.psi.PsiParameter;
  * @author anna
  * @since 6.0
  */
-public interface RefParameter extends RefJavaElement {
-  /**
-   * Checks if the parameter is used for reading.
-   *
-   * @return true if the parameter has read accesses, false otherwise.
-   */
-  boolean isUsedForReading();
+public interface RefParameter extends RefJavaElement
+{
+	/**
+	 * Checks if the parameter is used for reading.
+	 *
+	 * @return true if the parameter has read accesses, false otherwise.
+	 */
+	boolean isUsedForReading();
 
-  /**
-   * Checks if the parameter is used for writing.
-   *
-   * @return true if the parameter has write accesses, false otherwise.
-   */
-  boolean isUsedForWriting();
+	/**
+	 * Checks if the parameter is used for writing.
+	 *
+	 * @return true if the parameter has write accesses, false otherwise.
+	 */
+	boolean isUsedForWriting();
 
-  /**
-   * Returns the index of the parameter in the parameter list of its owner method.
-   *
-   * @return the index of the parameter.
-   */
-  int getIndex();
+	/**
+	 * Returns the index of the parameter in the parameter list of its owner method.
+	 *
+	 * @return the index of the parameter.
+	 */
+	int getIndex();
 
-  /**
-   * If all invocations of the method pass the same value to the parameter, returns
-   * that value (the name of a static final field or the text of a literal expression).
-   * Otherwise, returns null.
-   *
-   * @return the parameter value or null if it's different or impossible to determine.
-   */
-  @Nullable String getActualValueIfSame();
+	/**
+	 * If all invocations of the method pass the same value to the parameter, returns
+	 * that value (the name of a static final field or the text of a literal expression).
+	 * Otherwise, returns null.
+	 *
+	 * @return the parameter value or null if it's different or impossible to determine.
+	 */
+	@Nullable
+	String getActualValueIfSame();
 
-  /**
-   * Marks the parameter as referenced for reading or writing.
-   *
-   * @param forWriting true if the parameter is marked as referenced for writing, false
-   * otherwise.
-   */
-  void parameterReferenced(final boolean forWriting);
+	/**
+	 * Marks the parameter as referenced for reading or writing.
+	 *
+	 * @param forWriting true if the parameter is marked as referenced for writing, false
+	 *                   otherwise.
+	 */
+	void parameterReferenced(final boolean forWriting);
 
-  @Override
-  PsiParameter getElement();
+	@Override
+	@Nullable
+	PsiParameter getElement();
 }
