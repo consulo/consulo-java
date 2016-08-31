@@ -15,8 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.consulo.module.extension.ModuleExtension;
-import org.consulo.module.extension.ModuleExtensionChangeListener;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ProjectTopics;
@@ -37,6 +35,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
+import consulo.module.extension.ModuleExtension;
+import consulo.module.extension.ModuleExtensionChangeListener;
 
 /**
  * @author Danila Ponomarenko

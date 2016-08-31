@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
@@ -43,6 +42,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Processor;
+import consulo.psi.PsiPackage;
 
 public class UnusedSymbolUtil
 {

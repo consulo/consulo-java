@@ -17,7 +17,7 @@
 package org.mustbe.consulo.java.library.jimage;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.ide.highlighter.ArchiveFileType;
+import consulo.fileTypes.ArchiveFileType;
 
 /**
  * @author VISTALL

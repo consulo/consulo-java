@@ -438,9 +438,9 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 		final ParserDefinition parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(language);
 		assert parserDefinition != null : "No parser definition for language " + language;
 		final Project project = myManager.getProject();
-		final Lexer lexer = parserDefinition.createLexer(project, null);
+		final Lexer lexer = parserDefinition.createLexer(LanguageLevel.HIGHEST);
 		final PsiBuilder builder = PsiBuilderFactory.getInstance().createBuilder(project, holder, lexer, language, LanguageLevel.HIGHEST, text);
-		final ASTNode node = parserDefinition.createParser(project, LanguageLevel.HIGHEST).parse(type, builder, LanguageLevel.HIGHEST);
+		final ASTNode node = parserDefinition.createParser(LanguageLevel.HIGHEST).parse(type, builder, LanguageLevel.HIGHEST);
 		holder.rawAddChildren((TreeElement) node);
 		final PsiElement psi = node.getPsi();
 		assert psi != null : text;

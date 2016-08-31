@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -32,17 +31,19 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-class CatchTypeProvider extends CompletionProvider<CompletionParameters>
+class CatchTypeProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> CATCH_CLAUSE_TYPE = psiElement().insideStarting(psiElement(PsiTypeElement.class).withParent(psiElement(PsiCatchSection.class)));
 
 	@RequiredReadAction
 	@Override
-	protected void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 	{
 		PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiTryStatement.class);
 		final PsiCodeBlock tryBlock = tryStatement == null ? null : tryStatement.getTryBlock();

@@ -18,11 +18,11 @@ package org.mustbe.consulo.java.library.jimage;
 
 import java.io.IOException;
 
-import consulo.lombok.annotations.Lazy;
-import consulo.lombok.annotations.Logger;
-import com.intellij.openapi.vfs.ArchiveEntry;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.jdk.internal.jimage.ImageReader;
+import consulo.lombok.annotations.Lazy;
+import consulo.lombok.annotations.Logger;
+import consulo.vfs.impl.archive.ArchiveEntry;
 
 /**
  * @author VISTALL

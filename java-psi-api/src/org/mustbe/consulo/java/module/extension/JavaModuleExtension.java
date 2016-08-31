@@ -17,7 +17,6 @@ package org.mustbe.consulo.java.module.extension;
 
 import java.util.Set;
 
-import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
@@ -25,6 +24,7 @@ import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.module.extension.ModuleExtensionWithSdk;
 
 /**
  * @author VISTALL

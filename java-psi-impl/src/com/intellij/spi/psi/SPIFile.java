@@ -15,23 +15,30 @@
  */
 package com.intellij.spi.psi;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.spi.SPIFileType;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
+import consulo.psi.PsiPackage;
 
 /**
  * User: anna

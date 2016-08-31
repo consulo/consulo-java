@@ -24,7 +24,7 @@ import net.jcip.annotations.GuardedBy;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.diagnostic.Logger;

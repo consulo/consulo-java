@@ -17,15 +17,15 @@ package org.mustbe.consulo.java.module.extension;
 
 import javax.swing.JComponent;
 
-import org.mustbe.consulo.java.module.extension.ui.JavaModuleExtensionPanel;
-import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredDispatchThread;
+import org.mustbe.consulo.java.module.extension.ui.JavaModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.module.extension.MutableModuleInheritableNamedPointer;
+import consulo.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL

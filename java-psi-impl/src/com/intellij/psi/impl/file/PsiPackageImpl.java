@@ -20,14 +20,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import consulo.lombok.annotations.Logger;
-import org.consulo.module.extension.ModuleExtension;
-import org.consulo.psi.PsiPackage;
-import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.completion.scope.JavaCompletionHints;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -54,6 +49,11 @@ import com.intellij.reference.SoftReference;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.lombok.annotations.Logger;
+import consulo.module.extension.ModuleExtension;
+import consulo.psi.PsiPackage;
+import consulo.psi.PsiPackageManager;
 
 @Logger
 public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Queryable

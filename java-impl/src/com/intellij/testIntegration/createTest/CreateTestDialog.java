@@ -36,8 +36,6 @@ import javax.swing.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.roots.ContentFolderScopes;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
@@ -87,6 +85,8 @@ import com.intellij.ui.RecentsManager;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.IncorrectOperationException;
+import consulo.roots.ContentFolderScopes;
+import consulo.roots.impl.TestContentFolderTypeProvider;
 
 public class CreateTestDialog extends DialogWrapper {
   private static final String RECENTS_KEY = "CreateTestDialog.RecentsKey";

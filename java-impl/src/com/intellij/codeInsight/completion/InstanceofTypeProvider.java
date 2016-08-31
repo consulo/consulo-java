@@ -23,7 +23,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.patterns.ElementPattern;
@@ -33,17 +32,19 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-class InstanceofTypeProvider extends CompletionProvider<CompletionParameters>
+class InstanceofTypeProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> AFTER_INSTANCEOF = psiElement().afterLeaf(PsiKeyword.INSTANCEOF);
 
 	@RequiredReadAction
 	@Override
-	protected void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 	{
 		final PsiElement position = parameters.getPosition();
 		final PsiType[] leftTypes = InstanceOfLeftPartTypeGetter.getLeftTypes(position);

@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.consulo.psi.PsiPackage;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;

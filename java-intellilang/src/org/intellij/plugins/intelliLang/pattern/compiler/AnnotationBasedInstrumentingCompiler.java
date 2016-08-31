@@ -23,13 +23,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.consulo.compiler.ModuleCompilerPathsManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.PsiClassWriter;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
@@ -58,6 +56,8 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.util.Processor;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 /**
  * Based on NotNullVerifyingCompiler, kindly provided by JetBrains for reference.

@@ -15,13 +15,13 @@
  */
 package com.intellij.codeInsight.generation;
 
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author peter

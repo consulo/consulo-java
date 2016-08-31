@@ -1,14 +1,11 @@
 package org.osmorc.manifest.lang;
 
-import org.consulo.annotations.Immutable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
-import com.intellij.lang.LanguageVersionWithParsing;
 import com.intellij.lang.PsiParser;
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.tree.TokenSet;
+import consulo.lang.LanguageVersionWithParsing;
 
 /**
  * @author VISTALL
@@ -19,7 +16,7 @@ public enum ManifestLanguageVersion implements LanguageVersionWithParsing
 	Manifest{
 		@NotNull
 		@Override
-		public Lexer createLexer(@Nullable Project project)
+		public Lexer createLexer()
 		{
 			return new ManifestLexer();
 		}
@@ -34,7 +31,7 @@ public enum ManifestLanguageVersion implements LanguageVersionWithParsing
 	Bnd {
 		@NotNull
 		@Override
-		public Lexer createLexer(@Nullable Project project)
+		public Lexer createLexer()
 		{
 			return new BndLexer();
 		}
@@ -47,12 +44,11 @@ public enum ManifestLanguageVersion implements LanguageVersionWithParsing
 		}
 	};
 
-	@Immutable
 	public static final ManifestLanguageVersion[] VALUES = values();
 
 	@NotNull
 	@Override
-	public PsiParser createParser(@Nullable Project project)
+	public PsiParser createParser()
 	{
 		return new ManifestParser();
 	}

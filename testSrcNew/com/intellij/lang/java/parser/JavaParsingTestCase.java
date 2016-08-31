@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.fileTypes.FileType;
@@ -35,7 +34,8 @@ import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.testFramework.LightVirtualFile;
-import com.intellij.testFramework.ParsingTestCase;
+import consulo.lang.LanguageVersion;
+import consulo.testFramework.ParsingTestCase;
 
 public abstract class JavaParsingTestCase extends ParsingTestCase
 {

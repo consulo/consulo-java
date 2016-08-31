@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
@@ -49,11 +48,13 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Function;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * User: anna
  */
-public class FunctionalExpressionCompletionProvider extends CompletionProvider<CompletionParameters>
+public class FunctionalExpressionCompletionProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> LAMBDA = psiElement().with(new PatternCondition<PsiElement>("LAMBDA_CONTEXT")
 	{
@@ -75,7 +76,7 @@ public class FunctionalExpressionCompletionProvider extends CompletionProvider<C
 
 	@RequiredReadAction
 	@Override
-	protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
+	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
 	{
 		result.addAllElements(getLambdaVariants(parameters, false));
 	}

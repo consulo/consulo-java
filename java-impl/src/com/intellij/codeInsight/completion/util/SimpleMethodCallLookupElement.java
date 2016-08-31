@@ -18,7 +18,7 @@ package com.intellij.codeInsight.completion.util;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiType;

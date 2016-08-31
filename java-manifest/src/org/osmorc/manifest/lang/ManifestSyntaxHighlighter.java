@@ -27,13 +27,13 @@ package org.osmorc.manifest.lang;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.consulo.fileTypes.LanguageVersionableSyntaxHighlighter;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.lang.LanguageVersion;
-import com.intellij.lang.LanguageVersionWithParsing;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.tree.IElementType;
+import consulo.fileTypes.LanguageVersionableSyntaxHighlighter;
+import consulo.lang.LanguageVersion;
+import consulo.lang.LanguageVersionWithParsing;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -57,7 +57,7 @@ public class ManifestSyntaxHighlighter extends LanguageVersionableSyntaxHighligh
 	@Override
 	public Lexer getHighlightingLexer(LanguageVersion languageVersion)
 	{
-		return ((LanguageVersionWithParsing) languageVersion).createLexer(null);
+		return ((LanguageVersionWithParsing) languageVersion).createLexer();
 	}
 
 	@NotNull

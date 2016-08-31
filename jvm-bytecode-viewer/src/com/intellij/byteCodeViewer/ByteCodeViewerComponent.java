@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import org.mustbe.consulo.RequiredWriteAction;
 import com.intellij.codeInsight.hint.EditorFragmentComponent;
 import com.intellij.execution.filters.LineNumbersMapping;
 import com.intellij.openapi.Disposable;
@@ -32,6 +31,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.LightColors;
+import consulo.annotations.RequiredWriteAction;
 
 /**
  * User: anna

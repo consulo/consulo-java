@@ -18,15 +18,15 @@ package org.mustbe.consulo.java.module.extension;
 
 import java.util.Set;
 
-import org.consulo.module.extension.ModuleExtension;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.roots.ContentFolderSupportPatcher;
-import org.mustbe.consulo.roots.ContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestResourceContentFolderTypeProvider;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import consulo.module.extension.ModuleExtension;
+import consulo.roots.ContentFolderSupportPatcher;
+import consulo.roots.ContentFolderTypeProvider;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
+import consulo.roots.impl.TestContentFolderTypeProvider;
+import consulo.roots.impl.TestResourceContentFolderTypeProvider;
 
 /**
  * @author VISTALL

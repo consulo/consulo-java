@@ -18,9 +18,6 @@ package com.intellij.refactoring.tempWithQuery;
 import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredDispatchThread;
-import com.intellij.codeInsight.TargetElementUtil;
-import com.intellij.codeInsight.TargetElementUtilEx;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -56,6 +53,9 @@ import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.duplicates.DuplicatesImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 public class TempWithQueryHandler implements RefactoringActionHandler
 {

@@ -20,15 +20,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.roots.ContentFolderScopes;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.vcsUtil.VcsUtil;
+import consulo.roots.ContentFolderScopes;
 
 /**
  * @author VISTALL

@@ -23,9 +23,9 @@ import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiDirectoryMethodProxy;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import consulo.psi.PsiDirectoryMethodProxy;
 
 public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy
 {

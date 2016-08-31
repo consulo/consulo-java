@@ -17,21 +17,21 @@ package org.mustbe.consulo.java.module.extension;
 
 import java.util.Set;
 
-import org.consulo.module.extension.ModuleInheritableNamedPointer;
-import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.annotations.RequiredReadAction;
+import consulo.extension.impl.ModuleExtensionWithSdkImpl;
+import consulo.module.extension.ModuleInheritableNamedPointer;
+import consulo.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL

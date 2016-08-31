@@ -19,11 +19,9 @@ import gnu.trove.THashSet;
 
 import java.util.*;
 
-import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
-import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ReadActionProcessor;
@@ -51,6 +49,8 @@ import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.messages.MessageBus;
+import consulo.annotations.RequiredReadAction;
+import consulo.psi.PsiPackageManager;
 
 /**
  * @author max

@@ -15,7 +15,10 @@
  */
 package com.intellij.ide.highlighter;
 
-import com.intellij.lang.LanguageVersion;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lexer.JavaHighlightingLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.HighlighterColors;
@@ -29,13 +32,11 @@ import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.XmlTokenType;
-import org.consulo.fileTypes.LanguageVersionableSyntaxHighlighter;
-import org.jetbrains.annotations.NotNull;
+import consulo.fileTypes.LanguageVersionableSyntaxHighlighter;
+import consulo.lang.LanguageVersion;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter {
+public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter
+{
   private static final Map<IElementType, TextAttributesKey> ourMap1;
   private static final Map<IElementType, TextAttributesKey> ourMap2;
 

@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -82,7 +81,7 @@ public abstract class PsiElementFinder
 	 * @param psiPackage the package to return the list of subpackages for.
 	 * @param scope      the scope in which subpackages are searched.
 	 * @return the list of subpackages.
-	 * @see PsiPackage#getSubPackages(GlobalSearchScope)
+	 * @see consulo.psi.PsiPackage#getSubPackages(GlobalSearchScope)
 	 */
 	@NotNull
 	public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
@@ -148,7 +147,7 @@ public abstract class PsiElementFinder
 	 * @param psiPackage the package to return the list of classes in.
 	 * @param scope      the scope in which classes are searched.
 	 * @return the list of classes.
-	 * @see PsiPackage#getClasses(GlobalSearchScope)
+	 * @see consulo.psi.PsiPackage#getClasses(GlobalSearchScope)
 	 */
 	@NotNull
 	public PsiClass[] getClasses(@Nullable String className, @NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)

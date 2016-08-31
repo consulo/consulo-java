@@ -18,7 +18,6 @@ package com.intellij.psi.impl.source;
 import java.util.Arrays;
 import java.util.List;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.javadoc.JavaDocUtil;
@@ -64,6 +63,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.IncorrectOperationException;
+import consulo.psi.PsiPackage;
 
 public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement implements PsiJavaCodeReferenceElement, SourceJavaCodeReference
 {

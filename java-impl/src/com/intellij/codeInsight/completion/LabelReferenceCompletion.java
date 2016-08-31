@@ -18,7 +18,6 @@ package com.intellij.codeInsight.completion;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.TailTypeDecorator;
@@ -28,11 +27,13 @@ import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.PsiLabelReference;
 import com.intellij.util.ProcessingContext;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-class LabelReferenceCompletion extends CompletionProvider<CompletionParameters>
+class LabelReferenceCompletion implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> LABEL_REFERENCE = psiElement().afterLeaf(PsiKeyword.BREAK, PsiKeyword.CONTINUE);
 
@@ -46,7 +47,7 @@ class LabelReferenceCompletion extends CompletionProvider<CompletionParameters>
 
 	@RequiredReadAction
 	@Override
-	protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
+	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
 	{
 		PsiReference ref = parameters.getPosition().getContainingFile().findReferenceAt(parameters.getOffset());
 		if(ref instanceof PsiLabelReference)

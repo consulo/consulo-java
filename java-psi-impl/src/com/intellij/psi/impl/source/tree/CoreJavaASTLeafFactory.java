@@ -17,8 +17,6 @@ package com.intellij.psi.impl.source.tree;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.lang.ASTLeafFactory;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.javadoc.PsiDocTokenImpl;
 import com.intellij.psi.impl.source.tree.java.PsiIdentifierImpl;
@@ -27,11 +25,14 @@ import com.intellij.psi.impl.source.tree.java.PsiKeywordImpl;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.java.IJavaDocElementType;
 import com.intellij.psi.tree.java.IJavaElementType;
+import consulo.lang.LanguageVersion;
+import consulo.psi.tree.ASTLeafFactory;
 
 /**
  * @author yole
  */
-public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory {
+public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory
+{
   @Override
   @NotNull
   public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion<?> languageVersion, @NotNull final CharSequence text) {

@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -37,6 +36,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
+import consulo.codeInsight.TargetElementUtil;
 
 public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
   private final PsiCall myMethodCall;

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightBundle;
@@ -48,9 +47,8 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.ArchiveFileSystem;
-import com.intellij.openapi.vfs.IVirtualFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.beanProperties.BeanPropertyElement;
 import com.intellij.psi.impl.source.javadoc.PsiDocParamRef;
@@ -63,6 +61,10 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.psi.PsiPackage;
+import consulo.vfs.ArchiveFileSystem;
+
+;
 
 /**
  * @author Maxim.Mossienko
@@ -890,10 +892,10 @@ public class JavaDocumentationProvider implements CodeDocumentationProvider, Ext
 		Module module = fileIndex.getModuleForFile(virtualFile);
 		if(module == null)
 		{
-			final IVirtualFileSystem fs = virtualFile.getFileSystem();
+			final VirtualFileSystem fs = virtualFile.getFileSystem();
 			if(fs instanceof ArchiveFileSystem)
 			{
-				final VirtualFile jar = ((ArchiveFileSystem) fs).getVirtualFileForArchive(virtualFile);
+				final VirtualFile jar = ((ArchiveFileSystem) fs).getLocalVirtualFileFor(virtualFile);
 				if(jar != null)
 				{
 					module = fileIndex.getModuleForFile(jar);

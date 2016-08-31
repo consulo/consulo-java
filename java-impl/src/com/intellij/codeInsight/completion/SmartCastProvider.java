@@ -4,7 +4,6 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.TailType;
@@ -25,11 +24,13 @@ import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-class SmartCastProvider extends CompletionProvider<CompletionParameters>
+class SmartCastProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> TYPECAST_TYPE_CANDIDATE = psiElement().afterLeaf("(");
 
@@ -56,7 +57,7 @@ class SmartCastProvider extends CompletionProvider<CompletionParameters>
 
 	@RequiredReadAction
 	@Override
-	protected void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 	{
 		addCastVariants(parameters, result);
 	}

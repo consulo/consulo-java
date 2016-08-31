@@ -16,7 +16,7 @@
 package com.intellij.execution.application;
 
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
+import consulo.annotations.RequiredReadAction;
 import com.intellij.execution.lineMarker.ExecutorAction;
 import com.intellij.execution.lineMarker.RunLineMarkerContributor;
 import com.intellij.psi.PsiClass;

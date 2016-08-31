@@ -16,19 +16,19 @@
 
 package org.mustbe.consulo.java.ide.newProjectOrModule;
 
-import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.ide.impl.NewModuleBuilder;
-import org.mustbe.consulo.ide.impl.NewModuleContext;
-import org.mustbe.consulo.ide.impl.UnzipNewModuleBuilderProcessor;
 import org.mustbe.consulo.java.JavaIcons;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
+import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import consulo.ide.impl.NewModuleBuilder;
+import consulo.ide.impl.NewModuleContext;
+import consulo.ide.impl.UnzipNewModuleBuilderProcessor;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 /**
  * @author VISTALL

@@ -19,7 +19,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.TypedLookupItem;
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;

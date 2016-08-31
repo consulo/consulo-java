@@ -17,7 +17,7 @@ package com.intellij.codeInsight.editorActions.wordSelection;
 
 import java.util.List;
 
-import org.mustbe.consulo.RequiredReadAction;
+import consulo.annotations.RequiredReadAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.JavaDocTokenType;

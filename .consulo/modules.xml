@@ -4,7 +4,7 @@
     <modules>
       <module name="consulo-java" dirurl="file://$PROJECT_DIR$" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/dep" />
+          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/dep" />
           <extension id="java" sdk-module-name="" sdk-name="1.8" language-level-module-name="" language-level-name="JDK_1_8" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="EXCLUDED" url="file://$MODULE_DIR$/.consulo/sandbox" />
@@ -347,7 +347,7 @@
       </module>
       <module name="java-coverage-impl" dirurl="file://$PROJECT_DIR$/java-coverage-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" />
           <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
@@ -381,7 +381,7 @@
       </module>
       <module name="java-i18n" dirurl="file://$PROJECT_DIR$/java-i18n" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-java" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="consulo-java" sdk-name="" language-level-module-name="consulo-java" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />

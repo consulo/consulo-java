@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.CharTailType;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
@@ -45,11 +44,13 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.Function;
 import com.intellij.util.ProcessingContext;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-class TypeArgumentCompletionProvider extends CompletionProvider<CompletionParameters>
+class TypeArgumentCompletionProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> IN_TYPE_ARGS = psiElement().inside(PsiReferenceParameterList.class);
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.TypeArgumentCompletionProvider");
@@ -65,7 +66,7 @@ class TypeArgumentCompletionProvider extends CompletionProvider<CompletionParame
 
 	@RequiredReadAction
 	@Override
-	protected void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext processingContext, @NotNull final CompletionResultSet resultSet)
+	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext processingContext, @NotNull final CompletionResultSet resultSet)
 	{
 		final PsiElement context = parameters.getPosition();
 

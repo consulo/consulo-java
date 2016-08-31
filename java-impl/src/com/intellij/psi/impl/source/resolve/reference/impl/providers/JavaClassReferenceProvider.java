@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
@@ -42,6 +41,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.psi.PsiPackage;
 
 /**
  * Created by IntelliJ IDEA.

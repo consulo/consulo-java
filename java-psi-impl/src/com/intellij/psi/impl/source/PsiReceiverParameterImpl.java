@@ -17,13 +17,13 @@ package com.intellij.psi.impl.source;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.annotations.RequiredReadAction;
 
 public class PsiReceiverParameterImpl extends CompositePsiElement implements PsiReceiverParameter
 {

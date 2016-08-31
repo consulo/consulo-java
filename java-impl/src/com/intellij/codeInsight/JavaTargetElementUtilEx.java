@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.extensions.CompositeExtensionPointName;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
@@ -22,6 +21,9 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.psi.xml.XmlText;
 import com.intellij.util.Processor;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
+import consulo.extensions.CompositeExtensionPointName;
 
 /**
  * @author VISTALL

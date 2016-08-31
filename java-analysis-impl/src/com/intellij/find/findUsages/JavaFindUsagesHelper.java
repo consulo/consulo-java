@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.find.FindBundle;
@@ -61,6 +60,7 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.psi.PsiPackage;
 
 public class JavaFindUsagesHelper
 {

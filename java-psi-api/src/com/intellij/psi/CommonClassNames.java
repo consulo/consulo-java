@@ -1,7 +1,7 @@
 package com.intellij.psi;
 
-import org.mustbe.consulo.DeprecationInfo;
 import org.mustbe.consulo.java.util.JavaClassNames;
+import consulo.annotations.DeprecationInfo;
 
 /**
  * @author VISTALL

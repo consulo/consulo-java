@@ -20,12 +20,22 @@
  */
 package com.intellij.ide.favoritesTreeView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.ModuleGroup;
 import com.intellij.ide.projectView.impl.PackageViewPane;
 import com.intellij.ide.projectView.impl.ProjectRootsUtil;
-import com.intellij.ide.projectView.impl.nodes.*;
+import com.intellij.ide.projectView.impl.nodes.PackageElementNode;
+import com.intellij.ide.projectView.impl.nodes.PackageViewModuleGroupNode;
+import com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode;
+import com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode;
+import com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -42,13 +52,8 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import consulo.ide.projectView.impl.nodes.PackageElement;
+import consulo.psi.PsiPackage;
 
 public class PsiPackageFavoriteNodeProvider extends FavoriteNodeProvider {
   @Override

@@ -29,7 +29,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.ExternalAnnotationsManager;
@@ -69,6 +68,7 @@ import com.intellij.slicer.SliceUsage;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredDispatchThread;
 
 public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 {

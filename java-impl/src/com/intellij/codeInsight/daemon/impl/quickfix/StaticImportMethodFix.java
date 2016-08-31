@@ -38,7 +38,6 @@ import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.impl.AddSingleMemberStaticImportAction;
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.ide.util.MethodCellRenderer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -64,6 +63,7 @@ import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.Processor;
+import consulo.ide.IconDescriptorUpdaters;
 
 public class StaticImportMethodFix implements IntentionAction
 {

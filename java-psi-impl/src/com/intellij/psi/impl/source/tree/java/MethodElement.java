@@ -16,7 +16,6 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiClass;
@@ -28,6 +27,7 @@ import com.intellij.psi.impl.source.tree.*;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
+import consulo.annotations.RequiredReadAction;
 
 public class MethodElement extends CompositeElement implements Constants
 {

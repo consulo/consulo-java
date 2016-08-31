@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
-import com.intellij.codeInsight.TargetElementUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.TargetElementUtil;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;

@@ -15,16 +15,16 @@
  */
 package org.mustbe.consulo.java.psi.impl;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
-import org.consulo.module.extension.ModuleExtension;
-import org.consulo.psi.PsiPackage;
-import org.consulo.psi.PsiPackageManager;
-import org.consulo.psi.PsiPackageSupportProvider;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.impl.file.PsiPackageImpl;
+import consulo.module.extension.ModuleExtension;
+import consulo.psi.PsiPackage;
+import consulo.psi.PsiPackageManager;
+import consulo.psi.PsiPackageSupportProvider;
 
 /**
  * @author VISTALL

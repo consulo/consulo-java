@@ -15,13 +15,14 @@
  */
 package com.intellij.lang.java;
 
-import com.intellij.ide.highlighter.JavaFileHighlighter;
-import com.intellij.lang.LanguageVersion;
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import org.consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.highlighter.JavaFileHighlighter;
+import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
+import consulo.lang.LanguageVersion;
 
-public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighlighterFactory {
+public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighlighterFactory
+{
   public JavaSyntaxHighlighterFactory() {
     super(JavaLanguage.INSTANCE);
   }

@@ -23,7 +23,7 @@ package com.intellij.analysis;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.consulo.psi.PsiPackage;
+import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;

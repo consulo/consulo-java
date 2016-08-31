@@ -15,13 +15,13 @@
  */
 package com.intellij.psi.presentation.java;
 
-import com.intellij.ide.IconDescriptorUpdaters;
+import javax.swing.Icon;
+
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.psi.PsiVariable;
-
-import javax.swing.*;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author yole

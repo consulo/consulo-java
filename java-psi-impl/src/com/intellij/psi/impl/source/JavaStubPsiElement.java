@@ -21,7 +21,6 @@ package com.intellij.psi.impl.source;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.ide.util.PsiNavigationSupport;
 import com.intellij.lang.ASTNode;
@@ -41,6 +40,7 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.IncorrectOperationException;
+import consulo.annotations.RequiredReadAction;
 
 public abstract class JavaStubPsiElement<T extends StubElement> extends StubBasedPsiElementBase<T> implements StubBasedPsiElement<T>
 {

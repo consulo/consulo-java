@@ -23,7 +23,6 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
@@ -38,6 +37,7 @@ import com.intellij.psi.util.ProjectIconsAccessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
+import consulo.annotations.RequiredReadAction;
 
 /**
  * Shows small (16x16 or less) icons as gutters.

@@ -19,7 +19,7 @@ import gnu.trove.THashSet;
 
 import java.util.*;
 
-import org.consulo.psi.PsiPackage;
+import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer;
 import com.intellij.psi.*;

@@ -15,12 +15,16 @@
  */
 package com.intellij.ide.favoritesTreeView.smartPointerPsiNodes;
 
-import com.intellij.ide.IconDescriptorUpdaters;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ProjectViewNodeDecorator;
 import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.projectView.impl.nodes.PackageElement;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.navigation.PsiElementNavigationItem;
@@ -30,13 +34,15 @@ import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.util.PsiUtilCore;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import consulo.ide.IconDescriptorUpdaters;
+import consulo.ide.projectView.impl.nodes.PackageElement;
 
 public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPointer> extends ProjectViewNode<Type> implements
                                                                                                                   PsiElementNavigationItem {

@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.JavaClassNameCompletionContributor;
@@ -33,7 +32,6 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.LocalQuickFixProvider;
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
@@ -65,6 +63,8 @@ import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
+import consulo.ide.IconDescriptorUpdaters;
+import consulo.psi.PsiPackage;
 
 /**
  * @author peter

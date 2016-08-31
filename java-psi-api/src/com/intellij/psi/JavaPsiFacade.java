@@ -18,11 +18,11 @@ package com.intellij.psi;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.DeprecationInfo;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.search.GlobalSearchScope;
+import consulo.annotations.DeprecationInfo;
 
 /**
  * @author max

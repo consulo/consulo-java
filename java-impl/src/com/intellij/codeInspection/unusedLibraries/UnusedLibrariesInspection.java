@@ -61,7 +61,6 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryUtil;
-import com.intellij.openapi.roots.types.BinariesOrderRootType;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -77,6 +76,7 @@ import com.intellij.psi.search.scope.packageSet.PackageSetFactory;
 import com.intellij.psi.search.scope.packageSet.ParsingException;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.roots.types.BinariesOrderRootType;
 
 public class UnusedLibrariesInspection extends GlobalInspectionTool {
   private static final Logger LOG = Logger.getInstance("#" + UnusedLibrariesInspection.class.getName());

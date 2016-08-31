@@ -21,7 +21,7 @@ package com.intellij.psi.impl.source.codeStyle;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
+import consulo.annotations.RequiredReadAction;
 import com.intellij.formatting.Block;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;

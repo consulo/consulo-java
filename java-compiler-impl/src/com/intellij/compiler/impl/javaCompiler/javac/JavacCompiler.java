@@ -27,10 +27,7 @@ import java.util.StringTokenizer;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.JavaCompilerBundle;
 import com.intellij.compiler.JavaCompilerUtil;
@@ -70,6 +67,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
 import com.intellij.util.PathsList;
+import consulo.annotations.RequiredReadAction;
+import consulo.compiler.roots.CompilerPathsImpl;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 public class JavacCompiler extends ExternalCompiler
 {

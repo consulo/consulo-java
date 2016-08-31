@@ -18,7 +18,6 @@ package com.intellij.codeInsight.completion;
 import static com.intellij.patterns.StandardPatterns.or;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiJavaPatterns;
 import com.intellij.psi.PsiClass;
@@ -28,11 +27,13 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.filters.getters.ExpectedTypesGetter;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ProcessingContext;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-class ExpectedAnnotationsProvider extends CompletionProvider<CompletionParameters>
+class ExpectedAnnotationsProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> ANNOTATION_ATTRIBUTE_VALUE = or(PsiJavaPatterns.psiElement().withParent(PsiNameValuePair.class), PsiJavaPatterns.psiElement().withSuperParent(2,
 			PsiNameValuePair.class));

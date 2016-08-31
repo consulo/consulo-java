@@ -21,7 +21,6 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.JavaDebuggerEditorsProvider;
-import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.actions.DebuggerActions;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
@@ -81,6 +80,7 @@ import com.intellij.xdebugger.frame.XValueMarkerProvider;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.XDebuggerUtilImpl;
 import com.intellij.xdebugger.ui.XDebugTabLayouter;
+import consulo.annotations.RequiredDispatchThread;
 import consulo.internal.com.sun.jdi.event.Event;
 
 /**

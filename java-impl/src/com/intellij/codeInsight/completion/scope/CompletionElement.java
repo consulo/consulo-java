@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion.scope;
 
-import org.consulo.psi.PsiPackage;
+import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;

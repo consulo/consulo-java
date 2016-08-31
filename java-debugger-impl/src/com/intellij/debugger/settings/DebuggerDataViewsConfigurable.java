@@ -31,7 +31,6 @@ import javax.swing.event.ChangeListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.JavaDebuggerSupport;
@@ -45,6 +44,7 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.ui.classFilter.ClassFilterEditor;
 import com.intellij.util.ui.JBUI;
+import consulo.annotations.RequiredDispatchThread;
 
 /**
  * @author Eugene Belyaev

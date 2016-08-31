@@ -20,11 +20,8 @@
  */
 package com.intellij.compiler.cache;
 
-import org.consulo.compiler.ModuleCompilerPathsManager;
-import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
 import com.intellij.compiler.classParsing.AnnotationConstantValue;
 import com.intellij.compiler.classParsing.AnnotationNameValuePair;
 import com.intellij.compiler.classParsing.ConstantValue;
@@ -40,6 +37,9 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.cls.ClsUtil;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.lombok.annotations.Logger;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 @Logger
 public class JavaMakeUtil extends MakeUtil {

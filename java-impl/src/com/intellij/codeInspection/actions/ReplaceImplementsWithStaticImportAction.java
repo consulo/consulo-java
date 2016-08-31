@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;

@@ -15,10 +15,13 @@
  */
 package com.intellij.codeInsight.completion.util;
 
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiPrimitiveType;
@@ -27,10 +30,7 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.EmptyIcon;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author peter

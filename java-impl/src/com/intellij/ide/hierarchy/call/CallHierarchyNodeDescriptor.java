@@ -22,10 +22,8 @@ import java.util.List;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.JavaHierarchyUtil;
@@ -54,8 +52,9 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
-import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.LayeredIcon;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.ide.IconDescriptorUpdaters;
 
 public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor implements Navigatable
 {

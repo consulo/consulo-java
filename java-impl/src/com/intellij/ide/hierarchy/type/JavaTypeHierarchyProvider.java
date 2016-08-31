@@ -16,9 +16,6 @@
 package com.intellij.ide.hierarchy.type;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredDispatchThread;
-import com.intellij.codeInsight.TargetElementUtil;
-import com.intellij.codeInsight.TargetElementUtilEx;
 import com.intellij.ide.hierarchy.HierarchyBrowser;
 import com.intellij.ide.hierarchy.HierarchyProvider;
 import com.intellij.ide.hierarchy.TypeHierarchyBrowserBase;
@@ -36,6 +33,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiSyntheticClass;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author yole

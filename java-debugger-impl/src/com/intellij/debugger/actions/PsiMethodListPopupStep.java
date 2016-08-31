@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.unwrap.ScopeHighlighter;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.popup.ListPopupStep;
 import com.intellij.openapi.ui.popup.ListSeparator;

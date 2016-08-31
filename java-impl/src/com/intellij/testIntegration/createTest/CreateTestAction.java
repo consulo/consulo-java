@@ -20,8 +20,6 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.roots.ContentFolderScopes;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
@@ -50,6 +48,8 @@ import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testIntegration.TestFramework;
 import com.intellij.util.IncorrectOperationException;
+import consulo.roots.ContentFolderScopes;
+import consulo.roots.impl.TestContentFolderTypeProvider;
 
 public class CreateTestAction extends PsiElementBaseIntentionAction {
 

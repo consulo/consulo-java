@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.google.common.annotations.VisibleForTesting;
@@ -80,6 +79,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.psi.PsiPackage;
 
 public class PsiReferenceExpressionImpl extends PsiReferenceExpressionBase implements PsiReferenceExpression, SourceJavaCodeReference
 {

@@ -17,11 +17,6 @@ package com.intellij.ide.macro;
 
 import java.io.File;
 
-import org.consulo.compiler.ModuleCompilerPathsManager;
-import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -33,6 +28,11 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import consulo.annotations.RequiredReadAction;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.compiler.roots.CompilerPathsImpl;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.roots.impl.TestContentFolderTypeProvider;
 
 public final class OutputPathMacro extends Macro
 {

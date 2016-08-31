@@ -27,12 +27,12 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.openapi.vfs.ArchiveEntry;
-import com.intellij.openapi.vfs.ArchiveFile;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.jdk.internal.jimage.Consumer;
 import consulo.internal.jdk.internal.jimage.ImageReader;
 import consulo.internal.jdk.internal.jimage.UTF8String;
+import consulo.vfs.impl.archive.ArchiveEntry;
+import consulo.vfs.impl.archive.ArchiveFile;
 
 /**
  * @author VISTALL
@@ -42,9 +42,12 @@ public class JImageArchiveFile implements ArchiveFile
 {
 	private final Map<String, ArchiveEntry> myEntries;
 
+	private String myName;
+
 	public JImageArchiveFile(String basePath) throws IOException
 	{
 		File file = new File(basePath);
+		myName = file.getName();
 
 		final ImageReader imageReader = ImageReader.open(file.getPath());
 
@@ -90,6 +93,13 @@ public class JImageArchiveFile implements ArchiveFile
 		myEntries.put(archiveEntry.getName(), archiveEntry);
 	}
 
+	@NotNull
+	@Override
+	public String getName()
+	{
+		return myName;
+	}
+
 	@Nullable
 	@Override
 	public ArchiveEntry getEntry(String name)
@@ -99,7 +109,7 @@ public class JImageArchiveFile implements ArchiveFile
 
 	@Nullable
 	@Override
-	public InputStream getInputStream(ArchiveEntry entry) throws IOException
+	public InputStream getInputStream(@NotNull ArchiveEntry entry) throws IOException
 	{
 		if(entry.isDirectory())
 		{

@@ -19,7 +19,6 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
@@ -32,6 +31,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
+import consulo.psi.PsiPackage;
 
 public class JavaResolveUtil
 {

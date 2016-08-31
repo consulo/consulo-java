@@ -16,7 +16,8 @@
 package com.intellij.packaging.impl.elements;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.packaging.elements.ArchivePackageWriter;
+import consulo.packaging.elements.ArchivePackageWriter;
+import consulo.packaging.impl.elements.ZipArchivePackagingElement;
 
 /**
  * @author VISTALL

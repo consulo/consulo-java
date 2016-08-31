@@ -20,7 +20,6 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
@@ -35,6 +34,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.annotations.RequiredReadAction;
 
 /**
  * @author VISTALL

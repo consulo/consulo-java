@@ -24,6 +24,8 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import consulo.lombok.annotations.Lazy;
+import consulo.roots.OrderEntryWithTracking;
+import consulo.roots.OrderRootTypeWithConvert;
 
 /**
  * @author yole

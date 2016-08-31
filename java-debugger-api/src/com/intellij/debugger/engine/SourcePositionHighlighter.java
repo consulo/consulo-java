@@ -16,17 +16,17 @@
 package com.intellij.debugger.engine;
 
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.extensions.CompositeExtensionPointName;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.openapi.util.TextRange;
+import consulo.extensions.CompositeExtensionPointName;
 
 /**
  * @author Nikolay.Tropin
  */
 public interface SourcePositionHighlighter
 {
-	CompositeExtensionPointName<SourcePositionHighlighter>
-			EP_NAME = CompositeExtensionPointName.applicationPoint("org.consulo.java.debugger.sourcePositionHighlighter", SourcePositionHighlighter.class);
+	CompositeExtensionPointName<SourcePositionHighlighter> EP_NAME = CompositeExtensionPointName.applicationPoint("org.consulo.java.debugger.sourcePositionHighlighter",
+			SourcePositionHighlighter.class);
 
 	@Nullable
 	public abstract TextRange getHighlightRange(SourcePosition sourcePosition);

@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.MethodHierarchyBrowserBase;
@@ -46,6 +45,7 @@ import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiSyntheticClass;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.util.IncorrectOperationException;
+import consulo.annotations.RequiredDispatchThread;
 
 abstract class OverrideImplementMethodAction extends AnAction
 {

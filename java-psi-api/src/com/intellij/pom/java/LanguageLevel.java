@@ -15,14 +15,14 @@
  */
 package com.intellij.pom.java;
 
-import org.consulo.util.pointers.Named;
-import org.consulo.util.pointers.NamedPointer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.core.JavaCoreBundle;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.Key;
+import consulo.lang.LanguageVersion;
+import consulo.util.pointers.Named;
+import consulo.util.pointers.NamedPointer;
 
 /**
  * @author dsl

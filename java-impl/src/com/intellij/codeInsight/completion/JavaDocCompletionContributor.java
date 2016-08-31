@@ -76,6 +76,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * Created by IntelliJ IDEA.
@@ -98,10 +99,10 @@ public class JavaDocCompletionContributor extends CompletionContributor
 	{
 		extend(CompletionType.BASIC, PsiJavaPatterns.psiElement(JavaDocTokenType.DOC_TAG_NAME), new TagChooser());
 
-		extend(CompletionType.BASIC, PsiJavaPatterns.psiElement().inside(PsiDocComment.class), new CompletionProvider<CompletionParameters>()
+		extend(CompletionType.BASIC, PsiJavaPatterns.psiElement().inside(PsiDocComment.class), new CompletionProvider()
 		{
 			@Override
-			protected void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 			{
 				final PsiElement position = parameters.getPosition();
 				boolean isArg = PsiJavaPatterns.psiElement().afterLeaf("(").accepts(position);
@@ -177,7 +178,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 			}
 		});
 
-		extend(CompletionType.SMART, psiElement().inside(psiElement(PsiDocTag.class).withName(string().oneOf(PsiKeyword.THROWS, "exception"))), new CompletionProvider<CompletionParameters>()
+		extend(CompletionType.SMART, psiElement().inside(psiElement(PsiDocTag.class).withName(string().oneOf(PsiKeyword.THROWS, "exception"))), new CompletionProvider()
 		{
 			@Override
 			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
@@ -296,11 +297,11 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		}
 	}
 
-	private static class TagChooser extends CompletionProvider<CompletionParameters>
+	private static class TagChooser implements CompletionProvider
 	{
 
 		@Override
-		protected void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+		public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 		{
 			final List<String> ret = new ArrayList<String>();
 			final PsiElement position = parameters.getPosition();

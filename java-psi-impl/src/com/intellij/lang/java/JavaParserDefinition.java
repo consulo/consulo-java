@@ -15,12 +15,20 @@
  */
 package com.intellij.lang.java;
 
-import com.intellij.lang.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LanguageUtil;
+import com.intellij.lang.ParserDefinition;
+import com.intellij.lang.PsiParser;
 import com.intellij.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.JavaDocTokenType;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.impl.java.stubs.JavaStubElementType;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
@@ -29,7 +37,7 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.jetbrains.annotations.NotNull;
+import consulo.lang.LanguageVersion;
 
 /**
  * @author max
@@ -37,7 +45,7 @@ import org.jetbrains.annotations.NotNull;
 public class JavaParserDefinition implements ParserDefinition {
   @Override
   @NotNull
-  public Lexer createLexer(Project project, @NotNull LanguageVersion languageVersion) {
+  public Lexer createLexer(@NotNull LanguageVersion languageVersion) {
     return new JavaLexer((LanguageLevel)languageVersion);
   }
 
@@ -67,7 +75,7 @@ public class JavaParserDefinition implements ParserDefinition {
 
   @Override
   @NotNull
-  public PsiParser createParser(@NotNull Project project, @NotNull LanguageVersion languageVersion) {
+  public PsiParser createParser(@NotNull LanguageVersion languageVersion) {
     return new JavaParser();
   }
 

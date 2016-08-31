@@ -16,7 +16,7 @@
 
 package org.mustbe.consulo.java.library.jimage;
 
-import com.intellij.openapi.vfs.ArchiveEntry;
+import consulo.vfs.impl.archive.ArchiveEntry;
 
 /**
  * @author VISTALL

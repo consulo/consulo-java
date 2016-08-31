@@ -15,10 +15,10 @@
  */
 package com.intellij.lang.java;
 
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageVersion;
-import com.intellij.pom.java.LanguageLevel;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.Language;
+import com.intellij.pom.java.LanguageLevel;
+import consulo.lang.LanguageVersion;
 
 /**
  * @author max

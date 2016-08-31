@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.openapi.application.AccessToken;
@@ -71,6 +70,7 @@ import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
+import consulo.annotations.RequiredReadAction;
 
 public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters>
 {

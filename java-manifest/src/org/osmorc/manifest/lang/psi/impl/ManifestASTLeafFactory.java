@@ -28,10 +28,10 @@ package org.osmorc.manifest.lang.psi.impl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osmorc.manifest.lang.ManifestTokenType;
-import com.intellij.lang.ASTLeafFactory;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.tree.IElementType;
+import consulo.lang.LanguageVersion;
+import consulo.psi.tree.ASTLeafFactory;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

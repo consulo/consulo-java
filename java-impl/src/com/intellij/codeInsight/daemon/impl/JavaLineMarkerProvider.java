@@ -26,7 +26,6 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -58,6 +57,7 @@ import com.intellij.util.Function;
 import com.intellij.util.FunctionUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
+import consulo.annotations.RequiredReadAction;
 
 public class JavaLineMarkerProvider implements LineMarkerProvider
 {

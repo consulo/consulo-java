@@ -17,8 +17,8 @@ package com.intellij.codeInsight.navigation.actions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
-import com.intellij.codeInsight.TargetElementUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.TargetElementUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.JavaResolveResult;
 import com.intellij.psi.PsiClass;

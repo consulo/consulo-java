@@ -53,7 +53,6 @@ import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.impl.CompositeDependencyCache;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
@@ -94,6 +93,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopes;
 import com.intellij.util.Chunk;
 import com.intellij.util.cls.ClsFormatException;
+import consulo.compiler.make.impl.CompositeDependencyCache;
 
 /**
  * @author Eugene Zhuravlev

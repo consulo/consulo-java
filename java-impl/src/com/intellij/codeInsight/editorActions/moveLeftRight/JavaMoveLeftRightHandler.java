@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.editorActions.moveLeftRight;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
+import consulo.annotations.RequiredReadAction;
 import com.intellij.psi.PsiAnnotationParameterList;
 import com.intellij.psi.PsiArrayInitializerExpression;
 import com.intellij.psi.PsiClass;

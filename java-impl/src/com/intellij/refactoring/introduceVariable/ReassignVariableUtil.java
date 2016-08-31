@@ -17,7 +17,7 @@ package com.intellij.refactoring.introduceVariable;
 
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;

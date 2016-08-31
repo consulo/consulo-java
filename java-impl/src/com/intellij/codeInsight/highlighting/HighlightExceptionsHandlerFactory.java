@@ -20,7 +20,7 @@ import java.util.Collection;
 
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtil;
 import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;

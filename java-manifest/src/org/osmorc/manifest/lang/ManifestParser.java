@@ -28,12 +28,12 @@ import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.headerparser.HeaderUtil;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import consulo.lang.LanguageVersion;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

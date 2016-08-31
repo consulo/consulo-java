@@ -15,12 +15,12 @@
  */
 package com.intellij.psi.impl.source.tree;
 
-import com.intellij.lang.ASTCompositeFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.javadoc.CorePsiDocTagValueImpl;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import consulo.psi.tree.ASTCompositeFactory;
 
 /**
  * @author VISTALL

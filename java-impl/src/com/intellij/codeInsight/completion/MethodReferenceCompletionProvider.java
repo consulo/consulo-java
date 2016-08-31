@@ -31,13 +31,14 @@ import com.intellij.psi.impl.source.resolve.graphInference.FunctionalInterfacePa
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
+import consulo.codeInsight.completion.CompletionProvider;
 
-public class MethodReferenceCompletionProvider extends CompletionProvider<CompletionParameters>
+public class MethodReferenceCompletionProvider implements CompletionProvider
 {
 	private static final Logger LOG = Logger.getInstance("#" + MethodReferenceCompletionProvider.class.getName());
 
 	@Override
-	protected void addCompletions(@NotNull CompletionParameters parameters,
+	public void addCompletions(@NotNull CompletionParameters parameters,
 			ProcessingContext context,
 			@NotNull final CompletionResultSet result)
 	{

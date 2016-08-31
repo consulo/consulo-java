@@ -8,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.coverage.CoverageSuite;
 import com.intellij.coverage.CoverageSuitesBundle;
@@ -33,6 +32,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ui.ColumnInfo;
+import consulo.psi.PsiPackage;
 
 /**
  * User: anna

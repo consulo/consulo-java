@@ -7,11 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.consulo.compiler.ModuleCompilerPathsManager;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.roots.ContentFolderScopes;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtil;
@@ -37,6 +33,10 @@ import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.ProjectData;
 import com.intellij.util.containers.HashMap;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.roots.ContentFolderScopes;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.roots.impl.TestContentFolderTypeProvider;
 
 /**
  * @author ven

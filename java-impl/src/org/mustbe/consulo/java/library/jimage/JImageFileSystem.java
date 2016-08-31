@@ -16,17 +16,14 @@
 
 package org.mustbe.consulo.java.library.jimage;
 
-import consulo.lombok.annotations.Logger;
-import org.consulo.vfs.ArchiveFileSystemBase;
+import java.io.IOException;
+
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.vfs.ArchiveFile;
-import com.intellij.openapi.vfs.ArchiveFileSystem;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.impl.archive.ArchiveHandler;
-import com.intellij.openapi.vfs.impl.archive.ArchiveHandlerBase;
-import com.intellij.util.messages.MessageBus;
+import consulo.lombok.annotations.Logger;
+import consulo.vfs.impl.archive.ArchiveFile;
+import consulo.vfs.impl.archive.ArchiveFileSystemBase;
 
 /**
  * @author VISTALL
@@ -41,56 +38,15 @@ public class JImageFileSystem extends ArchiveFileSystemBase implements Applicati
 		return (JImageFileSystem) VirtualFileManager.getInstance().getFileSystem(JImageFileType.PROTOCOL);
 	}
 
-	public JImageFileSystem(MessageBus bus)
+	public JImageFileSystem()
 	{
-		super(bus);
-	}
-
-	@Override
-	public ArchiveHandler createHandler(ArchiveFileSystem fileSystem, final String path)
-	{
-		return new ArchiveHandlerBase(fileSystem, path)
-		{
-			@Nullable
-			@Override
-			protected ArchiveFile createArchiveFile()
-			{
-				try
-				{
-					return new JImageArchiveFile(path);
-				}
-				catch(Exception e)
-				{
-					LOGGER.error("Failed to load file: " + path, e);
-					return ArchiveFile.EMPTY;
-				}
-			}
-		};
-	}
-
-	@Override
-	public void initComponent()
-	{
-
-	}
-
-	@Override
-	public void disposeComponent()
-	{
-
+		super(JImageFileType.PROTOCOL);
 	}
 
 	@NotNull
 	@Override
-	public String getProtocol()
+	public ArchiveFile createArchiveFile(@NotNull String path) throws IOException
 	{
-		return JImageFileType.PROTOCOL;
-	}
-
-	@NotNull
-	@Override
-	public String getComponentName()
-	{
-		return getClass().getSimpleName();
+		return new JImageArchiveFile(path);
 	}
 }

@@ -8,14 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.consulo.compiler.ModuleCompilerPathsManager;
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.roots.ContentFolderScopes;
-import org.mustbe.consulo.roots.ContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.coverage.view.CoverageViewExtension;
 import com.intellij.coverage.view.CoverageViewManager;
 import com.intellij.coverage.view.JavaCoverageViewExtension;
@@ -60,6 +54,13 @@ import com.intellij.rt.coverage.data.JumpData;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.SwitchData;
 import com.intellij.util.containers.HashSet;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.psi.PsiPackage;
+import consulo.roots.ContentFolderScopes;
+import consulo.roots.ContentFolderTypeProvider;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.roots.impl.TestContentFolderTypeProvider;
+
 /**
  * @author Roman.Chernyatchik
  */

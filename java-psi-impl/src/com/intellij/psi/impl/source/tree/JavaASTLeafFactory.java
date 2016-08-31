@@ -16,8 +16,8 @@
 package com.intellij.psi.impl.source.tree;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.psi.tree.IElementType;
+import consulo.lang.LanguageVersion;
 
 /**
  * @author VISTALL

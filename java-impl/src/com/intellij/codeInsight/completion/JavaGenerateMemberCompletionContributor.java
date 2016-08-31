@@ -35,7 +35,6 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
@@ -48,6 +47,7 @@ import com.intellij.ui.RowIcon;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author peter

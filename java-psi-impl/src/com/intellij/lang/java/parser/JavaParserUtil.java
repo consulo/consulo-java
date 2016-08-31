@@ -15,6 +15,11 @@
  */
 package com.intellij.lang.java.parser;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.*;
 import com.intellij.lang.impl.PsiBuilderAdapter;
@@ -37,11 +42,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.indexing.IndexingDataKeys;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.PropertyKey;
-
-import java.util.List;
 
 public class JavaParserUtil {
   private static final Key<Boolean> DEEP_PARSE_BLOCKS_IN_STATEMENTS = Key.create("JavaParserUtil.ParserExtender");
@@ -153,7 +153,7 @@ public class JavaParserUtil {
 
     final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
     final LanguageLevel level = PsiUtil.getLanguageLevel(psi);
-    final Lexer lexer = LanguageParserDefinitions.INSTANCE.forLanguage(JavaLanguage.INSTANCE).createLexer(project, level);
+    final Lexer lexer = LanguageParserDefinitions.INSTANCE.forLanguage(JavaLanguage.INSTANCE).createLexer(level);
     Language language = psi.getLanguage();
     if (!language.isKindOf(JavaLanguage.INSTANCE)) language = JavaLanguage.INSTANCE;
 
@@ -169,7 +169,7 @@ public class JavaParserUtil {
 
     final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
     final LanguageLevel level = PsiUtil.getLanguageLevel(psi);
-    final Lexer lexer = LanguageParserDefinitions.INSTANCE.forLanguage(JavaLanguage.INSTANCE).createLexer(project, level);
+    final Lexer lexer = LanguageParserDefinitions.INSTANCE.forLanguage(JavaLanguage.INSTANCE).createLexer(level);
 
     return factory.createBuilder(project, chameleon, lexer, chameleon.getTokenType().getLanguage(), level, chameleon.getText());
   }
@@ -189,7 +189,7 @@ public class JavaParserUtil {
     final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
     final Lexer lexer = chameleon.getElementType() == JavaDocElementType.DOC_COMMENT
                         ? new JavaDocLexer(level.isAtLeast(LanguageLevel.JDK_1_5))
-                        : parserDefinition.createLexer(project, level);
+                        : parserDefinition.createLexer(level);
     final PsiBuilder builder = factory.createBuilder(project, chameleon, lexer, chameleon.getElementType().getLanguage(), level, chameleon.getChars());
 
     final PsiBuilder.Marker root = builder.mark();

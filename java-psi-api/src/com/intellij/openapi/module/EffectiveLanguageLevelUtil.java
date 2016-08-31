@@ -15,11 +15,11 @@
  */
 package com.intellij.openapi.module;
 
-import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.annotations.RequiredReadAction;
 
 public class EffectiveLanguageLevelUtil
 {

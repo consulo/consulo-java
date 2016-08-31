@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExpectedTypeInfo;
@@ -44,6 +43,7 @@ import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.util.CollectConsumer;
 import com.intellij.util.Consumer;
+import consulo.psi.PsiPackage;
 
 /**
  * @author peter

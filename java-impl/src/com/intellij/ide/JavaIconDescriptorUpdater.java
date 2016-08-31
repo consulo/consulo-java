@@ -16,7 +16,6 @@
 package com.intellij.ide;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.JavaIcons;
 import org.mustbe.consulo.java.util.JavaClassNames;
 import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
@@ -31,6 +30,10 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiMethodUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.ide.IconDescriptor;
+import consulo.ide.IconDescriptorUpdater;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author VISTALL

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
@@ -23,6 +22,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.HashMap;
+import consulo.psi.PsiPackage;
 
 /**
  * @author Roman.Chernyatchik

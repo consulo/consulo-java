@@ -30,13 +30,13 @@ import org.osmorc.manifest.lang.psi.ManifestStubElementTypes;
 import org.osmorc.manifest.lang.psi.elementtype.AbstractManifestStubElementType;
 import org.osmorc.manifest.lang.psi.impl.ManifestFileImpl;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.LanguageVersionableParserDefinition;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.util.PsiUtil;
+import consulo.lang.LanguageVersionableParserDefinition;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

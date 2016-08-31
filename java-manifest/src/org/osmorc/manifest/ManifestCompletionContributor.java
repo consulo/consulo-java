@@ -25,14 +25,18 @@
 
 package org.osmorc.manifest;
 
-import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.headerparser.HeaderParserEP;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.patterns.PlatformPatterns;
+import com.intellij.util.ProcessingContext;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * Completion contributor which adds the name of all known headers to the autocomplete list.
@@ -44,7 +48,7 @@ import org.osmorc.manifest.lang.headerparser.HeaderParserEP;
 public class ManifestCompletionContributor extends CompletionContributor {
   public ManifestCompletionContributor() {
     extend(CompletionType.BASIC, PlatformPatterns.psiElement(ManifestTokenType.HEADER_NAME).withLanguage(ManifestLanguage.INSTANCE),
-           new CompletionProvider<CompletionParameters>() {
+           new CompletionProvider() {
 
              public void addCompletions(@NotNull CompletionParameters completionparameters,
                                         ProcessingContext processingcontext,

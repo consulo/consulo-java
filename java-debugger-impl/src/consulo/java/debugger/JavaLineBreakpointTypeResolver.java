@@ -2,7 +2,7 @@ package consulo.java.debugger;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
+import consulo.annotations.RequiredReadAction;
 import com.intellij.debugger.ui.breakpoints.JavaFieldBreakpointType;
 import com.intellij.debugger.ui.breakpoints.JavaLineBreakpointType;
 import com.intellij.debugger.ui.breakpoints.JavaLineBreakpointTypeBase;

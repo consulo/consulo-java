@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
@@ -62,6 +61,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.indexing.IndexingDataKeys;
+import consulo.psi.PsiPackage;
 
 public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJavaFile
 {

@@ -5,14 +5,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.consulo.compiler.ModuleCompilerPathsManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassReader;
 import org.jetbrains.org.objectweb.asm.util.Textifier;
 import org.jetbrains.org.objectweb.asm.util.TraceClassVisitor;
-import org.mustbe.consulo.roots.impl.ProductionContentFolderTypeProvider;
-import org.mustbe.consulo.roots.impl.TestContentFolderTypeProvider;
 import com.intellij.codeInsight.documentation.DockablePopupManager;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.openapi.components.ServiceManager;
@@ -33,6 +30,9 @@ import com.intellij.psi.presentation.java.SymbolPresentationUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.content.Content;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.roots.impl.TestContentFolderTypeProvider;
 
 /**
  * User: anna

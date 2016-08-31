@@ -16,9 +16,6 @@
 package com.intellij.vcsUtil;
 
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredDispatchThread;
-import com.intellij.codeInsight.TargetElementUtil;
-import com.intellij.codeInsight.TargetElementUtilEx;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -34,6 +31,9 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiStatement;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author yole

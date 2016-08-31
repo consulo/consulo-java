@@ -20,10 +20,22 @@
  */
 package com.intellij.compiler.cache;
 
+import gnu.trove.TIntHashSet;
+
+import java.io.File;
+import java.io.IOException;
+import java.rmi.Remote;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.classParsing.*;
 import com.intellij.compiler.impl.ExitException;
 import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.DependencyCache;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerManager;
@@ -40,16 +52,10 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.cls.ClsFormatException;
 import com.intellij.util.cls.ClsUtil;
-import gnu.trove.TIntHashSet;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import consulo.compiler.make.DependencyCache;
 
-import java.io.File;
-import java.io.IOException;
-import java.rmi.Remote;
-import java.util.*;
-
-public class JavaDependencyCache implements DependencyCache {
+public class JavaDependencyCache implements DependencyCache
+{
   private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.make.DependencyCache");
 
   private volatile Cache myCache;

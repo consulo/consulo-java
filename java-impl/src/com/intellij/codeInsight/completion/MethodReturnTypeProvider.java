@@ -21,7 +21,6 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
@@ -32,18 +31,20 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-class MethodReturnTypeProvider extends CompletionProvider<CompletionParameters>
+class MethodReturnTypeProvider implements CompletionProvider
 {
 	protected static final ElementPattern<PsiElement> IN_METHOD_RETURN_TYPE = psiElement().withParents(PsiJavaCodeReferenceElement.class, PsiTypeElement.class,
 			PsiMethod.class).andNot(JavaKeywordCompletion.AFTER_DOT);
 
 	@RequiredReadAction
 	@Override
-	protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull final CompletionResultSet result)
+	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull final CompletionResultSet result)
 	{
 		addProbableReturnTypes(parameters, result);
 	}

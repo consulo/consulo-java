@@ -34,7 +34,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;

@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightClassUtil;
@@ -48,11 +47,13 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
+import consulo.annotations.RequiredReadAction;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
  */
-public class JavaInheritorsGetter extends CompletionProvider<CompletionParameters>
+public class JavaInheritorsGetter implements CompletionProvider
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.JavaInheritorsGetter");
 	private final ConstructorInsertHandler myConstructorInsertHandler;

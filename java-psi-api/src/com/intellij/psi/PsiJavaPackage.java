@@ -15,18 +15,19 @@
  */
 package com.intellij.psi;
 
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.ArrayFactory;
-import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.ArrayFactory;
+import consulo.psi.PsiPackage;
 
 /**
  * Represents a Java package.
  */
-public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage {
+public interface PsiJavaPackage extends PsiModifierListOwner, PsiPackage
+{
   @NonNls String PACKAGE_INFO_CLASS = "package-info";
   @NonNls String PACKAGE_INFO_FILE = PACKAGE_INFO_CLASS + ".java";
 

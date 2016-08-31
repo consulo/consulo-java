@@ -26,7 +26,7 @@ package org.osmorc.manifest.lang;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.Language;
-import com.intellij.lang.LanguageVersion;
+import consulo.lang.LanguageVersion;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

@@ -20,7 +20,7 @@ import java.awt.Font;
 import javax.swing.Icon;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.JavaHierarchyUtil;

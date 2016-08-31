@@ -32,8 +32,6 @@ import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredDispatchThread;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -46,6 +44,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;
 import com.intellij.util.Function;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.annotations.RequiredReadAction;
 
 /**
  * @author Gregory.Shrago

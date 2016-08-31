@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source.codeStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.consulo.psi.PsiPackage;
+import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTNode;

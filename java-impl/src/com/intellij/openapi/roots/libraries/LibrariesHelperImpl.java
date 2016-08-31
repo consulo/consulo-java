@@ -21,10 +21,10 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.openapi.roots.types.BinariesOrderRootType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
+import consulo.roots.types.BinariesOrderRootType;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
  * @author lesya

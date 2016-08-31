@@ -53,6 +53,7 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.util.ReflectionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
@@ -130,10 +131,10 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 
 		extend(CompletionType.SMART, InstanceofTypeProvider.AFTER_INSTANCEOF, new InstanceofTypeProvider());
 
-		extend(CompletionType.SMART, psiElement(), new CompletionProvider<CompletionParameters>()
+		extend(CompletionType.SMART, psiElement(), new CompletionProvider()
 		{
 			@Override
-			protected void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
+			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 			{
 				if(SmartCastProvider.shouldSuggestCast(parameters))
 				{

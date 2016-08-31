@@ -15,13 +15,13 @@
  */
 package org.mustbe.consulo.java.module.extension;
 
-import org.consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;
-import org.consulo.util.pointers.NamedPointer;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
+import consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;
+import consulo.util.pointers.NamedPointer;
 
 /**
  * @author VISTALL

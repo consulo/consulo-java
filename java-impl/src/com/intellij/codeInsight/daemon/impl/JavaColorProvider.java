@@ -19,8 +19,6 @@ import java.awt.Color;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.RequiredWriteAction;
 import com.intellij.openapi.editor.ElementColorProvider;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -33,6 +31,8 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.ui.ColorUtil;
+import consulo.annotations.RequiredReadAction;
+import consulo.annotations.RequiredWriteAction;
 
 /**
  * @author Konstantin Bulenkov

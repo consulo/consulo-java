@@ -14,8 +14,6 @@ import java.util.StringTokenizer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.DeprecationInfo;
-import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
@@ -30,6 +28,8 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
+import consulo.annotations.DeprecationInfo;
+import consulo.annotations.RequiredReadAction;
 import consulo.lombok.annotations.ProjectService;
 
 @ProjectService

@@ -1,8 +1,8 @@
 package com.intellij.coverage;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.ide.projectView.impl.nodes.PackageElement;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.packageDependencies.ui.PackageDependenciesNode;
@@ -12,7 +12,7 @@ import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.ColoredTreeCellRenderer;
-import org.jetbrains.annotations.Nullable;
+import consulo.ide.projectView.impl.nodes.PackageElement;
 
 /**
  * @author yole

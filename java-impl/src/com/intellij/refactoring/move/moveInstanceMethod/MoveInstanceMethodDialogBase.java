@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.move.moveInstanceMethod;
 
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;

@@ -15,6 +15,14 @@
  */
 package com.intellij.codeInsight.completion;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -31,26 +39,20 @@ import com.intellij.util.Function;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
 * @author peter
 */
-class SameSignatureCallParametersProvider extends CompletionProvider<CompletionParameters> {
+class SameSignatureCallParametersProvider implements CompletionProvider
+{
   static final PsiElementPattern.Capture<PsiElement> IN_CALL_ARGUMENT =
     psiElement().beforeLeaf(psiElement(JavaTokenType.RPARENTH)).afterLeaf("(").withParent(
       psiElement(PsiReferenceExpression.class).withParent(
         psiElement(PsiExpressionList.class).withParent(PsiCall.class)));
 
   @Override
-  protected void addCompletions(@NotNull CompletionParameters parameters,
+  public void addCompletions(@NotNull CompletionParameters parameters,
                                 ProcessingContext context,
                                 @NotNull CompletionResultSet result) {
     final PsiCall methodCall = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiCall.class);

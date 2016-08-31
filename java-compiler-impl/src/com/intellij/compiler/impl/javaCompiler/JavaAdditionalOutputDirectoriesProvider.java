@@ -19,8 +19,6 @@ import java.util.Arrays;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.compiler.roots.CompilerPathsImpl;
-import com.intellij.compiler.impl.AdditionalOutputDirectoriesProvider;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.module.Module;
@@ -29,12 +27,15 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.ArrayUtil;
+import consulo.compiler.impl.AdditionalOutputDirectoriesProvider;
+import consulo.compiler.roots.CompilerPathsImpl;
 
 /**
  * @author VISTALL
  * @since 20:24/12.06.13
  */
-public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider {
+public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider
+{
 
   @NotNull
   @Override

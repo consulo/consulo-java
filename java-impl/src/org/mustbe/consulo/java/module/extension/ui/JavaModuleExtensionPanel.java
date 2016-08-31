@@ -26,12 +26,6 @@ import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.consulo.module.extension.ModuleExtension;
-import org.consulo.module.extension.ModuleExtensionWithSdk;
-import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
-import org.consulo.module.extension.ui.ModuleExtensionSdkBoxBuilder;
-import org.mustbe.consulo.RequiredDispatchThread;
-import org.mustbe.consulo.RequiredReadAction;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtension;
 import org.mustbe.consulo.java.module.extension.SpecialDirLocation;
@@ -53,6 +47,12 @@ import com.intellij.ui.ColoredListCellRendererWrapper;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.TitledSeparator;
 import com.intellij.util.PairConsumer;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.annotations.RequiredReadAction;
+import consulo.extension.ui.ModuleExtensionSdkBoxBuilder;
+import consulo.module.extension.ModuleExtension;
+import consulo.module.extension.ModuleExtensionWithSdk;
+import consulo.module.extension.MutableModuleInheritableNamedPointer;
 
 /**
  * @author VISTALL

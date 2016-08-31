@@ -15,7 +15,7 @@
  */
 package com.intellij.usages.impl.rules;
 
-import com.intellij.ide.IconDescriptorUpdaters;
+import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.navigation.NavigationItemFileStatus;
 import com.intellij.openapi.actionSystem.DataKey;

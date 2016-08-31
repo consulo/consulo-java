@@ -15,19 +15,21 @@
  */
 package com.intellij.codeInsight.completion;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
+import consulo.codeInsight.completion.CompletionProvider;
 
 /**
  * @author peter
 */
-public abstract class ExpectedTypeBasedCompletionProvider extends CompletionProvider<CompletionParameters> {
+public abstract class ExpectedTypeBasedCompletionProvider implements CompletionProvider
+{
 
   @Override
   public void addCompletions(@NotNull final CompletionParameters params, final ProcessingContext matchingContext, @NotNull final CompletionResultSet result) {

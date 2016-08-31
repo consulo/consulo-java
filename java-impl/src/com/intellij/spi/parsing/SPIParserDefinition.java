@@ -17,14 +17,12 @@ package com.intellij.spi.parsing;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.spi.SPILanguage;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
@@ -38,6 +36,7 @@ import com.intellij.spi.psi.SPIClassProviderReferenceElement;
 import com.intellij.spi.psi.SPIClassProvidersElementList;
 import com.intellij.spi.psi.SPIFile;
 import com.intellij.spi.psi.SPIPackageOrClassReferenceElement;
+import consulo.lang.LanguageVersion;
 
 /**
  * User: anna
@@ -50,12 +49,12 @@ public class SPIParserDefinition implements ParserDefinition {
 
   @NotNull
   @Override
-  public Lexer createLexer(Project project, LanguageVersion languageVersion) {
+  public Lexer createLexer(LanguageVersion languageVersion) {
     return new SPILexer();
   }
 
   @Override
-  public PsiParser createParser(Project project, LanguageVersion languageVersion) {
+  public PsiParser createParser(LanguageVersion languageVersion) {
     return new PsiParser() {
       @NotNull
       @Override

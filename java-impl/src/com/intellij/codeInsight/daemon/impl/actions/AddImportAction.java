@@ -30,7 +30,6 @@ import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.hint.QuestionAction;
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.diagnostic.Logger;
@@ -52,6 +51,7 @@ import com.intellij.psi.statistics.JavaStatisticsManager;
 import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
+import consulo.ide.IconDescriptorUpdaters;
 
 public class AddImportAction implements QuestionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.actions.AddImportAction");

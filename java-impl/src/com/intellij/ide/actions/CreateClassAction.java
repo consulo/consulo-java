@@ -18,10 +18,9 @@ package com.intellij.ide.actions;
 
 import java.util.Map;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
-import org.consulo.module.extension.ModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -43,6 +42,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.util.IncorrectOperationException;
+import consulo.module.extension.ModuleExtension;
 
 /**
  * The standard "New Class" action.

@@ -17,9 +17,7 @@ package com.intellij.core;
 
 import java.io.File;
 
-import org.consulo.psi.PsiPackageManager;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.psi.impl.PsiPackageManagerImpl;
 import com.intellij.mock.MockFileIndexFacade;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
@@ -37,6 +35,8 @@ import com.intellij.psi.impl.PsiElementFactoryImpl;
 import com.intellij.psi.impl.file.impl.JavaFileManager;
 import com.intellij.psi.impl.source.resolve.JavaResolveCache;
 import com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl;
+import consulo.psi.PsiPackageManager;
+import consulo.psi.impl.PsiPackageManagerImpl;
 
 /**
  * TODO [VISTALL]

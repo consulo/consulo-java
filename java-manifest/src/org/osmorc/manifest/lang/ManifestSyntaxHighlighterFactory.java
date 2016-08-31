@@ -1,9 +1,9 @@
 package org.osmorc.manifest.lang;
 
-import org.consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.lang.LanguageVersion;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
+import consulo.lang.LanguageVersion;
 
 /**
  * @author VISTALL

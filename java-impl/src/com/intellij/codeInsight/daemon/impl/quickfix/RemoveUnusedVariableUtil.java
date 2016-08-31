@@ -15,16 +15,17 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import gnu.trove.THashSet;
+
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import gnu.trove.THashSet;
-import org.consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
+import consulo.psi.PsiPackage;
 
 public class RemoveUnusedVariableUtil {
   public static final int MAKE_STATEMENT = 1;

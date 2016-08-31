@@ -16,7 +16,7 @@
 package com.intellij.refactoring.typeMigration.actions;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtil;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;

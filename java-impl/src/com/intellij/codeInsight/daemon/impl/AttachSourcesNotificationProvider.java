@@ -28,8 +28,6 @@ import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.RequiredDispatchThread;
-import org.mustbe.consulo.editor.notifications.EditorNotificationProvider;
 import org.mustbe.consulo.java.JavaBundle;
 import com.intellij.ProjectTopics;
 import com.intellij.codeEditor.JavaEditorFileSwapper;
@@ -53,8 +51,6 @@ import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.types.BinariesOrderRootType;
-import com.intellij.openapi.roots.types.SourcesOrderRootType;
 import com.intellij.openapi.roots.ui.configuration.PathUIUtils;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -76,6 +72,10 @@ import com.intellij.ui.GuiUtils;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.editor.notifications.EditorNotificationProvider;
+import consulo.roots.types.BinariesOrderRootType;
+import consulo.roots.types.SourcesOrderRootType;
 
 /**
  * @author Dmitry Avdeev

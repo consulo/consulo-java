@@ -25,7 +25,6 @@ import org.jetbrains.annotations.TestOnly;
 import org.mustbe.consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -35,6 +34,7 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.psi.*;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.util.IncorrectOperationException;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author Dmitry Batkovich

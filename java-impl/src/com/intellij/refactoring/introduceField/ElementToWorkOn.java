@@ -18,10 +18,7 @@ package com.intellij.refactoring.introduceField;
 import java.util.Iterator;
 import java.util.List;
 
-import org.mustbe.consulo.RequiredDispatchThread;
 import com.intellij.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.TargetElementUtil;
-import com.intellij.codeInsight.TargetElementUtilEx;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.project.Project;
@@ -45,6 +42,9 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author dsl
