@@ -30,13 +30,7 @@
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-manifest" />
-          <orderEntry type="module-library">
-            <library name="consulo:Spellchecker">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/dep/spellchecker/lib/spellchecker.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
+          <orderEntry type="library" name="consulo-plugin: com.intellij.spellchecker" level="project" />
         </module-layer>
       </module>
       <module name="java-compiler-artifact-impl" dirurl="file://$PROJECT_DIR$/java-compiler-artifact-impl" current-layer="Default">
@@ -199,14 +193,8 @@
           <orderEntry type="module" module-name="java-debugger-api" exported="" />
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-rt" />
-          <orderEntry type="module-library">
-            <library name="consulo:Images">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/images/lib/images.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="library" name="jetbrains-asm" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.images" level="project" />
         </module-layer>
       </module>
       <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl" current-layer="Default">
@@ -241,16 +229,7 @@
           <orderEntry type="module" module-name="java-analysis-api" exported="" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-indexing-api" />
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
         </module-layer>
       </module>
       <module name="java-psi-impl" dirurl="file://$PROJECT_DIR$/java-psi-impl" current-layer="Default">
@@ -282,16 +261,10 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module-library">
-            <library name="consulo:IntelliLang">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/intelliLang/lib/intelliLang.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
           <orderEntry type="module" module-name="java-compiler-impl" />
           <orderEntry type="library" name="jetbrains-asm" level="project" />
+          <orderEntry type="library" name="consulo-plugin: org.intellij.intelliLang" level="project" />
         </module-layer>
       </module>
       <module name="java-impl" dirurl="file://$PROJECT_DIR$/java-impl" current-layer="Default">
@@ -308,27 +281,12 @@
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-impl" exported="" />
           <orderEntry type="module" module-name="java-analysis-impl" exported="" />
-          <orderEntry type="module-library">
-            <library name="consulo:Regexp">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/regexp/lib/regexp.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="java-indexing-impl" exported="" />
           <orderEntry type="module" module-name="java-rt" />
           <orderEntry type="module" module-name="java-execution-api" />
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="library" name="jimage-jdk6" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.regexp" level="project" />
         </module-layer>
       </module>
       <module name="java-manifest" dirurl="file://$PROJECT_DIR$/java-manifest" current-layer="Default">
@@ -389,31 +347,10 @@
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module-library">
-            <library name="consulo:Properties Support">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/properties/lib/properties.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:Spellchecker">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/spellchecker/lib/spellchecker.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.spellchecker" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.properties" level="project" />
         </module-layer>
       </module>
       <module name="java-xml-impl" dirurl="file://$PROJECT_DIR$/java-xml-impl" current-layer="Default">
@@ -426,17 +363,8 @@
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="java-impl" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
         </module-layer>
       </module>
       <module name="json-descriptor-impl" dirurl="file://$PROJECT_DIR$/json-descriptor-impl" current-layer="Default">
@@ -449,19 +377,8 @@
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module-library">
-            <library name="consulo:JavaScript">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/debugger-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/javascript.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/json-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/json_simple-1.1.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/lib.org.chromium.sdk.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/lib.org.chromium.sdk.wipbackend.protocol_1_0.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="java-psi-impl" />
+          <orderEntry type="library" name="consulo-plugin: org.mustbe.consulo.javascript" level="project" />
         </module-layer>
       </module>
     </modules>
