@@ -25,7 +25,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
  */
 public interface DependencyProcessor {
   ExtensionPointName<DependencyProcessor> EXTENSION_POINT_NAME =
-    ExtensionPointName.create("org.consulo.java.compiler.makeDependencyProcessor");
+    ExtensionPointName.create("consulo.java.compiler.makeDependencyProcessor");
 
   void processDependencies(CompileContext context, int classQualifiedName, CachingSearcher searcher) throws CacheCorruptedException;
 }

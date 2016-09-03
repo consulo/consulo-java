@@ -20,7 +20,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;

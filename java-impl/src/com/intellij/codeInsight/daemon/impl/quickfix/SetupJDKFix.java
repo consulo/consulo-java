@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;

@@ -24,7 +24,7 @@ import com.intellij.psi.PsiClass;
  */
 public interface GenerateToStringClassFilter
 {
-	ExtensionPointName<GenerateToStringClassFilter> EP_NAME = ExtensionPointName.create("org.consulo.java.generation.toStringClassFilter");
+	ExtensionPointName<GenerateToStringClassFilter> EP_NAME = ExtensionPointName.create("consulo.java.generation.toStringClassFilter");
 
 	boolean canGenerateToString(PsiClass psiClass);
 }

@@ -30,7 +30,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public interface MoveClassHandler
 {
-	ExtensionPointName<MoveClassHandler> EP_NAME = new ExtensionPointName<MoveClassHandler>("org.consulo.java.refactoring.moveClassHandler");
+	ExtensionPointName<MoveClassHandler> EP_NAME = new ExtensionPointName<MoveClassHandler>("consulo.java.refactoring.moveClassHandler");
 
 	void prepareMove(@NotNull PsiClass aClass);
 

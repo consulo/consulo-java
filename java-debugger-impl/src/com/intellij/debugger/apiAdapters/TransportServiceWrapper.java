@@ -20,12 +20,13 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.ExecutionException;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
+import consulo.java.debugger.apiAdapters.TransportClassDelegates;
+import consulo.lombok.annotations.Logger;
 
 @Logger
 public class TransportServiceWrapper

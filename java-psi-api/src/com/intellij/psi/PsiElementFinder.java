@@ -35,7 +35,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public abstract class PsiElementFinder
 {
-	public static final ExtensionPointName<PsiElementFinder> EP_NAME = ExtensionPointName.create("org.consulo.java.elementFinder");
+	public static final ExtensionPointName<PsiElementFinder> EP_NAME = ExtensionPointName.create("consulo.java.elementFinder");
 
 	/**
 	 * Searches the specified scope within the project for a class with the specified full-qualified

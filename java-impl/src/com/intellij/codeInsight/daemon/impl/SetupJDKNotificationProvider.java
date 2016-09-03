@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ProjectTopics;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.highlighter.JavaClassFileType;

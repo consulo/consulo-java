@@ -18,7 +18,7 @@ import com.intellij.psi.PsiFile;
 public abstract class JavaCoverageEngineExtension
 {
 	public static final ExtensionPointName<JavaCoverageEngineExtension> EP_NAME =
-			ExtensionPointName.create("org.consulo.java.coverageEngineExtension");
+			ExtensionPointName.create("consulo.java.coverageEngineExtension");
 
 	public abstract boolean isApplicableTo(@Nullable RunConfigurationBase conf);
 

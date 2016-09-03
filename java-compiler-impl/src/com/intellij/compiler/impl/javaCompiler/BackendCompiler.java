@@ -26,10 +26,11 @@ import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.util.UserDataHolderBase;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
 
 public interface BackendCompiler
 {
-	ExtensionPointName<BackendCompilerEP> EP_NAME = ExtensionPointName.create("org.consulo.java.backendCompiler");
+	ExtensionPointName<BackendCompilerEP> EP_NAME = ExtensionPointName.create("consulo.java.backendCompiler");
 
 	@NotNull
 	String getPresentableName();

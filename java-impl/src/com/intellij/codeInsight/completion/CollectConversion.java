@@ -17,8 +17,8 @@ package com.intellij.codeInsight.completion;
 
 import static com.intellij.psi.CommonClassNames.JAVA_UTIL_LIST;
 import static com.intellij.psi.CommonClassNames.JAVA_UTIL_SET;
-import static org.mustbe.consulo.java.util.JavaClassNames.JAVA_UTIL_STREAM_COLLECTORS;
-import static org.mustbe.consulo.java.util.JavaClassNames.JAVA_UTIL_STREAM_STREAM;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_STREAM_COLLECTORS;
+import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_STREAM_STREAM;
 
 import java.util.Collection;
 import java.util.Set;

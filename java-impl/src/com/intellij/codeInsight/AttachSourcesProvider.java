@@ -15,18 +15,18 @@
  */
 package com.intellij.codeInsight;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.roots.LibraryOrderEntry;
 import com.intellij.openapi.util.ActionCallback;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.List;
 
 public interface AttachSourcesProvider {
   ExtensionPointName<AttachSourcesProvider> EP_NAME =
-    new ExtensionPointName<AttachSourcesProvider>("org.consulo.java.attachSourcesProvider");
+    new ExtensionPointName<AttachSourcesProvider>("consulo.java.attachSourcesProvider");
 
 
   @NotNull

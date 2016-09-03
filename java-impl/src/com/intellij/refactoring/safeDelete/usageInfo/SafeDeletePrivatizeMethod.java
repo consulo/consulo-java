@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.safeDelete.usageInfo;
 
-import org.mustbe.consulo.java.util.JavaClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiMethod;

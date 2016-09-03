@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
 import com.intellij.codeInsight.CodeInsightUtil;
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.EmptyExpression;
 import com.intellij.codeInsight.generation.ClassMember;
 import com.intellij.codeInsight.generation.GenerateFieldOrPropertyHandler;

@@ -17,7 +17,7 @@ package com.intellij.openapi.roots.impl;
 
 import java.util.Set;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.internal.statistic.AbstractApplicationUsagesCollector;
 import com.intellij.internal.statistic.beans.GroupDescriptor;

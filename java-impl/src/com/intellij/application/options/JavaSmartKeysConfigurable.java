@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.javadoc.JavadocBundle;
 import com.intellij.openapi.options.BeanConfigurable;
 import com.intellij.openapi.options.Configurable;
+import consulo.java.application.options.JavaSmartKeysSettings;
 
 /**
  * @author Denis Zhdanov

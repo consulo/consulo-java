@@ -15,17 +15,17 @@
  */
 package com.intellij.psi.augment;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.openapi.extensions.Extensions;
+import com.intellij.psi.PsiElement;
+
 
 public abstract class PsiAugmentProvider {
-  public static final ExtensionPointName<PsiAugmentProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.augmentProvider");
+  public static final ExtensionPointName<PsiAugmentProvider> EP_NAME = ExtensionPointName.create("consulo.java.augmentProvider");
 
   @NotNull
   public abstract <Psi extends PsiElement> List<Psi> getAugments(@NotNull PsiElement element, @NotNull Class<Psi> type);

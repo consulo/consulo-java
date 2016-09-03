@@ -15,8 +15,8 @@
  */
 package com.intellij.execution.ui;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.extensions.ExtensionPointName;
 
 /**
  * Extension point for providing custom jre to be shown at run configuration control.
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface JreProvider {
 
-  ExtensionPointName<JreProvider> EP_NAME = new ExtensionPointName<JreProvider>("org.consulo.java.jreProvider");
+  ExtensionPointName<JreProvider> EP_NAME = new ExtensionPointName<JreProvider>("consulo.java.jreProvider");
   
   @NotNull
   String getJrePath();

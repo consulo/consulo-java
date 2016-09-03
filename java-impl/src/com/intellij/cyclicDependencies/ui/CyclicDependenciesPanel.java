@@ -35,7 +35,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.java.JavaIcons;
+import consulo.java.JavaIcons;
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.cyclicDependencies.CyclicDependenciesBuilder;

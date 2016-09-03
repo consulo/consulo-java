@@ -28,7 +28,7 @@ import java.util.List;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.debugger.impl.GenericDebugRunnerConfiguration;
+import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;

@@ -33,8 +33,8 @@ import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.psi.PsiAdapter;
-import org.mustbe.consulo.java.codeInsight.JavaCodeInsightBundle;
-import org.mustbe.consulo.java.codeInsight.JavaCodeInsightSettings;
+import consulo.java.codeInsight.JavaCodeInsightBundle;
+import consulo.java.codeInsight.JavaCodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.generation.EqualsHashCodeTemplatesManager;

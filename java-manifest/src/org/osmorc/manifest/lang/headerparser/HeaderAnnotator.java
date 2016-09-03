@@ -27,6 +27,7 @@ package org.osmorc.manifest.lang.headerparser;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
+import consulo.java.manifest.lang.headerparser.HeaderUtil;
 import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 

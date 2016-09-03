@@ -17,7 +17,7 @@ package com.intellij.codeInspection;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.JavaInspectionsBundle;
+import consulo.java.codeInsight.JavaInspectionsBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiElement;

@@ -19,7 +19,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;

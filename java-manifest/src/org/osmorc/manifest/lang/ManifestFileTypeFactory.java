@@ -3,6 +3,7 @@ package org.osmorc.manifest.lang;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
+import consulo.java.manifest.lang.BndFileType;
 
 /**
  * @author yole

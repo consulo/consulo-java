@@ -56,7 +56,7 @@ public class OverridingMethodsSearch extends ExtensibleQueryFactory<PsiMethod, O
   }
 
   private OverridingMethodsSearch() {
-    super("org.consulo.java");
+    super("consulo.java");
   }
 
   public static Query<PsiMethod> search(final PsiMethod method, SearchScope scope, final boolean checkDeep) {

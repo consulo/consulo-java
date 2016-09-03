@@ -30,7 +30,7 @@ import javax.swing.text.Document;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
-import org.mustbe.consulo.java.util.JavaClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;

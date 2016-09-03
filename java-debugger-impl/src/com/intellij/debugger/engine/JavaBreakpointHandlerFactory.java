@@ -22,7 +22,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
  */
 public interface JavaBreakpointHandlerFactory
 {
-	ExtensionPointName<JavaBreakpointHandlerFactory> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.javaBreakpointHandlerFactory");
+	ExtensionPointName<JavaBreakpointHandlerFactory> EP_NAME = ExtensionPointName.create("consulo.java.debugger.javaBreakpointHandlerFactory");
 
 	JavaBreakpointHandler createHandler(DebugProcessImpl process);
 }

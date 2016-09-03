@@ -32,7 +32,7 @@ import com.intellij.util.containers.MultiMap;
  */
 public interface MoveMemberHandler
 {
-	LanguageExtension<MoveMemberHandler> EP_NAME = new LanguageExtension<MoveMemberHandler>("org.consulo.java.refactoring.moveMemberHandler");
+	LanguageExtension<MoveMemberHandler> EP_NAME = new LanguageExtension<MoveMemberHandler>("consulo.java.refactoring.moveMemberHandler");
 
 	@Nullable
 	MoveMembersProcessor.MoveMembersUsageInfo getUsage(@NotNull PsiMember member, @NotNull PsiReference ref, @NotNull Set<PsiMember> membersToMove,

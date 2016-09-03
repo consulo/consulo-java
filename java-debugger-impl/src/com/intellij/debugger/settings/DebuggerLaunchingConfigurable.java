@@ -27,7 +27,7 @@ import javax.swing.JRadioButton;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
-import com.intellij.debugger.apiAdapters.TransportClassDelegates;
+import consulo.java.debugger.apiAdapters.TransportClassDelegates;
 import com.intellij.openapi.options.ConfigurableUi;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.ui.components.panels.VerticalBox;

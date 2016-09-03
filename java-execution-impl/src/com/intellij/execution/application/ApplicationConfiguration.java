@@ -22,7 +22,7 @@ import java.util.Map;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.debugger.impl.GenericDebugRunnerConfiguration;
+import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;

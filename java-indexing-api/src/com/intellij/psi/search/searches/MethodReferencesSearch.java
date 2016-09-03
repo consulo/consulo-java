@@ -44,8 +44,7 @@ import com.intellij.util.containers.ContainerUtil;
 public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 		MethodReferencesSearch.SearchParameters>
 {
-	public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("org.consulo.java" +
-			".methodReferencesSearch");
+	public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("consulo.java.methodReferencesSearch");
 	public static final MethodReferencesSearch INSTANCE = new MethodReferencesSearch();
 
 	public static class SearchParameters implements DumbAwareSearchParameters
@@ -128,7 +127,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 
 	private MethodReferencesSearch()
 	{
-		super("org.consulo.java");
+		super("consulo.java");
 	}
 
 	public static Query<PsiReference> search(@NotNull PsiMethod method,

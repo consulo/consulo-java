@@ -24,7 +24,7 @@ import com.intellij.psi.PsiMember;
  * Date: 1/31/12
  */
 public abstract class CanBeFinalHandler {
-  public static final ExtensionPointName<CanBeFinalHandler> EP_NAME = ExtensionPointName.create("org.consulo.java.canBeFinal");
+  public static final ExtensionPointName<CanBeFinalHandler> EP_NAME = ExtensionPointName.create("consulo.java.canBeFinal");
 
   public abstract boolean canBeFinal(PsiMember member);
 

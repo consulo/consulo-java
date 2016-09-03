@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInspection;
 
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.MethodThrowsFix;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClassType;

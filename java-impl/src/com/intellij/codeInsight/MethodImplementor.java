@@ -29,7 +29,7 @@ import com.intellij.util.IncorrectOperationException;
  */
 public interface MethodImplementor extends MemberImplementorExplorer
 {
-	ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create("org.consulo.java.methodImplementor");
+	ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create("consulo.java.methodImplementor");
 
 	@NotNull
 	PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;

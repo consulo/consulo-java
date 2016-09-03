@@ -18,7 +18,7 @@ package com.siyeh.ig.performance;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInspection.JavaExtensionPoints;
+import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassInitializer;

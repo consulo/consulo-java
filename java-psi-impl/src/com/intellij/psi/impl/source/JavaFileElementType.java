@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source;
 import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.util.JavaClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;

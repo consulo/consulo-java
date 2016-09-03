@@ -47,7 +47,7 @@ import com.intellij.codeInspection.GlobalInspectionTool;
 import com.intellij.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.JavaExtensionPoints;
+import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.ProblemDescriptionsProcessor;
 import com.intellij.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.ex.GlobalInspectionContextBase;

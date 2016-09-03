@@ -15,17 +15,17 @@
  */
 package com.intellij.execution;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * User: anna
  * Date: Mar 4, 2005
  */
 public interface JavaTestPatcher {
-  ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create("org.consulo.java.testPatcher");
+  ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create("consulo.java.testPatcher");
 
   void patchJavaParameters(@NotNull Module module, @NotNull JavaParameters javaParameters);
 }

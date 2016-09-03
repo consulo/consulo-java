@@ -18,7 +18,7 @@ package com.siyeh.ig.fixes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtilBase;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.util.Processor;

@@ -29,8 +29,7 @@ import com.intellij.refactoring.classMembers.MemberInfoBase;
  */
 public interface PullUpHelper<T extends MemberInfoBase<? extends PsiMember>>
 {
-	LanguageExtension<PullUpHelperFactory> INSTANCE = new LanguageExtension<PullUpHelperFactory>("org.consulo.java" +
-			".refactoring.pullUpHelperFactory");
+	LanguageExtension<PullUpHelperFactory> INSTANCE = new LanguageExtension<>("consulo.java.refactoring.pullUpHelperFactory");
 
 	void encodeContextInfo(T info);
 

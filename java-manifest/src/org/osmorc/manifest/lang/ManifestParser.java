@@ -26,7 +26,7 @@ package org.osmorc.manifest.lang;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import org.osmorc.manifest.lang.headerparser.HeaderUtil;
+import consulo.java.manifest.lang.headerparser.HeaderUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
@@ -38,7 +38,7 @@ import consulo.lang.LanguageVersion;
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
-class ManifestParser implements PsiParser {
+public class ManifestParser implements PsiParser {
   private boolean currentHeaderIsSimpleHeader;
 
   private PsiBuilder.Marker headerValuePartMarker;

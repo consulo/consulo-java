@@ -27,10 +27,10 @@ import java.util.StringTokenizer;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.CompilerIOUtil;
-import com.intellij.compiler.JavaCompilerBundle;
-import com.intellij.compiler.JavaCompilerUtil;
+import consulo.java.compiler.JavaCompilerBundle;
+import consulo.java.compiler.JavaCompilerUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;

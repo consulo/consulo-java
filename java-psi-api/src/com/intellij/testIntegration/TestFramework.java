@@ -29,7 +29,7 @@ import com.intellij.util.IncorrectOperationException;
 
 public interface TestFramework
 {
-	ExtensionPointName<TestFramework> EXTENSION_NAME = ExtensionPointName.create("org.consulo.java.testFramework");
+	ExtensionPointName<TestFramework> EXTENSION_NAME = ExtensionPointName.create("consulo.java.testFramework");
 
 	@NotNull
 	String getName();

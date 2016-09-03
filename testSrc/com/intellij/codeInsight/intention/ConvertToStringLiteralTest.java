@@ -19,6 +19,7 @@ package com.intellij.codeInsight.intention;
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
+import consulo.java.JavaQuickFixBundle;
 
 
 public class ConvertToStringLiteralTest extends JavaCodeInsightFixtureTestCase {
@@ -27,7 +28,7 @@ public class ConvertToStringLiteralTest extends JavaCodeInsightFixtureTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    myIntention = org.mustbe.consulo.java.JavaQuickFixBundle.message("convert.to.string.text");
+    myIntention = JavaQuickFixBundle.message("convert.to.string.text");
   }
 
   public void testSimple() throws Exception {

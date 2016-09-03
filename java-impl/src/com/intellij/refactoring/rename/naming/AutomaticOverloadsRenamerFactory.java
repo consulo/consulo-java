@@ -25,7 +25,7 @@ import java.util.Collection;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.refactoring.JavaRefactoringBundle;
+import consulo.java.refactoring.JavaRefactoringBundle;
 import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.usageView.UsageInfo;
 

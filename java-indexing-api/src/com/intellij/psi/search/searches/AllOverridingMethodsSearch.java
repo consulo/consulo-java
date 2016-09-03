@@ -59,7 +59,7 @@ public class AllOverridingMethodsSearch extends ExtensibleQueryFactory<Pair<PsiM
 
 	private AllOverridingMethodsSearch()
 	{
-		super("org.consulo.java");
+		super("consulo.java");
 	}
 
 	public static Query<Pair<PsiMethod, PsiMethod>> search(final PsiClass aClass, SearchScope scope)

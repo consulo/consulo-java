@@ -25,7 +25,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
  */
 public abstract class JvmSteppingCommandProvider
 {
-	public static final ExtensionPointName<JvmSteppingCommandProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.jvmSteppingCommandProvider");
+	public static final ExtensionPointName<JvmSteppingCommandProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.jvmSteppingCommandProvider");
 
 	/**
 	 * @return null if can not handle

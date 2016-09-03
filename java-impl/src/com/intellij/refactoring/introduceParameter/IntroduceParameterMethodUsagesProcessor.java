@@ -27,7 +27,7 @@ import com.intellij.util.containers.MultiMap;
  */
 public interface IntroduceParameterMethodUsagesProcessor {
   ExtensionPointName<IntroduceParameterMethodUsagesProcessor> EP_NAME =
-    new ExtensionPointName<IntroduceParameterMethodUsagesProcessor>("org.consulo.java.refactoring.introduceParameterMethodUsagesProcessor");
+    new ExtensionPointName<IntroduceParameterMethodUsagesProcessor>("consulo.java.refactoring.introduceParameterMethodUsagesProcessor");
 
   boolean isMethodUsage(UsageInfo usage);
 

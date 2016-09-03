@@ -28,7 +28,7 @@ package org.osmorc.manifest;
 import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestTokenType;
-import org.osmorc.manifest.lang.headerparser.HeaderParserEP;
+import consulo.java.manifest.lang.headerparser.HeaderParserEP;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;

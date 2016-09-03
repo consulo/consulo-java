@@ -29,7 +29,7 @@ import com.intellij.psi.util.PropertyUtil;
  */
 public abstract class GetterSetterPrototypeProvider
 {
-	public static final ExtensionPointName<GetterSetterPrototypeProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.getterSetterProvider");
+	public static final ExtensionPointName<GetterSetterPrototypeProvider> EP_NAME = ExtensionPointName.create("consulo.java.getterSetterProvider");
 
 	public abstract boolean canGeneratePrototypeFor(PsiField field);
 

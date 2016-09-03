@@ -1,15 +1,15 @@
 package com.intellij.execution;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Sergey Evdokimov
  */
 public abstract class JUnitRecognizer {
 
-  public static final ExtensionPointName<JUnitRecognizer> EP_NAME = ExtensionPointName.create("org.consulo.java.junitRecognizer");
+  public static final ExtensionPointName<JUnitRecognizer> EP_NAME = ExtensionPointName.create("consulo.java.junitRecognizer");
 
   public abstract boolean isTestAnnotated(@NotNull PsiMethod method);
 

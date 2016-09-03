@@ -18,7 +18,7 @@ package com.intellij.codeInsight.template.postfix.util;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.java.util.JavaClassNames;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.codeInsight.CodeInsightServicesUtil;
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatePsiInfo;

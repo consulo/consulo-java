@@ -16,7 +16,7 @@
 package com.intellij.codeInspection.wrongPackageStatement;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;

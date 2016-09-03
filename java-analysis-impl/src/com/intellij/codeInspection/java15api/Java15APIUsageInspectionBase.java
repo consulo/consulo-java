@@ -70,8 +70,7 @@ import com.intellij.util.containers.hash.HashSet;
 public class Java15APIUsageInspectionBase extends BaseJavaBatchLocalInspectionTool
 {
 	public static final String SHORT_NAME = "Since15";
-	public static final ExtensionPointName<FileCheckingInspection> EP_NAME = ExtensionPointName.create("org.consulo" +
-			".java.java15InspectionTool");
+	public static final ExtensionPointName<FileCheckingInspection> EP_NAME = ExtensionPointName.create("consulo.java.java15InspectionTool");
 
 	private static final String EFFECTIVE_LL = "effectiveLL";
 

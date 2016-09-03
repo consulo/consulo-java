@@ -28,7 +28,7 @@ import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFileHandler;
 import com.intellij.refactoring.util.MoveRenameUsageInfo;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;
-import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
+import consulo.java.util.JavaProjectRootsUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

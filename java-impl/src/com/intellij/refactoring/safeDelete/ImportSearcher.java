@@ -15,15 +15,15 @@
  */
 package com.intellij.refactoring.safeDelete;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Max Medvedev
  */
 public abstract class ImportSearcher {
-  private static final ExtensionPointName<ImportSearcher> EP_NAME = ExtensionPointName.create("org.consulo.java.safeDelete.importSearcher");
+  private static final ExtensionPointName<ImportSearcher> EP_NAME = ExtensionPointName.create("consulo.java.safeDelete.importSearcher");
 
   /**
    * @return found import or null

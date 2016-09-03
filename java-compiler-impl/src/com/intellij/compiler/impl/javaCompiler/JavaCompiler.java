@@ -18,7 +18,7 @@ package com.intellij.compiler.impl.javaCompiler;
 
 import java.util.Arrays;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.CompilerException;

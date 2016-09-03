@@ -42,7 +42,7 @@ import com.intellij.refactoring.util.RadioUpDownListener;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashSet;
-import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
+import consulo.java.util.JavaProjectRootsUtil;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

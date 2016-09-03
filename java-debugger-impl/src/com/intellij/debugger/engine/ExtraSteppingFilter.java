@@ -22,7 +22,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
  */
 public interface ExtraSteppingFilter
 {
-	ExtensionPointName<ExtraSteppingFilter> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.extraSteppingFilter");
+	ExtensionPointName<ExtraSteppingFilter> EP_NAME = ExtensionPointName.create("consulo.java.debugger.extraSteppingFilter");
 
 	boolean isApplicable(SuspendContext context);
 

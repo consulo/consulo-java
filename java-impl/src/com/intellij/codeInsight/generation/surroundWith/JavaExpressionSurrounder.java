@@ -29,7 +29,7 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
 
 public abstract class JavaExpressionSurrounder implements Surrounder {
-  public static ExtensionPointName<JavaExpressionSurrounder> EP_NAME = ExtensionPointName.create("org.consulo.java.expressionSurrounder");
+  public static ExtensionPointName<JavaExpressionSurrounder> EP_NAME = ExtensionPointName.create("consulo.java.expressionSurrounder");
   
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.surroundWith.SurroundExpressionHandler");
 

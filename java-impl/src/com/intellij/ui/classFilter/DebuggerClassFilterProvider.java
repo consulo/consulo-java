@@ -15,16 +15,16 @@
  */
 package com.intellij.ui.classFilter;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-
 import java.util.List;
+
+import com.intellij.openapi.extensions.ExtensionPointName;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Oct 22, 2008
  */
 public interface DebuggerClassFilterProvider {
-  ExtensionPointName<DebuggerClassFilterProvider> EP_NAME = new ExtensionPointName<DebuggerClassFilterProvider>("org.consulo.java.debuggerClassFilterProvider");
+  ExtensionPointName<DebuggerClassFilterProvider> EP_NAME = new ExtensionPointName<DebuggerClassFilterProvider>("consulo.java.debuggerClassFilterProvider");
 
   List<ClassFilter> getFilters();
 }

@@ -28,7 +28,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 
 public abstract class ResourceBundleManager {
-  private static final ExtensionPointName<ResourceBundleManager> RESOURCE_BUNDLE_MANAGER = ExtensionPointName.create("org.consulo.java.resourceBundleManager");
+  private static final ExtensionPointName<ResourceBundleManager> RESOURCE_BUNDLE_MANAGER = ExtensionPointName.create("consulo.java.resourceBundleManager");
   protected final Project myProject;
 
   protected ResourceBundleManager(final Project project) {

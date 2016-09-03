@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.swing.Icon;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.module.ModuleUtil;
@@ -30,7 +30,7 @@ import com.intellij.packaging.artifacts.ArtifactType;
 import com.intellij.packaging.elements.CompositePackagingElement;
 import com.intellij.packaging.elements.PackagingElementOutputKind;
 import com.intellij.packaging.elements.PackagingElementResolvingContext;
-import com.intellij.packaging.impl.elements.JarArchivePackagingElement;
+import consulo.java.packaging.impl.elements.JarArchivePackagingElement;
 
 /**
  * @author nik

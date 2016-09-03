@@ -22,6 +22,8 @@
  */
 package com.intellij.execution;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.configuration.RunConfigurationExtensionBase;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
@@ -31,11 +33,9 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class RunConfigurationExtension extends RunConfigurationExtensionBase<RunConfigurationBase>{
-  public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = new ExtensionPointName<RunConfigurationExtension>("org.consulo.java.runConfigurationExtension");
+  public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = new ExtensionPointName<>("consulo.java.runConfigurationExtension");
 
   public abstract <T extends RunConfigurationBase > void updateJavaParameters(final T configuration, final JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException;
 

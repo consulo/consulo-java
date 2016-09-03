@@ -16,7 +16,7 @@
 package com.intellij.openapi.fileTypes.impl;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.library.jimage.JImageFileType;
+import consulo.java.library.jimage.JImageFileType;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;

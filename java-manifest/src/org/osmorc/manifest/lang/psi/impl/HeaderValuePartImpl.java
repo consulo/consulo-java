@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import org.osmorc.manifest.lang.headerparser.HeaderUtil;
+import consulo.java.manifest.lang.headerparser.HeaderUtil;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.psi.ManifestToken;

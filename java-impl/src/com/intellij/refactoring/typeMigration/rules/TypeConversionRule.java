@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.typeMigration.rules;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiExpression;
@@ -23,14 +24,13 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiType;
 import com.intellij.refactoring.typeMigration.TypeConversionDescriptorBase;
 import com.intellij.refactoring.typeMigration.TypeMigrationLabeler;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author anna
  * Date: 08-Aug-2008
  */
 public abstract class TypeConversionRule {
-  public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create("org.consulo.java.conversion.rule");
+  public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create("consulo.java.conversion.rule");
   @Nullable
   public abstract TypeConversionDescriptorBase findConversion(final PsiType from,
                                                               final PsiType to,

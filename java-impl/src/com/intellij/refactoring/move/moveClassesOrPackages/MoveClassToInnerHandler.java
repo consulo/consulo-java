@@ -33,7 +33,7 @@ import com.intellij.usageView.UsageInfo;
  */
 public interface MoveClassToInnerHandler {
   ExtensionPointName<MoveClassToInnerHandler> EP_NAME =
-		  new ExtensionPointName<MoveClassToInnerHandler>("org.consulo.java.refactoring.moveClassToInnerHandler");
+		  new ExtensionPointName<MoveClassToInnerHandler>("consulo.java.refactoring.moveClassToInnerHandler");
 
   @Nullable
   PsiClass moveClass(@NotNull PsiClass aClass, @NotNull PsiClass targetClass);

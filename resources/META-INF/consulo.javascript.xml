@@ -1,5 +1,5 @@
 <idea-plugin>
 	<extensions defaultExtensionNs="consulo.javascript">
-		<jsonDescriptionByAnotherPsiElementProvider implementation="org.mustbe.consulo.json.GsonDescriptionByAnotherPsiElementProvider" />
+		<jsonDescriptionByAnotherPsiElementProvider implementation="consulo.json.GsonDescriptionByAnotherPsiElementProvider" />
 	</extensions>
 </idea-plugin>

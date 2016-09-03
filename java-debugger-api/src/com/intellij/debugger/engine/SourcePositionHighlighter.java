@@ -25,7 +25,7 @@ import consulo.extensions.CompositeExtensionPointName;
  */
 public interface SourcePositionHighlighter
 {
-	CompositeExtensionPointName<SourcePositionHighlighter> EP_NAME = CompositeExtensionPointName.applicationPoint("org.consulo.java.debugger.sourcePositionHighlighter",
+	CompositeExtensionPointName<SourcePositionHighlighter> EP_NAME = CompositeExtensionPointName.applicationPoint("consulo.java.debugger.sourcePositionHighlighter",
 			SourcePositionHighlighter.class);
 
 	@Nullable

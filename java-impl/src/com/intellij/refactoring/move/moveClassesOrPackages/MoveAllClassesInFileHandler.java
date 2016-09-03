@@ -25,7 +25,7 @@ import com.intellij.psi.PsiElement;
 public abstract class MoveAllClassesInFileHandler
 {
 	public static ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME =
-			new ExtensionPointName<MoveAllClassesInFileHandler>("org.consulo.java.refactoring.moveAllClassesInFileHandler");
+			new ExtensionPointName<MoveAllClassesInFileHandler>("consulo.java.refactoring.moveAllClassesInFileHandler");
 
 	public abstract void processMoveAllClassesInFile(@NotNull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove);
 }

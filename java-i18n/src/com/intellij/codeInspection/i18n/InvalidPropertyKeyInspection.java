@@ -15,11 +15,24 @@
  */
 package com.intellij.codeInspection.i18n;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.FileCheckingInspection;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.properties.PropertiesReferenceManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -32,10 +45,6 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author max
@@ -43,7 +52,7 @@ import java.util.*;
  */
 public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
   private static final ExtensionPointName<FileCheckingInspection> EP_NAME =
-    ExtensionPointName.create("org.consulo.java.invalidPropertyKeyInspectionTool");
+    ExtensionPointName.create("consulo.java.invalidPropertyKeyInspectionTool");
 
   @Override
   @NotNull

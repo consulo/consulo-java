@@ -63,6 +63,7 @@ import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
+import consulo.java.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 
 /**
  * @author Maxim.Medvedev

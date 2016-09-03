@@ -40,7 +40,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionProfile;
 import com.intellij.codeInspection.InspectionsBundle;
@@ -106,7 +106,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   private static final String IGNORE_ACCESSORS_ATTR_NAME = "IGNORE_ACCESSORS";
-  private static final String JAVADOC_NOT_NESSARY_EP_NAME = "org.consulo.java.javaDocNotNecessary";
+  private static final String JAVADOC_NOT_NESSARY_EP_NAME = "consulo.java.javaDocNotNecessary";
 
   public static class Options implements JDOMExternalizable {
     @NonNls public String ACCESS_JAVADOC_REQUIRED_FOR = NONE;

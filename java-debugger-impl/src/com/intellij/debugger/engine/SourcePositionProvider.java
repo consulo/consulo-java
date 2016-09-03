@@ -25,7 +25,7 @@ import com.intellij.openapi.project.Project;
 
 public abstract class SourcePositionProvider
 {
-	public static final ExtensionPointName<SourcePositionProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.sourcePositionProvider");
+	public static final ExtensionPointName<SourcePositionProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.sourcePositionProvider");
 
 	@Nullable
 	public static SourcePosition getSourcePosition(@NotNull NodeDescriptor descriptor, @NotNull Project project, @NotNull DebuggerContextImpl context)

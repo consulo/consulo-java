@@ -21,8 +21,8 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
-import org.mustbe.consulo.java.util.JavaClassNames;
+import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;

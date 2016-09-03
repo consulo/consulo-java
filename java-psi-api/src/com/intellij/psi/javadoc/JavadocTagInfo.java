@@ -15,17 +15,17 @@
  */
 package com.intellij.psi.javadoc;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author mike
  */
 public interface JavadocTagInfo {
-  ExtensionPointName<JavadocTagInfo> EP_NAME = ExtensionPointName.create("org.consulo.java.javadocTagInfo");
+  ExtensionPointName<JavadocTagInfo> EP_NAME = ExtensionPointName.create("consulo.java.javadocTagInfo");
 
   @NonNls String getName();
   boolean isInline();

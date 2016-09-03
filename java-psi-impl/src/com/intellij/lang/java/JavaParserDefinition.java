@@ -37,6 +37,7 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+import consulo.java.JavaParser;
 import consulo.lang.LanguageVersion;
 
 /**

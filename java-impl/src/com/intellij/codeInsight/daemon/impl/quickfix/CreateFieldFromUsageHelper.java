@@ -29,7 +29,7 @@ import com.intellij.psi.PsiSubstitutor;
  */
 public abstract class CreateFieldFromUsageHelper
 {
-	private static final LanguageExtension<CreateFieldFromUsageHelper> EP_NAME = new LanguageExtension<CreateFieldFromUsageHelper>("org.consulo.java" +
+	private static final LanguageExtension<CreateFieldFromUsageHelper> EP_NAME = new LanguageExtension<>("consulo.java" +
 			".codeInsight.createFieldFromUsageHelper");
 
 	@NotNull

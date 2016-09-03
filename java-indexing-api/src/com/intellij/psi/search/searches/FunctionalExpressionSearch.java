@@ -33,7 +33,7 @@ import com.intellij.util.QueryExecutor;
 
 public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters>
 {
-	public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("org.consulo.java.functionalInterfaceSearch");
+	public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("consulo.java.functionalInterfaceSearch");
 	public static final FunctionalExpressionSearch INSTANCE = new FunctionalExpressionSearch();
 
 	public static class SearchParameters
@@ -62,7 +62,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
 
 	public FunctionalExpressionSearch()
 	{
-		super("org.consulo.java");
+		super("consulo.java");
 	}
 
 	public static Query<PsiFunctionalExpression> search(@NotNull final PsiClass aClass, @NotNull SearchScope scope)

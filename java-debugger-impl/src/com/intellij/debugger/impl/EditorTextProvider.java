@@ -15,19 +15,19 @@
  */
 package com.intellij.debugger.impl;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides text in the editor for Evaluate expression action
  * @author Maxim.Medvedev
  */
 public interface EditorTextProvider {
-  LanguageExtension<EditorTextProvider> EP = new LanguageExtension<EditorTextProvider>("org.consulo.java.debuggerEditorTextProvider");
+  LanguageExtension<EditorTextProvider> EP = new LanguageExtension<EditorTextProvider>("consulo.java.debuggerEditorTextProvider");
 
   @Nullable
   TextWithImports getEditorText(PsiElement elementAtCaret);

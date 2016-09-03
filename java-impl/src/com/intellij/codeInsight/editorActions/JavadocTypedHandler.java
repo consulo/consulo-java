@@ -17,7 +17,7 @@ package com.intellij.codeInsight.editorActions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.application.options.JavaSmartKeysSettings;
+import consulo.java.application.options.JavaSmartKeysSettings;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;

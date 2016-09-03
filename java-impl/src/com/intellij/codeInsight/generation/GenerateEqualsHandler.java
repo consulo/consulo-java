@@ -18,7 +18,7 @@ package com.intellij.codeInsight.generation;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.codeInsight.JavaCodeInsightSettings;
+import consulo.java.codeInsight.JavaCodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.generation.ui.GenerateEqualsWizard;
 import com.intellij.codeInsight.hint.HintManager;

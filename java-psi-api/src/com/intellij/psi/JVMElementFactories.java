@@ -15,11 +15,11 @@
  */
 package com.intellij.psi;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Medvedev Max
@@ -28,7 +28,7 @@ public class JVMElementFactories extends LanguageExtension<JVMElementFactoryProv
   private static final JVMElementFactories INSTANCE = new JVMElementFactories();
 
   private JVMElementFactories() {
-    super("org.consulo.java.generation.topLevelFactory");
+    super("consulo.java.generation.topLevelFactory");
   }
 
   @Nullable

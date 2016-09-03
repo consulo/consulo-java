@@ -18,7 +18,7 @@ package com.intellij.ide.highlighter;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.JavaIcons;
+import consulo.java.JavaIcons;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;

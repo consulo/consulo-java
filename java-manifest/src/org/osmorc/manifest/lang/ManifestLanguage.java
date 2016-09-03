@@ -26,6 +26,7 @@ package org.osmorc.manifest.lang;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.Language;
+import consulo.java.manifest.lang.ManifestLanguageVersion;
 import consulo.lang.LanguageVersion;
 
 /**

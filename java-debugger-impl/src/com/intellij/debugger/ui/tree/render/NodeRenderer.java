@@ -19,7 +19,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 
 public interface NodeRenderer extends ChildrenRenderer, ValueLabelRenderer
 {
-	ExtensionPointName<NodeRenderer> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger.nodeRenderer");
+	ExtensionPointName<NodeRenderer> EP_NAME = ExtensionPointName.create("consulo.java.debugger.nodeRenderer");
 
 	String getName();
 

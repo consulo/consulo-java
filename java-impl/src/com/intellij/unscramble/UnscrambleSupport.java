@@ -15,12 +15,12 @@
  */
 package com.intellij.unscramble;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.extensions.ExtensionPointName;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.extensions.ExtensionPointName;
+import com.intellij.openapi.project.Project;
 
 public interface UnscrambleSupport {
-  ExtensionPointName<UnscrambleSupport> EP_NAME = ExtensionPointName.create("org.consulo.java.unscrambleSupport");
+  ExtensionPointName<UnscrambleSupport> EP_NAME = ExtensionPointName.create("consulo.java.unscrambleSupport");
 
   @Nullable
   String unscramble(Project project, String text, String logName);

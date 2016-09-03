@@ -18,7 +18,7 @@ package com.intellij.codeInsight.generation;
 import javax.swing.JComponent;
 
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.java.codeInsight.JavaCodeInsightBundle;
+import consulo.java.codeInsight.JavaCodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;

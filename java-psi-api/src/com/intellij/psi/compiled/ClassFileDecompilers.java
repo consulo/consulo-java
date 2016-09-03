@@ -83,7 +83,7 @@ public class ClassFileDecompilers
 	}
 
 
-	public static ExtensionPointName<Decompiler> EP_NAME = ExtensionPointName.create("org.consulo.java.psi.classFileDecompiler");
+	public static ExtensionPointName<Decompiler> EP_NAME = ExtensionPointName.create("consulo.java.psi.classFileDecompiler");
 
 	private ClassFileDecompilers()
 	{

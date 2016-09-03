@@ -15,17 +15,17 @@
  */
 package com.intellij.debugger.engine;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Max Medvedev
  */
 public abstract class TopLevelParentClassProvider {
   private static final ExtensionPointName<TopLevelParentClassProvider> EP_NAME =
-    ExtensionPointName.create("org.consulo.java.topLevelClassProvider");
+    ExtensionPointName.create("consulo.java.topLevelClassProvider");
 
   public static PsiClass getTopLevelParentClass(PsiClass psiClass) {
     for (TopLevelParentClassProvider provider : EP_NAME.getExtensions()) {

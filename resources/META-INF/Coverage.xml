@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-	<extensions defaultExtensionNs="org.consulo.java">
+	<extensions defaultExtensionNs="consulo.java">
 		<runConfigurationExtension implementation="com.intellij.execution.coverage.CoverageJavaRunConfigurationExtension"/>
 	</extensions>
 
@@ -10,7 +10,6 @@
 		<coverageEngine implementation="com.intellij.coverage.JavaCoverageEngine" order="last"/>
 		<projectViewNodeDecorator implementation="com.intellij.coverage.CoverageProjectViewClassNodeDecorator"/>
 
-		<errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
 		<projectService serviceInterface="com.intellij.coverage.JavaCoverageAnnotator"
 						serviceImplementation="com.intellij.coverage.JavaCoverageAnnotator"/>
 		<programRunner implementation="com.intellij.coverage.DefaultJavaCoverageRunner" id="DefaultJavaCoverageRunner"/>

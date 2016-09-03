@@ -25,8 +25,7 @@ import com.intellij.openapi.project.Project;
  */
 public interface ClassTypePointerFactory
 {
-	ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create("org.consulo.java" +
-			".classTypePointerFactory");
+	ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create("consulo.java.classTypePointerFactory");
 
 	@Nullable
 	SmartTypePointer createClassTypePointer(@NotNull PsiClassType classType, @NotNull Project project);

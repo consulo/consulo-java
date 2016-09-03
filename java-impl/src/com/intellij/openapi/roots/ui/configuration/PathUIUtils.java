@@ -18,16 +18,12 @@ package com.intellij.openapi.roots.ui.configuration;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.library.JavaSourceRootDetector;
-import com.intellij.openapi.progress.ProgressIndicator;
+import consulo.java.library.JavaSourceRootDetector;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.ui.OrderRoot;
-import com.intellij.openapi.roots.libraries.ui.RootDetector;
 import com.intellij.openapi.roots.libraries.ui.impl.LibraryRootsDetectorImpl;
 import com.intellij.openapi.roots.libraries.ui.impl.RootDetectionUtil;
 import com.intellij.openapi.vfs.VfsUtil;

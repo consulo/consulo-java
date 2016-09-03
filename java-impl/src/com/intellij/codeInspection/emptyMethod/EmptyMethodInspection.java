@@ -18,7 +18,7 @@ package com.intellij.codeInspection.emptyMethod;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
@@ -51,7 +51,7 @@ import java.util.List;
  * @author max
  */
 public class EmptyMethodInspection extends GlobalJavaInspectionTool {
-  private static final ExtensionPointName<Condition<RefMethod>> EP_NAME = ExtensionPointName.create("org.consulo.java.canBeEmpty");
+  private static final ExtensionPointName<Condition<RefMethod>> EP_NAME = ExtensionPointName.create("consulo.java.canBeEmpty");
 
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.empty.method.display.name");
   @NonNls private static final String SHORT_NAME = "EmptyMethod";

@@ -27,7 +27,7 @@ import com.intellij.psi.search.GlobalSearchScope;
  */
 public interface ExceptionFilterFactory
 {
-	ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create("org.consulo.java.exceptionFilter");
+	ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create("consulo.java.exceptionFilter");
 
 	@NotNull
 	Filter create(@NotNull GlobalSearchScope searchScope);

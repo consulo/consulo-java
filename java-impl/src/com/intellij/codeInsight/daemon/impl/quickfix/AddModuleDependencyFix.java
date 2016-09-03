@@ -22,7 +22,7 @@ import javax.swing.JList;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.java.JavaQuickFixBundle;
+import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.compiler.ModuleCompilerUtil;
 import com.intellij.icons.AllIcons;

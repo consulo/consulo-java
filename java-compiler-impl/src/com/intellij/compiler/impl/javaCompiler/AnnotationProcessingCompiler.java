@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
 import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.CommonBundle;

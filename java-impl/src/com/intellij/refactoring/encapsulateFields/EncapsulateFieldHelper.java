@@ -15,14 +15,14 @@
  */
 package com.intellij.refactoring.encapsulateFields;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Max Medvedev
@@ -31,7 +31,7 @@ public abstract class EncapsulateFieldHelper {
   private static class Extension extends LanguageExtension<EncapsulateFieldHelper> {
 
     public Extension() {
-      super("org.consulo.java.encapsulateFields.helper");
+      super("consulo.java.encapsulateFields.helper");
     }
   }
   private static final Extension INSTANCE = new Extension();

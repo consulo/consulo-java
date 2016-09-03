@@ -20,12 +20,12 @@
  */
 package com.intellij.codeInsight.generation;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
 
 public interface OverrideImplementsAnnotationsHandler {
-  ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME = ExtensionPointName.create("org.consulo.java.overrideImplementsAnnotationsHandler");
+  ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME = ExtensionPointName.create("consulo.java.overrideImplementsAnnotationsHandler");
 
   String[] getAnnotations(Project project);
   @NotNull

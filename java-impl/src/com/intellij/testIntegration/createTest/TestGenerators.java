@@ -24,6 +24,6 @@ public class TestGenerators extends LanguageExtension<TestGenerator> {
   public static final TestGenerators INSTANCE = new TestGenerators();
 
   private TestGenerators() {
-    super("org.consulo.java.testGenerator", new JavaTestGenerator());
+    super("consulo.java.testGenerator", new JavaTestGenerator());
   }
 }

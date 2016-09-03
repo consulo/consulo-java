@@ -11,8 +11,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtensionImpl;
-import org.mustbe.consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.module.extension.JavaModuleExtensionImpl;
+import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
 import consulo.lombok.annotations.Logger;
 
 import java.io.File;

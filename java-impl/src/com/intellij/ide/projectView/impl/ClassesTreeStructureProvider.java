@@ -27,7 +27,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import org.mustbe.consulo.java.util.JavaProjectRootsUtil;
+import consulo.java.util.JavaProjectRootsUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

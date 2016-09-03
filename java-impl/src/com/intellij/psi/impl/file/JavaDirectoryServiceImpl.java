@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.core.CoreJavaDirectoryService;
 import com.intellij.ide.fileTemplates.FileTemplate;

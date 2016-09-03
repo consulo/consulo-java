@@ -20,7 +20,7 @@ import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.openapi.extensions.ExtensionPointName;
 
 public interface VisibilityExtension {
-  ExtensionPointName<VisibilityExtension> EP_NAME = ExtensionPointName.create("org.consulo.java.visibility");
+  ExtensionPointName<VisibilityExtension> EP_NAME = ExtensionPointName.create("consulo.java.visibility");
 
   void fillIgnoreList(RefManager refManager, ProblemDescriptionsProcessor processor);
 }

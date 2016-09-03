@@ -26,7 +26,7 @@ import com.intellij.psi.PsiElement;
  */
 public abstract class ExpressionConverter {
   public static final LanguageExtension<ExpressionConverter> EP =
-    new LanguageExtension<ExpressionConverter>("org.consulo.java.expressionConverter");
+    new LanguageExtension<ExpressionConverter>("consulo.java.expressionConverter");
 
   protected abstract PsiElement convert(PsiElement expression, Project project);
 

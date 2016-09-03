@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.compiler.CompilerEncodingService;
 import com.intellij.compiler.CompilerException;
-import com.intellij.compiler.JavaCompilerUtil;
+import consulo.java.compiler.JavaCompilerUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.cache.Cache;
 import com.intellij.compiler.cache.JavaDependencyCache;

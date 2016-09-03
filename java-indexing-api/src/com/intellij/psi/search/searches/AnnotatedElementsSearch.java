@@ -15,11 +15,16 @@
  */
 package com.intellij.psi.search.searches;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.PsiParameter;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.InstanceofQuery;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
 
 public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierListOwner, AnnotatedElementsSearch.Parameters> {
   public static final AnnotatedElementsSearch INSTANCE = new AnnotatedElementsSearch();
@@ -49,7 +54,7 @@ public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierL
   }
 
   private AnnotatedElementsSearch() {
-    super("org.consulo.java");
+    super("consulo.java");
   }
 
   private static Query<PsiModifierListOwner> createDelegateQuery(PsiClass annotationClass,

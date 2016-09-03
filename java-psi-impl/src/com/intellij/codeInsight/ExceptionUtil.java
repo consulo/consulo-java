@@ -56,6 +56,7 @@ import com.intellij.util.Function;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.codeInsight.ExtraExceptionHandler;
 
 /**
  * @author mike

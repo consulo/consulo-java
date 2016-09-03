@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 <idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
-	<id>org.consulo.java</id>
+	<id>consulo.java</id>
 	<name>Java</name>
 	<version>SNAPHOT</version>
 	<category>Custom Languages</category>
@@ -347,7 +347,7 @@
 			<implementation-class>com.intellij.util.xml.impl.JavaDomApplicationComponent</implementation-class>
 		</component>
 		<component>
-			<implementation-class>org.mustbe.consulo.java.library.jimage.JImageFileSystem</implementation-class>
+			<implementation-class>consulo.java.library.jimage.JImageFileSystem</implementation-class>
 		</component>
 		<component>
 			<implementation-class>com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter</implementation-class>
@@ -383,7 +383,7 @@
 	</project-components>
 
 	<extensionPoints>
-		<extensionPoint name="manifest.headerParser" beanClass="org.osmorc.manifest.lang.headerparser.HeaderParserEP">
+		<extensionPoint name="manifest.headerParser" beanClass="consulo.java.manifest.lang.headerparser.HeaderParserEP">
 			<with attribute="implementationClass" implements="org.osmorc.manifest.lang.headerparser.HeaderParser"/>
 		</extensionPoint>
 
@@ -576,9 +576,9 @@
 
 		<extensionPoint name="psi.clsCustomNavigationPolicy"
 						interface="com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy"/>
-		<extensionPoint name="extraExceptionHandler" interface="com.intellij.codeInsight.ExtraExceptionHandler"/>
+		<extensionPoint name="extraExceptionHandler" interface="consulo.java.codeInsight.ExtraExceptionHandler"/>
 
-		<extensionPoint name="backendCompiler" beanClass="com.intellij.compiler.impl.javaCompiler.BackendCompilerEP" area="CONSULO_PROJECT">
+		<extensionPoint name="backendCompiler" beanClass="consulo.java.compiler.impl.javaCompiler.BackendCompilerEP" area="CONSULO_PROJECT">
 			<with attribute="implementationClass" implements="com.intellij.compiler.impl.javaCompiler.BackendCompiler"/>
 		</extensionPoint>
 		<extensionPoint name="compiler.makeDependencyProcessor" interface="com.intellij.compiler.cache.DependencyProcessor"/>
@@ -594,7 +594,7 @@
 		<extensionPoint name="i18nizeHandlerProvider" interface="com.intellij.codeInspection.i18n.I18nizeHandlerProvider"/>
 	</extensionPoints>
 
-	<extensions defaultExtensionNs="org.consulo.java">
+	<extensions defaultExtensionNs="consulo.java">
 		<allClassesSearch implementation="com.intellij.psi.impl.search.AllClassesSearchExecutor"/>
 
 		<expressionSurrounder implementation="com.intellij.debugger.codeinsight.JavaWithRuntimeCastSurrounder"/>
@@ -679,7 +679,7 @@
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.FileObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.StackTraceElementObjectRenderer"/>
 
-		<augmentProvider implementation="com.intellij.psi.augment.JavaEnumAugmentProvider"/>
+		<augmentProvider implementation="consulo.java.psi.augment.JavaEnumAugmentProvider"/>
 
 		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
@@ -862,7 +862,7 @@
 							serviceImplementation="com.intellij.debugger.settings.DebuggerSettings"/>
 		<applicationService serviceInterface="com.intellij.debugger.settings.ThreadsViewSettings"
 							serviceImplementation="com.intellij.debugger.settings.ThreadsViewSettings"/>
-		<applicationService serviceImplementation="org.mustbe.consulo.java.codeInsight.JavaCodeInsightSettings" />
+		<applicationService serviceImplementation="consulo.java.codeInsight.JavaCodeInsightSettings" />
 
 		<projectService serviceInterface="com.intellij.ide.util.TreeClassChooserFactory"
 						serviceImplementation="com.intellij.ide.util.TreeClassChooserFactoryImpl"/>
@@ -1389,7 +1389,7 @@
 		</intentionAction>
 
 		<lang.parserDefinition language="JAVA" implementationClass="com.intellij.lang.java.JavaParserDefinition"/>
-		<lang.versionResolver language="JAVA" implementationClass="com.intellij.lang.java.JavaLanguageVersionResolver"/>
+		<lang.versionResolver language="JAVA" implementationClass="consulo.java.JavaLanguageVersionResolver"/>
 
 		<lang.refactoringSupport language="JAVA" implementationClass="com.intellij.lang.java.JavaRefactoringSupportProvider"/>
 		<lang.refactoringSupport.classMembersRefactoringSupport language="JAVA"
@@ -1454,7 +1454,7 @@
 
 		<lang.psiStructureViewFactory language="JAVA" implementationClass="com.intellij.lang.java.JavaStructureViewBuilderFactory"/>
 
-		<lang.ast.leafFactory implementation="com.intellij.psi.impl.source.tree.JavaASTLeafFactory"/>
+		<lang.ast.leafFactory implementation="consulo.java.psi.impl.source.tree.JavaASTLeafFactory"/>
 		<lang.ast.compositeFactory implementation="com.intellij.psi.impl.source.tree.JavaASTCompositeFactory"/>
 
 		<lang.smartEnterProcessor language="JAVA"
@@ -1507,8 +1507,8 @@
 		<quoteHandler fileType="JAVA" className="com.intellij.codeInsight.editorActions.JavaQuoteHandler"/>
 		<typedHandler implementation="com.intellij.codeInsight.editorActions.JavaTypedHandler" id="java"/>
 		<typedHandler implementation="com.intellij.codeInsight.editorActions.JavadocTypedHandler" id="javadoc"/>
-		<applicationService serviceInterface="com.intellij.application.options.JavaSmartKeysSettings"
-							serviceImplementation="com.intellij.application.options.JavaSmartKeysSettings"/>
+		<applicationService serviceInterface="consulo.java.application.options.JavaSmartKeysSettings"
+							serviceImplementation="consulo.java.application.options.JavaSmartKeysSettings"/>
 		<applicationConfigurable id="editor.preferences.smartKeys.java"
 								 parentId="editor.preferences.smartKeys"
 								 displayName="Java"
@@ -1822,8 +1822,8 @@
 		<extendWordSelectionHandler implementation="com.intellij.codeInsight.editorActions.wordSelection.JavaWordSelectioner"/>
 		<basicWordSelectionFilter implementation="com.intellij.codeInsight.editorActions.wordSelection.JavaBasicWordSelectionFilter"/>
 
-		<iconDescriptorUpdater implementation="com.intellij.ide.JavaIconDescriptorUpdater" id="java"/>
-		<iconDescriptorUpdater implementation="com.intellij.execution.testframework.TestIconDescriptorUpdater"/>
+		<iconDescriptorUpdater implementation="consulo.java.ide.JavaIconDescriptorUpdater" id="java"/>
+		<iconDescriptorUpdater implementation="consulo.java.execution.testframework.TestIconDescriptorUpdater"/>
 
 		<idIndexer filetype="JAVA" implementationClass="com.intellij.psi.impl.cache.impl.idCache.JavaIdIndexer"/>
 		<todoIndexer filetype="JAVA" implementationClass="com.intellij.psi.impl.cache.impl.idCache.JavaTodoIndexer"/>
@@ -1908,11 +1908,11 @@
 		<configurationType implementation="com.intellij.execution.application.ApplicationConfigurationType"/>
 		<runConfigurationProducer implementation="com.intellij.execution.application.ApplicationConfigurationProducer"/>
 
-		<psi.packageSupportProvider implementation="org.mustbe.consulo.java.psi.impl.JavaPsiPackageSupportProvider"/>
+		<psi.packageSupportProvider implementation="consulo.java.psi.impl.JavaPsiPackageSupportProvider"/>
 		<customPropertyScopeProvider implementation="com.intellij.psi.impl.search.SimpleAccessorScopeProvider"/>
 
 		<compiler.additionalOutputDirectoriesProvider
-				implementation="com.intellij.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider"/>
+				implementation="consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider"/>
 
 		<applicationService serviceInterface="com.intellij.openapi.roots.libraries.LibrariesHelper"
 							serviceImplementation="com.intellij.openapi.roots.libraries.LibrariesHelperImpl"/>
@@ -1925,39 +1925,39 @@
 		<lang.parserDefinition language="JAVA-SPI" implementationClass="com.intellij.spi.parsing.SPIParserDefinition"/>
 		<lang.commenter language="JAVA-SPI" implementationClass="com.intellij.spi.SPICommenter"/>
 		<annotator language="JAVA-SPI" implementationClass="com.intellij.spi.SPIAnnotator"/>
-		<lang.substitutor language="TEXT" implementationClass="com.intellij.spi.SPILanguageSubstitutor"/>
+		<lang.substitutor language="TEXT" implementationClass="consulo.java.spi.SPILanguageSubstitutor"/>
 
 		<packaging.artifactType implementation="com.intellij.packaging.impl.artifacts.JarArtifactType" order="after zip-artifact"/>
-		<packaging.elementType implementation="com.intellij.packaging.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
+		<packaging.elementType implementation="consulo.java.packaging.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
 		<moduleExtensionProvider key="java"
 								 icon="/icons/java.png"
 								 name="Java"
-								 immutableClass="org.mustbe.consulo.java.module.extension.JavaModuleExtensionImpl"
-								 mutableClass="org.mustbe.consulo.java.module.extension.JavaMutableModuleExtensionImpl"/>
+								 immutableClass="consulo.java.module.extension.JavaModuleExtensionImpl"
+								 mutableClass="consulo.java.module.extension.JavaMutableModuleExtensionImpl"/>
 		<orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
 		<orderRootTypeEditor key="javaExternalAnnotations"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
-		<contentFolderSupportPatcher implementation="org.mustbe.consulo.java.module.extension.JavaContentFolderSupportPatcher"/>
+		<contentFolderSupportPatcher implementation="consulo.java.module.extension.JavaContentFolderSupportPatcher"/>
 		<pathMacroExpendableProtocol protocol="jar"/>
 		<pathMacroExpendableProtocol protocol="jimage"/>
 
 		<psi.directoryMethodProxy implementation="com.intellij.psi.impl.file.JavaPsiDirectoryMethodProxy"/>
 
-		<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.AnnotationsRootFilter"/>
-		<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaClassesRootFilter"/>
-		<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavadocRootDetector"/>
-		<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaJarRootFilter"/>
-		<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaSourceDirectoryRootFilter"/>
-		<defaultLibraryRootDetector implementation="org.mustbe.consulo.java.library.JavaSourceRootDetector"/>
+		<defaultLibraryRootDetector implementation="consulo.java.library.AnnotationsRootFilter"/>
+		<defaultLibraryRootDetector implementation="consulo.java.library.JavaClassesRootFilter"/>
+		<defaultLibraryRootDetector implementation="consulo.java.library.JavadocRootDetector"/>
+		<defaultLibraryRootDetector implementation="consulo.java.library.JavaJarRootFilter"/>
+		<defaultLibraryRootDetector implementation="consulo.java.library.JavaSourceDirectoryRootFilter"/>
+		<defaultLibraryRootDetector implementation="consulo.java.library.JavaSourceRootDetector"/>
 
 		<codeInsight.template.postfixTemplateProvider language="JAVA"
 													  implementationClass="com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider"/>
 
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
-		<newModuleBuilder implementation="org.mustbe.consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder"/>
+		<newModuleBuilder implementation="consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder"/>
 		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.codeInspection.SuppressManagerImpl"/>
 
-		<targetElementUtilEx implementation="com.intellij.codeInsight.JavaTargetElementUtilEx"/>
+		<targetElementUtilEx implementation="consulo.java.codeInsight.JavaTargetElementUtilEx"/>
 
 		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
 

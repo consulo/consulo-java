@@ -21,8 +21,7 @@ import com.intellij.psi.PsiElement;
 
 public interface SimplePropertyGetterProvider
 {
-	ExtensionPointName<SimplePropertyGetterProvider> EP_NAME = ExtensionPointName.create("org.consulo.java.debugger" +
-			".simplePropertyGetterProvider");
+	ExtensionPointName<SimplePropertyGetterProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.simplePropertyGetterProvider");
 
 	boolean isInsideSimpleGetter(@NotNull PsiElement element);
 }

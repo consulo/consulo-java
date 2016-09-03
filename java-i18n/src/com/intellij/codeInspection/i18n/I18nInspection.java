@@ -91,7 +91,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
   @NonNls private static final String TO_STRING = "toString";
 
   private static final ExtensionPointName<FileCheckingInspection> EP_NAME =
-    ExtensionPointName.create("org.consulo.java.i18nInspectionTool");
+    ExtensionPointName.create("consulo.java.i18nInspectionTool");
 
   public I18nInspection() {
     cacheNonNlsCommentPattern();

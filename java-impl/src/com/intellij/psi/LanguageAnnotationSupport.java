@@ -24,6 +24,6 @@ public class LanguageAnnotationSupport extends LanguageExtension<PsiAnnotationSu
   public static final LanguageAnnotationSupport INSTANCE = new LanguageAnnotationSupport();
 
   private LanguageAnnotationSupport() {
-    super("org.consulo.java.annotationSupport");
+    super("consulo.java.annotationSupport");
   }
 }

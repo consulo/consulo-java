@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInspection.JavaExtensionPoints;
+import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;

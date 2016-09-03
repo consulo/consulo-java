@@ -17,7 +17,7 @@ package com.intellij.refactoring.changeSignature;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.JavaTargetElementUtilEx;
+import consulo.java.codeInsight.JavaTargetElementUtilEx;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.openapi.actionSystem.DataContext;
