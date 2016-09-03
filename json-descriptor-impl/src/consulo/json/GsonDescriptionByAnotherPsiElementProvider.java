@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mustbe.consulo.json;
+package consulo.json;
 
 import java.util.Collection;
 import java.util.Map;
@@ -23,10 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import org.mustbe.consulo.java.util.JavaClassNames;
-import org.mustbe.consulo.json.validation.NativeArray;
-import org.mustbe.consulo.json.validation.descriptionByAnotherPsiElement.DescriptionByAnotherPsiElementProvider;
-import org.mustbe.consulo.json.validation.descriptor.JsonObjectDescriptor;
-import org.mustbe.consulo.json.validation.descriptor.JsonPropertyDescriptor;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -39,6 +35,10 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredDispatchThread;
 import consulo.annotations.RequiredReadAction;
+import consulo.json.validation.NativeArray;
+import consulo.json.validation.descriptionByAnotherPsiElement.DescriptionByAnotherPsiElementProvider;
+import consulo.json.validation.descriptor.JsonObjectDescriptor;
+import consulo.json.validation.descriptor.JsonPropertyDescriptor;
 import consulo.module.extension.ModuleExtensionHelper;
 
 /**

@@ -1,8 +1,0 @@
-<component name="libraryTable">
-  <library name="consulo-plugin: org.mustbe.consulo.javascript">
-    <binaries>
-      <root url="file://$PROJECT_DIR$/dep/org.mustbe.consulo.javascript/lib" />
-    </binaries>
-    <jarDirectory url="file://$PROJECT_DIR$/dep/org.mustbe.consulo.javascript/lib" recursive="false" />
-  </library>
-</component>
