@@ -2,7 +2,7 @@
   <artifact build-on-make="true" name="dist">
     <output-path>$PROJECT_DIR$/out/artifacts/dist</output-path>
     <root id="root">
-      <element id="directory" name="java">
+      <element id="directory" name="consulo.java">
         <element id="directory" name="lib">
           <element id="zip-archive" name="java.jar">
             <element id="module-output" name="java-analysis-api" />
