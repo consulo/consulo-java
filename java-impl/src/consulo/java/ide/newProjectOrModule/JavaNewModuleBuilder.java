@@ -17,17 +17,16 @@
 package consulo.java.ide.newProjectOrModule;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.java.JavaIcons;
-import consulo.java.module.extension.JavaMutableModuleExtension;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import consulo.ide.impl.NewModuleBuilder;
-import consulo.ide.impl.NewModuleContext;
 import consulo.ide.impl.UnzipNewModuleBuilderProcessor;
+import consulo.ide.newProject.NewModuleBuilder;
+import consulo.ide.newProject.NewModuleContext;
+import consulo.java.module.extension.JavaMutableModuleExtension;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 /**
@@ -39,13 +38,9 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 	@Override
 	public void setupContext(@NotNull NewModuleContext context)
 	{
-		context.addItem("#Java", "Java", JavaIcons.Java);
-		context.addItem("#JavaHelloWorld", "Hello World", AllIcons.RunConfigurations.Application);
+		NewModuleContext.Group group = context.createGroup("java", "Java");
 
-		context.setupItem(new String[]{
-				"#Java",
-				"#JavaHelloWorld"
-		}, new UnzipNewModuleBuilderProcessor<JavaNewModuleBuilderPanel>("/moduleTemplates/#JavaHelloWorld.zip")
+		group.add("Console Application", AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleBuilderPanel>("/moduleTemplates/#JavaHelloWorld.zip")
 		{
 			@NotNull
 			@Override
