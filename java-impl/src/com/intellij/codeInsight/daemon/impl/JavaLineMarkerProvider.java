@@ -240,7 +240,7 @@ public class JavaLineMarkerProvider implements LineMarkerProvider
 				continue;
 			}
 			PsiElement range = getMethodRange(method);
-			ArrowUpLineMarkerInfo upInfo = new ArrowUpLineMarkerInfo(range, AllIcons.Gutter.ImplementingMethod, MarkerType.SIBLING_OVERRIDING_METHOD, Pass.UPDATE_OVERRIDEN_MARKERS);
+			ArrowUpLineMarkerInfo upInfo = new ArrowUpLineMarkerInfo(range, AllIcons.Gutter.ImplementingMethod, MarkerType.SIBLING_OVERRIDING_METHOD, Pass.LINE_MARKERS);
 			LineMarkerInfo info = NavigateAction.setNavigateAction(upInfo, "Go to super method", IdeActions.ACTION_GOTO_SUPER);
 			result.add(info);
 		}
@@ -287,7 +287,7 @@ public class JavaLineMarkerProvider implements LineMarkerProvider
 				range = aClass;
 			}
 			MarkerType type = MarkerType.SUBCLASSED_CLASS;
-			LineMarkerInfo info = new LineMarkerInfo<PsiElement>(range, range.getTextRange(), icon, Pass.UPDATE_OVERRIDEN_MARKERS, type.getTooltip(), type.getNavigationHandler(),
+			LineMarkerInfo info = new LineMarkerInfo<PsiElement>(range, range.getTextRange(), icon, Pass.LINE_MARKERS, type.getTooltip(), type.getNavigationHandler(),
 					GutterIconRenderer.Alignment.RIGHT);
 			NavigateAction.setNavigateAction(info, aClass.isInterface() ? "Go to implementation(s)" : "Go to subclass(es)", IdeActions.ACTION_GOTO_IMPLEMENTATION);
 			result.add(info);
@@ -350,7 +350,7 @@ public class JavaLineMarkerProvider implements LineMarkerProvider
 			PsiElement range = getMethodRange(method);
 			final MarkerType type = MarkerType.OVERRIDDEN_METHOD;
 			final Icon icon = overrides ? AllIcons.Gutter.OverridenMethod : AllIcons.Gutter.ImplementedMethod;
-			LineMarkerInfo<PsiElement> info = new LineMarkerInfo<PsiElement>(range, range.getTextRange(), icon, Pass.UPDATE_OVERRIDEN_MARKERS, type.getTooltip(), type.getNavigationHandler(),
+			LineMarkerInfo<PsiElement> info = new LineMarkerInfo<PsiElement>(range, range.getTextRange(), icon, Pass.LINE_MARKERS, type.getTooltip(), type.getNavigationHandler(),
 					GutterIconRenderer.Alignment.RIGHT);
 			NavigateAction.setNavigateAction(info, overrides ? "Go to overriding methods" : "Go to implementation(s)", IdeActions.ACTION_GOTO_IMPLEMENTATION);
 			result.add(info);
