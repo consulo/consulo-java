@@ -171,7 +171,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, Dir
 
 		if(!classes.isEmpty())
 		{
-			final VirtualFile jarFile = getJarFile(aClass);
+			final VirtualFile jarFile = getArchiveFile(aClass);
 			for(List<PsiClass> sameNamedClasses : classes.values())
 			{
 				ProgressManager.checkCanceled();
@@ -276,7 +276,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, Dir
 			for(PsiClass sameNamedClass : sameNamedClasses)
 			{
 				ProgressManager.checkCanceled();
-				boolean fromSameJar = Comparing.equal(getJarFile(sameNamedClass), jarFile);
+				boolean fromSameJar = Comparing.equal(getArchiveFile(sameNamedClass), jarFile);
 				if(fromSameJar)
 				{
 					sameJarClassFound = true;
@@ -291,7 +291,7 @@ public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, Dir
 		return sameJarClassFound || ContainerUtil.process(sameNamedClasses, consumer);
 	}
 
-	private static VirtualFile getJarFile(final PsiClass aClass)
+	private static VirtualFile getArchiveFile(final PsiClass aClass)
 	{
 		return ApplicationManager.getApplication().runReadAction(new Computable<VirtualFile>()
 		{
