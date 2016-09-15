@@ -16,35 +16,35 @@
 package com.intellij.execution.application;
 
 import org.jetbrains.annotations.Nullable;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.execution.lineMarker.ExecutorAction;
 import com.intellij.execution.lineMarker.RunLineMarkerContributor;
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiMethodUtil;
+import com.intellij.util.containers.ContainerUtil;
 
 /**
  * @author Dmitry Avdeev
  */
 public class ApplicationRunLineMarkerProvider extends RunLineMarkerContributor
 {
-	@RequiredReadAction
 	@Nullable
 	@Override
-	public Info getInfo(PsiElement e)
+	public Info getInfo(final PsiElement e)
 	{
 		if(isIdentifier(e))
 		{
 			PsiElement element = e.getParent();
-			if(element instanceof PsiClass && PsiMethodUtil.findMainInClass((PsiClass) element) != null)
+			if(element instanceof PsiClass && PsiMethodUtil.findMainInClass((PsiClass) element) != null || element instanceof PsiMethod && "main".equals(((PsiMethod) element).getName()) &&
+					PsiMethodUtil.isMainMethod((PsiMethod) element))
 			{
-				return new Info(ApplicationConfigurationType.getInstance().getIcon(), null, ExecutorAction.getActions(0));
-			}
-			if(element instanceof PsiMethod && "main".equals(((PsiMethod) element).getName()) && PsiMethodUtil.isMainMethod((PsiMethod) element))
-			{
-				return new Info(ApplicationConfigurationType.getInstance().getIcon(), null, ExecutorAction.getActions(0));
+				final AnAction[] actions = ExecutorAction.getActions(0);
+				return new Info(AllIcons.RunConfigurations.TestState.Run, element1 -> StringUtil.join(ContainerUtil.mapNotNull(actions, action -> getText(action, element1)), "\n"), actions);
 			}
 		}
 		return null;
