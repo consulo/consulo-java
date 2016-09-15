@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,24 @@ package com.intellij.psi.impl.file.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.module.util.JavaClassNames;
 import com.intellij.ProjectTopics;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileWithId;
 import com.intellij.psi.PsiClass;
@@ -43,25 +44,22 @@ import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.impl.PsiManagerEx;
 import com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.containers.ConcurrentHashMap;
 import com.intellij.util.containers.ContainerUtil;
 
 /**
- * Author: dmitrylomov
+ * @author dmitry lomov
  */
-@consulo.lombok.annotations.Logger
 public class JavaFileManagerImpl implements JavaFileManager, Disposable
 {
-	private final ConcurrentHashMap<GlobalSearchScope, PsiClass> myCachedObjectClassMap = new ConcurrentHashMap<GlobalSearchScope, PsiClass>();
-	private final PsiManagerEx myManager;
-	private final ProjectRootManager myProjectRootManager;
-	private Set<String> myNontrivialPackagePrefixes = null;
-	private boolean myDisposed = false;
+	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.impl.JavaFileManagerImpl");
 
-	public JavaFileManagerImpl(final Project project, final PsiManagerEx manager, final ProjectRootManager projectRootManager)
+	private final PsiManagerEx myManager;
+	private volatile Set<String> myNontrivialPackagePrefixes;
+	private boolean myDisposed;
+
+	public JavaFileManagerImpl(Project project)
 	{
-		myManager = manager;
-		myProjectRootManager = projectRootManager;
+		myManager = PsiManagerEx.getInstanceEx(project);
 		project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter()
 		{
 			@Override
@@ -70,148 +68,103 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 				myNontrivialPackagePrefixes = null;
 			}
 		});
-
-		myManager.registerRunnableToRunOnChange(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				myCachedObjectClassMap.clear();
-			}
-		});
 	}
 
 	@Override
 	public void dispose()
 	{
 		myDisposed = true;
-		myCachedObjectClassMap.clear();
 	}
 
+	@NotNull
 	@Override
 	public PsiClass[] findClasses(@NotNull String qName, @NotNull final GlobalSearchScope scope)
 	{
-		final Collection<PsiClass> classes = JavaFullClassNameIndex.getInstance().get(qName.hashCode(), myManager.getProject(), scope);
-		if(classes.isEmpty())
-		{
-			return PsiClass.EMPTY_ARRAY;
-		}
-		List<PsiClass> result = new ArrayList<PsiClass>(classes.size());
-		int count = 0;
-		PsiClass aClass = null;
-		for(PsiClass found : classes)
-		{
-			aClass = found;
-			final String qualifiedName = aClass.getQualifiedName();
-			if(qualifiedName == null || !qualifiedName.equals(qName))
-			{
-				continue;
-			}
+		List<Pair<PsiClass, VirtualFile>> result = doFindClasses(qName, scope);
 
-			VirtualFile vFile = aClass.getContainingFile().getVirtualFile();
-			if(!hasAcceptablePackage(vFile))
-			{
-				continue;
-			}
-
-			result.add(aClass);
-			count++;
-		}
-
+		int count = result.size();
 		if(count == 0)
 		{
 			return PsiClass.EMPTY_ARRAY;
 		}
 		if(count == 1)
 		{
-			return new PsiClass[]{aClass};
+			return new PsiClass[]{result.get(0).getFirst()};
 		}
 
-		ContainerUtil.quickSort(result, new Comparator<PsiClass>()
-		{
-			@Override
-			public int compare(PsiClass o1, PsiClass o2)
-			{
-				return scope.compare(o2.getContainingFile().getVirtualFile(), o1.getContainingFile().getVirtualFile());
-			}
-		});
+		ContainerUtil.quickSort(result, (o1, o2) -> scope.compare(o2.getSecond(), o1.getSecond()));
 
-		return result.toArray(new PsiClass[count]);
+		return result.stream().map(p -> p.getFirst()).toArray(PsiClass[]::new);
 	}
 
-	@Override
-	@Nullable
-	public PsiClass findClass(@NotNull String qName, @NotNull GlobalSearchScope scope)
+	@NotNull
+	private List<Pair<PsiClass, VirtualFile>> doFindClasses(@NotNull String qName, @NotNull final GlobalSearchScope scope)
 	{
-		LOGGER.assertTrue(!myDisposed);
-
-		if(JavaClassNames.JAVA_LANG_OBJECT.equals(qName))
-		{ // optimization
-			PsiClass cached = myCachedObjectClassMap.get(scope);
-			if(cached == null)
-			{
-				cached = findClassInIndex(qName, scope);
-				if(cached != null)
-				{
-					cached = myCachedObjectClassMap.cacheOrGet(scope, cached);
-				}
-			}
-
-			return cached;
-		}
-
-		return findClassInIndex(qName, scope);
-	}
-
-
-	@Nullable
-	private PsiClass findClassInIndex(String qName, GlobalSearchScope scope)
-	{
-		VirtualFile bestFile = null;
-		PsiClass bestClass = null;
 		final Collection<PsiClass> classes = JavaFullClassNameIndex.getInstance().get(qName.hashCode(), myManager.getProject(), scope);
-
+		if(classes.isEmpty())
+		{
+			return Collections.emptyList();
+		}
+		List<Pair<PsiClass, VirtualFile>> result = new ArrayList<>(classes.size());
 		for(PsiClass aClass : classes)
 		{
-			PsiFile file = aClass.getContainingFile();
-			if(file == null)
-			{
-				LOGGER.error("aClass=" + aClass + " of class " + aClass.getClass() + "; valid=" + aClass.isValid());
-				continue;
-			}
-			final boolean valid = aClass.isValid();
-			VirtualFile vFile = file.getVirtualFile();
-			if(!valid)
-			{
-				LOGGER.error("Invalid class " + aClass + "; " +
-						file + (file.isValid() ? "" : " (invalid)") +
-						"; virtualFile:" + vFile +
-						(vFile != null && !vFile.isValid() ? " (invalid)" : "") +
-						"; id=" + (vFile == null ? 0 : ((VirtualFileWithId) vFile).getId()), new PsiInvalidElementAccessException(aClass));
-				continue;
-			}
-
 			final String qualifiedName = aClass.getQualifiedName();
 			if(qualifiedName == null || !qualifiedName.equals(qName))
 			{
 				continue;
 			}
 
-
+			PsiFile file = aClass.getContainingFile();
+			if(file == null)
+			{
+				throw new AssertionError("No file for class: " + aClass + " of " + aClass.getClass());
+			}
+			final boolean valid = file.isValid();
+			VirtualFile vFile = file.getVirtualFile();
+			if(!valid)
+			{
+				LOG.error("Invalid file " +
+						file + "; virtualFile:" + vFile +
+						(vFile != null && !vFile.isValid() ? " (invalid)" : "") +
+						"; id=" + (vFile == null ? 0 : ((VirtualFileWithId) vFile).getId()), new PsiInvalidElementAccessException(aClass));
+				continue;
+			}
 			if(!hasAcceptablePackage(vFile))
 			{
 				continue;
 			}
+
+			result.add(Pair.create(aClass, vFile));
+		}
+
+		return result;
+	}
+
+	@Override
+	@Nullable
+	public PsiClass findClass(@NotNull String qName, @NotNull GlobalSearchScope scope)
+	{
+		LOG.assertTrue(!myDisposed);
+		VirtualFile bestFile = null;
+		PsiClass bestClass = null;
+		List<Pair<PsiClass, VirtualFile>> result = doFindClasses(qName, scope);
+
+		//noinspection ForLoopReplaceableByForEach
+		for(int i = 0; i < result.size(); i++)
+		{
+			Pair<PsiClass, VirtualFile> pair = result.get(i);
+			VirtualFile vFile = pair.getSecond();
 			if(bestFile == null || scope.compare(vFile, bestFile) > 0)
 			{
 				bestFile = vFile;
-				bestClass = aClass;
+				bestClass = pair.getFirst();
 			}
 		}
+
 		return bestClass;
 	}
 
-	private boolean hasAcceptablePackage(final VirtualFile vFile)
+	private boolean hasAcceptablePackage(@NotNull VirtualFile vFile)
 	{
 		if(vFile.getFileType() == JavaClassFileType.INSTANCE)
 		{
@@ -232,25 +185,30 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 		return true;
 	}
 
+	@NotNull
 	@Override
 	public Collection<String> getNonTrivialPackagePrefixes()
 	{
-		if(myNontrivialPackagePrefixes == null)
+		Set<String> names = myNontrivialPackagePrefixes;
+		if(names == null)
 		{
-			Set<String> names = new HashSet<String>();
-			final ProjectRootManager rootManager = myProjectRootManager;
+			names = new HashSet<>();
+			final ProjectRootManager rootManager = ProjectRootManager.getInstance(myManager.getProject());
 			final VirtualFile[] sourceRoots = rootManager.getContentSourceRoots();
 			final ProjectFileIndex fileIndex = rootManager.getFileIndex();
 			for(final VirtualFile sourceRoot : sourceRoots)
 			{
-				final String packageName = fileIndex.getPackageNameByDirectory(sourceRoot);
-				if(packageName != null && !packageName.isEmpty())
+				if(sourceRoot.isDirectory())
 				{
-					names.add(packageName);
+					final String packageName = fileIndex.getPackageNameByDirectory(sourceRoot);
+					if(packageName != null && !packageName.isEmpty())
+					{
+						names.add(packageName);
+					}
 				}
 			}
 			myNontrivialPackagePrefixes = names;
 		}
-		return myNontrivialPackagePrefixes;
+		return names;
 	}
 }

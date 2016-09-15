@@ -15,22 +15,28 @@
  */
 package com.intellij.psi.impl;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Factory;
 import com.intellij.openapi.util.Key;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.psi.PsiCompiledElement;
+import com.intellij.psi.PsiConstantEvaluationHelper;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiPrefixExpression;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.ConcurrencyUtil;
 import com.intellij.util.ObjectUtils;
-import com.intellij.util.containers.ConcurrentSoftHashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
+import com.intellij.util.containers.ContainerUtil;
 
 public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalkingVisitor {
   private final Factory<ConcurrentMap<PsiElement, Object>> myMapFactory;
@@ -84,7 +90,7 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
   private static final CachedValueProvider<ConcurrentMap<PsiElement,Object>> PROVIDER = new CachedValueProvider<ConcurrentMap<PsiElement,Object>>() {
     @Override
     public Result<ConcurrentMap<PsiElement,Object>> compute() {
-      ConcurrentMap<PsiElement, Object> value = new ConcurrentSoftHashMap<PsiElement, Object>();
+      ConcurrentMap<PsiElement, Object> value = ContainerUtil.createConcurrentSoftMap();
       return Result.create(value, PsiModificationTracker.MODIFICATION_COUNT);
     }
   };
