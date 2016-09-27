@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.fixes;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -29,48 +31,52 @@ import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
  */
-public class IntroduceVariableFix extends InspectionGadgetsFix {
+public class IntroduceVariableFix extends InspectionGadgetsFix
+{
 
-  private final boolean myMayChangeSemantics;
+	private final boolean myMayChangeSemantics;
 
-  public IntroduceVariableFix(boolean mayChangeSemantics) {
-    myMayChangeSemantics = mayChangeSemantics;
-  }
+	public IntroduceVariableFix(boolean mayChangeSemantics)
+	{
+		myMayChangeSemantics = mayChangeSemantics;
+	}
 
-  @NotNull
-  @Override
-  public String getName() {
-    if (myMayChangeSemantics) {
-      return InspectionGadgetsBundle.message("introduce.variable.may.change.semantics.quickfix");
-    } else {
-      return InspectionGadgetsBundle.message("introduce.variable.quickfix");
-    }
-  }
+	@NotNull
+	@Override
+	public String getName()
+	{
+		if(myMayChangeSemantics)
+		{
+			return InspectionGadgetsBundle.message("introduce.variable.may.change.semantics.quickfix");
+		}
+		else
+		{
+			return InspectionGadgetsBundle.message("introduce.variable.quickfix");
+		}
+	}
 
-  @Nullable
-  public PsiExpression getExpressionToExtract(PsiElement element) {
-    return PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class, false);
-  }
+	@Nullable
+	public PsiExpression getExpressionToExtract(PsiElement element)
+	{
+		return PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class, false);
+	}
 
-  @Override
-  protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-    final PsiExpression expression = getExpressionToExtract(descriptor.getPsiElement());
-    if (expression == null) {
-      return;
-    }
-    final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
-    final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
-    dataContextContainer.doWhenDone(new AsyncResult.Handler<DataContext>() {
-      @Override
-      public void run(DataContext dataContext) {
-        handler.invoke(project, new PsiElement[]{expression}, dataContext);
-      }
-    });
-  }
+	@Override
+	protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException
+	{
+		final PsiExpression expression = getExpressionToExtract(descriptor.getPsiElement());
+		if(expression == null)
+		{
+			return;
+		}
+		final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
+		final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
+		dataContextContainer.doWhenDone(dataContext -> {
+			handler.invoke(project, new PsiElement[]{expression}, dataContext);
+		});
+	}
 }
