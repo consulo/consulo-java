@@ -15,6 +15,7 @@
  */
 package consulo.java.compiler;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
@@ -227,24 +228,24 @@ public class JavaCompilerUtil
 		return getSdkForCompilation(chunk.getModule());
 	}
 
-	@Nullable
+	@NotNull
 	public static Set<VirtualFile> getCompilationClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
 		if(extension == null)
 		{
-			return null;
+			return Collections.emptySet();
 		}
 		return extension.getCompilationClasspath(compileContext, moduleChunk);
 	}
 
-	@Nullable
+	@NotNull
 	public static Set<VirtualFile> getCompilationBootClasspath(@NotNull CompileContext compileContext, final ModuleChunk moduleChunk)
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
 		if(extension == null)
 		{
-			return null;
+			return Collections.emptySet();
 		}
 		return extension.getCompilationBootClasspath(compileContext, moduleChunk);
 	}

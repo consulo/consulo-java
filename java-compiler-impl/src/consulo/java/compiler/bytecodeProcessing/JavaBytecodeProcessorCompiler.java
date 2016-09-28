@@ -44,6 +44,7 @@ import com.intellij.openapi.compiler.TimestampValidityState;
 import com.intellij.openapi.compiler.ValidityState;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -53,6 +54,7 @@ import com.intellij.util.Chunk;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.java.compiler.JavaCompilerUtil;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.lombok.annotations.Logger;
 import consulo.roots.ContentFolderTypeProvider;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
@@ -121,6 +123,12 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 	{
 		Map<File, FileObject> map = compileContext.getUserData(JavaCompiler.ourOutputFileParseInfo);
 		if(map == null)
+		{
+			return;
+		}
+
+		JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+		if(extension == null)
 		{
 			return;
 		}
@@ -214,7 +222,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 	}
 
 	@NotNull
-	private static URL[] toUrls(Set<VirtualFile> files)
+	private static URL[] toUrls(@NotNull Set<VirtualFile> files)
 	{
 		List<URL> urls = new ArrayList<>(files.size());
 		for(VirtualFile file : files)
