@@ -326,7 +326,7 @@ public class JavacCompiler extends ExternalCompiler
 		}
 		else
 		{
-			File sourcesFile = FileUtil.createTempFile("javac", ".tmp");
+			File sourcesFile = File.createTempFile("javac", ".tmp");
 			sourcesFile.deleteOnExit();
 			myTempFiles.add(sourcesFile);
 			final PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile)));
@@ -571,7 +571,7 @@ public class JavacCompiler extends ExternalCompiler
 		}
 		else
 		{
-			File cpFile = FileUtil.createTempFile(tempFileName, ".tmp");
+			File cpFile = File.createTempFile(tempFileName, ".tmp");
 			cpFile.deleteOnExit();
 			tempFiles.add(cpFile);
 			final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(cpFile)));

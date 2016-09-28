@@ -20,6 +20,7 @@ import gnu.trove.THashMap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -373,7 +374,7 @@ public class BackendCompilerWrapper
 		}
 		else
 		{ // chunk has several modules
-			final File outputDir = FileUtil.createTempDirectory("compile", "output");
+			final File outputDir = Files.createTempDirectory("compileOutput").toFile();
 			fileToDelete = outputDir;
 			dirs.add(new OutputDir(outputDir.getPath(), ModuleChunk.ALL_SOURCES));
 		}
@@ -480,8 +481,8 @@ public class BackendCompilerWrapper
 			final Future<?> classParsingThreadFuture = ApplicationManager.getApplication().executeOnPooledThread(classParsingThread);
 
 			OutputParser errorParser = myCompiler.createErrorParser(outputDir, process);
-			CompilerParsingThread errorParsingThread = errorParser == null ? null : new SynchedCompilerParsing(process, myCompileContext, errorParser, classParsingThread, true, errorParser
-					.isTrimLines());
+			CompilerParsingThread errorParsingThread = errorParser == null ? null : new SynchedCompilerParsing(process, myCompileContext, errorParser, classParsingThread, true,
+					errorParser.isTrimLines());
 			Future<?> errorParsingThreadFuture = null;
 			if(errorParsingThread != null)
 			{
@@ -489,8 +490,8 @@ public class BackendCompilerWrapper
 			}
 
 			OutputParser outputParser = myCompiler.createOutputParser(outputDir);
-			CompilerParsingThread outputParsingThread = outputParser == null ? null : new SynchedCompilerParsing(process, myCompileContext, outputParser, classParsingThread, false, outputParser
-					.isTrimLines());
+			CompilerParsingThread outputParsingThread = outputParser == null ? null : new SynchedCompilerParsing(process, myCompileContext, outputParser, classParsingThread, false,
+					outputParser.isTrimLines());
 			Future<?> outputParsingThreadFuture = null;
 			if(outputParsingThread != null)
 			{
@@ -687,7 +688,7 @@ public class BackendCompilerWrapper
 		{
 			final String projectName = myProject.getName();
 			final String moduleName = module.getName();
-			File tempDirectory = FileUtil.createTempDirectory(projectName, moduleName);
+			File tempDirectory = Files.createTempDirectory(projectName + "_" + moduleName).toFile();
 			tempDir = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(tempDirectory);
 			if(tempDir == null)
 			{
