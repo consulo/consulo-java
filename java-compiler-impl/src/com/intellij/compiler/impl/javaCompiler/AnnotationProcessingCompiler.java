@@ -21,13 +21,13 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
+import gnu.trove.THashMap;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
-import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.CommonBundle;
 import com.intellij.compiler.CompilerException;
@@ -56,6 +56,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
+import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
+import consulo.lombok.annotations.Logger;
 
 @Logger
 public class AnnotationProcessingCompiler implements TranslatingCompiler {
@@ -105,7 +107,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
       new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files), _context, javacCompiler, sink);
     wrapper.setForceCompileTestsSeparately(true);
     try {
-      wrapper.compile();
+      wrapper.compile(new THashMap<>());
     }
     catch (CompilerException e) {
       _context.addMessage(CompilerMessageCategory.ERROR, ExceptionUtil.getThrowableText(e), null, -1, -1);

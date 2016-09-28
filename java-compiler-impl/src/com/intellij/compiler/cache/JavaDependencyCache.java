@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.classParsing.*;
 import com.intellij.compiler.impl.ExitException;
 import com.intellij.compiler.make.CacheCorruptedException;
@@ -142,7 +143,7 @@ public class JavaDependencyCache implements DependencyCache
     myToUpdate.add(qName);
   }
 
-  public int reparseClassFile(@NotNull File file, final byte[] fileContent) throws ClsFormatException, CacheCorruptedException {
+  public int reparseClassFile(@NotNull File file, @Nullable byte[] fileContent) throws ClsFormatException, CacheCorruptedException {
     SymbolTable symbolTable = getSymbolTable();
 
     final int qName = getNewClassesCache().importClassInfo(new ClassFileReader(file, symbolTable, fileContent), symbolTable);

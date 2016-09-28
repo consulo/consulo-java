@@ -16,10 +16,12 @@
 
 package com.intellij.compiler.impl.javaCompiler;
 
-import java.util.Arrays;
+import gnu.trove.THashMap;
 
-import consulo.java.module.extension.JavaModuleExtension;
-import consulo.lombok.annotations.Logger;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.CompilerException;
 import com.intellij.compiler.impl.CompileDriver;
@@ -37,9 +39,13 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
+import consulo.java.module.extension.JavaModuleExtension;
+import consulo.lombok.annotations.Logger;
 
 /*
  * @author: Eugene Zhuravlev
@@ -49,6 +55,8 @@ import com.intellij.util.ExceptionUtil;
 @Logger
 public class JavaCompiler implements TranslatingCompiler
 {
+	public static final Key<Map<File, FileObject>> ourOutputFileParseInfo = Key.create("ourOutputFileParseInfo");
+
 	private final Project myProject;
 
 	public JavaCompiler(Project project)
@@ -87,16 +95,19 @@ public class JavaCompiler implements TranslatingCompiler
 		{
 			return;
 		}
+
+		Map<File, FileObject> parsingInfo = new THashMap<>(FileUtil.FILE_HASHING_STRATEGY);
+		context.putUserData(ourOutputFileParseInfo, parsingInfo);
+
 		final BackendCompiler backEndCompiler = getBackEndCompiler();
-		final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files),
-				(CompileContextEx) context, backEndCompiler, sink);
+		final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files), (CompileContextEx) context, backEndCompiler, sink);
 		try
 		{
 			if(CompileDriver.ourDebugMode)
 			{
 				System.out.println("Starting java compiler; with backend compiler: " + backEndCompiler.getClass().getName());
 			}
-			wrapper.compile();
+			wrapper.compile(parsingInfo);
 		}
 		catch(CompilerException e)
 		{

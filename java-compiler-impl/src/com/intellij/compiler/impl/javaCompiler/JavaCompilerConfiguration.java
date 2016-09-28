@@ -100,25 +100,6 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 		return myBytecodeTargetLevel;
 	}
 
-	@Deprecated
-	public void setBytecodeTargetLevel(Module module, String level)
-	{
-		final String previous;
-		if(StringUtil.isEmpty(level))
-		{
-			previous = myModuleBytecodeTarget.remove(module.getName());
-		}
-		else
-		{
-			previous = myModuleBytecodeTarget.put(module.getName(), level);
-		}
-		// todo: mark module as dirty in order to rebuild it completely with the new target level
-		//if (!Comparing.equal(previous, level)) {
-		//  final Project project = module.getProject();
-		//
-		//}
-	}
-
 	@NotNull
 	public BackendCompiler getActiveCompiler()
 	{

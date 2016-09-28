@@ -15,59 +15,80 @@
  */
 package com.intellij.compiler.impl.javaCompiler;
 
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.util.ArrayUtil;
+
 /**
  * @author cdr
  */
-public class FileObject {
-  private static final byte[] NOT_LOADED = ArrayUtil.EMPTY_BYTE_ARRAY;
+public class FileObject
+{
+	private static final byte[] NOT_LOADED = ArrayUtil.EMPTY_BYTE_ARRAY;
 
-  private final File myFile;
-  private final byte[] myContent;
+	private final File myFile;
+	private byte[] myContent;
+	private int myClassId = -1;
 
-  public FileObject(@NotNull File file, @NotNull byte[] content) {
-    myFile = file;
-    myContent = content;
-  }
+	public FileObject(@NotNull File file, @NotNull byte[] content)
+	{
+		myFile = file;
+		myContent = content;
+	}
 
-  public FileObject(File file) {
-    myFile = file;
-    myContent = NOT_LOADED;
-  }
+	public FileObject(File file)
+	{
+		myFile = file;
+		myContent = NOT_LOADED;
+	}
 
-  public File getFile() {
-    return myFile;
-  }
+	public void setClassId(int classId)
+	{
+		myClassId = classId;
+	}
 
-  public byte[] getContent() throws IOException {
-    if (myContent == NOT_LOADED) {
-      return FileUtil.loadFileBytes(myFile);
-    }
-    return myContent;
-  }
+	public int getClassId()
+	{
+		return myClassId;
+	}
 
-  public void save() throws IOException {
-    if (myContent == NOT_LOADED) {
-      return; // already on disk
-    }
-    try {
-      FileUtil.writeToFile(myFile, myContent);
-    }
-    catch (FileNotFoundException e) {
-      FileUtil.createParentDirs(myFile);
-      FileUtil.writeToFile(myFile, myContent);
-    }
-  }
+	public File getFile()
+	{
+		return myFile;
+	}
 
-  @Override
-  public String toString() {
-    return getFile().toString();
-  }
+	public byte[] getOrLoadContent() throws IOException
+	{
+		if(myContent == NOT_LOADED)
+		{
+			return FileUtil.loadFileBytes(myFile);
+		}
+		return myContent;
+	}
+
+	public boolean save(byte[] content) throws IOException
+	{
+		myContent = content;
+
+		try
+		{
+			FileUtil.writeToFile(myFile, myContent);
+		}
+		catch(FileNotFoundException e)
+		{
+			FileUtil.createParentDirs(myFile);
+			FileUtil.writeToFile(myFile, myContent);
+		}
+		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return getFile().toString();
+	}
 }

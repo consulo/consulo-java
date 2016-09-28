@@ -15,7 +15,14 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,18 +34,13 @@ import java.util.StringTokenizer;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.CompilerIOUtil;
-import consulo.java.compiler.JavaCompilerBundle;
-import consulo.java.compiler.JavaCompilerUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.BackendCompilerWrapper;
 import com.intellij.compiler.impl.javaCompiler.ExternalCompiler;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
-import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.openapi.application.ApplicationManager;
@@ -59,7 +61,6 @@ import com.intellij.openapi.projectRoots.impl.MockSdkWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -69,6 +70,9 @@ import com.intellij.rt.compiler.JavacRunner;
 import com.intellij.util.PathsList;
 import consulo.annotations.RequiredReadAction;
 import consulo.compiler.roots.CompilerPathsImpl;
+import consulo.java.compiler.JavaCompilerBundle;
+import consulo.java.compiler.JavaCompilerUtil;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 public class JavacCompiler extends ExternalCompiler
@@ -145,22 +149,22 @@ public class JavacCompiler extends ExternalCompiler
 			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(javaSdk);
 			if(toolsJarPath == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"),
-						Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.tools.jar.missing", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
+						.getErrorIcon());
 				return false;
 			}
 			final String versionString = javaSdk.getVersionString();
 			if(versionString == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"),
-						Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.unknown.jdk.version", javaSdk.getName()), JavaCompilerBundle.message("compiler.javac.name"), Messages
+						.getErrorIcon());
 				return false;
 			}
 
 			if(CompilerUtil.isOfVersion(versionString, "1.0"))
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"), JavaCompilerBundle.message("compiler.javac.name"),
-						Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.1_0_compilation.not.supported"), JavaCompilerBundle.message("compiler.javac.name"), Messages
+						.getErrorIcon());
 				return false;
 			}
 		}
@@ -204,10 +208,7 @@ public class JavacCompiler extends ExternalCompiler
 
 	@Override
 	@NotNull
-	public GeneralCommandLine createStartupCommand(@NotNull UserDataHolderBase data,
-			final ModuleChunk chunk,
-			final CompileContext context,
-			final String outputPath) throws IOException, IllegalArgumentException
+	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
 	{
 
 		try
@@ -219,7 +220,7 @@ public class JavacCompiler extends ExternalCompiler
 				{
 					try
 					{
-						return createStartupCommand(data, chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
+						return createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
 								.isAnnotationProcessorsEnabled());
 					}
 					catch(IOException e)
@@ -242,7 +243,7 @@ public class JavacCompiler extends ExternalCompiler
 
 	@NotNull
 	@RequiredReadAction
-	private GeneralCommandLine createStartupCommand(UserDataHolderBase data,
+	private GeneralCommandLine createStartupCommand(
 			final ModuleChunk chunk,
 			final String outputPath,
 			final CompileContext compileContext,
@@ -305,7 +306,7 @@ public class JavacCompiler extends ExternalCompiler
 			parametersList.add(JAVAC_MAIN_CLASS_OLD);
 		}
 
-		addCommandLineOptions(data, compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, true, myAnnotationProcessorMode);
+		addCommandLineOptions(compileContext, chunk, parametersList, outputPath, jdk, version, myTempFiles, true, true, myAnnotationProcessorMode);
 
 		parametersList.addAll(additionalOptions);
 
@@ -446,8 +447,7 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@RequiredReadAction
-	public static void addCommandLineOptions(@NotNull UserDataHolderBase data,
-			CompileContext compileContext,
+	public static void addCommandLineOptions(CompileContext compileContext,
 			ModuleChunk chunk,
 			@NonNls ParametersList commandLine,
 			String outputPath,
@@ -468,27 +468,6 @@ public class JavacCompiler extends ExternalCompiler
 		final Set<VirtualFile> cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
 		final Set<VirtualFile> bootCp = JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk);
 
-		InstrumentationClassFinder classFinder = new InstrumentationClassFinder(toUrls(bootCp), toUrls(cp))
-		{
-			@Override
-			protected InputStream lookupClassAfterClasspath(String internalClassName)
-			{
-				File targetFile = new File(outputPath, internalClassName + ".class");
-				if(targetFile.exists())
-				{
-					try
-					{
-						return new FileInputStream(targetFile);
-					}
-					catch(FileNotFoundException e)
-					{
-						throw new RuntimeException(e);
-					}
-				}
-				return null;
-			}
-		};
-		data.putUserData(BackendCompilerWrapper.ourInstrumentationClassFinderKey, classFinder);
 
 		final String classPath;
 		if(version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1)

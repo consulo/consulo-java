@@ -24,7 +24,6 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
 
@@ -33,16 +32,13 @@ public abstract class ExternalCompiler implements BackendCompiler
 	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.ExternalCompiler");
 
 	@NotNull
-	public abstract GeneralCommandLine createStartupCommand(@NotNull UserDataHolderBase data,
-			ModuleChunk chunk,
-			CompileContext context,
-			String outputPath) throws IOException, IllegalArgumentException;
+	public abstract GeneralCommandLine createStartupCommand(ModuleChunk chunk, CompileContext context, String outputPath) throws IOException, IllegalArgumentException;
 
 	@Override
 	@NotNull
-	public Process launchProcess(@NotNull UserDataHolderBase data, @NotNull final ModuleChunk chunk, @NotNull final String outputDir, @NotNull final CompileContext compileContext) throws IOException
+	public Process launchProcess(@NotNull final ModuleChunk chunk, @NotNull final String outputDir, @NotNull final CompileContext compileContext) throws IOException
 	{
-		final GeneralCommandLine commandLine = createStartupCommand(data, chunk, compileContext, outputDir);
+		final GeneralCommandLine commandLine = createStartupCommand(chunk, compileContext, outputDir);
 
 		if(LOG.isDebugEnabled())
 		{
