@@ -15,6 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
+import java.util.concurrent.TimeUnit;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
@@ -31,7 +33,7 @@ import com.intellij.openapi.progress.util.ProgressIndicatorListenerAdapter;
 import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.util.Alarm;
+import com.intellij.util.concurrency.AppExecutorUtil;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 
 /**
@@ -126,47 +128,33 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 		if(currentCommand != null)
 		{
-			final Alarm alarm = new Alarm(Alarm.ThreadToUse.SHARED_THREAD);
-			alarm.addRequest(new Runnable()
-			{
-				@Override
-				public void run()
+			AppExecutorUtil.getAppScheduledExecutorService().schedule(() -> {
+				if(currentCommand == myEvents.getCurrentEvent())
 				{
+					// if current command is still in progress, cancel it
+					getCurrentRequest().requestStop();
 					try
 					{
-						if(currentCommand == myEvents.getCurrentEvent())
-						{
-							// if current command is still in progress, cancel it
-							getCurrentRequest().requestStop();
-							try
-							{
-								getCurrentRequest().join();
-							}
-							catch(InterruptedException ignored)
-							{
-							}
-							catch(Exception e)
-							{
-								throw new RuntimeException(e);
-							}
-							finally
-							{
-								if(!myDisposed)
-								{
-									startNewWorkerThread();
-								}
-							}
-						}
+						getCurrentRequest().join();
+					}
+					catch(InterruptedException ignored)
+					{
+					}
+					catch(Exception e)
+					{
+						throw new RuntimeException(e);
 					}
 					finally
 					{
-						Disposer.dispose(alarm);
+						if(!myDisposed)
+						{
+							startNewWorkerThread();
+						}
 					}
 				}
-			}, terminateTimeout);
+			}, terminateTimeout, TimeUnit.MILLISECONDS);
 		}
 	}
-
 
 	@Override
 	public void processEvent(@NotNull DebuggerCommandImpl managerCommand)
