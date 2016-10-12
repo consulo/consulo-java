@@ -46,7 +46,6 @@ import com.intellij.openapi.compiler.ex.CompileContextEx;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -90,11 +89,9 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 
 		@NotNull
 		@Override
-		public VirtualFile getFile()
+		public File getFile()
 		{
-			VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(myFile);
-			assert virtualFile != null : "File: " + myFile + " is null";
-			return virtualFile;
+			return myFile;
 		}
 
 		@Nullable
