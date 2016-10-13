@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-
-<idea-plugin version="2">
+<idea-plugin>
 
   <extensions defaultExtensionNs="com.intellij">
-    <compiler implementation="org.intellij.plugins.intelliLang.pattern.compiler.impl.PatternValidationCompiler"/>
+    <!--<compiler implementation="org.intellij.plugins.intelliLang.pattern.compiler.impl.PatternValidationCompiler"/>-->
 
     <localInspection shortName="UnknownLanguage" displayName="Unknown Language ID" groupName="Language Injection" enabledByDefault="true"
                      level="ERROR" implementationClass="org.intellij.plugins.intelliLang.inject.java.validation.UnknownLanguageID"/>
