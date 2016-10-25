@@ -31,7 +31,6 @@ import javax.swing.ListCellRenderer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
@@ -47,6 +46,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -60,10 +60,11 @@ import com.intellij.psi.util.proximity.PsiProximityComparator;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.list.PopupListElementRenderer;
 import com.intellij.util.ArrayUtilRt;
+import com.intellij.util.CommonProcessors;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
-import com.intellij.util.Processor;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.java.JavaQuickFixBundle;
 
 public class StaticImportMethodFix implements IntentionAction
 {
@@ -235,37 +236,39 @@ public class StaticImportMethodFix implements IntentionAction
 		}
 
 		final RegisterMethodsProcessor registrar = new RegisterMethodsProcessor();
-		cache.processMethodsWithName(name, scope, new Processor<PsiMethod>()
+		CommonProcessors.CollectProcessor<PsiMethod> processor = new CommonProcessors.CollectProcessor<>();
+		cache.processMethodsWithName(name, scope, processor);
+
+		Condition<PsiMethod> methodCondition = psiMethod -> (applicableList.isEmpty() ? list : applicableList).size() + deprecated.size() < 50;
+		for(PsiMethod method : processor.getResults())
 		{
-			@Override
-			public boolean process(PsiMethod method)
+			ProgressManager.checkCanceled();
+			if(JavaCompletionUtil.isInExcludedPackage(method, false) || !method.hasModifierProperty(PsiModifier.STATIC))
 			{
-				ProgressManager.checkCanceled();
-				if(JavaCompletionUtil.isInExcludedPackage(method, false) || !method.hasModifierProperty(PsiModifier.STATIC))
+				continue;
+			}
+			PsiFile file = method.getContainingFile();
+			final PsiClass containingClass = method.getContainingClass();
+			if(file instanceof PsiJavaFile
+					//do not show methods from default package
+					&& !((PsiJavaFile) file).getPackageName().isEmpty() && PsiUtil.isAccessible(method, element, containingClass))
+			{
+				if(method.isDeprecated())
 				{
-					return true;
-				}
-				PsiFile file = method.getContainingFile();
-				final PsiClass containingClass = method.getContainingClass();
-				if(file instanceof PsiJavaFile
-						//do not show methods from default package
-						&& !((PsiJavaFile) file).getPackageName().isEmpty() && PsiUtil.isAccessible(method, element, containingClass))
-				{
-					if(method.isDeprecated())
+					deprecated.put(containingClass, method);
+					if(!methodCondition.value(method))
 					{
-						deprecated.put(containingClass, method);
-						return processCondition();
+						break;
 					}
-					registrar.registerMethod(containingClass, method);
 				}
-				return processCondition();
+				registrar.registerMethod(containingClass, method);
 			}
 
-			private boolean processCondition()
+			if(!methodCondition.value(method))
 			{
-				return (applicableList.isEmpty() ? list : applicableList).size() + deprecated.size() < 50;
+				break;
 			}
-		});
+		}
 
 		for(Map.Entry<PsiClass, PsiMethod> deprecatedMethod : deprecated.entrySet())
 		{
