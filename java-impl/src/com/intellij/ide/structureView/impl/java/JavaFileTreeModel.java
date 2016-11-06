@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
@@ -27,6 +28,7 @@ import com.intellij.ide.util.treeView.smartTree.Grouper;
 import com.intellij.ide.util.treeView.smartTree.NodeProvider;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.ide.util.treeView.smartTree.TreeStructureUtil;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassOwner;
@@ -34,19 +36,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.ui.PlaceHolder;
 
 public class JavaFileTreeModel extends TextEditorBasedStructureViewModel implements StructureViewModel.ElementInfoProvider, PlaceHolder<String>
 {
-	private static final Collection<NodeProvider> NODE_PROVIDERS = Arrays.<NodeProvider>asList(new JavaInheritedMembersNodeProvider(), new JavaAnonymousClassesNodeProvider());
-	private final PsiClassOwner myFile;
+	private static final Collection<NodeProvider> NODE_PROVIDERS = Arrays.asList(new JavaInheritedMembersNodeProvider(), new JavaAnonymousClassesNodeProvider(), new JavaLambdaNodeProvider());
 	private String myPlace;
 
-	public JavaFileTreeModel(@NotNull PsiClassOwner file)
+	public JavaFileTreeModel(@NotNull PsiClassOwner file, @Nullable Editor editor)
 	{
-		super(file);
-		myFile = file;
+		super(editor, file);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	@NotNull
 	public StructureViewTreeElement getRoot()
 	{
-		return new JavaFileTreeElement(myFile);
+		return new JavaFileTreeElement(getPsiFile());
 	}
 
 	@Override
@@ -102,9 +103,9 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 	}
 
 	@Override
-	protected PsiFile getPsiFile()
+	protected PsiClassOwner getPsiFile()
 	{
-		return myFile;
+		return (PsiClassOwner) super.getPsiFile();
 	}
 
 	@Override
@@ -144,6 +145,8 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 			{
 				return ((PsiClass) element).getQualifiedName() != null;
 			}
+
+			return element instanceof PsiLambdaExpression;
 		}
 		return false;
 	}
@@ -156,12 +159,13 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
 				PsiClass.class,
 				PsiMethod.class,
 				PsiField.class,
+				PsiLambdaExpression.class,
 				PsiJavaFile.class
 		};
 	}
 
 	@Override
-	public void setPlace(String place)
+	public void setPlace(@NotNull String place)
 	{
 		myPlace = place;
 	}
