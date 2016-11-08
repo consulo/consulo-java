@@ -38,6 +38,8 @@ public enum JavaSdkVersion
 	JDK_1_8(LanguageLevel.JDK_1_8, "1.8"),
 	JDK_1_9(LanguageLevel.JDK_1_9, "1.9");
 
+	public static final JavaSdkVersion LAST = JDK_1_9;
+
 	private final LanguageLevel myMaxLanguageLevel;
 	private final String myDescription;
 
