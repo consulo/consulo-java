@@ -178,7 +178,8 @@ public class JavaSdkImpl extends JavaSdk
 		List<String> list = new SmartList<String>();
 		if(SystemInfo.isMac)
 		{
-			list.add("/System/Library/Frameworks/JavaVM.framework/Versions");
+			list.add("/Library/Java/JavaVirtualMachines");
+			list.add("/System/Library/Java/JavaVirtualMachines");
 			list.add("/usr/libexec/java_home");
 		}
 		else if(SystemInfo.isSolaris)
