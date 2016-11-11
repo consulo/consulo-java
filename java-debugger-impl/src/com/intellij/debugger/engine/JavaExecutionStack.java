@@ -131,7 +131,7 @@ public class JavaExecutionStack extends XExecutionStack
 	}
 
 	@Override
-	public void computeStackFrames(final int firstFrameIndex, final XStackFrameContainer container)
+	public void computeStackFrames(final XStackFrameContainer container)
 	{
 		if(container.isObsolete())
 		{
@@ -161,14 +161,8 @@ public class JavaExecutionStack extends XExecutionStack
 					{
 						try
 						{
-							int added = 0;
 							Iterator<StackFrameProxyImpl> iterator = myThreadProxy.frames().iterator();
-							if(iterator.hasNext() && firstFrameIndex > 0)
-							{
-								iterator.next();
-								added++;
-							}
-							myDebugProcess.getManagerThread().schedule(new AppendFrameCommand(getSuspendContext(), iterator, container, added, firstFrameIndex));
+							myDebugProcess.getManagerThread().schedule(new AppendFrameCommand(getSuspendContext(), iterator, container, 0, 0));
 						}
 						catch(EvaluateException e)
 						{

@@ -21,7 +21,7 @@ import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.javadoc.PsiDocToken;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.XmlToken;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,7 +41,7 @@ public class TokenTypeFilter implements ElementFilter{
 
   @Override
   public boolean isClassAcceptable(Class hintClass){
-    return ReflectionCache.isAssignable(PsiDocToken.class, hintClass) || ReflectionCache.isAssignable(XmlToken.class, hintClass);
+    return ReflectionUtil.isAssignable(PsiDocToken.class, hintClass) || ReflectionUtil.isAssignable(XmlToken.class, hintClass);
   }
 
   @Override

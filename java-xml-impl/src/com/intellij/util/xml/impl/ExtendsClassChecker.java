@@ -27,7 +27,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.xml.DomBundle;
 import com.intellij.util.xml.DomElement;
@@ -168,8 +168,7 @@ public class ExtendsClassChecker extends DomCustomAnnotationChecker<ExtendClass>
 
   private static boolean isPsiClassType(GenericDomValue element) {
     final Class genericValueParameter = DomUtil.getGenericValueParameter(element.getDomElementType());
-    if (genericValueParameter != null && (ReflectionCache.isAssignable(genericValueParameter, PsiClass.class) ||
-                                          ReflectionCache.isAssignable(genericValueParameter, PsiType.class))) {
+    if (genericValueParameter != null && (ReflectionUtil.isAssignable(genericValueParameter, PsiClass.class) || ReflectionUtil.isAssignable(genericValueParameter, PsiType.class))) {
       return true;
     }
     return false;

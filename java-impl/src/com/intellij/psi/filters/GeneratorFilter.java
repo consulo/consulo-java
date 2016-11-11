@@ -18,7 +18,7 @@ package com.intellij.psi.filters;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.reference.SoftReference;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -72,7 +72,7 @@ public class GeneratorFilter implements ElementFilter{
     try{
       final ElementFilter elementFilter = (ElementFilter) myFilterClass.newInstance();
       final Object[] initArgument = myGetter.get(context, null);
-      if(ReflectionCache.isAssignable(InitializableFilter.class, myFilterClass) && initArgument != null){
+      if(ReflectionUtil.isAssignable(InitializableFilter.class, myFilterClass) && initArgument != null){
         ((InitializableFilter)elementFilter).init(initArgument);
         return elementFilter;
       }

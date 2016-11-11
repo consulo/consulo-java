@@ -18,7 +18,7 @@ package com.intellij.psi.filters.types;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,6 +41,6 @@ public class TypeFilter implements ElementFilter{
 
   @Override
   public boolean isClassAcceptable(Class hintClass){
-    return ReflectionCache.isAssignable(PsiType.class, hintClass);
+    return ReflectionUtil.isAssignable(PsiType.class, hintClass);
   }
 }

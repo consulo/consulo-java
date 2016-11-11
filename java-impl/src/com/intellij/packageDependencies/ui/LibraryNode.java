@@ -15,14 +15,15 @@
  */
 package com.intellij.packageDependencies.ui;
 
+import java.util.Set;
+
+import javax.swing.Icon;
+
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.SdkOrderEntry;
+import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.psi.PsiFile;
-
-import javax.swing.*;
-import java.util.Set;
 
 public class LibraryNode extends PackageDependenciesNode {
 
@@ -69,6 +70,6 @@ public class LibraryNode extends PackageDependenciesNode {
   }
 
   public Icon getIcon() {
-    return myLibraryOrJdk instanceof SdkOrderEntry ? AllIcons.Nodes.PpJdk : AllIcons.Nodes.PpLibFolder;
+    return myLibraryOrJdk instanceof ModuleExtensionWithSdkOrderEntry ? AllIcons.Nodes.PpJdk : AllIcons.Nodes.PpLibFolder;
   }
 }

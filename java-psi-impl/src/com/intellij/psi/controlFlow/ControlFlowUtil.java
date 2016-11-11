@@ -15,20 +15,28 @@
  */
 package com.intellij.psi.controlFlow;
 
+import gnu.trove.THashSet;
+import gnu.trove.TIntHashSet;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.DummyHolder;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 import com.intellij.util.containers.IntArrayList;
-import gnu.trove.THashSet;
-import gnu.trove.TIntHashSet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class ControlFlowUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.controlFlow.ControlFlowUtil");
@@ -351,7 +359,7 @@ public class ControlFlowUtil {
   private static boolean isElementOfClass(PsiElement element, Class[] classesFilter) {
     if (classesFilter == null) return true;
     for (Class aClassesFilter : classesFilter) {
-      if (ReflectionCache.isAssignable(aClassesFilter, element.getClass())) {
+      if (ReflectionUtil.isAssignable(aClassesFilter, element.getClass())) {
         return true;
       }
     }

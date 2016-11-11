@@ -18,7 +18,7 @@ package com.intellij.psi.filters.classes;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,7 +30,7 @@ import com.intellij.util.ReflectionCache;
 public class InterfaceFilter implements ElementFilter{
   @Override
   public boolean isClassAcceptable(Class hintClass){
-    return ReflectionCache.isAssignable(PsiClass.class, hintClass);
+    return ReflectionUtil.isAssignable(PsiClass.class, hintClass);
   }
 
   @Override

@@ -15,17 +15,17 @@
  */
 package com.intellij.psi.filters.classes;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.util.ReflectionCache;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.util.ReflectionUtil;
 
 public class EnumOrAnnotationTypeFilter implements ElementFilter{
 
   @Override
   public boolean isClassAcceptable(Class hintClass){
-    return ReflectionCache.isAssignable(PsiClass.class, hintClass);
+    return ReflectionUtil.isAssignable(PsiClass.class, hintClass);
   }
 
   @Override

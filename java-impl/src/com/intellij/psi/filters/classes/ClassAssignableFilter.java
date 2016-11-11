@@ -22,7 +22,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.reference.SoftReference;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,7 +42,7 @@ public abstract class ClassAssignableFilter implements ElementFilter{
 
   @Override
   public boolean isClassAcceptable(Class hintClass){
-    return ReflectionCache.isAssignable(PsiClass.class, hintClass);
+    return ReflectionUtil.isAssignable(PsiClass.class, hintClass);
   }
 
   protected PsiClass getPsiClass(PsiManager manager, GlobalSearchScope scope){

@@ -52,10 +52,10 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.LibraryOrderEntry;
+import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.SdkOrderEntry;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Computable;
@@ -159,9 +159,9 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
         final ModuleRootManager rootManager = ModuleRootManager.getInstance(module);
         final OrderEntry[] entries = rootManager.getOrderEntries();
         for (OrderEntry entry : entries) {
-          if (entry instanceof SdkOrderEntry) {
+          if (entry instanceof ModuleExtensionWithSdkOrderEntry) {
             if (/*!ModuleType.get(module).isValidSdk(module, null)*/Boolean.FALSE) {
-              System.err.println(InspectionsBundle.message("offline.inspections.module.jdk.not.found", ((SdkOrderEntry)entry).getSdkName(),
+              System.err.println(InspectionsBundle.message("offline.inspections.module.jdk.not.found", ((ModuleExtensionWithSdkOrderEntry)entry).getSdkName(),
                                                            module.getName()));
               return false;
             }

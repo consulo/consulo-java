@@ -15,19 +15,23 @@
  */
 package com.intellij.psi.search.scope.packageSet;
 
+import java.io.File;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.LibraryOrderEntry;
+import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
+import com.intellij.openapi.roots.OrderEntry;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.problems.WolfTheProblemSolver;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.util.List;
-import java.util.regex.Pattern;
 
 public class PatternPackageSet extends PatternBasedPackageSet {
   @NonNls public static final String SCOPE_TEST = "test";
@@ -169,8 +173,8 @@ public class PatternPackageSet extends PatternBasedPackageSet {
             final String fileName = new File(presentableName).getName();
             if (libPattern.matcher(fileName).matches()) return true;
           }
-        } else if (orderEntry instanceof SdkOrderEntry) {
-          final String jdkName = ((SdkOrderEntry)orderEntry).getSdkName();
+        } else if (orderEntry instanceof ModuleExtensionWithSdkOrderEntry) {
+          final String jdkName = ((ModuleExtensionWithSdkOrderEntry)orderEntry).getSdkName();
           if (jdkName != null && libPattern.matcher(jdkName).matches()) return true;
         }
       }

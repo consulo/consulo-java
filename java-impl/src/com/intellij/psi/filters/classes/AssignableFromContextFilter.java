@@ -19,7 +19,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.reference.SoftReference;
-import com.intellij.util.ReflectionCache;
+import com.intellij.util.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,7 +32,7 @@ public class AssignableFromContextFilter implements ElementFilter{
 
   @Override
   public boolean isClassAcceptable(Class hintClass){
-    return ReflectionCache.isAssignable(PsiClass.class, hintClass);
+    return ReflectionUtil.isAssignable(PsiClass.class, hintClass);
   }
 
   private SoftReference myCurrentContext = new SoftReference(null);
