@@ -16,15 +16,12 @@
 
 package consulo.java.ide.newProjectOrModule;
 
-import javax.swing.JComponent;
-
 import org.jetbrains.annotations.NotNull;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import consulo.annotations.RequiredReadAction;
 import consulo.ide.impl.UnzipNewModuleBuilderProcessor;
 import consulo.ide.newProject.NewModuleBuilder;
 import consulo.ide.newProject.NewModuleBuilderProcessor;
@@ -78,6 +75,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 		});
 	}
 
+	@RequiredReadAction
 	private static void setupModule(@NotNull JavaNewModuleBuilderPanel panel, @NotNull ContentEntry contentEntry, @NotNull ModifiableRootModel modifiableRootModel)
 	{
 		// need get by id - due, extension can be from original Java impl, or from other plugin, like IKVM.NET
@@ -91,12 +89,6 @@ public class JavaNewModuleBuilder implements NewModuleBuilder
 		{
 			javaMutableModuleExtension.getInheritableSdk().set(null, sdk);
 			modifiableRootModel.addModuleExtensionSdkEntry(javaMutableModuleExtension);
-
-			JavaSdkVersion version = JavaSdk.getInstance().getVersion(sdk);
-			if(version != null)
-			{
-				javaMutableModuleExtension.getInheritableLanguageLevel().set(null, version.getMaxLanguageLevel());
-			}
 		}
 		contentEntry.addFolder(contentEntry.getUrl() + "/src", ProductionContentFolderTypeProvider.getInstance());
 	}

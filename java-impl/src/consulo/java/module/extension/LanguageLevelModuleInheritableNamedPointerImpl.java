@@ -20,7 +20,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;
 import consulo.util.pointers.NamedPointer;
 
@@ -65,11 +64,5 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 	public NamedPointer<LanguageLevel> getPointer(@NotNull Project project, @NotNull String name)
 	{
 		return LanguageLevel.valueOf(name);
-	}
-
-	@Override
-	public LanguageLevel getDefaultValue()
-	{
-		return LanguageLevel.HIGHEST;
 	}
 }

@@ -32,8 +32,20 @@ import consulo.module.extension.ModuleExtensionWithSdk;
  */
 public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends ModuleExtensionWithSdk<T>
 {
+	/**
+	 * @return user set language version or resolved language version from sdk
+	 */
 	@NotNull
 	LanguageLevel getLanguageLevel();
+
+	/**
+	 * @return user set language version. If version is not set return null
+	 */
+	@Nullable
+	default LanguageLevel getLanguageLevelNoDefault()
+	{
+		return getLanguageLevel();
+	}
 
 	@NotNull
 	SpecialDirLocation getSpecialDirLocation();

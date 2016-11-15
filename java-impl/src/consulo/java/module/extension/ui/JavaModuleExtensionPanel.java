@@ -17,18 +17,14 @@
 package consulo.java.module.extension.ui;
 
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import consulo.java.module.extension.JavaModuleExtension;
-import consulo.java.module.extension.JavaMutableModuleExtension;
-import consulo.java.module.extension.SpecialDirLocation;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.javaCompiler.TargetOptionsComponent;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
@@ -37,19 +33,21 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.ui.ColoredListCellRendererWrapper;
+import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.TitledSeparator;
-import com.intellij.util.PairConsumer;
+import com.intellij.util.ObjectUtil;
 import consulo.annotations.RequiredDispatchThread;
 import consulo.annotations.RequiredReadAction;
 import consulo.extension.ui.ModuleExtensionSdkBoxBuilder;
+import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaMutableModuleExtension;
+import consulo.java.module.extension.SpecialDirLocation;
 import consulo.module.extension.ModuleExtension;
 import consulo.module.extension.ModuleExtensionWithSdk;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
@@ -62,7 +60,7 @@ public class JavaModuleExtensionPanel extends JPanel
 {
 	private final JavaMutableModuleExtension<?> myExtension;
 
-	private ComboBox myLanguageLevelComboBox;
+	private ComboBox<Object> myLanguageLevelComboBox;
 	private JRadioButton myModuleDirRadioButton;
 	private JRadioButton mySourceDirRadioButton;
 
@@ -72,15 +70,19 @@ public class JavaModuleExtensionPanel extends JPanel
 		super(new VerticalFlowLayout());
 		myExtension = extension;
 
-		ModuleExtensionSdkBoxBuilder sdkBoxBuilder = ModuleExtensionSdkBoxBuilder.createAndDefine(extension, classpathStateUpdater);
+		ModuleExtensionSdkBoxBuilder<?> sdkBoxBuilder = ModuleExtensionSdkBoxBuilder.createAndDefine(extension, classpathStateUpdater);
 
-		myLanguageLevelComboBox = new ComboBox();
-		myLanguageLevelComboBox.setRenderer(new ColoredListCellRendererWrapper<Object>()
+		myLanguageLevelComboBox = new ComboBox<>();
+		myLanguageLevelComboBox.setRenderer(new ColoredListCellRenderer<Object>()
 		{
 			@Override
-			protected void doCustomize(JList list, Object value, int index, boolean selected, boolean hasFocus)
+			protected void customizeCellRenderer(@NotNull JList<?> jList, Object value, int i, boolean b, boolean b1)
 			{
-				if(value instanceof LanguageLevel)
+				if(value == ObjectUtil.NULL)
+				{
+					append(TargetOptionsComponent.COMPILER_DEFAULT, SimpleTextAttributes.GRAY_ATTRIBUTES);
+				}
+				else if(value instanceof LanguageLevel)
 				{
 					final LanguageLevel languageLevel = (LanguageLevel) value;
 					append(languageLevel.getShortText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
@@ -107,24 +109,19 @@ public class JavaModuleExtensionPanel extends JPanel
 			}
 		});
 
-		sdkBoxBuilder.postConsumer(new PairConsumer<Sdk, Sdk>()
-		{
-			@Override
-			public void consume(Sdk oldValue, Sdk newValue)
+		sdkBoxBuilder.postConsumer((oldValue, newValue) -> {
+			Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
+			if(selectedItem instanceof LanguageLevel && newValue != null && oldValue != null)
 			{
-				Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
-				if(selectedItem instanceof LanguageLevel && newValue != null && oldValue != null)
-				{
-					JavaSdkVersion oldSdkVersion = JavaSdk.getInstance().getVersion(oldValue);
+				JavaSdkVersion oldSdkVersion = JavaSdk.getInstance().getVersion(oldValue);
 
-					// if old sdk version exists and lang version is equal sdk lang version
-					if(oldSdkVersion != null && oldSdkVersion.getMaxLanguageLevel() == selectedItem)
+				// if old sdk version exists and lang version is equal sdk lang version
+				if(oldSdkVersion != null && oldSdkVersion.getMaxLanguageLevel() == selectedItem)
+				{
+					JavaSdkVersion newSdkVersion = JavaSdk.getInstance().getVersion(newValue);
+					if(newSdkVersion != null)
 					{
-						JavaSdkVersion newSdkVersion = JavaSdk.getInstance().getVersion(newValue);
-						if(newSdkVersion != null)
-						{
-							myLanguageLevelComboBox.setSelectedItem(newSdkVersion.getMaxLanguageLevel());
-						}
+						myLanguageLevelComboBox.setSelectedItem(newSdkVersion.getMaxLanguageLevel());
 					}
 				}
 			}
@@ -146,25 +143,19 @@ public class JavaModuleExtensionPanel extends JPanel
 		final JRadioButton radioButton = extension.getSpecialDirLocation() == SpecialDirLocation.MODULE_DIR ? myModuleDirRadioButton : mySourceDirRadioButton;
 		radioButton.setSelected(true);
 
-		ChangeListener changeListener = new ChangeListener()
-		{
-			@Override
-			public void stateChanged(ChangeEvent e)
+		ChangeListener changeListener = e -> {
+			if(mySourceDirRadioButton.isSelected())
 			{
-				if(mySourceDirRadioButton.isSelected())
-				{
-					extension.setSpecialDirLocation(SpecialDirLocation.SOURCE_DIR);
-				}
-				else if(myModuleDirRadioButton.isSelected())
-				{
-					extension.setSpecialDirLocation(SpecialDirLocation.MODULE_DIR);
-				}
+				extension.setSpecialDirLocation(SpecialDirLocation.SOURCE_DIR);
+			}
+			else if(myModuleDirRadioButton.isSelected())
+			{
+				extension.setSpecialDirLocation(SpecialDirLocation.MODULE_DIR);
 			}
 		};
 
 		myModuleDirRadioButton.addChangeListener(changeListener);
 		mySourceDirRadioButton.addChangeListener(changeListener);
-
 
 		add(new TitledSeparator(JavaCoreBundle.message("paths.to.special.roots")));
 		JPanel specialRootPanel = new JPanel(new VerticalFlowLayout());
@@ -188,6 +179,7 @@ public class JavaModuleExtensionPanel extends JPanel
 	@RequiredReadAction
 	private void processLanguageLevelItems()
 	{
+		myLanguageLevelComboBox.addItem(ObjectUtil.NULL);
 		for(LanguageLevel languageLevel : LanguageLevel.values())
 		{
 			myLanguageLevelComboBox.addItem(languageLevel);
@@ -231,29 +223,28 @@ public class JavaModuleExtensionPanel extends JPanel
 		}
 		else
 		{
-			myLanguageLevelComboBox.setSelectedItem(inheritableLanguageLevel.get());
+			myLanguageLevelComboBox.setSelectedItem(ObjectUtil.notNull(inheritableLanguageLevel.get(), ObjectUtil.NULL));
 		}
 
-		myLanguageLevelComboBox.addItemListener(new ItemListener()
-		{
-			@Override
-			public void itemStateChanged(ItemEvent e)
+		myLanguageLevelComboBox.addItemListener(e -> {
+			if(e.getStateChange() == ItemEvent.SELECTED)
 			{
-				if(e.getStateChange() == ItemEvent.SELECTED)
+				final Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
+				if(selectedItem instanceof Module)
 				{
-					final Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
-					if(selectedItem instanceof Module)
-					{
-						inheritableLanguageLevel.set(((Module) selectedItem).getName(), null);
-					}
-					else if(selectedItem instanceof LanguageLevel)
-					{
-						inheritableLanguageLevel.set(null, ((LanguageLevel) selectedItem).getName());
-					}
-					else
-					{
-						inheritableLanguageLevel.set(selectedItem.toString(), null);
-					}
+					inheritableLanguageLevel.set(((Module) selectedItem).getName(), null);
+				}
+				else if(selectedItem instanceof LanguageLevel)
+				{
+					inheritableLanguageLevel.set(null, ((LanguageLevel) selectedItem).getName());
+				}
+				else if(selectedItem == ObjectUtil.NULL)
+				{
+					inheritableLanguageLevel.set((String) null, (String) null);
+				}
+				else
+				{
+					inheritableLanguageLevel.set(selectedItem.toString(), null);
 				}
 			}
 		});
