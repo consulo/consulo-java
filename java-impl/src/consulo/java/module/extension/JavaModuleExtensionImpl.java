@@ -123,7 +123,10 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		super.getStateImpl(element);
 
 		myLanguageLevel.toXml(element);
-		element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+		if(mySpecialDirLocation != SpecialDirLocation.SOURCE_DIR)
+		{
+			element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+		}
 		if(!StringUtil.isEmpty(myBytecodeVersion))
 		{
 			element.setAttribute(BYTECODE_VERSION, myBytecodeVersion);
