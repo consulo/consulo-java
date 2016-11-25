@@ -18,9 +18,9 @@ package consulo.java.module.extension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;
+import consulo.roots.ModuleRootLayer;
 import consulo.util.pointers.NamedPointer;
 
 /**
@@ -31,9 +31,9 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 {
 	private final String myExtensionId;
 
-	public LanguageLevelModuleInheritableNamedPointerImpl(@NotNull Project project, @NotNull String id)
+	public LanguageLevelModuleInheritableNamedPointerImpl(@NotNull ModuleRootLayer layer, @NotNull String id)
 	{
-		super(project, "language-level");
+		super(layer, "language-level");
 		myExtensionId = id;
 	}
 
@@ -61,7 +61,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 
 	@NotNull
 	@Override
-	public NamedPointer<LanguageLevel> getPointer(@NotNull Project project, @NotNull String name)
+	public NamedPointer<LanguageLevel> getPointer(@NotNull ModuleRootLayer layer, @NotNull String name)
 	{
 		return LanguageLevel.valueOf(name);
 	}

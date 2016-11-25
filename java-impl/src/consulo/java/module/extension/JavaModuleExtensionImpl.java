@@ -30,8 +30,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.annotations.RequiredReadAction;
-import consulo.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.module.extension.ModuleInheritableNamedPointer;
+import consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.roots.ModuleRootLayer;
 
 /**
@@ -53,13 +53,14 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	public JavaModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer moduleRootLayer)
 	{
 		super(id, moduleRootLayer);
-		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer.getProject(), id);
+		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer, id);
 		myLanguageLevelValue = new LazyValueBySdk<>(this, LanguageLevel.HIGHEST, sdk -> {
 			JavaSdkVersion sdkVersion = JavaSdk.getInstance().getVersion(sdk);
 			return sdkVersion == null ? LanguageLevel.HIGHEST : sdkVersion.getMaxLanguageLevel();
 		});
 	}
 
+	@RequiredReadAction
 	@Override
 	public void commit(@NotNull JavaModuleExtensionImpl mutableModuleExtension)
 	{
