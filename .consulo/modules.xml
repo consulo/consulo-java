@@ -284,7 +284,6 @@
           <orderEntry type="module" module-name="java-indexing-impl" exported="" />
           <orderEntry type="module" module-name="java-rt" />
           <orderEntry type="module" module-name="java-execution-api" />
-          <orderEntry type="library" name="jimage-jdk6" level="project" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.regexp" level="project" />
         </module-layer>

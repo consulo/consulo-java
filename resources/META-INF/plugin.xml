@@ -347,9 +347,6 @@
 			<implementation-class>com.intellij.util.xml.impl.JavaDomApplicationComponent</implementation-class>
 		</component>
 		<component>
-			<implementation-class>consulo.java.library.jimage.JImageFileSystem</implementation-class>
-		</component>
-		<component>
 			<implementation-class>com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisConverter</implementation-class>
 		</component>
 	</application-components>
@@ -1945,7 +1942,6 @@
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
 		<contentFolderSupportPatcher implementation="consulo.java.module.extension.JavaContentFolderSupportPatcher"/>
 		<pathMacroExpendableProtocol protocol="jar"/>
-		<pathMacroExpendableProtocol protocol="jimage"/>
 
 		<psi.directoryMethodProxy implementation="com.intellij.psi.impl.file.JavaPsiDirectoryMethodProxy"/>
 

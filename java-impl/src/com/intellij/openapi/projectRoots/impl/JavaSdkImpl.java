@@ -31,8 +31,9 @@ import javax.swing.Icon;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import consulo.fileTypes.ZipArchiveFileType;
 import consulo.java.JavaIcons;
-import consulo.java.library.jimage.JImageFileType;
+import consulo.java.fileTypes.JModFileType;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
@@ -329,7 +330,6 @@ public class JavaSdkImpl extends JavaSdk
 	{
 		final File jdkHome = new File(sdk.getHomePath());
 		List<VirtualFile> classes = findClasses(jdkHome, false);
-		VirtualFile sources = findSources(jdkHome);
 		VirtualFile docs = findDocs(jdkHome, "docs/api");
 
 		final SdkModificator sdkModificator = sdk.getSdkModificator();
@@ -345,33 +345,49 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			sdkModificator.addRoot(root, BinariesOrderRootType.getInstance());
 		}
-		if(sources != null)
-		{
-			sdkModificator.addRoot(sources, SourcesOrderRootType.getInstance());
-		}
+
 		addJavaFxSources(jdkHome, sdkModificator);
 
-		File modulesDir = new File(jdkHome, "lib/modules");
-		if(modulesDir.exists() && modulesDir.isDirectory())
+		boolean isModuleJdk = false;
+		File jmodsDirectory = new File(jdkHome, "jmods");
+		if(jmodsDirectory.exists() && jmodsDirectory.isDirectory())
 		{
-			for(File file : modulesDir.listFiles())
+			isModuleJdk = true;
+			File[] files = jmodsDirectory.listFiles();
+			for(File file : files)
 			{
-				VirtualFile maybeJImageFile = LocalFileSystem.getInstance().findFileByIoFile(file);
-				if(maybeJImageFile == null || maybeJImageFile.getFileType() != JImageFileType.INSTANCE)
+				VirtualFile jmodFile = JModFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(file.getPath());
+				if(jmodFile != null)
 				{
-					continue;
+					VirtualFile classesDir = jmodFile.findChild("classes");
+					if(classesDir != null)
+					{
+						sdkModificator.addRoot(classesDir, BinariesOrderRootType.getInstance());
+					}
 				}
-				sdkModificator.addRoot(maybeJImageFile, BinariesOrderRootType.getInstance());
 			}
 		}
 
-		File jmodsFile = new File(jdkHome, "jmods");
-		if(jmodsFile.exists() && jmodsFile.isDirectory())
+		boolean noSources = true;
+		VirtualFile srcZipFile = ZipArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(new File(jdkHome, "src.zip").getPath());
+		if(srcZipFile != null)
 		{
-			VirtualFile javaBaseModule = LocalFileSystem.getInstance().findFileByIoFile(new File(jmodsFile, "java.base.jmod"));
-			if(javaBaseModule != null)
+			noSources = false;
+
+			if(isModuleJdk)
 			{
-				sdkModificator.addRoot(javaBaseModule, BinariesOrderRootType.getInstance());
+				VirtualFile[] children = srcZipFile.getChildren();
+				for(VirtualFile child : children)
+				{
+					if(child.isDirectory())
+					{
+						sdkModificator.addRoot(child, SourcesOrderRootType.getInstance());
+					}
+				}
+			}
+			else
+			{
+				sdkModificator.addRoot(srcZipFile, SourcesOrderRootType.getInstance());
 			}
 		}
 
@@ -405,7 +421,7 @@ public class JavaSdkImpl extends JavaSdk
 				sdkModificator.addRoot(appleDocs, DocumentationOrderRootType.getInstance());
 			}
 
-			if(commonDocs == null && appleDocs == null && sources == null)
+			if(commonDocs == null && appleDocs == null && noSources)
 			{
 				String url = getDefaultDocumentationUrl(sdk);
 				if(url != null)
@@ -509,13 +525,9 @@ public class JavaSdkImpl extends JavaSdk
 		String path = home.replace(File.separatorChar, '/');
 		sdkModificator.setHomePath(path);
 		sdkModificator.setVersionString(jdkName); // must be set after home path, otherwise setting home path clears the version string
-
-		File jdkHomeFile = new File(home);
-		addClasses(jdkHomeFile, sdkModificator, isJre);
-		addSources(jdkHomeFile, sdkModificator);
-		addJavaFxSources(jdkHomeFile, sdkModificator);
-		addDocs(jdkHomeFile, sdkModificator);
 		sdkModificator.commitChanges();
+
+		setupSdkPaths(jdk);
 
 		return jdk;
 	}
@@ -559,48 +571,6 @@ public class JavaSdkImpl extends JavaSdk
 			return;
 		}
 		sdkModificator.addRoot(archiveRootForLocalFile, SourcesOrderRootType.getInstance());
-	}
-
-	private static void addSources(File file, SdkModificator sdkModificator)
-	{
-		VirtualFile vFile = findSources(file);
-		if(vFile != null)
-		{
-			sdkModificator.addRoot(vFile, SourcesOrderRootType.getInstance());
-		}
-	}
-
-	@Nullable
-	@SuppressWarnings({"HardCodedStringLiteral"})
-	public static VirtualFile findSources(File file)
-	{
-		File srcDir = new File(file, "src");
-		File jarFile = new File(file, "src.jar");
-		if(!jarFile.exists())
-		{
-			jarFile = new File(file, "src.zip");
-		}
-
-		if(jarFile.exists())
-		{
-			VirtualFile vFile = findInJar(jarFile, "src");
-			if(vFile != null)
-			{
-				return vFile;
-			}
-			// try 1.4 format
-			vFile = findInJar(jarFile, "");
-			return vFile;
-		}
-		else
-		{
-			if(!srcDir.exists() || !srcDir.isDirectory())
-			{
-				return null;
-			}
-			String path = srcDir.getAbsolutePath().replace(File.separatorChar, '/');
-			return LocalFileSystem.getInstance().findFileByPath(path);
-		}
 	}
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
