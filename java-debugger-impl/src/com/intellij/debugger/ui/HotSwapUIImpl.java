@@ -182,7 +182,7 @@ public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent
 			return;
 		}
 
-		final boolean shouldPerformScan = true;
+		final boolean shouldPerformScan = generatedPaths == null;
 
 		final HotSwapProgressImpl findClassesProgress;
 		if(shouldPerformScan)
