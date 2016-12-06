@@ -17,9 +17,25 @@ package com.intellij.debugger.impl;
 
 import java.util.EventListener;
 
-public interface DebuggerManagerListener extends EventListener{
-  void sessionCreated(DebuggerSession session);
-  void sessionAttached(DebuggerSession session);
-  void sessionDetached(DebuggerSession session);
-  void sessionRemoved(DebuggerSession session);
+import com.intellij.openapi.extensions.ExtensionPointName;
+
+public interface DebuggerManagerListener extends EventListener
+{
+	ExtensionPointName<DebuggerManagerListener> EP_NAME = ExtensionPointName.create("consulo.java.debugger.managerListener");
+
+	default void sessionCreated(DebuggerSession session)
+	{
+	}
+
+	default void sessionAttached(DebuggerSession session)
+	{
+	}
+
+	default void sessionDetached(DebuggerSession session)
+	{
+	}
+
+	default void sessionRemoved(DebuggerSession session)
+	{
+	}
 }

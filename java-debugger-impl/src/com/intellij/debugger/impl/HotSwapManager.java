@@ -21,14 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
-import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.AbstractProjectComponent;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderEnumerator;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pair;
@@ -38,47 +34,40 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.HashMap;
+import consulo.lombok.annotations.ProjectService;
 
-public class HotSwapManager extends AbstractProjectComponent
+@ProjectService
+public class HotSwapManager
 {
+	public static class Listener implements DebuggerManagerListener
+	{
+		@Override
+		public void sessionCreated(DebuggerSession session)
+		{
+			HotSwapManager manager = HotSwapManager.getInstance(session.getProject());
+			manager.myTimeStamps.put(session, System.currentTimeMillis());
+		}
+
+		@Override
+		public void sessionRemoved(DebuggerSession session)
+		{
+			HotSwapManager manager = HotSwapManager.getInstance(session.getProject());
+			manager.myTimeStamps.remove(session);
+		}
+	}
+
 	private final Map<DebuggerSession, Long> myTimeStamps = new HashMap<>();
 	private static final String CLASS_EXTENSION = ".class";
-
-	public HotSwapManager(Project project, DebuggerManagerEx manager)
-	{
-		super(project);
-		manager.addDebuggerManagerListener(new DebuggerManagerAdapter()
-		{
-			@Override
-			public void sessionCreated(DebuggerSession session)
-			{
-				myTimeStamps.put(session, Long.valueOf(System.currentTimeMillis()));
-			}
-
-			@Override
-			public void sessionRemoved(DebuggerSession session)
-			{
-				myTimeStamps.remove(session);
-			}
-		});
-	}
-
-	@Override
-	@NotNull
-	public String getComponentName()
-	{
-		return "HotSwapManager";
-	}
 
 	private long getTimeStamp(DebuggerSession session)
 	{
 		Long tStamp = myTimeStamps.get(session);
-		return tStamp != null ? tStamp.longValue() : 0;
+		return tStamp != null ? tStamp : 0;
 	}
 
 	void setTimeStamp(DebuggerSession session, long tStamp)
 	{
-		myTimeStamps.put(session, Long.valueOf(tStamp));
+		myTimeStamps.put(session, tStamp);
 	}
 
 	private Map<String, HotSwapFile> scanForModifiedClasses(final DebuggerSession session, final HotSwapProgress progress)
@@ -89,7 +78,7 @@ public class HotSwapManager extends AbstractProjectComponent
 		final Map<String, HotSwapFile> modifiedClasses = new HashMap<>();
 
 		List<File> outputRoots = ApplicationManager.getApplication().runReadAction((Computable<List<File>>) () -> {
-			final List<VirtualFile> allDirs = OrderEnumerator.orderEntries(myProject).withoutSdk().withoutLibraries().getPathsList().getRootDirs();
+			final List<VirtualFile> allDirs = OrderEnumerator.orderEntries(session.getProject()).withoutSdk().withoutLibraries().getPathsList().getRootDirs();
 			return allDirs.stream().map(VfsUtil::virtualToIoFile).collect(Collectors.toList());
 		});
 
@@ -139,11 +128,6 @@ public class HotSwapManager extends AbstractProjectComponent
 			}
 		}
 		return true;
-	}
-
-	public static HotSwapManager getInstance(Project project)
-	{
-		return project.getComponent(HotSwapManager.class);
 	}
 
 	private void reloadClasses(DebuggerSession session, Map<String, HotSwapFile> classesToReload, HotSwapProgress progress)

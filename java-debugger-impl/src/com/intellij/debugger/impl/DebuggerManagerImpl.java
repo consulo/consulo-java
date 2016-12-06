@@ -136,6 +136,30 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	@NonNls
 	private static final String DEBUG_KEY_NAME = "idea.xdebug.key";
 
+	public DebuggerManagerImpl(Project project, StartupManager startupManager, EditorColorsManager colorsManager)
+	{
+		myProject = project;
+		myBreakpointManager = new BreakpointManager(myProject, startupManager, this);
+
+		if(!project.isDefault())
+		{
+			DebuggerManagerListener[] extensions = DebuggerManagerListener.EP_NAME.getExtensions(project);
+			for(DebuggerManagerListener extension : extensions)
+			{
+				myDispatcher.addListener(extension);
+			}
+
+			colorsManager.addEditorColorsListener(new EditorColorsListener()
+			{
+				@Override
+				public void globalSchemeChange(EditorColorsScheme scheme)
+				{
+					getBreakpointManager().updateBreakpointsUI();
+				}
+			}, project);
+		}
+	}
+
 	@Override
 	public void addClassNameMapper(final NameMapper mapper)
 	{
@@ -172,23 +196,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	public void removeDebuggerManagerListener(DebuggerManagerListener listener)
 	{
 		myDispatcher.removeListener(listener);
-	}
-
-	public DebuggerManagerImpl(Project project, StartupManager startupManager, EditorColorsManager colorsManager)
-	{
-		myProject = project;
-		myBreakpointManager = new BreakpointManager(myProject, startupManager, this);
-		if(!project.isDefault())
-		{
-			colorsManager.addEditorColorsListener(new EditorColorsListener()
-			{
-				@Override
-				public void globalSchemeChange(EditorColorsScheme scheme)
-				{
-					getBreakpointManager().updateBreakpointsUI();
-				}
-			}, project);
-		}
 	}
 
 	@Nullable

@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
 	<id>consulo.java</id>
 	<name>Java</name>
 	<version>SNAPHOT</version>
@@ -362,14 +362,6 @@
 			<interface-class>com.intellij.debugger.ui.DebuggerPanelsManager</interface-class>
 			<implementation-class>com.intellij.debugger.ui.DebuggerPanelsManager</implementation-class>
 		</component>
-		<component>
-			<interface-class>com.intellij.debugger.impl.HotSwapManager</interface-class>
-			<implementation-class>com.intellij.debugger.impl.HotSwapManager</implementation-class>
-		</component>
-		<component>
-			<interface-class>com.intellij.debugger.ui.HotSwapUI</interface-class>
-			<implementation-class>com.intellij.debugger.ui.HotSwapUIImpl</implementation-class>
-		</component>
 
 		<component>
 			<interface-class>com.intellij.debugger.DebuggerManager</interface-class>
@@ -462,6 +454,8 @@
 						interface="com.intellij.debugger.engine.evaluation.CodeFragmentFactory"/>
 
 		<extensionPoint name="debugger.nodeRenderer" interface="com.intellij.debugger.ui.tree.render.NodeRenderer"/>
+
+		<extensionPoint name="debugger.managerListener" interface="com.intellij.debugger.impl.DebuggerManagerListener" area="CONSULO_PROJECT"/>
 
 		<extensionPoint name="debugger.sourcePositionProvider" interface="com.intellij.debugger.engine.SourcePositionProvider"/>
 
@@ -665,6 +659,9 @@
 		<debugger.sourcePositionProvider implementation="com.intellij.debugger.engine.DefaultSourcePositionProvider" order="last"/>
 		<debugger.sourcePositionHighlighter implementation="com.intellij.debugger.engine.JavaSourcePositionHighlighter"/>
 
+		<debugger.managerListener implementation="com.intellij.debugger.impl.HotSwapManager$Listener"/>
+		<debugger.managerListener implementation="com.intellij.debugger.ui.HotSwapUIImpl$Listener"/>
+
 		<debugger.simplePropertyGetterProvider implementation="com.intellij.debugger.engine.JavaSimpleGetterProvider"/>
 
 		<generation.topLevelFactory language="JAVA" implementationClass="com.intellij.psi.impl.JavaFactoryProvider"/>
@@ -700,6 +697,9 @@
 
 		<projectService serviceInterface="com.intellij.debugger.ui.DebuggerRecents"
 						serviceImplementation="com.intellij.debugger.ui.DebuggerRecents"/>
+
+		<projectService serviceImplementation="com.intellij.debugger.impl.HotSwapManager" />
+		<projectService serviceInterface="com.intellij.debugger.ui.HotSwapUI" serviceImplementation="com.intellij.debugger.ui.HotSwapUIImpl" />
 
 		<compiler implementation="com.intellij.compiler.impl.javaCompiler.AnnotationProcessingCompiler" id="java-annotation-processor"
 				  order="before java-compiler"/>

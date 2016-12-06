@@ -25,13 +25,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.CommonBundle;
 import com.intellij.debugger.DebuggerBundle;
-import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.DebuggerManagerEx;
-import com.intellij.debugger.impl.DebuggerManagerAdapter;
+import com.intellij.debugger.impl.DebuggerManagerListener;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.HotSwapFile;
 import com.intellij.debugger.impl.HotSwapManager;
@@ -44,7 +42,6 @@ import com.intellij.openapi.compiler.CompilationStatusListener;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.compiler.CompilerTopics;
-import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -53,7 +50,6 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.messages.MessageBus;
 import com.intellij.util.messages.MessageBusConnection;
 
 /**
@@ -61,75 +57,49 @@ import com.intellij.util.messages.MessageBusConnection;
  * Date: Oct 2, 2003
  * Time: 6:00:55 PM
  */
-public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent
+public class HotSwapUIImpl extends HotSwapUI
 {
+	public static class Listener implements DebuggerManagerListener
+	{
+		private MessageBusConnection myConn = null;
+		private int mySessionCount = 0;
+
+		@Override
+		public void sessionAttached(DebuggerSession session)
+		{
+			if(mySessionCount++ == 0)
+			{
+				Project project = session.getProject();
+
+				myConn = project.getMessageBus().connect();
+				myConn.subscribe(CompilerTopics.COMPILATION_STATUS, new MyCompilationStatusListener(project));
+			}
+		}
+
+		@Override
+		public void sessionDetached(DebuggerSession session)
+		{
+			mySessionCount = Math.max(0, mySessionCount - 1);
+			if(mySessionCount == 0)
+			{
+				final MessageBusConnection conn = myConn;
+				if(conn != null)
+				{
+					Disposer.dispose(conn);
+					myConn = null;
+				}
+			}
+		}
+	}
+
 	private final List<HotSwapVetoableListener> myListeners = ContainerUtil.createLockFreeCopyOnWriteList();
 	private boolean myAskBeforeHotswap = true;
 	private final Project myProject;
 	private boolean myPerformHotswapAfterThisCompilation = true;
 
-	public HotSwapUIImpl(final Project project, final MessageBus bus, DebuggerManager debugManager)
+	public HotSwapUIImpl(final Project project)
 	{
 		myProject = project;
-
-		((DebuggerManagerEx) debugManager).addDebuggerManagerListener(new DebuggerManagerAdapter()
-		{
-			private MessageBusConnection myConn = null;
-			private int mySessionCount = 0;
-
-			@Override
-			public void sessionAttached(DebuggerSession session)
-			{
-				if(mySessionCount++ == 0)
-				{
-					myConn = bus.connect();
-					myConn.subscribe(CompilerTopics.COMPILATION_STATUS, new MyCompilationStatusListener());
-				}
-			}
-
-			@Override
-			public void sessionDetached(DebuggerSession session)
-			{
-				mySessionCount = Math.max(0, mySessionCount - 1);
-				if(mySessionCount == 0)
-				{
-					final MessageBusConnection conn = myConn;
-					if(conn != null)
-					{
-						Disposer.dispose(conn);
-						myConn = null;
-					}
-				}
-			}
-		});
-	}
-
-	@Override
-	public void projectOpened()
-	{
-	}
-
-	@Override
-	public void projectClosed()
-	{
-	}
-
-	@Override
-	@NotNull
-	public String getComponentName()
-	{
-		return "HotSwapUI";
-	}
-
-	@Override
-	public void initComponent()
-	{
-	}
-
-	@Override
-	public void disposeComponent()
-	{
-
 	}
 
 	@Override
@@ -339,9 +309,15 @@ public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent
 		myAskBeforeHotswap = false;
 	}
 
-	private class MyCompilationStatusListener implements CompilationStatusListener
+	private static class MyCompilationStatusListener implements CompilationStatusListener
 	{
 		private final AtomicReference<Map<String, List<String>>> myGeneratedPaths = new AtomicReference<>(new HashMap<>());
+		private Project myProject;
+
+		public MyCompilationStatusListener(Project project)
+		{
+			myProject = project;
+		}
 
 		public void fileGenerated(String outputRoot, String relativePath)
 		{
@@ -368,9 +344,11 @@ public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent
 				return;
 			}
 
-			if(errors == 0 && !aborted && myPerformHotswapAfterThisCompilation)
+			HotSwapUIImpl hotSwapUI = (HotSwapUIImpl) HotSwapUI.getInstance(myProject);
+
+			if(errors == 0 && !aborted && hotSwapUI.myPerformHotswapAfterThisCompilation)
 			{
-				for(HotSwapVetoableListener listener : myListeners)
+				for(HotSwapVetoableListener listener : hotSwapUI.myListeners)
 				{
 					if(!listener.shouldHotSwap(compileContext))
 					{
@@ -389,10 +367,10 @@ public class HotSwapUIImpl extends HotSwapUI implements ProjectComponent
 				}
 				if(!sessions.isEmpty())
 				{
-					hotSwapSessions(sessions, generated);
+					hotSwapUI.hotSwapSessions(sessions, generated);
 				}
 			}
-			myPerformHotswapAfterThisCompilation = true;
+			hotSwapUI.myPerformHotswapAfterThisCompilation = true;
 		}
 	}
 }
