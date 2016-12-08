@@ -30,7 +30,6 @@ import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
@@ -113,15 +112,7 @@ public class JavacOutputParser extends OutputParser
 			if(colonIndex2 >= 0)
 			{
 				final String filePath = part1.replace(File.separatorChar, '/');
-				final Boolean fileExists = ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
-				{
-					@Override
-					public Boolean compute()
-					{
-						return LocalFileSystem.getInstance().findFileByPath(filePath) != null ? Boolean.TRUE : Boolean.FALSE;
-					}
-				});
-				if(!fileExists.booleanValue())
+				if(!new File(filePath).exists())
 				{
 					// the part one turned out to be something else than a file path
 					return true;
@@ -137,7 +128,7 @@ public class JavacOutputParser extends OutputParser
 						category = CompilerMessageCategory.WARNING;
 					}
 
-					List<String> messages = new ArrayList<String>();
+					List<String> messages = new ArrayList<>();
 					messages.add(message);
 					int colNum;
 					String prevLine = null;
@@ -291,14 +282,7 @@ public class JavacOutputParser extends OutputParser
 				@Override
 				protected void doExecute(final String line, @Nullable final String filePath, final Callback callback)
 				{
-					final boolean fileExists = filePath != null && ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
-					{
-						@Override
-						public Boolean compute()
-						{
-							return LocalFileSystem.getInstance().findFileByPath(filePath) != null ? Boolean.TRUE : Boolean.FALSE;
-						}
-					});
+					final boolean fileExists = filePath != null && new File(filePath).exists();
 					if(fileExists)
 					{
 						addMessage(callback, CompilerMessageCategory.WARNING, line, VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL,
