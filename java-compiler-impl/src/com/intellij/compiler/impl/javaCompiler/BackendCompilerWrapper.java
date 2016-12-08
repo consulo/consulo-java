@@ -102,13 +102,13 @@ public class BackendCompilerWrapper
 	private final TranslatingCompiler myTranslatingCompiler;
 	private final Chunk<Module> myChunk;
 	private final Project myProject;
-	private final Map<Module, VirtualFile> myModuleToTempDirMap = new THashMap<Module, VirtualFile>();
+	private final Map<Module, VirtualFile> myModuleToTempDirMap = new THashMap<>();
 	private final ProjectFileIndex myProjectFileIndex;
 	@NonNls
 	private static final String PACKAGE_ANNOTATION_FILE_NAME = "package-info.java";
 	private static final FileObject ourStopThreadToken = new FileObject(new File(""), new byte[0]);
-	public final Map<String, Set<CompiledClass>> myFileNameToSourceMap = new THashMap<String, Set<CompiledClass>>();
-	private final Set<VirtualFile> myProcessedPackageInfos = new HashSet<VirtualFile>();
+	public final Map<String, Set<CompiledClass>> myFileNameToSourceMap = new THashMap<>();
+	private final Set<VirtualFile> myProcessedPackageInfos = new HashSet<>();
 	private final CompileStatistics myStatistics;
 	private volatile String myModuleName = null;
 	private boolean myForceCompileTestsSeparately = false;
@@ -176,7 +176,7 @@ public class BackendCompilerWrapper
 		if(!myFilesToCompile.isEmpty() && myCompileContext.getMessageCount(CompilerMessageCategory.ERROR) == 0)
 		{
 			// package-info.java hack
-			final List<TranslatingCompiler.OutputItem> outputs = new ArrayList<TranslatingCompiler.OutputItem>();
+			final List<TranslatingCompiler.OutputItem> outputs = new ArrayList<>();
 			ApplicationManager.getApplication().runReadAction(new Runnable()
 			{
 				@Override
@@ -244,7 +244,7 @@ public class BackendCompilerWrapper
 		runTransformingCompilers(chunk);
 
 
-		final List<OutputDir> outs = new ArrayList<OutputDir>();
+		final List<OutputDir> outs = new ArrayList<>();
 		File fileToDelete = getOutputDirsToCompileTo(chunk, outs);
 
 		try
@@ -596,7 +596,7 @@ public class BackendCompilerWrapper
 		final Module[] modules = chunk.getModules();
 		for(final JavaSourceTransformingCompiler transformer : transformers)
 		{
-			final Map<VirtualFile, VirtualFile> originalToCopyFileMap = new HashMap<VirtualFile, VirtualFile>();
+			final Map<VirtualFile, VirtualFile> originalToCopyFileMap = new HashMap<>();
 			final Application application = ApplicationManager.getApplication();
 			application.invokeAndWait(new Runnable()
 			{
@@ -707,8 +707,8 @@ public class BackendCompilerWrapper
 		}
 
 		myCompiler.compileFinished();
-		final List<File> toRefresh = new ArrayList<File>();
-		final Map<String, Collection<TranslatingCompiler.OutputItem>> results = new HashMap<String, Collection<TranslatingCompiler.OutputItem>>();
+		final List<File> toRefresh = new ArrayList<>();
+		final Map<String, Collection<TranslatingCompiler.OutputItem>> results = new HashMap<>();
 		try
 		{
 			final FileTypeManager typeManager = FileTypeManager.getInstance();
@@ -759,7 +759,7 @@ public class BackendCompilerWrapper
 			final List<File> filesToRefresh,
 			final Map<String, Collection<TranslatingCompiler.OutputItem>> results) throws CacheCorruptedException
 	{
-		final Ref<CacheCorruptedException> exRef = new Ref<CacheCorruptedException>(null);
+		final Ref<CacheCorruptedException> exRef = new Ref<>(null);
 		final ModuleFileIndex fileIndex = ModuleRootManager.getInstance(module).getFileIndex();
 		final GlobalSearchScope srcRootScope = GlobalSearchScope.moduleScope(module).intersectWith(GlobalSearchScopes.directoryScope(myProject, sourceRoot, true));
 
@@ -827,7 +827,7 @@ public class BackendCompilerWrapper
 
 		if(paths == null)
 		{
-			paths = new HashSet<CompiledClass>();
+			paths = new HashSet<>();
 			myFileNameToSourceMap.put(sourceFileName, paths);
 		}
 		paths.add(new CompiledClass(classQName, relativePathToSource, pathToClass));
@@ -900,7 +900,7 @@ public class BackendCompilerWrapper
 					Collection<TranslatingCompiler.OutputItem> outputs = results.get(realLocation.getFirst());
 					if(outputs == null)
 					{
-						outputs = new ArrayList<TranslatingCompiler.OutputItem>();
+						outputs = new ArrayList<>();
 						results.put(realLocation.getFirst(), outputs);
 					}
 					outputs.add(new OutputItemImpl(realLocation.getSecond(), srcFile));
@@ -953,7 +953,7 @@ public class BackendCompilerWrapper
 			LOG.info(message);
 			myCompileContext.addMessage(CompilerMessageCategory.WARNING, message, sourceFile.getUrl(), -1, -1);
 			// do not move: looks like source file has been invalidated, need recompilation
-			return new Pair<String, String>(tempOutputDir, pathToClass);
+			return Pair.create(tempOutputDir, pathToClass);
 		}
 		final String realOutputDir;
 		if(myCompileContext.isInTestSourceContent(sourceFile))
@@ -970,7 +970,7 @@ public class BackendCompilerWrapper
 		if(FileUtil.pathsEqual(tempOutputDir, realOutputDir))
 		{ // no need to move
 			filesToRefresh.add(new File(pathToClass));
-			return new Pair<String, String>(realOutputDir, pathToClass);
+			return Pair.create(realOutputDir, pathToClass);
 		}
 
 		final String realPathToClass = realOutputDir + pathToClass.substring(tempOutputDir.length());
@@ -1002,12 +1002,12 @@ public class BackendCompilerWrapper
 		if(success)
 		{
 			filesToRefresh.add(toFile);
-			return new Pair<String, String>(realOutputDir, realPathToClass);
+			return Pair.create(realOutputDir, realPathToClass);
 		}
 		return null;
 	}
 
-	private final Map<Module, String> myModuleToTestsOutput = new HashMap<Module, String>();
+	private final Map<Module, String> myModuleToTestsOutput = new HashMap<>();
 
 	private String getTestsOutputDir(final Module module)
 	{
@@ -1021,7 +1021,7 @@ public class BackendCompilerWrapper
 		return out;
 	}
 
-	private final Map<Module, String> myModuleToOutput = new HashMap<Module, String>();
+	private final Map<Module, String> myModuleToOutput = new HashMap<>();
 
 	private String getOutputDir(final Module module)
 	{
@@ -1059,7 +1059,7 @@ public class BackendCompilerWrapper
 
 	private class ClassParsingThread implements Runnable
 	{
-		private final BlockingQueue<FileObject> myPaths = new ArrayBlockingQueue<FileObject>(50000);
+		private final BlockingQueue<FileObject> myPaths = new ArrayBlockingQueue<>(50000);
 		private CacheCorruptedException myError = null;
 		private final String myOutputDir;
 		private final Map<File, FileObject> myParsingInfo;
