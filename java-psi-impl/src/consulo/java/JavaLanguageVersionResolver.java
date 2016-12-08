@@ -2,6 +2,7 @@ package consulo.java;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import consulo.annotations.RequiredReadAction;
 import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.lang.Language;
 import com.intellij.openapi.module.Module;
@@ -19,38 +20,50 @@ import consulo.lang.LanguageVersionResolver;
  */
 public class JavaLanguageVersionResolver implements LanguageVersionResolver
 {
+	@RequiredReadAction
 	@NotNull
-  @Override
-  public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable PsiElement element) {
-    if (element == null) {
-      return LanguageLevel.HIGHEST;
-    }
-    else {
-      final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(element);
-      if (moduleForPsiElement == null) {
-        return LanguageLevel.HIGHEST;
-      }
-      final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
-      if (extension == null) {
-        return LanguageLevel.HIGHEST;
-      }
-      return extension.getLanguageLevel();
-    }
-  }
+	@Override
+	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable PsiElement element)
+	{
+		if(element == null)
+		{
+			return LanguageLevel.HIGHEST.toLangVersion();
+		}
+		else
+		{
+			final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(element);
+			if(moduleForPsiElement == null)
+			{
+				return LanguageLevel.HIGHEST.toLangVersion();
+			}
+			final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
+			if(extension == null)
+			{
+				return LanguageLevel.HIGHEST.toLangVersion();
+			}
+			return extension.getLanguageLevel().toLangVersion();
+		}
+	}
 
-  @Override
-  public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
-    if (project == null || virtualFile == null) {
-      return LanguageLevel.HIGHEST;
-    }
-    final Module moduleForPsiElement = ModuleUtilCore.findModuleForFile(virtualFile, project);
-    if (moduleForPsiElement == null) {
-      return LanguageLevel.HIGHEST;
-    }
-    final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
-    if (extension == null) {
-      return LanguageLevel.HIGHEST;
-    }
-    return extension.getLanguageLevel();
-  }
+	@NotNull
+	@RequiredReadAction
+	@Override
+	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile)
+	{
+		if(project == null || virtualFile == null)
+		{
+			return LanguageLevel.HIGHEST.toLangVersion();
+		}
+		final Module moduleForPsiElement = ModuleUtilCore.findModuleForFile(virtualFile, project);
+		if(moduleForPsiElement == null)
+		{
+			return LanguageLevel.HIGHEST.toLangVersion();
+		}
+		final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
+		if(extension == null)
+		{
+			return LanguageLevel.HIGHEST.toLangVersion();
+		}
+		return extension.getLanguageLevel().toLangVersion();
+	}
 }

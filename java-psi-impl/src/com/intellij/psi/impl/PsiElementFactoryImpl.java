@@ -58,6 +58,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.HashMap;
+import consulo.java.psi.JavaLanguageVersion;
 
 public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements PsiElementFactory
 {
@@ -438,9 +439,10 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 		final ParserDefinition parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(language);
 		assert parserDefinition != null : "No parser definition for language " + language;
 		final Project project = myManager.getProject();
-		final Lexer lexer = parserDefinition.createLexer(LanguageLevel.HIGHEST);
-		final PsiBuilder builder = PsiBuilderFactory.getInstance().createBuilder(project, holder, lexer, language, LanguageLevel.HIGHEST, text);
-		final ASTNode node = parserDefinition.createParser(LanguageLevel.HIGHEST).parse(type, builder, LanguageLevel.HIGHEST);
+		JavaLanguageVersion highestLangVersion = LanguageLevel.HIGHEST.toLangVersion();
+		final Lexer lexer = parserDefinition.createLexer(highestLangVersion);
+		final PsiBuilder builder = PsiBuilderFactory.getInstance().createBuilder(project, holder, lexer, language, highestLangVersion, text);
+		final ASTNode node = parserDefinition.createParser(highestLangVersion).parse(type, builder, highestLangVersion);
 		holder.rawAddChildren((TreeElement) node);
 		final PsiElement psi = node.getPsi();
 		assert psi != null : text;

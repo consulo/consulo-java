@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2016 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,43 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.lang.java;
 
-import java.util.Arrays;
+package consulo.java.psi;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.lang.Language;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.lang.LanguageVersion;
 
 /**
- * @author max
+ * @author VISTALL
+ * @since 09-Dec-16.
  */
-public class JavaLanguage extends Language
+public class JavaLanguageVersion extends LanguageVersion
 {
-	public static final JavaLanguage INSTANCE = new JavaLanguage();
+	private LanguageLevel myLanguageLevel;
 
-	private JavaLanguage()
+	public JavaLanguageVersion(String id, String name, LanguageLevel languageLevel)
 	{
-		super("JAVA", "text/java", "application/x-java", "text/x-java");
-	}
-
-	@Override
-	public String getDisplayName()
-	{
-		return "Java";
+		super(id, name, JavaLanguage.INSTANCE);
+		myLanguageLevel = languageLevel;
 	}
 
 	@NotNull
-	@Override
-	public LanguageVersion[] findVersions()
+	public LanguageLevel getLanguageLevel()
 	{
-		return Arrays.stream(LanguageLevel.values()).map(LanguageLevel::toLangVersion).toArray(LanguageVersion[]::new);
-	}
-
-	@Override
-	public boolean isCaseSensitive()
-	{
-		return true;
+		return myLanguageLevel;
 	}
 }

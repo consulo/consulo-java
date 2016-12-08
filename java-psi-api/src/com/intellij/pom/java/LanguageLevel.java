@@ -18,16 +18,15 @@ package com.intellij.pom.java;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.core.JavaCoreBundle;
-import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.Key;
-import consulo.lang.LanguageVersion;
+import consulo.java.psi.JavaLanguageVersion;
 import consulo.util.pointers.Named;
 import consulo.util.pointers.NamedPointer;
 
 /**
  * @author dsl
  */
-public enum LanguageLevel implements LanguageVersion<JavaLanguage>, Named, NamedPointer<LanguageLevel>
+public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 {
 	JDK_1_3("1.3", JavaCoreBundle.message("jdk.1.3.language.level.description")),
 	JDK_1_4("1.4", JavaCoreBundle.message("jdk.1.4.language.level.description")),
@@ -44,10 +43,19 @@ public enum LanguageLevel implements LanguageVersion<JavaLanguage>, Named, Named
 	private final String myShortText;
 	private final String myPresentableText;
 
+	private JavaLanguageVersion myLangVersion;
+
 	LanguageLevel(final String shortText, final String presentableText)
 	{
 		myShortText = shortText;
 		myPresentableText = presentableText;
+		myLangVersion = new JavaLanguageVersion(name(), shortText, this);
+	}
+
+	@NotNull
+	public JavaLanguageVersion toLangVersion()
+	{
+		return myLangVersion;
 	}
 
 	public String getDescription()
@@ -71,12 +79,6 @@ public enum LanguageLevel implements LanguageVersion<JavaLanguage>, Named, Named
 	public String getName()
 	{
 		return name();
-	}
-
-	@Override
-	public JavaLanguage getLanguage()
-	{
-		return JavaLanguage.INSTANCE;
 	}
 
 	@Nullable

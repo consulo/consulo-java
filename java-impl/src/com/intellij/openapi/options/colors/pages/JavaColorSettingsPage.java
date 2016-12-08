@@ -149,7 +149,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
   @Override
   @NotNull
   public SyntaxHighlighter getHighlighter() {
-    return new JavaFileHighlighter(LanguageLevel.HIGHEST);
+    return new JavaFileHighlighter(LanguageLevel.HIGHEST.toLangVersion());
   }
 
   @Override

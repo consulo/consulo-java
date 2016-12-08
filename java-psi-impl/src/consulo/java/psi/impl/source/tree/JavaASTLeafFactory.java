@@ -29,12 +29,14 @@ import consulo.lang.LanguageVersion;
 public class JavaASTLeafFactory extends CoreJavaASTLeafFactory
 {
 	@Override
-  @NotNull
-  public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion<?> languageVersion, @NotNull final CharSequence text) {
-    if (type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT) {
-      return new PsiCommentImpl(type, text);
-    }
+	@NotNull
+	public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion languageVersion, @NotNull final CharSequence text)
+	{
+		if(type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT)
+		{
+			return new PsiCommentImpl(type, text);
+		}
 
-    return super.createLeaf(type, languageVersion, text);
-  }
+		return super.createLeaf(type, languageVersion, text);
+	}
 }

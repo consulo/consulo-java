@@ -33,6 +33,7 @@ import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.XmlTokenType;
 import consulo.fileTypes.LanguageVersionableSyntaxHighlighter;
+import consulo.java.psi.JavaLanguageVersion;
 import consulo.lang.LanguageVersion;
 
 public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter
@@ -41,7 +42,7 @@ public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter
   private static final Map<IElementType, TextAttributesKey> ourMap2;
 
   public JavaFileHighlighter() {
-    super(LanguageLevel.HIGHEST);
+    super(LanguageLevel.HIGHEST.toLangVersion());
   }
 
   public JavaFileHighlighter(LanguageVersion languageVersion) {
@@ -116,7 +117,7 @@ public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter
 
   @Override
   public Lexer getHighlightingLexer(LanguageVersion languageVersion) {
-    return new JavaHighlightingLexer((LanguageLevel) languageVersion);
+    return new JavaHighlightingLexer(((JavaLanguageVersion) languageVersion).getLanguageLevel());
   }
 
   @Override

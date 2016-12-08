@@ -37,94 +37,129 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+import consulo.annotations.RequiredReadAction;
 import consulo.java.JavaParser;
+import consulo.java.psi.JavaLanguageVersion;
 import consulo.lang.LanguageVersion;
 
 /**
  * @author max
  */
-public class JavaParserDefinition implements ParserDefinition {
-  @Override
-  @NotNull
-  public Lexer createLexer(@NotNull LanguageVersion languageVersion) {
-    return new JavaLexer((LanguageLevel)languageVersion);
-  }
+public class JavaParserDefinition implements ParserDefinition
+{
+	@Override
+	@NotNull
+	public Lexer createLexer(@NotNull LanguageVersion languageVersion)
+	{
+		JavaLanguageVersion wrapper = (JavaLanguageVersion) languageVersion;
+		return new JavaLexer(wrapper.getLanguageLevel());
+	}
 
-  @NotNull
-  @Override
-  public IFileElementType getFileNodeType() {
-    return JavaStubElementTypes.JAVA_FILE;
-  }
+	@NotNull
+	@Override
+	public IFileElementType getFileNodeType()
+	{
+		return JavaStubElementTypes.JAVA_FILE;
+	}
 
-  @Override
-  @NotNull
-  public TokenSet getWhitespaceTokens(@NotNull LanguageVersion languageVersion) {
-    return ElementType.JAVA_WHITESPACE_BIT_SET;
-  }
+	@Override
+	@NotNull
+	public TokenSet getWhitespaceTokens(@NotNull LanguageVersion languageVersion)
+	{
+		return ElementType.JAVA_WHITESPACE_BIT_SET;
+	}
 
-  @Override
-  @NotNull
-  public TokenSet getCommentTokens(LanguageVersion languageVersion) {
-    return ElementType.JAVA_COMMENT_BIT_SET;
-  }
+	@Override
+	@NotNull
+	public TokenSet getCommentTokens(@NotNull LanguageVersion languageVersion)
+	{
+		return ElementType.JAVA_COMMENT_BIT_SET;
+	}
 
-  @Override
-  @NotNull
-  public TokenSet getStringLiteralElements(LanguageVersion languageVersion) {
-    return TokenSet.create(JavaElementType.LITERAL_EXPRESSION);
-  }
+	@Override
+	@NotNull
+	public TokenSet getStringLiteralElements(@NotNull LanguageVersion languageVersion)
+	{
+		return TokenSet.create(JavaElementType.LITERAL_EXPRESSION);
+	}
 
-  @Override
-  @NotNull
-  public PsiParser createParser(@NotNull LanguageVersion languageVersion) {
-    return new JavaParser();
-  }
+	@Override
+	@NotNull
+	public PsiParser createParser(@NotNull LanguageVersion languageVersion)
+	{
+		return new JavaParser();
+	}
 
-  @Override
-  @NotNull
-  public PsiElement createElement(final ASTNode node) {
-    final IElementType type = node.getElementType();
-    if (type instanceof JavaStubElementType) {
-      return ((JavaStubElementType)type).createPsi(node);
-    }
+	@RequiredReadAction
+	@Override
+	@NotNull
+	public PsiElement createElement(@NotNull final ASTNode node)
+	{
+		final IElementType type = node.getElementType();
+		if(type instanceof JavaStubElementType)
+		{
+			return ((JavaStubElementType) type).createPsi(node);
+		}
 
-    throw new IllegalStateException("Incorrect node for JavaParserDefinition: " + node + " (" + type + ")");
-  }
+		throw new IllegalStateException("Incorrect node for JavaParserDefinition: " + node + " (" + type + ")");
+	}
 
-  @Override
-  public PsiFile createFile(final FileViewProvider viewProvider) {
-    return new PsiJavaFileImpl(viewProvider);
-  }
+	@Override
+	public PsiFile createFile(@NotNull final FileViewProvider viewProvider)
+	{
+		return new PsiJavaFileImpl(viewProvider);
+	}
 
-  @Override
-  public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
-    final PsiFile containingFile = left.getTreeParent().getPsi().getContainingFile();
-    final Lexer lexer;
-    if(containingFile instanceof PsiJavaFile)
-      lexer = new JavaLexer(((PsiJavaFile)containingFile).getLanguageLevel());
-    else lexer = new JavaLexer(LanguageLevel.HIGHEST);
-    if(right.getElementType() == JavaDocTokenType.DOC_TAG_VALUE_SHARP_TOKEN) return SpaceRequirements.MUST_NOT;
-    if(left.getElementType() == JavaDocTokenType.DOC_TAG_VALUE_SHARP_TOKEN) return SpaceRequirements.MUST_NOT;
-    final SpaceRequirements spaceRequirements = LanguageUtil.canStickTokensTogetherByLexer(left, right, lexer);
-    if(left.getElementType() == JavaTokenType.END_OF_LINE_COMMENT) return SpaceRequirements.MUST_LINE_BREAK;
+	@NotNull
+	@Override
+	public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right)
+	{
+		final PsiFile containingFile = left.getTreeParent().getPsi().getContainingFile();
+		final Lexer lexer;
+		if(containingFile instanceof PsiJavaFile)
+		{
+			lexer = new JavaLexer(((PsiJavaFile) containingFile).getLanguageLevel());
+		}
+		else
+		{
+			lexer = new JavaLexer(LanguageLevel.HIGHEST);
+		}
+		if(right.getElementType() == JavaDocTokenType.DOC_TAG_VALUE_SHARP_TOKEN)
+		{
+			return SpaceRequirements.MUST_NOT;
+		}
+		if(left.getElementType() == JavaDocTokenType.DOC_TAG_VALUE_SHARP_TOKEN)
+		{
+			return SpaceRequirements.MUST_NOT;
+		}
+		final SpaceRequirements spaceRequirements = LanguageUtil.canStickTokensTogetherByLexer(left, right, lexer);
+		if(left.getElementType() == JavaTokenType.END_OF_LINE_COMMENT)
+		{
+			return SpaceRequirements.MUST_LINE_BREAK;
+		}
 
-    if(left.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA) {
-      String text = left.getText();
-      if (text.length() > 0 && Character.isWhitespace(text.charAt(text.length() - 1))) {
-        return SpaceRequirements.MAY;
-      }
-    }
+		if(left.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA)
+		{
+			String text = left.getText();
+			if(text.length() > 0 && Character.isWhitespace(text.charAt(text.length() - 1)))
+			{
+				return SpaceRequirements.MAY;
+			}
+		}
 
-    if(right.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA) {
-      String text = right.getText();
-      if (text.length() > 0 && Character.isWhitespace(text.charAt(0))) {
-        return SpaceRequirements.MAY;
-      }
-    }
-    else if (right.getElementType() == JavaDocTokenType.DOC_INLINE_TAG_END) {
-      return SpaceRequirements.MAY;
-    }
+		if(right.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA)
+		{
+			String text = right.getText();
+			if(text.length() > 0 && Character.isWhitespace(text.charAt(0)))
+			{
+				return SpaceRequirements.MAY;
+			}
+		}
+		else if(right.getElementType() == JavaDocTokenType.DOC_INLINE_TAG_END)
+		{
+			return SpaceRequirements.MAY;
+		}
 
-    return spaceRequirements;
-  }
+		return spaceRequirements;
+	}
 }

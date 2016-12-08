@@ -62,9 +62,9 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 
 	@NotNull
 	@Override
-	public LanguageVersion<?> resolveLanguageVersion(@NotNull FileType fileType)
+	public LanguageVersion resolveLanguageVersion(@NotNull FileType fileType)
 	{
-		return myLanguageLevel;
+		return myLanguageLevel.toLangVersion();
 	}
 
 	@Override
