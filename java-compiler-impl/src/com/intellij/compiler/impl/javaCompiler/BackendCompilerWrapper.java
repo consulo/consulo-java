@@ -420,7 +420,12 @@ public class BackendCompilerWrapper
 	{
 		private final ClassParsingThread myClassParsingThread;
 
-		private SynchedCompilerParsing(Process process, final CompileContext context, OutputParser outputParser, ClassParsingThread classParsingThread, boolean readErrorStream, boolean trimLines)
+		private SynchedCompilerParsing(Process process,
+				final CompileContext context,
+				OutputParser outputParser,
+				ClassParsingThread classParsingThread,
+				boolean readErrorStream,
+				boolean trimLines)
 		{
 			super(process, outputParser, readErrorStream, trimLines, context);
 			myClassParsingThread = classParsingThread;
@@ -467,7 +472,8 @@ public class BackendCompilerWrapper
 	{
 		myCompileContext.getProgressIndicator().checkCanceled();
 
-		if(ApplicationManager.getApplication().runReadAction((Computable<Boolean>) () -> chunk.getFilesToCompile().isEmpty() ? Boolean.TRUE : Boolean.FALSE))
+		if(ApplicationManager.getApplication().runReadAction((Computable<Boolean>) () -> chunk.getFilesToCompile().isEmpty() ? Boolean.TRUE :
+				Boolean.FALSE))
 		{
 			return; // should not invoke javac with empty sources list
 		}
@@ -477,12 +483,12 @@ public class BackendCompilerWrapper
 		{
 			final Process process = myCompiler.launchProcess(chunk, outputDir, myCompileContext);
 			final long compilationStart = System.currentTimeMillis();
-			final ClassParsingThread classParsingThread = new ClassParsingThread(outputDir, parsingInfo);
+			final ClassParsingThread classParsingThread = new ClassParsingThread(parsingInfo);
 			final Future<?> classParsingThreadFuture = ApplicationManager.getApplication().executeOnPooledThread(classParsingThread);
 
 			OutputParser errorParser = myCompiler.createErrorParser(outputDir, process);
-			CompilerParsingThread errorParsingThread = errorParser == null ? null : new SynchedCompilerParsing(process, myCompileContext, errorParser, classParsingThread, true,
-					errorParser.isTrimLines());
+			CompilerParsingThread errorParsingThread = errorParser == null ? null : new SynchedCompilerParsing(process, myCompileContext,
+					errorParser, classParsingThread, true, errorParser.isTrimLines());
 			Future<?> errorParsingThreadFuture = null;
 			if(errorParsingThread != null)
 			{
@@ -490,8 +496,8 @@ public class BackendCompilerWrapper
 			}
 
 			OutputParser outputParser = myCompiler.createOutputParser(outputDir);
-			CompilerParsingThread outputParsingThread = outputParser == null ? null : new SynchedCompilerParsing(process, myCompileContext, outputParser, classParsingThread, false,
-					outputParser.isTrimLines());
+			CompilerParsingThread outputParsingThread = outputParser == null ? null : new SynchedCompilerParsing(process, myCompileContext,
+					outputParser, classParsingThread, false, outputParser.isTrimLines());
 			Future<?> outputParsingThreadFuture = null;
 			if(outputParsingThread != null)
 			{
@@ -584,7 +590,8 @@ public class BackendCompilerWrapper
 
 	private void runTransformingCompilers(final ModuleChunk chunk)
 	{
-		final JavaSourceTransformingCompiler[] transformers = CompilerManager.getInstance(myProject).getCompilers(JavaSourceTransformingCompiler.class);
+		final JavaSourceTransformingCompiler[] transformers = CompilerManager.getInstance(myProject).getCompilers(JavaSourceTransformingCompiler
+				.class);
 		if(transformers.length == 0)
 		{
 			return;
@@ -617,9 +624,11 @@ public class BackendCompilerWrapper
 									{
 										try
 										{
-											// if untransformed != file, the file is already a (possibly transformed) copy of the original 'untransformed' file.
+											// if untransformed != file, the file is already a (possibly transformed) copy of the original
+											// 'untransformed' file.
 											// If this is the case, just use already created copy and do not copy file content once again
-											final VirtualFile fileCopy = untransformed.equals(file) ? createFileCopy(getTempDir(module), file) : file;
+											final VirtualFile fileCopy = untransformed.equals(file) ? createFileCopy(getTempDir(module), file) :
+													file;
 											originalToCopyFileMap.put(file, fileCopy);
 										}
 										catch(IOException e)
@@ -701,9 +710,11 @@ public class BackendCompilerWrapper
 
 	private void compileFinished(int exitValue, final ModuleChunk chunk, final String outputDir)
 	{
-		if(exitValue != 0 && !myCompileContext.getProgressIndicator().isCanceled() && myCompileContext.getMessageCount(CompilerMessageCategory.ERROR) == 0)
+		if(exitValue != 0 && !myCompileContext.getProgressIndicator().isCanceled() && myCompileContext.getMessageCount(CompilerMessageCategory
+				.ERROR) == 0)
 		{
-			myCompileContext.addMessage(CompilerMessageCategory.ERROR, CompilerBundle.message("error.compiler.internal.error", exitValue), null, -1, -1);
+			myCompileContext.addMessage(CompilerMessageCategory.ERROR, CompilerBundle.message("error.compiler.internal.error", exitValue), null, -1,
+					-1);
 		}
 
 		myCompiler.compileFinished();
@@ -722,7 +733,8 @@ public class BackendCompilerWrapper
 						final String packagePrefix = myProjectFileIndex.getPackageNameByDirectory(root);
 						if(LOG.isDebugEnabled())
 						{
-							LOG.debug("Building output items for " + root.getPresentableUrl() + "; output dir = " + outputDirPath + "; packagePrefix = \"" + packagePrefix + "\"");
+							LOG.debug("Building output items for " + root.getPresentableUrl() + "; output dir = " + outputDirPath + "; packagePrefix" +
+									" = \"" + packagePrefix + "\"");
 						}
 						buildOutputItemsList(outputDirPath, module, root, typeManager, root, packagePrefix, toRefresh, results);
 					}
@@ -761,7 +773,8 @@ public class BackendCompilerWrapper
 	{
 		final Ref<CacheCorruptedException> exRef = new Ref<>(null);
 		final ModuleFileIndex fileIndex = ModuleRootManager.getInstance(module).getFileIndex();
-		final GlobalSearchScope srcRootScope = GlobalSearchScope.moduleScope(module).intersectWith(GlobalSearchScopes.directoryScope(myProject, sourceRoot, true));
+		final GlobalSearchScope srcRootScope = GlobalSearchScope.moduleScope(module).intersectWith(GlobalSearchScopes.directoryScope(myProject,
+				sourceRoot, true));
 
 		final Collection<FileType> registeredInputTypes = CompilerManager.getInstance(myProject).getRegisteredInputTypes(myTranslatingCompiler);
 
@@ -920,8 +933,8 @@ public class BackendCompilerWrapper
 				}
 				else
 				{
-					myCompileContext.addMessage(CompilerMessageCategory.ERROR, "Failed to copy from temporary location to output directory: " + outputPath + " (see idea.log for details)", null, -1,
-							-1);
+					myCompileContext.addMessage(CompilerMessageCategory.ERROR, "Failed to copy from temporary location to output directory: " +
+							outputPath + " (see idea.log for details)", null, -1, -1);
 					if(LOG.isDebugEnabled())
 					{
 						LOG.debug("Failed to move to real location: " + outputPath + "; from " + outputDir);
@@ -944,12 +957,14 @@ public class BackendCompilerWrapper
 	}
 
 	@Nullable
-	private Pair<String, String> moveToRealLocation(String tempOutputDir, String pathToClass, VirtualFile sourceFile, final List<File> filesToRefresh)
+	private Pair<String, String> moveToRealLocation(String tempOutputDir, String pathToClass, VirtualFile sourceFile, final List<File>
+			filesToRefresh)
 	{
 		final Module module = myCompileContext.getModuleByFile(sourceFile);
 		if(module == null)
 		{
-			final String message = "Cannot determine module for source file: " + sourceFile.getPresentableUrl() + ";\nCorresponding output file: " + pathToClass;
+			final String message = "Cannot determine module for source file: " + sourceFile.getPresentableUrl() + ";\nCorresponding output file: " +
+					pathToClass;
 			LOG.info(message);
 			myCompileContext.addMessage(CompilerMessageCategory.WARNING, message, sourceFile.getUrl(), -1, -1);
 			// do not move: looks like source file has been invalidated, need recompilation
@@ -1047,7 +1062,8 @@ public class BackendCompilerWrapper
 		String moduleName = myModuleName;
 		if(moduleName != null)
 		{
-			msg = CompilerBundle.message("statistics.files.classes.module", myStatistics.getFilesCount(), myStatistics.getClassesCount(), moduleName);
+			msg = CompilerBundle.message("statistics.files.classes.module", myStatistics.getFilesCount(), myStatistics.getClassesCount(),
+					moduleName);
 		}
 		else
 		{
@@ -1061,13 +1077,13 @@ public class BackendCompilerWrapper
 	{
 		private final BlockingQueue<FileObject> myPaths = new ArrayBlockingQueue<>(50000);
 		private CacheCorruptedException myError = null;
-		private final String myOutputDir;
+		private final JavaDependencyCache myJavaDependencyCache;
 		private final Map<File, FileObject> myParsingInfo;
 
-		private ClassParsingThread(String outputDir, Map<File, FileObject> parsingInfo)
+		private ClassParsingThread(Map<File, FileObject> parsingInfo)
 		{
 			myParsingInfo = parsingInfo;
-			myOutputDir = FileUtil.toSystemIndependentName(outputDir);
+			myJavaDependencyCache = myCompileContext.getDependencyCache().findChild(JavaDependencyCache.class);
 		}
 
 		private volatile boolean processing;
@@ -1125,11 +1141,10 @@ public class BackendCompilerWrapper
 			{
 				byte[] fileContent = fileObject.getOrLoadContent();
 				// the file is assumed to exist!
-				final JavaDependencyCache dependencyCache = myCompileContext.getDependencyCache().findChild(JavaDependencyCache.class);
-				int newClassQName = dependencyCache.reparseClassFile(file, fileContent);
-				final Cache newClassesCache = dependencyCache.getNewClassesCache();
+				int newClassQName = myJavaDependencyCache.reparseClassFile(file, fileContent);
+				final Cache newClassesCache = myJavaDependencyCache.getNewClassesCache();
 				final String sourceFileName = newClassesCache.getSourceFileName(newClassQName);
-				final String qName = dependencyCache.resolve(newClassQName);
+				final String qName = myJavaDependencyCache.resolve(newClassQName);
 				String relativePathToSource = "/" + JavaMakeUtil.createRelativePathToSource(qName, sourceFileName);
 				putName(sourceFileName, newClassQName, relativePathToSource, path);
 
