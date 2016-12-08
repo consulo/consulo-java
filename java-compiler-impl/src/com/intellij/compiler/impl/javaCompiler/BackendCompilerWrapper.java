@@ -1123,30 +1123,15 @@ public class BackendCompilerWrapper
 			final String path = file.getPath();
 			try
 			{
-				int newClassQName;
-				if(CompilerManager.MAKE_ENABLED)
-				{
-					byte[] fileContent = fileObject.getOrLoadContent();
-					// the file is assumed to exist!
-					final JavaDependencyCache dependencyCache = myCompileContext.getDependencyCache().findChild(JavaDependencyCache.class);
-					newClassQName = dependencyCache.reparseClassFile(file, fileContent);
-					final Cache newClassesCache = dependencyCache.getNewClassesCache();
-					final String sourceFileName = newClassesCache.getSourceFileName(newClassQName);
-					final String qName = dependencyCache.resolve(newClassQName);
-					String relativePathToSource = "/" + JavaMakeUtil.createRelativePathToSource(qName, sourceFileName);
-					putName(sourceFileName, newClassQName, relativePathToSource, path);
-
-				}
-				else
-				{
-					final String _path = FileUtil.toSystemIndependentName(path);
-					final int dollarIndex = _path.indexOf('$');
-					final int tailIndex = dollarIndex >= 0 ? dollarIndex : _path.length() - ".class".length();
-					final int slashIndex = _path.lastIndexOf('/');
-					final String sourceFileName = _path.substring(slashIndex + 1, tailIndex) + ".java";
-					String relativePathToSource = _path.substring(myOutputDir.length(), tailIndex) + ".java";
-					putName(sourceFileName, 0 /*doesn't matter here*/, relativePathToSource.startsWith("/") ? relativePathToSource : "/" + relativePathToSource, path);
-				}
+				byte[] fileContent = fileObject.getOrLoadContent();
+				// the file is assumed to exist!
+				final JavaDependencyCache dependencyCache = myCompileContext.getDependencyCache().findChild(JavaDependencyCache.class);
+				int newClassQName = dependencyCache.reparseClassFile(file, fileContent);
+				final Cache newClassesCache = dependencyCache.getNewClassesCache();
+				final String sourceFileName = newClassesCache.getSourceFileName(newClassQName);
+				final String qName = dependencyCache.resolve(newClassQName);
+				String relativePathToSource = "/" + JavaMakeUtil.createRelativePathToSource(qName, sourceFileName);
+				putName(sourceFileName, newClassQName, relativePathToSource, path);
 
 				fileObject.setClassId(newClassQName);
 				myParsingInfo.put(file, fileObject);
