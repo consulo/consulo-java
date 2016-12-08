@@ -25,42 +25,52 @@ import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.io.FileUtil;
 
 /**
- * @author Eugene Zhuravlev              
+ * @author Eugene Zhuravlev
  *         Date: Sep 14, 2005
  */
-public class FilePathActionJavac extends JavacParserAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.javac.FilePathActionJavac");
-  private final Matcher myJdk7FormatMatcher;
+public class FilePathActionJavac extends JavacParserAction
+{
+	private static final Logger LOG = Logger.getInstance(FilePathActionJavac.class);
+	private static final Pattern ourPattern = Pattern.compile("^\\w+\\[(.+)\\]$", Pattern.CASE_INSENSITIVE);
 
-  public FilePathActionJavac(final Matcher matcher) {
-    super(matcher);
-    myJdk7FormatMatcher = Pattern.compile("^\\w+\\[(.+)\\]$", Pattern.CASE_INSENSITIVE).matcher("");
-  }
+	private final Matcher myJdk7FormatMatcher;
 
-  protected void doExecute(final String line, String filePath, final OutputParser.Callback callback) {
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("Process parsing message: " + filePath);
-    }
+	public FilePathActionJavac(final Matcher matcher)
+	{
+		super(matcher);
+		myJdk7FormatMatcher = ourPattern.matcher("");
+	}
 
-    // for jdk7: cut off characters wrapping the path. e.g. "RegularFileObject[C:/tmp/bugs/src/a/Demo1.java]"
-    if (myJdk7FormatMatcher.reset(filePath).matches()) {
-      filePath = myJdk7FormatMatcher.group(1);
-    }
+	@Override
+	protected void doExecute(final String line, String filePath, final OutputParser.Callback callback)
+	{
+		if(LOG.isDebugEnabled())
+		{
+			LOG.debug("Process parsing message: " + filePath);
+		}
 
-    int index = filePath.lastIndexOf('/');
-    final String name = index >= 0 ? filePath.substring(index + 1) : filePath;
+		// for jdk7: cut off characters wrapping the path. e.g. "RegularFileObject[C:/tmp/bugs/src/a/Demo1.java]"
+		if(myJdk7FormatMatcher.reset(filePath).matches())
+		{
+			filePath = myJdk7FormatMatcher.group(1);
+		}
 
-    final FileType fileType = FileTypeManager.getInstance().getFileTypeByFileName(name);
-    if (fileType == JavaFileType.INSTANCE) {
-      callback.fileProcessed(filePath);
-      callback.setProgressText(CompilerBundle.message("progress.parsing.file", name));
-    }
-    else if (fileType == JavaClassFileType.INSTANCE) {
-      callback.fileGenerated(new FileObject(new File(filePath)));
-    }
-  }
+		int index = filePath.lastIndexOf('/');
+		final String name = index >= 0 ? filePath.substring(index + 1) : filePath;
+
+		CharSequence extension = FileUtil.getExtension((CharSequence) name);
+		if(Comparing.equal(extension, JavaFileType.INSTANCE.getDefaultExtension()))
+		{
+			callback.fileProcessed(filePath);
+			callback.setProgressText(CompilerBundle.message("progress.parsing.file", name));
+		}
+		else if(Comparing.equal(extension, JavaClassFileType.INSTANCE.getDefaultExtension()))
+		{
+			callback.fileGenerated(new FileObject(new File(filePath)));
+		}
+	}
 }
