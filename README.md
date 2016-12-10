@@ -1,1 +1,1 @@
-[![Build Status](http://must-be.org/jenkins/job/consulo-java/badge/icon)](http://must-be.org/jenkins/job/consulo-java/)
+[![Build Status](https://ci.consulo.io/job/consulo-java/badge/icon)](https://ci.consulo.io/job/consulo-java/)
