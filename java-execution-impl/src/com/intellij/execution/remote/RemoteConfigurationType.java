@@ -37,8 +37,8 @@ public class RemoteConfigurationType extends ConfigurationTypeBase
 {
 	public RemoteConfigurationType()
 	{
-		super("JavaRemoteConfigurationType", JavaExecutionBundle.message("remote.debug.configuration.display.name"), JavaExecutionBundle.message("remote.debug" + "" +
-				".configuration.description"), AllIcons.RunConfigurations.Remote);
+		super("JavaRemoteConfigurationType", JavaExecutionBundle.message("remote.debug.configuration.display.name"), JavaExecutionBundle.message("remote.debug.configuration.description"), AllIcons
+				.RunConfigurations.Remote);
 		addFactory(new ConfigurationFactory(this)
 		{
 			@Override
