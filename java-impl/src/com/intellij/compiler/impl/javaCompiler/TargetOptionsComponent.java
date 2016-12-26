@@ -326,7 +326,7 @@ public class TargetOptionsComponent extends JPanel
 			"1.8",
 			"1.9"
 	};
-	private static final String COMPILER_DEFAULT = "SDK default";
+	public static final String COMPILER_DEFAULT = "SDK default";
 	private final Project myProject;
 	private ComboBox myCbProjectTargetLevel;
 	private JBTable myTable;

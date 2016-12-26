@@ -4,19 +4,20 @@ import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestLexer;
 import org.osmorc.manifest.lang.ManifestParser;
-import com.intellij.lang.Language;
 import com.intellij.lang.PsiParser;
 import com.intellij.lexer.Lexer;
 import com.intellij.psi.tree.TokenSet;
+import consulo.lang.LanguageVersion;
 import consulo.lang.LanguageVersionWithParsing;
 
 /**
  * @author VISTALL
  * @since 20:07/24.06.13
  */
-public enum ManifestLanguageVersion implements LanguageVersionWithParsing
+public abstract class ManifestLanguageVersion extends LanguageVersion implements LanguageVersionWithParsing
 {
-	Manifest{
+	public static final ManifestLanguageVersion Manifest = new ManifestLanguageVersion("Manifest")
+	{
 		@NotNull
 		@Override
 		public Lexer createLexer()
@@ -30,8 +31,10 @@ public enum ManifestLanguageVersion implements LanguageVersionWithParsing
 		{
 			return TokenSet.EMPTY;
 		}
-	},
-	Bnd {
+	};
+
+	public static final ManifestLanguageVersion Bnd = new ManifestLanguageVersion("Bnd")
+	{
 		@NotNull
 		@Override
 		public Lexer createLexer()
@@ -47,7 +50,15 @@ public enum ManifestLanguageVersion implements LanguageVersionWithParsing
 		}
 	};
 
-	public static final ManifestLanguageVersion[] VALUES = values();
+	public static final ManifestLanguageVersion[] VALUES = new ManifestLanguageVersion[]{
+			Manifest,
+			Bnd
+	};
+
+	protected ManifestLanguageVersion(@NotNull String id)
+	{
+		super(id, id,  ManifestLanguage.INSTANCE);
+	}
 
 	@NotNull
 	@Override
@@ -68,18 +79,5 @@ public enum ManifestLanguageVersion implements LanguageVersionWithParsing
 	public TokenSet getWhitespaceTokens()
 	{
 		return TokenSet.EMPTY;
-	}
-
-	@NotNull
-	@Override
-	public String getName()
-	{
-		return name();
-	}
-
-	@Override
-	public Language getLanguage()
-	{
-		return ManifestLanguage.INSTANCE;
 	}
 }

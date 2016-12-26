@@ -61,6 +61,7 @@ public class ManifestSyntaxHighlighter extends LanguageVersionableSyntaxHighligh
 		return ((LanguageVersionWithParsing) languageVersion).createLexer();
 	}
 
+	@Override
 	@NotNull
 	public TextAttributesKey[] getTokenHighlights(IElementType tokenType)
 	{

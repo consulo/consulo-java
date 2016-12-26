@@ -15,10 +15,14 @@
  */
 package com.intellij.debugger.impl;
 
+import consulo.annotations.DeprecationInfo;
+
 /**
  * @author Eugene Zhuravlev
  *         Date: 1/30/12
  */
+@Deprecated
+@DeprecationInfo("Use DebuggerManagerListener")
 public class DebuggerManagerAdapter implements DebuggerManagerListener{
   @Override
   public void sessionCreated(DebuggerSession session) {

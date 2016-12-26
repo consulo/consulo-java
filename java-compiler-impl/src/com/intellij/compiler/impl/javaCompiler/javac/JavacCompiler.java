@@ -23,8 +23,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -63,7 +61,6 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.rt.compiler.JavacRunner;
@@ -82,7 +79,7 @@ public class JavacCompiler extends ExternalCompiler
 
 	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler");
 	private final Project myProject;
-	private final List<File> myTempFiles = new ArrayList<File>();
+	private final List<File> myTempFiles = new ArrayList<>();
 	@NonNls
 	private static final String JAVAC_MAIN_CLASS_OLD = "sun.tools.javac.Main";
 	@NonNls
@@ -329,8 +326,7 @@ public class JavacCompiler extends ExternalCompiler
 			File sourcesFile = File.createTempFile("javac", ".tmp");
 			sourcesFile.deleteOnExit();
 			myTempFiles.add(sourcesFile);
-			final PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile)));
-			try
+			try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile))))
 			{
 				for(final VirtualFile file : files)
 				{
@@ -344,10 +340,6 @@ public class JavacCompiler extends ExternalCompiler
 					writer.println(version == JavaSdkVersion.JDK_1_1 ? path : CompilerUtil.quotePath(path));
 				}
 			}
-			finally
-			{
-				writer.close();
-			}
 			parametersList.add("@" + sourcesFile.getAbsolutePath());
 		}
 		return commandLine;
@@ -360,7 +352,7 @@ public class JavacCompiler extends ExternalCompiler
 			ModuleChunk chunk,
 			boolean annotationProcessorsEnabled)
 	{
-		final List<String> additionalOptions = new ArrayList<String>();
+		final List<String> additionalOptions = new ArrayList<>();
 		StringTokenizer tokenizer = new StringTokenizer(new JavacSettingsBuilder(javacOptions).getOptionsString(chunk), " ");
 		if(!version.isAtLeast(JavaSdkVersion.JDK_1_6))
 		{
@@ -531,24 +523,6 @@ public class JavacCompiler extends ExternalCompiler
 		PathsList pathsList = new PathsList();
 		pathsList.addVirtualFiles(files);
 		return pathsList.getPathsString();
-	}
-
-	@NotNull
-	private static URL[] toUrls(Set<VirtualFile> files)
-	{
-		List<URL> urls = new ArrayList<>(files.size());
-		for(VirtualFile file : files)
-		{
-			try
-			{
-				urls.add(VfsUtilCore.virtualToIoFile(file).toURI().toURL());
-			}
-			catch(MalformedURLException e)
-			{
-				LOG.error(e);
-			}
-		}
-		return urls.toArray(new URL[urls.size()]);
 	}
 
 	private static void addClassPathValue(final Sdk jdk,

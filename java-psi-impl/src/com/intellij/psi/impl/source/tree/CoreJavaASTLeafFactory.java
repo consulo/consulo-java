@@ -33,35 +33,42 @@ import consulo.psi.tree.ASTLeafFactory;
  */
 public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory
 {
-  @Override
-  @NotNull
-  public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion<?> languageVersion, @NotNull final CharSequence text) {
-    if (type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT) {
-      return new PsiCoreCommentImpl(type, text);
-    }
-    else if (type == IDENTIFIER) {
-      return new PsiIdentifierImpl(text);
-    }
-    else if (KEYWORD_BIT_SET.contains(type)) {
-      return new PsiKeywordImpl(type, text);
-    }
-    else if (type instanceof IJavaElementType) {
-      return new PsiJavaTokenImpl(type, text);
-    }
-    else if (type instanceof IJavaDocElementType) {
-      assert type != DOC_TAG_VALUE_ELEMENT;
-      return new PsiDocTokenImpl(type, text);
-    }
+	@Override
+	@NotNull
+	public LeafElement createLeaf(@NotNull final IElementType type, @NotNull LanguageVersion languageVersion, @NotNull final CharSequence text)
+	{
+		if(type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT)
+		{
+			return new PsiCoreCommentImpl(type, text);
+		}
+		else if(type == IDENTIFIER)
+		{
+			return new PsiIdentifierImpl(text);
+		}
+		else if(KEYWORD_BIT_SET.contains(type))
+		{
+			return new PsiKeywordImpl(type, text);
+		}
+		else if(type instanceof IJavaElementType)
+		{
+			return new PsiJavaTokenImpl(type, text);
+		}
+		else if(type instanceof IJavaDocElementType)
+		{
+			assert type != DOC_TAG_VALUE_ELEMENT;
+			return new PsiDocTokenImpl(type, text);
+		}
 
-    return null;
-  }
+		return null;
+	}
 
-  @Override
-  public boolean apply(@Nullable IElementType input) {
-    return input == C_STYLE_COMMENT ||
-           input == END_OF_LINE_COMMENT ||
-           input == IDENTIFIER ||
-           KEYWORD_BIT_SET.contains(input) ||
-           input instanceof IJavaElementType || input instanceof IJavaDocElementType;
-  }
+	@Override
+	public boolean apply(@Nullable IElementType input)
+	{
+		return input == C_STYLE_COMMENT ||
+				input == END_OF_LINE_COMMENT ||
+				input == IDENTIFIER ||
+				KEYWORD_BIT_SET.contains(input) ||
+				input instanceof IJavaElementType || input instanceof IJavaDocElementType;
+	}
 }

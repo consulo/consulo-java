@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 must-be.org
+ * Copyright 2013-2016 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,46 +14,37 @@
  * limitations under the License.
  */
 
-package consulo.java.library.jimage;
+package consulo.java.fileTypes;
 
-import consulo.vfs.impl.archive.ArchiveEntry;
+import org.jetbrains.annotations.NotNull;
+import consulo.fileTypes.ArchiveFileType;
 
 /**
  * @author VISTALL
- * @since 21.12.14
+ * @since 05-Dec-16.
  */
-public class JImageDirectoryArchiveEntry implements ArchiveEntry
+public class JModFileType extends ArchiveFileType
 {
-	private final String myName;
-	private final long myLastModified;
+	public static final JModFileType INSTANCE = new JModFileType();
 
-	public JImageDirectoryArchiveEntry(String name, long lastModified)
+	@NotNull
+	@Override
+	public String getId()
 	{
-		myName = name;
-		myLastModified = lastModified;
+		return "JMOD_ARCHIVE";
 	}
 
+	@NotNull
 	@Override
-	public String getName()
+	public String getDefaultExtension()
 	{
-		return myName;
+		return "jmod";
 	}
 
+	@NotNull
 	@Override
-	public long getSize()
+	public String getProtocol()
 	{
-		return 0;
-	}
-
-	@Override
-	public long getTime()
-	{
-		return myLastModified;
-	}
-
-	@Override
-	public boolean isDirectory()
-	{
-		return true;
+		return "jar";
 	}
 }

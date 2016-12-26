@@ -16,12 +16,12 @@
 package com.intellij.openapi.fileTypes.impl;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.java.library.jimage.JImageFileType;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
+import consulo.java.fileTypes.JModFileType;
 
 public class JavaFileTypeFactory extends FileTypeFactory
 {
@@ -31,6 +31,6 @@ public class JavaFileTypeFactory extends FileTypeFactory
 		consumer.consume(JarArchiveFileType.INSTANCE, "jar;war;apk");
 		consumer.consume(JavaClassFileType.INSTANCE);
 		consumer.consume(JavaFileType.INSTANCE);
-		consumer.consume(JImageFileType.INSTANCE);
+		consumer.consume(JModFileType.INSTANCE);
 	}
 }

@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import consulo.annotations.RequiredReadAction;
 import consulo.lang.LanguageVersion;
 import consulo.lang.LanguageVersionResolver;
 
@@ -16,6 +17,7 @@ import consulo.lang.LanguageVersionResolver;
  */
 public class ManifestLanguageVersionResolver implements LanguageVersionResolver
 {
+	@RequiredReadAction
 	@NotNull
 	@Override
 	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable PsiElement element)
@@ -32,6 +34,7 @@ public class ManifestLanguageVersionResolver implements LanguageVersionResolver
 		return getLanguageVersion(language, element.getProject(), containingFile.getVirtualFile());
 	}
 
+	@RequiredReadAction
 	@NotNull
 	@Override
 	public LanguageVersion getLanguageVersion(@NotNull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile)

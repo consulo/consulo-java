@@ -25,12 +25,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import consulo.lombok.annotations.Lazy;
 import consulo.roots.OrderEntryWithTracking;
-import consulo.roots.OrderRootTypeWithConvert;
 
 /**
  * @author yole
  */
-public class AnnotationOrderRootType extends OrderRootTypeWithConvert
+public class AnnotationOrderRootType extends OrderRootType
 {
 	@NotNull
 	@Lazy
@@ -41,7 +40,7 @@ public class AnnotationOrderRootType extends OrderRootTypeWithConvert
 
 	public AnnotationOrderRootType()
 	{
-		super("javaExternalAnnotations", "JAVA_ANNOTATIONS", "javaAnnotationsPath");
+		super("javaExternalAnnotations");
 	}
 
 	@NotNull

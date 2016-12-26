@@ -15,6 +15,8 @@
  */
 package com.intellij.lang.java;
 
+import java.util.Arrays;
+
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.Language;
 import com.intellij.pom.java.LanguageLevel;
@@ -23,27 +25,31 @@ import consulo.lang.LanguageVersion;
 /**
  * @author max
  */
-public class JavaLanguage extends Language {
+public class JavaLanguage extends Language
+{
+	public static final JavaLanguage INSTANCE = new JavaLanguage();
 
-  public static final JavaLanguage INSTANCE = new JavaLanguage();
+	private JavaLanguage()
+	{
+		super("JAVA", "text/java", "application/x-java", "text/x-java");
+	}
 
-  private JavaLanguage() {
-    super("JAVA", "text/java", "application/x-java", "text/x-java");
-  }
+	@Override
+	public String getDisplayName()
+	{
+		return "Java";
+	}
 
-  @Override
-  public String getDisplayName() {
-    return "Java";
-  }
+	@NotNull
+	@Override
+	public LanguageVersion[] findVersions()
+	{
+		return Arrays.stream(LanguageLevel.values()).map(LanguageLevel::toLangVersion).toArray(LanguageVersion[]::new);
+	}
 
-  @NotNull
-  @Override
-  public LanguageVersion[] findVersions() {
-    return LanguageLevel.values();
-  }
-
-  @Override
-  public boolean isCaseSensitive() {
-    return true;
-  }
+	@Override
+	public boolean isCaseSensitive()
+	{
+		return true;
+	}
 }

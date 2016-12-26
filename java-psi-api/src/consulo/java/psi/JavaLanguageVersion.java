@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 must-be.org
+ * Copyright 2013-2016 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,45 +14,30 @@
  * limitations under the License.
  */
 
-package consulo.java.library.jimage;
+package consulo.java.psi;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.fileTypes.ArchiveFileType;
+import com.intellij.lang.java.JavaLanguage;
+import com.intellij.pom.java.LanguageLevel;
+import consulo.lang.LanguageVersion;
 
 /**
  * @author VISTALL
- * @since 21.12.14
+ * @since 09-Dec-16.
  */
-public class JImageFileType extends ArchiveFileType
+public class JavaLanguageVersion extends LanguageVersion
 {
-	public static final JImageFileType INSTANCE = new JImageFileType();
+	private LanguageLevel myLanguageLevel;
 
-	public static final String PROTOCOL = "jimage";
-
-	@NotNull
-	@Override
-	public String getDefaultExtension()
+	public JavaLanguageVersion(String id, String name, LanguageLevel languageLevel)
 	{
-		return "jimage";
+		super(id, name, JavaLanguage.INSTANCE);
+		myLanguageLevel = languageLevel;
 	}
 
 	@NotNull
-	@Override
-	public String getDescription()
+	public LanguageLevel getLanguageLevel()
 	{
-		return ".jimage files";
-	}
-
-	@Override
-	public String getProtocol()
-	{
-		return PROTOCOL;
-	}
-
-	@NotNull
-	@Override
-	public String getName()
-	{
-		return "JIMAGE_ARCHIVE";
+		return myLanguageLevel;
 	}
 }

@@ -51,7 +51,6 @@
           <element id="zip-archive" name="java-i18n.jar">
             <element id="module-output" name="java-i18n" />
           </element>
-          <element id="library" level="project" name="jimage-jdk6" />
           <element id="file-copy" path="$PROJECT_DIR$/java-coverage-impl/lib/jacocoant.jar" />
           <element id="zip-archive" name="javascript-impl.jar">
             <element id="module-output" name="json-descriptor-impl" />

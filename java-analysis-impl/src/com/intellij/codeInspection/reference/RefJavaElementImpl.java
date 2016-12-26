@@ -33,8 +33,8 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.*;
-import com.intellij.util.IconUtil;
 import com.intellij.util.containers.Stack;
+import consulo.fileTypes.impl.VfsIconUtil;
 
 public abstract class RefJavaElementImpl extends RefElementImpl implements RefJavaElement {
   private Set<RefClass> myOutTypeReferences;
@@ -276,7 +276,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
     if (isSyntheticJSP()) {
       final PsiElement element = getElement();
       if (element != null && element.isValid()) {
-        return IconUtil.getIcon(element.getContainingFile().getVirtualFile(),
+        return VfsIconUtil.getIcon(element.getContainingFile().getVirtualFile(),
                                 Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS, element.getProject());
       }
     }

@@ -23,21 +23,23 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.annotations.RequiredReadAction;
-import consulo.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.module.extension.ModuleInheritableNamedPointer;
+import consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL
  * @since 10:02/19.05.13
  */
-public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl>
+public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements
+		JavaModuleExtension<JavaModuleExtensionImpl>
 {
 	private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
 	private static final String BYTECODE_VERSION = "bytecode-version";
@@ -46,12 +48,19 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
 	protected String myBytecodeVersion;
 
+	private LazyValueBySdk<LanguageLevel> myLanguageLevelValue;
+
 	public JavaModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer moduleRootLayer)
 	{
 		super(id, moduleRootLayer);
-		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer.getProject(), id);
+		myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer, id);
+		myLanguageLevelValue = new LazyValueBySdk<>(this, LanguageLevel.HIGHEST, sdk -> {
+			JavaSdkVersion sdkVersion = JavaSdk.getInstance().getVersion(sdk);
+			return sdkVersion == null ? LanguageLevel.HIGHEST : sdkVersion.getMaxLanguageLevel();
+		});
 	}
 
+	@RequiredReadAction
 	@Override
 	public void commit(@NotNull JavaModuleExtensionImpl mutableModuleExtension)
 	{
@@ -65,6 +74,13 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 	@Override
 	@NotNull
 	public LanguageLevel getLanguageLevel()
+	{
+		return myLanguageLevel.isNull() ? myLanguageLevelValue.getValue() : myLanguageLevel.get();
+	}
+
+	@Nullable
+	@Override
+	public LanguageLevel getLanguageLevelNoDefault()
 	{
 		return myLanguageLevel.get();
 	}
@@ -123,7 +139,10 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		super.getStateImpl(element);
 
 		myLanguageLevel.toXml(element);
-		element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+		if(mySpecialDirLocation != SpecialDirLocation.SOURCE_DIR)
+		{
+			element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+		}
 		if(!StringUtil.isEmpty(myBytecodeVersion))
 		{
 			element.setAttribute(BYTECODE_VERSION, myBytecodeVersion);
@@ -137,7 +156,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 		super.loadStateImpl(element);
 
 		myLanguageLevel.fromXml(element);
-		mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.MODULE_DIR.name()));
+		mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.SOURCE_DIR.name()));
 		myBytecodeVersion = element.getAttributeValue(BYTECODE_VERSION, (String) null);
 	}
 }
