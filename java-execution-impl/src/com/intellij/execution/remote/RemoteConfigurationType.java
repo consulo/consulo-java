@@ -20,28 +20,26 @@
  */
 package com.intellij.execution.remote;
 
-import javax.swing.Icon;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
-import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.configurations.ConfigurationType;
+import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.execution.JavaExecutionBundle;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 
-public class RemoteConfigurationType implements ConfigurationType
+public class RemoteConfigurationType extends ConfigurationTypeBase
 {
-	private final ConfigurationFactory myFactory;
-
 	public RemoteConfigurationType()
 	{
-		myFactory = new ConfigurationFactory(this)
+		super("JavaRemoteConfigurationType", JavaExecutionBundle.message("remote.debug.configuration.display.name"), JavaExecutionBundle.message("remote.debug" + "" +
+				".configuration.description"), AllIcons.RunConfigurations.Remote);
+		addFactory(new ConfigurationFactory(this)
 		{
 			@Override
 			public RunConfiguration createTemplateConfiguration(Project project)
@@ -54,44 +52,7 @@ public class RemoteConfigurationType implements ConfigurationType
 			{
 				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
 			}
-		};
-	}
-
-	@Override
-	public String getDisplayName()
-	{
-		return ExecutionBundle.message("remote.debug.configuration.display.name");
-	}
-
-	@Override
-	public String getConfigurationTypeDescription()
-	{
-		return ExecutionBundle.message("remote.debug.configuration.description");
-	}
-
-	@Override
-	public Icon getIcon()
-	{
-		return AllIcons.RunConfigurations.Remote;
-	}
-
-	@Override
-	public ConfigurationFactory[] getConfigurationFactories()
-	{
-		return new ConfigurationFactory[]{myFactory};
-	}
-
-	@NotNull
-	public ConfigurationFactory getFactory()
-	{
-		return myFactory;
-	}
-
-	@Override
-	@NotNull
-	public String getId()
-	{
-		return "Remote";
+		});
 	}
 
 	@Nullable
