@@ -455,7 +455,7 @@
 
 		<extensionPoint name="debugger.nodeRenderer" interface="com.intellij.debugger.ui.tree.render.NodeRenderer"/>
 
-		<extensionPoint name="debugger.managerListener" interface="com.intellij.debugger.impl.DebuggerManagerListener" area="CONSULO_PROJECT"/>
+		<extensionPoint name="debugger.managerListener" interface="com.intellij.debugger.impl.DebuggerManagerListener" area="PROJECT"/>
 
 		<extensionPoint name="debugger.sourcePositionProvider" interface="com.intellij.debugger.engine.SourcePositionProvider"/>
 
@@ -496,7 +496,7 @@
 			<with attribute="implementationClass" implements="com.intellij.debugger.impl.EditorTextProvider"/>
 		</extensionPoint>
 
-		<extensionPoint name="javadocTagInfo" area="CONSULO_PROJECT" interface="com.intellij.psi.javadoc.JavadocTagInfo"/>
+		<extensionPoint name="javadocTagInfo" area="PROJECT" interface="com.intellij.psi.javadoc.JavadocTagInfo"/>
 
 		<extensionPoint name="refactoring.introduceParameterMethodUsagesProcessor"
 						interface="com.intellij.refactoring.introduceParameter.IntroduceParameterMethodUsagesProcessor"/>
@@ -515,8 +515,8 @@
 
 		<!--<extensionPoint name="expectedTypesProvider" interface="com.intellij.codeInsight.ExpectedTypesProviderExtension"/>-->
 
-		<extensionPoint name="elementFinder" area="CONSULO_PROJECT" interface="com.intellij.psi.PsiElementFinder"/>
-		<extensionPoint name="java.shortNamesCache" area="CONSULO_PROJECT" interface="com.intellij.psi.search.PsiShortNamesCache"/>
+		<extensionPoint name="elementFinder" area="PROJECT" interface="com.intellij.psi.PsiElementFinder"/>
+		<extensionPoint name="java.shortNamesCache" area="PROJECT" interface="com.intellij.psi.search.PsiShortNamesCache"/>
 
 		<extensionPoint name="generation.topLevelFactory" beanClass="com.intellij.lang.LanguageExtensionPoint">
 			<with attribute="implementationClass" implements="com.intellij.psi.JVMElementFactoryProvider"/>
@@ -569,7 +569,7 @@
 						interface="com.intellij.psi.impl.compiled.ClsCustomNavigationPolicy"/>
 		<extensionPoint name="extraExceptionHandler" interface="consulo.java.codeInsight.ExtraExceptionHandler"/>
 
-		<extensionPoint name="backendCompiler" beanClass="consulo.java.compiler.impl.javaCompiler.BackendCompilerEP" area="CONSULO_PROJECT">
+		<extensionPoint name="backendCompiler" beanClass="consulo.java.compiler.impl.javaCompiler.BackendCompilerEP" area="PROJECT">
 			<with attribute="implementationClass" implements="com.intellij.compiler.impl.javaCompiler.BackendCompiler"/>
 		</extensionPoint>
 
@@ -584,7 +584,7 @@
 		</extensionPoint>
 		<extensionPoint name="resourceBundleManager"
 						interface="com.intellij.lang.properties.psi.ResourceBundleManager"
-						area="CONSULO_PROJECT"/>
+						area="PROJECT"/>
 		<extensionPoint name="i18nizeHandlerProvider" interface="com.intellij.codeInspection.i18n.I18nizeHandlerProvider"/>
 	</extensionPoints>
 
