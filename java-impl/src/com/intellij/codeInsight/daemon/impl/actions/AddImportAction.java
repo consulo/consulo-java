@@ -15,10 +15,15 @@
  */
 package com.intellij.codeInsight.daemon.impl.actions;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Icon;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
@@ -28,6 +33,7 @@ import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.hint.QuestionAction;
+import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.diagnostic.Logger;
@@ -38,7 +44,6 @@ import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.psi.PsiClass;
@@ -47,6 +52,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.statistics.JavaStatisticsManager;
 import com.intellij.psi.statistics.StatisticsManager;
+import com.intellij.ui.popup.list.ListPopupImpl;
+import com.intellij.ui.popup.list.PopupListElementRenderer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtil;
 import consulo.annotations.RequiredReadAction;
@@ -176,12 +183,35 @@ public class AddImportAction implements QuestionAction
 			}
 
 			@Override
+			@RequiredReadAction
 			public Icon getIconFor(PsiClass aValue)
 			{
 				return IconDescriptorUpdaters.getIcon(aValue, 0);
 			}
 		};
-		JBPopupFactory.getInstance().createListPopup(step).showInBestPositionFor(myEditor);
+
+		ListPopupImpl popup = new ListPopupImpl(step)
+		{
+			@Override
+			protected ListCellRenderer getListElementRenderer()
+			{
+				final PopupListElementRenderer baseRenderer = (PopupListElementRenderer) super.getListElementRenderer();
+				final DefaultPsiElementCellRenderer psiRenderer = new DefaultPsiElementCellRenderer();
+				return new ListCellRenderer()
+				{
+					@Override
+					public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+					{
+						JPanel panel = new JPanel(new BorderLayout());
+						baseRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+						panel.add(baseRenderer.getNextStepLabel(), BorderLayout.EAST);
+						panel.add(psiRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus));
+						return panel;
+					}
+				};
+			}
+		};
+		popup.showInBestPositionFor(myEditor);
 	}
 
 	public static void excludeFromImport(final Project project, final String prefix)
