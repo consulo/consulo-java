@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2000-2009 JetBrains s.r.o.
  *
@@ -22,7 +21,6 @@ import java.util.List;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
@@ -50,214 +48,246 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.statistics.JavaStatisticsManager;
 import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.util.ObjectUtil;
+import consulo.annotations.RequiredReadAction;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.java.JavaQuickFixBundle;
 
-public class AddImportAction implements QuestionAction {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.actions.AddImportAction");
+public class AddImportAction implements QuestionAction
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.actions.AddImportAction");
 
-  private final Project myProject;
-  private final PsiReference myReference;
-  private final PsiClass[] myTargetClasses;
-  private final Editor myEditor;
+	private final Project myProject;
+	private final PsiReference myReference;
+	private final PsiClass[] myTargetClasses;
+	private final Editor myEditor;
 
-  public AddImportAction(@NotNull Project project,
-                         @NotNull PsiReference ref,
-                         @NotNull Editor editor,
-                         @NotNull PsiClass... targetClasses) {
-    myProject = project;
-    myReference = ref;
-    myTargetClasses = targetClasses;
-    myEditor = editor;
-  }
+	public AddImportAction(@NotNull Project project, @NotNull PsiReference ref, @NotNull Editor editor, @NotNull PsiClass... targetClasses)
+	{
+		myProject = project;
+		myReference = ref;
+		myTargetClasses = targetClasses;
+		myEditor = editor;
+	}
 
-  @Override
-  public boolean execute() {
-    PsiDocumentManager.getInstance(myProject).commitAllDocuments();
+	@Override
+	public boolean execute()
+	{
+		PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
-    if (!myReference.getElement().isValid()){
-      return false;
-    }
+		if(!myReference.getElement().isValid())
+		{
+			return false;
+		}
 
-    for (PsiClass myTargetClass : myTargetClasses) {
-      if (!myTargetClass.isValid()) {
-        return false;
-      }
-    }
+		for(PsiClass myTargetClass : myTargetClasses)
+		{
+			if(!myTargetClass.isValid())
+			{
+				return false;
+			}
+		}
 
-    if (myTargetClasses.length == 1){
-      addImport(myReference, myTargetClasses[0]);
-    }
-    else{
-      chooseClassAndImport();
-    }
-    return true;
-  }
+		if(myTargetClasses.length == 1)
+		{
+			addImport(myReference, myTargetClasses[0]);
+		}
+		else
+		{
+			chooseClassAndImport();
+		}
+		return true;
+	}
 
-  private void chooseClassAndImport() {
-    CodeInsightUtil.sortIdenticalShortNameClasses(myTargetClasses, myReference);
+	private void chooseClassAndImport()
+	{
+		CodeInsightUtil.sortIdenticalShortNameClasses(myTargetClasses, myReference);
 
-    final BaseListPopupStep<PsiClass> step =
-      new BaseListPopupStep<PsiClass>(JavaQuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses) {
-        @Override
-        public boolean isAutoSelectionEnabled() {
-          return false;
-        }
+		final BaseListPopupStep<PsiClass> step = new BaseListPopupStep<PsiClass>(JavaQuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses)
+		{
+			@Override
+			public boolean isAutoSelectionEnabled()
+			{
+				return false;
+			}
 
-        @Override
-        public boolean isSpeedSearchEnabled() {
-          return true;
-        }
+			@Override
+			public boolean isSpeedSearchEnabled()
+			{
+				return true;
+			}
 
-        @Override
-        public PopupStep onChosen(PsiClass selectedValue, boolean finalChoice) {
-          if (selectedValue == null) {
-            return FINAL_CHOICE;
-          }
+			@Override
+			public PopupStep onChosen(PsiClass selectedValue, boolean finalChoice)
+			{
+				if(selectedValue == null)
+				{
+					return FINAL_CHOICE;
+				}
 
-          if (finalChoice) {
-            PsiDocumentManager.getInstance(myProject).commitAllDocuments();
-            addImport(myReference, selectedValue);
-            return FINAL_CHOICE;
-          }
+				if(finalChoice)
+				{
+					PsiDocumentManager.getInstance(myProject).commitAllDocuments();
+					addImport(myReference, selectedValue);
+					return FINAL_CHOICE;
+				}
 
-          String qname = selectedValue.getQualifiedName();
-          if (qname == null) return FINAL_CHOICE;
+				String qname = selectedValue.getQualifiedName();
+				if(qname == null)
+				{
+					return FINAL_CHOICE;
+				}
 
-          List<String> toExclude = getAllExcludableStrings(qname);
+				List<String> toExclude = getAllExcludableStrings(qname);
 
-          return new BaseListPopupStep<String>(null, toExclude) {
-            @NotNull
-            @Override
-            public String getTextFor(String value) {
-              return "Exclude '" + value + "' from auto-import";
-            }
+				return new BaseListPopupStep<String>(null, toExclude)
+				{
+					@NotNull
+					@Override
+					public String getTextFor(String value)
+					{
+						return "Exclude '" + value + "' from auto-import";
+					}
 
-            @Override
-            public PopupStep onChosen(String selectedValue, boolean finalChoice) {
-              if (finalChoice) {
-                excludeFromImport(myProject, selectedValue);
-              }
+					@Override
+					public PopupStep onChosen(String selectedValue, boolean finalChoice)
+					{
+						if(finalChoice)
+						{
+							excludeFromImport(myProject, selectedValue);
+						}
 
-              return super.onChosen(selectedValue, finalChoice);
-            }
-          };
-        }
+						return super.onChosen(selectedValue, finalChoice);
+					}
+				};
+			}
 
-        @Override
-        public boolean hasSubstep(PsiClass selectedValue) {
-          return true;
-        }
+			@Override
+			public boolean hasSubstep(PsiClass selectedValue)
+			{
+				return true;
+			}
 
-        @NotNull
-        @Override
-        public String getTextFor(PsiClass value) {
-          return ObjectUtils.assertNotNull(value.getQualifiedName());
-        }
+			@NotNull
+			@Override
+			public String getTextFor(PsiClass value)
+			{
+				return ObjectUtil.assertNotNull(value.getQualifiedName());
+			}
 
-        @Override
-        public Icon getIconFor(PsiClass aValue) {
-          return IconDescriptorUpdaters.getIcon(aValue, 0);
-        }
-      };
-    JBPopupFactory.getInstance().createListPopup(step).showInBestPositionFor(myEditor);
-  }
+			@Override
+			public Icon getIconFor(PsiClass aValue)
+			{
+				return IconDescriptorUpdaters.getIcon(aValue, 0);
+			}
+		};
+		JBPopupFactory.getInstance().createListPopup(step).showInBestPositionFor(myEditor);
+	}
 
-  public static void excludeFromImport(final Project project, final String prefix) {
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        if (project.isDisposed()) return;
+	public static void excludeFromImport(final Project project, final String prefix)
+	{
+		ApplicationManager.getApplication().invokeLater(() -> {
+			if(project.isDisposed())
+			{
+				return;
+			}
 
-        final JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable();
-        ShowSettingsUtil.getInstance().editConfigurable(project, configurable, new Runnable() {
-          @Override
-          public void run() {
-			configurable.addExcludePackage(prefix);
-          }
-        });
-      }
-    });
-  }
+			final JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable();
+			ShowSettingsUtil.getInstance().editConfigurable(project, configurable, () -> {
+				configurable.addExcludePackage(prefix);
+			});
+		});
+	}
 
-  public static List<String> getAllExcludableStrings(@NotNull String qname) {
-    List<String> toExclude = new ArrayList<String>();
-    while (true) {
-      toExclude.add(qname);
-      final int i = qname.lastIndexOf('.');
-      if (i < 0 || i == qname.indexOf('.')) break;
-      qname = qname.substring(0, i);
-    }
-    return toExclude;
-  }
+	public static List<String> getAllExcludableStrings(@NotNull String qname)
+	{
+		List<String> toExclude = new ArrayList<String>();
+		while(true)
+		{
+			toExclude.add(qname);
+			final int i = qname.lastIndexOf('.');
+			if(i < 0 || i == qname.indexOf('.'))
+			{
+				break;
+			}
+			qname = qname.substring(0, i);
+		}
+		return toExclude;
+	}
 
-  private void addImport(final PsiReference ref, final PsiClass targetClass) {
-    StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
-    CommandProcessor.getInstance().executeCommand(myProject, new Runnable() {
-      @Override
-      public void run() {
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          @Override
-          public void run() {
-            _addImport(ref, targetClass);
-          }
-        });
-      }
-    }, JavaQuickFixBundle.message("add.import"), null);
-  }
+	private void addImport(final PsiReference ref, final PsiClass targetClass)
+	{
+		StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
+		CommandProcessor.getInstance().executeCommand(myProject, () -> ApplicationManager.getApplication().runWriteAction(() -> {
+			_addImport(ref, targetClass);
+		}), JavaQuickFixBundle.message("add.import"), null);
+	}
 
-  private void _addImport(PsiReference ref, PsiClass targetClass) {
-    if (!ref.getElement().isValid() || !targetClass.isValid() || ref.resolve() == targetClass) {
-      return;
-    }
-    if (!FileModificationService.getInstance().preparePsiElementForWrite(ref.getElement())){
-      return;
-    }
+	@RequiredReadAction
+	private void _addImport(PsiReference ref, PsiClass targetClass)
+	{
+		if(!ref.getElement().isValid() || !targetClass.isValid() || ref.resolve() == targetClass)
+		{
+			return;
+		}
+		if(!FileModificationService.getInstance().preparePsiElementForWrite(ref.getElement()))
+		{
+			return;
+		}
 
-    int caretOffset = myEditor.getCaretModel().getOffset();
-    RangeMarker caretMarker = myEditor.getDocument().createRangeMarker(caretOffset, caretOffset);
-    int colByOffset = myEditor.offsetToLogicalPosition(caretOffset).column;
-    int col = myEditor.getCaretModel().getLogicalPosition().column;
-    int virtualSpace = col == colByOffset ? 0 : col - colByOffset;
-    int line = myEditor.getCaretModel().getLogicalPosition().line;
-    LogicalPosition pos = new LogicalPosition(line, 0);
-    myEditor.getCaretModel().moveToLogicalPosition(pos);
+		int caretOffset = myEditor.getCaretModel().getOffset();
+		RangeMarker caretMarker = myEditor.getDocument().createRangeMarker(caretOffset, caretOffset);
+		int colByOffset = myEditor.offsetToLogicalPosition(caretOffset).column;
+		int col = myEditor.getCaretModel().getLogicalPosition().column;
+		int virtualSpace = col == colByOffset ? 0 : col - colByOffset;
+		int line = myEditor.getCaretModel().getLogicalPosition().line;
+		LogicalPosition pos = new LogicalPosition(line, 0);
+		myEditor.getCaretModel().moveToLogicalPosition(pos);
 
-    try{
-      bindReference(ref, targetClass);
-      if (CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY) {
-        Document document = myEditor.getDocument();
-        PsiFile psiFile = PsiDocumentManager.getInstance(myProject).getPsiFile(document);
-        new OptimizeImportsProcessor(myProject, psiFile).runWithoutProgress();
-      }
-    }
-    catch(IncorrectOperationException e){
-      LOG.error(e);
-    }
+		try
+		{
+			bindReference(ref, targetClass);
+			if(CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY)
+			{
+				Document document = myEditor.getDocument();
+				PsiFile psiFile = PsiDocumentManager.getInstance(myProject).getPsiFile(document);
+				new OptimizeImportsProcessor(myProject, psiFile).runWithoutProgress();
+			}
+		}
+		catch(IncorrectOperationException e)
+		{
+			LOG.error(e);
+		}
 
-    line = myEditor.getCaretModel().getLogicalPosition().line;
-    LogicalPosition pos1 = new LogicalPosition(line, col);
-    myEditor.getCaretModel().moveToLogicalPosition(pos1);
-    if (caretMarker.isValid()){
-      LogicalPosition pos2 = myEditor.offsetToLogicalPosition(caretMarker.getStartOffset());
-      int newCol = pos2.column + virtualSpace;
-      myEditor.getCaretModel().moveToLogicalPosition(new LogicalPosition(pos2.line, newCol));
-      myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-    }
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        if (!myProject.isDisposed() && myProject.isOpen()) {
-          DaemonCodeAnalyzer daemonCodeAnalyzer = DaemonCodeAnalyzer.getInstance(myProject);
-          if (daemonCodeAnalyzer != null) {
-            daemonCodeAnalyzer.updateVisibleHighlighters(myEditor);
-          }
-        }
-      }
-    });
-  }
+		line = myEditor.getCaretModel().getLogicalPosition().line;
+		LogicalPosition pos1 = new LogicalPosition(line, col);
+		myEditor.getCaretModel().moveToLogicalPosition(pos1);
+		if(caretMarker.isValid())
+		{
+			LogicalPosition pos2 = myEditor.offsetToLogicalPosition(caretMarker.getStartOffset());
+			int newCol = pos2.column + virtualSpace;
+			myEditor.getCaretModel().moveToLogicalPosition(new LogicalPosition(pos2.line, newCol));
+			myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+		}
+		ApplicationManager.getApplication().invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if(!myProject.isDisposed() && myProject.isOpen())
+				{
+					DaemonCodeAnalyzer daemonCodeAnalyzer = DaemonCodeAnalyzer.getInstance(myProject);
+					if(daemonCodeAnalyzer != null)
+					{
+						daemonCodeAnalyzer.updateVisibleHighlighters(myEditor);
+					}
+				}
+			}
+		});
+	}
 
-  protected void bindReference(PsiReference ref, PsiClass targetClass) {
-    ref.bindToElement(targetClass);
-  }
+	protected void bindReference(PsiReference ref, PsiClass targetClass)
+	{
+		ref.bindToElement(targetClass);
+	}
 }
