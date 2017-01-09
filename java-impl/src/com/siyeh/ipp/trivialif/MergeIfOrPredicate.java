@@ -15,7 +15,11 @@
  */
 package com.siyeh.ipp.trivialif;
 
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiIfStatement;
+import com.intellij.psi.PsiJavaToken;
+import com.intellij.psi.PsiStatement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ControlFlowUtils;

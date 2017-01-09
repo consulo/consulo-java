@@ -30,11 +30,12 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
-import consulo.java.codeInspection.JavaExtensionPoints;
+import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.ExtensionPointListener;
 import com.intellij.openapi.extensions.Extensions;
@@ -47,10 +48,14 @@ import com.intellij.openapi.util.JDOMExternalizableStringList;
 import com.intellij.profile.codeInspection.InspectionProfileManager;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
+import consulo.java.JavaQuickFixBundle;
+import consulo.java.codeInspection.JavaExtensionPoints;
 
 public abstract class EntryPointsManagerBase extends EntryPointsManager implements PersistentStateComponent<Element>
 {
@@ -185,10 +190,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 		return element;
 	}
 
-	public static void writeExternal(
-			final Element element,
-			final Map<String, SmartRefElementPointer> persistentEntryPoints,
-			final JDOMExternalizableStringList additional_annotations)
+	public static void writeExternal(final Element element, final Map<String, SmartRefElementPointer> persistentEntryPoints, final JDOMExternalizableStringList additional_annotations)
 	{
 		Element entryPointsElement = new Element("entry_points");
 		entryPointsElement.setAttribute(VERSION_ATTR, VERSION);
@@ -458,8 +460,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 					}
 
 					final String className = fqName.substring(notype ? 0 : spaceIdx + 1, lastDotIdx);
-					final String methodSignature = notype ? fqName.substring(lastDotIdx + 1) : fqName.substring(0,
-							spaceIdx) + ' ' + fqName.substring(lastDotIdx + 1);
+					final String methodSignature = notype ? fqName.substring(lastDotIdx + 1) : fqName.substring(0, spaceIdx) + ' ' + fqName.substring(lastDotIdx + 1);
 
 					fqName = className + " " + methodSignature;
 				}
@@ -502,5 +503,49 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
 			return true;
 		}
 		return AnnotationUtil.isAnnotated(owner, ADDITIONAL_ANNOTATIONS) || AnnotationUtil.isAnnotated(owner, getAdditionalAnnotations());
+	}
+
+	public class AddImplicitlyWriteAnnotation implements IntentionAction
+	{
+		private final String myQualifiedName;
+
+		public AddImplicitlyWriteAnnotation(String qualifiedName)
+		{
+			myQualifiedName = qualifiedName;
+		}
+
+		@Override
+		@NotNull
+		public String getText()
+		{
+			return JavaQuickFixBundle.message("fix.unused.symbol.injection.text", "fields", myQualifiedName);
+		}
+
+		@Override
+		@NotNull
+		public String getFamilyName()
+		{
+			return JavaQuickFixBundle.message("fix.unused.symbol.injection.family");
+		}
+
+		@Override
+		public boolean isAvailable(@NotNull Project project1, Editor editor, PsiFile file)
+		{
+			return true;
+		}
+
+		@Override
+		public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+		{
+			//TODO [VISTALL]
+			//myWriteAnnotations.add(myQualifiedName);
+			//ProjectInspectionProfileManager.getInstance(project).fireProfileChanged();
+		}
+
+		@Override
+		public boolean startInWriteAction()
+		{
+			return false;
+		}
 	}
 }

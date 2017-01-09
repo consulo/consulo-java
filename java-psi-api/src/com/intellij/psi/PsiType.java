@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
@@ -26,17 +25,27 @@ import com.intellij.util.ArrayFactory;
 /**
  * Representation of Java type (primitive type, array or class type).
  */
-public abstract class PsiType implements PsiAnnotationOwner
+public abstract class PsiType implements PsiAnnotationOwner, Cloneable
 {
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType BYTE = new PsiPrimitiveType("byte", "java.lang.Byte");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType CHAR = new PsiPrimitiveType("char", "java.lang.Character");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType DOUBLE = new PsiPrimitiveType("double", "java.lang.Double");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType FLOAT = new PsiPrimitiveType("float", "java.lang.Float");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType INT = new PsiPrimitiveType("int", "java.lang.Integer");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType LONG = new PsiPrimitiveType("long", "java.lang.Long");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType SHORT = new PsiPrimitiveType("short", "java.lang.Short");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType BOOLEAN = new PsiPrimitiveType("boolean", "java.lang.Boolean");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType VOID = new PsiPrimitiveType("void", "java.lang.Void");
+	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType NULL = new PsiPrimitiveType("null", (String) null);
 
 	public static final PsiType[] EMPTY_ARRAY = new PsiType[0];
@@ -56,22 +65,14 @@ public abstract class PsiType implements PsiAnnotationOwner
 		return ARRAY_FACTORY.create(count);
 	}
 
-	private final TypeAnnotationProvider myAnnotationProvider;
+	private TypeAnnotationProvider myAnnotationProvider;
 
 	/**
 	 * Constructs a PsiType with given annotations
 	 */
 	protected PsiType(@NotNull final PsiAnnotation[] annotations)
 	{
-		this(annotations.length == 0 ? TypeAnnotationProvider.EMPTY : new TypeAnnotationProvider()
-		{
-			@NotNull
-			@Override
-			public PsiAnnotation[] getAnnotations()
-			{
-				return annotations;
-			}
-		});
+		this(TypeAnnotationProvider.Static.create(annotations));
 	}
 
 	/**
@@ -80,6 +81,26 @@ public abstract class PsiType implements PsiAnnotationOwner
 	protected PsiType(@NotNull TypeAnnotationProvider annotations)
 	{
 		myAnnotationProvider = annotations;
+	}
+
+	@NotNull
+	public PsiType annotate(@NotNull TypeAnnotationProvider provider)
+	{
+		if(provider == myAnnotationProvider)
+		{
+			return this;
+		}
+
+		try
+		{
+			PsiType copy = (PsiType) clone();
+			copy.myAnnotationProvider = provider;
+			return copy;
+		}
+		catch(CloneNotSupportedException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -92,9 +113,8 @@ public abstract class PsiType implements PsiAnnotationOwner
 	}
 
 	/**
-	 * Creates array type with this type as a component.
+	 * @deprecated use {@link #annotate(TypeAnnotationProvider)} (to be removed in IDEA 18)
 	 */
-	@NotNull
 	public PsiArrayType createArrayType(@NotNull PsiAnnotation... annotations)
 	{
 		return new PsiArrayType(this, annotations);
@@ -103,14 +123,21 @@ public abstract class PsiType implements PsiAnnotationOwner
 	/**
 	 * Returns text of the type that can be presented to a user (references normally non-qualified).
 	 */
-	@NonNls
+	@NotNull
+	public String getPresentableText(boolean annotated)
+	{
+		return getPresentableText();
+	}
+
+	/**
+	 * Same as {@code getPresentableText(false)}.
+	 */
 	@NotNull
 	public abstract String getPresentableText();
 
 	/**
 	 * Returns canonical representation of the type (all references fully-qualified).
 	 */
-	@NonNls
 	@NotNull
 	public String getCanonicalText(boolean annotated)
 	{
@@ -120,7 +147,6 @@ public abstract class PsiType implements PsiAnnotationOwner
 	/**
 	 * Same as {@code getCanonicalText(false)}.
 	 */
-	@NonNls
 	@NotNull
 	public abstract String getCanonicalText();
 
@@ -128,9 +154,11 @@ public abstract class PsiType implements PsiAnnotationOwner
 	 * Return canonical text of the type with some internal details added for presentational purposes. Use with care.
 	 * todo[r.sh] merge with getPresentableText()
 	 */
-	@NonNls
 	@NotNull
-	public abstract String getInternalCanonicalText();
+	public String getInternalCanonicalText()
+	{
+		return getCanonicalText();
+	}
 
 	/**
 	 * Checks if the type is currently valid.
@@ -141,7 +169,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	public abstract boolean isValid();
 
 	/**
-	 * @return true if values of type <code>type</code> can be assigned to rvalues of this type.
+	 * @return true if values of type {@code type} can be assigned to rvalues of this type.
 	 */
 	public boolean isAssignableFrom(@NotNull PsiType type)
 	{
@@ -149,7 +177,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	}
 
 	/**
-	 * Checks whether values of type <code>type</code> can be casted to this type.
+	 * Checks whether values of type {@code type} can be casted to this type.
 	 */
 	public boolean isConvertibleFrom(@NotNull PsiType type)
 	{
@@ -162,7 +190,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	 * @param text the text to compare with.
 	 * @return true if the string is equivalent to the type, false otherwise
 	 */
-	public abstract boolean equalsToText(@NotNull @NonNls String text);
+	public abstract boolean equalsToText(@NotNull String text);
 
 	/**
 	 * Returns the class type for qualified class name.
@@ -284,7 +312,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	/**
 	 * Returns the innermost component type for an array type.
 	 *
-	 * @return the innermost (non-array) component of the type, or <code>this</code> if the type is not
+	 * @return the innermost (non-array) component of the type, or {@code this} if the type is not
 	 * an array type.
 	 */
 	@NotNull
@@ -335,7 +363,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 	}
 
 	@Override
-	public PsiAnnotation findAnnotation(@NotNull @NonNls String qualifiedName)
+	public PsiAnnotation findAnnotation(@NotNull String qualifiedName)
 	{
 		for(PsiAnnotation annotation : getAnnotations())
 		{
@@ -349,7 +377,7 @@ public abstract class PsiType implements PsiAnnotationOwner
 
 	@Override
 	@NotNull
-	public PsiAnnotation addAnnotation(@NotNull @NonNls String qualifiedName)
+	public PsiAnnotation addAnnotation(@NotNull String qualifiedName)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -364,13 +392,9 @@ public abstract class PsiType implements PsiAnnotationOwner
 	@Override
 	public String toString()
 	{
-		//noinspection HardCodedStringLiteral
 		return "PsiType:" + getPresentableText();
 	}
 
-	/**
-	 * Temporary class to facilitate transition to {@link #getCanonicalText(boolean)}.
-	 */
 	protected static abstract class Stub extends PsiType
 	{
 		protected Stub(@NotNull PsiAnnotation[] annotations)
@@ -378,10 +402,21 @@ public abstract class PsiType implements PsiAnnotationOwner
 			super(annotations);
 		}
 
-		public Stub(@NotNull TypeAnnotationProvider annotations)
+		protected Stub(@NotNull TypeAnnotationProvider annotations)
 		{
 			super(annotations);
 		}
+
+		@NotNull
+		@Override
+		public final String getPresentableText()
+		{
+			return getPresentableText(false);
+		}
+
+		@NotNull
+		@Override
+		public abstract String getPresentableText(boolean annotated);
 
 		@NotNull
 		@Override

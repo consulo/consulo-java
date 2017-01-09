@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,68 +22,77 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author ven
  */
-public class PsiEllipsisType extends PsiArrayType {
-  /**
-   * Creates an ellipsis type instance with the specified component type.
-   *
-   * @param componentType the type of the varargs array component.
-   */
-  public PsiEllipsisType(@NotNull PsiType componentType) {
-    super(componentType);
-  }
+public class PsiEllipsisType extends PsiArrayType
+{
+	public PsiEllipsisType(@NotNull PsiType componentType)
+	{
+		super(componentType);
+	}
 
-  public PsiEllipsisType(@NotNull PsiType componentType, @NotNull PsiAnnotation[] annotations) {
-    super(componentType, annotations);
-  }
+	public PsiEllipsisType(@NotNull PsiType componentType, @NotNull PsiAnnotation[] annotations)
+	{
+		super(componentType, annotations);
+	}
 
-  @NotNull
-  public static PsiType createEllipsis(@NotNull PsiType componentType, @NotNull PsiAnnotation[] annotations) {
-    return new PsiEllipsisType(componentType, annotations);
-  }
+	public PsiEllipsisType(@NotNull PsiType componentType, @NotNull TypeAnnotationProvider provider)
+	{
+		super(componentType, provider);
+	}
 
-  @NotNull
-  @Override
-  public String getPresentableText() {
-    return getText(getComponentType().getPresentableText(), "...", false, true);
-  }
+	/**
+	 * @deprecated use {@link #annotate(TypeAnnotationProvider)} (to be removed in IDEA 18)
+	 */
+	public static PsiType createEllipsis(@NotNull PsiType componentType, @NotNull PsiAnnotation[] annotations)
+	{
+		return new PsiEllipsisType(componentType, annotations);
+	}
 
-  @NotNull
-  @Override
-  public String getCanonicalText(boolean annotated) {
-    return getText(getComponentType().getCanonicalText(annotated), "...", true, annotated);
-  }
+	@NotNull
+	@Override
+	public String getPresentableText(boolean annotated)
+	{
+		return getText(getComponentType().getPresentableText(), "...", false, annotated);
+	}
 
-  @NotNull
-  @Override
-  public String getInternalCanonicalText() {
-    return getText(getComponentType().getInternalCanonicalText(), "...", true, true);
-  }
+	@NotNull
+	@Override
+	public String getCanonicalText(boolean annotated)
+	{
+		return getText(getComponentType().getCanonicalText(annotated), "...", true, annotated);
+	}
 
-  @Override
-  public boolean equalsToText(@NotNull String text) {
-    return text.endsWith("...") && getComponentType().equalsToText(text.substring(0, text.length() - 3)) ||
-           super.equalsToText(text);
-  }
+	@NotNull
+	@Override
+	public String getInternalCanonicalText()
+	{
+		return getText(getComponentType().getInternalCanonicalText(), "...", true, true);
+	}
 
-  /**
-   * Converts the ellipsis type to an array type with the same component type.
-   *
-   * @return the array type instance.
-   */
-  public PsiType toArrayType() {
-    return getComponentType().createArrayType(getAnnotations());
-  }
+	@Override
+	public boolean equalsToText(@NotNull String text)
+	{
+		return text.endsWith("...") && getComponentType().equalsToText(text.substring(0, text.length() - 3)) || super.equalsToText(text);
+	}
 
-  @Override
-  public <A> A accept(@NotNull PsiTypeVisitor<A> visitor) {
-    return visitor.visitEllipsisType(this);
-  }
+	/**
+	 * Converts the ellipsis type to an array type with the same component type.
+	 *
+	 * @return the array type instance.
+	 */
+	public PsiType toArrayType()
+	{
+		return new PsiArrayType(getComponentType(), getAnnotationProvider());
+	}
 
-  public boolean equals(Object obj) {
-    return obj instanceof PsiEllipsisType && super.equals(obj);
-  }
+	@Override
+	public <A> A accept(@NotNull PsiTypeVisitor<A> visitor)
+	{
+		return visitor.visitEllipsisType(this);
+	}
 
-  public int hashCode() {
-    return super.hashCode() * 5;
-  }
+	@Override
+	public int hashCode()
+	{
+		return super.hashCode() * 5;
+	}
 }

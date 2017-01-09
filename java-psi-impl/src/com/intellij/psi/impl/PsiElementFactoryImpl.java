@@ -686,7 +686,8 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 	@Override
 	public PsiKeyword createKeyword(@NotNull @NonNls String keyword, PsiElement context) throws IncorrectOperationException
 	{
-		if(!JavaLexer.isKeyword(keyword, PsiUtil.getLanguageLevel(context)))
+		LanguageLevel level = PsiUtil.getLanguageLevel(context);
+		if(!JavaLexer.isKeyword(keyword, level) && !JavaLexer.isSoftKeyword(keyword, level))
 		{
 			throw new IncorrectOperationException("\"" + keyword + "\" is not a keyword.");
 		}

@@ -16,6 +16,7 @@
 package com.intellij.psi.impl.source.resolve.graphInference;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,7 @@ class InitialInferenceState
 	private final InferenceSessionContainer myInferenceSessionContainer;
 	private final boolean myErased;
 
-	InitialInferenceState(Set<InferenceVariable> inferenceVariables,
+	InitialInferenceState(Collection<InferenceVariable> inferenceVariables,
 			PsiSubstitutor topInferenceSubstitutor,
 			PsiElement context,
 			PsiSubstitutor inferenceSubstitutor,

@@ -15,20 +15,28 @@
  */
 package com.siyeh.ig.controlflow;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiIfStatement;
+import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiParenthesizedExpression;
+import com.intellij.psi.PsiPolyadicExpression;
+import com.intellij.psi.PsiStatement;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class DuplicateConditionInspection extends BaseInspection {
 
@@ -92,7 +100,7 @@ public class DuplicateConditionInspection extends BaseInspection {
             continue;
           }
           final PsiExpression testCondition = conditionArray[j];
-          final boolean areEquivalent = EquivalenceChecker.expressionsAreEquivalent(condition, testCondition);
+          final boolean areEquivalent = EquivalenceChecker.getCanonicalPsiEquivalence().getCanonicalPsiEquivalence().expressionsAreEquivalent(condition, testCondition);
           if (areEquivalent) {
             if (!ignoreMethodCalls || !containsMethodCallExpression(testCondition)) {
               registerError(testCondition);

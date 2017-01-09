@@ -21,7 +21,6 @@ import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
@@ -53,7 +52,7 @@ public class PsiPolyExpressionUtil
 		{
 			return isPolyExpression(((PsiParenthesizedExpression) expression).getExpression());
 		}
-		else if(expression instanceof PsiNewExpression && PsiDiamondTypeUtil.hasDiamond((PsiNewExpression) expression))
+		else if(expression instanceof PsiNewExpression && PsiDiamondType.hasDiamond((PsiNewExpression) expression))
 		{
 			return isInAssignmentOrInvocationContext(expression);
 		}
@@ -79,24 +78,30 @@ public class PsiPolyExpressionUtil
 		{
 			if(method != null)
 			{
-				final Set<PsiTypeParameter> typeParameters = new HashSet<PsiTypeParameter>(Arrays.asList(method.getTypeParameters()));
-				if(!typeParameters.isEmpty())
-				{
-					final PsiType returnType = method.getReturnType();
-					if(returnType != null)
-					{
-						return mentionsTypeParameters(returnType, typeParameters);
-					}
-				}
-				else if(method.isConstructor() && expression instanceof PsiNewExpression && PsiDiamondTypeUtil.hasDiamond((PsiNewExpression) expression))
-				{
-					return true;
-				}
+				return isMethodCallTypeDependsOnInference(expression, method);
 			}
 			else
 			{
 				return true;
 			}
+		}
+		return false;
+	}
+
+	public static boolean isMethodCallTypeDependsOnInference(PsiExpression expression, PsiMethod method)
+	{
+		final Set<PsiTypeParameter> typeParameters = new HashSet<PsiTypeParameter>(Arrays.asList(method.getTypeParameters()));
+		if(!typeParameters.isEmpty())
+		{
+			final PsiType returnType = method.getReturnType();
+			if(returnType != null)
+			{
+				return mentionsTypeParameters(returnType, typeParameters);
+			}
+		}
+		else if(method.isConstructor() && expression instanceof PsiNewExpression && PsiDiamondType.hasDiamond((PsiNewExpression) expression))
+		{
+			return true;
 		}
 		return false;
 	}
@@ -203,7 +208,7 @@ public class PsiPolyExpressionUtil
 
 	private enum ConditionalKind
 	{
-		BOOLEAN, NUMERIC
+		BOOLEAN, NUMERIC, NULL
 	}
 
 	private static ConditionalKind isBooleanOrNumeric(PsiExpression expr)
@@ -217,7 +222,9 @@ public class PsiPolyExpressionUtil
 			return null;
 		}
 		PsiType type = null;
-		if(expr instanceof PsiNewExpression || hasStandaloneForm(expr))
+		//A class instance creation expression (§15.9) for a class that is convertible to a numeric type.
+		//As numeric classes do not have type parameters, at this point expressions with diamonds could be ignored
+		if(expr instanceof PsiNewExpression && !PsiDiamondType.hasDiamond((PsiNewExpression) expr) || hasStandaloneForm(expr))
 		{
 			type = expr.getType();
 		}
@@ -242,11 +249,11 @@ public class PsiPolyExpressionUtil
 			final PsiExpression elseExpression = ((PsiConditionalExpression) expr).getElseExpression();
 			final ConditionalKind thenKind = isBooleanOrNumeric(thenExpression);
 			final ConditionalKind elseKind = isBooleanOrNumeric(elseExpression);
-			if(thenKind == elseKind || elseKind == null)
+			if(thenKind == elseKind || elseKind == ConditionalKind.NULL)
 			{
 				return thenKind;
 			}
-			if(thenKind == null)
+			if(thenKind == ConditionalKind.NULL)
 			{
 				return elseKind;
 			}
@@ -257,6 +264,11 @@ public class PsiPolyExpressionUtil
 	@Nullable
 	private static ConditionalKind isBooleanOrNumericType(PsiType type)
 	{
+		if(type == PsiType.NULL)
+		{
+			return ConditionalKind.NULL;
+		}
+
 		final PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
 		if(TypeConversionUtil.isNumericType(type))
 		{

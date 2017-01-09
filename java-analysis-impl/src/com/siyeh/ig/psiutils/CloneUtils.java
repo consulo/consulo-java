@@ -15,11 +15,11 @@
  */
 package com.siyeh.ig.psiutils;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
-import org.jetbrains.annotations.NotNull;
 
 public class CloneUtils {
 

@@ -15,35 +15,33 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.formatting.alignment.AlignmentStrategy;
-import com.intellij.lang.ASTNode;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
+import com.intellij.formatting.alignment.AlignmentStrategy;
+import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 
 /**
  * @author max
  */
-public class PartialWhitespaceBlock extends SimpleJavaBlock {
-  private final TextRange myRange;
+public class PartialWhitespaceBlock extends SimpleJavaBlock
+{
+	private final TextRange myRange;
 
-  public PartialWhitespaceBlock(final ASTNode node,
-                                final TextRange range,
-                                final Wrap wrap,
-                                final Alignment alignment,
-                                final Indent indent,
-                                CommonCodeStyleSettings settings) {
-    super(node, wrap, AlignmentStrategy.wrap(alignment), indent, settings);
-    myRange = range;
-  }
+	public PartialWhitespaceBlock(ASTNode node, TextRange range, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	{
+		super(node, wrap, AlignmentStrategy.wrap(alignment), indent, settings, javaSettings);
+		myRange = range;
+	}
 
-  @NotNull
-  @Override
-  public TextRange getTextRange() {
-    return myRange;
-  }
+	@NotNull
+	@Override
+	public TextRange getTextRange()
+	{
+		return myRange;
+	}
 }

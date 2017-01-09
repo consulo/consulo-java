@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,49 +28,57 @@ import com.intellij.formatting.WrapType;
 import com.intellij.formatting.alignment.AlignmentStrategy;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
-import com.intellij.psi.impl.source.tree.ElementType;
 
-public class LabeledJavaBlock extends AbstractJavaBlock{
-  public LabeledJavaBlock(final ASTNode node,
-                          final Wrap wrap,
-                          final Alignment alignment,
-                          final Indent indent,
-                          final CommonCodeStyleSettings settings) {
-    super(node, wrap, alignment, indent, settings);
-  }
+public class LabeledJavaBlock extends AbstractJavaBlock
+{
+	public LabeledJavaBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	{
+		super(node, wrap, alignment, indent, settings, javaSettings);
+	}
 
-  @Override
-  protected List<Block> buildChildren() {
-    final ArrayList<Block> result = new ArrayList<Block>();
-    ASTNode child = myNode.getFirstChildNode();
-    Indent currentIndent = getLabelIndent();
-    Wrap currentWrap = null;
-    while (child != null) {
-      if (!FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0){
-        result.add(createJavaBlock(child, mySettings, currentIndent, currentWrap, AlignmentStrategy.getNullStrategy()));
-        if (child.getElementType() == ElementType.COLON) {
-          currentIndent = Indent.getNoneIndent();
-          currentWrap =Wrap.createWrap(WrapType.ALWAYS, true);
-        }
-      }
-      child = child.getTreeNext();
-    }
-    return result;
-  }
+	@Override
+	protected List<Block> buildChildren()
+	{
+		final ArrayList<Block> result = new ArrayList<>();
+		ASTNode child = myNode.getFirstChildNode();
+		Indent currentIndent = getLabelIndent();
+		Wrap currentWrap = null;
+		while(child != null)
+		{
+			if(!FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0)
+			{
+				result.add(createJavaBlock(child, mySettings, myJavaSettings, currentIndent, currentWrap, AlignmentStrategy.getNullStrategy()));
+				if(child.getElementType() == JavaTokenType.COLON)
+				{
+					currentIndent = Indent.getNoneIndent();
+					currentWrap = Wrap.createWrap(WrapType.ALWAYS, true);
+				}
+			}
+			child = child.getTreeNext();
+		}
+		return result;
+	}
 
-  private Indent getLabelIndent() {
-    if (mySettings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).LABEL_INDENT_ABSOLUTE) {
-      return Indent.getAbsoluteLabelIndent();
-    } else {
-      return Indent.getLabelIndent();
-    }
-  }
+	private Indent getLabelIndent()
+	{
+		if(mySettings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).LABEL_INDENT_ABSOLUTE)
+		{
+			return Indent.getAbsoluteLabelIndent();
+		}
+		else
+		{
+			return Indent.getLabelIndent();
+		}
+	}
 
-  @Override
-  @NotNull
-  public ChildAttributes getChildAttributes(final int newChildIndex) {
-    return new ChildAttributes(Indent.getNoneIndent(), null);
-  }
+	@Override
+	@NotNull
+	public ChildAttributes getChildAttributes(final int newChildIndex)
+	{
+		return new ChildAttributes(Indent.getNoneIndent(), null);
+	}
 }

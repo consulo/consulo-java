@@ -15,11 +15,11 @@
  */
 package com.siyeh.ig.psiutils;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class InstanceOfUtils {
 
@@ -223,7 +223,7 @@ public class InstanceOfUtils {
 
     private boolean isConflicting(PsiInstanceOfExpression expression) {
       final PsiExpression conditionOperand = expression.getOperand();
-      if (!EquivalenceChecker.expressionsAreEquivalent(
+      if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(
         referenceExpression, conditionOperand)) {
         return false;
       }
@@ -242,7 +242,7 @@ public class InstanceOfUtils {
 
     private boolean isAgreeing(PsiInstanceOfExpression expression) {
       final PsiExpression conditionOperand = expression.getOperand();
-      if (!EquivalenceChecker.expressionsAreEquivalent(
+      if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(
         referenceExpression, conditionOperand)) {
         return false;
       }

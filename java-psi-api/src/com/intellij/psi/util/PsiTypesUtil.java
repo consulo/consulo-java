@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,11 @@ package com.intellij.psi.util;
 
 import gnu.trove.THashMap;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +32,7 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.ArrayUtil;
 
 public class PsiTypesUtil
 {
@@ -106,6 +110,7 @@ public class PsiTypesUtil
 	 * @param type boxed java type name
 	 * @return unboxed type name if available; same value otherwise
 	 */
+	@Contract("null -> null; !null -> !null")
 	@Nullable
 	public static String unboxIfPossible(final String type)
 	{
@@ -123,6 +128,7 @@ public class PsiTypesUtil
 	 * @param type primitive java type name
 	 * @return boxed type name if available; same value otherwise
 	 */
+	@Contract("null -> null; !null -> !null")
 	@Nullable
 	public static String boxIfPossible(final String type)
 	{
@@ -237,8 +243,11 @@ public class PsiTypesUtil
 		return null;
 	}
 
+	/**
+	 * Return type explicitly declared in parent
+	 */
 	@Nullable
-	public static PsiType getExpectedTypeByParent(PsiElement element)
+	public static PsiType getExpectedTypeByParent(@NotNull PsiElement element)
 	{
 		final PsiElement parent = PsiUtil.skipParenthesizedExprUp(element.getParent());
 		if(parent instanceof PsiVariable)
@@ -292,11 +301,25 @@ public class PsiTypesUtil
 			}
 			else if(gParent instanceof PsiArrayInitializerExpression)
 			{
-				final PsiType expectedTypeByParent = getExpectedTypeByParent((PsiExpression) parent);
+				final PsiType expectedTypeByParent = getExpectedTypeByParent(parent);
 				return expectedTypeByParent != null && expectedTypeByParent instanceof PsiArrayType ? ((PsiArrayType) expectedTypeByParent).getComponentType() : null;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Returns the return type for enclosing method or lambda
+	 *
+	 * @param element element inside method or lambda to determine the return type of
+	 * @return the return type or null if cannot be determined
+	 */
+	@Nullable
+	public static PsiType getMethodReturnType(PsiElement element)
+	{
+		final PsiElement methodOrLambda = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiLambdaExpression.class);
+		return methodOrLambda instanceof PsiMethod ? ((PsiMethod) methodOrLambda).getReturnType() : methodOrLambda instanceof PsiLambdaExpression ? LambdaUtil.getFunctionalInterfaceReturnType(
+				(PsiLambdaExpression) methodOrLambda) : null;
 	}
 
 	public static boolean compareTypes(PsiType leftType, PsiType rightType, boolean ignoreEllipsis)
@@ -368,5 +391,65 @@ public class PsiTypesUtil
 				return false;
 			}
 		});
+	}
+
+	public static PsiType getParameterType(PsiParameter[] parameters, int i, boolean varargs)
+	{
+		final PsiParameter parameter = parameters[i < parameters.length ? i : parameters.length - 1];
+		PsiType parameterType = parameter.getType();
+		if(parameterType instanceof PsiEllipsisType && varargs)
+		{
+			parameterType = ((PsiEllipsisType) parameterType).getComponentType();
+		}
+		if(!parameterType.isValid())
+		{
+			PsiUtil.ensureValidType(parameterType, "Invalid type of parameter " + parameter + " of " + parameter.getClass());
+		}
+		return parameterType;
+	}
+
+	public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, final PsiTypeParameter[] typeParameters)
+	{
+		if(typeParameters.length == 0)
+		{
+			return typeParameters;
+		}
+
+		final Set<PsiTypeParameter> usedParameters = new HashSet<PsiTypeParameter>();
+		superReturnTypeInBaseClassType.accept(new PsiTypeVisitor<Object>()
+		{
+			@Nullable
+			@Override
+			public Object visitClassType(PsiClassType classType)
+			{
+				final PsiClass aClass = classType.resolve();
+				if(aClass instanceof PsiTypeParameter && ArrayUtil.find(typeParameters, aClass) > -1)
+				{
+					usedParameters.add((PsiTypeParameter) aClass);
+					return null;
+				}
+				for(PsiType type : classType.getParameters())
+				{
+					type.accept(this);
+				}
+				return null;
+			}
+
+			@Nullable
+			@Override
+			public Object visitWildcardType(PsiWildcardType wildcardType)
+			{
+				final PsiType bound = wildcardType.getBound();
+				return bound != null ? bound.accept(this) : null;
+			}
+
+			@Nullable
+			@Override
+			public Object visitArrayType(PsiArrayType arrayType)
+			{
+				return arrayType.getComponentType().accept(this);
+			}
+		});
+		return usedParameters.toArray(new PsiTypeParameter[usedParameters.size()]);
 	}
 }

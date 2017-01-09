@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2010 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,85 +15,105 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.formatting.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.formatting.Alignment;
+import com.intellij.formatting.Block;
+import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.Indent;
+import com.intellij.formatting.Spacing;
+import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.formatter.common.InjectedLanguageBlockBuilder;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author nik
  */
-public class CommentWithInjectionBlock extends AbstractJavaBlock {
-  private InjectedLanguageBlockBuilder myInjectedBlockBuilder;
+public class CommentWithInjectionBlock extends AbstractJavaBlock
+{
+	private final InjectedLanguageBlockBuilder myInjectedBlockBuilder;
 
-  public CommentWithInjectionBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings) {
-    super(node, wrap, alignment, indent, settings);
-    myInjectedBlockBuilder = new JavaCommentInjectedBlockBuilder();
-  }
+	public CommentWithInjectionBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings)
+	{
+		super(node, wrap, alignment, indent, settings, javaSettings);
+		myInjectedBlockBuilder = new JavaCommentInjectedBlockBuilder();
+	}
 
-  @Override
-  protected List<Block> buildChildren() {
-    final List<Block> result = new ArrayList<Block>();
-    myInjectedBlockBuilder.addInjectedBlocks(result, myNode, myWrap, myAlignment, Indent.getNoneIndent());
-    return result;
-  }
+	@Override
+	protected List<Block> buildChildren()
+	{
+		final List<Block> result = new ArrayList<>();
+		myInjectedBlockBuilder.addInjectedBlocks(result, myNode, myWrap, myAlignment, Indent.getNoneIndent());
+		return result;
+	}
 
-  @Override
-  public boolean isLeaf() {
-    return false;
-  }
+	@Override
+	public boolean isLeaf()
+	{
+		return false;
+	}
 
-  @NotNull
-  @Override
-  public ChildAttributes getChildAttributes(int newChildIndex) {
-    return new ChildAttributes(Indent.getNormalIndent(), null);
-  }
+	@NotNull
+	@Override
+	public ChildAttributes getChildAttributes(int newChildIndex)
+	{
+		return new ChildAttributes(Indent.getNormalIndent(), null);
+	}
 
-  @Override
-  public Spacing getSpacing(Block child1, @NotNull Block child2) {
-    return null;
-  }
+	@Override
+	public Spacing getSpacing(Block child1, @NotNull Block child2)
+	{
+		return null;
+	}
 
-  private class JavaCommentInjectedBlockBuilder extends InjectedLanguageBlockBuilder {
-    @Override
-    public CodeStyleSettings getSettings() {
-      return mySettings.getRootSettings();
-    }
+	private class JavaCommentInjectedBlockBuilder extends InjectedLanguageBlockBuilder
+	{
+		@Override
+		public CodeStyleSettings getSettings()
+		{
+			return mySettings.getRootSettings();
+		}
 
-    @Override                                      
-    public boolean canProcessFragment(String text, ASTNode injectionHost) {
-      return true;
-    }
+		@Override
+		public boolean canProcessFragment(String text, ASTNode injectionHost)
+		{
+			return true;
+		}
 
-    @Override
-    public Block createBlockBeforeInjection(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, final TextRange range) {
-      return new PartialCommentBlock(node, wrap, alignment, indent, range);
-    }
+		@Override
+		public Block createBlockBeforeInjection(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, final TextRange range)
+		{
+			return new PartialCommentBlock(node, wrap, alignment, indent, range);
+		}
 
-    @Override
-    public Block createBlockAfterInjection(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, TextRange range) {
-      return new PartialCommentBlock(node, wrap, alignment, Indent.getNoneIndent(), range);
-    }
-  }
+		@Override
+		public Block createBlockAfterInjection(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, TextRange range)
+		{
+			return new PartialCommentBlock(node, wrap, alignment, Indent.getNoneIndent(), range);
+		}
+	}
 
-  private static class PartialCommentBlock extends LeafBlock {
-    private final TextRange myRange;
+	private static class PartialCommentBlock extends LeafBlock
+	{
+		private final TextRange myRange;
 
-    public PartialCommentBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, TextRange range) {
-      super(node, wrap, alignment, indent);
-      myRange = range;
-    }
+		public PartialCommentBlock(ASTNode node, Wrap wrap, Alignment alignment, Indent indent, TextRange range)
+		{
+			super(node, wrap, alignment, indent);
+			myRange = range;
+		}
 
-    @NotNull
-    @Override
-    public TextRange getTextRange() {
-      return myRange;
-    }
-  }
+		@NotNull
+		@Override
+		public TextRange getTextRange()
+		{
+			return myRange;
+		}
+	}
 }

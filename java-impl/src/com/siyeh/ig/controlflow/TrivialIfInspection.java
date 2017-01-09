@@ -15,9 +15,19 @@
  */
 package com.siyeh.ig.controlflow;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiAssignmentExpression;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiExpressionStatement;
+import com.intellij.psi.PsiIfStatement;
+import com.intellij.psi.PsiJavaToken;
+import com.intellij.psi.PsiKeyword;
+import com.intellij.psi.PsiStatement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
@@ -29,8 +39,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class TrivialIfInspection extends BaseInspection {
 
@@ -400,7 +408,7 @@ public class TrivialIfInspection extends BaseInspection {
       }
       final PsiExpression thenLhs = thenExpression.getLExpression();
       final PsiExpression elseLhs = elseExpression.getLExpression();
-      return EquivalenceChecker.expressionsAreEquivalent(thenLhs,
+      return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs,
                                                          elseLhs);
     }
     else {
@@ -432,7 +440,7 @@ public class TrivialIfInspection extends BaseInspection {
       }
       final PsiExpression thenLhs = thenExpression.getLExpression();
       final PsiExpression elseLhs = elseExpression.getLExpression();
-      return EquivalenceChecker.expressionsAreEquivalent(thenLhs,
+      return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs,
                                                          elseLhs);
     }
     else {
@@ -473,7 +481,7 @@ public class TrivialIfInspection extends BaseInspection {
       }
       final PsiExpression thenLhs = thenExpression.getLExpression();
       final PsiExpression elseLhs = elseExpression.getLExpression();
-      return EquivalenceChecker.expressionsAreEquivalent(thenLhs,
+      return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs,
                                                          elseLhs);
     }
     else {
@@ -514,7 +522,7 @@ public class TrivialIfInspection extends BaseInspection {
       }
       final PsiExpression thenLhs = thenExpression.getLExpression();
       final PsiExpression elseLhs = elseExpression.getLExpression();
-      return EquivalenceChecker.expressionsAreEquivalent(thenLhs,
+      return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs,
                                                          elseLhs);
     }
     else {

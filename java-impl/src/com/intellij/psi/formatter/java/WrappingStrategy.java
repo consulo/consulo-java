@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,40 +16,51 @@
 package com.intellij.psi.formatter.java;
 
 import com.intellij.formatting.Wrap;
+import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.impl.source.tree.ElementType;
 
-public abstract class WrappingStrategy {
+public abstract class WrappingStrategy
+{
 
-  public static final WrappingStrategy DO_NOT_WRAP = new WrappingStrategy(null) {
-    @Override
-    protected boolean shouldWrap(final IElementType type) {
-      return false;
-    }
-  };
+	public static final WrappingStrategy DO_NOT_WRAP = new WrappingStrategy(null)
+	{
+		@Override
+		protected boolean shouldWrap(final IElementType type)
+		{
+			return false;
+		}
+	};
 
-  public static WrappingStrategy createDoNotWrapCommaStrategy(Wrap wrap) {
-    return new WrappingStrategy(wrap) {
-      @Override
-      protected boolean shouldWrap(final IElementType type) {
-        return type != ElementType.COMMA && type != ElementType.SEMICOLON;
-      }
-    };
-  }
+	public static WrappingStrategy createDoNotWrapCommaStrategy(Wrap wrap)
+	{
+		return new WrappingStrategy(wrap)
+		{
+			@Override
+			protected boolean shouldWrap(final IElementType type)
+			{
+				return type != JavaTokenType.COMMA && type != JavaTokenType.SEMICOLON;
+			}
+		};
+	}
 
-  private final Wrap myWrap;
+	private final Wrap myWrap;
 
-  public WrappingStrategy(final Wrap wrap) {
-    myWrap = wrap;
-  }
+	public WrappingStrategy(final Wrap wrap)
+	{
+		myWrap = wrap;
+	}
 
-  public Wrap getWrap(IElementType type) {
-    if (shouldWrap(type)) {
-      return myWrap;
-    } else {
-      return null;
-    }
-  }
+	public Wrap getWrap(IElementType type)
+	{
+		if(shouldWrap(type))
+		{
+			return myWrap;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-  protected abstract boolean shouldWrap(final IElementType type);
+	protected abstract boolean shouldWrap(final IElementType type);
 }

@@ -15,17 +15,22 @@
  */
 package com.siyeh.ig.controlflow;
 
-import com.intellij.psi.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiBinaryExpression;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiParenthesizedExpression;
+import com.intellij.psi.PsiPolyadicExpression;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class DuplicateBooleanBranchInspection extends BaseInspection {
 
@@ -81,7 +86,7 @@ public class DuplicateBooleanBranchInspection extends BaseInspection {
             continue;
           }
           final PsiExpression testCondition = conditionArray[j];
-          final boolean areEquivalent = EquivalenceChecker.expressionsAreEquivalent(condition, testCondition);
+          final boolean areEquivalent = EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(condition, testCondition);
           if (areEquivalent) {
             registerError(testCondition);
             if (!matched[i]) {

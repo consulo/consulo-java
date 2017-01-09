@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,34 +21,50 @@ package com.intellij.psi.impl.java.stubs;
 
 import com.intellij.psi.*;
 
-public abstract class StubPsiFactory {
-  public abstract PsiClass createClass(PsiClassStub stub);
+public abstract class StubPsiFactory
+{
+	public abstract PsiClass createClass(PsiClassStub stub);
 
-  public abstract PsiAnnotation createAnnotation(PsiAnnotationStub stub);
+	public abstract PsiAnnotation createAnnotation(PsiAnnotationStub stub);
 
-  public abstract PsiClassInitializer createClassInitializer(PsiClassInitializerStub stub);
+	public abstract PsiClassInitializer createClassInitializer(PsiClassInitializerStub stub);
 
-  public abstract PsiReferenceList createClassReferenceList(PsiClassReferenceListStub stub);
+	public abstract PsiReferenceList createClassReferenceList(PsiClassReferenceListStub stub);
 
-  public abstract PsiField createField(PsiFieldStub stub);
+	public abstract PsiField createField(PsiFieldStub stub);
 
-  public abstract PsiImportList createImportList(PsiImportListStub stub);
+	public abstract PsiImportList createImportList(PsiImportListStub stub);
 
-  public abstract PsiImportStatementBase createImportStatement(PsiImportStatementStub stub);
+	public abstract PsiImportStatementBase createImportStatement(PsiImportStatementStub stub);
 
-  public abstract PsiMethod createMethod(PsiMethodStub stub);
+	public abstract PsiMethod createMethod(PsiMethodStub stub);
 
-  public abstract PsiModifierList createModifierList(PsiModifierListStub stub);
+	public abstract PsiModifierList createModifierList(PsiModifierListStub stub);
 
-  public abstract PsiParameter createParameter(PsiParameterStub stub);
+	public abstract PsiParameter createParameter(PsiParameterStub stub);
 
-  public abstract PsiParameterList createParameterList(PsiParameterListStub stub);
+	public abstract PsiParameterList createParameterList(PsiParameterListStub stub);
 
-  public abstract PsiTypeParameter createTypeParameter(PsiTypeParameterStub stub);
+	public abstract PsiTypeParameter createTypeParameter(PsiTypeParameterStub stub);
 
-  public abstract PsiTypeParameterList createTypeParameterList(PsiTypeParameterListStub stub);
+	public abstract PsiTypeParameterList createTypeParameterList(PsiTypeParameterListStub stub);
 
-  public abstract PsiAnnotationParameterList createAnnotationParameterList(PsiAnnotationParameterListStub stub);
+	public abstract PsiAnnotationParameterList createAnnotationParameterList(PsiAnnotationParameterListStub stub);
 
-  public abstract PsiNameValuePair createNameValuePair(PsiNameValuePairStub stub);
+	public abstract PsiNameValuePair createNameValuePair(PsiNameValuePairStub stub);
+
+	public PsiJavaModule createModule(PsiJavaModuleStub stub)
+	{
+		return null;
+	}
+
+	public PsiRequiresStatement createRequiresStatement(PsiRequiresStatementStub stub)
+	{
+		return null;
+	}
+
+	public PsiExportsStatement createExportsStatement(PsiExportsStatementStub stub)
+	{
+		return null;
+	}
 }

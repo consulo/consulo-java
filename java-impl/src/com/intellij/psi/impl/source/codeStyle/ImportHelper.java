@@ -123,7 +123,7 @@ public class ImportHelper
 			PsiImportList newImportList = dummyFile.getImportList();
 			PsiImportList result = (PsiImportList) newImportList.copy();
 			PsiImportList oldList = file.getImportList();
-			if(oldList.isReplaceEquivalent(result))
+			if(oldList != null && oldList.isReplaceEquivalent(result))
 			{
 				return null;
 			}

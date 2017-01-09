@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,9 +41,13 @@ import com.intellij.openapi.vfs.VirtualFileWithId;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiInvalidElementAccessException;
+import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.impl.PsiManagerEx;
+import com.intellij.psi.impl.java.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex;
+import com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex;
+import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -210,5 +215,28 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable
 			myNontrivialPackagePrefixes = names;
 		}
 		return names;
+	}
+
+	@NotNull
+	@Override
+	public Collection<PsiJavaModule> findModules(@NotNull String moduleName, @NotNull GlobalSearchScope scope)
+	{
+		Collection<PsiJavaModule> named = JavaModuleNameIndex.getInstance().get(moduleName, myManager.getProject(), scope);
+		if(!named.isEmpty())
+		{
+			return named;
+		}
+
+		Collection<VirtualFile> jars = JavaAutoModuleNameIndex.getFilesByKey(moduleName, scope);
+		if(!jars.isEmpty())
+		{
+			List<PsiJavaModule> automatic = jars.stream().map(f -> LightJavaModule.getModule(myManager, f)).collect(Collectors.toList());
+			if(!automatic.isEmpty())
+			{
+				return automatic;
+			}
+		}
+
+		return Collections.emptyList();
 	}
 }

@@ -20,7 +20,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -31,8 +31,11 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.newvfs.FileAttribute;
 import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.io.DataInputOutputUtil;
 import com.intellij.util.messages.MessageBus;
+import consulo.java.module.extension.JavaModuleExtension;
 
 /**
  * @author Gregory.Shrago
@@ -145,5 +148,11 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 	@Override
 	public void afterRootsChanged(@NotNull Project project)
 	{
+	}
+
+	@Nullable
+	public String getInconsistencyLanguageLevelMessage(@NotNull String message, @NotNull PsiElement element, @NotNull LanguageLevel level, @NotNull PsiFile file)
+	{
+		return null;
 	}
 }

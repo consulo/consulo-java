@@ -27,7 +27,9 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.org.objectweb.asm.Attribute;
 import org.jetbrains.org.objectweb.asm.ClassReader;
+import org.jetbrains.org.objectweb.asm.Opcodes;
 import com.intellij.diagnostic.PluginException;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -46,10 +48,10 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DefaultProjectFactory;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.ui.Queryable;
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.ModificationTracker;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
@@ -80,8 +82,11 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.BitUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.cls.ClsFormatException;
+import consulo.annotations.RequiredReadAction;
+import consulo.annotations.RequiredWriteAction;
 
 public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub> implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx, Queryable, PsiClassOwnerEx, PsiCompiledFile
 {
@@ -180,6 +185,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		return myIsForDecompiling;
 	}
 
+	@RequiredReadAction
 	@Override
 	@NotNull
 	public String getName()
@@ -187,6 +193,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		return getVirtualFile().getName();
 	}
 
+	@RequiredReadAction
 	@Override
 	@NotNull
 	public PsiElement[] getChildren()
@@ -300,6 +307,16 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		return level;
 	}
 
+	@RequiredReadAction
+	@Nullable
+	@Override
+	public PsiJavaModule getModuleDeclaration()
+	{
+		PsiClassHolderFileStub<?> stub = getStub();
+		return stub instanceof PsiJavaFileStub ? ((PsiJavaFileStub) stub).getModule() : null;
+	}
+
+	@RequiredWriteAction
 	@Override
 	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
 	{
@@ -534,6 +551,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		return true;
 	}
 
+	@RequiredReadAction
 	@Override
 	@NotNull
 	public StubTree getStubTree()
@@ -573,6 +591,7 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		return stubTree;
 	}
 
+	@RequiredReadAction
 	@Override
 	public ASTNode findTreeForStub(final StubTree tree, final StubElement<?> stub)
 	{
@@ -671,33 +690,49 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	@Nullable
 	public static PsiJavaFileStub buildFileStub(@NotNull VirtualFile file, @NotNull byte[] bytes) throws ClsFormatException
 	{
-		if(ClassFileViewProvider.isInnerClass(file))
-		{
-			return null;
-		}
-
 		try
 		{
-			PsiJavaFileStubImpl stub = new PsiJavaFileStubImpl("do.not.know.yet", true);
+			if(ClassFileViewProvider.isInnerClass(file, bytes))
+			{
+				return null;
+			}
+
+			ClassReader reader = new ClassReader(bytes);
 			String className = file.getNameWithoutExtension();
-			StubBuildingVisitor<VirtualFile> visitor = new StubBuildingVisitor<VirtualFile>(file, STRATEGY, stub, 0, className);
-			try
+			String internalName = reader.getClassName();
+			boolean module = internalName.endsWith("/module-info") && BitUtil.isSet(reader.getAccess(), Opcodes.ACC_MODULE);
+			String packageName = getPackageName(internalName);
+			LanguageLevel level = ClsParsingUtil.getLanguageLevelByVersion(reader.readShort(6));
+
+			if(module)
 			{
-				new ClassReader(bytes).accept(visitor, ClassReader.SKIP_FRAMES);
+				PsiJavaFileStub stub = new PsiJavaFileStubImpl(null, "", level, true);
+				ModuleStubBuildingVisitor visitor = new ModuleStubBuildingVisitor(stub, packageName);
+				reader.accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
+				if(visitor.getResult() != null)
+				{
+					return stub;
+				}
 			}
-			catch(OutOfOrderInnerClassException e)
+			else
 			{
-				return null;
+				PsiJavaFileStub stub = new PsiJavaFileStubImpl(null, packageName, level, true);
+				try
+				{
+					FileContentPair source = new FileContentPair(file, bytes);
+					StubBuildingVisitor<FileContentPair> visitor = new StubBuildingVisitor<>(source, STRATEGY, stub, 0, className);
+					reader.accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
+					if(visitor.getResult() != null)
+					{
+						return stub;
+					}
+				}
+				catch(OutOfOrderInnerClassException ignored)
+				{
+				}
 			}
 
-			PsiClassStub<?> result = visitor.getResult();
-			if(result == null)
-			{
-				return null;
-			}
-
-			stub.setPackageName(getPackageName(result));
-			return stub;
+			return null;
 		}
 		catch(Exception e)
 		{
@@ -705,36 +740,62 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 		}
 	}
 
-	private static final InnerClassSourceStrategy<VirtualFile> STRATEGY = new InnerClassSourceStrategy<VirtualFile>()
+	private static String getPackageName(String internalName)
+	{
+		int p = internalName.lastIndexOf('/');
+		return p > 0 ? internalName.substring(0, p).replace('/', '.') : "";
+	}
+
+	static class FileContentPair extends Pair<VirtualFile, byte[]>
+	{
+		public FileContentPair(@NotNull VirtualFile file, @NotNull byte[] content)
+		{
+			super(file, content);
+		}
+
+		@NotNull
+		public byte[] getContent()
+		{
+			return second;
+		}
+
+		@Override
+		public String toString()
+		{
+			return first.toString();
+		}
+	}
+
+	private static final InnerClassSourceStrategy<FileContentPair> STRATEGY = new InnerClassSourceStrategy<FileContentPair>()
 	{
 		@Nullable
 		@Override
-		public VirtualFile findInnerClass(String innerName, VirtualFile outerClass)
+		public FileContentPair findInnerClass(String innerName, FileContentPair outerClass)
 		{
-			String baseName = outerClass.getNameWithoutExtension();
-			VirtualFile dir = outerClass.getParent();
+			String baseName = outerClass.first.getNameWithoutExtension();
+			VirtualFile dir = outerClass.first.getParent();
 			assert dir != null : outerClass;
-			return dir.findChild(baseName + "$" + innerName + ".class");
+			VirtualFile innerClass = dir.findChild(baseName + '$' + innerName + ".class");
+			if(innerClass != null)
+			{
+				try
+				{
+					byte[] bytes = innerClass.contentsToByteArray(false);
+					return new FileContentPair(innerClass, bytes);
+				}
+				catch(IOException ignored)
+				{
+				}
+			}
+			return null;
 		}
 
 		@Override
-		public void accept(VirtualFile innerClass, StubBuildingVisitor<VirtualFile> visitor)
+		public void accept(FileContentPair innerClass, StubBuildingVisitor<FileContentPair> visitor)
 		{
-			try
-			{
-				byte[] bytes = innerClass.contentsToByteArray();
-				new ClassReader(bytes).accept(visitor, ClassReader.SKIP_FRAMES);
-			}
-			catch(IOException ignored)
-			{
-			}
+			new ClassReader(innerClass.second).accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
 		}
 	};
 
-	private static String getPackageName(@NotNull PsiClassStub<?> result)
-	{
-		String fqn = result.getQualifiedName();
-		String shortName = result.getName();
-		return fqn == null || Comparing.equal(shortName, fqn) ? "" : fqn.substring(0, fqn.lastIndexOf('.'));
-	}
+	public static final Attribute[] EMPTY_ATTRIBUTES = new Attribute[0];
 }

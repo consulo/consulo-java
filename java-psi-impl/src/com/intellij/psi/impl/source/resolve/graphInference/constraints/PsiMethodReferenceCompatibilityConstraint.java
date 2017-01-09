@@ -39,7 +39,7 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class PsiMethodReferenceCompatibilityConstraint implements ConstraintFormula
 {
-	private static final Logger LOG = Logger.getInstance(PsiMethodReferenceCompatibilityConstraint.class);
+	private static final Logger LOG = Logger.getInstance("#" + PsiMethodReferenceCompatibilityConstraint.class.getName());
 	private final PsiMethodReferenceExpression myExpression;
 	private PsiType myT;
 
@@ -84,7 +84,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 			final PsiClass applicableMemberContainingClass = applicableMember.getContainingClass();
 			final PsiClass containingClass = qualifierResolveResult.getContainingClass();
 
-			PsiSubstitutor psiSubstitutor = getSubstitutor(signature, qualifierResolveResult, applicableMember, applicableMemberContainingClass);
+			PsiSubstitutor psiSubstitutor = getSubstitutor(signature, qualifierResolveResult, applicableMember, applicableMemberContainingClass, myExpression);
 
 			int idx = 0;
 			for(PsiTypeParameter param : ((PsiTypeParameterListOwner) applicableMember).getTypeParameters())
@@ -106,16 +106,16 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 				}
 				for(int i = 1; i < targetParameters.length; i++)
 				{
-					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables(psiSubstitutor.substitute(parameters[i - 1].getType())),
-							PsiUtil.captureToplevelWildcards(signature.getParameterTypes()[i], myExpression)));
+					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables(psiSubstitutor.substitute(parameters[i - 1].getType())), PsiUtil.captureToplevelWildcards
+							(signature.getParameterTypes()[i], myExpression)));
 				}
 			}
 			else if(targetParameters.length == parameters.length)
 			{
 				for(int i = 0; i < targetParameters.length; i++)
 				{
-					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables(psiSubstitutor.substitute(parameters[i].getType())),
-							PsiUtil.captureToplevelWildcards(signature.getParameterTypes()[i], myExpression)));
+					constraints.add(new TypeCompatibilityConstraint(session.substituteWithInferenceVariables(psiSubstitutor.substitute(parameters[i].getType())), PsiUtil.captureToplevelWildcards
+							(signature.getParameterTypes()[i], myExpression)));
 				}
 			}
 			else
@@ -198,7 +198,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 			final PsiType referencedMethodReturnType;
 			final PsiClass containingClass = method.getContainingClass();
 			LOG.assertTrue(containingClass != null, method);
-			PsiSubstitutor psiSubstitutor = getSubstitutor(signature, qualifierResolveResult, method, containingClass);
+			PsiSubstitutor psiSubstitutor = getSubstitutor(signature, qualifierResolveResult, method, containingClass, myExpression);
 
 			if(method.isConstructor())
 			{
@@ -220,8 +220,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 				LOG.assertTrue(interfaceClass != null);
 				if(PsiPolyExpressionUtil.mentionsTypeParameters(referencedMethodReturnType, ContainerUtil.newHashSet(method.getTypeParameters())))
 				{
-					session.registerSiteSubstitutor(psiSubstitutor);
-					session.initBounds(myExpression, method.getTypeParameters());
+					session.initBounds(myExpression, psiSubstitutor, method.getTypeParameters());
 					//the constraint reduces to the bound set B3 which would be used to determine the method reference's invocation type
 					//when targeting the return type of the function type, as defined in 18.5.2.
 					session.collectApplicabilityConstraints(myExpression, ((MethodCandidateInfo) resolve), groundTargetType);
@@ -257,7 +256,11 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 		return true;
 	}
 
-	private PsiSubstitutor getSubstitutor(MethodSignature signature, PsiMethodReferenceUtil.QualifierResolveResult qualifierResolveResult, PsiMember member, @Nullable PsiClass containingClass)
+	public static PsiSubstitutor getSubstitutor(MethodSignature signature,
+			PsiMethodReferenceUtil.QualifierResolveResult qualifierResolveResult,
+			PsiMember member,
+			@Nullable PsiClass containingClass,
+			final PsiMethodReferenceExpression methodReferenceExpression)
 	{
 		final PsiClass qContainingClass = qualifierResolveResult.getContainingClass();
 		PsiSubstitutor psiSubstitutor = qualifierResolveResult.getSubstitutor();
@@ -268,9 +271,9 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 			// otherwise, the type to search is the same as the type of the first search. Again, the type arguments, if any, are given by the method reference.
 			if(PsiUtil.isRawSubstitutor(qContainingClass, psiSubstitutor))
 			{
-				if(member instanceof PsiMethod && PsiMethodReferenceUtil.isSecondSearchPossible(signature.getParameterTypes(), qualifierResolveResult, myExpression))
+				if(member instanceof PsiMethod && PsiMethodReferenceUtil.isSecondSearchPossible(signature.getParameterTypes(), qualifierResolveResult, methodReferenceExpression))
 				{
-					final PsiType pType = PsiUtil.captureToplevelWildcards(signature.getParameterTypes()[0], myExpression);
+					final PsiType pType = PsiUtil.captureToplevelWildcards(signature.getParameterTypes()[0], methodReferenceExpression);
 					psiSubstitutor = getParameterizedTypeSubstitutor(qContainingClass, pType);
 				}
 				else if(member instanceof PsiMethod && ((PsiMethod) member).isConstructor() || member instanceof PsiClass)
@@ -279,12 +282,12 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
 					//If ClassType is a raw type, but is not a non-static member type of a raw type,
 					//the candidate notional member methods are those specified in §15.9.3 for a class instance creation expression that uses <>
 					//to elide the type arguments to a class.
-					final PsiResolveHelper helper = JavaPsiFacade.getInstance(myExpression.getProject()).getResolveHelper();
+					final PsiResolveHelper helper = JavaPsiFacade.getInstance(methodReferenceExpression.getProject()).getResolveHelper();
 					final PsiType[] paramTypes = member instanceof PsiMethod ? ((PsiMethod) member).getSignature(PsiSubstitutor.EMPTY).getParameterTypes() : PsiType.EMPTY_ARRAY;
-					LOG.assertTrue(paramTypes.length == signature.getParameterTypes().length, "expr: " + myExpression + "; " +
+					LOG.assertTrue(paramTypes.length == signature.getParameterTypes().length, "expr: " + methodReferenceExpression + "; " +
 							paramTypes.length + "; " +
 							Arrays.toString(signature.getParameterTypes()));
-					psiSubstitutor = helper.inferTypeArguments(qContainingClass.getTypeParameters(), paramTypes, signature.getParameterTypes(), PsiUtil.getLanguageLevel(myExpression));
+					psiSubstitutor = helper.inferTypeArguments(qContainingClass.getTypeParameters(), paramTypes, signature.getParameterTypes(), PsiUtil.getLanguageLevel(methodReferenceExpression));
 				}
 				else
 				{

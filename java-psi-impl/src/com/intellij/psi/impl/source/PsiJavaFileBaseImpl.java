@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
@@ -61,6 +62,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import com.intellij.util.indexing.IndexingDataKeys;
+import consulo.annotations.RequiredReadAction;
 import consulo.psi.PsiPackage;
 
 public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJavaFile
@@ -68,17 +70,13 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiJavaFileBaseImpl");
 	@NonNls
 	private static final String[] IMPLICIT_IMPORTS = {CommonClassNames.DEFAULT_PACKAGE};
-	private final CachedValue<MostlySingularMultiMap<String, SymbolCollectingProcessor.ResultWithContext>>
-			myResolveCache;
+	private final CachedValue<MostlySingularMultiMap<String, SymbolCollectingProcessor.ResultWithContext>> myResolveCache;
 	private volatile String myPackageName;
 
-	protected PsiJavaFileBaseImpl(IElementType elementType,
-			IElementType contentElementType,
-			FileViewProvider viewProvider)
+	protected PsiJavaFileBaseImpl(IElementType elementType, IElementType contentElementType, FileViewProvider viewProvider)
 	{
 		super(elementType, contentElementType, viewProvider);
-		myResolveCache = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new MyCacheBuilder
-				(this), false);
+		myResolveCache = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new MyCacheBuilder(this), false);
 	}
 
 	@Override
@@ -167,21 +165,26 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 	}
 
 	@Override
-	@NotNull
+	@Nullable
 	public PsiImportList getImportList()
 	{
-		StubElement<?> stub = getStub();
+		StubElement<?> stub = getGreenStub();
 		if(stub != null)
 		{
-			PsiImportList[] nodes = stub.getChildrenByType(JavaStubElementTypes.IMPORT_LIST,
-					PsiImportList.ARRAY_FACTORY);
-			assert nodes.length == 1 : stub + "; " + stub.getChildrenStubs();
-			return nodes[0];
+			PsiImportList[] nodes = stub.getChildrenByType(JavaStubElementTypes.IMPORT_LIST, PsiImportList.ARRAY_FACTORY);
+			if(nodes.length == 1)
+			{
+				return nodes[0];
+			}
+			if(nodes.length == 0)
+			{
+				return null;
+			}
+			reportStubAstMismatch(stub + "; " + stub.getChildrenStubs(), getStubTree(), PsiDocumentManager.getInstance(getProject()).getCachedDocument(this));
 		}
 
 		ASTNode node = calcTreeElement().findChildByType(JavaElementType.IMPORT_LIST);
-		assert node != null : getFileType() + ", " + getName();
-		return SourceTreeToPsiMap.treeToPsiNotNull(node);
+		return (PsiImportList) SourceTreeToPsiMap.treeElementToPsi(node);
 	}
 
 	@Override
@@ -295,8 +298,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 		@Override
 		public void handleEvent(final Event event, final Object associated)
 		{
-			if(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT.equals(event) && associated instanceof
-					PsiImportStaticStatement)
+			if(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT.equals(event) && associated instanceof PsiImportStaticStatement)
 			{
 				final PsiImportStaticStatement importStaticStatement = (PsiImportStaticStatement) associated;
 				myIsProcessingOnDemand = importStaticStatement.isOnDemand();
@@ -311,8 +313,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 		@Override
 		public boolean execute(@NotNull final PsiElement element, final ResolveState state)
 		{
-			if(element instanceof PsiModifierListOwner && ((PsiModifierListOwner) element).hasModifierProperty
-					(PsiModifier.STATIC))
+			if(element instanceof PsiModifierListOwner && ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC))
 			{
 				if(element instanceof PsiNamedElement && myIsProcessingOnDemand)
 				{
@@ -332,22 +333,17 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 	}
 
 	@Override
-	public boolean processDeclarations(@NotNull final PsiScopeProcessor processor,
-			@NotNull final ResolveState state,
-			PsiElement lastParent,
-			@NotNull PsiElement place)
+	public boolean processDeclarations(@NotNull final PsiScopeProcessor processor, @NotNull final ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
 	{
 		assert isValid();
 
 		if(processor instanceof ClassResolverProcessor &&
 				isPhysical() &&
-				(getUserData(PsiFileEx.BATCH_REFERENCE_PROCESSING) == Boolean.TRUE || myResolveCache.hasUpToDateValue
-						()))
+				(getUserData(PsiFileEx.BATCH_REFERENCE_PROCESSING) == Boolean.TRUE || myResolveCache.hasUpToDateValue()))
 		{
 			final ClassResolverProcessor hint = (ClassResolverProcessor) processor;
 			String name = hint.getName(state);
-			MostlySingularMultiMap<String, SymbolCollectingProcessor.ResultWithContext> cache = myResolveCache
-					.getValue();
+			MostlySingularMultiMap<String, SymbolCollectingProcessor.ResultWithContext> cache = myResolveCache.getValue();
 			MyResolveCacheProcessor cacheProcessor = new MyResolveCacheProcessor(processor, state);
 			return name != null ? cache.processForKey(name, cacheProcessor) : cache.processAllValues(cacheProcessor);
 		}
@@ -355,10 +351,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 		return processDeclarationsNoGuess(processor, state, lastParent, place);
 	}
 
-	private boolean processDeclarationsNoGuess(PsiScopeProcessor processor,
-			@NotNull ResolveState state,
-			PsiElement lastParent,
-			PsiElement place)
+	private boolean processDeclarationsNoGuess(PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, PsiElement place)
 	{
 		processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 		final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
@@ -400,8 +393,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 						final PsiClass containingClass = ((PsiClass) resolved).getContainingClass();
 						if(containingClass != null && containingClass.hasTypeParameters())
 						{
-							if(!processor.execute(resolved, state.put(PsiSubstitutor.KEY,
-									createRawSubstitutor(containingClass))))
+							if(!processor.execute(resolved, state.put(PsiSubstitutor.KEY, createRawSubstitutor(containingClass))))
 
 							{
 								return false;
@@ -417,8 +409,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 			processor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT, null);
 
 			// check in current package
-			final PsiPackage aPackage = JavaPsiFacade.getInstance(myManager.getProject()).findPackage(getPackageName
-					());
+			final PsiPackage aPackage = JavaPsiFacade.getInstance(myManager.getProject()).findPackage(getPackageName());
 			if(aPackage != null)
 			{
 				if(!aPackage.processDeclarations(processor, state, null, place))
@@ -460,8 +451,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 					final JavaResolveResult[] results = reference.multiResolve(false);
 					if(results.length > 0)
 					{
-						staticImportProcessor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT,
-								importStaticStatement);
+						staticImportProcessor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT, importStaticStatement);
 						for(JavaResolveResult result : results)
 						{
 							if(!staticImportProcessor.execute(result.getElement(), state))
@@ -483,8 +473,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 				final PsiClass targetElement = importStaticStatement.resolveTargetClass();
 				if(targetElement != null)
 				{
-					staticImportProcessor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT,
-							importStaticStatement);
+					staticImportProcessor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT, importStaticStatement);
 					if(!targetElement.processDeclarations(staticImportProcessor, state, lastParent, place))
 					{
 						return false;
@@ -520,10 +509,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 		return JavaPsiFacade.getElementFactory(containingClass.getProject()).createRawSubstitutor(containingClass);
 	}
 
-	private static boolean processOnDemandTarget(PsiElement target,
-			PsiScopeProcessor processor,
-			ResolveState substitutor,
-			PsiElement place)
+	private static boolean processOnDemandTarget(PsiElement target, PsiScopeProcessor processor, ResolveState substitutor, PsiElement place)
 	{
 		if(target instanceof PsiPackage)
 		{
@@ -581,8 +567,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 		return JavaCodeStyleManager.getInstance(getProject()).addImport(this, aClass);
 	}
 
-	private static final NotNullLazyKey<LanguageLevel, PsiJavaFileBaseImpl> LANGUAGE_LEVEL_KEY = NotNullLazyKey.create
-			("LANGUAGE_LEVEL", new NotNullFunction<PsiJavaFileBaseImpl, LanguageLevel>()
+	private static final NotNullLazyKey<LanguageLevel, PsiJavaFileBaseImpl> LANGUAGE_LEVEL_KEY = NotNullLazyKey.create("LANGUAGE_LEVEL", new NotNullFunction<PsiJavaFileBaseImpl, LanguageLevel>()
 	{
 		@Override
 		@NotNull
@@ -591,6 +576,14 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 			return file.getLanguageLevelInner();
 		}
 	});
+
+	@RequiredReadAction
+	@Nullable
+	@Override
+	public PsiJavaModule getModuleDeclaration()
+	{
+		return null;
+	}
 
 	@Override
 	@NotNull
@@ -651,8 +644,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 				}
 			}
 
-			final LanguageLevel classesLanguageLevel = JavaPsiImplementationHelper.getInstance(project)
-					.getClassesLanguageLevel(virtualFile);
+			final LanguageLevel classesLanguageLevel = JavaPsiImplementationHelper.getInstance(project).getClassesLanguageLevel(virtualFile);
 			if(classesLanguageLevel != null)
 			{
 				return classesLanguageLevel;
@@ -661,8 +653,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 		return LanguageLevel.HIGHEST;
 	}
 
-	private static class MyCacheBuilder implements CachedValueProvider<MostlySingularMultiMap<String,
-			SymbolCollectingProcessor.ResultWithContext>>
+	private static class MyCacheBuilder implements CachedValueProvider<MostlySingularMultiMap<String, SymbolCollectingProcessor.ResultWithContext>>
 	{
 		private final PsiJavaFileBaseImpl myFile;
 
@@ -704,8 +695,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 				final PsiClass containingClass = ((PsiClass) element).getContainingClass();
 				if(containingClass != null && containingClass.hasTypeParameters())
 				{
-					return myProcessor.execute(element, myState.put(PsiSubstitutor.KEY,
-							createRawSubstitutor(containingClass)));
+					return myProcessor.execute(element, myState.put(PsiSubstitutor.KEY, createRawSubstitutor(containingClass)));
 				}
 			}
 

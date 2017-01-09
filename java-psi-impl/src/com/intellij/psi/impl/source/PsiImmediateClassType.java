@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,12 +89,12 @@ public class PsiImmediateClassType extends PsiClassType.Stub
 
 	public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor)
 	{
-		this(aClass, substitutor, null, PsiAnnotation.EMPTY_ARRAY);
+		this(aClass, substitutor, null, TypeAnnotationProvider.EMPTY);
 	}
 
 	public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor, @Nullable LanguageLevel level)
 	{
-		this(aClass, substitutor, level, PsiAnnotation.EMPTY_ARRAY);
+		this(aClass, substitutor, level, TypeAnnotationProvider.EMPTY);
 	}
 
 	public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor, @Nullable LanguageLevel level, @NotNull PsiAnnotation... annotations)
@@ -106,9 +106,9 @@ public class PsiImmediateClassType extends PsiClassType.Stub
 		assert substitutor.isValid();
 	}
 
-	public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor, @Nullable LanguageLevel level, @NotNull TypeAnnotationProvider annotations)
+	public PsiImmediateClassType(@NotNull PsiClass aClass, @NotNull PsiSubstitutor substitutor, @Nullable LanguageLevel level, @NotNull TypeAnnotationProvider provider)
 	{
-		super(level, annotations);
+		super(level, provider);
 		myClass = aClass;
 		myManager = aClass.getManager();
 		mySubstitutor = substitutor;
@@ -141,10 +141,11 @@ public class PsiImmediateClassType extends PsiClassType.Stub
 		for(PsiTypeParameter parameter : parameters)
 		{
 			PsiType substituted = mySubstitutor.substitute(parameter);
-			if(substituted != null)
+			if(substituted == null)
 			{
-				lst.add(substituted);
+				return PsiType.EMPTY_ARRAY;
 			}
+			lst.add(substituted);
 		}
 		return lst.toArray(createArray(lst.size()));
 	}
@@ -165,11 +166,11 @@ public class PsiImmediateClassType extends PsiClassType.Stub
 
 	@NotNull
 	@Override
-	public String getPresentableText()
+	public String getPresentableText(boolean annotated)
 	{
 		if(myPresentableText == null)
 		{
-			myPresentableText = getText(TextType.PRESENTABLE, true);
+			myPresentableText = getText(TextType.PRESENTABLE, annotated);
 		}
 		return myPresentableText;
 	}

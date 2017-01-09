@@ -15,97 +15,128 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.formatting.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.impl.source.codeStyle.ShiftIndentInsideHelper;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeafBlock implements ASTBlock{
-  private int myStartOffset = -1;
-  private final ASTNode myNode;
-  private final Wrap myWrap;
-  private final Alignment myAlignment;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.formatting.ASTBlock;
+import com.intellij.formatting.Alignment;
+import com.intellij.formatting.Block;
+import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.Indent;
+import com.intellij.formatting.Spacing;
+import com.intellij.formatting.Wrap;
+import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.impl.source.codeStyle.ShiftIndentInsideHelper;
 
-  private static final ArrayList<Block> EMPTY_SUB_BLOCKS = new ArrayList<Block>();
-  private final Indent myIndent;
+public class LeafBlock implements ASTBlock
+{
+	private int myStartOffset = -1;
+	private final ASTNode myNode;
+	private final Wrap myWrap;
+	private final Alignment myAlignment;
 
-  public LeafBlock(final ASTNode node,
-                   final Wrap wrap,
-                   final Alignment alignment,
-                   Indent indent)
-  {
-    myNode = node;
-    myWrap = wrap;
-    myAlignment = alignment;
-    myIndent = indent;
-  }
+	private static final ArrayList<Block> EMPTY_SUB_BLOCKS = new ArrayList<>();
+	private final Indent myIndent;
 
-  @Override
-  public ASTNode getNode() {
-    return myNode;
-  }
+	public LeafBlock(final ASTNode node, final Wrap wrap, final Alignment alignment, Indent indent)
+	{
+		myNode = node;
+		myWrap = wrap;
+		myAlignment = alignment;
+		myIndent = indent;
+	}
 
-  @Override
-  @NotNull
-  public TextRange getTextRange() {
-    if (myStartOffset != -1) {
-      return new TextRange(myStartOffset, myStartOffset + myNode.getTextLength());
-    }
-    return myNode.getTextRange();
-  }
+	@Override
+	public ASTNode getNode()
+	{
+		return myNode;
+	}
 
-  @Override
-  @NotNull
-  public List<Block> getSubBlocks() {
-    return EMPTY_SUB_BLOCKS;
-  }
+	@Override
+	@NotNull
+	public TextRange getTextRange()
+	{
+		if(myStartOffset != -1)
+		{
+			return new TextRange(myStartOffset, myStartOffset + myNode.getTextLength());
+		}
+		return myNode.getTextRange();
+	}
 
-  @Override
-  public Wrap getWrap() {
-    return myWrap;
-  }
+	@Override
+	@NotNull
+	public List<Block> getSubBlocks()
+	{
+		return EMPTY_SUB_BLOCKS;
+	}
 
-  @Override
-  public Indent getIndent() {
-    return myIndent;
-  }
+	@Override
+	public Wrap getWrap()
+	{
+		return myWrap;
+	}
 
-  @Override
-  public Alignment getAlignment() {
-    return myAlignment;
-  }
+	@Override
+	public Indent getIndent()
+	{
+		return myIndent;
+	}
 
-  @Override
-  public Spacing getSpacing(Block child1, @NotNull Block child2) {
-    return null;
-  }
+	@Override
+	public Alignment getAlignment()
+	{
+		return myAlignment;
+	}
 
-  public ASTNode getTreeNode() {
-    return myNode;
-  }
+	@Override
+	public Spacing getSpacing(Block child1, @NotNull Block child2)
+	{
+		return null;
+	}
 
-  @Override
-  @NotNull
-  public ChildAttributes getChildAttributes(final int newChildIndex) {
-    return new ChildAttributes(getIndent(), null);
-  }
+	public ASTNode getTreeNode()
+	{
+		return myNode;
+	}
 
-  @Override
-  public boolean isIncomplete() {
-    return false;
-  }
+	@Override
+	@NotNull
+	public ChildAttributes getChildAttributes(final int newChildIndex)
+	{
+		return new ChildAttributes(getIndent(), null);
+	}
 
-  @Override
-  public boolean isLeaf() {
-    return ShiftIndentInsideHelper.mayShiftIndentInside(myNode);
-  }
+	@Override
+	public boolean isIncomplete()
+	{
+		return false;
+	}
 
-  public void setStartOffset(final int startOffset) {
-    myStartOffset = startOffset;
-   // if (startOffset != -1) assert startOffset == myNode.getTextRange().getStartOffset();
-  }
+	@Override
+	public boolean isLeaf()
+	{
+		return ShiftIndentInsideHelper.mayShiftIndentInside(myNode);
+	}
+
+	public void setStartOffset(final int startOffset)
+	{
+		myStartOffset = startOffset;
+		// if (startOffset != -1) assert startOffset == myNode.getTextRange().getStartOffset();
+	}
+
+	/*@Override
+	@Nullable
+	public List<TextRange> getExtraRangesToFormat(@NotNull FormattingRangesInfo info)
+	{
+		int startOffset = getTextRange().getStartOffset();
+		if(info.isOnInsertedLine(startOffset) && myNode.getTextLength() == 1 && myNode.textContains('}'))
+		{
+			ASTNode parent = myNode.getTreeParent();
+			return new NodeIndentRangesCalculator(parent).calculateExtraRanges();
+		}
+		return null;
+	}*/
+
 }

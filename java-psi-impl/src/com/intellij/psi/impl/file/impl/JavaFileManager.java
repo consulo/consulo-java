@@ -23,15 +23,26 @@ import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
 
 public interface JavaFileManager
 {
+	static JavaFileManager getInstance(@NotNull Project project)
+	{
+		return ServiceManager.getService(project, JavaFileManager.class);
+	}
+
 	@Nullable
 	PsiClass findClass(@NotNull String qName, @NotNull GlobalSearchScope scope);
 
 	PsiClass[] findClasses(@NotNull String qName, @NotNull GlobalSearchScope scope);
 
 	Collection<String> getNonTrivialPackagePrefixes();
+
+	@NotNull
+	Collection<PsiJavaModule> findModules(@NotNull String moduleName, @NotNull GlobalSearchScope scope);
 }

@@ -276,7 +276,7 @@ public class JavaMarkObjectActionHandler extends MarkObjectActionHandler {
 
   public static Color getAutoMarkupColor() {
     final EditorColorsManager manager = EditorColorsManager.getInstance();
-    final TextAttributes textAttributes = manager.getGlobalScheme().getAttributes(JavaHighlightingColors.STATIC_FIELD);
+    final TextAttributes textAttributes = manager.getGlobalScheme().getAttributes(JavaHighlightingColors.STATIC_FIELD_ATTRIBUTES);
     return textAttributes.getForegroundColor();
   }
 }

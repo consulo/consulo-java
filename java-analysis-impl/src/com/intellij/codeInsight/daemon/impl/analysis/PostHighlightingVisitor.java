@@ -33,6 +33,7 @@ import com.intellij.codeInsight.daemon.impl.FileStatusMap;
 import com.intellij.codeInsight.daemon.impl.GlobalUsageHelper;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
+import com.intellij.codeInsight.daemon.impl.JavaHighlightInfoTypes;
 import com.intellij.codeInsight.daemon.impl.UnusedSymbolUtil;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
 import com.intellij.codeInsight.intention.EmptyIntentionAction;
@@ -52,7 +53,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.TransactionGuard;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -74,9 +74,6 @@ import consulo.psi.PsiPackage;
 
 class PostHighlightingVisitor
 {
-	private static final HighlightInfoType UNUSED_IMPORT = new HighlightInfoType.HighlightInfoTypeSeverityByKey(HighlightDisplayKey.findOrRegister(UnusedImportLocalInspection.SHORT_NAME,
-			UnusedImportLocalInspection.DISPLAY_NAME), CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES);
-
 	private static final Logger LOG = Logger.getInstance(PostHighlightingVisitor.class);
 	private final LanguageLevel myLanguageLevel;
 	private final RefCountHolder myRefCountHolder;
@@ -647,7 +644,7 @@ class PostHighlightingVisitor
 	private HighlightInfo registerRedundantImport(@NotNull PsiImportStatementBase importStatement, @NotNull HighlightDisplayKey unusedImportKey)
 	{
 		String description = InspectionsBundle.message("unused.import.statement");
-		HighlightInfo info = HighlightInfo.newHighlightInfo(UNUSED_IMPORT).range(importStatement).descriptionAndTooltip(description).create();
+		HighlightInfo info = HighlightInfo.newHighlightInfo(JavaHighlightInfoTypes.UNUSED_IMPORT).range(importStatement).descriptionAndTooltip(description).create();
 
 		QuickFixAction.registerQuickFixAction(info, QuickFixFactory.getInstance().createOptimizeImportsFix(false), unusedImportKey);
 		QuickFixAction.registerQuickFixAction(info, QuickFixFactory.getInstance().createEnableOptimizeImportsOnTheFlyFix(), unusedImportKey);

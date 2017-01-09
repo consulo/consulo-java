@@ -15,6 +15,9 @@
  */
 package com.siyeh.ig.j2me;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -26,10 +29,11 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.ig.psiutils.*;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.ComparisonUtils;
+import com.siyeh.ig.psiutils.ControlFlowUtils;
+import com.siyeh.ig.psiutils.EquivalenceChecker;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
 
 public class SimplifiableIfStatementInspection extends BaseInspection {
 
@@ -387,7 +391,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
       }
       final PsiExpression thenLhs = thenExpression.getLExpression();
       final PsiExpression elseLhs = elseExpression.getLExpression();
-      return EquivalenceChecker.expressionsAreEquivalent(thenLhs, elseLhs);
+      return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs, elseLhs);
     }
 
     public static boolean isAssignment(@Nullable PsiStatement statement) {

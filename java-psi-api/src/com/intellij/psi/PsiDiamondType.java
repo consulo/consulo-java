@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
+import com.intellij.psi.util.PsiUtil;
 
 public abstract class PsiDiamondType extends PsiType
 {
 	public static final RecursionGuard ourDiamondGuard = RecursionManager.createGuard("diamondInference");
 
-	public PsiDiamondType(PsiAnnotation[] annotations)
+	public PsiDiamondType()
 	{
-		super(annotations);
+		super(TypeAnnotationProvider.EMPTY);
 	}
 
 	public abstract DiamondInferenceResult resolveInferredTypes();
@@ -64,6 +66,22 @@ public abstract class PsiDiamondType extends PsiType
 			public String getErrorMessage()
 			{
 				return "Cannot infer arguments";
+			}
+		};
+
+		public static final DiamondInferenceResult RAW_RESULT = new DiamondInferenceResult()
+		{
+			@NotNull
+			@Override
+			public PsiType[] getTypes()
+			{
+				return PsiType.EMPTY_ARRAY;
+			}
+
+			@Override
+			public String getErrorMessage()
+			{
+				return null;
 			}
 		};
 
@@ -186,4 +204,34 @@ public abstract class PsiDiamondType extends PsiType
 			return result;
 		}
 	}
+
+	public static boolean hasDiamond(PsiNewExpression expression)
+	{
+		return getDiamondType(expression) != null;
+	}
+
+	public static PsiDiamondType getDiamondType(PsiNewExpression expression)
+	{
+		if(PsiUtil.isLanguageLevel7OrHigher(expression))
+		{
+			final PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
+			if(classReference != null)
+			{
+				final PsiReferenceParameterList parameterList = classReference.getParameterList();
+				if(parameterList != null)
+				{
+					final PsiTypeElement[] parameterElements = parameterList.getTypeParameterElements();
+					if(parameterElements.length == 1)
+					{
+						final PsiType type = parameterElements[0].getType();
+						return type instanceof PsiDiamondType ? (PsiDiamondType) type : null;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Nullable
+	public abstract JavaResolveResult getStaticFactory();
 }

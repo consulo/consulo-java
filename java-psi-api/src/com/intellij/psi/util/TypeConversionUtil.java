@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
@@ -144,8 +143,7 @@ public class TypeConversionUtil
 
 		@NotNull
 		@Override
-		@NonNls
-		public String getPresentableText()
+		public String getPresentableText(boolean annotated)
 		{
 			return "FAKE TYPE";
 		}

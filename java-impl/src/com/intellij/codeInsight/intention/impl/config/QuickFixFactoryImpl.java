@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
@@ -65,11 +64,13 @@ import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.ClassKind;
+import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PropertyMemberType;
 import com.intellij.refactoring.changeSignature.ChangeSignatureGestureDetector;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
+import consulo.java.JavaQuickFixBundle;
 
 /**
  * @author cdr
@@ -768,8 +769,16 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	public IntentionAction createAddToDependencyInjectionAnnotationsFix(@NotNull Project project, @NotNull String qualifiedName, @NotNull String element)
 	{
 		final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
-		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName),
-				JavaQuickFixBundle.message("fix.unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
+		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName), JavaQuickFixBundle
+				.message("fix.unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
+	}
+
+	@NotNull
+	@Override
+	public IntentionAction createAddToImplicitlyWrittenFieldsFix(Project project, @NotNull String qualifiedName)
+	{
+		EntryPointsManagerBase entryPointsManagerBase = EntryPointsManagerBase.getInstance(project);
+		return entryPointsManagerBase.new AddImplicitlyWriteAnnotation(qualifiedName);
 	}
 
 	@NotNull
@@ -850,8 +859,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 					String afterText = file.getText();
 					if(Comparing.strEqual(beforeText, afterText))
 					{
-						LOG.error(LogMessageEx.createEvent("Import optimizer  hasn't optimized any imports", file.getViewProvider().getVirtualFile().getPath(),
-								AttachmentFactory.createAttachment(file.getViewProvider().getVirtualFile())));
+						LOG.error(LogMessageEx.createEvent("Import optimizer  hasn't optimized any imports", file.getViewProvider().getVirtualFile().getPath(), AttachmentFactory.createAttachment
+								(file.getViewProvider().getVirtualFile())));
 					}
 				}
 			}
@@ -888,6 +897,36 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 		return new WrapLongWithMathToIntExactFix(type, expression);
 	}
 
+	@NotNull
+	@Override
+	public IntentionAction createWrapWithOptionalFix(@Nullable PsiType type, @NotNull PsiExpression expression)
+	{
+		return WrapObjectWithOptionalOfNullableFix.createFix(type, expression);
+	}
+
+	@Nullable
+	@Override
+	public IntentionAction createNotIterableForEachLoopFix(@NotNull PsiExpression expression)
+	{
+		final PsiElement parent = expression.getParent();
+		if(parent instanceof PsiForeachStatement)
+		{
+			final PsiType type = expression.getType();
+			if(InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_ITERATOR))
+			{
+				return new ReplaceIteratorForEachLoopWithIteratorForLoopFix((PsiForeachStatement) parent);
+			}
+		}
+		return null;
+	}
+
+	@NotNull
+	@Override
+	public List<IntentionAction> createAddAnnotationAttributeNameFixes(@NotNull PsiNameValuePair pair)
+	{
+		return AddAnnotationAttributeNameFix.createFixes(pair);
+	}
+
 	private static boolean timeToOptimizeImports(@NotNull PsiFile file)
 	{
 		if(!CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY)
@@ -921,8 +960,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 		// ignore unresolved imports errors
 		PsiImportList importList = ((PsiJavaFile) file).getImportList();
 		final TextRange importsRange = importList == null ? TextRange.EMPTY_RANGE : importList.getTextRange();
-		boolean hasErrorsExceptUnresolvedImports = !DaemonCodeAnalyzerEx.processHighlights(document, file.getProject(), HighlightSeverity.ERROR, 0, document.getTextLength(),
-				new Processor<HighlightInfo>()
+		boolean hasErrorsExceptUnresolvedImports = !DaemonCodeAnalyzerEx.processHighlights(document, file.getProject(), HighlightSeverity.ERROR, 0, document.getTextLength(), new
+				Processor<HighlightInfo>()
 		{
 			@Override
 			public boolean process(HighlightInfo error)

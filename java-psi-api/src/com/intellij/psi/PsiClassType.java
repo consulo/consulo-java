@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,6 @@ import com.intellij.util.ArrayFactory;
  */
 public abstract class PsiClassType extends PsiType
 {
-	/**
-	 * The empty array of PSI class types which can be reused to avoid unnecessary allocations.
-	 */
 	public static final PsiClassType[] EMPTY_ARRAY = new PsiClassType[0];
 	public static final ArrayFactory<PsiClassType> ARRAY_FACTORY = new ArrayFactory<PsiClassType>()
 	{
@@ -58,10 +55,17 @@ public abstract class PsiClassType extends PsiType
 		myLanguageLevel = languageLevel;
 	}
 
-	public PsiClassType(LanguageLevel languageLevel, @NotNull TypeAnnotationProvider annotations)
+	public PsiClassType(LanguageLevel languageLevel, @NotNull TypeAnnotationProvider provider)
 	{
-		super(annotations);
+		super(provider);
 		myLanguageLevel = languageLevel;
+	}
+
+	@NotNull
+	@Override
+	public PsiClassType annotate(@NotNull TypeAnnotationProvider provider)
+	{
+		return (PsiClassType) super.annotate(provider);
 	}
 
 	/**
@@ -271,7 +275,7 @@ public abstract class PsiClassType extends PsiType
 	public abstract PsiClassType rawType();
 
 	/**
-	 * Overrides {@link com.intellij.psi.PsiType#getResolveScope()} to narrow specify @NotNull.
+	 * Overrides {@link PsiType#getResolveScope()} to narrow specify @NotNull.
 	 */
 	@Override
 	@NotNull
@@ -352,9 +356,6 @@ public abstract class PsiClassType extends PsiType
 		};
 	}
 
-	/**
-	 * Temporary class to facilitate transition to {@link #getCanonicalText(boolean)}.
-	 */
 	public static abstract class Stub extends PsiClassType
 	{
 		protected Stub(LanguageLevel languageLevel, @NotNull PsiAnnotation[] annotations)
@@ -362,10 +363,21 @@ public abstract class PsiClassType extends PsiType
 			super(languageLevel, annotations);
 		}
 
-		public Stub(LanguageLevel languageLevel, @NotNull TypeAnnotationProvider annotations)
+		protected Stub(LanguageLevel languageLevel, @NotNull TypeAnnotationProvider annotations)
 		{
 			super(languageLevel, annotations);
 		}
+
+		@NotNull
+		@Override
+		public final String getPresentableText()
+		{
+			return getPresentableText(false);
+		}
+
+		@NotNull
+		@Override
+		public abstract String getPresentableText(boolean annotated);
 
 		@NotNull
 		@Override

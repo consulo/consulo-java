@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,18 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
 import com.intellij.ide.TypePresentationService;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.lang.findUsages.LanguageFindUsages;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import consulo.java.JavaQuickFixBundle;
 
 public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement
 {
@@ -37,9 +38,19 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement
 	private final String myName;
 	private final String myFamilyName;
 
-	public VariableArrayTypeFix(@NotNull PsiArrayInitializerExpression initializer, @NotNull PsiType componentType)
+	private VariableArrayTypeFix(@NotNull PsiArrayInitializerExpression initializer, @NotNull PsiArrayType arrayType, @NotNull PsiVariable variable)
 	{
-		super(getInitializer(initializer));
+		super(initializer);
+		myTargetType = arrayType;
+		PsiExpression myNewExpression = getNewExpressionLocal(initializer);
+		myName = myTargetType.equals(variable.getType()) && myNewExpression != null ? JavaQuickFixBundle.message("change.new.operator.type.text", getNewText(myNewExpression, initializer),
+				myTargetType.getCanonicalText(), "") : JavaQuickFixBundle.message("fix.variable.type.text", formatType(variable), variable.getName(), myTargetType.getCanonicalText());
+		myFamilyName = JavaQuickFixBundle.message(myTargetType.equals(variable.getType()) && myNewExpression != null ? "change.new.operator.type.family" : "fix.variable.type.family");
+	}
+
+	@Nullable
+	public static VariableArrayTypeFix createFix(PsiArrayInitializerExpression initializer, @NotNull PsiType componentType)
+	{
 		PsiArrayType arrayType = new PsiArrayType(componentType);
 		PsiArrayInitializerExpression arrayInitializer = initializer;
 		while(arrayInitializer.getParent() instanceof PsiArrayInitializerExpression)
@@ -47,15 +58,12 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement
 			arrayInitializer = (PsiArrayInitializerExpression) arrayInitializer.getParent();
 			arrayType = new PsiArrayType(arrayType);
 		}
-		myTargetType = arrayType;
-
-		PsiExpression myNewExpression = getNewExpressionLocal(arrayInitializer);
-		PsiVariable myVariable = getVariableLocal(arrayInitializer);
-		myName = myVariable == null ? null : myTargetType.equals(myVariable.getType()) && myNewExpression != null ? JavaQuickFixBundle.message("change.new.operator.type.text",
-				getNewText(myNewExpression, arrayInitializer), myTargetType.getCanonicalText(), "") : JavaQuickFixBundle.message("fix.variable.type.text", formatType(myVariable),
-				myVariable.getName(), myTargetType.getCanonicalText());
-		myFamilyName = myVariable == null ? null : myTargetType.equals(myVariable.getType()) && myNewExpression != null ? JavaQuickFixBundle.message("change.new.operator.type.family") :
-				JavaQuickFixBundle.message("fix.variable.type.family");
+		PsiVariable variable = getVariableLocal(arrayInitializer);
+		if(variable == null)
+		{
+			return null;
+		}
+		return new VariableArrayTypeFix(arrayInitializer, arrayType, variable);
 	}
 
 	private static String formatType(@NotNull PsiVariable variable)
@@ -179,7 +187,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement
 			return;
 		}
 		/**
-		 * only for the case when in same statement with initialization
+		 only for the case when in same statement with initialization
 		 */
 		final PsiNewExpression myNewExpression = getNewExpressionLocal(myInitializer);
 
@@ -187,18 +195,10 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement
 		{
 			return;
 		}
-		final PsiElementFactory factory = JavaPsiFacade.getInstance(file.getProject()).getElementFactory();
 
 		if(!myTargetType.equals(myVariable.getType()))
 		{
-			myVariable.normalizeDeclaration();
-			myVariable.getTypeElement().replace(factory.createTypeElement(myTargetType));
-			JavaCodeStyleManager.getInstance(project).shortenClassReferences(myVariable);
-
-			if(!myVariable.getContainingFile().equals(file))
-			{
-				UndoUtil.markPsiFileForUndo(myVariable.getContainingFile());
-			}
+			WriteAction.run(() -> fixVariableType(project, file, myVariable));
 		}
 
 		if(myNewExpression != null)
@@ -208,11 +208,28 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement
 				return;
 			}
 
-			@NonNls String text = "new " + myTargetType.getCanonicalText() + "{}";
-			final PsiNewExpression newExpression = (PsiNewExpression) factory.createExpressionFromText(text, myNewExpression.getParent());
-			final PsiElement[] children = newExpression.getChildren();
-			children[children.length - 1].replace(myInitializer);
-			myNewExpression.replace(newExpression);
+			WriteAction.run(() -> fixArrayInitializer(myInitializer, myNewExpression));
 		}
+	}
+
+	private void fixVariableType(@NotNull Project project, @NotNull PsiFile file, PsiVariable myVariable)
+	{
+		myVariable.normalizeDeclaration();
+		myVariable.getTypeElement().replace(JavaPsiFacade.getElementFactory(project).createTypeElement(myTargetType));
+		JavaCodeStyleManager.getInstance(project).shortenClassReferences(myVariable);
+
+		if(!myVariable.getContainingFile().equals(file))
+		{
+			UndoUtil.markPsiFileForUndo(myVariable.getContainingFile());
+		}
+	}
+
+	private void fixArrayInitializer(PsiArrayInitializerExpression myInitializer, PsiNewExpression myNewExpression)
+	{
+		@NonNls String text = "new " + myTargetType.getCanonicalText() + "{}";
+		final PsiNewExpression newExpression = (PsiNewExpression) JavaPsiFacade.getElementFactory(myNewExpression.getProject()).createExpressionFromText(text, myNewExpression.getParent());
+		final PsiElement[] children = newExpression.getChildren();
+		children[children.length - 1].replace(myInitializer);
+		myNewExpression.replace(newExpression);
 	}
 }

@@ -36,8 +36,7 @@ import com.intellij.util.ArrayUtilRt;
  */
 public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParameterTypeInferencePolicy
 {
-	public static final ProcessCandidateParameterTypeInferencePolicy INSTANCE = new
-			ProcessCandidateParameterTypeInferencePolicy();
+	public static final ProcessCandidateParameterTypeInferencePolicy INSTANCE = new ProcessCandidateParameterTypeInferencePolicy();
 
 
 	@Override
@@ -74,8 +73,7 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 					continue;
 				}
 				final PsiSubstitutor substitutor = getSubstitutor(contextCall, expressions, i, result);
-				final Pair<PsiType, ConstraintType> constraint = inferConstraint(typeParameter, innerMethodCall, i,
-						innerReturnType, result, substitutor);
+				final Pair<PsiType, ConstraintType> constraint = inferConstraint(typeParameter, innerMethodCall, i, innerReturnType, result, substitutor);
 				if(constraint != null)
 				{
 					return constraint;
@@ -90,16 +88,12 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 		return null;
 	}
 
-	protected PsiSubstitutor getSubstitutor(PsiCallExpression contextCall,
-			PsiExpression[] expressions,
-			int i,
-			JavaResolveResult result)
+	protected PsiSubstitutor getSubstitutor(PsiCallExpression contextCall, PsiExpression[] expressions, int i, JavaResolveResult result)
 	{
 		if(result instanceof MethodCandidateInfo)
 		{
 			List<PsiExpression> leftArgs = getExpressions(expressions, i);
-			return ((MethodCandidateInfo) result).inferSubstitutorFromArgs(this,
-					leftArgs.toArray(new PsiExpression[leftArgs.size()]));
+			return ((MethodCandidateInfo) result).inferSubstitutorFromArgs(this, leftArgs.toArray(new PsiExpression[leftArgs.size()]));
 		}
 		else
 		{
@@ -136,8 +130,7 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 			if(parameter != null)
 			{
 				final PsiParameter finalParameter = parameter;
-				PsiType type = PsiResolveHelper.ourGuard.doPreventingRecursion(innerMethodCall, true,
-						new Computable<PsiType>()
+				PsiType type = PsiResolveHelper.ourGuard.doPreventingRecursion(innerMethodCall, true, new Computable<PsiType>()
 				{
 					@Override
 					public PsiType compute()
@@ -146,9 +139,8 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 					}
 				});
 				final LanguageLevel languageLevel = PsiUtil.getLanguageLevel(finalParameter);
-				final Pair<PsiType, ConstraintType> constraint = new PsiOldInferenceHelper(element.getManager())
-						.getSubstitutionForTypeParameterConstraint(typeParameter, innerReturnType, type, false,
-								languageLevel);
+				final Pair<PsiType, ConstraintType> constraint = new PsiOldInferenceHelper(element.getManager()).getSubstitutionForTypeParameterConstraint(typeParameter, innerReturnType, type,
+						false, languageLevel);
 				if(constraint != null)
 				{
 					return constraint;
@@ -159,8 +151,7 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 	}
 
 	@NotNull
-	protected JavaResolveResult[] getResults(@NotNull PsiCallExpression contextCall,
-			final int exprIdx) throws MethodProcessorSetupFailedException
+	protected JavaResolveResult[] getResults(@NotNull PsiCallExpression contextCall, final int exprIdx) throws MethodProcessorSetupFailedException
 	{
 		PsiFile containingFile = contextCall.getContainingFile();
 		final MethodCandidatesProcessor processor = new MethodCandidatesProcessor(contextCall, containingFile);

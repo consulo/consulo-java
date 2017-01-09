@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight;
 
+import gnu.trove.THashMap;
 import gnu.trove.THashSet;
 
 import java.lang.annotation.Annotation;
@@ -22,8 +23,10 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.Contract;
@@ -31,6 +34,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
@@ -39,7 +43,9 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.CommonProcessors;
+import com.intellij.util.Consumer;
+import com.intellij.util.Processor;
+import com.intellij.util.Processors;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -277,7 +283,7 @@ public class AnnotationUtil
 				else if(element instanceof PsiClass)
 				{
 					//noinspection unchecked
-					InheritanceUtil.processSupers((PsiClass) element, false, new CommonProcessors.CollectProcessor<PsiClass>((Set) result));
+					InheritanceUtil.processSupers((PsiClass) element, false, (Processor) Processors.cancelableCollectProcessor(result));
 				}
 				else if(element instanceof PsiParameter)
 				{
@@ -288,9 +294,7 @@ public class AnnotationUtil
 				//noinspection unchecked
 				list.addAll((Collection<? extends T>) result);
 
-				List<Object> dependencies = ContainerUtil.<Object>newArrayList(result);
-				dependencies.add(PsiModificationTracker.MODIFICATION_COUNT);
-				return Result.create(list, dependencies);
+				return Result.create(list, PsiModificationTracker.MODIFICATION_COUNT);
 			}
 		});
 	}
@@ -333,27 +337,45 @@ public class AnnotationUtil
 		return map.get(annotationNames);
 	}
 
-	private static void collectSuperParameters(@NotNull Set<PsiModifierListOwner> result, @NotNull PsiParameter parameter)
+	private static void collectSuperParameters(@NotNull final Set<PsiModifierListOwner> result, @NotNull PsiParameter parameter)
 	{
-		PsiElement scope = parameter.getDeclarationScope();
-		if(!(scope instanceof PsiMethod))
-		{
-			return;
-		}
-		PsiMethod method = (PsiMethod) scope;
-
 		PsiElement parent = parameter.getParent();
 		if(!(parent instanceof PsiParameterList))
 		{
 			return;
 		}
-		int index = ((PsiParameterList) parent).getParameterIndex(parameter);
-		for(PsiMethod superMethod : getSuperAnnotationOwners(method))
+		final int index = ((PsiParameterList) parent).getParameterIndex(parameter);
+		Consumer<PsiMethod> forEachSuperMethod = new Consumer<PsiMethod>()
 		{
-			PsiParameter[] superParameters = superMethod.getParameterList().getParameters();
-			if(index < superParameters.length)
+			@Override
+			public void consume(PsiMethod method)
 			{
-				result.add(superParameters[index]);
+				PsiParameter[] superParameters = method.getParameterList().getParameters();
+				if(index < superParameters.length)
+				{
+					result.add(superParameters[index]);
+				}
+			}
+		};
+
+		PsiElement scope = parent.getParent();
+		if(scope instanceof PsiLambdaExpression)
+		{
+			PsiMethod method = LambdaUtil.getFunctionalInterfaceMethod(((PsiLambdaExpression) scope).getFunctionalInterfaceType());
+			if(method != null)
+			{
+				forEachSuperMethod.consume(method);
+				for(PsiMethod superMethod : getSuperAnnotationOwners(method))
+				{
+					forEachSuperMethod.consume(superMethod);
+				}
+			}
+		}
+		else if(scope instanceof PsiMethod)
+		{
+			for(PsiMethod superMethod : getSuperAnnotationOwners((PsiMethod) scope))
+			{
+				forEachSuperMethod.consume(superMethod);
 			}
 		}
 	}
@@ -507,7 +529,7 @@ public class AnnotationUtil
 	 *
 	 * @param owner       modifier list
 	 * @param annotations annotations qualified names or patterns. Patterns can have '*' at the end
-	 * @return <code>true</code> if annotated of at least one annotation from the annotations list
+	 * @return {@code true} if annotated of at least one annotation from the annotations list
 	 */
 	@Contract("null,_ -> false")
 	public static boolean checkAnnotatedUsingPatterns(@Nullable PsiModifierListOwner owner, @NotNull Collection<String> annotations)
@@ -619,7 +641,7 @@ public class AnnotationUtil
 					}
 					if(visited.add(superClass))
 					{
-						annotations = ArrayUtil.mergeArrays(annotations, getAllAnnotations(superClass, true, visited));
+						annotations = ArrayUtil.mergeArrays(annotations, getAllAnnotations(superClass, true, visited, withInferred));
 					}
 				}
 			}
@@ -648,7 +670,7 @@ public class AnnotationUtil
 						{
 							continue;
 						}
-						annotations = ArrayUtil.mergeArrays(annotations, getAllAnnotations(superMethod, true, visited));
+						annotations = ArrayUtil.mergeArrays(annotations, getAllAnnotations(superMethod, true, visited, withInferred));
 					}
 				}
 			}
@@ -686,7 +708,7 @@ public class AnnotationUtil
 							PsiParameter[] superParameters = superMethod.getParameterList().getParameters();
 							if(index < superParameters.length)
 							{
-								annotations = ArrayUtil.mergeArrays(annotations, getAllAnnotations(superParameters[index], true, visited));
+								annotations = ArrayUtil.mergeArrays(annotations, getAllAnnotations(superParameters[index], true, visited, withInferred));
 							}
 						}
 					}
@@ -758,5 +780,141 @@ public class AnnotationUtil
 		AnnotationInvocationHandler handler = new AnnotationInvocationHandler(annotationClass, annotation);
 		@SuppressWarnings("unchecked") T t = (T) Proxy.newProxyInstance(annotationClass.getClassLoader(), new Class<?>[]{annotationClass}, handler);
 		return t;
+	}
+
+	@Nullable
+	public static PsiNameValuePair findDeclaredAttribute(@NotNull PsiAnnotation annotation, @NonNls @Nullable("null means 'value'") String attributeName)
+	{
+		if(PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.equals(attributeName))
+		{
+			attributeName = null;
+		}
+		for(PsiNameValuePair attribute : annotation.getParameterList().getAttributes())
+		{
+			@NonNls final String name = attribute.getName();
+			if(Comparing.equal(name, attributeName) || attributeName == null && PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.equals(name))
+			{
+				return attribute;
+			}
+		}
+		return null;
+	}
+
+	public static boolean equal(@Nullable PsiAnnotation a, @Nullable PsiAnnotation b)
+	{
+		if(a == null)
+		{
+			return b == null;
+		}
+		else if(b == null)
+		{
+			return false;
+		}
+		final String name = a.getQualifiedName();
+		if(name == null || !name.equals(b.getQualifiedName()))
+		{
+			return false;
+		}
+		final Map<String, PsiAnnotationMemberValue> valueMap1 = new THashMap<String, PsiAnnotationMemberValue>(2);
+		final Map<String, PsiAnnotationMemberValue> valueMap2 = new THashMap<String, PsiAnnotationMemberValue>(2);
+		if(!fillValueMap(a.getParameterList(), valueMap1) || !fillValueMap(b.getParameterList(), valueMap2) ||
+				valueMap1.size() != valueMap2.size())
+		{
+			return false;
+		}
+		for(Map.Entry<String, PsiAnnotationMemberValue> entry : valueMap1.entrySet())
+		{
+			if(!equal(entry.getValue(), valueMap2.get(entry.getKey())))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean fillValueMap(PsiAnnotationParameterList parameterList, Map<String, PsiAnnotationMemberValue> valueMap)
+	{
+		final PsiNameValuePair[] attributes1 = parameterList.getAttributes();
+		for(PsiNameValuePair attribute : attributes1)
+		{
+			final PsiReference reference = attribute.getReference();
+			if(reference == null)
+			{
+				return false;
+			}
+			final PsiElement target = reference.resolve();
+			if(!(target instanceof PsiAnnotationMethod))
+			{
+				return false;
+			}
+			final PsiAnnotationMethod annotationMethod = (PsiAnnotationMethod) target;
+			final PsiAnnotationMemberValue defaultValue = annotationMethod.getDefaultValue();
+			final PsiAnnotationMemberValue value = attribute.getValue();
+			if(equal(value, defaultValue))
+			{
+				continue;
+			}
+			final String name1 = attribute.getName();
+			valueMap.put(name1 == null ? PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME : name1, value);
+		}
+		return true;
+	}
+
+	public static boolean equal(PsiAnnotationMemberValue value1, PsiAnnotationMemberValue value2)
+	{
+		if(value1 instanceof PsiArrayInitializerMemberValue && value2 instanceof PsiArrayInitializerMemberValue)
+		{
+			final PsiAnnotationMemberValue[] initializers1 = ((PsiArrayInitializerMemberValue) value1).getInitializers();
+			final PsiAnnotationMemberValue[] initializers2 = ((PsiArrayInitializerMemberValue) value2).getInitializers();
+			if(initializers1.length != initializers2.length)
+			{
+				return false;
+			}
+			for(int i = 0; i < initializers1.length; i++)
+			{
+				if(!equal(initializers1[i], initializers2[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		if(value1 != null && value2 != null)
+		{
+			final PsiConstantEvaluationHelper constantEvaluationHelper = JavaPsiFacade.getInstance(value1.getProject()).getConstantEvaluationHelper();
+			final Object const1 = constantEvaluationHelper.computeConstantExpression(value1);
+			final Object const2 = constantEvaluationHelper.computeConstantExpression(value2);
+			return const1 != null && const1.equals(const2);
+		}
+		return false;
+	}
+
+	public static boolean equal(PsiAnnotation[] annotations1, PsiAnnotation[] annotations2)
+	{
+		final Map<String, PsiAnnotation> map1 = buildAnnotationMap(annotations1);
+		final Map<String, PsiAnnotation> map2 = buildAnnotationMap(annotations2);
+		if(map1.size() != map2.size())
+		{
+			return false;
+		}
+		for(Map.Entry<String, PsiAnnotation> entry : map1.entrySet())
+		{
+			if(!equal(entry.getValue(), map2.get(entry.getKey())))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static Map<String, PsiAnnotation> buildAnnotationMap(PsiAnnotation[] annotations)
+	{
+		final Map<String, PsiAnnotation> map = new HashMap<String, PsiAnnotation>();
+		for(PsiAnnotation annotation : annotations)
+		{
+			map.put(annotation.getQualifiedName(), annotation);
+		}
+		map.remove(CommonClassNames.JAVA_LANG_OVERRIDE);
+		return map;
 	}
 }

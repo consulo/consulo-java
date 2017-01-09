@@ -15,6 +15,12 @@
  */
 package com.siyeh.ig.controlflow;
 
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
@@ -27,12 +33,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 public class IfMayBeConditionalInspection extends BaseInspection {
 
@@ -135,7 +135,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
             }
             final PsiExpression thenArgument = thenArguments[i];
             final PsiExpression elseArgument = elseArguments[i];
-            if (EquivalenceChecker.expressionsAreEquivalent(thenArgument, elseArgument)) {
+            if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenArgument, elseArgument)) {
               replacementText.append(thenArgument.getText());
             }
             else {
@@ -227,7 +227,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
           }
           final PsiExpression thenLhs = thenAssignmentExpression.getLExpression();
           final PsiExpression elseLhs = elseAssignmentExpression.getLExpression();
-          if (!EquivalenceChecker.expressionsAreEquivalent(thenLhs, elseLhs)) {
+          if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs, elseLhs)) {
             return;
           }
           final PsiExpression thenRhs = ParenthesesUtils.stripParentheses(thenAssignmentExpression.getRExpression());
@@ -248,7 +248,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
           final PsiMethodCallExpression elseMethodCallExpression = (PsiMethodCallExpression)elseExpression;
           final PsiReferenceExpression thenMethodExpression = thenMethodCallExpression.getMethodExpression();
           final PsiReferenceExpression elseMethodExpression = elseMethodCallExpression.getMethodExpression();
-          if (!EquivalenceChecker.expressionsAreEquivalent(thenMethodExpression, elseMethodExpression)) {
+          if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenMethodExpression, elseMethodExpression)) {
             return;
           }
           final PsiExpressionList thenArgumentList = thenMethodCallExpression.getArgumentList();
@@ -262,7 +262,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
           for (int i = 0, length = thenArguments.length; i < length; i++) {
             final PsiExpression thenArgument = thenArguments[i];
             final PsiExpression elseArgument = elseArguments[i];
-            if (!EquivalenceChecker.expressionsAreEquivalent(thenArgument,  elseArgument)) {
+            if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenArgument,  elseArgument)) {
               differences++;
             }
           }

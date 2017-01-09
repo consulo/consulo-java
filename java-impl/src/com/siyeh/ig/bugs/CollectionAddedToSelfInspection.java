@@ -15,14 +15,14 @@
  */
 package com.siyeh.ig.bugs;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.*;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class CollectionAddedToSelfInspection extends BaseInspection {
 
@@ -76,7 +76,7 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
       boolean hasMatchingArg = false;
       final PsiExpression[] args = argumentList.getExpressions();
       for (PsiExpression arg : args) {
-        if (EquivalenceChecker.expressionsAreEquivalent(qualifier, arg)) {
+        if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(qualifier, arg)) {
           hasMatchingArg = true;
         }
       }

@@ -15,10 +15,21 @@
  */
 package com.siyeh.ig.assignment;
 
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiAssignmentExpression;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiJavaToken;
+import com.intellij.psi.PsiPolyadicExpression;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeCastExpression;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
@@ -27,10 +38,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspection {
 
@@ -222,7 +229,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
           return;
         }
       }
-      if (!EquivalenceChecker.expressionsAreEquivalent(lhs, operands[0])) {
+      if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(lhs, operands[0])) {
         return;
       }
       registerError(assignment, lhs, polyadicExpression);

@@ -39,6 +39,7 @@ import com.intellij.openapi.projectRoots.JavaVersionService;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
@@ -1144,8 +1145,8 @@ public final class PsiUtil extends PsiUtilCore
 	public static List<PsiTypeElement> getParameterTypeElements(@NotNull PsiParameter parameter)
 	{
 		PsiTypeElement typeElement = parameter.getTypeElement();
-		return typeElement != null && typeElement.getType() instanceof PsiDisjunctionType ? PsiTreeUtil.getChildrenOfTypeAsList(typeElement,
-				PsiTypeElement.class) : Collections.singletonList(typeElement);
+		return typeElement != null && typeElement.getType() instanceof PsiDisjunctionType ? PsiTreeUtil.getChildrenOfTypeAsList(typeElement, PsiTypeElement.class) : Collections.singletonList
+				(typeElement);
 	}
 
 	public static void checkIsIdentifier(@NotNull PsiManager manager, String text) throws IncorrectOperationException
@@ -1650,6 +1651,12 @@ public final class PsiUtil extends PsiUtilCore
 		return className + "." + member.getName();
 	}
 
+	public static boolean isFromDefaultPackage(PsiClass aClass)
+	{
+		final PsiFile containingFile = aClass.getContainingFile();
+		return containingFile instanceof PsiClassOwner && StringUtil.isEmpty(((PsiClassOwner) containingFile).getPackageName());
+	}
+
 	static boolean checkSameExpression(PsiElement templateExpr, final PsiExpression expression)
 	{
 		return templateExpr.equals(skipParenthesizedExprDown(expression));
@@ -1726,5 +1733,23 @@ public final class PsiUtil extends PsiUtilCore
 				addReturnStatements(vector, child);
 			}
 		}
+	}
+
+	public static boolean isPackageEmpty(@NotNull PsiDirectory[] directories, @NotNull String packageName)
+	{
+		for(PsiDirectory directory : directories)
+		{
+			for(PsiFile file : directory.getFiles())
+			{
+				if(file instanceof PsiClassOwner &&
+						packageName.equals(((PsiClassOwner) file).getPackageName()) &&
+						((PsiClassOwner) file).getClasses().length > 0)
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }

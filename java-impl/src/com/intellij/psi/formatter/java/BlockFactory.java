@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,19 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.formatting.Wrap;
 import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Indent;
 import com.intellij.formatting.Block;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.formatting.Indent;
+import com.intellij.formatting.Wrap;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 
-import java.util.List;
+public interface BlockFactory
+{
+	Block createBlock(ASTNode node, Indent indent, Alignment alignment, Wrap wrap);
 
-public class MethodCallExpressionBlock extends AbstractJavaBlock{
-  public MethodCallExpressionBlock(final ASTNode node, final Wrap wrap, final Alignment alignment, final Indent indent, final CodeStyleSettings settings) {
-    super(node, wrap, alignment, indent, settings);
-  }
+	CommonCodeStyleSettings getSettings();
 
-  @Override
-  protected List<Block> buildChildren() {
-    return null;
-  }
+	JavaCodeStyleSettings getJavaSettings();
 }

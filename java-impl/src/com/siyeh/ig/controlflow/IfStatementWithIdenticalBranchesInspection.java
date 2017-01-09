@@ -15,9 +15,21 @@
  */
 package com.siyeh.ig.controlflow;
 
+import java.util.Collections;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiBlockStatement;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiIfStatement;
+import com.intellij.psi.PsiLoopStatement;
+import com.intellij.psi.PsiReturnStatement;
+import com.intellij.psi.PsiStatement;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.extractMethod.InputVariables;
@@ -30,10 +42,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collections;
 
 public class IfStatementWithIdenticalBranchesInspection
   extends BaseInspection {
@@ -220,14 +228,14 @@ public class IfStatementWithIdenticalBranchesInspection
             }
             return;
           }
-          else if (!EquivalenceChecker.statementsAreEquivalent(
+          else if (!EquivalenceChecker.getCanonicalPsiEquivalence().statementsAreEquivalent(
             statement, nextStatement)) {
             return;
           }
           nextStatement = getNextStatement(nextStatement);
         }
       }
-      else if (!EquivalenceChecker.statementsAreEquivalent(
+      else if (!EquivalenceChecker.getCanonicalPsiEquivalence().statementsAreEquivalent(
         thenBranch, nextStatement)) {
         return;
       }

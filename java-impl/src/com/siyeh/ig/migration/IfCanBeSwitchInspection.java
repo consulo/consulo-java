@@ -15,6 +15,28 @@
  */
 package com.siyeh.ig.migration;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.ButtonModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
+
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -30,21 +52,6 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SwitchUtils;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.text.Document;
-import java.awt.*;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class IfCanBeSwitchInspection extends BaseInspection {
 
@@ -332,7 +339,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         final PsiExpression argument = arguments[0];
         final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
         final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
-        if (EquivalenceChecker.expressionsAreEquivalent(switchExpression, argument)) {
+        if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(switchExpression, argument)) {
           branch.addCaseExpression(qualifierExpression);
         }
         else {
@@ -351,7 +358,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         else if (operands.length == 2) {
           final PsiExpression lhs = operands[0];
           final PsiExpression rhs = operands[1];
-          if (EquivalenceChecker.expressionsAreEquivalent(switchExpression, rhs)) {
+          if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(switchExpression, rhs)) {
             branch.addCaseExpression(lhs);
           }
           else {

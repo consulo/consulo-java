@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import gnu.trove.THashMap;
 import gnu.trove.THashSet;
 import gnu.trove.TIntArrayList;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ import com.intellij.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.util.ThreeState;
 import com.intellij.util.containers.FactoryMap;
 import com.intellij.util.containers.HashSet;
 
@@ -90,7 +92,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 					myArgumentsList.getText() + "; " +
 					"file=" + (method == null ? "<unknown>" : method.getContainingFile()));
 		}
-		return MethodCandidateInfo.ourOverloadGuard.doPreventingRecursion(myArgumentsList, true, new Computable<CandidateInfo>()
+		return MethodCandidateInfo.ourOverloadGuard.doPreventingRecursion(myArgumentsList, false, new Computable<CandidateInfo>()
 		{
 			@Override
 			public CandidateInfo compute()
@@ -112,12 +114,6 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			return conflicts.get(0);
 		}
 
-		boolean atLeastOneMatch = checkParametersNumber(conflicts, getActualParametersLength(), true);
-		if(conflicts.size() == 1)
-		{
-			return conflicts.get(0);
-		}
-
 		final FactoryMap<MethodCandidateInfo, PsiSubstitutor> map = new FactoryMap<MethodCandidateInfo, PsiSubstitutor>()
 		{
 			@Nullable
@@ -127,6 +123,11 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 				return key.getSubstitutor(false);
 			}
 		};
+		boolean atLeastOneMatch = checkParametersNumber(conflicts, getActualParametersLength(), map, true);
+		if(conflicts.size() == 1)
+		{
+			return conflicts.get(0);
+		}
 
 		checkSameSignatures(conflicts, map);
 		if(conflicts.size() == 1)
@@ -140,7 +141,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			return conflicts.get(0);
 		}
 
-		checkParametersNumber(conflicts, getActualParametersLength(), false);
+		checkParametersNumber(conflicts, getActualParametersLength(), map, false);
 		if(conflicts.size() == 1)
 		{
 			return conflicts.get(0);
@@ -186,12 +187,6 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			return conflicts.get(0);
 		}
 
-		checkAccessStaticLevels(conflicts, false);
-		if(conflicts.size() == 1)
-		{
-			return conflicts.get(0);
-		}
-
 		Set<CandidateInfo> uniques = new THashSet<CandidateInfo>(conflicts);
 		if(uniques.size() == 1)
 		{
@@ -202,13 +197,27 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 
 	private static void checkPotentiallyCompatibleMethods(@NotNull List<CandidateInfo> conflicts)
 	{
+		List<CandidateInfo> partiallyApplicable = new ArrayList<CandidateInfo>();
 		for(Iterator<CandidateInfo> iterator = conflicts.iterator(); iterator.hasNext(); )
 		{
 			CandidateInfo conflict = iterator.next();
-			if(conflict instanceof MethodCandidateInfo && !((MethodCandidateInfo) conflict).isPotentiallyCompatible())
+			if(conflict instanceof MethodCandidateInfo)
 			{
-				iterator.remove();
+				ThreeState compatible = ((MethodCandidateInfo) conflict).isPotentiallyCompatible();
+				if(compatible == ThreeState.NO)
+				{
+					iterator.remove();
+				}
+				else if(compatible == ThreeState.UNSURE)
+				{
+					partiallyApplicable.add(conflict);
+				}
 			}
+		}
+
+		if(conflicts.size() > partiallyApplicable.size())
+		{
+			conflicts.removeAll(partiallyApplicable);
 		}
 	}
 
@@ -490,7 +499,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 	/**
 	 * choose to accept static interface methods during search to get "Static interface methods must be invoked on containing interface class only" error
 	 * instead of non clear javac message that symbol not found
-	 * <p/>
+	 * <p>
 	 * but these methods should be ignored during overload resolution if another methods are present
 	 */
 	private void checkStaticMethodsOfInterfaces(@NotNull List<CandidateInfo> conflicts)
@@ -561,7 +570,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 		return null;
 	}
 
-	public boolean checkParametersNumber(@NotNull List<CandidateInfo> conflicts, final int argumentsCount, boolean ignoreIfStaticsProblem)
+	public boolean checkParametersNumber(@NotNull List<CandidateInfo> conflicts, final int argumentsCount, FactoryMap<MethodCandidateInfo, PsiSubstitutor> map, boolean ignoreIfStaticsProblem)
 	{
 		boolean atLeastOneMatch = false;
 		TIntArrayList unmatchedIndices = null;
@@ -579,8 +588,8 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			}
 			PsiMethod method = ((MethodCandidateInfo) info).getElement();
 			final int parametersCount = method.getParameterList().getParametersCount();
-			if(((myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_8) ? ((MethodCandidateInfo) info).isVarargs() : method.isVarArgs()) && parametersCount - 1 <= argumentsCount) || parametersCount ==
-					argumentsCount)
+			boolean isVarargs = (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_8) ? ((MethodCandidateInfo) info).isVarargs() : method.isVarArgs()) && parametersCount - 1 <= argumentsCount;
+			if(isVarargs || parametersCount == argumentsCount)
 			{
 				// remove all unmatched before
 				if(unmatchedIndices != null)
@@ -588,6 +597,21 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 					for(int u = unmatchedIndices.size() - 1; u >= 0; u--)
 					{
 						int index = unmatchedIndices.get(u);
+						//ensure super method with varargs won't win over non-vararg override
+						if(ignoreIfStaticsProblem && isVarargs)
+						{
+							MethodCandidateInfo candidateInfo = (MethodCandidateInfo) conflicts.get(index);
+							PsiMethod candidateToRemove = candidateInfo.getElement();
+							if(candidateToRemove != method)
+							{
+								PsiSubstitutor candidateToRemoveSubst = map.get(candidateInfo);
+								PsiSubstitutor substitutor = map.get(info);
+								if(MethodSignatureUtil.isSubsignature(candidateToRemove.getSignature(candidateToRemoveSubst), method.getSignature(substitutor)))
+								{
+									continue;
+								}
+							}
+						}
 						conflicts.remove(index);
 						i--;
 					}
@@ -708,6 +732,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 		final int max = Math.max(Math.max(params1.length, params2.length), argsLength);
 		PsiType[] types1 = PsiType.createArray(max);
 		PsiType[] types2 = PsiType.createArray(max);
+		boolean[] varargs = new boolean[max];
 		final boolean varargsPosition = applicabilityLevel == MethodCandidateInfo.ApplicabilityLevel.VARARGS;
 		for(int i = 0; i < max; i++)
 		{
@@ -718,8 +743,8 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			{
 				if(type1 instanceof PsiEllipsisType && type2 instanceof PsiEllipsisType &&
 						params1.length == params2.length &&
-						class1 != null && (!JavaVersionService.getInstance().isAtLeast(class1, JavaSdkVersion.JDK_1_7) || ((PsiArrayType) type1).getComponentType().equalsToText(CommonClassNames
-						.JAVA_LANG_OBJECT) || ((PsiArrayType) type2).getComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT)))
+						(class1 != null && !JavaVersionService.getInstance().isAtLeast(class1, JavaSdkVersion.JDK_1_7) || ((PsiArrayType) type1).getComponentType().equalsToText(CommonClassNames
+								.JAVA_LANG_OBJECT) || ((PsiArrayType) type2).getComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT)))
 				{
 					type1 = ((PsiEllipsisType) type1).toArrayType();
 					type2 = ((PsiEllipsisType) type2).toArrayType();
@@ -728,6 +753,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 				{
 					type1 = type1 instanceof PsiEllipsisType ? ((PsiArrayType) type1).getComponentType() : type1;
 					type2 = type2 instanceof PsiEllipsisType ? ((PsiArrayType) type2).getComponentType() : type2;
+					varargs[i] = true;
 				}
 			}
 
@@ -743,6 +769,10 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 		for(int i = 0; i < types1.length; i++)
 		{
 			ProgressManager.checkCanceled();
+			if(varargs[i])
+			{
+				continue;
+			}
 			final PsiExpression arg = args != null && i < args.length ? args[i] : null;
 			final PsiType argType = myActualParameterTypes != null && i < getActualParametersLength() ? myActualParameterTypes[i] : null;
 			if(arg == null && argType == null)
@@ -949,8 +979,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 			final PsiExpression[] expressions = ((PsiExpressionList) myArgumentsList).getExpressions();
 			if(argId < expressions.length)
 			{
-				final Specifics specific = isFunctionalTypeMoreSpecific(expressions[argId], right, left);
-				return Specifics.FIRST.equals(specific);
+				return isFunctionalTypeMoreSpecific(expressions[argId], right, left);
 			}
 		}
 		return false;
@@ -1054,8 +1083,7 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 		}
 	}
 
-	@NotNull
-	private static Specifics isFunctionalTypeMoreSpecific(PsiExpression expr, PsiType sType, PsiType tType)
+	private static boolean isFunctionalTypeMoreSpecific(PsiExpression expr, PsiType sType, PsiType tType)
 	{
 		if(expr instanceof PsiParenthesizedExpression)
 		{
@@ -1064,9 +1092,8 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 
 		if(expr instanceof PsiConditionalExpression)
 		{
-			final Specifics thenSpecifics = isFunctionalTypeMoreSpecific(((PsiConditionalExpression) expr).getThenExpression(), sType, tType);
-			final Specifics elseSpecifics = isFunctionalTypeMoreSpecific(((PsiConditionalExpression) expr).getElseExpression(), sType, tType);
-			return thenSpecifics == elseSpecifics ? thenSpecifics : Specifics.NEITHER;
+			return isFunctionalTypeMoreSpecific(((PsiConditionalExpression) expr).getThenExpression(), sType, tType) && isFunctionalTypeMoreSpecific(((PsiConditionalExpression) expr)
+					.getElseExpression(), sType, tType);
 		}
 
 		if(expr instanceof PsiFunctionalExpression)
@@ -1074,29 +1101,20 @@ public class JavaMethodsConflictResolver implements PsiConflictResolver
 
 			if(expr instanceof PsiLambdaExpression && !((PsiLambdaExpression) expr).hasFormalParameterTypes())
 			{
-				return Specifics.NEITHER;
+				return false;
 			}
 			if(expr instanceof PsiMethodReferenceExpression && !((PsiMethodReferenceExpression) expr).isExact())
 			{
-				return Specifics.NEITHER;
+				return false;
 			}
 
 			if(LambdaUtil.isFunctionalType(sType) && LambdaUtil.isFunctionalType(tType) &&
 					!TypeConversionUtil.erasure(tType).isAssignableFrom(sType) &&
 					!TypeConversionUtil.erasure(sType).isAssignableFrom(tType))
 			{
-				final boolean specific12 = InferenceSession.isFunctionalTypeMoreSpecificOnExpression(sType, tType, expr);
-				final boolean specific21 = InferenceSession.isFunctionalTypeMoreSpecificOnExpression(tType, sType, expr);
-				if(specific12 && !specific21)
-				{
-					return Specifics.FIRST;
-				}
-				if(!specific12 && specific21)
-				{
-					return Specifics.SECOND;
-				}
+				return InferenceSession.isFunctionalTypeMoreSpecificOnExpression(sType, tType, expr);
 			}
 		}
-		return Specifics.NEITHER;
+		return false;
 	}
 }

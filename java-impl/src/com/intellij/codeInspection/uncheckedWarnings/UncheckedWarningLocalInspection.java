@@ -16,6 +16,24 @@
 
 package com.intellij.codeInspection.uncheckedWarnings;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.intellij.lang.annotations.Pattern;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -24,26 +42,23 @@ import com.intellij.codeInsight.daemon.impl.quickfix.VariableArrayTypeFix;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.LocalInspectionToolSession;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Pass;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.util.*;
-import org.intellij.lang.annotations.Pattern;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.psi.util.MethodSignature;
+import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.util.TypeConversionUtil;
 
 /**
  * User: anna
@@ -338,7 +353,7 @@ public class UncheckedWarningLocalInspection extends BaseJavaLocalInspectionTool
                                                          JavaHighlightUtil.formatType(componentType));
           if (!arrayTypeFixChecked) {
             final PsiType checkResult = JavaHighlightUtil.sameType(initializers);
-            fix = checkResult != null ? new VariableArrayTypeFix(arrayInitializer, checkResult) : null;
+            fix = checkResult != null ? VariableArrayTypeFix.createFix(arrayInitializer, checkResult) : null;
             arrayTypeFixChecked = true;
           }
 

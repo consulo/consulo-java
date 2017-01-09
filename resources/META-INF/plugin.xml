@@ -369,6 +369,11 @@
 			<option name="workspace" value="true"/>
 			<loadForDefaultProject/>
 		</component>
+
+		<component>
+			<implementation-class>com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory</implementation-class>
+			<skipForDefaultProject/>
+		</component>
 	</project-components>
 
 	<extensionPoints>
@@ -376,6 +381,7 @@
 			<with attribute="implementationClass" implements="org.osmorc.manifest.lang.headerparser.HeaderParser"/>
 		</extensionPoint>
 
+		<extensionPoint name="typeAnnotationModifier" interface="com.intellij.psi.augment.TypeAnnotationModifier"/>
 		<extensionPoint name="augmentProvider" interface="com.intellij.psi.augment.PsiAugmentProvider"/>
 		<extensionPoint name="cantBeStatic" interface="com.intellij.openapi.util.Condition"/>
 
@@ -679,6 +685,8 @@
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.StackTraceElementObjectRenderer"/>
 
 		<augmentProvider implementation="consulo.java.psi.augment.JavaEnumAugmentProvider"/>
+
+		<typeAnnotationModifier implementation="com.intellij.codeInsight.NullityAnnotationModifier" />
 
 		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
@@ -1800,6 +1808,7 @@
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaShortClassNameIndex"/>
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaSuperClassNameOccurenceIndex"/>
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaMethodParameterTypesIndex"/>
+		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex"/>
 
 		<fileBasedIndex implementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
 
@@ -1962,6 +1971,7 @@
 		<targetElementUtilEx implementation="consulo.java.codeInsight.JavaTargetElementUtilEx"/>
 
 		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionIndex"/>
+		<fileBasedIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaAutoModuleNameIndex"/>
 
 		<xdebugger.lineBreakpointTypeResolver filetype="CLASS" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>
 		<xdebugger.lineBreakpointTypeResolver filetype="JAVA" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>

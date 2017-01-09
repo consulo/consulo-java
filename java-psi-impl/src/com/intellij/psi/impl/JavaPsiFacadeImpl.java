@@ -61,14 +61,12 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	private final PsiConstantEvaluationHelper myConstantEvaluationHelper;
 
 	private final Project myProject;
-	private final JavaFileManager myFileManager;
 	private final PsiPackageManager myPackageManager;
 
 
 	public JavaPsiFacadeImpl(Project project, PsiPackageManager psiManager, JavaFileManager javaFileManager, MessageBus bus)
 	{
 		myProject = project;
-		myFileManager = javaFileManager;
 		myPackageManager = psiManager;
 		myConstantEvaluationHelper = new PsiConstantEvaluationHelperImpl();
 
@@ -307,14 +305,14 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 		@Override
 		public PsiClass findClass(@NotNull String qualifiedName, @NotNull GlobalSearchScope scope)
 		{
-			return myFileManager.findClass(qualifiedName, scope);
+			return JavaFileManager.getInstance(myProject).findClass(qualifiedName, scope);
 		}
 
 		@Override
 		@NotNull
 		public PsiClass[] findClasses(@NotNull String qualifiedName, @NotNull GlobalSearchScope scope)
 		{
-			return myFileManager.findClasses(qualifiedName, scope);
+			return JavaFileManager.getInstance(myProject).findClasses(qualifiedName, scope);
 		}
 
 		@Override
@@ -478,7 +476,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@Override
 	public boolean isPartOfPackagePrefix(@NotNull String packageName)
 	{
-		final Collection<String> packagePrefixes = myFileManager.getNonTrivialPackagePrefixes();
+		final Collection<String> packagePrefixes = JavaFileManager.getInstance(myProject).getNonTrivialPackagePrefixes();
 		for(final String subpackageName : packagePrefixes)
 		{
 			if(isSubpackageOf(subpackageName, packageName))
