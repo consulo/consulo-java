@@ -17,7 +17,7 @@ package com.intellij.ide;
 
 import com.intellij.application.options.IndentOptionsEditor;
 import com.intellij.application.options.JavaIndentOptionsEditor;
-import com.intellij.lang.Language;
+import com.intellij.ide.highlighter.JavaFileType;import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.project.Project;
@@ -186,7 +186,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   @Override
   public PsiFile createFileFromText(final Project project, final String text) {
     final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText(
-      "sample.java", StdFileTypes.JAVA, text, LocalTimeCounter.currentTime(), true, false
+      "sample.java", JavaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), true, false
     );
     file.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.HIGHEST);
     return file;
