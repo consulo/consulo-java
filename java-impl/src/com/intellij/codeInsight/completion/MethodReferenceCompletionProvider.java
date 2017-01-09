@@ -38,30 +38,32 @@ public class MethodReferenceCompletionProvider implements CompletionProvider
 	private static final Logger LOG = Logger.getInstance("#" + MethodReferenceCompletionProvider.class.getName());
 
 	@Override
-	public void addCompletions(@NotNull CompletionParameters parameters,
-			ProcessingContext context,
-			@NotNull final CompletionResultSet result)
+	public void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull final CompletionResultSet result)
 	{
 		if(!PsiUtil.isLanguageLevel8OrHigher(parameters.getOriginalFile()))
 		{
 			return;
 		}
+
+		final PsiElement rulezzRef = parameters.getPosition().getParent();
+		if(rulezzRef == null || !LambdaUtil.isValidLambdaContext(rulezzRef.getParent()))
+		{
+			return;
+		}
+
 		final ExpectedTypeInfo[] expectedTypes = JavaSmartCompletionContributor.getExpectedTypes(parameters);
 		for(ExpectedTypeInfo expectedType : expectedTypes)
 		{
 			final PsiType defaultType = expectedType.getDefaultType();
 			if(LambdaUtil.isFunctionalType(defaultType))
 			{
-				final PsiType functionalType = FunctionalInterfaceParameterizationUtil.getGroundTargetType
-						(defaultType);
+				final PsiType functionalType = FunctionalInterfaceParameterizationUtil.getGroundTargetType(defaultType);
 				final PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType(functionalType);
 				if(returnType != null)
 				{
 					final PsiElement position = parameters.getPosition();
 					final PsiElement refPlace = position.getParent();
-					final ExpectedTypeInfoImpl typeInfo = new ExpectedTypeInfoImpl(returnType,
-							ExpectedTypeInfo.TYPE_OR_SUBTYPE, returnType, TailType.UNKNOWN, null,
-							ExpectedTypeInfoImpl.NULL);
+					final ExpectedTypeInfoImpl typeInfo = new ExpectedTypeInfoImpl(returnType, ExpectedTypeInfo.TYPE_OR_SUBTYPE, returnType, TailType.UNKNOWN, null, ExpectedTypeInfoImpl.NULL);
 					final Map<PsiElement, PsiType> map = LambdaUtil.getFunctionalTypeMap();
 					Consumer<LookupElement> noTypeCheck = new Consumer<LookupElement>()
 					{
@@ -71,8 +73,7 @@ public class MethodReferenceCompletionProvider implements CompletionProvider
 							final PsiElement element = lookupElement.getPsiElement();
 							if(element instanceof PsiMethod)
 							{
-								final PsiMethodReferenceExpression referenceExpression =
-										createMethodReferenceExpression((PsiMethod) element);
+								final PsiMethodReferenceExpression referenceExpression = createMethodReferenceExpression((PsiMethod) element);
 								if(referenceExpression == null)
 								{
 									return;
@@ -82,12 +83,10 @@ public class MethodReferenceCompletionProvider implements CompletionProvider
 								try
 								{
 									final PsiElement resolve = referenceExpression.resolve();
-									if(resolve != null && PsiEquivalenceUtil.areElementsEquivalent(element, resolve) &&
-											PsiMethodReferenceUtil.checkMethodReferenceContext(referenceExpression,
-													resolve, functionalType) == null)
+									if(resolve != null && PsiEquivalenceUtil.areElementsEquivalent(element, resolve) && PsiMethodReferenceUtil.checkMethodReferenceContext(referenceExpression,
+											resolve, functionalType) == null)
 									{
-										result.addElement(new JavaMethodReferenceElement((PsiMethod) element,
-												refPlace));
+										result.addElement(new JavaMethodReferenceElement((PsiMethod) element, refPlace));
 									}
 								}
 								finally
@@ -105,12 +104,10 @@ public class MethodReferenceCompletionProvider implements CompletionProvider
 							PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(method.getProject());
 							if(refPlace instanceof PsiMethodReferenceExpression)
 							{
-								final PsiMethodReferenceExpression referenceExpression =
-										(PsiMethodReferenceExpression) refPlace.copy();
+								final PsiMethodReferenceExpression referenceExpression = (PsiMethodReferenceExpression) refPlace.copy();
 								final PsiElement referenceNameElement = referenceExpression.getReferenceNameElement();
 								LOG.assertTrue(referenceNameElement != null, referenceExpression);
-								referenceNameElement.replace(method.isConstructor() ? elementFactory.createKeyword
-										("new") : elementFactory.createIdentifier(method.getName()));
+								referenceNameElement.replace(method.isConstructor() ? elementFactory.createKeyword("new") : elementFactory.createIdentifier(method.getName()));
 								return referenceExpression;
 							}
 							else if(method.hasModifierProperty(PsiModifier.STATIC))
@@ -118,9 +115,7 @@ public class MethodReferenceCompletionProvider implements CompletionProvider
 								final PsiClass aClass = method.getContainingClass();
 								LOG.assertTrue(aClass != null);
 								final String qualifiedName = aClass.getQualifiedName();
-								return (PsiMethodReferenceExpression) elementFactory.createExpressionFromText
-										(qualifiedName + "::" + (method.isConstructor() ? "new" : method.getName()),
-												refPlace);
+								return (PsiMethodReferenceExpression) elementFactory.createExpressionFromText(qualifiedName + "::" + (method.isConstructor() ? "new" : method.getName()), refPlace);
 							}
 							else
 							{
@@ -129,8 +124,7 @@ public class MethodReferenceCompletionProvider implements CompletionProvider
 						}
 					};
 
-					final Runnable runnable = ReferenceExpressionCompletionContributor.fillCompletionVariants(new
-							JavaSmartCompletionParameters(parameters, typeInfo), noTypeCheck);
+					final Runnable runnable = ReferenceExpressionCompletionContributor.fillCompletionVariants(new JavaSmartCompletionParameters(parameters, typeInfo), noTypeCheck);
 					if(runnable != null)
 					{
 						runnable.run();

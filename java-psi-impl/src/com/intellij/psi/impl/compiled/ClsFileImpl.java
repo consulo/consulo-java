@@ -20,7 +20,6 @@ import static com.intellij.reference.SoftReference.dereference;
 import java.io.IOException;
 import java.lang.ref.Reference;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,7 +47,6 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DefaultProjectFactory;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.ui.Queryable;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.openapi.util.Pair;
@@ -60,7 +58,6 @@ import com.intellij.psi.compiled.ClassFileDecompilers;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import com.intellij.psi.impl.PsiFileEx;
-import com.intellij.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.psi.impl.java.stubs.impl.PsiJavaFileStubImpl;
 import com.intellij.psi.impl.source.PsiFileImpl;
@@ -90,10 +87,7 @@ import consulo.annotations.RequiredWriteAction;
 
 public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub> implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx, Queryable, PsiClassOwnerEx, PsiCompiledFile
 {
-	private static final String BANNER = "\n" +
-			"  // IntelliJ API Decompiler stub source generated from a class file\n" +
-			"  // Implementation of methods is not available\n" +
-			"\n";
+	private static final String BANNER = "\n" + "  // IntelliJ API Decompiler stub source generated from a class file\n" + "  // Implementation of methods is not available\n" + "\n";
 
 	private static final Key<Document> CLS_DOCUMENT_LINK_KEY = Key.create("cls.document.link");
 
@@ -291,20 +285,16 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	@NotNull
 	public LanguageLevel getLanguageLevel()
 	{
-		LanguageLevel level = myLanguageLevel;
-		if(level == null)
+		PsiClassHolderFileStub<?> stub = getStub();
+		if(stub instanceof PsiJavaFileStub)
 		{
-			List classes = ApplicationManager.getApplication().runReadAction(new Computable<List>()
+			LanguageLevel level = ((PsiJavaFileStub) stub).getLanguageLevel();
+			if(level != null)
 			{
-				@Override
-				public List compute()
-				{
-					return getStub().getChildrenStubs();
-				}
-			});
-			myLanguageLevel = level = !classes.isEmpty() ? ((PsiClassStub<?>) classes.get(0)).getLanguageLevel() : LanguageLevel.HIGHEST;
+				return level;
+			}
 		}
-		return level;
+		return LanguageLevel.HIGHEST;
 	}
 
 	@RequiredReadAction

@@ -29,9 +29,7 @@ import com.intellij.codeInsight.lookup.TailTypeDecorator;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
-import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
 
 /**
@@ -41,7 +39,6 @@ class CatchTypeProvider implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> CATCH_CLAUSE_TYPE = psiElement().insideStarting(psiElement(PsiTypeElement.class).withParent(psiElement(PsiCatchSection.class)));
 
-	@RequiredReadAction
 	@Override
 	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 	{
@@ -52,7 +49,7 @@ class CatchTypeProvider implements CompletionProvider
 			return;
 		}
 
-		final InheritorsHolder holder = new InheritorsHolder(result);
+		final JavaCompletionSession session = new JavaCompletionSession(result);
 
 		for(final PsiClassType type : ExceptionUtil.getThrownExceptions(tryBlock.getStatements()))
 		{
@@ -60,27 +57,23 @@ class CatchTypeProvider implements CompletionProvider
 			if(typeClass != null)
 			{
 				result.addElement(createCatchTypeVariant(tryBlock, type));
-				holder.registerClass(typeClass);
+				session.registerClass(typeClass);
 			}
 		}
 
 		final Collection<PsiClassType> expectedClassTypes = Collections.singletonList(JavaPsiFacade.getElementFactory(tryBlock.getProject()).createTypeByFQClassName(CommonClassNames
 				.JAVA_LANG_THROWABLE));
-		JavaInheritorsGetter.processInheritors(parameters, expectedClassTypes, result.getPrefixMatcher(), new Consumer<PsiType>()
+		JavaInheritorsGetter.processInheritors(parameters, expectedClassTypes, result.getPrefixMatcher(), type ->
 		{
-			@Override
-			public void consume(PsiType type)
+			final PsiClass psiClass = type instanceof PsiClassType ? ((PsiClassType) type).resolve() : null;
+			if(psiClass == null || psiClass instanceof PsiTypeParameter)
 			{
-				final PsiClass psiClass = type instanceof PsiClassType ? ((PsiClassType) type).resolve() : null;
-				if(psiClass == null || psiClass instanceof PsiTypeParameter)
-				{
-					return;
-				}
+				return;
+			}
 
-				if(!holder.alreadyProcessed(psiClass))
-				{
-					result.addElement(createCatchTypeVariant(tryBlock, (PsiClassType) type));
-				}
+			if(!session.alreadyProcessed(psiClass))
+			{
+				result.addElement(createCatchTypeVariant(tryBlock, (PsiClassType) type));
 			}
 		});
 	}

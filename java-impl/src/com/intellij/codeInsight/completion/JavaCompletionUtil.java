@@ -468,9 +468,7 @@ public class JavaCompletionUtil
 						{
 							PsiType typeAfterCast = toRaw(castSub.substitute(returnType));
 							PsiType typeDeclared = toRaw(plainSub.substitute(returnType));
-							if(typeAfterCast != null && typeDeclared != null &&
-									typeAfterCast.isAssignableFrom(typeDeclared) &&
-									processor.isAccessible(plainClass.findMethodBySignature(method, true)))
+							if(typeAfterCast != null && typeDeclared != null && typeAfterCast.isAssignableFrom(typeDeclared) && processor.isAccessible(plainClass.findMethodBySignature(method, true)))
 							{
 								return item;
 							}
@@ -618,8 +616,8 @@ public class JavaCompletionUtil
 
 			if(completion instanceof PsiClass)
 			{
-				return JavaClassNameCompletionContributor.createClassLookupItems((PsiClass) completion, JavaClassNameCompletionContributor.AFTER_NEW.accepts(reference),
-						JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER, Conditions.<PsiClass>alwaysTrue());
+				return JavaClassNameCompletionContributor.createClassLookupItems((PsiClass) completion, JavaClassNameCompletionContributor.AFTER_NEW.accepts(reference), JavaClassNameInsertHandler
+						.JAVA_CLASS_INSERT_HANDLER, Conditions.<PsiClass>alwaysTrue());
 			}
 		}
 
@@ -759,9 +757,7 @@ public class JavaCompletionUtil
 		if(element instanceof PsiIdentifier)
 		{
 			PsiElement parent = element.getParent();
-			if(parent instanceof PsiJavaCodeReferenceElement &&
-					!((PsiJavaCodeReferenceElement) parent).isQualified() &&
-					!(parent.getParent() instanceof PsiPackageStatement))
+			if(parent instanceof PsiJavaCodeReferenceElement && !((PsiJavaCodeReferenceElement) parent).isQualified() && !(parent.getParent() instanceof PsiPackageStatement))
 			{
 				PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement) parent;
 
@@ -796,9 +792,7 @@ public class JavaCompletionUtil
 							}
 						}
 
-						if(!staticImport &&
-								!psiClass.getManager().areElementsEquivalent(psiClass, resolveReference((PsiReference) newElement)) &&
-								!PsiUtil.isInnerClass(psiClass))
+						if(!staticImport && !psiClass.getManager().areElementsEquivalent(psiClass, resolveReference((PsiReference) newElement)) && !PsiUtil.isInnerClass(psiClass))
 						{
 							final String qName = psiClass.getQualifiedName();
 							if(qName != null)
@@ -1061,5 +1055,20 @@ public class JavaCompletionUtil
 			return StringUtil.escapeXml(generics);
 		} */
 		return generics;
+	}
+
+	public static int findQualifiedNameStart(@NotNull InsertionContext context)
+	{
+		int start = context.getTailOffset() - 1;
+		while(start >= 0)
+		{
+			char ch = context.getDocument().getCharsSequence().charAt(start);
+			if(!Character.isJavaIdentifierPart(ch) && ch != '.')
+			{
+				break;
+			}
+			start--;
+		}
+		return start + 1;
 	}
 }

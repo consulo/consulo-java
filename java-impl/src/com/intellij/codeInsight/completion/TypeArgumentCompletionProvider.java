@@ -41,8 +41,6 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.Function;
 import com.intellij.util.ProcessingContext;
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
@@ -56,12 +54,12 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.completion.TypeArgumentCompletionProvider");
 	private final boolean mySmart;
 	@Nullable
-	private final InheritorsHolder myInheritors;
+	private final JavaCompletionSession mySession;
 
-	TypeArgumentCompletionProvider(boolean smart, @Nullable InheritorsHolder inheritors)
+	TypeArgumentCompletionProvider(boolean smart, @Nullable JavaCompletionSession session)
 	{
 		mySmart = smart;
-		myInheritors = inheritors;
+		mySession = session;
 	}
 
 	@RequiredReadAction
@@ -100,8 +98,8 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 		}
 	}
 
-	private void fillExpectedTypeArgs(CompletionResultSet resultSet, PsiElement context, final PsiClass actualClass, final int index, PsiClassType.ClassResolveResult expectedType,
-			TailType globalTail)
+	private void fillExpectedTypeArgs(CompletionResultSet resultSet, PsiElement context, final PsiClass actualClass, final int index, PsiClassType.ClassResolveResult expectedType, TailType
+			globalTail)
 	{
 		final PsiClass expectedClass = expectedType.getElement();
 
@@ -114,7 +112,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 		assert currentSubstitutor != null;
 
 		PsiTypeParameter[] params = actualClass.getTypeParameters();
-		final List<PsiTypeLookupItem> typeItems = new ArrayList<PsiTypeLookupItem>();
+		final List<PsiTypeLookupItem> typeItems = new ArrayList<>();
 		for(int i = index; i < params.length; i++)
 		{
 			PsiType arg = getExpectedTypeArg(context, i, expectedType, currentSubstitutor, params);
@@ -132,7 +130,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 
 		boolean hasParameters = ConstructorInsertHandler.hasConstructorParameters(actualClass, context);
 		TypeArgsLookupElement element = new TypeArgsLookupElement(typeItems, globalTail, hasParameters);
-		element.registerSingleClass(myInheritors);
+		element.registerSingleClass(mySession);
 		resultSet.addElement(element);
 	}
 
@@ -158,19 +156,15 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 	private static void addInheritors(CompletionParameters parameters, final CompletionResultSet resultSet, final PsiClass referencedClass, final int parameterIndex)
 	{
 		final List<PsiClassType> typeList = Collections.singletonList((PsiClassType) TypeConversionUtil.typeParameterErasure(referencedClass.getTypeParameters()[parameterIndex]));
-		JavaInheritorsGetter.processInheritors(parameters, typeList, resultSet.getPrefixMatcher(), new Consumer<PsiType>()
+		JavaInheritorsGetter.processInheritors(parameters, typeList, resultSet.getPrefixMatcher(), type ->
 		{
-			@Override
-			public void consume(final PsiType type)
+			final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+			if(psiClass == null)
 			{
-				final PsiClass psiClass = PsiUtil.resolveClassInType(type);
-				if(psiClass == null)
-				{
-					return;
-				}
-
-				resultSet.addElement(TailTypeDecorator.withTail(new JavaPsiClassReferenceElement(psiClass), getTail(parameterIndex == referencedClass.getTypeParameters().length - 1)));
+				return;
 			}
+
+			resultSet.addElement(TailTypeDecorator.withTail(new JavaPsiClassReferenceElement(psiClass), getTail(parameterIndex == referencedClass.getTypeParameters().length - 1)));
 		});
 	}
 
@@ -245,14 +239,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 			myTypeItems = typeItems;
 			myGlobalTail = globalTail;
 			myHasParameters = hasParameters;
-			myLookupString = StringUtil.join(myTypeItems, new Function<PsiTypeLookupItem, String>()
-			{
-				@Override
-				public String fun(PsiTypeLookupItem item)
-				{
-					return item.getType().getPresentableText();
-				}
-			}, ", ");
+			myLookupString = StringUtil.join(myTypeItems, item -> item.getType().getPresentableText(), ", ");
 		}
 
 		@NotNull
@@ -262,7 +249,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 			return myTypeItems.get(0).getObject();
 		}
 
-		public void registerSingleClass(@Nullable InheritorsHolder inheritors)
+		public void registerSingleClass(@Nullable JavaCompletionSession inheritors)
 		{
 			if(inheritors != null && myTypeItems.size() == 1)
 			{

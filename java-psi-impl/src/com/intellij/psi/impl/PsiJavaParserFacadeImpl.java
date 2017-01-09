@@ -89,8 +89,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		@Override
 		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
 		{
-			JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS |
-					ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS);
+			JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS);
 		}
 	};
 
@@ -223,11 +222,21 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 
 	@NotNull
 	@Override
-	public PsiDocComment createDocCommentFromText(@NotNull final String text) throws IncorrectOperationException
+	public PsiDocComment createDocCommentFromText(@NotNull String docCommentText) throws IncorrectOperationException
 	{
-		final PsiMethod method = createMethodFromText(StringUtil.join(text, "void m();"), null);
+		return createDocCommentFromText(docCommentText, null);
+	}
+
+	@NotNull
+	@Override
+	public PsiDocComment createDocCommentFromText(@NotNull String text, @Nullable PsiElement context) throws IncorrectOperationException
+	{
+		final PsiMethod method = createMethodFromText(text.trim() + "void m();", context);
 		final PsiDocComment comment = method.getDocComment();
-		assert comment != null : text;
+		if(comment == null)
+		{
+			throw new IncorrectOperationException("Incorrect comment '" + text + "'");
+		}
 		return comment;
 	}
 

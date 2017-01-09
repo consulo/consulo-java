@@ -23,18 +23,20 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiMethod;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
 
 /**
  * @author peter
  */
-public class InheritorsHolder implements Consumer<LookupElement>
+public class JavaCompletionSession implements Consumer<LookupElement>
 {
-	private final Set<String> myAddedClasses = new HashSet<String>();
+	private final Set<String> myAddedClasses = new HashSet<>();
+	private Set<String> myKeywords = new HashSet<>();
 	private final CompletionResultSet myResult;
 
-	public InheritorsHolder(CompletionResultSet result)
+	public JavaCompletionSession(CompletionResultSet result)
 	{
 		myResult = result;
 	}
@@ -42,12 +44,27 @@ public class InheritorsHolder implements Consumer<LookupElement>
 	@Override
 	public void consume(LookupElement lookupElement)
 	{
+		PsiClass psiClass = extractClass(lookupElement);
+		if(psiClass != null)
+		{
+			registerClass(psiClass);
+		}
+		myResult.addElement(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(lookupElement));
+	}
+
+	@Nullable
+	private static PsiClass extractClass(LookupElement lookupElement)
+	{
 		final Object object = lookupElement.getObject();
 		if(object instanceof PsiClass)
 		{
-			registerClass((PsiClass) object);
+			return (PsiClass) object;
 		}
-		myResult.addElement(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(lookupElement));
+		if(object instanceof PsiMethod && ((PsiMethod) object).isConstructor())
+		{
+			return ((PsiMethod) object).getContainingClass();
+		}
+		return null;
 	}
 
 	public void registerClass(@NotNull PsiClass psiClass)
@@ -64,13 +81,23 @@ public class InheritorsHolder implements Consumer<LookupElement>
 
 	public boolean alreadyProcessed(@NotNull LookupElement element)
 	{
-		final Object object = element.getObject();
-		return object instanceof PsiClass && alreadyProcessed((PsiClass) object);
+		final PsiClass psiClass = extractClass(element);
+		return psiClass != null && alreadyProcessed(psiClass);
 	}
 
 	public boolean alreadyProcessed(@NotNull PsiClass object)
 	{
 		final String name = getClassName(object);
 		return name == null || myAddedClasses.contains(name);
+	}
+
+	public boolean isKeywordAlreadyProcessed(@NotNull String keyword)
+	{
+		return myKeywords.contains(keyword);
+	}
+
+	public void registerKeyword(@NotNull String keyword)
+	{
+		myKeywords.add(keyword);
 	}
 }

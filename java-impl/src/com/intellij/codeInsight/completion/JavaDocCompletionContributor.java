@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.completion.scope.CompletionElement;
 import com.intellij.codeInsight.completion.scope.JavaCompletionProcessor;
 import com.intellij.codeInsight.editorActions.wordSelection.DocTagSelectioner;
 import com.intellij.codeInsight.javadoc.JavaDocUtil;
@@ -72,7 +71,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.Processor;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
@@ -94,6 +92,26 @@ public class JavaDocCompletionContributor extends CompletionContributor
 	private static final
 	@NonNls
 	String LINK_TAG = "link";
+	private static final InsertHandler<LookupElement> PARAM_DESCRIPTION_INSERT_HANDLER = (context, item) ->
+	{
+		if(context.getCompletionChar() != Lookup.REPLACE_SELECT_CHAR)
+		{
+			return;
+		}
+
+		context.commitDocument();
+		PsiDocTag docTag = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiDocTag.class, false);
+		if(docTag != null)
+		{
+			Document document = context.getDocument();
+			int tagEnd = DocTagSelectioner.getDocTagRange(docTag, document.getCharsSequence(), 0).getEndOffset();
+			int tail = context.getTailOffset();
+			if(tail < tagEnd)
+			{
+				document.deleteString(tail, tagEnd);
+			}
+		}
+	};
 
 	public JavaDocCompletionContributor()
 	{
@@ -114,14 +132,8 @@ public class JavaDocCompletionContributor extends CompletionContributor
 				{
 					result.stopHere();
 
-					final JavaCompletionProcessor processor = new JavaCompletionProcessor(position, TrueFilter.INSTANCE, JavaCompletionProcessor.Options.CHECK_NOTHING,
-							Conditions.<String>alwaysTrue());
-					((PsiJavaReference) ref).processVariants(processor);
-
-					for(final CompletionElement _item : processor.getResults())
+					for(LookupElement item : completeJavadocReference(position, (PsiJavaReference) ref))
 					{
-						final Object element = _item.getElement();
-						LookupElement item = createLookupItem(element);
 						if(onlyConstants)
 						{
 							Object o = item.getObject();
@@ -130,14 +142,13 @@ public class JavaDocCompletionContributor extends CompletionContributor
 								continue;
 							}
 							PsiField field = (PsiField) o;
-							if(!(field.hasModifierProperty(PsiModifier.STATIC) && field.getInitializer() != null &&
-									JavaConstantExpressionEvaluator.computeConstantExpression(field.getInitializer(), false) != null))
+							if(!(field.hasModifierProperty(PsiModifier.STATIC) && field.getInitializer() != null && JavaConstantExpressionEvaluator.computeConstantExpression(field.getInitializer(), false) != null))
+
 							{
 								continue;
 							}
 						}
 
-						item.putUserData(JavaCompletionUtil.FORCE_SHOW_SIGNATURE_ATTR, Boolean.TRUE);
 						if(isArg)
 						{
 							item = AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(item);
@@ -145,36 +156,13 @@ public class JavaDocCompletionContributor extends CompletionContributor
 						result.addElement(item);
 					}
 
-					JavaCompletionContributor.addAllClasses(parameters, result, new InheritorsHolder(result));
+					JavaCompletionContributor.addAllClasses(parameters, result, new JavaCompletionSession(result));
 				}
 
 				if(tag != null && "author".equals(tag.getName()))
 				{
 					result.addElement(LookupElementBuilder.create(SystemProperties.getUserName()));
 				}
-			}
-
-			private LookupElement createLookupItem(final Object element)
-			{
-				if(element instanceof PsiMethod)
-				{
-					return new JavaMethodCallElement((PsiMethod) element)
-					{
-						@Override
-						public void handleInsert(InsertionContext context)
-						{
-							new MethodSignatureInsertHandler().handleInsert(context, this);
-						}
-					};
-				}
-				if(element instanceof PsiClass)
-				{
-					JavaPsiClassReferenceElement classElement = new JavaPsiClassReferenceElement((PsiClass) element);
-					classElement.setInsertHandler(JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER);
-					return classElement;
-				}
-
-				return LookupItemUtil.objectToLookupItem(element);
 			}
 		});
 
@@ -184,7 +172,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 			{
 				final PsiElement element = parameters.getPosition();
-				final Set<PsiClass> throwsSet = new HashSet<PsiClass>();
+				final Set<PsiClass> throwsSet = new HashSet<>();
 				final PsiMethod method = PsiTreeUtil.getContextOfType(element, PsiMethod.class, true);
 				if(method != null)
 				{
@@ -199,6 +187,42 @@ public class JavaDocCompletionContributor extends CompletionContributor
 				}
 			}
 		});
+	}
+
+	@NotNull
+	private List<LookupElement> completeJavadocReference(PsiElement position, PsiJavaReference ref)
+	{
+		JavaCompletionProcessor processor = new JavaCompletionProcessor(position, TrueFilter.INSTANCE, JavaCompletionProcessor.Options.CHECK_NOTHING, Conditions.alwaysTrue());
+		ref.processVariants(processor);
+		return ContainerUtil.map(processor.getResults(), (completionResult) ->
+		{
+			LookupElement item = createReferenceLookupItem(completionResult.getElement());
+			item.putUserData(JavaCompletionUtil.FORCE_SHOW_SIGNATURE_ATTR, Boolean.TRUE);
+			return item;
+		});
+	}
+
+	private LookupElement createReferenceLookupItem(final Object element)
+	{
+		if(element instanceof PsiMethod)
+		{
+			return new JavaMethodCallElement((PsiMethod) element)
+			{
+				@Override
+				public void handleInsert(InsertionContext context)
+				{
+					new MethodSignatureInsertHandler().handleInsert(context, this);
+				}
+			};
+		}
+		if(element instanceof PsiClass)
+		{
+			JavaPsiClassReferenceElement classElement = new JavaPsiClassReferenceElement((PsiClass) element);
+			classElement.setInsertHandler(JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER);
+			return classElement;
+		}
+
+		return LookupItemUtil.objectToLookupItem(element);
 	}
 
 	private static PsiParameter getDocTagParam(PsiElement tag)
@@ -222,7 +246,6 @@ public class JavaDocCompletionContributor extends CompletionContributor
 	@Override
 	public void fillCompletionVariants(@NotNull final CompletionParameters parameters, @NotNull final CompletionResultSet result)
 	{
-
 		PsiElement position = parameters.getPosition();
 		if(PsiJavaPatterns.psiElement(JavaDocTokenType.DOC_COMMENT_DATA).accepts(position))
 		{
@@ -232,10 +255,70 @@ public class JavaDocCompletionContributor extends CompletionContributor
 				suggestSimilarParameterDescriptions(result, position, param);
 			}
 
+			suggestLinkWrappingVariants(parameters, result.withPrefixMatcher(CompletionUtil.findJavaIdentifierPrefix(parameters)), position);
+
+			if(!result.getPrefixMatcher().getPrefix().isEmpty())
+			{
+				for(String keyword : ContainerUtil.ar("null", "true", "false"))
+				{
+					String tagText = "{@code " + keyword + "}";
+					result.addElement(LookupElementBuilder.create(keyword).withPresentableText(tagText).withInsertHandler((context, item) -> context.getDocument().replaceString(context
+							.getStartOffset(), context.getTailOffset(), tagText)));
+				}
+			}
+
 			return;
 		}
 
 		super.fillCompletionVariants(parameters, result);
+	}
+
+	private void suggestLinkWrappingVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result, PsiElement position)
+	{
+		PrefixMatcher matcher = result.getPrefixMatcher();
+		int prefixStart = parameters.getOffset() - matcher.getPrefix().length() - position.getTextRange().getStartOffset();
+		if(prefixStart > 0 && position.getText().charAt(prefixStart - 1) == '#')
+		{
+			String mockCommentPrefix = "/** {@link ";
+			String mockText = mockCommentPrefix + position.getText().substring(prefixStart - 1) + "}*/";
+			PsiDocComment mockComment = JavaPsiFacade.getElementFactory(position.getProject()).createDocCommentFromText(mockText, position);
+			PsiJavaReference ref = (PsiJavaReference) mockComment.findReferenceAt(mockCommentPrefix.length() + 1);
+			assert ref != null : mockText;
+			for(LookupElement element : completeJavadocReference(ref.getElement(), ref))
+			{
+				result.addElement(LookupElementDecorator.withInsertHandler(element, wrapIntoLinkTag((context, item) -> element.handleInsert(context))));
+			}
+		}
+		else
+		{
+			InsertHandler<JavaPsiClassReferenceElement> handler = wrapIntoLinkTag(JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER);
+			AllClassesGetter.processJavaClasses(parameters, matcher, parameters.getInvocationCount() == 1, psiClass -> result.addElement(AllClassesGetter.createLookupItem(psiClass, handler)));
+		}
+	}
+
+	@NotNull
+	private static <T extends LookupElement> InsertHandler<T> wrapIntoLinkTag(InsertHandler<T> delegate)
+	{
+		return (context, item) ->
+		{
+			Document document = context.getDocument();
+
+			String link = "{@link ";
+			int startOffset = context.getStartOffset();
+			int sharpLength = document.getCharsSequence().charAt(startOffset - 1) == '#' ? 1 : 0;
+
+			document.insertString(startOffset - sharpLength, link);
+			document.insertString(context.getTailOffset(), "}");
+			context.setTailOffset(context.getTailOffset() - 1);
+			context.getOffsetMap().addOffset(CompletionInitializationContext.START_OFFSET, startOffset + link.length());
+
+			context.commitDocument();
+			delegate.handleInsert(context, item);
+			if(item.getObject() instanceof PsiField)
+			{
+				context.getEditor().getCaretModel().moveToOffset(context.getTailOffset() + 1);
+			}
+		};
 	}
 
 	private static void suggestSimilarParameterDescriptions(CompletionResultSet result, PsiElement position, final PsiParameter param)
@@ -247,8 +330,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 			public void visitElement(PsiElement element)
 			{
 				PsiParameter param1 = getDocTagParam(element);
-				if(param1 != null && param1 != param &&
-						Comparing.equal(param1.getName(), param.getName()) && Comparing.equal(param1.getType(), param.getType()))
+				if(param1 != null && param1 != param && Comparing.equal(param1.getName(), param.getName()) && Comparing.equal(param1.getType(), param.getType()))
 				{
 					String text = "";
 					for(PsiElement psiElement : ((PsiDocTag) element).getDataElements())
@@ -270,30 +352,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		});
 		for(String description : descriptions)
 		{
-			result.addElement(LookupElementBuilder.create(description).withInsertHandler(new InsertHandler<LookupElement>()
-			{
-				@Override
-				public void handleInsert(InsertionContext context, LookupElement item)
-				{
-					if(context.getCompletionChar() != Lookup.REPLACE_SELECT_CHAR)
-					{
-						return;
-					}
-
-					context.commitDocument();
-					PsiDocTag docTag = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiDocTag.class, false);
-					if(docTag != null)
-					{
-						Document document = context.getDocument();
-						int tagEnd = DocTagSelectioner.getDocTagRange(docTag, document.getCharsSequence(), 0).getEndOffset();
-						int tail = context.getTailOffset();
-						if(tail < tagEnd)
-						{
-							document.deleteString(tail, tagEnd);
-						}
-					}
-				}
-			}));
+			result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(description).withInsertHandler(PARAM_DESCRIPTION_INSERT_HANDLER), 1));
 		}
 	}
 
@@ -303,7 +362,7 @@ public class JavaDocCompletionContributor extends CompletionContributor
 		@Override
 		public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 		{
-			final List<String> ret = new ArrayList<String>();
+			final List<String> ret = new ArrayList<>();
 			final PsiElement position = parameters.getPosition();
 			final PsiDocComment comment = PsiTreeUtil.getParentOfType(position, PsiDocComment.class);
 			assert comment != null;
@@ -389,18 +448,14 @@ public class JavaDocCompletionContributor extends CompletionContributor
 				PsiMember member = PsiTreeUtil.getParentOfType(comment, PsiMember.class);
 				if(member instanceof PsiClass)
 				{
-					InheritanceUtil.processSupers((PsiClass) member, false, new Processor<PsiClass>()
+					InheritanceUtil.processSupers((PsiClass) member, false, psiClass ->
 					{
-						@Override
-						public boolean process(PsiClass psiClass)
+						String name = psiClass.getQualifiedName();
+						if(StringUtil.isNotEmpty(name) && !CommonClassNames.JAVA_LANG_OBJECT.equals(name))
 						{
-							String name = psiClass.getQualifiedName();
-							if(StringUtil.isNotEmpty(name) && !CommonClassNames.JAVA_LANG_OBJECT.equals(name))
-							{
-								result.add("see " + name);
-							}
-							return true;
+							result.add("see " + name);
 						}
+						return true;
 					});
 				}
 			}

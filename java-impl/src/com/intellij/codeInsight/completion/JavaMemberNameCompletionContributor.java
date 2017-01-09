@@ -64,8 +64,8 @@ import com.intellij.util.containers.ContainerUtil;
 public class JavaMemberNameCompletionContributor extends CompletionContributor
 {
 	public static final ElementPattern<PsiElement> INSIDE_TYPE_PARAMS_PATTERN = psiElement().
-			afterLeaf(psiElement().withText("?").andOr(psiElement().afterLeaf("<", ","), psiElement().afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(),
-					psiElement(PsiAnnotation.class))));
+			afterLeaf(psiElement().withText("?").andOr(psiElement().afterLeaf("<", ","), psiElement().afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(PsiAnnotation
+					.class))));
 
 	static final int MAX_SCOPE_SIZE_TO_SEARCH_UNRESOLVED = 50000;
 
@@ -83,7 +83,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 		}
 
 		PsiElement position = parameters.getPosition();
-		final Set<LookupElement> lookupSet = new THashSet<LookupElement>();
+		final Set<LookupElement> lookupSet = new THashSet<>();
 		if(psiElement(PsiIdentifier.class).andNot(INSIDE_TYPE_PARAMS_PATTERN).withParent(or(psiElement(PsiLocalVariable.class), psiElement(PsiParameter.class))).accepts(position))
 		{
 			completeLocalVariableName(lookupSet, result.getPrefixMatcher(), (PsiVariable) parameters.getPosition().getParent(), parameters.getInvocationCount() >= 1);
@@ -219,7 +219,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 
 	private static String[] getOverlappedNameVersions(final String prefix, final String[] suggestedNames, String suffix)
 	{
-		final List<String> newSuggestions = new ArrayList<String>();
+		final List<String> newSuggestions = new ArrayList<>();
 		int longestOverlap = 0;
 
 		for(String suggestedName : suggestedNames)
@@ -286,7 +286,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 		{
 			return ArrayUtil.EMPTY_STRING_ARRAY;
 		}
-		final Set<String> unresolvedRefs = new LinkedHashSet<String>();
+		final Set<String> unresolvedRefs = new LinkedHashSet<>();
 
 		if(parentOfType != null)
 		{
@@ -300,8 +300,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 					{
 						return;
 					}
-					if(referenceOnMethod && parent instanceof PsiMethodCallExpression &&
-							reference == ((PsiMethodCallExpression) parent).getMethodExpression())
+					if(referenceOnMethod && parent instanceof PsiMethodCallExpression && reference == ((PsiMethodCallExpression) parent).getMethodExpression())
 					{
 						if(reference.resolve() == null)
 						{
@@ -387,7 +386,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 			final boolean includeOverlapped,
 			final boolean methodPrefix)
 	{
-		Set<String> result = new LinkedHashSet<String>();
+		Set<String> result = new LinkedHashSet<>();
 		final String[] suggestedNames = suggestedNameInfo.names;
 		for(final String suggestedName : suggestedNames)
 		{
@@ -451,13 +450,13 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor
 
 		addLookupItems(set, null, matcher, element.getProject(), getUnresolvedReferences(ourClassParent, true));
 
-		addLookupItems(set, null, matcher, element.getProject(), getPropertiesHandlersNames(ourClassParent, ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC),
-				PsiUtil.getTypeByPsiElement(element), element));
+		addLookupItems(set, null, matcher, element.getProject(), getPropertiesHandlersNames(ourClassParent, ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC), PsiUtil
+				.getTypeByPsiElement(element), element));
 	}
 
 	private static String[] getPropertiesHandlersNames(final PsiClass psiClass, final boolean staticContext, final PsiType varType, final PsiElement element)
 	{
-		final List<String> propertyHandlers = new ArrayList<String>();
+		final List<String> propertyHandlers = new ArrayList<>();
 
 		for(final PsiField field : psiClass.getFields())
 		{
