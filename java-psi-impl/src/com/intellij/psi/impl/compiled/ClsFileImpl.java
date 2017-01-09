@@ -192,7 +192,8 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	@NotNull
 	public PsiElement[] getChildren()
 	{
-		return getClasses(); // TODO : package statement?
+		PsiJavaModule module = getModuleDeclaration();
+		return module != null ? new PsiElement[]{module} : getClasses();
 	}
 
 	@Override
@@ -330,12 +331,20 @@ public class ClsFileImpl extends ClsRepositoryPsiElement<PsiClassHolderFileStub>
 	{
 		buffer.append(BANNER);
 
-		appendText(getPackageStatement(), 0, buffer, "\n\n");
-
-		PsiClass[] classes = getClasses();
-		if(classes.length > 0)
+		PsiJavaModule module = getModuleDeclaration();
+		if(module != null)
 		{
-			appendText(classes[0], 0, buffer);
+			appendText(module, 0, buffer);
+		}
+		else
+		{
+			appendText(getPackageStatement(), 0, buffer, "\n\n");
+
+			PsiClass[] classes = getClasses();
+			if(classes.length > 0)
+			{
+				appendText(classes[0], 0, buffer);
+			}
 		}
 	}
 

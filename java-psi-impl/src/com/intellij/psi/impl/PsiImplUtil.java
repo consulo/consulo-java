@@ -34,9 +34,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.impl.light.LightClassReference;
+import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
@@ -197,17 +199,12 @@ public class PsiImplUtil
 				break;
 			}
 		}
-		String message = parameter + ":" + parameter.getClass() + " not found among parameters: " + Arrays.asList(parameters) + "." +
-				" parameterList' parent: " + parameterList.getParent() + ";" +
-				" parameter.isValid()=" + parameter.isValid() + ";" +
-				" parameterList.isValid()= " + parameterList.isValid() + ";" +
-				" parameterList stub: " + (parameterList instanceof StubBasedPsiElement ? ((StubBasedPsiElement) parameterList).getStub() : "---") + "; " +
-				" parameter stub: " + (parameter instanceof StubBasedPsiElement ? ((StubBasedPsiElement) parameter).getStub() : "---") + ";" +
-				" suspect: " + suspect + " (index=" + i + "); " + (suspect == null ? null : suspect.getClass()) +
-				" suspect stub: " + (suspect instanceof StubBasedPsiElement ? ((StubBasedPsiElement) suspect).getStub() : suspect == null ? "-null-" : "---" + suspect.getClass()) + ";" +
-				" parameter.equals(suspect) = " + parameter.equals(suspect) + "; " +
-				" parameter.getNode() == suspect.getNode():  " + (parameter.getNode() == (suspect == null ? null : suspect.getNode())) + "; " +
-				".";
+		String message = parameter + ":" + parameter.getClass() + " not found among parameters: " + Arrays.asList(parameters) + "." + " parameterList' parent: " + parameterList.getParent() + ";" + "" +
+				" parameter.isValid()=" + parameter.isValid() + ";" + " parameterList.isValid()= " + parameterList.isValid() + ";" + " parameterList stub: " + (parameterList instanceof
+				StubBasedPsiElement ? ((StubBasedPsiElement) parameterList).getStub() : "---") + "; " + " parameter stub: " + (parameter instanceof StubBasedPsiElement ? ((StubBasedPsiElement)
+				parameter).getStub() : "---") + ";" + " suspect: " + suspect + " (index=" + i + "); " + (suspect == null ? null : suspect.getClass()) + " suspect stub: " + (suspect instanceof
+				StubBasedPsiElement ? ((StubBasedPsiElement) suspect).getStub() : suspect == null ? "-null-" : "---" + suspect.getClass()) + ";" + " parameter.equals(suspect) = " + parameter.equals
+				(suspect) + "; " + " parameter.getNode() == suspect.getNode():  " + (parameter.getNode() == (suspect == null ? null : suspect.getNode())) + "; " + ".";
 		LOG.error(message);
 		return i;
 	}
@@ -989,5 +986,17 @@ public class PsiImplUtil
 
 		ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(element, resolver, true, incompleteCode, psiFile);
 		return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
+	}
+
+	public static VirtualFile getModuleVirtualFile(@NotNull PsiJavaModule module)
+	{
+		if(module instanceof LightJavaModule)
+		{
+			return ((LightJavaModule) module).getRootVirtualFile();
+		}
+		else
+		{
+			return module.getContainingFile().getVirtualFile();
+		}
 	}
 }

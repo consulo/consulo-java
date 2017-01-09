@@ -16,9 +16,6 @@
 package consulo.java.ide;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.java.JavaIcons;
-import consulo.java.module.util.JavaClassNames;
-import consulo.java.util.JavaProjectRootsUtil;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -34,6 +31,11 @@ import consulo.annotations.RequiredReadAction;
 import consulo.ide.IconDescriptor;
 import consulo.ide.IconDescriptorUpdater;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.java.JavaIcons;
+import consulo.java.fileTypes.JModFileType;
+import consulo.java.module.util.JavaClassNames;
+import consulo.java.util.JavaProjectRootsUtil;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
  * @author VISTALL
@@ -175,6 +177,18 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater
 				iconDescriptor.setRightIcon(AllIcons.Nodes.C_plocal);
 			}
 		}
+	}
+
+	@RequiredReadAction
+	private static boolean isModuleDirectory(PsiDirectory directory)
+	{
+		String name = directory.getName();
+		if(name.equals("classes"))
+		{
+			VirtualFile archiveFile = ArchiveVfsUtil.getVirtualFileForArchive(directory.getVirtualFile());
+			return archiveFile != null && archiveFile.getFileType() == JModFileType.INSTANCE;
+		}
+		return false;
 	}
 
 	private static boolean processedFile(PsiElement element, IconDescriptor iconDescriptor)
