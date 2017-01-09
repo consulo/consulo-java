@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,10 +48,10 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 {
 	private static final ElementFilter ourFilter = ElementClassFilter.METHOD;
 
-	private boolean myStaticScopeFlag = false;
-	private boolean myIsConstructor = false;
-	protected PsiElement myCurrentFileContext = null;
-	protected PsiClass myAccessClass = null;
+	private boolean myStaticScopeFlag;
+	private boolean myIsConstructor;
+	protected PsiElement myCurrentFileContext;
+	protected PsiClass myAccessClass;
 	private PsiExpressionList myArgumentList;
 	private PsiType[] myTypeArguments;
 	private final LanguageLevel myLanguageLevel;

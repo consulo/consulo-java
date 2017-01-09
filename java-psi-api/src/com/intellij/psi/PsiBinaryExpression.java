@@ -18,43 +18,48 @@ package com.intellij.psi;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 
 /**
  * Represents a Java binary expression (addition, multiplication and so on).
  * N.B Please use {@link PsiPolyadicExpression} instead as a more general form of an infix operator-expression.
  */
-public interface PsiBinaryExpression extends PsiPolyadicExpression {
-  /**
-   * Returns the left operand of the expression.
-   *
-   * @return the left operand.
-   */
-  @NotNull
-  PsiExpression getLOperand();
+public interface PsiBinaryExpression extends PsiPolyadicExpression
+{
+	TokenSet BOOLEAN_OPERATION_TOKENS = TokenSet.create(JavaTokenType.EQEQ, JavaTokenType.NE, JavaTokenType.LT, JavaTokenType.GT, JavaTokenType.LE, JavaTokenType.GE, JavaTokenType.OROR,
+			JavaTokenType.ANDAND);
 
-  /**
-   * Returns the right operand of the expression.
-   *
-   * @return the right operand, or null if the expression is incomplete.
-   */
-  @Nullable
-  PsiExpression getROperand();
+	/**
+	 * Returns the left operand of the expression.
+	 *
+	 * @return the left operand.
+	 */
+	@NotNull
+	PsiExpression getLOperand();
 
-  /**
-   * Returns the token representing the operation (for example, {@link JavaTokenType#PLUS} for an
-   * addition operation).
-   *
-   * @return the operation token.
-   */
-  @NotNull
-  PsiJavaToken getOperationSign();
+	/**
+	 * Returns the right operand of the expression.
+	 *
+	 * @return the right operand, or null if the expression is incomplete.
+	 */
+	@Nullable
+	PsiExpression getROperand();
 
-  /**
-   * Returns the type of the token representing the operation performed.
-   *
-   * @return the token type.
-   */
-  @Override
-  @NotNull
-  IElementType getOperationTokenType();
+	/**
+	 * Returns the token representing the operation (for example, {@link JavaTokenType#PLUS} for an
+	 * addition operation).
+	 *
+	 * @return the operation token.
+	 */
+	@NotNull
+	PsiJavaToken getOperationSign();
+
+	/**
+	 * Returns the type of the token representing the operation performed.
+	 *
+	 * @return the token type.
+	 */
+	@Override
+	@NotNull
+	IElementType getOperationTokenType();
 }

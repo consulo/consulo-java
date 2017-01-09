@@ -18,7 +18,6 @@ package com.intellij.psi.util;
 import gnu.trove.TObjectHashingStrategy;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,7 +68,7 @@ public class MethodSignatureUtil
 
 	/**
 	 * def: (8.4.2 Method Signature) Two method signatures m1 and m2 are override-equivalent iff either m1 is a subsignature of m2 or m2 is a subsignature of m1.
-	 * <p/>
+	 * <p>
 	 * erasure (erasure) = erasure, so we would check if erasures are equal and then check if the number of type parameters agree:
 	 * if signature(m1)=signature(m2), then m1.typeParams=m2.typeParams
 	 * if (erasure(signature(m1))=signature(m2), then m2.typeParams.length=0 and vise versa
@@ -78,8 +77,8 @@ public class MethodSignatureUtil
 	{
 		final int typeParamsLength1 = method1.getTypeParameters().length;
 		final int typeParamsLength2 = method2.getTypeParameters().length;
-		return (typeParamsLength1 == typeParamsLength2 || typeParamsLength1 == 0 || typeParamsLength2 == 0) && areErasedParametersEqual(method1.getSignature(PsiSubstitutor.EMPTY),
-				method2.getSignature(PsiSubstitutor.EMPTY));
+		return (typeParamsLength1 == typeParamsLength2 || typeParamsLength1 == 0 || typeParamsLength2 == 0) && areErasedParametersEqual(method1.getSignature(PsiSubstitutor.EMPTY), method2
+				.getSignature(PsiSubstitutor.EMPTY));
 	}
 
 	public static boolean areErasedParametersEqual(@NotNull MethodSignature method1, @NotNull MethodSignature method2)
@@ -160,8 +159,8 @@ public class MethodSignatureUtil
 		{
 			return false;
 		}
-		return checkSignaturesEqualInner(method1, method2, getSuperMethodSignatureSubstitutor(method1, method2)) || checkSignaturesEqualInner(method2, method1,
-				getSuperMethodSignatureSubstitutor(method2, method1));
+		return checkSignaturesEqualInner(method1, method2, getSuperMethodSignatureSubstitutor(method1, method2)) || checkSignaturesEqualInner(method2, method1, getSuperMethodSignatureSubstitutor
+				(method2, method1));
 	}
 
 	private static boolean checkSignaturesEqualInner(@NotNull MethodSignature subSignature, @NotNull MethodSignature superSignature, final PsiSubstitutor unifyingSubstitutor)
@@ -420,18 +419,23 @@ public class MethodSignatureUtil
 			result = result.put(superTypeParameters[i], factory.createType(methodTypeParameter));
 		}
 
+		final PsiSubstitutor methodSubstitutor = methodSignature.getSubstitutor();
+
 		//check bounds
 		for(int i = 0; i < methodTypeParameters.length; i++)
 		{
 			PsiTypeParameter methodTypeParameter = methodTypeParameters[i];
 			PsiTypeParameter superTypeParameter = superTypeParameters[i];
 			final Set<PsiType> methodSupers = new HashSet<PsiType>();
-			Collections.addAll(methodSupers, methodTypeParameter.getSuperTypes());
+			for(PsiClassType methodSuper : methodTypeParameter.getSuperTypes())
+			{
+				methodSupers.add(methodSubstitutor.substitute(methodSuper));
+			}
 
 			final Set<PsiType> superSupers = new HashSet<PsiType>();
 			for(PsiClassType superSuper : superTypeParameter.getSuperTypes())
 			{
-				superSupers.add(result.substitute(superSuper));
+				superSupers.add(methodSubstitutor.substitute(result.substitute(superSuper)));
 			}
 			methodSupers.remove(PsiType.getJavaLangObject(methodTypeParameter.getManager(), methodTypeParameter.getResolveScope()));
 			superSupers.remove(PsiType.getJavaLangObject(superTypeParameter.getManager(), superTypeParameter.getResolveScope()));
@@ -539,7 +543,7 @@ public class MethodSignatureUtil
 		{
 
 			//R1, adapted to the type parameters of d2 (§8.4.4), is a subtype of R2.
-			final PsiSubstitutor adaptingSubstitutor = getSuperMethodSignatureSubstitutor(d1, d2);
+			final PsiSubstitutor adaptingSubstitutor = getSuperMethodSignatureSubstitutor(d2, d1);
 			if(adaptingSubstitutor != null && r2.isAssignableFrom(adaptingSubstitutor.substitute(r1)))
 			{
 				return true;

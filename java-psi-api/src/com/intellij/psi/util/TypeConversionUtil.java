@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import gnu.trove.THashSet;
 import gnu.trove.TObjectIntHashMap;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -1037,8 +1038,8 @@ public class TypeConversionUtil
 	 *
 	 * @param left  type to assign to
 	 * @param right type of value
-	 * @return true if value of type <code>right</code> can be assigned to an l-value of
-	 * type <code>left</code>
+	 * @return true if value of type {@code right} can be assigned to an l-value of
+	 * type {@code left}
 	 */
 	public static boolean isAssignable(@NotNull PsiType left, @NotNull PsiType right)
 	{
@@ -1119,7 +1120,7 @@ public class TypeConversionUtil
 
 		if(right instanceof PsiCapturedWildcardType)
 		{
-			return isAssignable(left, ((PsiCapturedWildcardType) right).getUpperBound(), allowUncheckedConversion, capture);
+			return isAssignable(left, ((PsiCapturedWildcardType) right).getUpperBound(capture), allowUncheckedConversion, capture);
 		}
 
 		if(left instanceof PsiCapturedWildcardType)
@@ -1211,7 +1212,7 @@ public class TypeConversionUtil
 		}
 		if(left instanceof PsiPrimitiveType)
 		{
-			return isUnboxable((PsiPrimitiveType) left, (PsiClassType) right);
+			return isUnboxable((PsiPrimitiveType) left, (PsiClassType) right, new HashSet<PsiClassType>());
 		}
 		final PsiClassType.ClassResolveResult leftResult = PsiUtil.resolveGenericsClassInType(left);
 		final PsiClassType.ClassResolveResult rightResult = PsiUtil.resolveGenericsClassInType(right);
@@ -1267,8 +1268,30 @@ public class TypeConversionUtil
 		return isAssignable(wildcardType.getExtendsBound(), right);
 	}
 
-	private static boolean isUnboxable(@NotNull PsiPrimitiveType left, @NotNull PsiClassType right)
+	private static boolean isUnboxable(@NotNull PsiPrimitiveType left, @NotNull PsiClassType right, @NotNull Set<PsiClassType> types)
 	{
+		if(!right.getLanguageLevel().isAtLeast(LanguageLevel.JDK_1_5))
+		{
+			return false;
+		}
+		final PsiClass psiClass = right.resolve();
+		if(psiClass == null)
+		{
+			return false;
+		}
+
+		if(psiClass instanceof PsiTypeParameter)
+		{
+			for(PsiClassType bound : psiClass.getExtendsListTypes())
+			{
+				if(types.add(bound) && isUnboxable(left, bound, types))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		final PsiPrimitiveType rightUnboxedType = PsiPrimitiveType.getUnboxedType(right);
 		return rightUnboxedType != null && isAssignable(left, rightUnboxedType);
 	}
@@ -1342,7 +1365,7 @@ public class TypeConversionUtil
 							@Override
 							public boolean process(PsiClass psiClass)
 							{
-								ContainerUtil.addIfNotNull(psiClass.getQualifiedName(), set);
+								ContainerUtil.addIfNotNull(set, psiClass.getQualifiedName());
 								return true;
 							}
 						});
@@ -1526,13 +1549,13 @@ public class TypeConversionUtil
 	private static final Set<String> ourReportedSuperClassSubstitutorExceptions = ContainerUtil.newConcurrentSet();
 
 	/**
-	 * Calculates substitutor that binds type parameters in <code>superClass</code> with
-	 * values that they have in <code>derivedClass</code>, given that type parameters in
-	 * <code>derivedClass</code> are bound by <code>derivedSubstitutor</code>.
-	 * <code>superClass</code> must be a super class/interface of <code>derivedClass</code> (as in
-	 * <code>InheritanceUtil.isInheritorOrSelf(derivedClass, superClass, true)</code>
+	 * Calculates substitutor that binds type parameters in {@code superClass} with
+	 * values that they have in {@code derivedClass}, given that type parameters in
+	 * {@code derivedClass} are bound by {@code derivedSubstitutor}.
+	 * {@code superClass} must be a super class/interface of {@code derivedClass} (as in
+	 * {@code InheritanceUtil.isInheritorOrSelf(derivedClass, superClass, true)}
 	 *
-	 * @return substitutor (never returns <code>null</code>)
+	 * @return substitutor (never returns {@code null})
 	 * @see PsiClass#isInheritor(PsiClass, boolean)
 	 * @see InheritanceUtil#isInheritorOrSelf(PsiClass, PsiClass, boolean)
 	 */
@@ -1836,7 +1859,14 @@ public class TypeConversionUtil
 			@Override
 			public PsiType visitWildcardType(PsiWildcardType wildcardType)
 			{
-				return wildcardType.getExtendsBound().accept(this);
+				return wildcardType;
+			}
+
+			@Nullable
+			@Override
+			public PsiType visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType)
+			{
+				return capturedWildcardType.getUpperBound().accept(this);
 			}
 
 			@Override
@@ -1885,11 +1915,7 @@ public class TypeConversionUtil
 			return null;
 		}
 		Object value;
-		if(operand instanceof String && castType.equalsToText(JAVA_LANG_STRING))
-		{
-			value = operand;
-		}
-		else if(operand instanceof Boolean && PsiType.BOOLEAN.equals(castType))
+		if(operand instanceof String && castType.equalsToText(JAVA_LANG_STRING) || operand instanceof Boolean && PsiType.BOOLEAN.equals(castType))
 		{
 			value = operand;
 		}
@@ -2058,14 +2084,7 @@ public class TypeConversionUtil
 			}
 			return lType;
 		}
-		if(sign == JavaTokenType.EQEQ ||
-				sign == JavaTokenType.NE ||
-				sign == JavaTokenType.LT ||
-				sign == JavaTokenType.GT ||
-				sign == JavaTokenType.LE ||
-				sign == JavaTokenType.GE ||
-				sign == JavaTokenType.OROR ||
-				sign == JavaTokenType.ANDAND)
+		if(PsiBinaryExpression.BOOLEAN_OPERATION_TOKENS.contains(sign))
 		{
 			return PsiType.BOOLEAN;
 		}

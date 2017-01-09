@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import com.intellij.util.SmartList;
  */
 public class MethodCandidatesProcessor extends MethodsProcessor
 {
-	protected boolean myHasAccessibleStaticCorrectCandidate = false;
+	protected boolean myHasAccessibleStaticCorrectCandidate;
 
 	public MethodCandidatesProcessor(@NotNull PsiElement place, PsiFile placeFile, @NotNull PsiConflictResolver[] resolvers, @NotNull List<CandidateInfo> container)
 	{
@@ -58,8 +58,8 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 
 	public void addMethod(@NotNull PsiMethod method, final PsiSubstitutor substitutor, boolean staticProblem)
 	{
-		final boolean isAccessible = JavaResolveUtil.isAccessible(method, getContainingClass(method), method.getModifierList(), myPlace, myAccessClass, myCurrentFileContext,
-				myPlaceFile) && !isShadowed(method);
+		final boolean isAccessible = JavaResolveUtil.isAccessible(method, getContainingClass(method), method.getModifierList(), myPlace, myAccessClass, myCurrentFileContext, myPlaceFile) &&
+				!isShadowed(method);
 		if(isAccepted(method) && !(isInterfaceStaticMethodAccessibleThroughInheritance(method) && ImportsUtil.hasStaticImportOn(myPlace, method, true)))
 		{
 			if(!staticProblem && myAccessClass != null && method.hasModifierProperty(PsiModifier.STATIC))
@@ -119,7 +119,7 @@ public class MethodCandidatesProcessor extends MethodsProcessor
 				if(myExpressionTypes == null && argumentList != null)
 				{
 					final PsiType[] expressionTypes = getExpressionTypes(argumentList);
-					if(MethodCandidateInfo.isOverloadCheck())
+					if(MethodCandidateInfo.isOverloadCheck() || LambdaUtil.isLambdaParameterCheck())
 					{
 						return expressionTypes;
 					}
