@@ -41,7 +41,7 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.codeStyle.PsiBasedFormatterModelWithShiftIndentInside;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.impl.source.tree.TreeUtil;import consulo.annotations.RequiredReadAction;
 
 public class JavaFormattingModelBuilder implements FormattingModelBuilder
 {
@@ -49,6 +49,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 
 	@Override
 	@NotNull
+	@RequiredReadAction
 	public FormattingModel createModel(final PsiElement element, final CodeStyleSettings settings)
 	{
 		final FileElement fileElement = TreeUtil.getFileElement((TreeElement) SourceTreeToPsiMap.psiElementToTree(element));
@@ -61,12 +62,14 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 	}
 
 	@Override
+	@RequiredReadAction
 	public TextRange getRangeAffectingIndent(PsiFile file, int offset, ASTNode elementAtOffset)
 	{
 		return doGetRangeAffectingIndent(elementAtOffset);
 	}
 
 	@Nullable
+	@RequiredReadAction
 	public static TextRange doGetRangeAffectingIndent(final ASTNode elementAtOffset)
 	{
 		ASTNode current = elementAtOffset;
@@ -113,6 +116,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilder
 	 * @return given node range if there is no error-element before it; combined range otherwise
 	 */
 	@Nullable
+	@RequiredReadAction
 	private static TextRange combineWithErrorElementIfPossible(@NotNull ASTNode node)
 	{
 		if(node.getElementType() == TokenType.ERROR_ELEMENT)

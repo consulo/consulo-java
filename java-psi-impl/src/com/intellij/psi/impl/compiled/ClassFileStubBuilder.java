@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,79 +35,84 @@ import com.intellij.util.indexing.FileContent;
 /**
  * @author max
  */
-public class ClassFileStubBuilder implements BinaryFileStubBuilder
-{
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.compiled.ClassFileStubBuilder");
+public class ClassFileStubBuilder implements BinaryFileStubBuilder {
+  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.compiled.ClassFileStubBuilder");
 
-	public static final int STUB_VERSION = 12;
+  public static final int STUB_VERSION = 18;
 
-	@Override
-	public boolean acceptsFile(@NotNull VirtualFile file)
-	{
-		return true;
-	}
+  @Override
+  public boolean acceptsFile(@NotNull VirtualFile file) {
+	return true;
+  }
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public StubElement buildStubTree(@NotNull FileContent fileContent)
-	{
-		VirtualFile file = fileContent.getFile();
-		byte[] content = fileContent.getContent();
+  @Override
+  public StubElement buildStubTree(@NotNull FileContent fileContent) {
+	VirtualFile file = fileContent.getFile();
+    byte[] content = fileContent.getContent();
 
-		try
-		{
-			ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-			if(decompiler instanceof Full)
-			{
-				return ((Full) decompiler).getStubBuilder().buildFileStub(fileContent);
-			}
-		}
-		catch(ClsFormatException e)
-		{
-			LOG.debug(e);
-		}
+    try {
+      try {
+        file.setPreloadedContentHint(content);
+        ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
+        if (decompiler instanceof Full) {
+          return ((Full)decompiler).getStubBuilder().buildFileStub(fileContent);
+        }
+      }
+      catch (ClsFormatException e) {
+		  if(LOG.isDebugEnabled())
+		  {
+			  LOG.debug(file.getPath(), e);
+		  }
+		  else
+		  {
+			  LOG.info(file.getPath() + ": " + e.getMessage());
+		  }
+      }
 
-		try
-		{
-			PsiFileStub<?> stub = ClsFileImpl.buildFileStub(file, content);
-			if(stub == null && !fileContent.getFileName().contains("$"))
-			{
-				LOG.info("No stub built for file " + fileContent);
-			}
-			return stub;
-		}
-		catch(ClsFormatException e)
-		{
-			LOG.debug(e);
-		}
+      try {
+        PsiFileStub<?> stub = ClsFileImpl.buildFileStub(file, content);
+        if (stub == null && fileContent.getFileName().indexOf('$') < 0) {
+          LOG.info("No stub built for file " + fileContent);
+        }
+        return stub;
+      }
+      catch (ClsFormatException e) {
+		  if(LOG.isDebugEnabled())
+		  {
+			  LOG.debug(file.getPath(), e);
+		  }
+		  else
+		  {
+			  LOG.info(file.getPath() + ": " + e.getMessage());
+		  }
+      }
+    }
+    finally {
+      file.setPreloadedContentHint(null);
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	private static final Comparator<Object> CLASS_NAME_COMPARATOR = new Comparator<Object>()
-	{
-		@Override
-		public int compare(Object o1, Object o2)
-		{
-			return o1.getClass().getName().compareTo(o2.getClass().getName());
-		}
-	};
+  private static final Comparator<Object> CLASS_NAME_COMPARATOR = new Comparator<Object>() {
+    @Override
+    public int compare(Object o1, Object o2) {
+      return o1.getClass().getName().compareTo(o2.getClass().getName());
+    }
+  };
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public int getStubVersion()
-	{
-		int version = STUB_VERSION;
+  @Override
+  public int getStubVersion() {
+    int version = STUB_VERSION;
 
-		List<ClassFileDecompilers.Decompiler> decompilers = ContainerUtil.newArrayList(ClassFileDecompilers.EP_NAME.getExtensions());
-		Collections.sort(decompilers, CLASS_NAME_COMPARATOR);
-		for(ClassFileDecompilers.Decompiler decompiler : decompilers)
-		{
-			if(decompiler instanceof Full)
-			{
-				version = version * 31 + ((Full) decompiler).getStubBuilder().getStubVersion() + decompiler.getClass().getName().hashCode();
-			}
-		}
-		return version;
-	}
+    List<ClassFileDecompilers.Decompiler> decompilers = ContainerUtil.newArrayList(ClassFileDecompilers.EP_NAME.getExtensions());
+    Collections.sort(decompilers, CLASS_NAME_COMPARATOR);
+    for (ClassFileDecompilers.Decompiler decompiler : decompilers) {
+      if (decompiler instanceof Full) {
+        version = version * 31 + ((Full)decompiler).getStubBuilder().getStubVersion() + decompiler.getClass().getName().hashCode();
+      }
+    }
+
+    return version;
+  }
 }

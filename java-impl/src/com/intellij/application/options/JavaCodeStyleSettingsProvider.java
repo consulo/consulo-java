@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,14 @@
 package com.intellij.application.options;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.Language;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
+import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
+import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 
 /**
  * @author Rustam Vishnyakov
@@ -27,11 +32,11 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
   @NotNull
   @Override
   public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
-    return new CodeStyleAbstractConfigurable(settings, originalSettings, "Java") {      
-      protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
+      return new CodeStyleAbstractConfigurable(settings, originalSettings, "Java") {
+      @Override protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
         return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
       }
-      public String getHelpTopic() {
+      @Override public String getHelpTopic() {
         return "reference.settingsdialog.codestyle.java";
       }
     };
@@ -40,5 +45,17 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
   @Override
   public String getConfigurableDisplayName() {
     return "Java";
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
+
+  @Nullable
+  @Override
+  public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
+    return new JavaCodeStyleSettings(settings);
   }
 }
