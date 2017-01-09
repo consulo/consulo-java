@@ -28,34 +28,45 @@ import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 /**
  * @author Rustam Vishnyakov
  */
-public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
-  @NotNull
-  @Override
-  public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
-      return new CodeStyleAbstractConfigurable(settings, originalSettings, "Java") {
-      @Override protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
-        return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
-      }
-      @Override public String getHelpTopic() {
-        return "reference.settingsdialog.codestyle.java";
-      }
-    };
-  }
+public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider
+{
+	@NotNull
+	@Override
+	public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings)
+	{
+		return new CodeStyleAbstractConfigurable(settings, originalSettings, "Java")
+		{
+			@Override
+			protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings)
+			{
+				return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
+			}
 
-  @Override
-  public String getConfigurableDisplayName() {
-    return "Java";
-  }
+			@Override
+			public String getHelpTopic()
+			{
+				return "reference.settingsdialog.codestyle.java";
+			}
+		};
+	}
 
-  @Nullable
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+	@Override
+	public String getConfigurableDisplayName()
+	{
+		return "Java";
+	}
 
-  @Nullable
-  @Override
-  public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
-    return new JavaCodeStyleSettings(settings);
-  }
+	@Nullable
+	@Override
+	public Language getLanguage()
+	{
+		return JavaLanguage.INSTANCE;
+	}
+
+	@Nullable
+	@Override
+	public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings)
+	{
+		return new JavaCodeStyleSettings(settings);
+	}
 }
