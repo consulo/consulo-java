@@ -15,34 +15,48 @@
  */
 package com.intellij.ide.util;
 
-import com.intellij.psi.*;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.presentation.java.ClassPresentationUtil;
 
-public class PsiClassListCellRenderer extends PsiElementListCellRenderer<PsiClass> {
-  @Override
-  public String getElementText(PsiClass element) {
-    return ClassPresentationUtil.getNameForClass(element, false);
-  }
+public class PsiClassListCellRenderer extends PsiElementListCellRenderer<PsiClass>
+{
+	public static final PsiClassListCellRenderer INSTANCE = new PsiClassListCellRenderer();
 
-  @Override
-  protected String getContainerText(PsiClass element, final String name) {
-    return getContainerTextStatic(element);
-  }
+	@Override
+	public String getElementText(PsiClass element)
+	{
+		return ClassPresentationUtil.getNameForClass(element, false);
+	}
 
-  @Nullable
-  public static String getContainerTextStatic(final PsiElement element) {
-    PsiFile file = element.getContainingFile();
-    if (file instanceof PsiClassOwner) {
-      String packageName = ((PsiClassOwner)file).getPackageName();
-      if (packageName.isEmpty()) return null;
-      return "(" + packageName + ")";
-    }
-    return null;
-  }
+	@Override
+	protected String getContainerText(PsiClass element, final String name)
+	{
+		return getContainerTextStatic(element);
+	}
 
-  @Override
-  protected int getIconFlags() {
-    return 0;
-  }
+	@Nullable
+	public static String getContainerTextStatic(final PsiElement element)
+	{
+		PsiFile file = element.getContainingFile();
+		if(file instanceof PsiClassOwner)
+		{
+			String packageName = ((PsiClassOwner) file).getPackageName();
+			if(packageName.isEmpty())
+			{
+				return null;
+			}
+			return "(" + packageName + ")";
+		}
+		return null;
+	}
+
+	@Override
+	protected int getIconFlags()
+	{
+		return 0;
+	}
 }

@@ -264,8 +264,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention
 			LOG.assertTrue(operand != null);
 			lambdaExpression = (PsiLambdaExpression) typeCastExpression.replace(operand);
 			final PsiElement body = lambdaExpression.getBody();
-			final PsiExpression singleExpression = RedundantLambdaCodeBlockInspection.isCodeBlockRedundant
-					(lambdaExpression, body);
+			final PsiExpression singleExpression = RedundantLambdaCodeBlockInspection.isCodeBlockRedundant(lambdaExpression);
 			if(singleExpression != null)
 			{
 				body.replace(singleExpression);

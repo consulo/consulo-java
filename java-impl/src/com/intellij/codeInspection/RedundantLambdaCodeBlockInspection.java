@@ -15,23 +15,15 @@
  */
 package com.intellij.codeInspection;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.infos.MethodCandidateInfo;
-import com.intellij.psi.scope.conflictResolvers.JavaMethodsConflictResolver;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 
@@ -84,7 +76,7 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 				if(PsiUtil.isLanguageLevel8OrHigher(expression))
 				{
 					final PsiElement body = expression.getBody();
-					final PsiExpression psiExpression = isCodeBlockRedundant(expression, body);
+					final PsiExpression psiExpression = isCodeBlockRedundant(body);
 					if(psiExpression != null)
 					{
 						final PsiElement errorElement;
@@ -97,15 +89,14 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 						{
 							errorElement = body.getFirstChild();
 						}
-						holder.registerProblem(errorElement, "Statement lambda can be replaced with expression " +
-								"lambda", ProblemHighlightType.LIKE_UNUSED_SYMBOL, new ReplaceWithExprFix());
+						holder.registerProblem(errorElement, "Statement lambda can be replaced with expression lambda", ProblemHighlightType.LIKE_UNUSED_SYMBOL, new ReplaceWithExprFix());
 					}
 				}
 			}
 		};
 	}
 
-	public static PsiExpression isCodeBlockRedundant(PsiExpression expression, PsiElement body)
+	public static PsiExpression isCodeBlockRedundant(PsiElement body)
 	{
 		if(body instanceof PsiCodeBlock)
 		{
@@ -114,31 +105,23 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 			{
 				if(LambdaUtil.isExpressionStatementExpression(psiExpression))
 				{
-					final PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
-					if(parent instanceof PsiExpressionList)
+					final PsiCall call = LambdaUtil.treeWalkUp(body);
+					if(call != null && call.resolveMethod() != null)
 					{
-						final PsiElement gParent = parent.getParent();
-						if(gParent instanceof PsiCallExpression)
+						final int offsetInTopCall = body.getTextRange().getStartOffset() - call.getTextRange().getStartOffset();
+						PsiCall copyCall = LambdaUtil.copyTopLevelCall(call);
+						if(copyCall == null)
 						{
-							final CandidateInfo[] candidates = PsiResolveHelper.SERVICE.getInstance(gParent.getProject
-									()).getReferencedMethodCandidates((PsiCallExpression) gParent, false, true);
-							if(candidates.length > 1)
+							return null;
+						}
+						final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(copyCall.findElementAt(offsetInTopCall), PsiCodeBlock.class);
+						if(codeBlock != null)
+						{
+							final PsiElement parent = codeBlock.getParent();
+							if(parent instanceof PsiLambdaExpression)
 							{
-								final List<CandidateInfo> info = new ArrayList<CandidateInfo>(Arrays.asList
-										(candidates));
-								final LanguageLevel level = PsiUtil.getLanguageLevel(parent);
-								final JavaMethodsConflictResolver conflictResolver = new JavaMethodsConflictResolver(
-										(PsiExpressionList) parent, level);
-								final PsiExpressionList argumentList = ((PsiCallExpression) gParent).getArgumentList();
-								if(argumentList == null)
-								{
-									return null;
-								}
-								conflictResolver.checkParametersNumber(info, argumentList.getExpressions().length,
-										false);
-								conflictResolver.checkSpecifics(info, MethodCandidateInfo.ApplicabilityLevel.VARARGS,
-										level);
-								if(info.size() > 1)
+								codeBlock.replace(psiExpression);
+								if(copyCall.resolveMethod() == null || ((PsiLambdaExpression) parent).getFunctionalInterfaceType() == null)
 								{
 									return null;
 								}
@@ -169,16 +152,9 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 	{
 		@NotNull
 		@Override
-		public String getName()
-		{
-			return "Replace with expression lambda";
-		}
-
-		@NotNull
-		@Override
 		public String getFamilyName()
 		{
-			return getName();
+			return "Replace with expression lambda";
 		}
 
 		@Override
@@ -187,12 +163,7 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
 			final PsiElement element = descriptor.getPsiElement();
 			if(element != null)
 			{
-				if(!FileModificationService.getInstance().preparePsiElementForWrite(element))
-				{
-					return;
-				}
-				final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element,
-						PsiLambdaExpression.class);
+				final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
 				if(lambdaExpression != null)
 				{
 					final PsiElement body = lambdaExpression.getBody();
