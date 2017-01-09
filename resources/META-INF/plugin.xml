@@ -1835,6 +1835,7 @@
 		<basicWordSelectionFilter implementation="com.intellij.codeInsight.editorActions.wordSelection.JavaBasicWordSelectionFilter"/>
 
 		<iconDescriptorUpdater implementation="consulo.java.ide.JavaIconDescriptorUpdater" id="java"/>
+		<iconDescriptorUpdater implementation="consulo.java.ide.JavaModuleIconDescriptorUpdater" id="javaModule" order="after directory"/>
 		<iconDescriptorUpdater implementation="consulo.java.execution.testframework.TestIconDescriptorUpdater"/>
 
 		<idIndexer filetype="JAVA" implementationClass="com.intellij.psi.impl.cache.impl.idCache.JavaIdIndexer"/>
