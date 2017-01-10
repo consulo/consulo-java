@@ -15,6 +15,10 @@
  */
 package com.intellij.ide.projectView.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.SelectableTreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
@@ -28,155 +32,200 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import consulo.java.util.JavaProjectRootsUtil;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
+public class ClassesTreeStructureProvider implements SelectableTreeStructureProvider, DumbAware
+{
+	private final Project myProject;
 
-public class ClassesTreeStructureProvider implements SelectableTreeStructureProvider, DumbAware {
-  private final Project myProject;
+	public ClassesTreeStructureProvider(Project project)
+	{
+		myProject = project;
+	}
 
-  public ClassesTreeStructureProvider(Project project) {
-    myProject = project;
-  }
+	@Override
+	public Collection<AbstractTreeNode> modify(AbstractTreeNode parent, Collection<AbstractTreeNode> children, ViewSettings settings)
+	{
+		ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+		for(final AbstractTreeNode child : children)
+		{
+			Object o = child.getValue();
+			if(o instanceof PsiClassOwner/* && !(o instanceof JspFile)*/)
+			{
+				final ViewSettings settings1 = ((ProjectViewNode) parent).getSettings();
+				final PsiClassOwner classOwner = (PsiClassOwner) o;
+				final VirtualFile file = classOwner.getVirtualFile();
 
-  @Override
-  public Collection<AbstractTreeNode> modify(AbstractTreeNode parent, Collection<AbstractTreeNode> children, ViewSettings settings) {
-    ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
-    for (final AbstractTreeNode child : children) {
-      Object o = child.getValue();
-      if (o instanceof PsiClassOwner/* && !(o instanceof JspFile)*/) {
-        final ViewSettings settings1 = ((ProjectViewNode)parent).getSettings();
-        final PsiClassOwner classOwner = (PsiClassOwner)o;
-        final VirtualFile file = classOwner.getVirtualFile();
+				if(!(classOwner instanceof PsiCompiledElement))
+				{
+					//do not show duplicated items if jar file contains classes and sources
+					final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
+					if(file != null && fileIndex.isInLibrarySource(file))
+					{
+						final PsiElement originalElement = classOwner.getOriginalElement();
+						if(originalElement instanceof PsiFile)
+						{
+							PsiFile classFile = (PsiFile) originalElement;
+							final VirtualFile virtualClassFile = classFile.getVirtualFile();
+							if(virtualClassFile != null && fileIndex.isInLibraryClasses(virtualClassFile) && classOwner.getManager().areElementsEquivalent(classOwner.getContainingDirectory(),
+									classFile.getContainingDirectory()))
+							{
+								continue;
+							}
+						}
+					}
+				}
 
-        if (!(classOwner instanceof PsiCompiledElement)) {
-          //do not show duplicated items if jar file contains classes and sources
-          final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
-          if (file != null && fileIndex.isInLibrarySource(file)) {
-            final PsiElement originalElement = classOwner.getOriginalElement();
-            if (originalElement instanceof PsiFile) {
-              PsiFile classFile = (PsiFile)originalElement;
-              final VirtualFile virtualClassFile = classFile.getVirtualFile();
-              if (virtualClassFile != null && fileIndex.isInLibraryClasses(virtualClassFile) &&
-                  classOwner.getManager().areElementsEquivalent(classOwner.getContainingDirectory(), classFile.getContainingDirectory())) {
-                continue;
-              }
-            }
-          }
-        }
+				if(fileInRoots(file))
+				{
+					PsiClass[] classes = classOwner.getClasses();
+					if(classes.length == 1 && !(classes[0] instanceof SyntheticElement) && (file == null || file.getNameWithoutExtension().equals(classes[0].getName())))
+					{
+						result.add(new ClassTreeNode(myProject, classes[0], settings1));
+					}
+					else
+					{
+						result.add(new PsiClassOwnerTreeNode(classOwner, settings1));
+					}
+					continue;
+				}
+			}
 
-        if (fileInRoots(file)) {
-          PsiClass[] classes = classOwner.getClasses();
-          if (classes.length == 1 && !(classes[0] instanceof SyntheticElement) &&
-              (file == null || file.getNameWithoutExtension().equals(classes[0].getName()))) {
-            result.add(new ClassTreeNode(myProject, classes[0], settings1));
-          }
-          else {
-            result.add(new PsiClassOwnerTreeNode(classOwner, settings1));
-          }
-          continue;
-        }
-      }
-      result.add(child);
-    }
-    return result;
-  }
+			result.add(child);
+		}
+		return result;
+	}
 
-  private boolean fileInRoots(@Nullable VirtualFile file) {
-    if (file == null) {
-      return false;
-    }
-    return JavaProjectRootsUtil.isJavaSourceFile(myProject, file, true);
-  }
+	private boolean fileInRoots(@Nullable VirtualFile file)
+	{
+		if(file == null)
+		{
+			return false;
+		}
+		return JavaProjectRootsUtil.isJavaSourceFile(myProject, file, true);
+	}
 
-  @Override
-  public Object getData(Collection<AbstractTreeNode> selected, String dataName) {
-    return null;
-  }
+	@Override
+	public Object getData(Collection<AbstractTreeNode> selected, String dataName)
+	{
+		return null;
+	}
 
-  @Override
-  public PsiElement getTopLevelElement(final PsiElement element) {
-    PsiFile baseRootFile = getBaseRootFile(element);
-    if (baseRootFile == null) return null;
+	@Override
+	public PsiElement getTopLevelElement(final PsiElement element)
+	{
+		PsiFile baseRootFile = getBaseRootFile(element);
+		if(baseRootFile == null)
+		{
+			return null;
+		}
 
-    if (!fileInRoots(baseRootFile.getVirtualFile())) return baseRootFile;
+		if(!fileInRoots(baseRootFile.getVirtualFile()))
+		{
+			return baseRootFile;
+		}
 
-    PsiElement current = element;
-    while (current != null) {
+		PsiElement current = element;
+		while(current != null)
+		{
 
-      if (isSelectable(current)) break;
-      if (isTopLevelClass(current, baseRootFile)) break;
+			if(isSelectable(current))
+			{
+				break;
+			}
+			if(isTopLevelClass(current, baseRootFile))
+			{
+				break;
+			}
 
-      current = current.getParent();
-    }
+			current = current.getParent();
+		}
 
-    if (current instanceof PsiClassOwner) {
-      PsiClass[] classes = ((PsiClassOwner)current).getClasses();
-      if (classes.length == 1 && !(classes[0] instanceof SyntheticElement) && isTopLevelClass(classes[0], baseRootFile)) {
-        current = classes[0];
-      }
-    }
+		if(current instanceof PsiClassOwner)
+		{
+			PsiClass[] classes = ((PsiClassOwner) current).getClasses();
+			if(classes.length == 1 && !(classes[0] instanceof SyntheticElement) && isTopLevelClass(classes[0], baseRootFile))
+			{
+				current = classes[0];
+			}
+		}
 
-    return current != null ? current : baseRootFile;
-  }
+		return current != null ? current : baseRootFile;
+	}
 
-  private boolean isSelectable(PsiElement element) {
-    if (element instanceof PsiFileSystemItem) return true;
+	private boolean isSelectable(PsiElement element)
+	{
+		if(element instanceof PsiFileSystemItem)
+		{
+			return true;
+		}
 
-    if (element instanceof PsiField || element instanceof PsiClass || element instanceof PsiMethod) {
-      return !(element.getParent() instanceof PsiAnonymousClass) && !(element instanceof PsiAnonymousClass);
-    }
+		if(element instanceof PsiField || element instanceof PsiClass || element instanceof PsiMethod)
+		{
+			return !(element.getParent() instanceof PsiAnonymousClass) && !(element instanceof PsiAnonymousClass);
+		}
 
-    return false;
-  }
+		return false;
+	}
 
-  @Nullable
-  private static PsiFile getBaseRootFile(PsiElement element) {
-    final PsiFile containingFile = element.getContainingFile();
-    if (containingFile == null) return null;
+	@Nullable
+	private static PsiFile getBaseRootFile(PsiElement element)
+	{
+		final PsiFile containingFile = element.getContainingFile();
+		if(containingFile == null)
+		{
+			return null;
+		}
 
-    final FileViewProvider viewProvider = containingFile.getViewProvider();
-    return viewProvider.getPsi(viewProvider.getBaseLanguage());
-  }
+		final FileViewProvider viewProvider = containingFile.getViewProvider();
+		return viewProvider.getPsi(viewProvider.getBaseLanguage());
+	}
 
-  private static boolean isTopLevelClass(final PsiElement element, PsiFile baseRootFile) {
+	private static boolean isTopLevelClass(final PsiElement element, PsiFile baseRootFile)
+	{
 
-    if (!(element instanceof PsiClass)) {
-      return false;
-    }
+		if(!(element instanceof PsiClass))
+		{
+			return false;
+		}
 
-    if (element instanceof PsiAnonymousClass) {
-      return false;
-    }
+		if(element instanceof PsiAnonymousClass)
+		{
+			return false;
+		}
 
-    final PsiFile parentFile = parentFileOf((PsiClass)element);
-    // do not select JspClass
-    return parentFile != null && parentFile.getLanguage() == baseRootFile.getLanguage();
-  }
+		final PsiFile parentFile = parentFileOf((PsiClass) element);
+		// do not select JspClass
+		return parentFile != null && parentFile.getLanguage() == baseRootFile.getLanguage();
+	}
 
-  @Nullable
-  private static PsiFile parentFileOf(final PsiClass psiClass) {
-    return psiClass.getContainingClass() == null ? psiClass.getContainingFile() : null;
-  }
+	@Nullable
+	private static PsiFile parentFileOf(final PsiClass psiClass)
+	{
+		return psiClass.getContainingClass() == null ? psiClass.getContainingFile() : null;
+	}
 
-  private static class PsiClassOwnerTreeNode extends PsiFileNode {
+	private static class PsiClassOwnerTreeNode extends PsiFileNode
+	{
 
-    public PsiClassOwnerTreeNode(PsiClassOwner classOwner, ViewSettings settings) {
-      super(classOwner.getProject(), classOwner, settings);
-    }
+		public PsiClassOwnerTreeNode(PsiClassOwner classOwner, ViewSettings settings)
+		{
+			super(classOwner.getProject(), classOwner, settings);
+		}
 
-    @Override
-    public Collection<AbstractTreeNode> getChildrenImpl() {
-      final ViewSettings settings = getSettings();
-      final ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
-      for (PsiClass aClass : ((PsiClassOwner)getValue()).getClasses()) {
-        if (!(aClass instanceof SyntheticElement)) {
-          result.add(new ClassTreeNode(myProject, aClass, settings));
-        }
-      }
-      return result;
-    }
+		@Override
+		public Collection<AbstractTreeNode> getChildrenImpl()
+		{
+			final ViewSettings settings = getSettings();
+			final ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+			for(PsiClass aClass : ((PsiClassOwner) getValue()).getClasses())
+			{
+				if(!(aClass instanceof SyntheticElement))
+				{
+					result.add(new ClassTreeNode(myProject, aClass, settings));
+				}
+			}
+			return result;
+		}
 
-  }
+	}
 }
