@@ -28,7 +28,7 @@ public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater
 	}
 
 	@RequiredReadAction
-	private static boolean isModuleDirectory(PsiDirectory directory)
+	public static boolean isModuleDirectory(PsiDirectory directory)
 	{
 		String name = directory.getName();
 		if(name.equals("classes"))

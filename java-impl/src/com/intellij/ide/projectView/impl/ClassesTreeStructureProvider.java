@@ -31,6 +31,9 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import consulo.annotations.RequiredReadAction;
+import consulo.java.ide.JavaModuleIconDescriptorUpdater;
+import consulo.java.ide.projectView.impl.JavaModuleRootTreeNode;
 import consulo.java.util.JavaProjectRootsUtil;
 
 public class ClassesTreeStructureProvider implements SelectableTreeStructureProvider, DumbAware
@@ -43,9 +46,10 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 	}
 
 	@Override
+	@RequiredReadAction
 	public Collection<AbstractTreeNode> modify(AbstractTreeNode parent, Collection<AbstractTreeNode> children, ViewSettings settings)
 	{
-		ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+		ArrayList<AbstractTreeNode> result = new ArrayList<>();
 		for(final AbstractTreeNode child : children)
 		{
 			Object o = child.getValue();
@@ -66,8 +70,7 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 						{
 							PsiFile classFile = (PsiFile) originalElement;
 							final VirtualFile virtualClassFile = classFile.getVirtualFile();
-							if(virtualClassFile != null && fileIndex.isInLibraryClasses(virtualClassFile) && classOwner.getManager().areElementsEquivalent(classOwner.getContainingDirectory(),
-									classFile.getContainingDirectory()))
+							if(virtualClassFile != null && fileIndex.isInLibraryClasses(virtualClassFile) && classOwner.getManager().areElementsEquivalent(classOwner.getContainingDirectory(), classFile.getContainingDirectory()))
 							{
 								continue;
 							}
@@ -89,6 +92,10 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 					continue;
 				}
 			}
+			else if(o instanceof PsiDirectory && JavaModuleIconDescriptorUpdater.isModuleDirectory((PsiDirectory) o))
+			{
+				result.add(new JavaModuleRootTreeNode(myProject, (PsiDirectory) o, settings));
+			}
 
 			result.add(child);
 		}
@@ -97,11 +104,7 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 
 	private boolean fileInRoots(@Nullable VirtualFile file)
 	{
-		if(file == null)
-		{
-			return false;
-		}
-		return JavaProjectRootsUtil.isJavaSourceFile(myProject, file, true);
+		return file != null && JavaProjectRootsUtil.isJavaSourceFile(myProject, file, true);
 	}
 
 	@Override
@@ -111,6 +114,7 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 	}
 
 	@Override
+	@RequiredReadAction
 	public PsiElement getTopLevelElement(final PsiElement element)
 	{
 		PsiFile baseRootFile = getBaseRootFile(element);
@@ -180,9 +184,9 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 		return viewProvider.getPsi(viewProvider.getBaseLanguage());
 	}
 
+	@RequiredReadAction
 	private static boolean isTopLevelClass(final PsiElement element, PsiFile baseRootFile)
 	{
-
 		if(!(element instanceof PsiClass))
 		{
 			return false;
@@ -216,7 +220,7 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 		public Collection<AbstractTreeNode> getChildrenImpl()
 		{
 			final ViewSettings settings = getSettings();
-			final ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+			final ArrayList<AbstractTreeNode> result = new ArrayList<>();
 			for(PsiClass aClass : ((PsiClassOwner) getValue()).getClasses())
 			{
 				if(!(aClass instanceof SyntheticElement))
