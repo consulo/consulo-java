@@ -1967,6 +1967,7 @@
 		<codeInsight.template.postfixTemplateProvider language="JAVA"
 													  implementationClass="com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider"/>
 
+		<codeInsight.parameterNameHints language="JAVA" implementationClass="com.intellij.codeInsight.hints.JavaInlayParameterHintsProvider" />
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
 		<newModuleBuilder implementation="consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder"/>
 		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.codeInspection.SuppressManagerImpl"/>
