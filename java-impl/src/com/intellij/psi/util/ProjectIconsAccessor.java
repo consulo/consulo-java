@@ -24,7 +24,6 @@ import java.util.Locale;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import consulo.lombok.annotations.ProjectService;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +38,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.ui.JBUI;
+import consulo.lombok.annotations.ProjectService;
 
 /**
  * Resolve small icons located in project for use in UI (e.g. gutter preview icon, lookups).
@@ -158,7 +158,7 @@ public class ProjectIconsAccessor implements Disposable
 
 	private static boolean hasProperSize(Icon icon)
 	{
-		return icon.getIconHeight() <= JBUI.scaleIconSize(16) && icon.getIconWidth() <= JBUI.scaleIconSize(16);
+		return icon.getIconHeight() <= JBUI.scale(16) && icon.getIconWidth() <= JBUI.scale(16);
 	}
 
 	private static boolean isConsuloProject(@Nullable PsiElement element)
