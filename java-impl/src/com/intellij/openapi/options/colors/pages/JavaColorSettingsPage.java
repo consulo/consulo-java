@@ -60,6 +60,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
 			new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.javadoc.tag.value"), JavaHighlightingColors.DOC_COMMENT_TAG_VALUE),
 			new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.javadoc.markup"), JavaHighlightingColors.DOC_COMMENT_MARKUP),
 
+			new AttributesDescriptor("Package", JavaHighlightingColors.PACKAGE_NAME_ATTRIBUTES),
 			new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.class"), JavaHighlightingColors.CLASS_NAME_ATTRIBUTES),
 			new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.anonymous.class"), JavaHighlightingColors.ANONYMOUS_CLASS_NAME_ATTRIBUTES),
 			new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.type.parameter"), JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES),
@@ -118,6 +119,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
 		ourTags.put("param", JavaHighlightingColors.PARAMETER_ATTRIBUTES);
 		ourTags.put("lambda_param", JavaHighlightingColors.LAMBDA_PARAMETER_ATTRIBUTES);
 		ourTags.put("class", JavaHighlightingColors.CLASS_NAME_ATTRIBUTES);
+		ourTags.put("package", JavaHighlightingColors.PACKAGE_NAME_ATTRIBUTES);
 		ourTags.put("anonymousClass", JavaHighlightingColors.ANONYMOUS_CLASS_NAME_ATTRIBUTES);
 		ourTags.put("typeParameter", JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES);
 		ourTags.put("abstractClass", JavaHighlightingColors.ABSTRACT_CLASS_NAME_ATTRIBUTES);
@@ -168,7 +170,7 @@ public class JavaColorSettingsPage implements ColorSettingsPage, InspectionColor
 	public String getDemoText()
 	{
 		return "/* Block comment */\n" +
-				"import <class>java.util.Date</class>;\n" +
+				"import <package>java.util.</package><class>Date</class>;\n" +
 				"/**\n" +
 				" * Doc comment here for <code>SomeClass</code>\n" +
 				" * @param <javadocTagValue>T</javadocTagValue> type parameter\n" +

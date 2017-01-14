@@ -419,7 +419,7 @@ public class HighlightNamesUtil
 				range = referenceNameElement.getTextRange();
 			}
 		}
-		HighlightInfoType type = JavaHighlightInfoTypes.CLASS_NAME;
+		HighlightInfoType type = JavaHighlightInfoTypes.PACKAGE_NAME;
 		TextAttributes attributes = mergeWithScopeAttributes(resolved, type, scheme);
 		HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(type).range(range);
 		if(attributes != null)
