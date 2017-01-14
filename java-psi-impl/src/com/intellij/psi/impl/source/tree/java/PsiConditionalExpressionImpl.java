@@ -18,18 +18,13 @@ package com.intellij.psi.impl.source.tree.java;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.GenericsUtil;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiConditionalExpression;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
+import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
@@ -85,6 +80,20 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
 		{
 			return type1;
 		}
+
+		if(PsiUtil.isLanguageLevel8OrHigher(this) && PsiPolyExpressionUtil.isPolyExpression(this) && !MethodCandidateInfo.ourOverloadGuard.currentStack().contains(PsiUtil.skipParenthesizedExprUp
+				(this.getParent())))
+		{
+			//15.25.3 Reference Conditional Expressions
+			// The type of a poly reference conditional expression is the same as its target type.
+			final PsiType targetType = InferenceSession.getTargetType(this);
+			if(targetType instanceof PsiClassType)
+			{
+				return ((PsiClassType) targetType).setLanguageLevel(PsiUtil.getLanguageLevel(this));
+			}
+			return targetType;
+		}
+
 		final int typeRank1 = TypeConversionUtil.getTypeRank(type1);
 		final int typeRank2 = TypeConversionUtil.getTypeRank(type2);
 
@@ -102,11 +111,11 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
 		{
 			if(typeRank1 == TypeConversionUtil.BYTE_RANK && typeRank2 == TypeConversionUtil.SHORT_RANK)
 			{
-				return type2;
+				return type2 instanceof PsiPrimitiveType ? type2 : PsiPrimitiveType.getUnboxedType(type2);
 			}
 			if(typeRank1 == TypeConversionUtil.SHORT_RANK && typeRank2 == TypeConversionUtil.BYTE_RANK)
 			{
-				return type1;
+				return type1 instanceof PsiPrimitiveType ? type1 : PsiPrimitiveType.getUnboxedType(type1);
 			}
 			if(typeRank2 == TypeConversionUtil.INT_RANK && (typeRank1 == TypeConversionUtil.BYTE_RANK || typeRank1 == TypeConversionUtil.SHORT_RANK || typeRank1 == TypeConversionUtil.CHAR_RANK))
 			{
@@ -162,6 +171,10 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
 			}
 		}
 
+		if(type1 instanceof PsiLambdaParameterType || type2 instanceof PsiLambdaParameterType)
+		{
+			return null;
+		}
 		final PsiType leastUpperBound = GenericsUtil.getLeastUpperBound(type1, type2, getManager());
 		return leastUpperBound != null ? PsiUtil.captureToplevelWildcards(leastUpperBound, this) : null;
 	}
