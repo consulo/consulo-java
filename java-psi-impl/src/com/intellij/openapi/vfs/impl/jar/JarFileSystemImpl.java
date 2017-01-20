@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.ide.highlighter;
+package com.intellij.openapi.vfs.impl.jar;
+
+import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.fileTypes.ArchiveFileType;
+import com.intellij.ide.highlighter.JarArchiveFileType;
+import consulo.vfs.impl.archive.ArchiveFile;
+import consulo.vfs.impl.archive.ArchiveFileSystemBase;
+import consulo.vfs.impl.zip.ZipArchiveFile;
 
-public class JarArchiveFileType extends ArchiveFileType
+public class JarFileSystemImpl extends ArchiveFileSystemBase
 {
-	public static final String PROTOCOL = "jar";
-	public static final JarArchiveFileType INSTANCE = new JarArchiveFileType();
-
-	@NotNull
-	@Override
-	public String getId()
+	public JarFileSystemImpl()
 	{
-		return "JAR_ARCHIVE";
+		super(JarArchiveFileType.PROTOCOL);
 	}
 
 	@NotNull
 	@Override
-	public String getProtocol()
+	public ArchiveFile createArchiveFile(@NotNull String filePath) throws IOException
 	{
-		return PROTOCOL;
+		return new ZipArchiveFile(filePath);
 	}
 }
