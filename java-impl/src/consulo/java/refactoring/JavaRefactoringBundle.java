@@ -16,13 +16,29 @@
 
 package consulo.java.refactoring;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 
 /**
  * @author VISTALL
  * @since 15.08.2015
  */
-@Bundle
-public class JavaRefactoringBundle
+public class JavaRefactoringBundle extends AbstractBundle
 {
+	private static final JavaRefactoringBundle ourInstance = new JavaRefactoringBundle();
+
+	private JavaRefactoringBundle()
+	{
+		super("messages.JavaRefactoringBundle");
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaRefactoringBundle") String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaRefactoringBundle") String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
+	}
 }

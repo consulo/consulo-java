@@ -1,30 +1,37 @@
 package consulo.java.application.options;
 
 import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
 import com.intellij.util.xmlb.XmlSerializationException;
 import com.intellij.util.xmlb.XmlSerializer;
-import consulo.lombok.annotations.ApplicationService;
-import consulo.lombok.annotations.Logger;
 
 /**
  * @author VISTALL
  * @since 16.08.14
  */
-@ApplicationService
 @State(
 		name = "JavaSmartKeysSettings",
 		storages = {
 				@Storage(
 						file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
 		})
-@Logger
 public class JavaSmartKeysSettings implements PersistentStateComponent<Element>
 {
+	private static final Logger LOGGER = Logger.getInstance(JavaSmartKeysSettings.class);
+
+	@NotNull
+	public static JavaSmartKeysSettings getInstance()
+	{
+		return ServiceManager.getService(JavaSmartKeysSettings.class);
+	}
+
 	public boolean JAVADOC_GENERATE_CLOSING_TAG = true;
 
 	@Override

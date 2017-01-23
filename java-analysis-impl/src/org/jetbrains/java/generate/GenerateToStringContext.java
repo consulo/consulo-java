@@ -15,12 +15,13 @@
  */
 package org.jetbrains.java.generate;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.config.Config;
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
-import consulo.lombok.annotations.ApplicationService;
 
 /**
  * Application context for this plugin.
@@ -33,9 +34,14 @@ import consulo.lombok.annotations.ApplicationService;
 				)
 		}
 )
-@ApplicationService
 public class GenerateToStringContext implements PersistentStateComponent<Config>
 {
+	@NotNull
+	public static GenerateToStringContext getInstance()
+	{
+		return ServiceManager.getService(GenerateToStringContext.class);
+	}
+
 	private Config config = new Config();
 
 	public static Config getConfig()

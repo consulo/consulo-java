@@ -16,13 +16,29 @@
 
 package consulo.java;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 
 /**
  * @author VISTALL
  * @since 18.11.2015
  */
-@Bundle
-public class JavaBundle
+public class JavaBundle extends AbstractBundle
 {
+	private static final JavaBundle ourInstance = new JavaBundle();
+
+	private JavaBundle()
+	{
+		super("messages.JavaBundle");
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaBundle") String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaBundle") String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
+	}
 }

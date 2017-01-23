@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.Application;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.Pair;
@@ -38,16 +39,20 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.SLRUMap;
 import com.intellij.util.ui.JBUI;
-import consulo.lombok.annotations.ProjectService;
 
 /**
  * Resolve small icons located in project for use in UI (e.g. gutter preview icon, lookups).
  *
  * @since 15
  */
-@ProjectService
 public class ProjectIconsAccessor implements Disposable
 {
+	@NotNull
+	public static ProjectIconsAccessor getInstance(@NotNull Project project)
+	{
+		return ServiceManager.getService(project, ProjectIconsAccessor.class);
+	}
+
 	@NonNls
 	private static final String JAVAX_SWING_ICON = "javax.swing.Icon";
 

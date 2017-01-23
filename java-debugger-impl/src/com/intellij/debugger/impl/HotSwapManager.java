@@ -21,10 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderEnumerator;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pair;
@@ -34,11 +37,15 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.HashMap;
-import consulo.lombok.annotations.ProjectService;
 
-@ProjectService
 public class HotSwapManager
 {
+	@NotNull
+	public static HotSwapManager getInstance(@NotNull Project project)
+	{
+		return ServiceManager.getService(project, HotSwapManager.class);
+	}
+
 	public static class Listener implements DebuggerManagerListener
 	{
 		@Override

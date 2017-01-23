@@ -15,13 +15,29 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 
 /**
  * @author max
  */
-@Bundle
-public class JavaErrorMessages
+public class JavaErrorMessages extends AbstractBundle
 {
 	public static final String BUNDLE = "messages.JavaErrorMessages";
+	private static final JavaErrorMessages ourInstance = new JavaErrorMessages();
+
+	private JavaErrorMessages()
+	{
+		super(BUNDLE);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = BUNDLE) String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
+	}
 }

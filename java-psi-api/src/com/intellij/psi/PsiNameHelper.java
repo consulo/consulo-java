@@ -21,9 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import consulo.lombok.annotations.ProjectService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
@@ -31,9 +32,14 @@ import com.intellij.util.ArrayUtil;
 /**
  * Service for validating and parsing Java identifiers.
  */
-@ProjectService
 public abstract class PsiNameHelper
 {
+	@NotNull
+	public static PsiNameHelper getInstance(@NotNull Project project)
+	{
+		return ServiceManager.getService(project, PsiNameHelper.class);
+	}
+
 	/**
 	 * Checks if the specified text is a Java identifier, using the language level of the project
 	 * with which the name helper is associated to filter out keywords.

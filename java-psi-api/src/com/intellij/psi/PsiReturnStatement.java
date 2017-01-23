@@ -15,19 +15,32 @@
  */
 package com.intellij.psi;
 
-import consulo.lombok.annotations.ArrayFactoryFields;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.util.ArrayFactory;
 
 /**
  * Represents a Java <code>return</code> statement.
  */
-@ArrayFactoryFields
-public interface PsiReturnStatement extends PsiStatement {
-  /**
-   * Returns the expression representing the value returned by the statement.
-   *
-   * @return the return value expression, or null if the statement does not return any value. 
-   */
-  @Nullable
-  PsiExpression getReturnValue();
+public interface PsiReturnStatement extends PsiStatement
+{
+	public static final PsiReturnStatement[] EMPTY_ARRAY = new PsiReturnStatement[0];
+
+	public static ArrayFactory<PsiReturnStatement> ARRAY_FACTORY = new ArrayFactory<PsiReturnStatement>()
+	{
+		@NotNull
+		@Override
+		public PsiReturnStatement[] create(int count)
+		{
+			return count == 0 ? EMPTY_ARRAY : new PsiReturnStatement[count];
+		}
+	};
+
+	/**
+	 * Returns the expression representing the value returned by the statement.
+	 *
+	 * @return the return value expression, or null if the statement does not return any value.
+	 */
+	@Nullable
+	PsiExpression getReturnValue();
 }

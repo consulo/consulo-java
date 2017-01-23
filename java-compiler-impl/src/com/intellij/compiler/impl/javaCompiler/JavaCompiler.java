@@ -35,6 +35,7 @@ import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -45,16 +46,16 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
 import consulo.java.module.extension.JavaModuleExtension;
-import consulo.lombok.annotations.Logger;
 
 /*
  * @author: Eugene Zhuravlev
  * Date: Jan 17, 2003
  * Time: 3:22:59 PM
  */
-@Logger
 public class JavaCompiler implements TranslatingCompiler
 {
+	private static final Logger LOGGER = Logger.getInstance(JavaCompiler.class);
+
 	public static final Key<Map<File, FileObject>> ourOutputFileParseInfo = Key.create("ourOutputFileParseInfo");
 
 	private final Project myProject;

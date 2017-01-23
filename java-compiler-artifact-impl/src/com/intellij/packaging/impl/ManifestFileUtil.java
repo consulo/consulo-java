@@ -27,7 +27,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.CommonBundle;
@@ -38,6 +37,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.deployment.DeploymentUtil;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -75,9 +75,10 @@ import com.intellij.util.PathUtil;
 /**
  * @author nik
  */
-@Logger
 public class ManifestFileUtil
 {
+	private static final Logger LOGGER = Logger.getInstance(ManifestFileUtil.class);
+
 	public static final String MANIFEST_PATH = JarFile.MANIFEST_NAME;
 	public static final String MANIFEST_FILE_NAME = PathUtil.getFileName(MANIFEST_PATH);
 	public static final String MANIFEST_DIR_NAME = PathUtil.getParentPath(MANIFEST_PATH);

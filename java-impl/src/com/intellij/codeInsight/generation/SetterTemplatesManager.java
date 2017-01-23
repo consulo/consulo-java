@@ -17,10 +17,11 @@ package com.intellij.codeInsight.generation;
 
 import java.io.IOException;
 
-import consulo.lombok.annotations.ApplicationService;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
@@ -31,9 +32,14 @@ import com.intellij.openapi.components.StoragePathMacros;
 				@Storage(
 						file = StoragePathMacros.APP_CONFIG + "/setterTemplates.xml")
 		})
-@ApplicationService
 public class SetterTemplatesManager extends TemplatesManager
 {
+	@NotNull
+	public static SetterTemplatesManager getInstance()
+	{
+		return ServiceManager.getService(SetterTemplatesManager.class);
+	}
+
 	private static final String DEFAULT = "defaultSetter.vm";
 	private static final String BUILDER = "builderSetter.vm";
 

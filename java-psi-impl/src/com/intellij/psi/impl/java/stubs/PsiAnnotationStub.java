@@ -15,15 +15,28 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import consulo.lombok.annotations.ArrayFactoryFields;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.stubs.StubElement;
+import com.intellij.util.ArrayFactory;
 
 /**
  * @author max
  */
-@ArrayFactoryFields
-public interface PsiAnnotationStub extends StubElement<PsiAnnotation> {
+public interface PsiAnnotationStub extends StubElement<PsiAnnotation>
+{
+	public static final PsiAnnotationStub[] EMPTY_ARRAY = new PsiAnnotationStub[0];
+
+	public static ArrayFactory<PsiAnnotationStub> ARRAY_FACTORY = new ArrayFactory<PsiAnnotationStub>()
+	{
+		@NotNull
+		@Override
+		public PsiAnnotationStub[] create(int count)
+		{
+			return count == 0 ? EMPTY_ARRAY : new PsiAnnotationStub[count];
+		}
+	};
+
 	String getText();
 
 	PsiAnnotation getPsiElement();

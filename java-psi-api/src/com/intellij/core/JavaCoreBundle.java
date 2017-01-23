@@ -15,8 +15,25 @@
  */
 package com.intellij.core;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 
-@Bundle("messages.JavaCoreBundle")
-public class JavaCoreBundle {
+public class JavaCoreBundle extends AbstractBundle
+{
+	private static final JavaCoreBundle ourInstance = new JavaCoreBundle();
+
+	private JavaCoreBundle()
+	{
+		super("messages.JavaCoreBundle");
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaCoreBundle") String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaCoreBundle") String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
+	}
 }

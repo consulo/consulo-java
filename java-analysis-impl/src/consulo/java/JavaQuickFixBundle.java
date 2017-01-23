@@ -16,13 +16,29 @@
 
 package consulo.java;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 
 /**
  * @author VISTALL
  * @since 27.12.2015
  */
-@Bundle
-public class JavaQuickFixBundle
+public class JavaQuickFixBundle extends AbstractBundle
 {
+	private static final JavaQuickFixBundle ourInstance = new JavaQuickFixBundle();
+
+	private JavaQuickFixBundle()
+	{
+		super("messages.JavaQuickFixBundle");
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaQuickFixBundle") String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaQuickFixBundle") String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
+	}
 }

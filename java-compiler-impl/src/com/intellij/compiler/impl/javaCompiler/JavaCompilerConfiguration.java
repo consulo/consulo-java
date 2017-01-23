@@ -14,11 +14,10 @@ import java.util.StringTokenizer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
@@ -31,9 +30,9 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.annotations.DeprecationInfo;
 import consulo.annotations.RequiredReadAction;
-import consulo.lombok.annotations.ProjectService;
+import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
+import consulo.java.module.extension.JavaModuleExtension;
 
-@ProjectService
 @State(
 		name = "JavaCompilerConfiguration",
 		storages = {
@@ -42,6 +41,12 @@ import consulo.lombok.annotations.ProjectService;
 		})
 public class JavaCompilerConfiguration implements PersistentStateComponent<Element>
 {
+	@NotNull
+	public static JavaCompilerConfiguration getInstance(@NotNull Project project)
+	{
+		return ServiceManager.getService(project, JavaCompilerConfiguration.class);
+	}
+
 	public static final String ANNOTATION_PROCESSING = "annotation-processing";
 	public static final String BYTECODE_TARGET_LEVEL = "bytecode-target-level";
 

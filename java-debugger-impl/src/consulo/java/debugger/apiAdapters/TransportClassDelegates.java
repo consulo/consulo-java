@@ -16,15 +16,12 @@
 
 package consulo.java.debugger.apiAdapters;
 
-import consulo.lombok.annotations.Lazy;
-
 /**
  * @author VISTALL
  * @since 31.05.2015
  */
 public class TransportClassDelegates
 {
-	@Lazy
 	public static Class<?> getSocketTransportServiceClass()
 	{
 		try
@@ -37,7 +34,6 @@ public class TransportClassDelegates
 		}
 	}
 
-	@Lazy(notNull = false)
 	public static Class<?> getSharedMemoryTransportServiceClass()
 	{
 		try

@@ -16,20 +16,28 @@
 
 package com.intellij.debugger.ui;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.impl.DebuggerSession;
-import consulo.lombok.annotations.ProjectService;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 
 /**
  * @author nik
  */
-@ProjectService
-public abstract class HotSwapUI {
-  public abstract void reloadChangedClasses(DebuggerSession session, boolean compileBeforeHotswap);
+public abstract class HotSwapUI
+{
+	@NotNull
+	public static HotSwapUI getInstance(@NotNull Project project)
+	{
+		return ServiceManager.getService(project, HotSwapUI.class);
+	}
 
-  public abstract void dontPerformHotswapAfterThisCompilation();
+	public abstract void reloadChangedClasses(DebuggerSession session, boolean compileBeforeHotswap);
+
+	public abstract void dontPerformHotswapAfterThisCompilation();
 
 
-  public abstract void addListener(HotSwapVetoableListener listener);
+	public abstract void addListener(HotSwapVetoableListener listener);
 
-  public abstract void removeListener(HotSwapVetoableListener listener);
+	public abstract void removeListener(HotSwapVetoableListener listener);
 }

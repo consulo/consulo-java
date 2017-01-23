@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
-import consulo.lombok.annotations.Lazy;
 import consulo.roots.OrderEntryWithTracking;
 
 /**
@@ -32,7 +31,6 @@ import consulo.roots.OrderEntryWithTracking;
 public class AnnotationOrderRootType extends OrderRootType
 {
 	@NotNull
-	@Lazy
 	public static OrderRootType getInstance()
 	{
 		return getOrderRootType(AnnotationOrderRootType.class);

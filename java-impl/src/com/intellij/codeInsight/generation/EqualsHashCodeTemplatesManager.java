@@ -21,12 +21,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import consulo.lombok.annotations.ApplicationService;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.exception.TemplateResourceException;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
@@ -41,9 +41,14 @@ import com.intellij.util.containers.ContainerUtil;
 				@Storage(
 						file = StoragePathMacros.APP_CONFIG + "/equalsHashCodeTemplates.xml")
 		})
-@ApplicationService
 public class EqualsHashCodeTemplatesManager extends TemplatesManager
 {
+	@NotNull
+	public static EqualsHashCodeTemplatesManager getInstance()
+	{
+		return ServiceManager.getService(EqualsHashCodeTemplatesManager.class);
+	}
+
 	private static final String DEFAULT_EQUALS = "/com/intellij/codeInsight/generation/defaultEquals.vm";
 	private static final String DEFAULT_HASH_CODE = "/com/intellij/codeInsight/generation/defaultHashCode.vm";
 	private static final String APACHE3_EQUALS = "/com/intellij/codeInsight/generation/apacheEqualsBuilder3.vm";

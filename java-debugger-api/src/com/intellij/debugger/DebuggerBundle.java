@@ -15,11 +15,11 @@
  */
 package com.intellij.debugger;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 import com.intellij.execution.configurations.RemoteConnection;
 
-@Bundle
-public class DebuggerBundle
+public class DebuggerBundle extends AbstractBundle
 {
 	public static String getAddressDisplayName(final RemoteConnection connection)
 	{
@@ -29,5 +29,22 @@ public class DebuggerBundle
 	public static String getTransportName(final RemoteConnection connection)
 	{
 		return connection.isUseSockets() ? message("transport.name.socket") : message("transport.name.shared.memory");
+	}
+
+	private static final DebuggerBundle ourInstance = new DebuggerBundle();
+
+	private DebuggerBundle()
+	{
+		super("messages.DebuggerBundle");
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.DebuggerBundle") String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.DebuggerBundle") String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
 	}
 }

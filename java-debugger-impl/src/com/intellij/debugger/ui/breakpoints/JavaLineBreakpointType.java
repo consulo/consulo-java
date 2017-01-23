@@ -20,17 +20,14 @@ import java.util.List;
 
 import javax.swing.Icon;
 
-import consulo.lombok.annotations.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaLineBreakpointProperties;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.HelpID;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.icons.AllIcons;
-import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -49,6 +46,8 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.breakpoints.ui.XBreakpointGroupingRule;
 import com.intellij.xdebugger.impl.XSourcePositionImpl;
+import consulo.annotations.RequiredReadAction;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * Base class for java line-connected exceptions (line, method, field)
@@ -58,7 +57,6 @@ import com.intellij.xdebugger.impl.XSourcePositionImpl;
 public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineBreakpointProperties> implements JavaBreakpointType
 {
 	@NotNull
-	@Lazy
 	public static JavaLineBreakpointType getInstance()
 	{
 		return EXTENSION_POINT_NAME.findExtension(JavaLineBreakpointType.class);

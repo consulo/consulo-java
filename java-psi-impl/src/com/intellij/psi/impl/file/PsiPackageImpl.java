@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.completion.scope.JavaCompletionHints;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.util.Condition;
@@ -50,14 +51,14 @@ import com.intellij.util.ArrayFactory;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredReadAction;
-import consulo.lombok.annotations.Logger;
 import consulo.module.extension.ModuleExtension;
 import consulo.psi.PsiPackage;
 import consulo.psi.PsiPackageManager;
 
-@Logger
 public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Queryable
 {
+	private static final Logger LOGGER = Logger.getInstance(PsiPackageImpl.class);
+
 	private volatile CachedValue<PsiModifierList> myAnnotationList;
 	private volatile CachedValue<Collection<PsiDirectory>> myDirectories;
 	private volatile SoftReference<Set<String>> myPublicClassNamesCache;

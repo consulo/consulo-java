@@ -24,12 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -50,9 +50,10 @@ import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.intellij.util.indexing.IdFilter;
 
-@Logger
 public class DefaultSymbolNavigationContributor implements ChooseByNameContributorEx
 {
+	private static final Logger LOGGER = Logger.getInstance(DefaultSymbolNavigationContributor.class);
+
 	@Override
 	@NotNull
 	public String[] getNames(Project project, boolean includeNonProjectItems)

@@ -43,6 +43,7 @@ import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TimestampValidityState;
 import com.intellij.openapi.compiler.ValidityState;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.io.FileUtil;
@@ -54,7 +55,6 @@ import com.intellij.util.containers.ContainerUtil;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.module.extension.JavaModuleExtension;
-import consulo.lombok.annotations.Logger;
 import consulo.roots.ContentFolderTypeProvider;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.roots.impl.TestContentFolderTypeProvider;
@@ -63,9 +63,10 @@ import consulo.roots.impl.TestContentFolderTypeProvider;
  * @author VISTALL
  * @since 28-Sep-16
  */
-@Logger
 public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 {
+	private static final Logger LOGGER = Logger.getInstance(JavaBytecodeProcessorCompiler.class);
+
 	private static class MyProcessingItem implements ProcessingItem
 	{
 		private final File myFile;

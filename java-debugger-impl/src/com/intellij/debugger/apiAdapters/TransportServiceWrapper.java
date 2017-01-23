@@ -23,14 +23,15 @@ import java.lang.reflect.InvocationTargetException;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.execution.ExecutionException;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.ArrayUtil;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 import consulo.java.debugger.apiAdapters.TransportClassDelegates;
-import consulo.lombok.annotations.Logger;
 
-@Logger
 public class TransportServiceWrapper
 {
+	private static final Logger LOGGER = Logger.getInstance(TransportServiceWrapper.class);
+
 	@NotNull
 	public static TransportServiceWrapper createTransportService(int type) throws ExecutionException
 	{

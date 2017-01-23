@@ -1,12 +1,28 @@
 package consulo.java.codeInsight;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 
 /**
  * @author VISTALL
  * @since 13.10.2015
  */
-@Bundle
-public class JavaCodeInsightBundle
+public class JavaCodeInsightBundle extends AbstractBundle
 {
+	private static final JavaCodeInsightBundle ourInstance = new JavaCodeInsightBundle();
+
+	private JavaCodeInsightBundle()
+	{
+		super("messages.JavaCodeInsightBundle");
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaCodeInsightBundle") String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "messages.JavaCodeInsightBundle") String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
+	}
 }
