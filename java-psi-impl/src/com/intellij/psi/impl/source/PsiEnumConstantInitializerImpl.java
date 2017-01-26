@@ -15,13 +15,13 @@
  */
 package com.intellij.psi.impl.source;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.psi.impl.light.LightClassReference;
-import org.jetbrains.annotations.NotNull;
 
 public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiEnumConstantInitializer {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiEnumConstantInitializerImpl");
@@ -73,11 +73,6 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
     PsiClass containingClass = ((PsiEnumConstant)parent).getContainingClass();
     LOG.assertTrue(containingClass != null);
     return containingClass;
-  }
-
-  @Override
-  public PsiElement getParent() {
-    return getParentByStub();
   }
 
   @Override

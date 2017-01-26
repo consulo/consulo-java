@@ -29,6 +29,7 @@ import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiUtil;
 
 public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements PsiTypeCastExpression, Constants
 {
@@ -60,7 +61,7 @@ public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements P
 		{
 			return null;
 		}
-		return castType.getType();
+		return PsiUtil.captureToplevelWildcards(castType.getType(), this);
 	}
 
 	@Override
@@ -131,4 +132,3 @@ public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements P
 		return "PsiTypeCastExpression:" + getText();
 	}
 }
-

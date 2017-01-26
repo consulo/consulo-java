@@ -398,10 +398,4 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	{
 		return false;
 	}
-
-	@Override
-	public PsiQualifiedNamedElement getContainer()
-	{
-		return getParentPackage();
-	}
 }

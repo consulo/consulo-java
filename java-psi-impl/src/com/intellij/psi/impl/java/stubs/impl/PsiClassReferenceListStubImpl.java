@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * @author max
- */
 package com.intellij.psi.impl.java.stubs.impl;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.PsiReferenceList;
 import com.intellij.psi.impl.compiled.ClsJavaCodeReferenceElementImpl;
 import com.intellij.psi.impl.java.stubs.JavaClassReferenceListElementType;
 import com.intellij.psi.impl.java.stubs.PsiClassReferenceListStub;
-import com.intellij.psi.impl.java.stubs.PsiClassStub;
-import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
 import com.intellij.psi.stubs.StubBase;
@@ -39,30 +32,40 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.io.StringRef;
 
+/**
+ * @author max
+ */
 public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> implements PsiClassReferenceListStub
 {
+	@NotNull
 	private final PsiReferenceList.Role myRole;
 	private final StringRef[] myNames;
 	private PsiClassType[] myTypes;
 
-	public PsiClassReferenceListStubImpl(final JavaClassReferenceListElementType type, final StubElement parent, final String[] names, final PsiReferenceList.Role role)
+	public PsiClassReferenceListStubImpl(@NotNull JavaClassReferenceListElementType type, final StubElement parent, @NotNull String[] names, @NotNull PsiReferenceList.Role role)
 	{
-		super(parent, type);
-		myNames = StringRef.createArray(names.length);
+		this(type, parent, toStringRefs(names), role);
+	}
+
+	@NotNull
+	private static StringRef[] toStringRefs(String[] names)
+	{
+		StringRef[] myNames = StringRef.createArray(names.length);
 		for(int i = 0; i < names.length; i++)
 		{
 			myNames[i] = StringRef.fromString(names[i]);
 		}
-		myRole = role;
+		return myNames;
 	}
 
-	public PsiClassReferenceListStubImpl(final JavaClassReferenceListElementType type, final StubElement parent, final StringRef[] names, final PsiReferenceList.Role role)
+	public PsiClassReferenceListStubImpl(@NotNull JavaClassReferenceListElementType type, final StubElement parent, @NotNull StringRef[] names, @NotNull PsiReferenceList.Role role)
 	{
 		super(parent, type);
 		myNames = names;
 		myRole = role;
 	}
 
+	@NotNull
 	@Override
 	public PsiClassType[] getReferencedTypes()
 	{
@@ -83,7 +86,7 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 		{
 			for(int i = 0; i < types.length; i++)
 			{
-				types[i] = new PsiClassReferenceType(new ClsJavaCodeReferenceElementImpl(getPsi(), StringRef.toString(myNames[i])), null);
+				types[i] = new PsiClassReferenceType(new ClsJavaCodeReferenceElementImpl(getPsi(), myNames[i].toString()), null);
 			}
 		}
 		else
@@ -94,15 +97,9 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 			final PsiReferenceList psi = getPsi();
 			for(int i = 0; i < types.length; i++)
 			{
-				PsiElement context = psi;
-				if(getParentStub() instanceof PsiClassStub)
-				{
-					context = ((PsiClassImpl) getParentStub().getPsi()).calcBasesResolveContext(PsiNameHelper.getShortClassName(StringRef.toString(myNames[i])), psi);
-				}
-
 				try
 				{
-					final PsiJavaCodeReferenceElement ref = factory.createReferenceFromText(StringRef.toString(myNames[i]), context);
+					final PsiJavaCodeReferenceElement ref = factory.createReferenceFromText(myNames[i].toString(), psi);
 					((PsiJavaCodeReferenceElementImpl) ref).setKindWhenDummy(PsiJavaCodeReferenceElementImpl.CLASS_NAME_KIND);
 					types[i] = factory.createType(ref);
 				}
@@ -129,9 +126,10 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 		}
 
 		myTypes = types;
-		return types;
+		return types.clone();
 	}
 
+	@NotNull
 	@Override
 	public String[] getReferencedNames()
 	{
@@ -143,6 +141,7 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
 		return names;
 	}
 
+	@NotNull
 	@Override
 	public PsiReferenceList.Role getRole()
 	{
