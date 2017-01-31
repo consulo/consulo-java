@@ -763,20 +763,11 @@
 		<lookup.actionProvider implementation="com.intellij.codeInsight.completion.ExcludeFromCompletionLookupActionProvider"
 							   id="excludeFromCompletion" order="last"/>
 
-		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.JavaNameIdentifierConfidence"
-							   id="javaNameIdentifierDefault"/>
-		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.UnfocusedNameIdentifier"
-							   id="javaNameIdentifier"/>
-		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.FocusInJavadoc" id="javadoc"
-							   order="before javaComments"/>
-		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.UnfocusedComments" id="javaComments"/>
-		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.AlwaysFocusLookup" id="javaTrue"
-							   order="last"/>
-		<completion.confidence language="JAVA"
-							   implementationClass="com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionCompletionConfidence"
-							   id="javaReflection"/>
-		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.SkipAutopopupInStrings"
-							   id="javaSkipAutopopupInStrings"/>
+		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.JavaReferenceCompletionConfidence"/>
+		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.JavadocCompletionConfidence" id="javadoc" order="before javaComments"/>
+		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.SkipAutopopupInComments" id="javaComments"/>
+		<completion.confidence language="JAVA" implementationClass="com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionCompletionConfidence" id="javaReflection" />
+		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.SkipAutopopupInStrings" id="javaSkipAutopopupInStrings"/>
 
 		<completion.contributor language="JAVA" implementationClass="com.intellij.codeInsight.completion.RefactoringCompletionContributor"
 								id="javaRefactoring"
