@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,119 +15,96 @@
  */
 package com.intellij.psi.impl;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.xml.XmlFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.util.Conditions;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFileSystemItem;
+import com.intellij.psi.PsiLambdaExpression;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiModifiableCodeBlock;
+import com.intellij.psi.SyntaxTraverser;
+import com.intellij.psi.impl.PsiTreeChangeEventImpl.PsiEventType;
+import com.intellij.psi.util.PsiModificationTracker;
 
-public class JavaCodeBlockModificationListener implements PsiTreeChangePreprocessor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.JavaCodeBlockModificationListener");
+public class JavaCodeBlockModificationListener extends PsiTreeChangePreprocessorBase
+{
+	public JavaCodeBlockModificationListener(@NotNull PsiManager psiManager)
+	{
+		super(psiManager);
+	}
 
-  private final PsiModificationTrackerImpl myModificationTracker;
+	@Override
+	protected boolean acceptsEvent(@NotNull PsiTreeChangeEventImpl event)
+	{
+		return event.getFile() instanceof PsiClassOwner;
+	}
 
-  public JavaCodeBlockModificationListener(final PsiModificationTracker modificationTracker) {
-    myModificationTracker = (PsiModificationTrackerImpl) modificationTracker;
-  }
+	@Override
+	protected boolean isOutOfCodeBlock(@NotNull PsiElement element)
+	{
+		for(PsiElement e : SyntaxTraverser.psiApi().parents(element))
+		{
+			if(e instanceof PsiModifiableCodeBlock)
+			{
+				// trigger OOCBM for final variables initialized in constructors & class initializers
+				if(!((PsiModifiableCodeBlock) e).shouldChangeModificationCount(element))
+				{
+					return false;
+				}
+			}
+			if(e instanceof PsiClass)
+			{
+				break;
+			}
+			if(e instanceof PsiClassOwner)
+			{
+				break;
+			}
+		}
+		return true;
+	}
 
-  @Override
-  public void treeChanged(@NotNull final PsiTreeChangeEventImpl event) {
-    switch (event.getCode()) {
-      case BEFORE_CHILDREN_CHANGE:
-      case BEFORE_PROPERTY_CHANGE:
-      case BEFORE_CHILD_MOVEMENT:
-      case BEFORE_CHILD_REPLACEMENT:
-      case BEFORE_CHILD_ADDITION:
-      case BEFORE_CHILD_REMOVAL:
-        break;
+	@Override
+	protected boolean isOutOfCodeBlock(@NotNull PsiFileSystemItem file)
+	{
+		if(file instanceof PsiModifiableCodeBlock)
+		{
+			return ((PsiModifiableCodeBlock) file).shouldChangeModificationCount(file);
+		}
+		return super.isOutOfCodeBlock(file);
+	}
 
-      case CHILD_ADDED:
-      case CHILD_REMOVED:
-      case CHILD_REPLACED:
-        processChange(event.getParent(), event.getOldChild(), event.getChild());
-        break;
+	@Override
+	protected void onTreeChanged(@NotNull PsiTreeChangeEventImpl event)
+	{
+		PsiModificationTracker tracker = myPsiManager.getModificationTracker();
+		long cur = tracker.getOutOfCodeBlockModificationCount();
+		super.onTreeChanged(event);
+		if(cur == tracker.getOutOfCodeBlockModificationCount())
+		{
+			PsiEventType code = event.getCode();
+			if(code == PsiEventType.CHILD_ADDED || code == PsiEventType.CHILD_REMOVED || code == PsiEventType.CHILD_REPLACED)
+			{
+				if(hasClassesInside(event.getOldChild()) || event.getOldChild() != event.getChild() && hasClassesInside(event.getChild()))
+				{
+					onOutOfCodeBlockModification(event);
+					doIncOutOfCodeBlockCounter();
+				}
+			}
+		}
+	}
 
-      case CHILDREN_CHANGED:
-        // general childrenChanged() event after each change
-        if (!event.isGenericChange()) {
-          processChange(event.getParent(), event.getParent(), null);
-        }
-        break;
+	@Override
+	protected void doIncOutOfCodeBlockCounter()
+	{
+		((PsiModificationTrackerImpl) myPsiManager.getModificationTracker()).incCounter();
+	}
 
-      case CHILD_MOVED:
-      case PROPERTY_CHANGED:
-        myModificationTracker.incCounter();
-        break;
-
-      default:
-        LOG.error("Unknown code:" + event.getCode());
-        break;
-    }
-  }
-
-  private void processChange(final PsiElement parent, final PsiElement child1, final PsiElement child2) {
-    try {
-      if (!isInsideCodeBlock(parent)) {
-        if (parent != null && isClassOwner(parent.getContainingFile()) ||
-            isClassOwner(child1) || isClassOwner(child2) || isSourceDir(parent) ||
-            (parent != null && isClassOwner(parent.getParent()))) {
-          myModificationTracker.incCounter();
-        }
-        else {
-          myModificationTracker.incOutOfCodeBlockModificationCounter();
-        }
-        return;
-      }
-
-      if (containsClassesInside(child1) || child2 != child1 && containsClassesInside(child2)) {
-        myModificationTracker.incCounter();
-      }
-    }
-    catch (PsiInvalidElementAccessException ignored) {
-      myModificationTracker.incCounter(); // Shall not happen actually, just a pre-release paranoia
-    }
-  }
-
-  private static boolean isSourceDir(PsiElement element) {
-    return element instanceof PsiDirectory && JavaDirectoryService.getInstance().getPackage((PsiDirectory)element) != null;
-  }
-
-  private static boolean isClassOwner(final PsiElement element) {
-    return element instanceof PsiClassOwner && !(element instanceof XmlFile) /*|| element instanceof JspDirective*/;
-  }
-
-  private static boolean containsClassesInside(final PsiElement element) {
-    if (element == null) return false;
-    if (element instanceof PsiClass) return true;
-
-    PsiElement child = element.getFirstChild();
-    while (child != null) {
-      if (containsClassesInside(child)) return true;
-      child = child.getNextSibling();
-    }
-
-    return false;
-  }
-
-  private static boolean isInsideCodeBlock(PsiElement element) {
-    if (element instanceof PsiFileSystemItem) {
-      return false;
-    }
-
-    if (element == null || element.getParent() == null) return true;
-
-    PsiElement parent = element;
-    while (true) {
-      if (parent instanceof PsiFile || parent instanceof PsiDirectory || parent == null) {
-        return false;
-      }
-      if (parent instanceof PsiClass) return false; // anonymous or local class
-      if (parent instanceof PsiModifiableCodeBlock) {
-        if (!((PsiModifiableCodeBlock)parent).shouldChangeModificationCount(element)) {
-          return true;
-        }
-      }
-      parent = parent.getParent();
-    }
-  }
+	private static boolean hasClassesInside(@Nullable PsiElement element)
+	{
+		return !SyntaxTraverser.psiTraverser(element).traverse().filter(Conditions.instanceOf(PsiClass.class, PsiLambdaExpression.class)).isEmpty();
+	}
 }
