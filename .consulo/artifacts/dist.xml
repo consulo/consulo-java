@@ -31,6 +31,7 @@
             <element id="module-output" name="java-coverage-impl" />
             <element id="module-output" name="java-xml-impl" />
             <element id="module-production-resource-output" name="java-execution-api" />
+            <element id="module-output" name="guava-impl" />
           </element>
           <element id="zip-archive" name="java-rt.jar">
             <element id="module-output" name="java-rt" />

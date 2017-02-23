@@ -286,7 +286,6 @@
           <orderEntry type="module" module-name="java-indexing-impl" exported="" />
           <orderEntry type="module" module-name="java-rt" />
           <orderEntry type="module" module-name="java-execution-api" />
-          <orderEntry type="library" name="jimage-jdk6" level="project" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.regexp" level="project" />
         </module-layer>
@@ -381,6 +380,19 @@
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="library" name="consulo-plugin: consulo.javascript" level="project" />
+        </module-layer>
+      </module>
+      <module name="guava-impl" dirurl="file://$PROJECT_DIR$/extract/guava-impl" current-layer="Default">
+        <module-layer name="Default">
+          <extension id="consulo-plugin" sdk-name="Consulo SNAPSHOT" />
+          <extension id="java" sdk-name="1.8" language-level-name="JDK_1_8" bytecode-version="1.8" />
+          <content url="file://$MODULE_DIR$">
+            <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+          </content>
+          <orderEntry type="module-extension-sdk" extension-id="java" />
+          <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+          <orderEntry type="sourceFolder" />
+          <orderEntry type="module" module-name="java-impl" />
         </module-layer>
       </module>
     </modules>
