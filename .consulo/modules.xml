@@ -108,7 +108,7 @@
       <module name="java-rt" dirurl="file://$PROJECT_DIR$/java-rt" current-layer="Default">
         <module-layer name="Default">
           <extension id="consulo-plugin" sdk-module-name="consulo-java" />
-          <extension id="java" sdk-name="1.6" language-level-name="JDK_1_6" bytecode-version="1.6" />
+          <extension id="java" sdk-name="1.6" language-level-name="JDK_1_3" bytecode-version="1.1" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
           </content>

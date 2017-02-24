@@ -42,6 +42,7 @@ import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationPr
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.diagnostic.Logger;
@@ -57,7 +58,6 @@ import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.projectRoots.impl.MockSdkWrapper;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -177,13 +177,6 @@ public class JavacCompiler extends ExternalCompiler
 	}
 
 	@Override
-	@NotNull
-	public Configurable createConfigurable()
-	{
-		return new JavacConfigurable(myProject);
-	}
-
-	@Override
 	public OutputParser createErrorParser(@NotNull final String outputDir, Process process)
 	{
 		return new JavacOutputParser(myProject);
@@ -195,53 +188,17 @@ public class JavacCompiler extends ExternalCompiler
 		return null;
 	}
 
-	private static class MyException extends RuntimeException
-	{
-		private MyException(Throwable cause)
-		{
-			super(cause);
-		}
-	}
-
 	@Override
 	@NotNull
 	public GeneralCommandLine createStartupCommand(final ModuleChunk chunk, final CompileContext context, final String outputPath) throws IOException, IllegalArgumentException
 	{
-
-		try
-		{
-			return ApplicationManager.getApplication().runReadAction(new Computable<GeneralCommandLine>()
-			{
-				@Override
-				public GeneralCommandLine compute()
-				{
-					try
-					{
-						return createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
-								.isAnnotationProcessorsEnabled());
-					}
-					catch(IOException e)
-					{
-						throw new MyException(e);
-					}
-				}
-			});
-		}
-		catch(MyException e)
-		{
-			Throwable cause = e.getCause();
-			if(cause instanceof IOException)
-			{
-				throw (IOException) cause;
-			}
-			throw e;
-		}
+		return ReadAction.compute(() -> createStartupCommand(chunk, outputPath, context, JavacCompilerConfiguration.getInstance(myProject), JavaCompilerConfiguration.getInstance(myProject)
+				.isAnnotationProcessorsEnabled()));
 	}
 
 	@NotNull
 	@RequiredReadAction
-	private GeneralCommandLine createStartupCommand(
-			final ModuleChunk chunk,
+	private GeneralCommandLine createStartupCommand(final ModuleChunk chunk,
 			final String outputPath,
 			final CompileContext compileContext,
 			JpsJavaCompilerOptions javacOptions,

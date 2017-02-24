@@ -24,7 +24,6 @@ import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.options.Configurable;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
 
 public interface BackendCompiler
@@ -33,9 +32,6 @@ public interface BackendCompiler
 
 	@NotNull
 	String getPresentableName();
-
-	@NotNull
-	Configurable createConfigurable();
 
 	@Nullable
 	OutputParser createErrorParser(@NotNull String outputDir, Process process);
