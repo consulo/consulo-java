@@ -28,26 +28,28 @@ import consulo.util.pointers.NamedPointer;
  */
 public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 {
-	JDK_1_3("1.3", JavaCoreBundle.message("jdk.1.3.language.level.description")),
-	JDK_1_4("1.4", JavaCoreBundle.message("jdk.1.4.language.level.description")),
-	JDK_1_5("1.5", JavaCoreBundle.message("jdk.1.5.language.level.description")),
-	JDK_1_6("1.6", JavaCoreBundle.message("jdk.1.6.language.level.description")),
-	JDK_1_7("1.7", JavaCoreBundle.message("jdk.1.7.language.level.description")),
-	JDK_1_8("1.8", JavaCoreBundle.message("jdk.1.8.language.level.description")),
-	JDK_1_9("1.9", JavaCoreBundle.message("jdk.1.9.language.level.description")),
-	JDK_X("Java X", JavaCoreBundle.message("jdk.X.language.level.description"));
+	JDK_1_3("1.3", "Java 1.3", JavaCoreBundle.message("jdk.1.3.language.level.description")),
+	JDK_1_4("1.4", "Java 1.4", JavaCoreBundle.message("jdk.1.4.language.level.description")),
+	JDK_1_5("1.5", "Java 5", JavaCoreBundle.message("jdk.1.5.language.level.description")),
+	JDK_1_6("1.6", "Java 6", JavaCoreBundle.message("jdk.1.6.language.level.description")),
+	JDK_1_7("1.7", "Java 7", JavaCoreBundle.message("jdk.1.7.language.level.description")),
+	JDK_1_8("1.8", "Java 8", JavaCoreBundle.message("jdk.1.8.language.level.description")),
+	JDK_1_9("1.9", "Java 9", JavaCoreBundle.message("jdk.1.9.language.level.description")),
+	JDK_X("1.10", "Java X", JavaCoreBundle.message("jdk.X.language.level.description"));
 
 	public static final LanguageLevel HIGHEST = JDK_1_9;
 	public static final Key<LanguageLevel> KEY = Key.create("LANGUAGE_LEVEL");
 
 	private final String myShortText;
+	private final String myFullText;
 	private final String myPresentableText;
 
 	private JavaLanguageVersion myLangVersion;
 
-	LanguageLevel(final String shortText, final String presentableText)
+	LanguageLevel(String shortText, String fullText, String presentableText)
 	{
 		myShortText = shortText;
+		myFullText = fullText;
 		myPresentableText = presentableText;
 		myLangVersion = new JavaLanguageVersion(name(), shortText, this);
 	}
@@ -120,5 +122,11 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	public String getShortText()
 	{
 		return myShortText;
+	}
+
+	@NotNull
+	public String getFullText()
+	{
+		return myFullText;
 	}
 }

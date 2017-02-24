@@ -28,7 +28,6 @@ import javax.swing.JComponent;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.JavaBundle;
 import com.intellij.ProjectTopics;
 import com.intellij.codeEditor.JavaEditorFileSwapper;
 import com.intellij.codeInsight.AttachSourcesProvider;
@@ -74,6 +73,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 import consulo.annotations.RequiredDispatchThread;
 import consulo.editor.notifications.EditorNotificationProvider;
+import consulo.java.JavaBundle;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
 
@@ -221,11 +221,10 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 	{
 		try
 		{
-			byte[] data = file.contentsToByteArray();
+			byte[] data = file.contentsToByteArray(false);
 			if(data.length > 8)
 			{
-				DataInputStream stream = new DataInputStream(new ByteArrayInputStream(data));
-				try
+				try (DataInputStream stream = new DataInputStream(new ByteArrayInputStream(data)))
 				{
 					if(stream.readInt() == 0xCAFEBABE)
 					{
@@ -235,14 +234,10 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 						LanguageLevel level = ClsParsingUtil.getLanguageLevelByVersion(major);
 						if(level != null)
 						{
-							info.append(" (").append(level.getShortText()).append(')');
+							info.append(" (").append(level == LanguageLevel.JDK_1_3 ? level.getFullText() + " or older" : level.getFullText()).append(')');
 						}
 						return info.toString();
 					}
-				}
-				finally
-				{
-					stream.close();
 				}
 			}
 		}
