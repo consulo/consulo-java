@@ -21,9 +21,7 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.psi.PsiElement;
 
-@State(
-		name = "NullableNotNullManager",
-		storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)})
+@State(name = "NullableNotNullManager",storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
 public class NullableNotNullManagerImpl extends NullableNotNullManager
 {
 	@Override

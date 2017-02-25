@@ -36,7 +36,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 
-@State(name = "JavadocGenerationManager", storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)})
+@State(name = "JavadocGenerationManager",storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
 public final class JavadocGenerationManager implements PersistentStateComponent<Element> {
   private static final Logger LOG = Logger.getInstance("#com.intellij.javadoc.JavadocGenerationManager");
   private final JavadocConfiguration myConfiguration;
