@@ -21,7 +21,6 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.components.StorageScheme;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -36,8 +35,7 @@ import consulo.java.module.extension.JavaModuleExtension;
 @State(
 		name = "JavaCompilerConfiguration",
 		storages = {
-				@Storage(file = StoragePathMacros.PROJECT_FILE),
-				@Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/compiler.xml", scheme = StorageScheme.DIRECTORY_BASED)
+				@Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/compiler.xml")
 		})
 public class JavaCompilerConfiguration implements PersistentStateComponent<Element>
 {

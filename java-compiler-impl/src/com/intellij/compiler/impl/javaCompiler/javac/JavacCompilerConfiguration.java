@@ -15,16 +15,20 @@
  */
 package com.intellij.compiler.impl.javaCompiler.javac;
 
-import com.intellij.openapi.components.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.components.PathMacroManager;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.NotNull;
 
 @State(
   name = "JavacCompilerConfiguration",
   storages = {
-    @Storage(file = StoragePathMacros.PROJECT_FILE),
-    @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/compiler.xml", scheme = StorageScheme.DIRECTORY_BASED)
+    @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/compiler.xml")
   }
 )
 public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJavaCompilerOptions> {

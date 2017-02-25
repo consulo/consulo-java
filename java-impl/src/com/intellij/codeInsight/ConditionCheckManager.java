@@ -15,15 +15,19 @@
  */
 package com.intellij.codeInsight;
 
-import com.intellij.openapi.components.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:johnnyclark@gmail.com">Johnny Clark</a>
@@ -32,8 +36,7 @@ import java.util.List;
 @State(
   name = "ConditionCheckManager",
   storages = {
-    @Storage(id = "dir", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/checker.xml", scheme = StorageScheme.DIRECTORY_BASED),
-    @Storage(file = StoragePathMacros.PROJECT_FILE)
+    @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/checker.xml"),
   }
 )
 public class ConditionCheckManager implements PersistentStateComponent<ConditionCheckManager.State> {

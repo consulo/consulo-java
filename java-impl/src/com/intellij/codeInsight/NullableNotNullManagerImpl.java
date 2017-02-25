@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 @State(
 		name = "NullableNotNullManager",
-		storages = {@Storage(file = StoragePathMacros.PROJECT_FILE)})
+		storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)})
 public class NullableNotNullManagerImpl extends NullableNotNullManager
 {
 	@Override

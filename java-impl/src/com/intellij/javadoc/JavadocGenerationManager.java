@@ -15,6 +15,8 @@
  */
 package com.intellij.javadoc;
 
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.execution.ExecutionException;
@@ -24,21 +26,17 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.util.ExecutionErrorDialog;
-import com.intellij.openapi.components.*;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 
-@State(name = "JavadocGenerationManager",
-       storages = {
-         @Storage(
-           file = StoragePathMacros.PROJECT_FILE
-         )
-       }
-)
+@State(name = "JavadocGenerationManager", storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)})
 public final class JavadocGenerationManager implements PersistentStateComponent<Element> {
   private static final Logger LOG = Logger.getInstance("#com.intellij.javadoc.JavadocGenerationManager");
   private final JavadocConfiguration myConfiguration;
