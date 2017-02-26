@@ -116,9 +116,8 @@ public final class PsiUtil extends PsiUtilCore
 	public static boolean isAccessedForReading(@NotNull PsiExpression expr)
 	{
 		PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class);
-		return !(parent instanceof PsiAssignmentExpression) ||
-				!PsiTreeUtil.isAncestor(((PsiAssignmentExpression) parent).getLExpression(), expr, false) ||
-				((PsiAssignmentExpression) parent).getOperationTokenType() != JavaTokenType.EQ;
+		return !(parent instanceof PsiAssignmentExpression) || !PsiTreeUtil.isAncestor(((PsiAssignmentExpression) parent).getLExpression(), expr, false) || ((PsiAssignmentExpression) parent)
+				.getOperationTokenType() != JavaTokenType.EQ;
 	}
 
 	public static boolean isAccessible(@NotNull PsiMember member, @NotNull PsiElement place, @Nullable PsiClass accessObjectClass)
@@ -451,8 +450,7 @@ public final class PsiUtil extends PsiUtilCore
 	@Nullable
 	public static String getAccessModifier(@AccessLevel int accessLevel)
 	{
-		@SuppressWarnings("UnnecessaryLocalVariable") @PsiModifier.ModifierConstant
-		final String modifier = accessLevel > accessModifiers.length ? null : accessModifiers[accessLevel - 1];
+		@SuppressWarnings("UnnecessaryLocalVariable") @PsiModifier.ModifierConstant final String modifier = accessLevel > accessModifiers.length ? null : accessModifiers[accessLevel - 1];
 		return modifier;
 	}
 
@@ -1090,13 +1088,10 @@ public final class PsiUtil extends PsiUtilCore
 			for(PsiType boundType : boundTypes)
 			{
 				PsiType substitutedBoundType = captureSubstitutor.substitute(boundType);
-				if(substitutedBoundType != null && !(substitutedBoundType instanceof PsiWildcardType) &&
-						!substitutedBoundType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
+				if(substitutedBoundType != null && !(substitutedBoundType instanceof PsiWildcardType) && !substitutedBoundType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT))
 				{
-					if(originalBound instanceof PsiArrayType &&
-							substitutedBoundType instanceof PsiArrayType &&
-							!originalBound.isAssignableFrom(substitutedBoundType) &&
-							!substitutedBoundType.isAssignableFrom(originalBound))
+					if(originalBound instanceof PsiArrayType && substitutedBoundType instanceof PsiArrayType && !originalBound.isAssignableFrom(substitutedBoundType) && !substitutedBoundType
+							.isAssignableFrom(originalBound))
 					{
 						continue;
 					}
@@ -1253,13 +1248,8 @@ public final class PsiUtil extends PsiUtilCore
 	public static boolean canBeOverriden(@NotNull PsiMethod method)
 	{
 		PsiClass parentClass = method.getContainingClass();
-		return parentClass != null &&
-				!method.isConstructor() &&
-				!method.hasModifierProperty(PsiModifier.STATIC) &&
-				!method.hasModifierProperty(PsiModifier.FINAL) &&
-				!method.hasModifierProperty(PsiModifier.PRIVATE) &&
-				!(parentClass instanceof PsiAnonymousClass) &&
-				!parentClass.hasModifierProperty(PsiModifier.FINAL);
+		return parentClass != null && !method.isConstructor() && !method.hasModifierProperty(PsiModifier.STATIC) && !method.hasModifierProperty(PsiModifier.FINAL) && !method.hasModifierProperty
+				(PsiModifier.PRIVATE) && !(parentClass instanceof PsiAnonymousClass) && !parentClass.hasModifierProperty(PsiModifier.FINAL);
 	}
 
 	@NotNull
@@ -1371,9 +1361,7 @@ public final class PsiUtil extends PsiUtilCore
 
 	public static boolean isInstantiatable(@NotNull PsiClass clazz)
 	{
-		return !clazz.hasModifierProperty(PsiModifier.ABSTRACT) &&
-				clazz.hasModifierProperty(PsiModifier.PUBLIC) &&
-				hasDefaultConstructor(clazz);
+		return !clazz.hasModifierProperty(PsiModifier.ABSTRACT) && clazz.hasModifierProperty(PsiModifier.PUBLIC) && hasDefaultConstructor(clazz);
 	}
 
 	public static boolean hasDefaultConstructor(@NotNull PsiClass clazz)
@@ -1398,8 +1386,8 @@ public final class PsiUtil extends PsiUtilCore
 		{
 			for(PsiMethod cls : constructors)
 			{
-				if((!checkModifiers || cls.hasModifierProperty(PsiModifier.PUBLIC) ||
-						allowProtected && cls.hasModifierProperty(PsiModifier.PROTECTED)) && cls.getParameterList().getParametersCount() == 0)
+				if((!checkModifiers || cls.hasModifierProperty(PsiModifier.PUBLIC) || allowProtected && cls.hasModifierProperty(PsiModifier.PROTECTED)) && cls.getParameterList().getParametersCount()
+						== 0)
 				{
 					return true;
 				}
@@ -1741,9 +1729,7 @@ public final class PsiUtil extends PsiUtilCore
 		{
 			for(PsiFile file : directory.getFiles())
 			{
-				if(file instanceof PsiClassOwner &&
-						packageName.equals(((PsiClassOwner) file).getPackageName()) &&
-						((PsiClassOwner) file).getClasses().length > 0)
+				if(file instanceof PsiClassOwner && packageName.equals(((PsiClassOwner) file).getPackageName()) && ((PsiClassOwner) file).getClasses().length > 0)
 				{
 					return false;
 				}
@@ -1751,5 +1737,10 @@ public final class PsiUtil extends PsiUtilCore
 		}
 
 		return true;
+	}
+
+	public static boolean isModuleFile(@NotNull PsiFile file)
+	{
+		return file instanceof PsiJavaFile && ((PsiJavaFile) file).getModuleDeclaration() != null;
 	}
 }
