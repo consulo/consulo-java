@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.intellij.codeInsight.completion;
 
 import gnu.trove.THashSet;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiDocumentManager;
@@ -35,10 +35,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.search.AllClassesSearchExecutor;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.AllClassesSearch;
 import com.intellij.util.Consumer;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
@@ -115,8 +114,7 @@ public class AllClassesGetter
 				{
 					try
 					{
-						context.setTailOffset(psiReference.getRangeInElement().getEndOffset() + psiReference.getElement().getTextRange()
-								.getStartOffset());
+						context.setTailOffset(psiReference.getRangeInElement().getEndOffset() + psiReference.getElement().getTextRange().getStartOffset());
 						final PsiElement newUnderlying = psiReference.bindToElement(psiClass);
 						if(newUnderlying != null)
 						{
@@ -161,115 +159,46 @@ public class AllClassesGetter
 
 	};
 
-	public static final InsertHandler<JavaPsiClassReferenceElement> INSERT_FQN = new InsertHandler<JavaPsiClassReferenceElement>()
+	public static final InsertHandler<JavaPsiClassReferenceElement> INSERT_FQN = (context, item) ->
 	{
-		@Override
-		public void handleInsert(InsertionContext context, JavaPsiClassReferenceElement item)
+		final String qName = item.getQualifiedName();
+		if(qName != null)
 		{
-			final String qName = item.getQualifiedName();
-			if(qName != null)
-			{
-				int start = context.getTailOffset() - 1;
-				while(start >= 0)
-				{
-					final char ch = context.getDocument().getCharsSequence().charAt(start);
-					if(!Character.isJavaIdentifierPart(ch) && ch != '.')
-					{
-						break;
-					}
-					start--;
-				}
-				context.getDocument().replaceString(start + 1, context.getTailOffset(), qName);
-				LOG.assertTrue(context.getTailOffset() >= 0);
-			}
+			int start = JavaCompletionUtil.findQualifiedNameStart(context);
+			context.getDocument().replaceString(start, context.getTailOffset(), qName);
+			LOG.assertTrue(context.getTailOffset() >= 0);
 		}
 	};
 
-	public static void processJavaClasses(@NotNull final CompletionParameters parameters, @NotNull final PrefixMatcher prefixMatcher,
-			final boolean filterByScope, @NotNull final Consumer<PsiClass> consumer)
+	public static void processJavaClasses(@NotNull final CompletionParameters parameters,
+			@NotNull final PrefixMatcher prefixMatcher,
+			final boolean filterByScope,
+			@NotNull final Consumer<PsiClass> consumer)
 	{
 		final PsiElement context = parameters.getPosition();
 		final Project project = context.getProject();
 		final GlobalSearchScope scope = filterByScope ? context.getContainingFile().getResolveScope() : GlobalSearchScope.allScope(project);
 
-		Processor<PsiClass> processor = new Processor<PsiClass>()
-		{
-			final Set<String> qNames = new THashSet<String>();
-			final boolean pkgContext = JavaCompletionUtil.inSomePackage(context);
-			final String packagePrefix = getPackagePrefix(context, parameters.getOffset());
-
-			@Override
-			public boolean process(PsiClass psiClass)
-			{
-				if(parameters.getInvocationCount() < 2 && PsiReferenceExpressionImpl.seemsScrambled(psiClass))
-				{
-					return true;
-				}
-
-				assert psiClass != null;
-				if(isAcceptableInContext(context, psiClass, filterByScope, pkgContext))
-				{
-					String qName = psiClass.getQualifiedName();
-					if(qName != null && qName.startsWith(packagePrefix) && qNames.add(qName))
-					{
-						consumer.consume(psiClass);
-					}
-				}
-				return true;
-			}
-		};
-		processJavaClasses(prefixMatcher, project, scope, processor);
+		processJavaClasses(prefixMatcher, project, scope, new LimitedAccessibleClassPreprocessor(parameters, filterByScope, consumer));
 	}
 
-	public static void processJavaClasses(@NotNull final PrefixMatcher prefixMatcher, @NotNull Project project, @NotNull GlobalSearchScope scope,
-			@NotNull Processor<PsiClass> processor)
+	public static void processJavaClasses(@NotNull final PrefixMatcher prefixMatcher, @NotNull Project project, @NotNull GlobalSearchScope scope, @NotNull Processor<PsiClass> processor)
 	{
-		AllClassesSearch.search(scope, project, new Condition<String>()
+		final Set<String> names = new THashSet<>(10000);
+		AllClassesSearchExecutor.processClassNames(project, scope, s ->
 		{
-			@Override
-			public boolean value(String s)
+			if(prefixMatcher.prefixMatches(s))
 			{
-				return prefixMatcher.isStartMatch(s);
+				names.add(s);
 			}
-		}).forEach(processor);
-		AllClassesSearch.search(scope, project, new Condition<String>()
-		{
-			@Override
-			public boolean value(String s)
-			{
-				return prefixMatcher.prefixMatches(s);
-			}
-		}).forEach(processor);
+		});
+		LinkedHashSet<String> sorted = CompletionUtil.sortMatching(prefixMatcher, names);
+		AllClassesSearchExecutor.processClassesByNames(project, scope, sorted, processor);
 	}
 
-
-	private static String getPackagePrefix(final PsiElement context, final int offset)
-	{
-		final CharSequence fileText = context.getContainingFile().getViewProvider().getContents();
-		int i = offset - 1;
-		while(i >= 0)
-		{
-			final char c = fileText.charAt(i);
-			if(!Character.isJavaIdentifierPart(c) && c != '.')
-			{
-				break;
-			}
-			i--;
-		}
-		String prefix = fileText.subSequence(i + 1, offset).toString();
-		final int j = prefix.lastIndexOf('.');
-		return j > 0 ? prefix.substring(0, j) : "";
-	}
-
-	public static boolean isAcceptableInContext(@NotNull final PsiElement context, @NotNull final PsiClass psiClass, final boolean filterByScope,
-			final boolean pkgContext)
+	public static boolean isAcceptableInContext(@NotNull final PsiElement context, @NotNull final PsiClass psiClass, final boolean filterByScope, final boolean pkgContext)
 	{
 		ProgressManager.checkCanceled();
-
-		if(!context.isValid() || !psiClass.isValid())
-		{
-			return false;
-		}
 
 		if(JavaCompletionUtil.isInExcludedPackage(psiClass, false))
 		{
@@ -290,8 +219,7 @@ public class AllClassesGetter
 		return JavaCompletionUtil.isSourceLevelAccessible(context, psiClass, pkgContext);
 	}
 
-	public static JavaPsiClassReferenceElement createLookupItem(@NotNull final PsiClass psiClass, final InsertHandler<JavaPsiClassReferenceElement>
-			insertHandler)
+	public static JavaPsiClassReferenceElement createLookupItem(@NotNull final PsiClass psiClass, final InsertHandler<JavaPsiClassReferenceElement> insertHandler)
 	{
 		final JavaPsiClassReferenceElement item = new JavaPsiClassReferenceElement(psiClass);
 		item.setInsertHandler(insertHandler);

@@ -15,20 +15,21 @@
  */
 package com.intellij.codeInsight.lookup;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.TailType;
 import com.intellij.codeInsight.completion.JavaClassNameCompletionContributor;
 import com.intellij.codeInsight.completion.JavaMethodCallElement;
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.meta.PsiMetaData;
 import com.intellij.psi.util.PsiUtilCore;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,99 +38,82 @@ import java.util.Collection;
  * Time: 16:05:20
  * To change this template use Options | File Templates.
  */
-public class LookupItemUtil{
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.lookup.LookupItemUtil");
+public class LookupItemUtil
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.lookup.LookupItemUtil");
 
-  private LookupItemUtil() {
-  }
+	/**
+	 * @see LookupElementBuilder
+	 * @deprecated
+	 */
+	@NotNull
+	public static LookupElement objectToLookupItem(Object object)
+	{
+		if(object instanceof LookupElement)
+		{
+			return (LookupElement) object;
+		}
+		if(object instanceof PsiClass)
+		{
+			return JavaClassNameCompletionContributor.createClassLookupItem((PsiClass) object, true);
+		}
+		if(object instanceof PsiMethod)
+		{
+			return new JavaMethodCallElement((PsiMethod) object);
+		}
+		if(object instanceof PsiVariable)
+		{
+			return new VariableLookupItem((PsiVariable) object);
+		}
+		if(object instanceof PsiExpression)
+		{
+			return new ExpressionLookupItem((PsiExpression) object);
+		}
+		if(object instanceof PsiType)
+		{
+			return PsiTypeLookupItem.createLookupItem((PsiType) object, null);
+		}
+		if(object instanceof PsiJavaPackage)
+		{
+			return new PackageLookupItem((PsiJavaPackage) object);
+		}
 
-  @Nullable
-  public static LookupElement addLookupItem(Collection<LookupElement> set, @NotNull Object object) {
-    return addLookupItem(set, object, new CamelHumpMatcher(""));
-  }
+		String s = null;
+		LookupItem item = new LookupItem(object, "");
+		if(object instanceof PsiElement)
+		{
+			s = PsiUtilCore.getName((PsiElement) object);
+		}
+		TailType tailType = TailType.NONE;
+		if(object instanceof PsiMetaData)
+		{
+			s = ((PsiMetaData) object).getName();
+		}
+		else if(object instanceof String)
+		{
+			s = (String) object;
+		}
+		else if(object instanceof Template)
+		{
+			s = ((Template) object).getKey();
+		}
+		else if(object instanceof PresentableLookupValue)
+		{
+			s = ((PresentableLookupValue) object).getPresentation();
+		}
 
-  @Nullable
-  public static LookupElement addLookupItem(Collection<LookupElement> set, @NotNull Object object, PrefixMatcher matcher) {
-    if (object instanceof PsiType) {
-      PsiType psiType = (PsiType)object;
-      for (final LookupElement lookupItem : set) {
-        Object o = lookupItem.getObject();
-        if (o.equals(psiType)) {
-          return lookupItem;
-        }
-      }
-    }
+		if(object instanceof LookupValueWithUIHint && ((LookupValueWithUIHint) object).isBold())
+		{
+			item.setBold();
+		}
 
-    for (LookupElement lookupItem : set) {
-      if(lookupItem.getObject().equals(lookupItem)) return null;
-    }
-    LookupElement item = objectToLookupItem(object);
-    if (matcher.prefixMatches(item)) {
-      return set.add(item) ? item : null;
-    }
-    return null;
-  }
+		if(s == null)
+		{
+			LOG.error("Null string for object: " + object + " of class " + (object != null ? object.getClass() : null));
+		}
+		item.setLookupString(s);
 
-  /**
-   * @deprecated
-   * @see LookupElementBuilder
-  */
-  public static LookupElement objectToLookupItem(Object object) {
-    if (object instanceof LookupElement) return (LookupElement)object;
-    if (object instanceof PsiClass) {
-      return JavaClassNameCompletionContributor.createClassLookupItem((PsiClass)object, true);
-    }
-    if (object instanceof PsiMethod) {
-      return new JavaMethodCallElement((PsiMethod)object);
-    }
-    if (object instanceof PsiVariable) {
-      return new VariableLookupItem((PsiVariable)object);
-    }
-    if (object instanceof PsiKeyword) {
-      return new KeywordLookupItem((PsiKeyword)object, (PsiKeyword)object);
-    }
-    if (object instanceof PsiExpression) {
-      return new ExpressionLookupItem((PsiExpression) object);
-    }
-    if (object instanceof PsiType) {
-      return PsiTypeLookupItem.createLookupItem((PsiType)object, null);
-    }
-    if (object instanceof PsiJavaPackage) {
-      return new PackageLookupItem((PsiJavaPackage)object);
-    }
-
-    String s = null;
-    LookupItem item = new LookupItem(object, "");
-    if (object instanceof PsiElement){
-      s = PsiUtilCore.getName((PsiElement)object);
-    }
-    TailType tailType = TailType.NONE;
-    if (object instanceof PsiMetaData) {
-      s = ((PsiMetaData)object).getName();
-    }
-    else if (object instanceof String) {
-      s = (String)object;
-    }
-    else if (object instanceof Template) {
-      s = ((Template) object).getKey();
-    }
-    else if (object instanceof PresentableLookupValue) {
-      s = ((PresentableLookupValue)object).getPresentation();
-    }
-
-    if (object instanceof LookupValueWithUIHint && ((LookupValueWithUIHint) object).isBold()) {
-      item.setBold();
-    }
-
-    if (s == null) {
-      LOG.error("Null string for object: " + object + " of class " + (object != null ? object.getClass() : null));
-    }
-    if (object instanceof LookupValueWithTail) {
-      item.setAttribute(LookupItem.TAIL_TEXT_ATTR, " " + ((LookupValueWithTail)object).getTailText());
-    }
-    item.setLookupString(s);
-
-    item.setTailType(tailType);
-    return item;
-  }
+		item.setTailType(tailType);
+		return item;
+	}
 }

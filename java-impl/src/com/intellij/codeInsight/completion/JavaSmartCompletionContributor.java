@@ -54,7 +54,6 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.util.ReflectionUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
 
 /**
@@ -139,7 +138,6 @@ public class JavaSmartCompletionContributor extends CompletionContributor
 
 		extend(CompletionType.SMART, psiElement(), new CompletionProvider()
 		{
-			@RequiredReadAction
 			@Override
 			public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 			{

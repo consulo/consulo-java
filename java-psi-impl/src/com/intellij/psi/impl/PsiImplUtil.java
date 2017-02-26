@@ -199,8 +199,8 @@ public class PsiImplUtil
 				break;
 			}
 		}
-		String message = parameter + ":" + parameter.getClass() + " not found among parameters: " + Arrays.asList(parameters) + "." + " parameterList' parent: " + parameterList.getParent() + ";" + "" +
-				" parameter.isValid()=" + parameter.isValid() + ";" + " parameterList.isValid()= " + parameterList.isValid() + ";" + " parameterList stub: " + (parameterList instanceof
+		String message = parameter + ":" + parameter.getClass() + " not found among parameters: " + Arrays.asList(parameters) + "." + " parameterList' parent: " + parameterList.getParent() + ";" +
+				"" + " parameter.isValid()=" + parameter.isValid() + ";" + " parameterList.isValid()= " + parameterList.isValid() + ";" + " parameterList stub: " + (parameterList instanceof
 				StubBasedPsiElement ? ((StubBasedPsiElement) parameterList).getStub() : "---") + "; " + " parameter stub: " + (parameter instanceof StubBasedPsiElement ? ((StubBasedPsiElement)
 				parameter).getStub() : "---") + ";" + " suspect: " + suspect + " (index=" + i + "); " + (suspect == null ? null : suspect.getClass()) + " suspect stub: " + (suspect instanceof
 				StubBasedPsiElement ? ((StubBasedPsiElement) suspect).getStub() : suspect == null ? "-null-" : "---" + suspect.getClass()) + ";" + " parameter.equals(suspect) = " + parameter.equals
@@ -621,6 +621,21 @@ public class PsiImplUtil
 	{
 		PsiDocComment docComment = owner.getDocComment();
 		return docComment != null && docComment.findTagByName("deprecated") != null;
+	}
+
+	@Nullable
+	public static PsiJavaDocumentedElement findDocCommentOwner(@NotNull PsiDocComment comment)
+	{
+		PsiElement parent = comment.getParent();
+		if(parent instanceof PsiJavaDocumentedElement)
+		{
+			PsiJavaDocumentedElement owner = (PsiJavaDocumentedElement) parent;
+			if(owner.getDocComment() == comment)
+			{
+				return owner;
+			}
+		}
+		return null;
 	}
 
 	@Nullable

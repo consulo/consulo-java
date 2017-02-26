@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,16 @@
  */
 package com.intellij.psi.filters.getters;
 
+import gnu.trove.THashSet;
+
+import java.util.Set;
+
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
-import com.intellij.codeInsight.completion.CompletionContext;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiType;
-import com.intellij.psi.filters.ContextGetter;
 import com.intellij.psi.util.PsiTreeUtil;
-import gnu.trove.THashSet;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,31 +33,33 @@ import java.util.Set;
  * Time: 12:37:26
  * To change this template use Options | File Templates.
  */
-public class ExpectedTypesGetter implements ContextGetter{
+public class ExpectedTypesGetter
+{
 
-  @Override
-  @NotNull
-  public PsiType[] get(PsiElement context, CompletionContext completionContext){
-    return getExpectedTypes(context, false);
-  }
+	public static PsiType[] getExpectedTypes(final PsiElement context, boolean defaultTypes)
+	{
+		PsiExpression expression = PsiTreeUtil.getContextOfType(context, PsiExpression.class, true);
+		if(expression == null)
+		{
+			return PsiType.EMPTY_ARRAY;
+		}
 
-  public static PsiType[] getExpectedTypes(final PsiElement context, boolean defaultTypes) {
-    PsiExpression expression = PsiTreeUtil.getContextOfType(context, PsiExpression.class, true);
-    if(expression == null) return PsiType.EMPTY_ARRAY;
+		return extractTypes(ExpectedTypesProvider.getExpectedTypes(expression, true), defaultTypes);
+	}
 
-    return extractTypes(ExpectedTypesProvider.getExpectedTypes(expression, true), defaultTypes);
-  }
-
-  public static PsiType[] extractTypes(ExpectedTypeInfo[] infos, boolean defaultTypes) {
-    Set<PsiType> result = new THashSet<PsiType>(infos.length);
-    for (ExpectedTypeInfo info : infos) {
-      final PsiType type = info.getType();
-      final PsiType defaultType = info.getDefaultType();
-      if (!defaultTypes && !defaultType.equals(type)) {
-        result.add(type);
-      }
-      result.add(defaultType);
-    }
-    return result.toArray(new PsiType[result.size()]);
-  }
+	public static PsiType[] extractTypes(ExpectedTypeInfo[] infos, boolean defaultTypes)
+	{
+		Set<PsiType> result = new THashSet<>(infos.length);
+		for(ExpectedTypeInfo info : infos)
+		{
+			final PsiType type = info.getType();
+			final PsiType defaultType = info.getDefaultType();
+			if(!defaultTypes && !defaultType.equals(type))
+			{
+				result.add(type);
+			}
+			result.add(defaultType);
+		}
+		return result.toArray(PsiType.createArray(result.size()));
+	}
 }

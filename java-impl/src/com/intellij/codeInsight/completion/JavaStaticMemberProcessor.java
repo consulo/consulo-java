@@ -22,15 +22,7 @@ import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.VariableLookupItem;
 import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStaticStatement;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 
 /**
@@ -61,20 +53,22 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor
 
 	@NotNull
 	@Override
-	protected LookupElement createLookupElement(@NotNull PsiMember member,
-			@NotNull final PsiClass containingClass,
-			boolean shouldImport)
+	protected LookupElement createLookupElement(@NotNull PsiMember member, @NotNull final PsiClass containingClass, boolean shouldImport)
 	{
-		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition,
-				false);
+		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
+
+		String exprText = member.getName() + (member instanceof PsiMethod ? "()" : "");
+		PsiReference ref = JavaPsiFacade.getElementFactory(member.getProject()).createExpressionFromText(exprText, myOriginalPosition).findReferenceAt(0);
+		if(ref instanceof PsiReferenceExpression && ((PsiReferenceExpression) ref).multiResolve(true).length > 0)
+		{
+			shouldImport = false;
+		}
 
 		if(member instanceof PsiMethod)
 		{
-			return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new GlobalMethodCallElement((PsiMethod) member,
-					shouldImport, false));
+			return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new GlobalMethodCallElement((PsiMethod) member, shouldImport, false));
 		}
-		return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new VariableLookupItem((PsiField) member,
-				shouldImport)
+		return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new VariableLookupItem((PsiField) member, shouldImport)
 		{
 			@Override
 			public void handleInsert(InsertionContext context)
@@ -87,12 +81,9 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor
 	}
 
 	@Override
-	protected LookupElement createLookupElement(@NotNull List<PsiMethod> overloads,
-			@NotNull PsiClass containingClass,
-			boolean shouldImport)
+	protected LookupElement createLookupElement(@NotNull List<PsiMethod> overloads, @NotNull PsiClass containingClass, boolean shouldImport)
 	{
-		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition,
-				false);
+		shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
 
 		final JavaMethodCallElement element = new GlobalMethodCallElement(overloads.get(0), shouldImport, true);
 		JavaCompletionUtil.putAllMethods(element, overloads);

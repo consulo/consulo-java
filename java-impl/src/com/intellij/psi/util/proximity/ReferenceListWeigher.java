@@ -45,7 +45,9 @@ public class ReferenceListWeigher extends ProximityWeigher
 
 	protected enum Preference
 	{
-		Interfaces, Classes, Exceptions
+		Interfaces,
+		Classes,
+		Exceptions
 	}
 
 	@Nullable
@@ -88,7 +90,10 @@ public class ReferenceListWeigher extends ProximityWeigher
 
 	public enum ReferenceListApplicability
 	{
-		inapplicable, unknown, applicableByKind, applicableByName
+		inapplicable,
+		unknown,
+		applicableByKind,
+		applicableByName
 	}
 
 	@Override

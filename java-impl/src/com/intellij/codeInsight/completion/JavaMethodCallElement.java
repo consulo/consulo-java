@@ -15,20 +15,46 @@
  */
 package com.intellij.codeInsight.completion;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
+import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupItem;
 import com.intellij.codeInsight.lookup.TypedLookupItem;
 import com.intellij.codeInsight.lookup.impl.JavaElementLookupRenderer;
+import com.intellij.codeInsight.template.Expression;
+import com.intellij.codeInsight.template.ExpressionContext;
+import com.intellij.codeInsight.template.InvokeActionResult;
+import com.intellij.codeInsight.template.Result;
+import com.intellij.codeInsight.template.Template;
+import com.intellij.codeInsight.template.TemplateEditingAdapter;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.ConstantNode;
+import com.intellij.codeInsight.template.impl.TemplateImpl;
+import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
+import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.featureStatistics.FeatureUsageTracker;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.event.DocumentAdapter;
+import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.util.ClassConditionKey;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.registry.Registry;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 
 /**
@@ -44,6 +70,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 	private PsiSubstitutor myQualifierSubstitutor = PsiSubstitutor.EMPTY;
 	private PsiSubstitutor myInferenceSubstitutor = PsiSubstitutor.EMPTY;
 	private boolean myMayNeedExplicitTypeParameters;
+	private String myForcedQualifier = "";
 
 	public JavaMethodCallElement(@NotNull PsiMethod method)
 	{
@@ -75,6 +102,12 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 				}
 			}
 		}
+	}
+
+	void setForcedQualifier(@NotNull String forcedQualifier)
+	{
+		myForcedQualifier = forcedQualifier;
+		setLookupString(forcedQualifier + getLookupString());
 	}
 
 	@Override
@@ -174,33 +207,175 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 		else if(myHelper != null)
 		{
 			context.commitDocument();
-			if(willBeImported())
-			{
-				final PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiReferenceExpression.class, false);
-				if(ref != null && myContainingClass != null && !ref.isReferenceTo(method))
-				{
-					ref.bindToElementViaStaticImport(myContainingClass);
-				}
-				return;
-			}
-
-			qualifyMethodCall(file, startOffset, document);
+			importOrQualify(document, file, method, startOffset);
 		}
 
-		final PsiType type = method.getReturnType();
+		PsiCallExpression methodCall = findCallAtOffset(context, context.getOffset(refStart));
+		if(methodCall != null)
+		{
+			CompletionMemory.registerChosenMethod(method, methodCall);
+			handleNegation(context, document, method, methodCall);
+		}
+
+		startArgumentLiveTemplate(context, method);
+	}
+
+	static PsiCallExpression findCallAtOffset(InsertionContext context, int offset)
+	{
+		context.commitDocument();
+		return PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), offset, PsiCallExpression.class, false);
+	}
+
+	private static void handleNegation(InsertionContext context, Document document, PsiMethod method, PsiCallExpression methodCall)
+	{
+		PsiType type = method.getReturnType();
 		if(context.getCompletionChar() == '!' && type != null && PsiType.BOOLEAN.isAssignableFrom(type))
 		{
 			context.setAddCompletionChar(false);
-			context.commitDocument();
-			final int offset = context.getOffset(refStart);
-			final PsiMethodCallExpression methodCall = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiMethodCallExpression.class, false);
-			if(methodCall != null)
+			FeatureUsageTracker.getInstance().triggerFeatureUsed(CodeCompletionFeatures.EXCLAMATION_FINISH);
+			document.insertString(methodCall.getTextRange().getStartOffset(), "!");
+		}
+	}
+
+	private void importOrQualify(Document document, PsiFile file, PsiMethod method, int startOffset)
+	{
+		if(willBeImported())
+		{
+			final PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiReferenceExpression.class, false);
+			if(ref != null && myContainingClass != null && !ref.isReferenceTo(method))
 			{
-				FeatureUsageTracker.getInstance().triggerFeatureUsed(CodeCompletionFeatures.EXCLAMATION_FINISH);
-				document.insertString(methodCall.getTextRange().getStartOffset(), "!");
+				ref.bindToElementViaStaticImport(myContainingClass);
 			}
+			return;
 		}
 
+		qualifyMethodCall(file, startOffset, document);
+	}
+
+	public static final Key<PsiMethod> ARGUMENT_TEMPLATE_ACTIVE = Key.create("ARGUMENT_TEMPLATE_ACTIVE");
+
+	@NotNull
+	private static Template createArgTemplate(PsiMethod method, int caretOffset, PsiExpressionList argList, TextRange argRange)
+	{
+		Template template = TemplateManager.getInstance(method.getProject()).createTemplate("", "");
+		PsiParameter[] parameters = method.getParameterList().getParameters();
+		for(int i = 0; i < parameters.length; i++)
+		{
+			if(i > 0)
+			{
+				template.addTextSegment(", ");
+			}
+			String name = StringUtil.notNullize(parameters[i].getName());
+			Expression expression = Registry.is("java.completion.argument.live.template.completion", false) ? new AutoPopupCompletion() : new ConstantNode(name);
+			template.addVariable(name, expression, new ConstantNode(name), true);
+		}
+		boolean finishInsideParens = method.isVarArgs();
+		if(finishInsideParens)
+		{
+			template.addEndVariable();
+		}
+		template.addTextSegment(argList.getText().substring(caretOffset - argRange.getStartOffset(), argList.getTextLength()));
+		if(!finishInsideParens)
+		{
+			template.addEndVariable();
+		}
+		return template;
+	}
+
+	public static boolean startArgumentLiveTemplate(InsertionContext context, PsiMethod method)
+	{
+		if(method.getParameterList().getParametersCount() == 0 || context.getCompletionChar() == Lookup.COMPLETE_STATEMENT_SELECT_CHAR || !Registry.is("java.completion.argument.live.template", false))
+		{
+			return false;
+		}
+
+		Editor editor = context.getEditor();
+		context.commitDocument();
+		PsiCall call = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiCall.class, false);
+		PsiExpressionList argList = call == null ? null : call.getArgumentList();
+		if(argList == null || argList.getExpressions().length > 0)
+		{
+			return false;
+		}
+
+		TextRange argRange = argList.getTextRange();
+		int caretOffset = editor.getCaretModel().getOffset();
+		if(!argRange.contains(caretOffset))
+		{
+			return false;
+		}
+
+		Template template = createArgTemplate(method, caretOffset, argList, argRange);
+
+		context.getDocument().deleteString(caretOffset, argRange.getEndOffset());
+		TemplateManager.getInstance(method.getProject()).startTemplate(editor, template);
+
+		TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
+		if(templateState == null)
+		{
+			return false;
+		}
+
+		setupNonFilledArgumentRemoving(editor, templateState);
+
+		editor.putUserData(ARGUMENT_TEMPLATE_ACTIVE, method);
+		Disposer.register(templateState, () ->
+		{
+			if(editor.getUserData(ARGUMENT_TEMPLATE_ACTIVE) == method)
+			{
+				editor.putUserData(ARGUMENT_TEMPLATE_ACTIVE, null);
+			}
+		});
+		return true;
+	}
+
+	private static void setupNonFilledArgumentRemoving(final Editor editor, final TemplateState templateState)
+	{
+		AtomicInteger maxEditedVariable = new AtomicInteger(-1);
+		editor.getDocument().addDocumentListener(new DocumentAdapter()
+		{
+			@Override
+			public void documentChanged(DocumentEvent e)
+			{
+				maxEditedVariable.set(Math.max(maxEditedVariable.get(), templateState.getCurrentVariableNumber()));
+			}
+		}, templateState);
+
+		templateState.addTemplateStateListener(new TemplateEditingAdapter()
+		{
+			@Override
+			public void currentVariableChanged(TemplateState templateState, Template template, int oldIndex, int newIndex)
+			{
+				maxEditedVariable.set(Math.max(maxEditedVariable.get(), oldIndex));
+			}
+
+			@Override
+			public void beforeTemplateFinished(TemplateState state, Template template, boolean brokenOff)
+			{
+				if(brokenOff)
+				{
+					removeUntouchedArguments((TemplateImpl) template);
+				}
+			}
+
+			private void removeUntouchedArguments(TemplateImpl template)
+			{
+				int firstUnchangedVar = maxEditedVariable.get() + 1;
+				if(firstUnchangedVar >= template.getVariableCount())
+				{
+					return;
+				}
+
+				TextRange startRange = templateState.getVariableRange(template.getVariableNameAt(firstUnchangedVar));
+				TextRange endRange = templateState.getVariableRange(template.getVariableNameAt(template.getVariableCount() - 1));
+				if(startRange == null || endRange == null)
+				{
+					return;
+				}
+
+				WriteCommandAction.runWriteCommandAction(editor.getProject(), () -> editor.getDocument().deleteString(startRange.getStartOffset(), endRange.getEndOffset()));
+			}
+		});
 	}
 
 	private boolean shouldInsertTypeParameters()
@@ -208,7 +383,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 		return myMayNeedExplicitTypeParameters && !getInferenceSubstitutor().equals(PsiSubstitutor.EMPTY) && myMethod.getParameterList().getParametersCount() == 0;
 	}
 
-	public static boolean mayNeedTypeParameters(final PsiElement leaf)
+	public static boolean mayNeedTypeParameters(@Nullable final PsiElement leaf)
 	{
 		if(PsiTreeUtil.getParentOfType(leaf, PsiExpressionList.class, true, PsiCodeBlock.class, PsiModifierListOwner.class) == null)
 		{
@@ -217,13 +392,16 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 				return false;
 			}
 		}
-		if(leaf != null)
+
+		if(PsiUtil.getLanguageLevel(leaf).isAtLeast(LanguageLevel.JDK_1_8))
 		{
-			final PsiElement parent = leaf.getParent();
-			if(parent instanceof PsiReferenceExpression && ((PsiReferenceExpression) parent).getTypeParameters().length > 0)
-			{
-				return false;
-			}
+			return false;
+		}
+
+		final PsiElement parent = leaf.getParent();
+		if(parent instanceof PsiReferenceExpression && ((PsiReferenceExpression) parent).getTypeParameters().length > 0)
+		{
+			return false;
 		}
 		return true;
 	}
@@ -321,6 +499,10 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 
 		MemberLookupHelper helper = myHelper != null ? myHelper : new MemberLookupHelper(myMethod, myContainingClass, false, false);
 		helper.renderElement(presentation, myHelper != null, myHelper != null && !myHelper.willBeImported(), getSubstitutor());
+		if(!myForcedQualifier.isEmpty())
+		{
+			presentation.setItemText(myForcedQualifier + presentation.getItemText());
+		}
 
 		if(shouldInsertTypeParameters())
 		{
@@ -342,5 +524,29 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 			}
 		}
 
+	}
+
+	private static class AutoPopupCompletion extends Expression
+	{
+		@Nullable
+		@Override
+		public Result calculateResult(ExpressionContext context)
+		{
+			return new InvokeActionResult(() -> AutoPopupController.getInstance(context.getProject()).scheduleAutoPopup(context.getEditor()));
+		}
+
+		@Nullable
+		@Override
+		public Result calculateQuickResult(ExpressionContext context)
+		{
+			return null;
+		}
+
+		@Nullable
+		@Override
+		public LookupElement[] calculateLookupItems(ExpressionContext context)
+		{
+			return null;
+		}
 	}
 }

@@ -15,15 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.elementType;
-import static com.intellij.patterns.PsiJavaPatterns.or;
-import static com.intellij.patterns.PsiJavaPatterns.psiClass;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiExpressionStatement;
-import static com.intellij.patterns.PsiJavaPatterns.psiJavaElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
-import static com.intellij.patterns.PsiJavaPatterns.psiNameValuePair;
-import static com.intellij.patterns.PsiJavaPatterns.psiReferenceExpression;
+import static com.intellij.patterns.PsiJavaPatterns.*;
 import static com.intellij.util.ObjectUtils.assertNotNull;
 
 import java.util.Arrays;
@@ -277,6 +269,11 @@ public class JavaCompletionContributor extends CompletionContributor
 			addIdentifierVariants(parameters, position, result, matcher, parent, session);
 		}
 
+		if(JavaMemberNameCompletionContributor.INSIDE_TYPE_PARAMS_PATTERN.accepts(position))
+		{
+			return;
+		}
+
 		Set<String> usedWords = addReferenceVariants(parameters, result, session);
 
 		if(psiElement().inside(PsiLiteralExpression.class).accepts(position))
@@ -339,7 +336,7 @@ public class JavaCompletionContributor extends CompletionContributor
 
 		if(SmartCastProvider.shouldSuggestCast(parameters))
 		{
-			SmartCastProvider.addCastVariants(parameters, element ->
+			SmartCastProvider.addCastVariants(parameters, result.getPrefixMatcher(), element ->
 			{
 				registerClassFromTypeElement(element, session);
 				result.addElement(PrioritizedLookupElement.withPriority(element, 1));
@@ -553,7 +550,7 @@ public class JavaCompletionContributor extends CompletionContributor
 		boolean isSecondCompletion = parameters.getInvocationCount() >= 2;
 
 		PsiElement position = parameters.getPosition();
-		if(JavaKeywordCompletion.isInstanceofPlace(position))
+		if(JavaKeywordCompletion.isInstanceofPlace(position) || JavaMemberNameCompletionContributor.INSIDE_TYPE_PARAMS_PATTERN.accepts(position))
 		{
 			return false;
 		}
@@ -956,6 +953,10 @@ public class JavaCompletionContributor extends CompletionContributor
 			{
 				return true;
 			}
+		}
+		if(psiElement(PsiIdentifier.class).withParent(psiParameter()).accepts(file.findElementAt(startOffset)))
+		{
+			return true;
 		}
 
 		HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(startOffset);

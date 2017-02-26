@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,73 +20,61 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
-import com.intellij.execution.RunnerRegistry;
 import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
+import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.util.ExecutionErrorDialog;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.util.xmlb.XmlSerializer;
 
-@State(name = "JavadocGenerationManager",storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
-public final class JavadocGenerationManager implements PersistentStateComponent<Element> {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.javadoc.JavadocGenerationManager");
-  private final JavadocConfiguration myConfiguration;
-  private final Project myProject;
+@State(name = "JavadocGenerationManager", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
+public final class JavadocGenerationManager implements PersistentStateComponent<Element>
+{
+	private final JavadocConfiguration myConfiguration = new JavadocConfiguration();
+	private final Project myProject;
 
-  public static JavadocGenerationManager getInstance(@NotNull Project project) {
-    return ServiceManager.getService(project, JavadocGenerationManager.class);
-  }
+	public static JavadocGenerationManager getInstance(@NotNull Project project)
+	{
+		return ServiceManager.getService(project, JavadocGenerationManager.class);
+	}
 
-  JavadocGenerationManager(Project project) {
-    myProject = project;
-    myConfiguration = new JavadocConfiguration(project);
-  }
+	JavadocGenerationManager(Project project)
+	{
+		myProject = project;
+	}
 
-  @Override
-  public Element getState() {
-    final Element state = new Element("state");
-    try {
-      myConfiguration.writeExternal(state);
-    }
-    catch (WriteExternalException e) {
-      LOG.error(e);
-    }
-    return state;
-  }
+	@Override
+	public Element getState()
+	{
+		return XmlSerializer.serialize(myConfiguration, JavadocConfiguration.FILTER);
+	}
 
-  @Override
-  public void loadState(Element state) {
-    try {
-      myConfiguration.readExternal(state);
-    }
-    catch (InvalidDataException e) {
-      LOG.error(e);
-    }
-  }
+	@Override
+	public void loadState(Element state)
+	{
+		XmlSerializer.deserializeInto(myConfiguration, state);
+	}
 
-  public JavadocConfiguration getConfiguration() {
-    return myConfiguration;
-  }
+	@NotNull
+	public JavadocConfiguration getConfiguration()
+	{
+		return myConfiguration;
+	}
 
-  public void generateJavadoc(AnalysisScope scope) {
-    myConfiguration.setGenerationScope(scope);
-    try {
-      final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(DefaultRunExecutor.EXECUTOR_ID, myConfiguration);
-      assert runner != null;
-      Executor executor = DefaultRunExecutor.getRunExecutorInstance();
-      runner.execute(new ExecutionEnvironment(myConfiguration ,executor, myProject, null));
-    }
-    catch (ExecutionException e) {
-      ExecutionErrorDialog.show(e, CommonBundle.getErrorTitle(), myProject);
-    }
-  }
+	public void generateJavadoc(AnalysisScope scope)
+	{
+		try
+		{
+			JavadocGeneratorRunProfile profile = new JavadocGeneratorRunProfile(myProject, scope, myConfiguration);
+			ExecutionEnvironmentBuilder.create(myProject, DefaultRunExecutor.getRunExecutorInstance(), profile).buildAndExecute();
+		}
+		catch(ExecutionException e)
+		{
+			ExecutionErrorDialog.show(e, CommonBundle.getErrorTitle(), myProject);
+		}
+	}
 }

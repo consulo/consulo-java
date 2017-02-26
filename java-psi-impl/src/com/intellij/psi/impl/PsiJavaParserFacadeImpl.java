@@ -20,7 +20,6 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.DeclarationParser;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
@@ -57,137 +56,39 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		myManager = manager;
 	}
 
-	private static final JavaParserUtil.ParserWrapper ANNOTATION = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getDeclarationParser().parseAnnotation(builder);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper ANNOTATION = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseAnnotation(builder);
 
-	private static final JavaParserUtil.ParserWrapper PARAMETER = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getDeclarationParser().parseParameter(builder, true, false);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper PARAMETER = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseParameter(builder, true, false);
 
-	private static final JavaParserUtil.ParserWrapper RESOURCE = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getDeclarationParser().parseResource(builder);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper RESOURCE = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseResource(builder);
 
-	private static final JavaParserUtil.ParserWrapper TYPE = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper TYPE = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS);
 
-	public static final JavaParserUtil.ParserWrapper REFERENCE = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
-		}
-	};
+	public static final JavaParserUtil.ParserWrapper REFERENCE = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
 
-	public static final JavaParserUtil.ParserWrapper DIAMOND_REF = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, true);
-		}
-	};
+	public static final JavaParserUtil.ParserWrapper DIAMOND_REF = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, true);
 
-	public static final JavaParserUtil.ParserWrapper STATIC_IMPORT_REF = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getReferenceParser().parseImportCodeReference(builder, true);
-		}
-	};
+	public static final JavaParserUtil.ParserWrapper STATIC_IMPORT_REF = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseImportCodeReference(builder, true);
 
-	private static final JavaParserUtil.ParserWrapper TYPE_PARAMETER = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getReferenceParser().parseTypeParameter(builder);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper TYPE_PARAMETER = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseTypeParameter(builder);
 
-	private static final JavaParserUtil.ParserWrapper DECLARATION = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getDeclarationParser().parse(builder, DeclarationParser.Context.CLASS);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper DECLARATION = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parse(builder, DeclarationParser.Context.CLASS);
 
-	private static final JavaParserUtil.ParserWrapper CODE_BLOCK = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getStatementParser().parseCodeBlockDeep(builder, true);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper CODE_BLOCK = (builder, languageLevel) -> JavaParser.INSTANCE.getStatementParser().parseCodeBlockDeep(builder, true);
 
-	private static final JavaParserUtil.ParserWrapper STATEMENT = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getStatementParser().parseStatement(builder);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper STATEMENT = (builder, languageLevel) -> JavaParser.INSTANCE.getStatementParser().parseStatement(builder);
 
-	private static final JavaParserUtil.ParserWrapper EXPRESSION = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getExpressionParser().parse(builder);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper EXPRESSION = (builder, languageLevel) -> JavaParser.INSTANCE.getExpressionParser().parse(builder);
 
-	private static final JavaParserUtil.ParserWrapper ENUM_CONSTANT = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			JavaParser.INSTANCE.getDeclarationParser().parseEnumConstant(builder);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper ENUM_CONSTANT = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseEnumConstant(builder);
 
-	private static final JavaParserUtil.ParserWrapper MODULE = new JavaParserUtil.ParserWrapper()
-	{
-		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
-		{
-			ModuleParser.parseModule(builder);
-		}
-	};
+	private static final JavaParserUtil.ParserWrapper MODULE = (builder, languageLevel) -> ModuleParser.parseModule(builder);
 
 	private static final Map<String, PsiPrimitiveType> PRIMITIVE_TYPES;
 
 	static
 	{
-		PRIMITIVE_TYPES = new HashMap<String, PsiPrimitiveType>();
+		PRIMITIVE_TYPES = new HashMap<>();
 		PRIMITIVE_TYPES.put(PsiType.BYTE.getCanonicalText(), PsiType.BYTE);
 		PRIMITIVE_TYPES.put(PsiType.CHAR.getCanonicalText(), PsiType.CHAR);
 		PRIMITIVE_TYPES.put(PsiType.DOUBLE.getCanonicalText(), PsiType.DOUBLE);
@@ -480,6 +381,17 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 			throw new IncorrectOperationException("Incorrect module declaration '" + text + "'");
 		}
 		return (PsiJavaModule) element;
+	}
+
+	@NotNull
+	public PsiType createPrimitiveTypeFromText(@NotNull String text) throws IncorrectOperationException
+	{
+		PsiPrimitiveType primitiveType = getPrimitiveType(text);
+		if(primitiveType == null)
+		{
+			throw new IncorrectOperationException("Incorrect primitive type '" + text + "'");
+		}
+		return primitiveType;
 	}
 
 	public PsiJavaFile getDummyJavaFile()

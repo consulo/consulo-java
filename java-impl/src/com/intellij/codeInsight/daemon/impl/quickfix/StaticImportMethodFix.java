@@ -15,488 +15,121 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.impl.AddSingleMemberStaticImportAction;
-import com.intellij.ide.util.MethodCellRenderer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupStep;
-import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
-import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpressionList;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiSubstitutor;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.SmartPointerManager;
+import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.psi.util.proximity.PsiProximityComparator;
-import com.intellij.ui.popup.list.ListPopupImpl;
-import com.intellij.ui.popup.list.PopupListElementRenderer;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
-import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
 
-public class StaticImportMethodFix implements IntentionAction
+public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.StaticImportMethodFix");
 	private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
-	private List<PsiMethod> candidates;
 
 	public StaticImportMethodFix(@NotNull PsiMethodCallExpression methodCallExpression)
 	{
 		myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
 	}
 
-	@Override
 	@NotNull
-	public String getText()
-	{
-		String text = JavaQuickFixBundle.message("static.import.method.text");
-		if(candidates != null && candidates.size() == 1)
-		{
-			text += " '" + PsiFormatUtil.formatMethod(candidates.get(0), PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME |
-					PsiFormatUtilBase.SHOW_CONTAINING_CLASS |
-					PsiFormatUtilBase.SHOW_FQ_NAME, 0) + "'";
-		}
-		else
-		{
-			text += "...";
-		}
-		return text;
-	}
-
 	@Override
-	@NotNull
-	public String getFamilyName()
+	protected String getBaseText()
 	{
-		return getText();
-	}
-
-	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
-	{
-		return PsiUtil.isLanguageLevel5OrHigher(file) && myMethodCall.getElement() != null && myMethodCall.getElement().isValid() && myMethodCall.getElement().getMethodExpression()
-				.getQualifierExpression() == null && file.getManager().isInProject(file) && !(candidates == null ? candidates = getMethodsToImport() : candidates).isEmpty();
-	}
-
-	private PsiType getExpectedType()
-	{
-		final PsiMethodCallExpression methodCall = myMethodCall.getElement();
-		if(methodCall == null)
-		{
-			return null;
-		}
-		final PsiElement parent = PsiUtil.skipParenthesizedExprUp(methodCall.getParent());
-
-		if(parent instanceof PsiVariable)
-		{
-			if(methodCall.equals(PsiUtil.skipParenthesizedExprDown(((PsiVariable) parent).getInitializer())))
-			{
-				return ((PsiVariable) parent).getType();
-			}
-		}
-		else if(parent instanceof PsiAssignmentExpression)
-		{
-			if(methodCall.equals(PsiUtil.skipParenthesizedExprDown(((PsiAssignmentExpression) parent).getRExpression())))
-			{
-				return ((PsiAssignmentExpression) parent).getLExpression().getType();
-			}
-		}
-		else if(parent instanceof PsiReturnStatement)
-		{
-			final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(parent, PsiLambdaExpression.class);
-			if(lambdaExpression != null)
-			{
-				return LambdaUtil.getFunctionalInterfaceReturnType(lambdaExpression.getFunctionalInterfaceType());
-			}
-			else
-			{
-				PsiMethod method = PsiTreeUtil.getParentOfType(parent, PsiMethod.class);
-				if(method != null)
-				{
-					return method.getReturnType();
-				}
-			}
-		}
-		else if(parent instanceof PsiExpressionList)
-		{
-			final PsiElement pParent = parent.getParent();
-			if(pParent instanceof PsiCallExpression && parent.equals(((PsiCallExpression) pParent).getArgumentList()))
-			{
-				final JavaResolveResult resolveResult = ((PsiCallExpression) pParent).resolveMethodGenerics();
-				final PsiElement psiElement = resolveResult.getElement();
-				if(psiElement instanceof PsiMethod)
-				{
-					final PsiMethod psiMethod = (PsiMethod) psiElement;
-					final PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
-					final int idx = ArrayUtilRt.find(((PsiExpressionList) parent).getExpressions(), PsiUtil.skipParenthesizedExprUp(methodCall));
-					if(idx > -1 && parameters.length > 0)
-					{
-						PsiType parameterType = parameters[Math.min(idx, parameters.length - 1)].getType();
-						if(idx >= parameters.length - 1)
-						{
-							final PsiParameter lastParameter = parameters[parameters.length - 1];
-							if(lastParameter.isVarArgs())
-							{
-								parameterType = ((PsiEllipsisType) lastParameter.getType()).getComponentType();
-							}
-						}
-						return resolveResult.getSubstitutor().substitute(parameterType);
-					}
-					else
-					{
-						return null;
-					}
-				}
-			}
-		}
-		else if(parent instanceof PsiLambdaExpression)
-		{
-			return LambdaUtil.getFunctionalInterfaceReturnType(((PsiLambdaExpression) parent).getFunctionalInterfaceType());
-		}
-		return null;
+		return JavaQuickFixBundle.message("static.import.method.text");
 	}
 
 	@NotNull
-	private List<PsiMethod> getMethodsToImport()
+	@Override
+	protected String getMemberPresentableText(PsiMethod method)
 	{
-		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(myMethodCall.getProject());
+		return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_FQ_NAME, 0);
+	}
+
+	@NotNull
+	@Override
+	protected List<PsiMethod> getMembersToImport(boolean applicableOnly)
+	{
+		final Project project = myMethodCall.getProject();
+		PsiShortNamesCache cache = PsiShortNamesCache.getInstance(project);
 		final PsiMethodCallExpression element = myMethodCall.getElement();
-		PsiReferenceExpression reference = element.getMethodExpression();
-		final PsiExpressionList argumentList = element.getArgumentList();
-		String name = reference.getReferenceName();
-		final List<PsiMethod> list = new ArrayList<PsiMethod>();
+		PsiReferenceExpression reference = element == null ? null : element.getMethodExpression();
+		String name = reference == null ? null : reference.getReferenceName();
 		if(name == null)
 		{
-			return list;
+			return Collections.emptyList();
 		}
-		GlobalSearchScope scope = element.getResolveScope();
-		final Map<PsiClass, Boolean> possibleClasses = new HashMap<PsiClass, Boolean>();
-		final PsiType expectedType = getExpectedType();
-		final List<PsiMethod> applicableList = new ArrayList<PsiMethod>();
-		final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(element.getProject()).getResolveHelper();
-
-		final Map<PsiClass, PsiMethod> deprecated = new HashMap<PsiClass, PsiMethod>();
-		class RegisterMethodsProcessor
-		{
-			private void registerMethod(PsiClass containingClass, PsiMethod method)
-			{
-				final Boolean alreadyMentioned = possibleClasses.get(containingClass);
-				if(alreadyMentioned == Boolean.TRUE)
-				{
-					return;
-				}
-				if(alreadyMentioned == null)
-				{
-					list.add(method);
-					possibleClasses.put(containingClass, false);
-				}
-				PsiSubstitutor substitutorForMethod = resolveHelper.inferTypeArguments(method.getTypeParameters(), method.getParameterList().getParameters(), argumentList.getExpressions(),
-						PsiSubstitutor.EMPTY, element.getParent(), DefaultParameterTypeInferencePolicy.INSTANCE);
-				if(PsiUtil.isApplicable(method, substitutorForMethod, argumentList))
-				{
-					final PsiType returnType = substitutorForMethod.substitute(method.getReturnType());
-					if(expectedType == null || returnType == null || TypeConversionUtil.isAssignable(expectedType, returnType))
-					{
-						applicableList.add(method);
-						possibleClasses.put(containingClass, true);
-					}
-				}
-			}
-		}
-
-		final RegisterMethodsProcessor registrar = new RegisterMethodsProcessor();
-		CommonProcessors.CollectProcessor<PsiMethod> processor = new CommonProcessors.CollectProcessor<>();
-		cache.processMethodsWithName(name, scope, processor);
-
-		Condition<PsiMethod> methodCondition = psiMethod -> (applicableList.isEmpty() ? list : applicableList).size() + deprecated.size() < 50;
-		for(PsiMethod method : processor.getResults())
-		{
-			ProgressManager.checkCanceled();
-			if(JavaCompletionUtil.isInExcludedPackage(method, false) || !method.hasModifierProperty(PsiModifier.STATIC))
-			{
-				continue;
-			}
-			PsiFile file = method.getContainingFile();
-			final PsiClass containingClass = method.getContainingClass();
-			if(file instanceof PsiJavaFile
-					//do not show methods from default package
-					&& !((PsiJavaFile) file).getPackageName().isEmpty() && PsiUtil.isAccessible(method, element, containingClass))
-			{
-				if(method.isDeprecated())
-				{
-					deprecated.put(containingClass, method);
-					if(!methodCondition.value(method))
-					{
-						break;
-					}
-				}
-				registrar.registerMethod(containingClass, method);
-			}
-
-			if(!methodCondition.value(method))
-			{
-				break;
-			}
-		}
-
-		for(Map.Entry<PsiClass, PsiMethod> deprecatedMethod : deprecated.entrySet())
-		{
-			registrar.registerMethod(deprecatedMethod.getKey(), deprecatedMethod.getValue());
-		}
-
-		List<PsiMethod> result = applicableList.isEmpty() ? list : applicableList;
-		for(int i = result.size() - 1; i >= 0; i--)
-		{
-			ProgressManager.checkCanceled();
-			PsiMethod method = result.get(i);
-			// check for manually excluded
-			if(isExcluded(method))
-			{
-				result.remove(i);
-			}
-		}
-		Collections.sort(result, new PsiProximityComparator(argumentList));
-		return result;
+		final StaticMembersProcessor<PsiMethod> processor = new MyStaticMethodProcessor(element);
+		cache.processMethodsWithName(name, element.getResolveScope(), processor);
+		return processor.getMembersToImport(applicableOnly);
 	}
 
-	public static boolean isExcluded(PsiMember method)
+	@NotNull
+	protected StaticImportMethodQuestionAction<PsiMethod> createQuestionAction(List<PsiMethod> methodsToImport, @NotNull Project project, Editor editor)
 	{
-		String name = getMemberQualifiedName(method);
-		if(name == null)
-		{
-			return false;
-		}
-		CodeInsightSettings cis = CodeInsightSettings.getInstance();
-		for(String excluded : cis.EXCLUDED_PACKAGES)
-		{
-			if(name.equals(excluded) || name.startsWith(excluded + "."))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public void invoke(@NotNull final Project project, final Editor editor, PsiFile file)
-	{
-		if(!FileModificationService.getInstance().prepareFileForWrite(file))
-		{
-			return;
-		}
-		if(candidates.size() == 1)
-		{
-			final PsiMethod toImport = candidates.get(0);
-			doImport(toImport);
-		}
-		else
-		{
-			chooseAndImport(editor, project);
-		}
-	}
-
-	private void doImport(final PsiMethod toImport)
-	{
-		CommandProcessor.getInstance().executeCommand(toImport.getProject(), new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				ApplicationManager.getApplication().runWriteAction(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						try
-						{
-							PsiMethodCallExpression element = myMethodCall.getElement();
-							if(element != null)
-							{
-								AddSingleMemberStaticImportAction.bindAllClassRefs(element.getContainingFile(), toImport, toImport.getName(), toImport.getContainingClass());
-							}
-						}
-						catch(IncorrectOperationException e)
-						{
-							LOG.error(e);
-						}
-					}
-				});
-
-			}
-		}, getText(), this);
-
-	}
-
-	private void chooseAndImport(Editor editor, final Project project)
-	{
-		if(ApplicationManager.getApplication().isUnitTestMode())
-		{
-			doImport(candidates.get(0));
-			return;
-		}
-		final BaseListPopupStep<PsiMethod> step = new BaseListPopupStep<PsiMethod>(JavaQuickFixBundle.message("class.to.import.chooser.title"), candidates)
-		{
-
-			@Override
-			public PopupStep onChosen(PsiMethod selectedValue, boolean finalChoice)
-			{
-				if(selectedValue == null)
-				{
-					return FINAL_CHOICE;
-				}
-
-				if(finalChoice)
-				{
-					PsiDocumentManager.getInstance(project).commitAllDocuments();
-					LOG.assertTrue(selectedValue.isValid());
-					doImport(selectedValue);
-					return FINAL_CHOICE;
-				}
-
-				String qname = getMemberQualifiedName(selectedValue);
-				if(qname == null)
-				{
-					return FINAL_CHOICE;
-				}
-				List<String> excludableStrings = AddImportAction.getAllExcludableStrings(qname);
-				return new BaseListPopupStep<String>(null, excludableStrings)
-				{
-					@NotNull
-					@Override
-					public String getTextFor(String value)
-					{
-						return "Exclude '" + value + "' from auto-import";
-					}
-
-					@Override
-					public PopupStep onChosen(String selectedValue, boolean finalChoice)
-					{
-						if(finalChoice)
-						{
-							AddImportAction.excludeFromImport(project, selectedValue);
-						}
-
-						return super.onChosen(selectedValue, finalChoice);
-					}
-				};
-			}
-
-			@Override
-			public boolean hasSubstep(PsiMethod selectedValue)
-			{
-				return true;
-			}
-
-			@NotNull
-			@Override
-			public String getTextFor(PsiMethod value)
-			{
-				return ObjectUtils.assertNotNull(value.getName());
-			}
-
-			@Override
-			public Icon getIconFor(PsiMethod aValue)
-			{
-				return IconDescriptorUpdaters.getIcon(aValue, 0);
-			}
-		};
-
-		final ListPopupImpl popup = new ListPopupImpl(step)
-		{
-			final PopupListElementRenderer rightArrow = new PopupListElementRenderer(this);
-
-			@Override
-			protected ListCellRenderer getListElementRenderer()
-			{
-				return new MethodCellRenderer(true, PsiFormatUtilBase.SHOW_NAME)
-				{
-					@Override
-					protected DefaultListCellRenderer getRightCellRenderer(final Object value)
-					{
-						final DefaultListCellRenderer moduleRenderer = super.getRightCellRenderer(value);
-						return new DefaultListCellRenderer()
-						{
-							@Override
-							public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-							{
-								JPanel panel = new JPanel(new BorderLayout());
-								if(moduleRenderer != null)
-								{
-									Component moduleComponent = moduleRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-									if(!isSelected)
-									{
-										moduleComponent.setBackground(getBackgroundColor(value));
-									}
-									panel.add(moduleComponent, BorderLayout.CENTER);
-								}
-								rightArrow.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-								Component rightArrowComponent = rightArrow.getNextStepLabel();
-								panel.add(rightArrowComponent, BorderLayout.EAST);
-								return panel;
-							}
-						};
-					}
-				};
-			}
-		};
-		popup.showInBestPositionFor(editor);
+		return new StaticImportMethodQuestionAction<>(project, editor, methodsToImport, myMethodCall);
 	}
 
 	@Nullable
-	public static String getMemberQualifiedName(PsiMember member)
+	@Override
+	protected PsiElement getElement()
 	{
-		if(member instanceof PsiClass)
-		{
-			return ((PsiClass) member).getQualifiedName();
-		}
-
-		PsiClass containingClass = member.getContainingClass();
-		if(containingClass == null)
-		{
-			return null;
-		}
-		String className = containingClass.getQualifiedName();
-		if(className == null)
-		{
-			return null;
-		}
-		return className + "." + member.getName();
+		return myMethodCall.getElement();
 	}
 
+	@Nullable
 	@Override
-	public boolean startInWriteAction()
+	protected PsiElement getQualifierExpression()
 	{
-		return true;
+		final PsiMethodCallExpression element = myMethodCall.getElement();
+		return element != null ? element.getMethodExpression().getQualifierExpression() : null;
+	}
+
+	@Nullable
+	@Override
+	protected PsiElement resolveRef()
+	{
+		final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) getElement();
+		return methodCallExpression != null ? methodCallExpression.resolveMethod() : null;
+	}
+
+	private static class MyStaticMethodProcessor extends StaticMembersProcessor<PsiMethod>
+	{
+
+		private MyStaticMethodProcessor(PsiMethodCallExpression place)
+		{
+			super(place);
+		}
+
+		@Override
+		protected boolean isApplicable(PsiMethod method, PsiElement place)
+		{
+			final PsiExpressionList argumentList = ((PsiMethodCallExpression) place).getArgumentList();
+			final MethodCandidateInfo candidateInfo = new MethodCandidateInfo(method, PsiSubstitutor.EMPTY, false, false, argumentList, null, argumentList.getExpressionTypes(), null);
+			PsiSubstitutor substitutorForMethod = candidateInfo.getSubstitutor();
+			if(PsiUtil.isApplicable(method, substitutorForMethod, argumentList))
+			{
+				final PsiType returnType = substitutorForMethod.substitute(method.getReturnType());
+				final PsiType expectedType = getExpectedType();
+				return expectedType == null || returnType == null || TypeConversionUtil.isAssignable(expectedType, returnType);
+			}
+			return false;
+		}
 	}
 }

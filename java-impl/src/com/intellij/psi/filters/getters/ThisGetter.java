@@ -15,13 +15,19 @@
  */
 package com.intellij.psi.filters.getters;
 
-import com.intellij.codeInsight.completion.CompletionContext;
-import com.intellij.psi.*;
-import com.intellij.psi.filters.ContextGetter;
-import com.intellij.util.IncorrectOperationException;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiExpressionList;
+import com.intellij.psi.PsiKeyword;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.util.IncorrectOperationException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,39 +36,49 @@ import java.util.List;
  * Time: 14:02:59
  * To change this template use Options | File Templates.
  */
-public class ThisGetter implements ContextGetter{
-  @Override
-  public Object[] get(PsiElement context, CompletionContext completionContext) {
-    return getThisExpressionVariants(context).toArray();
-  }
+public class ThisGetter
+{
+	public static List<PsiExpression> getThisExpressionVariants(PsiElement context)
+	{
+		boolean first = true;
+		final List<PsiExpression> expressions = new ArrayList<>();
+		final PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
 
-  public static List<PsiExpression> getThisExpressionVariants(PsiElement context) {
-    boolean first = true;
-    final List<PsiExpression> expressions = new ArrayList<PsiExpression>();
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
+		PsiElement prev = context;
+		context = context.getContext();
 
-    PsiElement prev = context;
-    context = context.getContext();
-
-    while(context != null){
-      if(context instanceof PsiClass && !(prev instanceof PsiExpressionList)){
-        final String expressionText;
-        if(first){
-          first = false;
-          expressionText = PsiKeyword.THIS;
-        }
-        else expressionText = ((PsiClass)context).getName() + "." + PsiKeyword.THIS;
-        try{
-          expressions.add(factory.createExpressionFromText(expressionText, context));
-        }
-        catch(IncorrectOperationException ioe){}
-      }
-      if(context instanceof PsiModifierListOwner){
-        if(((PsiModifierListOwner)context).hasModifierProperty(PsiModifier.STATIC)) break;
-      }
-      prev = context;
-      context = context.getContext();
-    }
-    return expressions;
-  }
+		while(context != null)
+		{
+			if(context instanceof PsiClass && !(prev instanceof PsiExpressionList))
+			{
+				final String expressionText;
+				if(first)
+				{
+					first = false;
+					expressionText = PsiKeyword.THIS;
+				}
+				else
+				{
+					expressionText = ((PsiClass) context).getName() + "." + PsiKeyword.THIS;
+				}
+				try
+				{
+					expressions.add(factory.createExpressionFromText(expressionText, context));
+				}
+				catch(IncorrectOperationException ioe)
+				{
+				}
+			}
+			if(context instanceof PsiModifierListOwner)
+			{
+				if(((PsiModifierListOwner) context).hasModifierProperty(PsiModifier.STATIC))
+				{
+					break;
+				}
+			}
+			prev = context;
+			context = context.getContext();
+		}
+		return expressions;
+	}
 }

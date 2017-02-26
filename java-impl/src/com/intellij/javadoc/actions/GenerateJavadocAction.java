@@ -15,6 +15,10 @@
  */
 package com.intellij.javadoc.actions;
 
+import javax.swing.JComponent;
+import javax.swing.event.DocumentEvent;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.analysis.BaseAnalysisAction;
 import com.intellij.analysis.BaseAnalysisActionDialog;
@@ -23,10 +27,6 @@ import com.intellij.javadoc.JavadocConfigurable;
 import com.intellij.javadoc.JavadocGenerationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.DocumentAdapter;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 
 public final class GenerateJavadocAction extends BaseAnalysisAction{
   private JavadocConfigurable myConfigurable;
@@ -44,7 +44,7 @@ public final class GenerateJavadocAction extends BaseAnalysisAction{
 
   @Override
   protected JComponent getAdditionalActionSettings(Project project, final BaseAnalysisActionDialog dialog) {
-    myConfigurable = JavadocGenerationManager.getInstance(project).getConfiguration().createConfigurable();
+    myConfigurable = new JavadocConfigurable(JavadocGenerationManager.getInstance(project).getConfiguration());
     final JComponent component = myConfigurable.createComponent();
     myConfigurable.reset();
     myConfigurable.getOutputDirField().getDocument().addDocumentListener(new DocumentAdapter() {

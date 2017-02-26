@@ -36,8 +36,7 @@ public class InheritanceUtil
 	/**
 	 * @param aClass    a class to check.
 	 * @param baseClass supposed base class.
-	 * @param checkDeep true to check deeper than aClass.super (see {@linkplain PsiClass#isInheritor(com.intellij.psi
-	 * .PsiClass, boolean)}).
+	 * @param checkDeep true to check deeper than aClass.super (see {@linkplain PsiClass#isInheritor(com.intellij.psi.PsiClass, boolean)}).
 	 * @return true if aClass is the baseClass or baseClass inheritor
 	 */
 	public static boolean isInheritorOrSelf(@Nullable PsiClass aClass, @Nullable PsiClass baseClass, boolean checkDeep)
@@ -50,9 +49,7 @@ public class InheritanceUtil
 		return manager.areElementsEquivalent(baseClass, aClass) || aClass.isInheritor(baseClass, checkDeep);
 	}
 
-	public static boolean processSupers(@Nullable PsiClass aClass,
-			boolean includeSelf,
-			@NotNull Processor<PsiClass> superProcessor)
+	public static boolean processSupers(@Nullable PsiClass aClass, boolean includeSelf, @NotNull Processor<PsiClass> superProcessor)
 	{
 		if(aClass == null)
 		{
@@ -64,12 +61,10 @@ public class InheritanceUtil
 			return false;
 		}
 
-		return processSupers(aClass, superProcessor, new THashSet<PsiClass>());
+		return processSupers(aClass, superProcessor, new THashSet<>());
 	}
 
-	private static boolean processSupers(@NotNull PsiClass aClass,
-			@NotNull Processor<PsiClass> superProcessor,
-			@NotNull Set<PsiClass> visited)
+	private static boolean processSupers(@NotNull PsiClass aClass, @NotNull Processor<PsiClass> superProcessor, @NotNull Set<PsiClass> visited)
 	{
 		if(!visited.add(aClass))
 		{
@@ -102,6 +97,17 @@ public class InheritanceUtil
 			return isInheritor(((PsiClassType) type).resolve(), baseClassName);
 		}
 
+		if(type instanceof PsiIntersectionType)
+		{
+			for(PsiType conjunct : ((PsiIntersectionType) type).getConjuncts())
+			{
+				if(isInheritor(conjunct, baseClassName))
+				{
+					return true;
+				}
+			}
+		}
+
 		return false;
 	}
 
@@ -112,17 +118,14 @@ public class InheritanceUtil
 	}
 
 	@Contract("null, _, _ -> false")
-	public static boolean isInheritor(@Nullable PsiClass psiClass,
-			final boolean strict,
-			@NotNull final String baseClassName)
+	public static boolean isInheritor(@Nullable PsiClass psiClass, final boolean strict, @NotNull final String baseClassName)
 	{
 		if(psiClass == null)
 		{
 			return false;
 		}
 
-		final PsiClass base = JavaPsiFacade.getInstance(psiClass.getProject()).findClass(baseClassName,
-				psiClass.getResolveScope());
+		final PsiClass base = JavaPsiFacade.getInstance(psiClass.getProject()).findClass(baseClassName, psiClass.getResolveScope());
 		if(base == null)
 		{
 			return false;
@@ -138,27 +141,20 @@ public class InheritanceUtil
 	 * @param results
 	 * @param includeNonProject
 	 */
-	public static void getSuperClasses(@NotNull PsiClass aClass,
-			@NotNull Set<PsiClass> results,
-			boolean includeNonProject)
+	public static void getSuperClasses(@NotNull PsiClass aClass, @NotNull Set<PsiClass> results, boolean includeNonProject)
 	{
-		getSuperClassesOfList(aClass.getSuperTypes(), results, includeNonProject, new THashSet<PsiClass>(),
-				aClass.getManager());
+		getSuperClassesOfList(aClass.getSuperTypes(), results, includeNonProject, new THashSet<>(), aClass.getManager());
 	}
 
 	public static LinkedHashSet<PsiClass> getSuperClasses(@NotNull PsiClass aClass)
 	{
-		LinkedHashSet<PsiClass> result = new LinkedHashSet<PsiClass>();
+		LinkedHashSet<PsiClass> result = new LinkedHashSet<>();
 		getSuperClasses(aClass, result, true);
 		return result;
 	}
 
 
-	private static void getSuperClassesOfList(@NotNull PsiClassType[] types,
-			@NotNull Set<PsiClass> results,
-			boolean includeNonProject,
-			@NotNull Set<PsiClass> visited,
-			@NotNull PsiManager manager)
+	private static void getSuperClassesOfList(@NotNull PsiClassType[] types, @NotNull Set<PsiClass> results, boolean includeNonProject, @NotNull Set<PsiClass> visited, @NotNull PsiManager manager)
 	{
 		for(PsiClassType type : types)
 		{
@@ -174,10 +170,7 @@ public class InheritanceUtil
 		}
 	}
 
-	public static boolean hasEnclosingInstanceInScope(PsiClass aClass,
-			PsiElement scope,
-			final boolean isSuperClassAccepted,
-			boolean isTypeParamsAccepted)
+	public static boolean hasEnclosingInstanceInScope(PsiClass aClass, PsiElement scope, final boolean isSuperClassAccepted, boolean isTypeParamsAccepted)
 	{
 		PsiManager manager = aClass.getManager();
 		PsiElement place = scope;

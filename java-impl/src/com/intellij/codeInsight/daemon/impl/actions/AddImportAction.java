@@ -26,13 +26,14 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.application.options.editor.JavaAutoImportConfigurable;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.hint.QuestionAction;
+import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -43,6 +44,7 @@ import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
@@ -55,7 +57,7 @@ import com.intellij.psi.statistics.StatisticsManager;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.popup.list.PopupListElementRenderer;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
+import com.intellij.util.ObjectUtils;
 import consulo.annotations.RequiredReadAction;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.java.JavaQuickFixBundle;
@@ -108,7 +110,7 @@ public class AddImportAction implements QuestionAction
 
 	private void chooseClassAndImport()
 	{
-		CodeInsightUtil.sortIdenticalShortNameClasses(myTargetClasses, myReference);
+		CodeInsightUtil.sortIdenticalShortNamedMembers(myTargetClasses, myReference);
 
 		final BaseListPopupStep<PsiClass> step = new BaseListPopupStep<PsiClass>(JavaQuickFixBundle.message("class.to.import.chooser.title"), myTargetClasses)
 		{
@@ -134,39 +136,14 @@ public class AddImportAction implements QuestionAction
 
 				if(finalChoice)
 				{
-					PsiDocumentManager.getInstance(myProject).commitAllDocuments();
-					addImport(myReference, selectedValue);
-					return FINAL_CHOICE;
+					return doFinalStep(() ->
+					{
+						PsiDocumentManager.getInstance(myProject).commitAllDocuments();
+						addImport(myReference, selectedValue);
+					});
 				}
 
-				String qname = selectedValue.getQualifiedName();
-				if(qname == null)
-				{
-					return FINAL_CHOICE;
-				}
-
-				List<String> toExclude = getAllExcludableStrings(qname);
-
-				return new BaseListPopupStep<String>(null, toExclude)
-				{
-					@NotNull
-					@Override
-					public String getTextFor(String value)
-					{
-						return "Exclude '" + value + "' from auto-import";
-					}
-
-					@Override
-					public PopupStep onChosen(String selectedValue, boolean finalChoice)
-					{
-						if(finalChoice)
-						{
-							excludeFromImport(myProject, selectedValue);
-						}
-
-						return super.onChosen(selectedValue, finalChoice);
-					}
-				};
+				return getExcludesStep(selectedValue.getQualifiedName(), myProject);
 			}
 
 			@Override
@@ -179,7 +156,7 @@ public class AddImportAction implements QuestionAction
 			@Override
 			public String getTextFor(PsiClass value)
 			{
-				return ObjectUtil.assertNotNull(value.getQualifiedName());
+				return ObjectUtils.assertNotNull(value.getQualifiedName());
 			}
 
 			@Override
@@ -189,7 +166,6 @@ public class AddImportAction implements QuestionAction
 				return IconDescriptorUpdaters.getIcon(aValue, 0);
 			}
 		};
-
 		ListPopupImpl popup = new ListPopupImpl(step)
 		{
 			@Override
@@ -211,27 +187,59 @@ public class AddImportAction implements QuestionAction
 				};
 			}
 		};
+		NavigationUtil.hidePopupIfDumbModeStarts(popup, myProject);
 		popup.showInBestPositionFor(myEditor);
+	}
+
+	@Nullable
+	public static PopupStep getExcludesStep(String qname, final Project project)
+	{
+		if(qname == null)
+		{
+			return PopupStep.FINAL_CHOICE;
+		}
+
+		List<String> toExclude = getAllExcludableStrings(qname);
+
+		return new BaseListPopupStep<String>(null, toExclude)
+		{
+			@NotNull
+			@Override
+			public String getTextFor(String value)
+			{
+				return "Exclude '" + value + "' from auto-import";
+			}
+
+			@Override
+			public PopupStep onChosen(String selectedValue, boolean finalChoice)
+			{
+				if(finalChoice)
+				{
+					excludeFromImport(project, selectedValue);
+				}
+
+				return super.onChosen(selectedValue, finalChoice);
+			}
+		};
 	}
 
 	public static void excludeFromImport(final Project project, final String prefix)
 	{
-		ApplicationManager.getApplication().invokeLater(() -> {
+		ApplicationManager.getApplication().invokeLater(() ->
+		{
 			if(project.isDisposed())
 			{
 				return;
 			}
 
-			final JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable();
-			ShowSettingsUtil.getInstance().editConfigurable(project, configurable, () -> {
-				configurable.addExcludePackage(prefix);
-			});
+			final JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable(project);
+			ShowSettingsUtil.getInstance().editConfigurable(project, configurable, () -> configurable.addExcludePackage(prefix));
 		});
 	}
 
 	public static List<String> getAllExcludableStrings(@NotNull String qname)
 	{
-		List<String> toExclude = new ArrayList<String>();
+		List<String> toExclude = new ArrayList<>();
 		while(true)
 		{
 			toExclude.add(qname);
@@ -247,15 +255,6 @@ public class AddImportAction implements QuestionAction
 
 	private void addImport(final PsiReference ref, final PsiClass targetClass)
 	{
-		StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
-		CommandProcessor.getInstance().executeCommand(myProject, () -> ApplicationManager.getApplication().runWriteAction(() -> {
-			_addImport(ref, targetClass);
-		}), JavaQuickFixBundle.message("add.import"), null);
-	}
-
-	@RequiredReadAction
-	private void _addImport(PsiReference ref, PsiClass targetClass)
-	{
 		if(!ref.getElement().isValid() || !targetClass.isValid() || ref.resolve() == targetClass)
 		{
 			return;
@@ -265,6 +264,13 @@ public class AddImportAction implements QuestionAction
 			return;
 		}
 
+		StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
+		CommandProcessor.getInstance().executeCommand(myProject, () -> ApplicationManager.getApplication().runWriteAction(() -> DumbService.getInstance(myProject).withAlternativeResolveEnabled(() ->
+				_addImport(ref, targetClass))), JavaQuickFixBundle.message("add.import"), null);
+	}
+
+	private void _addImport(PsiReference ref, PsiClass targetClass)
+	{
 		int caretOffset = myEditor.getCaretModel().getOffset();
 		RangeMarker caretMarker = myEditor.getDocument().createRangeMarker(caretOffset, caretOffset);
 		int colByOffset = myEditor.offsetToLogicalPosition(caretOffset).column;
@@ -299,21 +305,6 @@ public class AddImportAction implements QuestionAction
 			myEditor.getCaretModel().moveToLogicalPosition(new LogicalPosition(pos2.line, newCol));
 			myEditor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
 		}
-		ApplicationManager.getApplication().invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if(!myProject.isDisposed() && myProject.isOpen())
-				{
-					DaemonCodeAnalyzer daemonCodeAnalyzer = DaemonCodeAnalyzer.getInstance(myProject);
-					if(daemonCodeAnalyzer != null)
-					{
-						daemonCodeAnalyzer.updateVisibleHighlighters(myEditor);
-					}
-				}
-			}
-		});
 	}
 
 	protected void bindReference(PsiReference ref, PsiClass targetClass)

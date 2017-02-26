@@ -511,4 +511,14 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
 	@Override
 	@NotNull
 	PsiExpression createExpressionFromText(@NotNull String text, @Nullable PsiElement context) throws IncorrectOperationException;
+
+	/**
+	 * Creates a Java type from the specified text.
+	 *
+	 * @param text the text of the type to create (a primitive type keyword).
+	 * @return the created type instance.
+	 * @throws IncorrectOperationException if some of the parameters are not valid.
+	 */
+	@NotNull
+	PsiType createPrimitiveTypeFromText(@NotNull String text) throws IncorrectOperationException;
 }
