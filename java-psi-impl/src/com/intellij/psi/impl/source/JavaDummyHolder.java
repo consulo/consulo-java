@@ -180,7 +180,6 @@ public class JavaDummyHolder extends DummyHolder implements PsiImportHolder
 		return aPackage == null || aPackage.getQualifiedName().isEmpty();
 	}
 
-
 	@Override
 	public void setOriginalFile(@NotNull final PsiFile originalFile)
 	{
