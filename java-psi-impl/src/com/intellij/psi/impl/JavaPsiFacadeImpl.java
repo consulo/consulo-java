@@ -22,7 +22,6 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ReadActionProcessor;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
@@ -48,8 +47,8 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.messages.MessageBus;
 import consulo.annotations.RequiredReadAction;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.psi.PsiPackageManager;
 
 /**
@@ -64,13 +63,12 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	private final PsiPackageManager myPackageManager;
 
 
-	public JavaPsiFacadeImpl(Project project, PsiPackageManager psiManager, JavaFileManager javaFileManager, MessageBus bus)
+	public JavaPsiFacadeImpl(Project project, PsiPackageManager psiManager)
 	{
 		myProject = project;
 		myPackageManager = psiManager;
 		myConstantEvaluationHelper = new PsiConstantEvaluationHelperImpl();
 
-		DummyHolderFactory.setFactory(new JavaDummyHolderFactory());
 		JavaElementType.ANNOTATION.getIndex(); // Initialize stubs.
 	}
 
@@ -135,7 +133,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 			return findClassesInDumbMode(qualifiedName, scope);
 		}
 
-		List<PsiClass> classes = new SmartList<PsiClass>();
+		List<PsiClass> classes = new SmartList<>();
 		for(PsiElementFinder finder : finders())
 		{
 			PsiClass[] finderClasses = finder.findClasses(qualifiedName, scope);
@@ -161,7 +159,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@NotNull
 	private PsiElementFinder[] calcFinders()
 	{
-		List<PsiElementFinder> elementFinders = new ArrayList<PsiElementFinder>();
+		List<PsiElementFinder> elementFinders = new ArrayList<>();
 		elementFinders.add(new PsiElementFinderImpl());
 		ContainerUtil.addAll(elementFinders, myProject.getExtensions(PsiElementFinder.EP_NAME));
 		return elementFinders.toArray(new PsiElementFinder[elementFinders.size()]);
@@ -192,7 +190,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@NotNull
 	public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
 	{
-		LinkedHashSet<PsiJavaPackage> result = new LinkedHashSet<PsiJavaPackage>();
+		LinkedHashSet<PsiJavaPackage> result = new LinkedHashSet<>();
 		for(PsiElementFinder finder : filteredFinders())
 		{
 			PsiJavaPackage[] packages = finder.getSubPackages(psiPackage, scope);
@@ -239,7 +237,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 	@NotNull
 	public Set<String> getClassNames(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
 	{
-		Set<String> result = new THashSet<String>();
+		Set<String> result = new THashSet<>();
 		for(PsiElementFinder finder : filteredFinders())
 		{
 			result.addAll(finder.getClassNames(psiPackage, scope));
@@ -260,7 +258,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 			}
 			if(result == null)
 			{
-				result = new ArrayList<PsiClass>();
+				result = new ArrayList<>();
 			}
 			ContainerUtil.addAll(result, classes);
 		}
@@ -292,7 +290,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 			}
 			if(result == null)
 			{
-				result = new ArrayList<PsiClass>();
+				result = new ArrayList<>();
 			}
 			ContainerUtil.addAll(result, classes);
 		}
@@ -325,7 +323,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 		@NotNull
 		public PsiJavaPackage[] getSubPackages(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope)
 		{
-			final Map<String, PsiJavaPackage> packagesMap = new HashMap<String, PsiJavaPackage>();
+			final Map<String, PsiJavaPackage> packagesMap = new HashMap<>();
 			final String qualifiedName = psiPackage.getQualifiedName();
 			for(PsiDirectory dir : psiPackage.getDirectories(scope))
 			{
@@ -370,7 +368,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 				}
 				if(list == null)
 				{
-					list = new ArrayList<PsiClass>();
+					list = new ArrayList<>();
 				}
 				for(PsiClass aClass : classes)
 				{
@@ -440,7 +438,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx
 						}
 						if(names == null)
 						{
-							names = new HashSet<String>();
+							names = new HashSet<>();
 						}
 						names.addAll(inFile);
 					}
