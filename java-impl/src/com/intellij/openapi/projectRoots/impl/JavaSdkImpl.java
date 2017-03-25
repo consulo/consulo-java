@@ -180,8 +180,8 @@ public class JavaSdkImpl extends JavaSdk
 		List<String> list = new SmartList<String>();
 		if(SystemInfo.isMac)
 		{
-			list.add("/Library/Java/JavaVirtualMachines");
-			list.add("/System/Library/Java/JavaVirtualMachines");
+			collectJavaPathsAtMac(list, "/Library/Java/JavaVirtualMachines");
+			collectJavaPathsAtMac(list, "/System/Library/Java/JavaVirtualMachines");
 			list.add("/usr/libexec/java_home");
 		}
 		else if(SystemInfo.isSolaris)
@@ -196,15 +196,31 @@ public class JavaSdkImpl extends JavaSdk
 		}
 		else if(SystemInfo.isWindows)
 		{
-			collectJavaPaths(list, "ProgramFiles");
-			collectJavaPaths(list, "ProgramFiles(x86)");
+			collectJavaPathsAtWindows(list, "ProgramFiles");
+			collectJavaPathsAtWindows(list, "ProgramFiles(x86)");
 			ContainerUtil.addIfNotNull(list, System.getProperty("java.home"));
 		}
 
 		return list;
 	}
 
-	private static void collectJavaPaths(List<String> list, String env)
+	private static void collectJavaPathsAtMac(List<String> list, String path)
+	{
+		File dir = new File(path);
+		if(dir.exists())
+		{
+			File[] files = dir.listFiles();
+			if(files != null)
+			{
+				for(File file : files)
+				{
+					list.add(file.getPath());
+				}
+			}
+		}
+	}
+
+	private static void collectJavaPathsAtWindows(List<String> list, String env)
 	{
 		String programFiles = System.getenv(env);
 		if(programFiles != null)
