@@ -22,7 +22,6 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
@@ -34,7 +33,10 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.psi.*;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.util.IncorrectOperationException;
+import consulo.annotations.RequiredReadAction;
+import consulo.annotations.RequiredWriteAction;
 import consulo.ide.IconDescriptorUpdaters;
+import consulo.java.JavaQuickFixBundle;
 
 /**
  * @author Dmitry Batkovich
@@ -53,10 +55,16 @@ public class AddMethodQualifierFix implements IntentionAction
 
 	@NotNull
 	@Override
+	@RequiredReadAction
 	public String getText()
 	{
-		String text = JavaQuickFixBundle.message("add.method.qualifier.fix.text", myCandidates.size() > 1 ? "" : myCandidates.get(0).getName());
-		if(myCandidates.size() > 1)
+		final List<PsiVariable> candidates = getOrFindCandidates();
+		if(candidates.isEmpty())
+		{
+			return getFamilyName();
+		}
+		String text = JavaQuickFixBundle.message("add.method.qualifier.fix.text", candidates.size() > 1 ? "" : candidates.get(0).getName());
+		if(candidates.size() > 1)
 		{
 			text += "...";
 		}
@@ -71,6 +79,7 @@ public class AddMethodQualifierFix implements IntentionAction
 	}
 
 	@Override
+	@RequiredReadAction
 	public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile file)
 	{
 		final PsiMethodCallExpression element = myMethodCall.getElement();
@@ -81,6 +90,7 @@ public class AddMethodQualifierFix implements IntentionAction
 		return getOrFindCandidates().size() != 0;
 	}
 
+	@RequiredReadAction
 	private synchronized List<PsiVariable> getOrFindCandidates()
 	{
 		if(myCandidates == null)
@@ -90,9 +100,10 @@ public class AddMethodQualifierFix implements IntentionAction
 		return myCandidates;
 	}
 
+	@RequiredReadAction
 	private void findCandidates()
 	{
-		myCandidates = new ArrayList<PsiVariable>();
+		myCandidates = new ArrayList<>();
 		final PsiMethodCallExpression methodCallElement = myMethodCall.getElement();
 		final String methodName = methodCallElement.getMethodExpression().getReferenceName();
 		if(methodName == null)
@@ -124,21 +135,24 @@ public class AddMethodQualifierFix implements IntentionAction
 	}
 
 	@TestOnly
+	@RequiredReadAction
 	public List<PsiVariable> getCandidates()
 	{
-		return myCandidates;
+		return getOrFindCandidates();
 	}
 
 	@Override
+	@RequiredWriteAction
 	public void invoke(@NotNull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
 	{
 		if(!FileModificationService.getInstance().preparePsiElementsForWrite(file))
 		{
 			return;
 		}
-		if(myCandidates.size() == 1 || UNIT_TEST_MODE)
+		List<PsiVariable> candidates = getOrFindCandidates();
+		if(candidates.size() == 1 || UNIT_TEST_MODE)
 		{
-			qualify(myCandidates.get(0), editor);
+			qualify(candidates.get(0), editor);
 		}
 		else
 		{
@@ -185,13 +199,13 @@ public class AddMethodQualifierFix implements IntentionAction
 		popup.showInBestPositionFor(editor);
 	}
 
+	@RequiredWriteAction
 	private void qualify(final PsiVariable qualifier, final Editor editor)
 	{
 		final String qualifierPresentableText = qualifier.getName();
 		final PsiMethodCallExpression oldExpression = myMethodCall.getElement();
 		final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(qualifier.getProject());
-		final PsiExpression expression = elementFactory.createExpressionFromText(qualifierPresentableText + "." +
-				oldExpression.getMethodExpression().getReferenceName() + "()", null);
+		final PsiExpression expression = elementFactory.createExpressionFromText(qualifierPresentableText + "." + oldExpression.getMethodExpression().getReferenceName() + "()", null);
 		final PsiElement replacedExpression = oldExpression.replace(expression);
 		editor.getCaretModel().moveToOffset(replacedExpression.getTextOffset() + replacedExpression.getTextLength());
 	}
