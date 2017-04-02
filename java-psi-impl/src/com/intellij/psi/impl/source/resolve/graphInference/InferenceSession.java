@@ -94,9 +94,9 @@ public class InferenceSession
 	private static final String UPPER_BOUNDS_PRESENTATION = "upper bounds";
 	private static final String LOWER_BOUNDS_PRESENTATION = "lower bounds";
 
-	private final Set<InferenceVariable> myInferenceVariables = new LinkedHashSet<InferenceVariable>();
-	private final List<ConstraintFormula> myConstraints = new ArrayList<ConstraintFormula>();
-	private final Set<ConstraintFormula> myConstraintsCopy = new HashSet<ConstraintFormula>();
+	private final Set<InferenceVariable> myInferenceVariables = new LinkedHashSet<>();
+	private final List<ConstraintFormula> myConstraints = new ArrayList<>();
+	private final Set<ConstraintFormula> myConstraintsCopy = new HashSet<>();
 	private InferenceSessionContainer myInferenceSessionContainer = new InferenceSessionContainer();
 
 	private PsiSubstitutor mySiteSubstitutor;
@@ -464,7 +464,7 @@ public class InferenceSession
 				final PsiType returnType = method.getReturnType();
 				if(!PsiType.VOID.equals(returnType) && returnType != null)
 				{
-					final Ref<String> errorMessage = new Ref<String>();
+					final Ref<String> errorMessage = new Ref<>();
 					final PsiType targetType = getTargetTypeFromParent(parent, errorMessage, false);
 					if(targetType == null && errorMessage.get() != null)
 					{
@@ -486,8 +486,8 @@ public class InferenceSession
 
 			if(parameters != null && args != null && !isOverloadCheck())
 			{
-				final Set<ConstraintFormula> additionalConstraints = new LinkedHashSet<ConstraintFormula>();
-				final HashSet<ConstraintFormula> ignoredConstraints = new HashSet<ConstraintFormula>();
+				final Set<ConstraintFormula> additionalConstraints = new LinkedHashSet<>();
+				final HashSet<ConstraintFormula> ignoredConstraints = new HashSet<>();
 				if(parameters.length > 0)
 				{
 					collectAdditionalConstraints(parameters, args, properties.getMethod(), mySiteSubstitutor, additionalConstraints, ignoredConstraints, properties.isVarargs(), initialSubstitutor);
@@ -516,7 +516,7 @@ public class InferenceSession
 		{
 			return Collections.emptyList();
 		}
-		final HashSet<InferenceVariable> dependencies = new HashSet<InferenceVariable>();
+		final HashSet<InferenceVariable> dependencies = new HashSet<>();
 		for(int i = 0; i < args.length; i++)
 		{
 			PsiExpression arg = args[i];
@@ -754,7 +754,7 @@ public class InferenceSession
 							}
 						}
 					}
-					return new Result<JavaResolveResult>(constructor.getElement() == null && resolveResult != null ? resolveResult : constructor, PsiModificationTracker.MODIFICATION_COUNT);
+					return new Result<>(constructor.getElement() == null && resolveResult != null ? resolveResult : constructor, PsiModificationTracker.MODIFICATION_COUNT);
 				}
 			});
 		}
@@ -829,7 +829,7 @@ public class InferenceSession
 
 	public InferenceVariable[] initBounds(PsiElement context, final PsiSubstitutor siteSubstitutor, PsiTypeParameter... typeParameters)
 	{
-		List<InferenceVariable> result = new ArrayList<InferenceVariable>(typeParameters.length);
+		List<InferenceVariable> result = new ArrayList<>(typeParameters.length);
 		for(PsiTypeParameter parameter : typeParameters)
 		{
 			String name = parameter.getName();
@@ -934,7 +934,7 @@ public class InferenceSession
 	{
 		if(Registry.is("javac.fresh.variables.for.captured.wildcards.only", true))
 		{
-			final List<PsiTypeParameter> capturedParams = new ArrayList<PsiTypeParameter>();
+			final List<PsiTypeParameter> capturedParams = new ArrayList<>();
 
 			PsiSubstitutor restParamSubstitution = PsiSubstitutor.EMPTY;
 			for(int i = 0; i < parameters.length; i++)
@@ -1042,7 +1042,7 @@ public class InferenceSession
 				return true;
 			}
 			final List<PsiType> eqBounds = inferenceVariable.getBounds(InferenceBound.EQ);
-			final List<PsiType> boundsToCheck = new ArrayList<PsiType>(bounds);
+			final List<PsiType> boundsToCheck = new ArrayList<>(bounds);
 			boundsToCheck.addAll(eqBounds);
 			for(PsiType lowBound : boundsToCheck)
 			{
@@ -1057,7 +1057,7 @@ public class InferenceSession
 
 	public static PsiType getTargetType(final PsiElement context)
 	{
-		return getTargetTypeFromParent(context, new Ref<String>(), true);
+		return getTargetTypeFromParent(context, new Ref<>(), true);
 	}
 
 	/**
@@ -1292,7 +1292,7 @@ public class InferenceSession
 
 	private boolean reduceConstraints()
 	{
-		List<ConstraintFormula> newConstraints = new ArrayList<ConstraintFormula>();
+		List<ConstraintFormula> newConstraints = new ArrayList<>();
 		for(int i = myConstraintIdx; i < myConstraints.size(); i++)
 		{
 			ConstraintFormula constraint = myConstraints.get(i);
@@ -1332,7 +1332,7 @@ public class InferenceSession
 
 	private PsiType substituteNonProperBound(PsiType bound, PsiSubstitutor substitutor)
 	{
-		final HashSet<InferenceVariable> dependencies = new LinkedHashSet<InferenceVariable>();
+		final HashSet<InferenceVariable> dependencies = new LinkedHashSet<>();
 		if(!collectDependencies(bound, dependencies))
 		{
 			return bound;
@@ -1377,11 +1377,11 @@ public class InferenceSession
 
 	private void resolveBounds(final Collection<InferenceVariable> inferenceVariables, @NotNull PsiSubstitutor substitutor)
 	{
-		final Collection<InferenceVariable> allVars = new ArrayList<InferenceVariable>(inferenceVariables);
+		final Collection<InferenceVariable> allVars = new ArrayList<>(inferenceVariables);
 		while(!allVars.isEmpty())
 		{
 			final List<InferenceVariable> vars = InferenceVariablesOrder.resolveOrder(allVars, this);
-			List<InferenceVariable> unresolved = new ArrayList<InferenceVariable>();
+			List<InferenceVariable> unresolved = new ArrayList<>();
 			for(InferenceVariable var : vars)
 			{
 				final PsiType eqBound = getEqualsBound(var, substitutor);
@@ -1616,7 +1616,7 @@ public class InferenceSession
 
 	public void registerIncompatibleErrorMessage(Collection<InferenceVariable> variables, String incompatibleTypesMessage)
 	{
-		variables = new ArrayList<InferenceVariable>(variables);
+		variables = new ArrayList<>(variables);
 		Collections.sort((ArrayList<InferenceVariable>) variables, new Comparator<InferenceVariable>()
 		{
 			@Override
@@ -1640,7 +1640,7 @@ public class InferenceSession
 	{
 		if(myErrorMessages == null)
 		{
-			myErrorMessages = new ArrayList<String>();
+			myErrorMessages = new ArrayList<>();
 		}
 		if(!myErrorMessages.contains(incompatibleBoundsMessage))
 		{
@@ -1772,7 +1772,7 @@ public class InferenceSession
 			final Set<ConstraintFormula> subset = buildSubset(additionalConstraints, ignoredConstraints);
 
 			//collect all input variables of selection
-			final Set<InferenceVariable> varsToResolve = new LinkedHashSet<InferenceVariable>();
+			final Set<InferenceVariable> varsToResolve = new LinkedHashSet<>();
 			for(ConstraintFormula formula : subset)
 			{
 				if(formula instanceof InputOutputConstraintFormula)
@@ -1842,9 +1842,9 @@ public class InferenceSession
 		final Set<InferenceVariable> outputVariables = getOutputVariables(additionalConstraints);
 		final Set<InferenceVariable> ignoredOutputVariables = getOutputVariables(ignoredConstraints);
 
-		Set<ConstraintFormula> subset = new LinkedHashSet<ConstraintFormula>();
+		Set<ConstraintFormula> subset = new LinkedHashSet<>();
 
-		Set<ConstraintFormula> noInputVariables = new LinkedHashSet<ConstraintFormula>();
+		Set<ConstraintFormula> noInputVariables = new LinkedHashSet<>();
 		for(ConstraintFormula constraint : additionalConstraints)
 		{
 			if(constraint instanceof InputOutputConstraintFormula)
@@ -1936,7 +1936,7 @@ public class InferenceSession
 	@NotNull
 	private Set<InferenceVariable> getOutputVariables(Set<ConstraintFormula> constraintFormulas)
 	{
-		final Set<InferenceVariable> outputVariables = new HashSet<InferenceVariable>();
+		final Set<InferenceVariable> outputVariables = new HashSet<>();
 		for(ConstraintFormula constraint : constraintFormulas)
 		{
 			if(constraint instanceof InputOutputConstraintFormula)
@@ -2101,7 +2101,7 @@ public class InferenceSession
 	private static boolean isMoreSpecificInternal(PsiMethod m1, PsiMethod m2, PsiSubstitutor siteSubstitutor1, PsiExpression[] args, PsiElement context, boolean varargs)
 	{
 
-		List<PsiTypeParameter> params = new ArrayList<PsiTypeParameter>();
+		List<PsiTypeParameter> params = new ArrayList<>();
 		for(PsiTypeParameter param : PsiUtil.typeParametersIterable(m2))
 		{
 			params.add(param);
