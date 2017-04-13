@@ -25,7 +25,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInspection.InspectionManager;
@@ -56,18 +55,16 @@ public class FileHeaderChecker
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.defaultFileTemplateUsage.FileHeaderChecker");
 
-	// abcdfghdjsjd kfkdjekr dfhakdjfk dkfkjgk dfjgjfkg ekfk fkgkvv ggkk eefkgjkdd jfkkkssl dfghgk gkhller hhksl lfflgl
 	static ProblemDescriptor checkFileHeader(@NotNull final PsiFile file, final InspectionManager manager, boolean onTheFly)
 	{
-		TIntObjectHashMap<String> offsetToProperty = new TIntObjectHashMap<String>();
-		Pattern pattern = getTemplatePattern(FileTemplateManager.getInstance().getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME),
-				file.getProject(), offsetToProperty);
+		TIntObjectHashMap<String> offsetToProperty = new TIntObjectHashMap<>();
+		Pattern pattern = getTemplatePattern(FileTemplateManager.getInstance(file.getProject()).getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME), file.getProject(), offsetToProperty);
 		Matcher matcher = pattern.matcher(file.getViewProvider().getContents());
 		if(matcher.matches())
 		{
 			final int startOffset = matcher.start(1);
 			final int endOffset = matcher.end(1);
-			final Ref<PsiDocComment> docComment = new Ref<PsiDocComment>();
+			final Ref<PsiDocComment> docComment = new Ref<>();
 			file.accept(new JavaRecursiveElementWalkingVisitor()
 			{
 				@Override
@@ -96,7 +93,7 @@ public class FileHeaderChecker
 			{
 				return null;
 			}
-			LocalQuickFix[] quickFix = createQuickFix(matcher, offsetToProperty);
+			LocalQuickFix[] quickFix = createQuickFix(file.getProject(), matcher, offsetToProperty);
 			final String description = InspectionsBundle.message("default.file.template.description");
 			return manager.createProblemDescriptor(element, description, onTheFly, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
 		}
@@ -112,9 +109,9 @@ public class FileHeaderChecker
 		return Pattern.compile(regex, Pattern.DOTALL);
 	}
 
-	private static Properties computeProperties(final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty)
+	private static Properties computeProperties(Project project, final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty)
 	{
-		Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
+		Properties properties = new Properties(FileTemplateManager.getInstance(project).getDefaultProperties());
 		int[] offsets = offsetToProperty.keys();
 		Arrays.sort(offsets);
 
@@ -129,9 +126,9 @@ public class FileHeaderChecker
 		return properties;
 	}
 
-	private static LocalQuickFix[] createQuickFix(final Matcher matcher, final TIntObjectHashMap<String> offsetToProperty)
+	private static LocalQuickFix[] createQuickFix(@NotNull Project project, Matcher matcher, final TIntObjectHashMap<String> offsetToProperty)
 	{
-		final FileTemplate template = FileTemplateManager.getInstance().getPattern(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
+		final FileTemplate template = FileTemplateManager.getInstance(project).getPattern(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
 
 		final ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix()
 		{
@@ -150,7 +147,7 @@ public class FileHeaderChecker
 				String newText;
 				try
 				{
-					newText = template.getText(computeProperties(matcher, offsetToProperty));
+					newText = template.getText(computeProperties(project, matcher, offsetToProperty));
 				}
 				catch(IOException e)
 				{
@@ -202,8 +199,7 @@ public class FileHeaderChecker
 	private static String templateToRegex(final String text, TIntObjectHashMap<String> offsetToProperty, Project project)
 	{
 		String regex = text;
-		@NonNls Collection<String> properties = new ArrayList<String>((Collection) FileTemplateManager.getInstance().getDefaultProperties(project)
-				.keySet());
+		Collection<String> properties = new ArrayList<>((Collection) FileTemplateManager.getInstance(project).getDefaultProperties().keySet());
 		properties.add("PACKAGE_NAME");
 
 		regex = escapeRegexChars(regex);

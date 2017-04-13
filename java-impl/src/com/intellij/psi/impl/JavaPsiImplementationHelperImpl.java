@@ -328,7 +328,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 	@Override
 	public void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection catchSection)
 	{
-		final FileTemplate catchBodyTemplate = FileTemplateManager.getInstance().getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
+		final FileTemplate catchBodyTemplate = FileTemplateManager.getInstance(catchSection.getProject()).getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
 		LOG.assertTrue(catchBodyTemplate != null);
 
 		final Properties props = new Properties();
@@ -351,7 +351,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 		{
 			throw ce;
 		}
-		catch(Exception e)
+		catch(Throwable e)
 		{
 			throw new IncorrectOperationException("Incorrect file template", e);
 		}

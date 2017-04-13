@@ -15,6 +15,14 @@
  */
 package com.intellij.testIntegration;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.TestFrameworks;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
@@ -37,14 +45,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.SmartList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
 
 public class TestIntegrationUtils {
   private static final Logger LOG = Logger.getInstance("#" + TestIntegrationUtils.class.getName());
@@ -185,7 +185,7 @@ public class TestIntegrationUtils {
                                                    boolean automatic) {
     FileTemplateDescriptor templateDesc = methodKind.getFileTemplateDescriptor(descriptor);
     String templateName = templateDesc.getFileName();
-    FileTemplate fileTemplate = FileTemplateManager.getInstance().getCodeTemplate(templateName);
+    FileTemplate fileTemplate = FileTemplateManager.getInstance(targetClass.getProject()).getCodeTemplate(templateName);
     Template template = TemplateManager.getInstance(targetClass.getProject()).createTemplate("", "");
 
     String templateText;

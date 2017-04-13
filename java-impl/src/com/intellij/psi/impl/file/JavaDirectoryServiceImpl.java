@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
-import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.core.CoreJavaDirectoryService;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -31,6 +30,7 @@ import com.intellij.ide.fileTemplates.ui.CreateFromTemplateDialog;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
@@ -47,6 +47,7 @@ import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.module.extension.JavaModuleExtension;
 
 /**
  * @author max
@@ -82,18 +83,13 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 	}
 
 	@Override
-	public PsiClass createClass(
-			@NotNull PsiDirectory dir,
-			@NotNull String name,
-			@NotNull String templateName,
-			boolean askForUndefinedVariables) throws IncorrectOperationException
+	public PsiClass createClass(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String templateName, boolean askForUndefinedVariables) throws IncorrectOperationException
 	{
 		return createClass(dir, name, templateName, askForUndefinedVariables, Collections.<String, String>emptyMap());
 	}
 
 	@Override
-	public PsiClass createClass(
-			@NotNull PsiDirectory dir,
+	public PsiClass createClass(@NotNull PsiDirectory dir,
 			@NotNull String name,
 			@NotNull String templateName,
 			boolean askForUndefinedVariables,
@@ -110,7 +106,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 		PsiClass someClass = createClassFromTemplate(dir, name, templateName);
 		if(!someClass.isInterface())
 		{
-			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(dir.getProject(), templateName));
 		}
 		return someClass;
 	}
@@ -123,7 +119,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 		PsiClass someClass = createClassFromTemplate(dir, name, templateName);
 		if(!someClass.isEnum())
 		{
-			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(dir.getProject(), templateName));
 		}
 		return someClass;
 	}
@@ -136,7 +132,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 		PsiClass someClass = createClassFromTemplate(dir, name, templateName);
 		if(!someClass.isAnnotationType())
 		{
-			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(dir.getProject(), templateName));
 		}
 		return someClass;
 	}
@@ -146,8 +142,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 		return createClassFromTemplate(dir, name, templateName, false, Collections.<String, String>emptyMap());
 	}
 
-	private static PsiClass createClassFromTemplate(
-			@NotNull PsiDirectory dir,
+	private static PsiClass createClassFromTemplate(@NotNull PsiDirectory dir,
 			String name,
 			String templateName,
 			boolean askToDefineVariables,
@@ -155,9 +150,10 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 	{
 		//checkCreateClassOrInterface(dir, name);
 
-		FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
+		Project project = dir.getProject();
+		FileTemplate template = FileTemplateManager.getInstance(project).getInternalTemplate(templateName);
 
-		Properties defaultProperties = FileTemplateManager.getInstance().getDefaultProperties(dir.getProject());
+		Properties defaultProperties = FileTemplateManager.getInstance(project).getDefaultProperties();
 		Properties properties = new Properties(defaultProperties);
 		properties.setProperty(FileTemplate.ATTRIBUTE_NAME, name);
 		for(Map.Entry<String, String> entry : additionalProperties.entrySet())
@@ -171,8 +167,8 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 		PsiElement element;
 		try
 		{
-			element = askToDefineVariables ? new CreateFromTemplateDialog(dir.getProject(), dir, template, null,
-					properties).create() : FileTemplateUtil.createFromTemplate(template, fileName, properties, dir);
+			element = askToDefineVariables ? new CreateFromTemplateDialog(project, dir, template, null, properties).create() : FileTemplateUtil.createFromTemplate(template, fileName, properties,
+					dir);
 		}
 		catch(IncorrectOperationException e)
 		{
@@ -191,15 +187,14 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService
 		PsiClass[] classes = file.getClasses();
 		if(classes.length < 1)
 		{
-			throw new IncorrectOperationException(getIncorrectTemplateMessage(templateName));
+			throw new IncorrectOperationException(getIncorrectTemplateMessage(dir.getProject(), templateName));
 		}
 		return classes[0];
 	}
 
-	private static String getIncorrectTemplateMessage(String templateName)
+	private static String getIncorrectTemplateMessage(Project project, String templateName)
 	{
-		return PsiBundle.message("psi.error.incorroect.class.template.message", FileTemplateManager.getInstance().internalTemplateToSubject
-				(templateName), templateName);
+		return PsiBundle.message("psi.error.incorroect.class.template.message", FileTemplateManager.getInstance(project).internalTemplateToSubject(templateName), templateName);
 	}
 
 	@Override

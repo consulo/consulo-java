@@ -30,7 +30,7 @@ public class FileTemplatesTest extends IdeaTestCase {
     final File customInclude = new File(testsDir, customIncludeFileName);
     final String includeText = FileUtil.loadFile(customInclude, FileTemplate.ourEncoding);
 
-    final FileTemplateManager templateManager = FileTemplateManager.getInstance();
+    final FileTemplateManager templateManager = FileTemplateManager.getDefaultInstance();
     final ArrayList<FileTemplate> originalIncludes = new ArrayList<FileTemplate>(Arrays.asList(templateManager.getAllPatterns()));
     try {
       // configure custom include
@@ -88,13 +88,13 @@ public class FileTemplatesTest extends IdeaTestCase {
   }
 
   public void testFindFileByUrl() throws Exception {
-    FileTemplate catchBodyTemplate = FileTemplateManager.getInstance().getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
+    FileTemplate catchBodyTemplate = FileTemplateManager.getDefaultInstance().getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
     assertNotNull(catchBodyTemplate);
   }
 
   public void testDefaultPackage() throws Exception {
     String name = "myclass";
-    FileTemplate template = FileTemplateManager.getInstance().addInternal(name/*+"ForTest"*/, "java");
+    FileTemplate template = FileTemplateManager.getDefaultInstance().addInternal(name/*+"ForTest"*/, "java");
     try {
       template.setText("package ${PACKAGE_NAME}; public class ${NAME} {}");
 
@@ -113,7 +113,7 @@ public class FileTemplatesTest extends IdeaTestCase {
       assertEquals("public class XXX {\n}", psiClass.getContainingFile().getText());
     }
     finally {
-      FileTemplateManager.getInstance().removeTemplate(template);
+      FileTemplateManager.getDefaultInstance().removeTemplate(template);
     }
   }
 }

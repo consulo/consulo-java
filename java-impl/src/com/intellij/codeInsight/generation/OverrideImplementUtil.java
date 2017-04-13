@@ -434,7 +434,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 	{
 		boolean isAbstract = originalMethod.hasModifierProperty(PsiModifier.ABSTRACT) || originalMethod.hasModifierProperty(PsiModifier.DEFAULT);
 		String templateName = isAbstract ? JavaTemplateUtil.TEMPLATE_IMPLEMENTED_METHOD_BODY : JavaTemplateUtil.TEMPLATE_OVERRIDDEN_METHOD_BODY;
-		FileTemplate template = FileTemplateManager.getInstance().getCodeTemplate(templateName);
+		FileTemplate template = FileTemplateManager.getInstance(result.getProject()).getCodeTemplate(templateName);
 		setupMethodBody(result, originalMethod, targetClass, template);
 	}
 
@@ -461,7 +461,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil
 		{
 			returnType = PsiType.VOID;
 		}
-		Properties properties = FileTemplateManager.getInstance().getDefaultProperties();
+		Properties properties = FileTemplateManager.getInstance(result.getProject()).getDefaultProperties();
 		properties.setProperty(FileTemplate.ATTRIBUTE_RETURN_TYPE, returnType.getPresentableText());
 		properties.setProperty(FileTemplate.ATTRIBUTE_DEFAULT_RETURN_VALUE, PsiTypesUtil.getDefaultValueOfType(returnType));
 		properties.setProperty(FileTemplate.ATTRIBUTE_CALL_SUPER, callSuper(originalMethod, result));
