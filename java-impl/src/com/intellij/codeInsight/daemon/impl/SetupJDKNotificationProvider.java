@@ -16,12 +16,10 @@
 package com.intellij.codeInsight.daemon.impl;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ProjectTopics;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -35,13 +33,15 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
+import consulo.annotations.RequiredReadAction;
+import consulo.editor.notifications.EditorNotificationProvider;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtension;
-import consulo.module.extension.ModuleExtensionChangeListener;
 
 /**
  * @author Danila Ponomarenko
  */
-public class SetupJDKNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel>
+public class SetupJDKNotificationProvider implements EditorNotificationProvider<EditorNotificationPanel>
 {
 	private static final Key<EditorNotificationPanel> KEY = Key.create("setup.jdk.notifier");
 
@@ -58,24 +58,19 @@ public class SetupJDKNotificationProvider extends EditorNotifications.Provider<E
 				notifications.updateAllNotifications();
 			}
 		});
-		myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, new ModuleExtensionChangeListener()
-		{
-			@Override
-			public void beforeExtensionChanged(@NotNull ModuleExtension<?> oldExtension, @NotNull ModuleExtension<?> newExtension)
-			{
-				notifications.updateAllNotifications();
-			}
-		});
+		myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, (oldExtension, newExtension) -> notifications.updateAllNotifications());
 	}
 
+	@NotNull
 	@Override
 	public Key<EditorNotificationPanel> getKey()
 	{
 		return KEY;
 	}
 
+	@RequiredReadAction
 	@Override
-	public EditorNotificationPanel createNotificationPanel(VirtualFile file, FileEditor fileEditor)
+	public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor)
 	{
 		if(file.getFileType() == JavaClassFileType.INSTANCE)
 		{
@@ -116,30 +111,15 @@ public class SetupJDKNotificationProvider extends EditorNotifications.Provider<E
 	{
 		EditorNotificationPanel panel = new EditorNotificationPanel();
 		panel.setText(JavaCoreBundle.message("module.jdk.not.defined"));
-		panel.createActionLabel(JavaCoreBundle.message("module.jdk.setup"), new Runnable()
+		panel.createActionLabel(JavaCoreBundle.message("module.jdk.setup"), () ->
 		{
-			@Override
-			public void run()
+			final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
+			if(moduleForPsiElement == null)
 			{
-				final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
-				if(moduleForPsiElement == null)
-				{
-					return;
-				}
-
-				ApplicationManager.getApplication().runWriteAction(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						final Module module = ModuleUtilCore.findModuleForPsiElement(file);
-						if(module != null)
-						{
-							ProjectSettingsService.getInstance(project).openModuleSettings(module);
-						}
-					}
-				});
+				return;
 			}
+
+			ProjectSettingsService.getInstance(project).openModuleSettings(moduleForPsiElement);
 		});
 		return panel;
 	}
