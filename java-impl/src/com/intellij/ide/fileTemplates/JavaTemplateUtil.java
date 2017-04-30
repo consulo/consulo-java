@@ -39,10 +39,10 @@ public class JavaTemplateUtil
 	public static final String TEMPLATE_I18NIZED_CONCATENATION = "I18nized Concatenation.java";
 	public static final String TEMPLATE_I18NIZED_JSP_EXPRESSION = "I18nized JSP Expression.jsp";
 
-	public static final String INTERNAL_CLASS_TEMPLATE_NAME = "Class";
-	public static final String INTERNAL_INTERFACE_TEMPLATE_NAME = "Interface";
-	public static final String INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME = "AnnotationType";
-	public static final String INTERNAL_ENUM_TEMPLATE_NAME = "Enum";
+	public static final String INTERNAL_CLASS_TEMPLATE_NAME = "Java Class";
+	public static final String INTERNAL_INTERFACE_TEMPLATE_NAME = "Java Interface";
+	public static final String INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME = "Java AnnotationType";
+	public static final String INTERNAL_ENUM_TEMPLATE_NAME = "Java Enum";
 	public static final String FILE_HEADER_TEMPLATE_NAME = "Java File Header";
 
 	public static final String[] INTERNAL_CLASS_TEMPLATES = {
