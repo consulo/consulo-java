@@ -690,7 +690,7 @@
 
 		<backendCompiler implementationClass="com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler"/>
 
-		<bytecodeCompilerProcessor implementation="consulo.java.compiler.bytecodeProcessing.impl.NotNullJavaBytecodeProcessorCompiler" />
+		<bytecodeCompilerProcessor implementation="consulo.java.compiler.bytecodeProcessing.impl.NotNullJavaBytecodeProcessorCompiler"/>
 
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.ColorObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.debugger.ui.tree.render.BinaryRenderer"/>
@@ -700,7 +700,7 @@
 
 		<augmentProvider implementation="consulo.java.psi.augment.JavaEnumAugmentProvider"/>
 
-		<typeAnnotationModifier implementation="com.intellij.codeInsight.NullityAnnotationModifier" />
+		<typeAnnotationModifier implementation="com.intellij.codeInsight.NullityAnnotationModifier"/>
 
 		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
@@ -720,8 +720,8 @@
 		<projectService serviceInterface="com.intellij.debugger.ui.DebuggerRecents"
 						serviceImplementation="com.intellij.debugger.ui.DebuggerRecents"/>
 
-		<projectService serviceImplementation="com.intellij.debugger.impl.HotSwapManager" />
-		<projectService serviceInterface="com.intellij.debugger.ui.HotSwapUI" serviceImplementation="com.intellij.debugger.ui.HotSwapUIImpl" />
+		<projectService serviceImplementation="com.intellij.debugger.impl.HotSwapManager"/>
+		<projectService serviceInterface="com.intellij.debugger.ui.HotSwapUI" serviceImplementation="com.intellij.debugger.ui.HotSwapUIImpl"/>
 
 		<compiler implementation="com.intellij.compiler.impl.javaCompiler.AnnotationProcessingCompiler" id="java-annotation-processor"
 				  order="before java-compiler"/>
@@ -777,7 +777,7 @@
 		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.JavaReferenceCompletionConfidence"/>
 		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.JavadocCompletionConfidence" id="javadoc" order="before javaComments"/>
 		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.SkipAutopopupInComments" id="javaComments"/>
-		<completion.confidence language="JAVA" implementationClass="com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionCompletionConfidence" id="javaReflection" />
+		<completion.confidence language="JAVA" implementationClass="com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionCompletionConfidence" id="javaReflection"/>
 		<completion.confidence language="JAVA" implementationClass="com.intellij.codeInsight.completion.SkipAutopopupInStrings" id="javaSkipAutopopupInStrings"/>
 
 		<completion.contributor language="JAVA" implementationClass="com.intellij.codeInsight.completion.RefactoringCompletionContributor"
@@ -1122,10 +1122,11 @@
 						  groupName="Declaration redundancy" enabledByDefault="false" level="WARNING"
 						  implementationClass="com.intellij.codeInspection.RedundantSuppressInspection"/>
 
-		<localInspection language="JAVA" suppressId="UnusedDeclaration" alternativeId="unused" shortName="UNUSED_SYMBOL"
-						 displayName="Unused symbol"
-						 groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection" unfair="true"/>
+		<globalInspection groupPath="Java" language="JAVA" shortName="unused" displayName="Unused declaration" groupBundle="messages.InspectionsBundle"
+						  groupKey="group.names.declaration.redundancy" enabledByDefault="true" level="WARNING"
+						  implementationClass="com.intellij.codeInspection.deadCode.UnusedDeclarationInspection"
+						  presentation="com.intellij.codeInspection.deadCode.UnusedDeclarationPresentation"/>
+
 		<localInspection language="JAVA" shortName="UNUSED_IMPORT" displayName="Unused import (editor light)" groupName="Imports"
 						 enabledByDefault="true"
 						 level="WARNING" implementationClass="com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection"
@@ -1982,7 +1983,7 @@
 		<codeInsight.template.postfixTemplateProvider language="JAVA"
 													  implementationClass="com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider"/>
 
-		<codeInsight.parameterNameHints language="JAVA" implementationClass="com.intellij.codeInsight.hints.JavaInlayParameterHintsProvider" />
+		<codeInsight.parameterNameHints language="JAVA" implementationClass="com.intellij.codeInsight.hints.JavaInlayParameterHintsProvider"/>
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
 		<newModuleBuilder implementation="consulo.java.ide.newProjectOrModule.JavaNewModuleBuilder"/>
 		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.codeInspection.SuppressManagerImpl"/>
