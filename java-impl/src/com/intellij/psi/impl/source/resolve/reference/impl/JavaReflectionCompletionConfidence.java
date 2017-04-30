@@ -15,30 +15,27 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.completion.CompletionConfidence;
-import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ThreeState;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaReflectionCompletionConfidence extends CompletionConfidence {
-  @NotNull
-  @Override
-  public ThreeState shouldFocusLookup(@NotNull CompletionParameters parameters) {
-    return ThreeState.UNSURE;
-  }
+public class JavaReflectionCompletionConfidence extends CompletionConfidence
+{
 
-  @NotNull
-  @Override
-  public ThreeState shouldSkipAutopopup(@NotNull PsiElement contextElement, @NotNull PsiFile psiFile, int offset) {
-    final PsiElement literal = contextElement.getParent();
-    if (literal != null && JavaReflectionReferenceContributor.PATTERN.accepts(literal)) {
-      return ThreeState.NO;
-    }
-    return super.shouldSkipAutopopup(contextElement, psiFile, offset);
-  }
+	@NotNull
+	@Override
+	public ThreeState shouldSkipAutopopup(@NotNull PsiElement contextElement, @NotNull PsiFile psiFile, int offset)
+	{
+		final PsiElement literal = contextElement.getParent();
+		if(literal != null && (JavaReflectionReferenceContributor.PATTERN.accepts(literal) || JavaReflectionReferenceContributor.CLASS_PATTERN.accepts(literal)))
+		{
+			return ThreeState.NO;
+		}
+		return super.shouldSkipAutopopup(contextElement, psiFile, offset);
+	}
 }

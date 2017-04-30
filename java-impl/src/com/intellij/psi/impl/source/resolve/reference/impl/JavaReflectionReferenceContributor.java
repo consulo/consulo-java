@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,80 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import com.intellij.patterns.PsiJavaElementPattern;
-import com.intellij.psi.PsiLiteral;
-import com.intellij.psi.PsiReferenceContributor;
-import com.intellij.psi.PsiReferenceRegistrar;
-
-import static com.intellij.patterns.PsiJavaPatterns.psiExpression;
 import static com.intellij.patterns.PsiJavaPatterns.psiLiteral;
 import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
-import static com.intellij.patterns.StandardPatterns.string;
+import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_CLASS;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.FOR_NAME;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_DECLARED_FIELD;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_DECLARED_METHOD;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_FIELD;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_METHOD;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.HANDLE_FACTORY_METHOD_NAMES;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.JAVA_LANG_CLASS_LOADER;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.JAVA_LANG_INVOKE_METHOD_HANDLES_LOOKUP;
+import static com.intellij.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.LOAD_CLASS;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PsiJavaElementPattern;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiLiteral;
+import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceContributor;
+import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiReferenceRegistrar;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import com.intellij.util.ProcessingContext;
 
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaReflectionReferenceContributor extends PsiReferenceContributor {
-  public static final PsiJavaElementPattern.Capture<PsiLiteral> PATTERN =
-    psiLiteral().inside(psiExpression().methodCall(psiMethod().withName(string().oneOf("getDeclaredField",
-                                                                                       "getField",
-                                                                                       "getMethod",
-                                                                                       "getDeclaredMethod"))
-                                                     .definedInClass(JAVA_LANG_CLASS)));
+public class JavaReflectionReferenceContributor extends PsiReferenceContributor
+{
+	public static final PsiJavaElementPattern.Capture<PsiLiteral> PATTERN = psiLiteral().methodCallParameter(psiMethod().withName(GET_FIELD, GET_DECLARED_FIELD, GET_METHOD, GET_DECLARED_METHOD)
+			.definedInClass(JAVA_LANG_CLASS));
 
-  @Override
-  public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
-    registrar.registerReferenceProvider(PATTERN, new JavaReflectionReferenceProvider());
-  }
+	public static final PsiJavaElementPattern.Capture<PsiLiteral> CLASS_PATTERN = psiLiteral().methodCallParameter(or(psiMethod().withName(FOR_NAME).definedInClass(JAVA_LANG_CLASS), psiMethod()
+			.withName(LOAD_CLASS).definedInClass(JAVA_LANG_CLASS_LOADER)));
+
+	private static final ElementPattern<? extends PsiElement> METHOD_HANDLE_PATTERN = psiLiteral().methodCallParameter(1, psiMethod().withName(HANDLE_FACTORY_METHOD_NAMES).definedInClass
+			(JAVA_LANG_INVOKE_METHOD_HANDLES_LOOKUP));
+
+	@Override
+	public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar)
+	{
+		registrar.registerReferenceProvider(PATTERN, new JavaReflectionReferenceProvider()
+		{
+			@Nullable
+			@Override
+			protected PsiReference[] getReferencesByMethod(@NotNull PsiLiteralExpression literalArgument, @NotNull PsiReferenceExpression methodReference, @NotNull ProcessingContext context)
+			{
+
+				final PsiExpression qualifier = methodReference.getQualifierExpression();
+				return qualifier != null ? new PsiReference[]{new JavaLangClassMemberReference(literalArgument, qualifier)} : null;
+			}
+		});
+
+		registrar.registerReferenceProvider(CLASS_PATTERN, new JavaReflectionReferenceProvider()
+		{
+			@Nullable
+			@Override
+			protected PsiReference[] getReferencesByMethod(@NotNull PsiLiteralExpression literalArgument, @NotNull PsiReferenceExpression methodReference, @NotNull ProcessingContext context)
+			{
+
+				final String referenceName = methodReference.getReferenceName();
+				if(FOR_NAME.equals(referenceName) || LOAD_CLASS.equals(referenceName))
+				{
+					return new JavaClassReferenceProvider().getReferencesByElement(literalArgument, context);
+				}
+				return null;
+			}
+		});
+
+		registrar.registerReferenceProvider(METHOD_HANDLE_PATTERN, new JavaLangInvokeHandleReference.JavaLangInvokeHandleReferenceProvider());
+	}
 }
