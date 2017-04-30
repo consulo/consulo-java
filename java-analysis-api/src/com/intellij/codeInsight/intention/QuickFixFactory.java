@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.intellij.codeInsight.intention;
 import java.util.Collection;
 import java.util.List;
 
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
@@ -343,6 +344,12 @@ public abstract class QuickFixFactory
 	public abstract IntentionAction createEnableOptimizeImportsOnTheFlyFix();
 
 	@NotNull
+	public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@NotNull PsiElement element);
+
+	@NotNull
+	public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@NotNull PsiElement element, @NotNull @Nls String text);
+
+	@NotNull
 	public abstract IntentionAction createSafeDeleteFix(@NotNull PsiElement element);
 
 	@Nullable
@@ -370,4 +377,16 @@ public abstract class QuickFixFactory
 
 	@NotNull
 	public abstract List<IntentionAction> createAddAnnotationAttributeNameFixes(@NotNull PsiNameValuePair pair);
+
+	@NotNull
+	public abstract IntentionAction createCollectionToArrayFix(@NotNull PsiExpression collectionExpression, @NotNull PsiArrayType arrayType);
+
+	@NotNull
+	public abstract IntentionAction createInsertMethodCallFix(@NotNull PsiMethodCallExpression call, PsiMethod method);
+
+	@NotNull
+	public abstract LocalQuickFixAndIntentionActionOnPsiElement createAccessStaticViaInstanceFix(PsiReferenceExpression methodRef, JavaResolveResult result);
+
+	@NotNull
+	public abstract IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, @NotNull PsiExpression expression);
 }

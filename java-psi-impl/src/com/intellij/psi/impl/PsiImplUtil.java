@@ -956,7 +956,6 @@ public class PsiImplUtil
 			boolean incompleteCode,
 			@NotNull ResolveCache.PolyVariantContextResolver<? super T> resolver)
 	{
-
 		FileASTNode fileElement = SharedImplUtil.findFileElement(element.getNode());
 		if(fileElement == null)
 		{
@@ -992,13 +991,13 @@ public class PsiImplUtil
 		return multiResolveImpl(manager.getProject(), psiFile, element, incompleteCode, resolver);
 	}
 
-	public static <T extends PsiJavaCodeReferenceElement> JavaResolveResult[] multiResolveImpl(Project project,
-			PsiFile psiFile,
-			T element,
+	@NotNull
+	public static <T extends PsiJavaCodeReferenceElement> JavaResolveResult[] multiResolveImpl(@NotNull Project project,
+			@NotNull PsiFile psiFile,
+			@NotNull T element,
 			boolean incompleteCode,
-			ResolveCache.PolyVariantContextResolver<? super T> resolver)
+			@NotNull ResolveCache.PolyVariantContextResolver<? super T> resolver)
 	{
-
 		ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(element, resolver, true, incompleteCode, psiFile);
 		return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
 	}

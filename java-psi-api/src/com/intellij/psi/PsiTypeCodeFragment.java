@@ -23,35 +23,60 @@ import org.jetbrains.annotations.NotNull;
  * @author dsl
  * @see PsiElementFactory#createTypeCodeFragment(String, PsiElement, boolean)
  */
-public interface PsiTypeCodeFragment extends JavaCodeFragment {
-  /**
-   * Returns the type referenced by the code fragment.
-   *
-   * @return the referenced type.
-   * @throws TypeSyntaxException if the code fragment contains a syntax error.
-   * @throws NoTypeException if the contents of the code fragment is not a Java type.
-   */
-  @NotNull
-  PsiType getType()
-    throws TypeSyntaxException, NoTypeException;
+public interface PsiTypeCodeFragment extends JavaCodeFragment
+{
+	/**
+	 * Returns the type referenced by the code fragment.
+	 *
+	 * @return the referenced type.
+	 * @throws TypeSyntaxException if the code fragment contains a syntax error.
+	 * @throws NoTypeException     if the contents of the code fragment is not a Java type.
+	 */
+	@NotNull
+	PsiType getType() throws TypeSyntaxException, NoTypeException;
 
-  /**
-   * Checks if <code>void</code> is treated as a valid type for the contents of
-   * the code fragment.
-   *
-   * @return true if <code>void</code> is a valid type, false otherwise.
-   */
-  boolean isVoidValid();
+	/**
+	 * Checks if {@code void} is treated as a valid type for the contents of
+	 * the code fragment.
+	 *
+	 * @return true if {@code void} is a valid type, false otherwise.
+	 */
+	boolean isVoidValid();
 
-  class IncorrectTypeException extends Exception {
-    public IncorrectTypeException(final String message) { super(message); }
-  }
+	class IncorrectTypeException extends Exception
+	{
+		public IncorrectTypeException(final String message)
+		{
+			super(message);
+		}
+	}
 
-  class TypeSyntaxException extends IncorrectTypeException {
-    public TypeSyntaxException(final String message) { super(message); }
-  }
+	class TypeSyntaxException extends IncorrectTypeException
+	{
+		private final int myErrorOffset;
 
-  class NoTypeException extends IncorrectTypeException {
-    public NoTypeException(final String message) { super(message); }
-  }
+		public TypeSyntaxException(final String message)
+		{
+			this(message, -1);
+		}
+
+		public TypeSyntaxException(final String message, int errorOffset)
+		{
+			super(message);
+			myErrorOffset = errorOffset;
+		}
+
+		public int getErrorOffset()
+		{
+			return myErrorOffset;
+		}
+	}
+
+	class NoTypeException extends IncorrectTypeException
+	{
+		public NoTypeException(final String message)
+		{
+			super(message);
+		}
+	}
 }

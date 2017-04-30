@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@ package com.intellij.psi.impl.source;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
@@ -40,312 +41,389 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.IncorrectOperationException;
 
-public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements PsiMethod, Queryable {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.PsiMethodImpl");
+public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements PsiMethod, Queryable
+{
+	private SoftReference<PsiType> myCachedType;
 
-  private SoftReference<PsiType> myCachedType = null;
+	public PsiMethodImpl(final PsiMethodStub stub)
+	{
+		this(stub, JavaStubElementTypes.METHOD);
+	}
 
-  public PsiMethodImpl(final PsiMethodStub stub) {
-    this(stub, JavaStubElementTypes.METHOD);
-  }
+	protected PsiMethodImpl(final PsiMethodStub stub, final IStubElementType type)
+	{
+		super(stub, type);
+	}
 
-  protected PsiMethodImpl(final PsiMethodStub stub, final IStubElementType type) {
-    super(stub, type);
-  }
+	public PsiMethodImpl(final ASTNode node)
+	{
+		super(node);
+	}
 
-  public PsiMethodImpl(final ASTNode node) {
-    super(node);
-  }
+	@Override
+	public void subtreeChanged()
+	{
+		super.subtreeChanged();
+		dropCached();
+	}
 
-  @Override
-  public void subtreeChanged() {
-    super.subtreeChanged();
-    dropCached();
-  }
+	protected void dropCached()
+	{
+		myCachedType = null;
+	}
 
-  protected void dropCached() {
-    myCachedType = null;
-  }
+	@Override
+	protected Object clone()
+	{
+		PsiMethodImpl clone = (PsiMethodImpl) super.clone();
+		clone.dropCached();
+		return clone;
+	}
 
-  @Override
-  protected Object clone() {
-    PsiMethodImpl clone = (PsiMethodImpl)super.clone();
-    clone.dropCached();
-    return clone;
-  }
+	@Override
+	public PsiClass getContainingClass()
+	{
+		PsiElement parent = getParent();
+		return parent instanceof PsiClass ? (PsiClass) parent : PsiTreeUtil.getParentOfType(this, PsiSyntheticClass.class);
+	}
 
-  @Override
-  public PsiClass getContainingClass() {
-    PsiElement parent = getParent();
-    return parent instanceof PsiClass ? (PsiClass)parent : PsiTreeUtil.getParentOfType(this, PsiSyntheticClass.class);
-  }
+	@Override
+	public PsiElement getContext()
+	{
+		final PsiClass cc = getContainingClass();
+		return cc != null ? cc : super.getContext();
+	}
 
-  @Override
-  public PsiElement getContext() {
-    final PsiClass cc = getContainingClass();
-    return cc != null ? cc : super.getContext();
-  }
+	@Override
+	public PsiIdentifier getNameIdentifier()
+	{
+		return (PsiIdentifier) getNode().findChildByRoleAsPsiElement(ChildRole.NAME);
+	}
 
-  @Override
-  public PsiIdentifier getNameIdentifier() {
-    return (PsiIdentifier)getNode().findChildByRoleAsPsiElement(ChildRole.NAME);
-  }
+	@Override
+	@NotNull
+	public PsiMethod[] findSuperMethods()
+	{
+		return PsiSuperMethodImplUtil.findSuperMethods(this);
+	}
 
-  @Override
-  @NotNull
-  public PsiMethod[] findSuperMethods() {
-    return PsiSuperMethodImplUtil.findSuperMethods(this);
-  }
+	@Override
+	@NotNull
+	public PsiMethod[] findSuperMethods(boolean checkAccess)
+	{
+		return PsiSuperMethodImplUtil.findSuperMethods(this, checkAccess);
+	}
 
-  @Override
-  @NotNull
-  public PsiMethod[] findSuperMethods(boolean checkAccess) {
-    return PsiSuperMethodImplUtil.findSuperMethods(this, checkAccess);
-  }
+	@Override
+	@NotNull
+	public PsiMethod[] findSuperMethods(PsiClass parentClass)
+	{
+		return PsiSuperMethodImplUtil.findSuperMethods(this, parentClass);
+	}
 
-  @Override
-  @NotNull
-  public PsiMethod[] findSuperMethods(PsiClass parentClass) {
-    return PsiSuperMethodImplUtil.findSuperMethods(this, parentClass);
-  }
+	@Override
+	@NotNull
+	public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess)
+	{
+		return PsiSuperMethodImplUtil.findSuperMethodSignaturesIncludingStatic(this, checkAccess);
+	}
 
-  @Override
-  @NotNull
-  public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess) {
-    return PsiSuperMethodImplUtil.findSuperMethodSignaturesIncludingStatic(this, checkAccess);
-  }
+	@Override
+	public PsiMethod findDeepestSuperMethod()
+	{
+		return PsiSuperMethodImplUtil.findDeepestSuperMethod(this);
+	}
 
-  @Override
-  public PsiMethod findDeepestSuperMethod() {
-    return PsiSuperMethodImplUtil.findDeepestSuperMethod(this);
-  }
+	@Override
+	@NotNull
+	public PsiMethod[] findDeepestSuperMethods()
+	{
+		return PsiSuperMethodImplUtil.findDeepestSuperMethods(this);
+	}
 
-  @Override
-  @NotNull
-  public PsiMethod[] findDeepestSuperMethods() {
-    return PsiSuperMethodImplUtil.findDeepestSuperMethods(this);
-  }
+	@Override
+	@NotNull
+	public String getName()
+	{
+		final String name;
+		final PsiMethodStub stub = getGreenStub();
+		if(stub != null)
+		{
+			name = stub.getName();
+		}
+		else
+		{
+			final PsiIdentifier nameIdentifier = getNameIdentifier();
+			name = nameIdentifier == null ? null : nameIdentifier.getText();
+		}
 
-  @Override
-  @NotNull
-  public String getName() {
-    final String name;
-    final PsiMethodStub stub = getStub();
-    if (stub != null) {
-      name = stub.getName();
-    }
-    else {
-      final PsiIdentifier nameIdentifier = getNameIdentifier();
-      name = nameIdentifier == null ? null : nameIdentifier.getText();
-    }
+		return name != null ? name : "<unnamed>";
+	}
 
-    return name != null ? name : "<unnamed>";
-  }
+	@Override
+	@NotNull
+	public HierarchicalMethodSignature getHierarchicalMethodSignature()
+	{
+		return PsiSuperMethodImplUtil.getHierarchicalMethodSignature(this);
+	}
 
-  @Override
-  @NotNull
-  public HierarchicalMethodSignature getHierarchicalMethodSignature() {
-    return PsiSuperMethodImplUtil.getHierarchicalMethodSignature(this);
-  }
+	@Override
+	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
+	{
+		final PsiIdentifier identifier = getNameIdentifier();
+		if(identifier == null)
+		{
+			throw new IncorrectOperationException("Empty name: " + this);
+		}
+		PsiImplUtil.setName(identifier, name);
+		return this;
+	}
 
-  @Override
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
-    final PsiIdentifier identifier = getNameIdentifier();
-    if (identifier == null) throw new IncorrectOperationException("Empty name: " + this);
-    PsiImplUtil.setName(identifier, name);
-    return this;
-  }
+	@Override
+	public PsiTypeElement getReturnTypeElement()
+	{
+		if(isConstructor())
+		{
+			return null;
+		}
+		return (PsiTypeElement) getNode().findChildByRoleAsPsiElement(ChildRole.TYPE);
+	}
 
-  @Override
-  public PsiTypeElement getReturnTypeElement() {
-    if (isConstructor()) return null;
-    return (PsiTypeElement)getNode().findChildByRoleAsPsiElement(ChildRole.TYPE);
-  }
+	@Override
+	public PsiTypeParameterList getTypeParameterList()
+	{
+		return getRequiredStubOrPsiChild(JavaStubElementTypes.TYPE_PARAMETER_LIST);
+	}
 
-  @Override
-  public PsiTypeParameterList getTypeParameterList() {
-    return getRequiredStubOrPsiChild(JavaStubElementTypes.TYPE_PARAMETER_LIST);
-  }
+	@Override
+	public boolean hasTypeParameters()
+	{
+		return PsiImplUtil.hasTypeParameters(this);
+	}
 
-  @Override
-  public boolean hasTypeParameters() {
-    return PsiImplUtil.hasTypeParameters(this);
-  }
+	@Override
+	@NotNull
+	public PsiTypeParameter[] getTypeParameters()
+	{
+		return PsiImplUtil.getTypeParameters(this);
+	}
 
-  @Override
-  @NotNull public PsiTypeParameter[] getTypeParameters() {
-    return PsiImplUtil.getTypeParameters(this);
-  }
+	@Override
+	public PsiType getReturnType()
+	{
+		if(isConstructor())
+		{
+			return null;
+		}
 
-  @Override
-  public PsiType getReturnType() {
-    if (isConstructor()) return null;
+		PsiMethodStub stub = getStub();
+		if(stub != null)
+		{
+			PsiType type = SoftReference.dereference(myCachedType);
+			if(type == null)
+			{
+				String typeText = TypeInfo.createTypeText(stub.getReturnTypeText(false));
+				assert typeText != null : stub;
+				type = JavaPsiFacade.getInstance(getProject()).getParserFacade().createTypeFromText(typeText, this);
+				type = JavaSharedImplUtil.applyAnnotations(type, getModifierList());
+				myCachedType = new SoftReference<>(type);
+			}
+			return type;
+		}
 
-    final PsiMethodStub stub = getStub();
-    if (stub != null) {
-      final String typeText = TypeInfo.createTypeText(stub.getReturnTypeText(true));
-      if (typeText == null) return null;
+		myCachedType = null;
+		PsiTypeElement typeElement = getReturnTypeElement();
+		return typeElement != null ? JavaSharedImplUtil.getType(typeElement, getParameterList()) : null;
+	}
 
-      SoftReference<PsiType> cachedType = myCachedType;
-      if (cachedType != null) {
-        PsiType type = cachedType.get();
-        if (type != null) return type;
-      }
+	@Override
+	@NotNull
+	public PsiModifierList getModifierList()
+	{
+		return getRequiredStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
+	}
 
-      try {
-        final PsiType type = JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeFromText(typeText, this);
-        myCachedType = new SoftReference<PsiType>(type);
-        return type;
-      }
-      catch (IncorrectOperationException e) {
-        LOG.error("stub: " + stub + "; method: " + getText(), e);
-        return null;
-      }
-    }
+	@Override
+	public boolean hasModifierProperty(@NotNull String name)
+	{
+		return getModifierList().hasModifierProperty(name);
+	}
 
-    myCachedType = null;
-    PsiTypeElement typeElement = getReturnTypeElement();
-    if (typeElement == null) return null;
-    PsiParameterList parameterList = getParameterList();
-    return JavaSharedImplUtil.getType(typeElement, parameterList);
-  }
+	@Override
+	@NotNull
+	public PsiParameterList getParameterList()
+	{
+		return getRequiredStubOrPsiChild(JavaStubElementTypes.PARAMETER_LIST);
+	}
 
-  @Override
-  @NotNull
-  public PsiModifierList getModifierList() {
-    return getRequiredStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
-  }
+	@Override
+	@NotNull
+	public PsiReferenceList getThrowsList()
+	{
+		PsiReferenceList child = getStubOrPsiChild(JavaStubElementTypes.THROWS_LIST);
+		if(child != null)
+		{
+			return child;
+		}
 
-  @Override
-  public boolean hasModifierProperty(@NotNull String name) {
-    return getModifierList().hasModifierProperty(name);
-  }
+		PsiMethodStub stub = getStub();
+		Stream<String> children = stub != null ? stub.getChildrenStubs().stream().map(s -> s.getClass().getSimpleName() + " : " + s.getStubType()) : Stream.of(getChildren()).map(e -> e.getClass()
+				.getSimpleName() + " : " + e.getNode().getElementType());
+		throw new AssertionError("Missing throws list, file=" + getContainingFile() + " children:\n" + children.collect(Collectors.joining("\n")));
+	}
 
-  @Override
-  @NotNull
-  public PsiParameterList getParameterList() {
-    return getRequiredStubOrPsiChild(JavaStubElementTypes.PARAMETER_LIST);
-  }
+	@Override
+	public PsiCodeBlock getBody()
+	{
+		return (PsiCodeBlock) getNode().findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
+	}
 
-  @Override
-  @NotNull
-  public PsiReferenceList getThrowsList() {
-    return getRequiredStubOrPsiChild(JavaStubElementTypes.THROWS_LIST);
-  }
+	@Override
+	@NotNull
+	public CompositeElement getNode()
+	{
+		return (CompositeElement) super.getNode();
+	}
 
-  @Override
-  public PsiCodeBlock getBody() {
-    return (PsiCodeBlock)getNode().findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
-  }
+	@Override
+	public boolean isDeprecated()
+	{
+		final PsiMethodStub stub = getGreenStub();
+		if(stub != null)
+		{
+			return stub.isDeprecated() || stub.hasDeprecatedAnnotation() && PsiImplUtil.isDeprecatedByAnnotation(this);
+		}
 
-  @Override
-  @NotNull
-  public CompositeElement getNode() {
-    return (CompositeElement)super.getNode();
-  }
+		return PsiImplUtil.isDeprecatedByDocTag(this) || PsiImplUtil.isDeprecatedByAnnotation(this);
+	}
 
-  @Override
-  public boolean isDeprecated() {
-    final PsiMethodStub stub = getStub();
-    if (stub != null) {
-      return stub.isDeprecated() || stub.hasDeprecatedAnnotation() && PsiImplUtil.isDeprecatedByAnnotation(this);
-    }
+	@Override
+	public PsiDocComment getDocComment()
+	{
+		final PsiMethodStub stub = getGreenStub();
+		if(stub != null && !stub.hasDocComment())
+		{
+			return null;
+		}
 
-    return PsiImplUtil.isDeprecatedByDocTag(this) || PsiImplUtil.isDeprecatedByAnnotation(this);
-  }
+		return (PsiDocComment) getNode().findChildByRoleAsPsiElement(ChildRole.DOC_COMMENT);
+	}
 
-  @Override
-  public PsiDocComment getDocComment() {
-    return (PsiDocComment)getNode().findChildByRoleAsPsiElement(ChildRole.DOC_COMMENT);
-  }
+	@Override
+	public boolean isConstructor()
+	{
+		final PsiMethodStub stub = getGreenStub();
+		if(stub != null)
+		{
+			return stub.isConstructor();
+		}
 
-  @Override
-  public boolean isConstructor() {
-    final PsiMethodStub stub = getStub();
-    if (stub != null) {
-      return stub.isConstructor();
-    }
+		return getNode().findChildByRole(ChildRole.TYPE) == null;
+	}
 
-    return getNode().findChildByRole(ChildRole.TYPE) == null;
-  }
+	@Override
+	public boolean isVarArgs()
+	{
+		final PsiMethodStub stub = getGreenStub();
+		if(stub != null)
+		{
+			return stub.isVarArgs();
+		}
 
-  @Override
-  public boolean isVarArgs() {
-    final PsiMethodStub stub = getStub();
-    if (stub != null) {
-      return stub.isVarArgs();
-    }
+		return PsiImplUtil.isVarArgs(this);
+	}
 
-    return PsiImplUtil.isVarArgs(this);
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitMethod(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitMethod(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public String toString()
+	{
+		return "PsiMethod:" + getName();
+	}
 
-  public String toString() {
-    return "PsiMethod:" + getName();
-  }
+	@Override
+	public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place)
+	{
+		return PsiImplUtil.processDeclarationsInMethod(this, processor, state, lastParent, place);
 
-  @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    return PsiImplUtil.processDeclarationsInMethod(this, processor, state, lastParent, place);
+	}
 
-  }
+	@Override
+	@NotNull
+	public MethodSignature getSignature(@NotNull PsiSubstitutor substitutor)
+	{
+		if(substitutor == PsiSubstitutor.EMPTY)
+		{
+			return CachedValuesManager.getCachedValue(this, () ->
+			{
+				MethodSignature signature = MethodSignatureBackedByPsiMethod.create(this, PsiSubstitutor.EMPTY);
+				return CachedValueProvider.Result.create(signature, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+			});
+		}
+		return MethodSignatureBackedByPsiMethod.create(this, substitutor);
+	}
 
-  @Override
-  @NotNull
-  public MethodSignature getSignature(@NotNull PsiSubstitutor substitutor){
-    return MethodSignatureBackedByPsiMethod.create(this, substitutor);
-  }
+	@Override
+	public PsiElement getOriginalElement()
+	{
+		final PsiClass containingClass = getContainingClass();
+		if(containingClass != null)
+		{
+			PsiElement original = containingClass.getOriginalElement();
+			if(original != containingClass)
+			{
+				final PsiMethod originalMethod = ((PsiClass) original).findMethodBySignature(this, false);
+				if(originalMethod != null)
+				{
+					return originalMethod;
+				}
+			}
+		}
+		return this;
+	}
 
-  @Override
-  public PsiElement getOriginalElement() {
-    final PsiClass containingClass = getContainingClass();
-    if (containingClass != null) {
-      final PsiMethod originalMethod = ((PsiClass)containingClass.getOriginalElement()).findMethodBySignature(this, false);
-      if (originalMethod != null) {
-        return originalMethod;
-      }
-    }
-    return this;
-  }
+	@Override
+	public ItemPresentation getPresentation()
+	{
+		return ItemPresentationProviders.getItemPresentation(this);
+	}
 
-  @Override
-  public ItemPresentation getPresentation() {
-    return ItemPresentationProviders.getItemPresentation(this);
-  }
+	@Override
+	public boolean isEquivalentTo(final PsiElement another)
+	{
+		return PsiClassImplUtil.isMethodEquivalentTo(this, another);
+	}
 
-  @Override
-  public boolean isEquivalentTo(final PsiElement another) {
-    return PsiClassImplUtil.isMethodEquivalentTo(this, another);
-  }
+	@Override
+	@NotNull
+	public SearchScope getUseScope()
+	{
+		return ApplicationManager.getApplication().runReadAction((Computable<SearchScope>) () -> PsiImplUtil.getMemberUseScope(this));
+	}
 
-  @Override
-  @NotNull
-  public SearchScope getUseScope() {
-    return ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>() {
-      @Override
-      public SearchScope compute() {
-        return PsiImplUtil.getMemberUseScope(PsiMethodImpl.this);
-      }
-    });
-  }
-
-  @Override
-  public void putInfo(@NotNull Map<String, String> info) {
-    info.put("methodName", getName());
-  }
+	@Override
+	public void putInfo(@NotNull Map<String, String> info)
+	{
+		info.put("methodName", getName());
+	}
 }

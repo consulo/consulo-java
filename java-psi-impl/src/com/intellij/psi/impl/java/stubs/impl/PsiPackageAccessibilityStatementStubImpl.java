@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,27 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
+import static com.intellij.psi.impl.java.stubs.JavaPackageAccessibilityStatementElementType.typeToRole;
+import static com.intellij.util.ObjectUtils.notNull;
+
 import java.util.Collections;
 import java.util.List;
 
-import com.intellij.psi.PsiExportsStatement;
-import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
-import com.intellij.psi.impl.java.stubs.PsiExportsStatementStub;
+import com.intellij.psi.PsiPackageAccessibilityStatement;
+import com.intellij.psi.impl.java.stubs.PsiPackageAccessibilityStatementStub;
+import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
 
-public class PsiExportsStatementStubImpl extends StubBase<PsiExportsStatement> implements PsiExportsStatementStub
+public class PsiPackageAccessibilityStatementStubImpl extends StubBase<PsiPackageAccessibilityStatement> implements PsiPackageAccessibilityStatementStub
 {
 	private final String myPackageName;
 	private final List<String> myTargets;
 
-	public PsiExportsStatementStubImpl(StubElement parent, String packageName, List<String> targets)
+	public PsiPackageAccessibilityStatementStubImpl(StubElement parent, IStubElementType type, String packageName, List<String> targets)
 	{
-		super(parent, JavaStubElementTypes.EXPORTS_STATEMENT);
-		myPackageName = packageName;
+		super(parent, type);
+		myPackageName = notNull(packageName, "");
 		myTargets = targets == null || targets.isEmpty() ? Collections.<String>emptyList() : Collections.unmodifiableList(targets);
 	}
 
@@ -52,7 +55,7 @@ public class PsiExportsStatementStubImpl extends StubBase<PsiExportsStatement> i
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("PsiExportsStatementStub:").append(myPackageName);
+		sb.append("PsiPackageAccessibilityStatementStub[").append(typeToRole(getStubType())).append("]:").append(myPackageName);
 		for(String target : myTargets)
 		{
 			sb.append(':').append(target);

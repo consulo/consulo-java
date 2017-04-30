@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
+import java.io.IOException;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -24,7 +28,7 @@ import com.intellij.psi.impl.java.stubs.impl.PsiImportStatementStubImpl;
 import com.intellij.psi.impl.source.PsiImportStatementImpl;
 import com.intellij.psi.impl.source.PsiImportStaticStatementImpl;
 import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.SourceUtil;
+import com.intellij.psi.impl.source.tree.JavaSourceUtil;
 import com.intellij.psi.impl.source.tree.java.ImportStaticStatementElement;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
@@ -32,68 +36,77 @@ import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 /**
  * @author max
  */
-public abstract class JavaImportStatementElementType extends JavaStubElementType<PsiImportStatementStub, PsiImportStatementBase> {
-  public JavaImportStatementElementType(@NonNls @NotNull final String id) {
-    super(id);
-  }
+public abstract class JavaImportStatementElementType extends JavaStubElementType<PsiImportStatementStub, PsiImportStatementBase>
+{
+	public JavaImportStatementElementType(@NonNls @NotNull final String id)
+	{
+		super(id);
+	}
 
-  @Override
-  public PsiImportStatementBase createPsi(@NotNull final PsiImportStatementStub stub) {
-    return getPsiFactory(stub).createImportStatement(stub);
-  }
+	@Override
+	public PsiImportStatementBase createPsi(@NotNull final PsiImportStatementStub stub)
+	{
+		return getPsiFactory(stub).createImportStatement(stub);
+	}
 
-  @Override
-  public PsiImportStatementBase createPsi(@NotNull final ASTNode node) {
-    if (node instanceof ImportStaticStatementElement) {
-      return new PsiImportStaticStatementImpl(node);
-    }
-    else {
-      return new PsiImportStatementImpl(node);
-    }
-  }
+	@Override
+	public PsiImportStatementBase createPsi(@NotNull final ASTNode node)
+	{
+		if(node instanceof ImportStaticStatementElement)
+		{
+			return new PsiImportStaticStatementImpl(node);
+		}
+		else
+		{
+			return new PsiImportStatementImpl(node);
+		}
+	}
 
-  @Override
-  public PsiImportStatementStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub) {
-    boolean isOnDemand = false;
-    String refText = null;
+	@Override
+	public PsiImportStatementStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub)
+	{
+		boolean isOnDemand = false;
+		String refText = null;
 
-    for (LighterASTNode child : tree.getChildren(node)) {
-      IElementType type = child.getTokenType();
-      if (type == JavaElementType.JAVA_CODE_REFERENCE || type == JavaElementType.IMPORT_STATIC_REFERENCE) {
-        refText = SourceUtil.getReferenceText(tree, child);
-      }
-      else if (type == JavaTokenType.ASTERISK) {
-        isOnDemand = true;
-      }
-    }
+		for(LighterASTNode child : tree.getChildren(node))
+		{
+			IElementType type = child.getTokenType();
+			if(type == JavaElementType.JAVA_CODE_REFERENCE || type == JavaElementType.IMPORT_STATIC_REFERENCE)
+			{
+				refText = JavaSourceUtil.getReferenceText(tree, child);
+			}
+			else if(type == JavaTokenType.ASTERISK)
+			{
+				isOnDemand = true;
+			}
+		}
 
-    byte flags = PsiImportStatementStubImpl.packFlags(isOnDemand, node.getTokenType() == JavaElementType.IMPORT_STATIC_STATEMENT);
-    return new PsiImportStatementStubImpl(parentStub, refText, flags);
-  }
+		byte flags = PsiImportStatementStubImpl.packFlags(isOnDemand, node.getTokenType() == JavaElementType.IMPORT_STATIC_STATEMENT);
+		return new PsiImportStatementStubImpl(parentStub, refText, flags);
+	}
 
-  @Override
-  public void serialize(@NotNull final PsiImportStatementStub stub, @NotNull final StubOutputStream dataStream) throws IOException {
-    dataStream.writeByte(((PsiImportStatementStubImpl)stub).getFlags());
-    dataStream.writeName(stub.getImportReferenceText());
-  }
+	@Override
+	public void serialize(@NotNull final PsiImportStatementStub stub, @NotNull final StubOutputStream dataStream) throws IOException
+	{
+		dataStream.writeByte(((PsiImportStatementStubImpl) stub).getFlags());
+		dataStream.writeName(stub.getImportReferenceText());
+	}
 
-  @NotNull
-  @Override
-  public PsiImportStatementStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
-    final byte flags = dataStream.readByte();
-    final StringRef refText = dataStream.readName();
-    return new PsiImportStatementStubImpl(parentStub, refText, flags);
-  }
+	@NotNull
+	@Override
+	public PsiImportStatementStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	{
+		final byte flags = dataStream.readByte();
+		final StringRef refText = dataStream.readName();
+		return new PsiImportStatementStubImpl(parentStub, refText, flags);
+	}
 
-  @Override
-  public void indexStub(@NotNull final PsiImportStatementStub stub, @NotNull final IndexSink sink) {
-  }
+	@Override
+	public void indexStub(@NotNull final PsiImportStatementStub stub, @NotNull final IndexSink sink)
+	{
+	}
 }

@@ -27,6 +27,7 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 
 public class JavaTreeCopyHandler implements TreeCopyHandler
@@ -39,11 +40,10 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 		boolean shallDecodeEscapedTexts = shallEncodeEscapedTexts(element, decodingState);
 		if(element instanceof CompositeElement)
 		{
-			if(element.getElementType() == JavaElementType.JAVA_CODE_REFERENCE || element.getElementType() ==
-					JavaElementType.REFERENCE_EXPRESSION)
+			final IElementType elementType = element.getElementType();
+			if(elementType == JavaElementType.JAVA_CODE_REFERENCE || elementType == JavaElementType.REFERENCE_EXPRESSION || elementType == JavaElementType.METHOD_REF_EXPRESSION)
 			{
-				PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement) SourceTreeToPsiMap.treeElementToPsi
-						(element);
+				PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement) SourceTreeToPsiMap.treeElementToPsi(element);
 				final PsiClass refClass = element.getCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY);
 				if(refClass != null)
 				{
@@ -64,10 +64,8 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 						}
 						else
 						{
-							// shorten references to the same package and to inner classes that can be accessed by
-							// short name
-							ref = (PsiJavaCodeReferenceElement) codeStyleManager.shortenClassReferences(ref,
-									JavaCodeStyleManager.DO_NOT_ADD_IMPORTS);
+							// shorten references to the same package and to inner classes that can be accessed by short name
+							ref = (PsiJavaCodeReferenceElement) codeStyleManager.shortenClassReferences(ref, JavaCodeStyleManager.DO_NOT_ADD_IMPORTS);
 						}
 						return (TreeElement) SourceTreeToPsiMap.psiElementToTree(ref);
 					}
@@ -84,13 +82,11 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 						LOG.assertTrue(ref instanceof PsiReferenceExpression);
 						element.putCopyableUserData(JavaTreeGenerator.REFERENCED_MEMBER_KEY, null);
 						PsiElement refElement1 = ref.resolve();
-						if(refMember != refElement1 && !refMember.getManager().areElementsEquivalent(refMember,
-								refElement1))
+						if(refMember != refElement1 && !refMember.getManager().areElementsEquivalent(refMember, refElement1))
 						{
 							try
 							{
-								ref = (PsiJavaCodeReferenceElement) ((PsiReferenceExpression) ref)
-										.bindToElementViaStaticImport(refMember.getContainingClass());
+								ref = (PsiJavaCodeReferenceElement) ((PsiReferenceExpression) ref).bindToElementViaStaticImport(refMember.getContainingClass());
 							}
 							catch(IncorrectOperationException e)
 							{
@@ -115,8 +111,7 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 							modifierList.setModifierProperty(PsiModifier.STATIC, true);
 							modifierList.setModifierProperty(PsiModifier.FINAL, true);
 						}
-						else if(element.getTreeParent().getElementType() == JavaElementType.METHOD || element
-								.getTreeParent().getElementType() == JavaElementType.ANNOTATION_METHOD)
+						else if(element.getTreeParent().getElementType() == JavaElementType.METHOD || element.getTreeParent().getElementType() == JavaElementType.ANNOTATION_METHOD)
 						{
 							modifierList.setModifierProperty(PsiModifier.PUBLIC, true);
 							modifierList.setModifierProperty(PsiModifier.ABSTRACT, true);
@@ -129,8 +124,7 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 				}
 			}
 		}
-		else if(shallDecodeEscapedTexts && element instanceof LeafElement && !(element instanceof
-				OuterLanguageElement))
+		else if(shallDecodeEscapedTexts && element instanceof LeafElement && !(element instanceof OuterLanguageElement))
 		{
 			if(!isInCData(element))
 			{
@@ -148,8 +142,8 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 		return null;
 	}
 
-	private static final Key<Boolean> ALREADY_ESCAPED = new Key<Boolean>("ALREADY_ESCAPED");
-	private static final Key<Boolean> ESCAPEMENT_ENGAGED = new Key<Boolean>("ESCAPEMENT_ENGAGED");
+	private static final Key<Boolean> ALREADY_ESCAPED = new Key<>("ALREADY_ESCAPED");
+	private static final Key<Boolean> ESCAPEMENT_ENGAGED = new Key<>("ESCAPEMENT_ENGAGED");
 
 	private static boolean conversionMayApply(ASTNode element)
 	{
@@ -167,32 +161,25 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 
 
 	@Override
-	public void encodeInformation(final TreeElement element,
-			final ASTNode original,
-			final Map<Object, Object> encodingState)
+	public void encodeInformation(final TreeElement element, final ASTNode original, final Map<Object, Object> encodingState)
 	{
 		boolean shallEncodeEscapedTexts = shallEncodeEscapedTexts(original, encodingState);
 
 		if(original instanceof CompositeElement)
 		{
-			if(original.getElementType() == JavaElementType.JAVA_CODE_REFERENCE || original.getElementType() ==
-					JavaElementType.REFERENCE_EXPRESSION)
+			if(original.getElementType() == JavaElementType.JAVA_CODE_REFERENCE || original.getElementType() == JavaElementType.REFERENCE_EXPRESSION)
 			{
 				encodeInformationInRef(element, original);
 			}
-			else if(original.getElementType() == JavaElementType.MODIFIER_LIST && (original.getTreeParent()
-					.getElementType() == JavaElementType.FIELD || original.getTreeParent().getElementType() ==
-					JavaElementType.METHOD || original.getTreeParent().getElementType() == JavaElementType
-					.ANNOTATION_METHOD) && original.getTreeParent().getTreeParent().getElementType() ==
-					JavaElementType.CLASS && (((PsiClass) SourceTreeToPsiMap.treeElementToPsi(original.getTreeParent()
-					.getTreeParent())).isInterface() || ((PsiClass) SourceTreeToPsiMap.treeElementToPsi(original
-					.getTreeParent().getTreeParent())).isAnnotationType()))
+			else if(original.getElementType() == JavaElementType.MODIFIER_LIST && (original.getTreeParent().getElementType() == JavaElementType.FIELD || original.getTreeParent().getElementType() ==
+					JavaElementType.METHOD || original.getTreeParent().getElementType() == JavaElementType.ANNOTATION_METHOD) && original.getTreeParent().getTreeParent().getElementType() ==
+					JavaElementType.CLASS && (((PsiClass) SourceTreeToPsiMap.treeElementToPsi(original.getTreeParent().getTreeParent())).isInterface() || ((PsiClass) SourceTreeToPsiMap
+					.treeElementToPsi(original.getTreeParent().getTreeParent())).isAnnotationType()))
 			{
 				element.putUserData(INTERFACE_MODIFIERS_FLAG_KEY, Boolean.TRUE);
 			}
 		}
-		else if(shallEncodeEscapedTexts && original instanceof LeafElement && !(original instanceof
-				OuterLanguageElement))
+		else if(shallEncodeEscapedTexts && original instanceof LeafElement && !(original instanceof OuterLanguageElement))
 		{
 			if(!isInCData(original))
 			{
@@ -239,33 +226,29 @@ public class JavaTreeCopyHandler implements TreeCopyHandler
 	{
 		if(original.getElementType() == JavaElementType.REFERENCE_EXPRESSION)
 		{
-			final PsiJavaCodeReferenceElement javaRefElement = (PsiJavaCodeReferenceElement) SourceTreeToPsiMap
-					.treeElementToPsi(original);
+			final PsiJavaCodeReferenceElement javaRefElement = (PsiJavaCodeReferenceElement) SourceTreeToPsiMap.treeElementToPsi(original);
 			assert javaRefElement != null;
 			final JavaResolveResult resolveResult = javaRefElement.advancedResolve(false);
 			final PsiElement target = resolveResult.getElement();
-			if(target instanceof PsiClass && original.getTreeParent().getElementType() == JavaElementType
-					.REFERENCE_EXPRESSION)
+			if(target instanceof PsiClass && (original.getTreeParent().getElementType() == JavaElementType.REFERENCE_EXPRESSION || original.getTreeParent().getElementType() == JavaElementType
+					.METHOD_REF_EXPRESSION))
 			{
 				ref.putCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY, (PsiClass) target);
 			}
-			else if((target instanceof PsiMethod || target instanceof PsiField) &&
-					((PsiMember) target).hasModifierProperty(PsiModifier.STATIC) &&
-					resolveResult.getCurrentFileResolveScope() instanceof PsiImportStaticStatement)
+			else if((target instanceof PsiMethod || target instanceof PsiField) && ((PsiMember) target).hasModifierProperty(PsiModifier.STATIC) && resolveResult.getCurrentFileResolveScope()
+					instanceof PsiImportStaticStatement)
 			{
 				ref.putCopyableUserData(JavaTreeGenerator.REFERENCED_MEMBER_KEY, (PsiMember) target);
 			}
 		}
 		else if(original.getElementType() == JavaElementType.JAVA_CODE_REFERENCE)
 		{
-			switch(((PsiJavaCodeReferenceElementImpl) original).getKind(((PsiJavaCodeReferenceElementImpl) original)
-					.getContainingFile()))
+			switch(((PsiJavaCodeReferenceElementImpl) original).getKind(((PsiJavaCodeReferenceElementImpl) original).getContainingFile()))
 			{
 				case PsiJavaCodeReferenceElementImpl.CLASS_NAME_KIND:
 				case PsiJavaCodeReferenceElementImpl.CLASS_OR_PACKAGE_NAME_KIND:
 				case PsiJavaCodeReferenceElementImpl.CLASS_IN_QUALIFIED_NEW_KIND:
-					final PsiElement target = SourceTreeToPsiMap.<PsiJavaCodeReferenceElement>treeToPsiNotNull
-							(original).resolve();
+					final PsiElement target = SourceTreeToPsiMap.<PsiJavaCodeReferenceElement>treeToPsiNotNull(original).resolve();
 					if(target instanceof PsiClass)
 					{
 						ref.putCopyableUserData(JavaTreeGenerator.REFERENCED_CLASS_KEY, (PsiClass) target);

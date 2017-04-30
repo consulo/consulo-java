@@ -15,6 +15,7 @@
  */
 package com.intellij.lexer;
 
+import com.intellij.lang.java.lexer.JavaDocLexer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaDocTokenType;
 import com.intellij.psi.JavaTokenType;
@@ -34,7 +35,7 @@ public class JavaHighlightingLexer extends LayeredLexer {
     registerSelfStoppingLayer(new StringLiteralLexer('\'', JavaTokenType.STRING_LITERAL),
                               new IElementType[]{JavaTokenType.CHARACTER_LITERAL}, IElementType.EMPTY_ARRAY);
 
-    LayeredLexer docLexer = new LayeredLexer(new JavaDocLexer(languageLevel.isAtLeast(LanguageLevel.JDK_1_5)));
+    LayeredLexer docLexer = new LayeredLexer(new JavaDocLexer(languageLevel));
 
     HtmlHighlightingLexer lexer = new HtmlHighlightingLexer();
     lexer.setHasNoEmbeddments(true);

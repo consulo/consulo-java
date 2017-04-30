@@ -15,6 +15,17 @@
  */
 package com.intellij.lexer;
 
+import static com.intellij.psi.PsiKeyword.EXPORTS;
+import static com.intellij.psi.PsiKeyword.MODULE;
+import static com.intellij.psi.PsiKeyword.OPENS;
+import static com.intellij.psi.PsiKeyword.PROVIDES;
+import static com.intellij.psi.PsiKeyword.REQUIRES;
+import static com.intellij.psi.PsiKeyword.TO;
+import static com.intellij.psi.PsiKeyword.TRANSITIVE;
+import static com.intellij.psi.PsiKeyword.USES;
+import static com.intellij.psi.PsiKeyword.WITH;
+import static com.intellij.psi.PsiKeyword.OPEN;
+
 import gnu.trove.THashSet;
 
 import java.io.IOException;
@@ -24,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.tree.IElementType;
@@ -40,8 +50,9 @@ public class JavaLexer extends LexerBase
 			new HashTable(LanguageLevel.JDK_1_3)
 	};
 
-	private static final Set<CharSequence> JAVA9_KEYWORDS = ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_SENSITIVE, PsiKeyword.MODULE, PsiKeyword.REQUIRES, PsiKeyword.EXPORTS,
-			PsiKeyword.USES, PsiKeyword.PROVIDES, PsiKeyword.TO, PsiKeyword.WITH);
+	private static final Set<CharSequence> JAVA9_KEYWORDS = ContainerUtil.newTroveSet(
+			CharSequenceHashingStrategy.CASE_SENSITIVE,
+			OPEN, MODULE, REQUIRES, EXPORTS, OPENS, USES, PROVIDES, TRANSITIVE, TO, WITH);
 
 	private static HashTable getTable(final LanguageLevel level)
 	{

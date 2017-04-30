@@ -148,7 +148,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
 		}
 		if(resolve instanceof PsiClass)
 		{
-			Map<PsiTypeParameter, PsiType> substitutionMap = new HashMap<PsiTypeParameter, PsiType>();
+			Map<PsiTypeParameter, PsiType> substitutionMap = new HashMap<>();
 			int index = 0;
 			for(PsiTypeParameter parameter : PsiUtil.typeParametersIterable((PsiClass) resolve))
 			{

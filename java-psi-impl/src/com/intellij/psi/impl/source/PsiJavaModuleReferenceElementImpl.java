@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.intellij.psi.impl.source;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
@@ -55,16 +54,11 @@ public class PsiJavaModuleReferenceElementImpl extends CompositePsiElement imple
 	@Override
 	public PsiPolyVariantReference getReference()
 	{
-		return CachedValuesManager.getCachedValue(this, new CachedValueProvider<PsiJavaModuleReference>()
+		return CachedValuesManager.getCachedValue(this, () ->
 		{
-			@Nullable
-			@Override
-			public Result<PsiJavaModuleReference> compute()
-			{
-				PsiJavaModuleReferenceElementImpl refElement = PsiJavaModuleReferenceElementImpl.this;
-				PsiJavaModuleReference ref = refElement.getParent() instanceof PsiJavaModule ? null : new PsiJavaModuleReference(refElement);
-				return Result.create(ref, refElement);
-			}
+			PsiJavaModuleReferenceElementImpl refElement = this;
+			PsiJavaModuleReference ref = refElement.getParent() instanceof PsiJavaModule ? null : new PsiJavaModuleReference(refElement);
+			return CachedValueProvider.Result.create(ref, refElement);
 		});
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2014 Dave Griffith, Bas Leijdekkers
+ * Copyright 2003-2015 Dave Griffith, Bas Leijdekkers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.siyeh.ig.psiutils;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.*;
@@ -26,6 +27,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 public class ParenthesesUtils
 {
+
+	public static final Map<IElementType, IElementType> tokenMap = new HashMap<>();
 
 	private ParenthesesUtils()
 	{
@@ -51,7 +54,23 @@ public class ParenthesesUtils
 	public static final int ASSIGNMENT_PRECEDENCE = 16;
 	public static final int NUM_PRECEDENCES = 17;
 
-	private static final Map<IElementType, Integer> s_binaryOperatorPrecedence = new HashMap<IElementType, Integer>(NUM_PRECEDENCES);
+	private static final Map<IElementType, Integer> s_binaryOperatorPrecedence = new HashMap<>(NUM_PRECEDENCES);
+
+
+	static
+	{
+		tokenMap.put(JavaTokenType.PLUSEQ, JavaTokenType.PLUS);
+		tokenMap.put(JavaTokenType.MINUSEQ, JavaTokenType.MINUS);
+		tokenMap.put(JavaTokenType.ASTERISKEQ, JavaTokenType.ASTERISK);
+		tokenMap.put(JavaTokenType.DIVEQ, JavaTokenType.DIV);
+		tokenMap.put(JavaTokenType.ANDEQ, JavaTokenType.AND);
+		tokenMap.put(JavaTokenType.OREQ, JavaTokenType.OR);
+		tokenMap.put(JavaTokenType.XOREQ, JavaTokenType.XOR);
+		tokenMap.put(JavaTokenType.PERCEQ, JavaTokenType.PERC);
+		tokenMap.put(JavaTokenType.LTLTEQ, JavaTokenType.LTLT);
+		tokenMap.put(JavaTokenType.GTGTEQ, JavaTokenType.GTGT);
+		tokenMap.put(JavaTokenType.GTGTGTEQ, JavaTokenType.GTGTGT);
+	}
 
 	static
 	{
@@ -76,6 +95,15 @@ public class ParenthesesUtils
 		s_binaryOperatorPrecedence.put(JavaTokenType.NE, EQUALITY_PRECEDENCE);
 	}
 
+	public static String getText(@NotNull PsiExpression expression, int precedence)
+	{
+		if(getPrecedence(expression) >= precedence)
+		{
+			return '(' + expression.getText() + ')';
+		}
+		return expression.getText();
+	}
+
 	@Nullable
 	public static PsiElement getParentSkipParentheses(PsiElement element)
 	{
@@ -87,7 +115,7 @@ public class ParenthesesUtils
 		return parent;
 	}
 
-	@Nullable
+	@Contract("null -> null")
 	public static PsiExpression stripParentheses(@Nullable PsiExpression expression)
 	{
 		while(expression instanceof PsiParenthesizedExpression)
@@ -100,11 +128,7 @@ public class ParenthesesUtils
 
 	public static boolean isCommutativeOperator(@NotNull IElementType token)
 	{
-		return !(token.equals(JavaTokenType.MINUS) ||
-				token.equals(JavaTokenType.DIV) ||
-				token.equals(JavaTokenType.PERC) ||
-				token.equals(JavaTokenType.LTLT) ||
-				token.equals(JavaTokenType.GTGT) ||
+		return !(token.equals(JavaTokenType.MINUS) || token.equals(JavaTokenType.DIV) || token.equals(JavaTokenType.PERC) || token.equals(JavaTokenType.LTLT) || token.equals(JavaTokenType.GTGT) ||
 				token.equals(JavaTokenType.GTGTGT));
 	}
 
@@ -150,12 +174,8 @@ public class ParenthesesUtils
 
 	public static int getPrecedence(PsiExpression expression)
 	{
-		if(expression instanceof PsiThisExpression ||
-				expression instanceof PsiLiteralExpression ||
-				expression instanceof PsiSuperExpression ||
-				expression instanceof PsiClassObjectAccessExpression ||
-				expression instanceof PsiArrayAccessExpression ||
-				expression instanceof PsiArrayInitializerExpression)
+		if(expression instanceof PsiThisExpression || expression instanceof PsiLiteralExpression || expression instanceof PsiSuperExpression || expression instanceof PsiClassObjectAccessExpression
+				|| expression instanceof PsiArrayAccessExpression || expression instanceof PsiArrayInitializerExpression)
 		{
 			return LITERAL_PRECEDENCE;
 		}
@@ -299,8 +319,7 @@ public class ParenthesesUtils
 		}
 	}
 
-	private static void removeParensFromParenthesizedExpression(@NotNull PsiParenthesizedExpression parenthesizedExpression,
-			boolean ignoreClarifyingParentheses)
+	private static void removeParensFromParenthesizedExpression(@NotNull PsiParenthesizedExpression parenthesizedExpression, boolean ignoreClarifyingParentheses)
 	{
 		final PsiExpression body = parenthesizedExpression.getExpression();
 		if(body == null)
@@ -309,8 +328,7 @@ public class ParenthesesUtils
 			return;
 		}
 		final PsiElement parent = parenthesizedExpression.getParent();
-		if(!(parent instanceof PsiExpression) || parent instanceof PsiParenthesizedExpression ||
-				parent instanceof PsiArrayInitializerExpression)
+		if(!(parent instanceof PsiExpression) || parent instanceof PsiParenthesizedExpression || parent instanceof PsiArrayInitializerExpression || parent instanceof PsiLambdaExpression)
 		{
 			final PsiExpression newExpression = (PsiExpression) parenthesizedExpression.replace(body);
 			removeParentheses(newExpression, ignoreClarifyingParentheses);
@@ -386,8 +404,7 @@ public class ParenthesesUtils
 		}
 		else
 		{
-			if(ignoreClarifyingParentheses && parent instanceof PsiPolyadicExpression &&
-					(body instanceof PsiPolyadicExpression || body instanceof PsiInstanceOfExpression))
+			if(ignoreClarifyingParentheses && parent instanceof PsiPolyadicExpression && (body instanceof PsiPolyadicExpression || body instanceof PsiInstanceOfExpression))
 			{
 				removeParentheses(body, ignoreClarifyingParentheses);
 			}
@@ -399,8 +416,7 @@ public class ParenthesesUtils
 		}
 	}
 
-	private static void removeParensFromConditionalExpression(@NotNull PsiConditionalExpression conditionalExpression,
-			boolean ignoreClarifyingParentheses)
+	private static void removeParensFromConditionalExpression(@NotNull PsiConditionalExpression conditionalExpression, boolean ignoreClarifyingParentheses)
 	{
 		final PsiExpression condition = conditionalExpression.getCondition();
 		removeParentheses(condition, ignoreClarifyingParentheses);
@@ -416,8 +432,7 @@ public class ParenthesesUtils
 		}
 	}
 
-	private static void removeParensFromInstanceOfExpression(@NotNull PsiInstanceOfExpression instanceofExpression,
-			boolean ignoreClarifyingParentheses)
+	private static void removeParensFromInstanceOfExpression(@NotNull PsiInstanceOfExpression instanceofExpression, boolean ignoreClarifyingParentheses)
 	{
 		final PsiExpression operand = instanceofExpression.getOperand();
 		removeParentheses(operand, ignoreClarifyingParentheses);
@@ -446,8 +461,7 @@ public class ParenthesesUtils
 		}
 	}
 
-	private static void removeParensFromArrayAccessExpression(@NotNull PsiArrayAccessExpression arrayAccessExpression,
-			boolean ignoreClarifyingParentheses)
+	private static void removeParensFromArrayAccessExpression(@NotNull PsiArrayAccessExpression arrayAccessExpression, boolean ignoreClarifyingParentheses)
 	{
 		final PsiExpression arrayExpression = arrayAccessExpression.getArrayExpression();
 		removeParentheses(arrayExpression, ignoreClarifyingParentheses);
@@ -467,8 +481,7 @@ public class ParenthesesUtils
 		}
 	}
 
-	private static void removeParensFromArrayInitializerExpression(@NotNull PsiArrayInitializerExpression arrayInitializerExpression,
-			boolean ignoreClarifyingParentheses)
+	private static void removeParensFromArrayInitializerExpression(@NotNull PsiArrayInitializerExpression arrayInitializerExpression, boolean ignoreClarifyingParentheses)
 	{
 		final PsiExpression[] initializers = arrayInitializerExpression.getInitializers();
 		for(final PsiExpression initializer : initializers)
@@ -516,8 +529,7 @@ public class ParenthesesUtils
 		}
 	}
 
-	private static void removeParensFromMethodCallExpression(@NotNull PsiMethodCallExpression methodCallExpression,
-			boolean ignoreClarifyingParentheses)
+	private static void removeParensFromMethodCallExpression(@NotNull PsiMethodCallExpression methodCallExpression, boolean ignoreClarifyingParentheses)
 	{
 		final PsiReferenceExpression target = methodCallExpression.getMethodExpression();
 		final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
@@ -532,6 +544,10 @@ public class ParenthesesUtils
 	public static boolean areParenthesesNeeded(PsiParenthesizedExpression expression, boolean ignoreClarifyingParentheses)
 	{
 		final PsiElement parent = expression.getParent();
+		if(parent instanceof PsiLambdaExpression)
+		{
+			return false;
+		}
 		if(!(parent instanceof PsiExpression))
 		{
 			return false;
@@ -567,9 +583,7 @@ public class ParenthesesUtils
 			{
 				if(expression instanceof PsiPolyadicExpression)
 				{
-					if(parentExpression instanceof PsiPolyadicExpression ||
-							parentExpression instanceof PsiConditionalExpression ||
-							parentExpression instanceof PsiInstanceOfExpression)
+					if(parentExpression instanceof PsiPolyadicExpression || parentExpression instanceof PsiConditionalExpression || parentExpression instanceof PsiInstanceOfExpression)
 					{
 						return true;
 					}
@@ -595,8 +609,7 @@ public class ParenthesesUtils
 			{
 				return true;
 			}
-			if(childType.equalsToText(CommonClassNames.JAVA_LANG_STRING) && !PsiTreeUtil.isAncestor(parentPolyadicExpression.getOperands()[0],
-					childPolyadicExpression, true))
+			if(childType.equalsToText(CommonClassNames.JAVA_LANG_STRING) && !PsiTreeUtil.isAncestor(parentPolyadicExpression.getOperands()[0], childPolyadicExpression, true))
 			{
 				final PsiExpression[] operands = childPolyadicExpression.getOperands();
 				for(PsiExpression operand : operands)
@@ -630,8 +643,7 @@ public class ParenthesesUtils
 			final PsiExpression[] parentOperands = parentPolyadicExpression.getOperands();
 			if(!PsiTreeUtil.isAncestor(parentOperands[0], expression, false))
 			{
-				if(!isAssociativeOperation(parentPolyadicExpression) ||
-						JavaTokenType.DIV == childOperator || JavaTokenType.PERC == childOperator)
+				if(!isAssociativeOperation(parentPolyadicExpression) || JavaTokenType.DIV == childOperator || JavaTokenType.PERC == childOperator)
 				{
 					return true;
 				}
@@ -644,5 +656,22 @@ public class ParenthesesUtils
 			return PsiTreeUtil.isAncestor(condition, expression, true);
 		}
 		return parentPrecedence < childPrecedence;
+	}
+
+	public static boolean areParenthesesNeeded(PsiJavaToken sign, PsiExpression rhs)
+	{
+		if(rhs instanceof PsiPolyadicExpression)
+		{
+			final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) rhs;
+			final int precedence1 = getPrecedenceForOperator(binaryExpression.getOperationTokenType());
+			final IElementType signTokenType = sign.getTokenType();
+			final IElementType newOperatorToken = tokenMap.get(signTokenType);
+			final int precedence2 = getPrecedenceForOperator(newOperatorToken);
+			return precedence1 >= precedence2 || !isCommutativeOperator(newOperatorToken);
+		}
+		else
+		{
+			return rhs instanceof PsiConditionalExpression;
+		}
 	}
 }

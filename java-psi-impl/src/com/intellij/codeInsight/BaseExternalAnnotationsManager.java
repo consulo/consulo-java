@@ -531,7 +531,7 @@ public abstract class BaseExternalAnnotationsManager extends ExternalAnnotations
 	private static final JavaParserUtil.ParserWrapper ANNOTATION = new JavaParserUtil.ParserWrapper()
 	{
 		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
+		public void parse(final PsiBuilder builder)
 		{
 			JavaParser.INSTANCE.getDeclarationParser().parseAnnotation(builder);
 		}

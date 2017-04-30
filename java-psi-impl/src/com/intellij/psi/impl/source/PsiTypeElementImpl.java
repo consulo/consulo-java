@@ -80,6 +80,12 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 
 	private PsiType calculateType()
 	{
+		/*PsiType inferredType = PsiAugmentProvider.getInferredType(this);
+		if(inferredType != null)
+		{
+			return inferredType;
+		} */
+
 		PsiType type = null;
 		List<PsiAnnotation> annotations = new SmartList<>();
 
@@ -301,7 +307,10 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
 		// neighbouring type annotations are logical part of this type element and should be dropped
 		PsiImplUtil.markTypeAnnotations(this);
 		PsiElement result = super.replace(newElement);
-		PsiImplUtil.deleteTypeAnnotations((PsiTypeElement) result);
+		if(result instanceof PsiTypeElement)
+		{
+			PsiImplUtil.deleteTypeAnnotations((PsiTypeElement) result);
+		}
 		return result;
 	}
 

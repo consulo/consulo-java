@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.intellij.psi.javadoc;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
@@ -24,25 +23,25 @@ import com.intellij.psi.PsiReference;
 /**
  * @author mike
  */
-public interface JavadocTagInfo {
-  ExtensionPointName<JavadocTagInfo> EP_NAME = ExtensionPointName.create("consulo.java.javadocTagInfo");
+public interface JavadocTagInfo
+{
+	ExtensionPointName<JavadocTagInfo> EP_NAME = ExtensionPointName.create("consulo.java.javadocTagInfo");
 
-  @NonNls String getName();
-  boolean isInline();
+	String getName();
 
-  boolean isValidInContext(PsiElement element);
+	boolean isInline();
 
-  Object[] getPossibleValues(PsiElement context, PsiElement place, String prefix);
+	boolean isValidInContext(PsiElement element);
 
-  /**
-   * Checks the tag value for correctness.
-   *
-   * @param value Doc tag to check.
-   * @return Returns null if correct, error message otherwise.
-   */
-  @Nullable
-  String checkTagValue(PsiDocTagValue value);
+	/**
+	 * Checks the tag value for correctness.
+	 *
+	 * @param value Doc tag to check.
+	 * @return Returns null if correct, error message otherwise.
+	 */
+	@Nullable
+	String checkTagValue(PsiDocTagValue value);
 
-  @Nullable
-  PsiReference getReference(PsiDocTagValue value);
+	@Nullable
+	PsiReference getReference(PsiDocTagValue value);
 }

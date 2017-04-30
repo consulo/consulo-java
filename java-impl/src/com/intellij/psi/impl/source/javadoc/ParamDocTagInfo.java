@@ -17,16 +17,14 @@ package com.intellij.psi.impl.source.javadoc;
 
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDocTokenType;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.javadoc.JavadocTagInfo;
 import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author mike
@@ -41,22 +39,6 @@ class ParamDocTagInfo implements JavadocTagInfo {
   public boolean isValidInContext(PsiElement element) {
     return element instanceof PsiMethod ||
            (element instanceof PsiClass && PsiUtil.isLanguageLevel5OrHigher(element));
-  }
-
-  @Override
-  public Object[] getPossibleValues(PsiElement context, PsiElement place, String prefix) {
-    if (context instanceof PsiTypeParameterListOwner) {
-      List<PsiNamedElement> result = new ArrayList<PsiNamedElement>(Arrays.asList(((PsiTypeParameterListOwner)context).getTypeParameters()));
-
-      if (context instanceof PsiMethod) {
-        PsiMethod method = (PsiMethod)context;
-        ContainerUtil.addAll(result, method.getParameterList().getParameters());
-      }
-
-      return result.toArray(new PsiNamedElement[result.size()]);
-    }
-
-    return ArrayUtil.EMPTY_OBJECT_ARRAY;
   }
 
   @Override

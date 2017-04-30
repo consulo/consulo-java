@@ -47,7 +47,7 @@ public class JavaTreeGenerator implements TreeGenerator
 	private static final JavaParserUtil.ParserWrapper MOD_LIST = new JavaParserUtil.ParserWrapper()
 	{
 		@Override
-		public void parse(PsiBuilder builder, LanguageLevel languageLevel)
+		public void parse(final PsiBuilder builder)
 		{
 			JavaParser.INSTANCE.getDeclarationParser().parseModifierList(builder);
 		}
@@ -55,7 +55,7 @@ public class JavaTreeGenerator implements TreeGenerator
 
 	@Override
 	@Nullable
-	public TreeElement generateTreeFor(PsiElement original, final CharTable table, final PsiManager manager)
+	public TreeElement generateTreeFor(@NotNull PsiElement original, @NotNull final CharTable table, @NotNull final PsiManager manager)
 	{
 		if(original instanceof PsiKeyword || original instanceof PsiIdentifier)
 		{
@@ -68,8 +68,7 @@ public class JavaTreeGenerator implements TreeGenerator
 			final String text = original.getText();
 			assert text != null : "Text is null for " + original + "; " + original.getClass();
 			final LanguageLevel level = PsiUtil.getLanguageLevel(original);
-			final DummyHolder holder = DummyHolderFactory.createHolder(original.getManager(),
-					new JavaDummyElement(text, MOD_LIST, level), null);
+			final DummyHolder holder = DummyHolderFactory.createHolder(original.getManager(), new JavaDummyElement(text, MOD_LIST, level), null);
 			final TreeElement modifierListElement = holder.getTreeElement().getFirstChildNode();
 			if(modifierListElement == null)
 			{
@@ -170,14 +169,9 @@ public class JavaTreeGenerator implements TreeGenerator
 		return null;
 	}
 
-	private static LeafElement createLeafFromText(String text,
-			CharTable table,
-			PsiManager manager,
-			PsiElement original,
-			IElementType type)
+	private static LeafElement createLeafFromText(String text, CharTable table, PsiManager manager, PsiElement original, IElementType type)
 	{
-		return Factory.createSingleLeafElement(type, text, 0, text.length(), table, manager,
-				CodeEditUtil.isNodeGenerated(original.getNode()));
+		return Factory.createSingleLeafElement(type, text, 0, text.length(), table, manager, CodeEditUtil.isNodeGenerated(original.getNode()));
 	}
 
 	private static TreeElement markGeneratedIfNeeded(@NotNull PsiElement original, @NotNull TreeElement copy)
@@ -200,9 +194,7 @@ public class JavaTreeGenerator implements TreeGenerator
 		return element;
 	}
 
-	private static TreeElement createReferenceExpression(final Project project,
-			final String text,
-			final PsiElement context)
+	private static TreeElement createReferenceExpression(final Project project, final String text, final PsiElement context)
 	{
 		final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
 		final PsiExpression expression = parserFacade.createExpressionFromText(text, context);
@@ -273,16 +265,13 @@ public class JavaTreeGenerator implements TreeGenerator
 				// can be not the case for "? name"
 				if(reference instanceof CompositeElement)
 				{
-					encodeClassTypeInfoInReference((CompositeElement) reference, resolveResult.getElement(),
-							resolveResult.getSubstitutor());
+					encodeClassTypeInfoInReference((CompositeElement) reference, resolveResult.getElement(), resolveResult.getSubstitutor());
 				}
 			}
 		}
 	}
 
-	private static void encodeClassTypeInfoInReference(@NotNull CompositeElement reference,
-			PsiClass referencedClass,
-			PsiSubstitutor substitutor)
+	private static void encodeClassTypeInfoInReference(@NotNull CompositeElement reference, PsiClass referencedClass, PsiSubstitutor substitutor)
 	{
 		reference.putCopyableUserData(REFERENCED_CLASS_KEY, referencedClass);
 
@@ -294,8 +283,7 @@ public class JavaTreeGenerator implements TreeGenerator
 
 		final ASTNode referenceParameterList = reference.findChildByRole(ChildRole.REFERENCE_PARAMETER_LIST);
 		int index = 0;
-		for(ASTNode child = referenceParameterList.getFirstChildNode(); child != null && index < typeParameters
-				.length; child = child.getTreeNext())
+		for(ASTNode child = referenceParameterList.getFirstChildNode(); child != null && index < typeParameters.length; child = child.getTreeNext())
 		{
 			if(child.getElementType() == JavaElementType.TYPE)
 			{

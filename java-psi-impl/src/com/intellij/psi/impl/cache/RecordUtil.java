@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,146 +15,120 @@
  */
 package com.intellij.psi.impl.cache;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.LighterASTTokenNode;
+import com.intellij.lang.java.lexer.JavaDocLexer;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.JavaDocTokenType;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.impl.java.stubs.*;
+import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.psi.impl.java.stubs.PsiClassStub;
+import com.intellij.psi.impl.java.stubs.PsiFieldStub;
+import com.intellij.psi.impl.java.stubs.PsiModifierListStub;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.LightTreeUtil;
-import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubElement;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.util.CharTable;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author max
  */
-public class RecordUtil {
-  @NonNls private static final String DEPRECATED_ANNOTATION_NAME = "Deprecated";
-  @NonNls private static final String DEPRECATED_TAG = "@deprecated";
+public class RecordUtil
+{
+	private static final String DEPRECATED_ANNOTATION_NAME = "Deprecated";
+	private static final String DEPRECATED_TAG = "@deprecated";
 
-  private RecordUtil() { }
+	private RecordUtil()
+	{
+	}
 
-  public static boolean isDeprecatedByAnnotation(@NotNull LighterAST tree, @NotNull LighterASTNode modList) {
-    for (final LighterASTNode child : tree.getChildren(modList)) {
-      if (child.getTokenType() == JavaElementType.ANNOTATION) {
-        final LighterASTNode ref = LightTreeUtil.firstChildOfType(tree, child, JavaElementType.JAVA_CODE_REFERENCE);
-        if (ref != null) {
-          final LighterASTNode id = LightTreeUtil.firstChildOfType(tree, ref, JavaTokenType.IDENTIFIER);
-          if (id != null) {
-            final String name = intern(tree.getCharTable(), id);
-            if (DEPRECATED_ANNOTATION_NAME.equals(name)) return true;
-          }
-        }
-      }
-    }
+	public static boolean isDeprecatedByAnnotation(@NotNull LighterAST tree, @NotNull LighterASTNode modList)
+	{
+		for(final LighterASTNode child : tree.getChildren(modList))
+		{
+			if(child.getTokenType() == JavaElementType.ANNOTATION)
+			{
+				final LighterASTNode ref = LightTreeUtil.firstChildOfType(tree, child, JavaElementType.JAVA_CODE_REFERENCE);
+				if(ref != null)
+				{
+					final LighterASTNode id = LightTreeUtil.firstChildOfType(tree, ref, JavaTokenType.IDENTIFIER);
+					if(id != null)
+					{
+						final String name = intern(tree.getCharTable(), id);
+						if(DEPRECATED_ANNOTATION_NAME.equals(name))
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
 
-    return false;
-  }
+		return false;
+	}
 
-  public static boolean isDeprecatedByDocComment(@NotNull LighterAST tree, @NotNull LighterASTNode comment) {
-    // todo[r.sh] parse doc comments, implement tree lookup
-    String text = LightTreeUtil.toFilteredString(tree, comment, null);
-    return text.contains(DEPRECATED_TAG);
-  }
+	public static boolean isDeprecatedByDocComment(@NotNull LighterAST tree, @NotNull LighterASTNode comment)
+	{
+		String text = LightTreeUtil.toFilteredString(tree, comment, null);
+		if(text.contains(DEPRECATED_TAG))
+		{
+			JavaDocLexer lexer = new JavaDocLexer(LanguageLevel.HIGHEST);
+			lexer.start(text);
+			IElementType token;
+			while((token = lexer.getTokenType()) != null)
+			{
+				if(token == JavaDocTokenType.DOC_TAG_NAME && DEPRECATED_TAG.equals(lexer.getTokenText()))
+				{
+					return true;
+				}
+				lexer.advance();
+			}
+		}
 
-  public static int packModifierList(@NotNull LighterAST tree, @NotNull LighterASTNode modList, @NotNull StubElement parent) {
-    int packed = 0;
+		return false;
+	}
 
-    final LighterASTNode modListOwner = tree.getParent(modList);
-    if (modListOwner != null && modListOwner.getTokenType() == parent.getStubType()) {
-      final StubElement grandParent = parent.getParentStub();
-      if (parent instanceof PsiClassStub) {
-        if (grandParent instanceof PsiClassStub && ((PsiClassStub)grandParent).isInterface()) {
-          packed |= ModifierFlags.PUBLIC_MASK;
-          packed |= ModifierFlags.STATIC_MASK;
-        }
-        if (((PsiClassStub)parent).isInterface()) {
-          packed |= ModifierFlags.ABSTRACT_MASK;
-          if (grandParent instanceof PsiClassStub) {
-            packed |= ModifierFlags.STATIC_MASK;
-          }
-        }
-        else if (((PsiClassStub)parent).isEnum()) {
-          if (!(grandParent instanceof PsiFileStub)) {
-            packed |= ModifierFlags.STATIC_MASK;
-          }
+	public static int packModifierList(@NotNull LighterAST tree, @NotNull LighterASTNode modList)
+	{
+		int packed = 0;
+		for(final LighterASTNode child : tree.getChildren(modList))
+		{
+			packed |= ModifierFlags.KEYWORD_TO_MODIFIER_FLAG_MAP.get(child.getTokenType());
+		}
+		return packed;
+	}
 
-          boolean isFinal = true;
-          final List<LighterASTNode> enumConstants = LightTreeUtil.getChildrenOfType(tree, modListOwner, JavaElementType.ENUM_CONSTANT);
-          for (final LighterASTNode constant : enumConstants) {
-            if (LightTreeUtil.firstChildOfType(tree, constant, JavaElementType.ENUM_CONSTANT_INITIALIZER) != null) {
-              isFinal = false;
-              break;
-            }
-          }
-          if (isFinal) {
-            packed |= ModifierFlags.FINAL_MASK;
-          }
+	@NotNull
+	public static String intern(@NotNull CharTable table, @NotNull LighterASTNode node)
+	{
+		assert node instanceof LighterASTTokenNode : node;
+		return table.intern(((LighterASTTokenNode) node).getText()).toString();
+	}
 
-          final List<LighterASTNode> methods = LightTreeUtil.getChildrenOfType(tree, modListOwner, JavaElementType.METHOD);
-          for (final LighterASTNode method : methods) {
-            final LighterASTNode mods = LightTreeUtil.requiredChildOfType(tree, method, JavaElementType.MODIFIER_LIST);
-            if (LightTreeUtil.firstChildOfType(tree, mods, JavaTokenType.ABSTRACT_KEYWORD) != null) {
-              packed |= ModifierFlags.ABSTRACT_MASK;
-              break;
-            }
-          }
-        }
-      }
-      else if (parent instanceof PsiMethodStub) {
-        if (grandParent instanceof PsiClassStub && ((PsiClassStub)grandParent).isInterface()) {
-          packed |= ModifierFlags.PUBLIC_MASK;
-          packed |= ModifierFlags.ABSTRACT_MASK;
-        }
-      }
-      else if (parent instanceof PsiFieldStub) {
-        if (parent.getStubType() == JavaElementType.ENUM_CONSTANT ||
-            grandParent instanceof PsiClassStub && ((PsiClassStub)grandParent).isInterface()) {
-          packed |= ModifierFlags.PUBLIC_MASK;
-          packed |= ModifierFlags.STATIC_MASK;
-          packed |= ModifierFlags.FINAL_MASK;
-        }
-      }
-    }
+	public static boolean isStaticNonPrivateMember(@NotNull StubElement<?> stub)
+	{
+		StubElement<PsiModifierList> type = stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
+		if(!(type instanceof PsiModifierListStub))
+		{
+			return false;
+		}
 
-    for (final LighterASTNode child : tree.getChildren(modList)) {
-      final int flag = ModifierFlags.KEYWORD_TO_MODIFIER_FLAG_MAP.get(child.getTokenType());
-      if (flag != 0) {
-        packed |= flag;
-      }
-    }
+		int mask = ((PsiModifierListStub) type).getModifiersMask();
+		if(ModifierFlags.hasModifierProperty(PsiModifier.PRIVATE, mask))
+		{
+			return false;
+		}
 
-    if ((packed & ModifierFlags.DEFENDER_MASK) != 0) {
-      packed &= ~ModifierFlags.ABSTRACT_MASK;
-    }
+		if(ModifierFlags.hasModifierProperty(PsiModifier.STATIC, mask))
+		{
+			return true;
+		}
 
-    if ((packed & (ModifierFlags.PRIVATE_MASK | ModifierFlags.PROTECTED_MASK | ModifierFlags.PUBLIC_MASK)) == 0) {
-      packed |= ModifierFlags.PACKAGE_LOCAL_MASK;
-    }
-
-    return packed;
-  }
-
-  @NotNull
-  public static String intern(@NotNull CharTable table, @NotNull LighterASTNode node) {
-    assert node instanceof LighterASTTokenNode : node;
-    return table.intern(((LighterASTTokenNode)node).getText()).toString();
-  }
-
-  public static boolean isStaticNonPrivateMember(@NotNull StubElement<?> stub) {
-    StubElement<PsiModifierList> type = stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
-    if (!(type instanceof PsiModifierListStub)) {
-      return false;
-    }
-
-    int mask = ((PsiModifierListStub)type).getModifiersMask();
-    return ModifierFlags.hasModifierProperty(PsiModifier.STATIC, mask) && !ModifierFlags.hasModifierProperty(PsiModifier.PRIVATE, mask);
-  }
+		return stub instanceof PsiFieldStub && stub.getStubType() == JavaElementType.ENUM_CONSTANT || stub.getParentStub() instanceof PsiClassStub && ((PsiClassStub) stub.getParentStub()).isInterface();
+	}
 }

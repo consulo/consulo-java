@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
+import java.io.IOException;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -26,50 +29,56 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 /**
  * @author max
  */
-public class JavaImportListElementType extends JavaStubElementType<PsiImportListStub, PsiImportList> {
-  public JavaImportListElementType() {
-    super("IMPORT_LIST");
-  }
+public class JavaImportListElementType extends JavaStubElementType<PsiImportListStub, PsiImportList>
+{
+	public JavaImportListElementType()
+	{
+		super("IMPORT_LIST");
+	}
 
-  @NotNull
-  @Override
-  public ASTNode createCompositeNode() {
-    return new ImportListElement();
-  }
+	@NotNull
+	@Override
+	public ASTNode createCompositeNode()
+	{
+		return new ImportListElement();
+	}
 
-  @Override
-  public PsiImportList createPsi(@NotNull final PsiImportListStub stub) {
-    return getPsiFactory(stub).createImportList(stub);
-  }
+	@Override
+	public PsiImportList createPsi(@NotNull final PsiImportListStub stub)
+	{
+		return getPsiFactory(stub).createImportList(stub);
+	}
 
-  @Override
-  public PsiImportList createPsi(@NotNull final ASTNode node) {
-    return new PsiImportListImpl(node);
-  }
+	@Override
+	public PsiImportList createPsi(@NotNull final ASTNode node)
+	{
+		return new PsiImportListImpl(node);
+	}
 
-  @Override
-  public PsiImportListStub createStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub) {
-    return new PsiImportListStubImpl(parentStub);
-  }
+	@Override
+	public PsiImportListStub createStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub)
+	{
+		return new PsiImportListStubImpl(parentStub);
+	}
 
-  @Override
-  public void serialize(@NotNull final PsiImportListStub stub, @NotNull final StubOutputStream dataStream) throws IOException {
-  }
+	@Override
+	public void serialize(@NotNull final PsiImportListStub stub, @NotNull final StubOutputStream dataStream) throws IOException
+	{
+	}
 
-  @NotNull
-  @Override
-  public PsiImportListStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
-    return new PsiImportListStubImpl(parentStub);
-  }
+	@NotNull
+	@Override
+	public PsiImportListStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	{
+		return new PsiImportListStubImpl(parentStub);
+	}
 
-  @Override
-  public void indexStub(@NotNull final PsiImportListStub stub, @NotNull final IndexSink sink) {
-  }
+	@Override
+	public void indexStub(@NotNull final PsiImportListStub stub, @NotNull final IndexSink sink)
+	{
+	}
 }

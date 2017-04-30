@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,23 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import static com.intellij.util.ObjectUtils.notNull;
-
 import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiRequiresStatement;
 import com.intellij.psi.impl.java.stubs.impl.PsiRequiresStatementStubImpl;
 import com.intellij.psi.impl.source.PsiRequiresStatementImpl;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.JavaSourceUtil;
+import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.util.io.StringRef;
 
 public class JavaRequiresStatementElementType extends JavaStubElementType<PsiRequiresStatementStub, PsiRequiresStatement>
@@ -66,43 +63,22 @@ public class JavaRequiresStatementElementType extends JavaStubElementType<PsiReq
 	@Override
 	public PsiRequiresStatementStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub)
 	{
-		String refText = null;
-		boolean isPublic = false, isStatic = false;
-
-		for(LighterASTNode child : tree.getChildren(node))
-		{
-			IElementType type = child.getTokenType();
-			if(type == JavaElementType.MODULE_REFERENCE)
-			{
-				refText = JavaSourceUtil.getReferenceText(tree, child);
-			}
-			else if(type == JavaTokenType.PUBLIC_KEYWORD)
-			{
-				isPublic = true;
-			}
-			else if(type == JavaTokenType.STATIC_KEYWORD)
-			{
-				isStatic = true;
-			}
-		}
-
-		return new PsiRequiresStatementStubImpl(parentStub, notNull(refText, ""), isPublic, isStatic);
+		LighterASTNode ref = LightTreeUtil.firstChildOfType(tree, node, JavaElementType.MODULE_REFERENCE);
+		String refText = ref != null ? JavaSourceUtil.getReferenceText(tree, ref) : null;
+		return new PsiRequiresStatementStubImpl(parentStub, refText);
 	}
 
 	@Override
 	public void serialize(@NotNull PsiRequiresStatementStub stub, @NotNull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getModuleName());
-		dataStream.writeByte(stub.getFlags());
 	}
 
 	@NotNull
 	@Override
 	public PsiRequiresStatementStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
-		String name = StringRef.toString(dataStream.readName());
-		byte flags = dataStream.readByte();
-		return new PsiRequiresStatementStubImpl(parentStub, name, flags);
+		return new PsiRequiresStatementStubImpl(parentStub, StringRef.toString(dataStream.readName()));
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@ package com.intellij.psi.impl;
 
 import java.util.Map;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.java.parser.DeclarationParser;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
-import com.intellij.lang.java.parser.ModuleParser;
 import com.intellij.lang.java.parser.ReferenceParser;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.text.StringUtil;
@@ -47,7 +47,6 @@ import com.intellij.util.containers.HashMap;
 public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 {
 	protected final PsiManager myManager;
-	private PsiJavaFile myDummyJavaFile;
 
 	private static final String DUMMY_FILE_NAME = "_Dummy_." + JavaFileType.INSTANCE.getDefaultExtension();
 
@@ -56,33 +55,33 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		myManager = manager;
 	}
 
-	private static final JavaParserUtil.ParserWrapper ANNOTATION = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseAnnotation(builder);
+	private static final JavaParserUtil.ParserWrapper ANNOTATION = builder -> JavaParser.INSTANCE.getDeclarationParser().parseAnnotation(builder);
 
-	private static final JavaParserUtil.ParserWrapper PARAMETER = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseParameter(builder, true, false);
+	private static final JavaParserUtil.ParserWrapper PARAMETER = builder -> JavaParser.INSTANCE.getDeclarationParser().parseParameter(builder, true, false);
 
-	private static final JavaParserUtil.ParserWrapper RESOURCE = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseResource(builder);
+	private static final JavaParserUtil.ParserWrapper RESOURCE = builder -> JavaParser.INSTANCE.getDeclarationParser().parseResource(builder);
 
-	private static final JavaParserUtil.ParserWrapper TYPE = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS);
+	private static final JavaParserUtil.ParserWrapper TYPE = builder -> JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | ReferenceParser.DISJUNCTIONS);
 
-	public static final JavaParserUtil.ParserWrapper REFERENCE = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
+	public static final JavaParserUtil.ParserWrapper REFERENCE = builder -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
 
-	public static final JavaParserUtil.ParserWrapper DIAMOND_REF = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, true);
+	public static final JavaParserUtil.ParserWrapper DIAMOND_REF = builder -> JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, true);
 
-	public static final JavaParserUtil.ParserWrapper STATIC_IMPORT_REF = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseImportCodeReference(builder, true);
+	public static final JavaParserUtil.ParserWrapper STATIC_IMPORT_REF = builder -> JavaParser.INSTANCE.getReferenceParser().parseImportCodeReference(builder, true);
 
-	private static final JavaParserUtil.ParserWrapper TYPE_PARAMETER = (builder, languageLevel) -> JavaParser.INSTANCE.getReferenceParser().parseTypeParameter(builder);
+	private static final JavaParserUtil.ParserWrapper TYPE_PARAMETER = builder -> JavaParser.INSTANCE.getReferenceParser().parseTypeParameter(builder);
 
-	private static final JavaParserUtil.ParserWrapper DECLARATION = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parse(builder, DeclarationParser.Context.CLASS);
+	private static final JavaParserUtil.ParserWrapper DECLARATION = builder -> JavaParser.INSTANCE.getDeclarationParser().parse(builder, DeclarationParser.Context.CLASS);
 
-	private static final JavaParserUtil.ParserWrapper CODE_BLOCK = (builder, languageLevel) -> JavaParser.INSTANCE.getStatementParser().parseCodeBlockDeep(builder, true);
+	private static final JavaParserUtil.ParserWrapper CODE_BLOCK = builder -> JavaParser.INSTANCE.getStatementParser().parseCodeBlockDeep(builder, true);
 
-	private static final JavaParserUtil.ParserWrapper STATEMENT = (builder, languageLevel) -> JavaParser.INSTANCE.getStatementParser().parseStatement(builder);
+	private static final JavaParserUtil.ParserWrapper STATEMENT = builder -> JavaParser.INSTANCE.getStatementParser().parseStatement(builder);
 
-	private static final JavaParserUtil.ParserWrapper EXPRESSION = (builder, languageLevel) -> JavaParser.INSTANCE.getExpressionParser().parse(builder);
+	private static final JavaParserUtil.ParserWrapper EXPRESSION = builder -> JavaParser.INSTANCE.getExpressionParser().parse(builder);
 
-	private static final JavaParserUtil.ParserWrapper ENUM_CONSTANT = (builder, languageLevel) -> JavaParser.INSTANCE.getDeclarationParser().parseEnumConstant(builder);
+	private static final JavaParserUtil.ParserWrapper ENUM_CONSTANT = builder -> JavaParser.INSTANCE.getDeclarationParser().parseEnumConstant(builder);
 
-	private static final JavaParserUtil.ParserWrapper MODULE = (builder, languageLevel) -> ModuleParser.parseModule(builder);
+	private static final JavaParserUtil.ParserWrapper MODULE = builder -> JavaParser.INSTANCE.getModuleParser().parse(builder);
 
 	private static final Map<String, PsiPrimitiveType> PRIMITIVE_TYPES;
 
@@ -109,7 +108,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiAnnotation))
 		{
-			throw new IncorrectOperationException("Incorrect annotation \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect annotation '" + text + "'");
 		}
 		return (PsiAnnotation) element;
 	}
@@ -149,7 +148,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiClass[] classes = aFile.getClasses();
 		if(classes.length != 1)
 		{
-			throw new IncorrectOperationException("Incorrect class \"" + body + "\".");
+			throw new IncorrectOperationException("Incorrect class '" + body + "'");
 		}
 		return classes[0];
 	}
@@ -162,7 +161,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiField))
 		{
-			throw new IncorrectOperationException("Incorrect field \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect field '" + text + "'");
 		}
 		return (PsiField) element;
 	}
@@ -175,7 +174,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiMethod))
 		{
-			throw newException("Incorrect method \"" + text + "\".", holder);
+			throw newException("Incorrect method '" + text + "'", holder);
 		}
 		return (PsiMethod) element;
 	}
@@ -195,7 +194,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiParameter))
 		{
-			throw new IncorrectOperationException("Incorrect parameter \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect parameter '" + text + "'");
 		}
 		return (PsiParameter) element;
 	}
@@ -208,7 +207,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiResourceVariable))
 		{
-			throw new IncorrectOperationException("Incorrect resource \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect resource '" + text + "'");
 		}
 		return (PsiResourceVariable) element;
 	}
@@ -224,11 +223,12 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 	@Override
 	public PsiTypeElement createTypeElementFromText(@NotNull final String text, @Nullable final PsiElement context) throws IncorrectOperationException
 	{
-		final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, TYPE, level(context)), context);
+		final LanguageLevel level = level(context);
+		final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, TYPE, level), context);
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiTypeElement))
 		{
-			throw new IncorrectOperationException("Incorrect type \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect type '" + text + "' (" + level + ")");
 		}
 		return (PsiTypeElement) element;
 	}
@@ -260,7 +260,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiJavaCodeReferenceElement))
 		{
-			throw new IncorrectOperationException("Incorrect reference \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect reference '" + text + "'");
 		}
 		return (PsiJavaCodeReferenceElement) element;
 	}
@@ -273,7 +273,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiCodeBlock))
 		{
-			throw new IncorrectOperationException("Incorrect code block \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect code block '" + text + "'");
 		}
 		return (PsiCodeBlock) element;
 	}
@@ -286,7 +286,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiStatement))
 		{
-			throw new IncorrectOperationException("Incorrect statement \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect statement '" + text + "'");
 		}
 		return (PsiStatement) element;
 	}
@@ -299,12 +299,12 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiExpression))
 		{
-			throw new IncorrectOperationException("Incorrect expression \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect expression '" + text + "'");
 		}
 		return (PsiExpression) element;
 	}
 
-	protected PsiJavaFile createDummyJavaFile(final String text)
+	protected PsiJavaFile createDummyJavaFile(@NonNls final String text)
 	{
 		final FileType type = JavaFileType.INSTANCE;
 		return (PsiJavaFile) PsiFileFactory.getInstance(myManager.getProject()).createFileFromText(DUMMY_FILE_NAME, type, text);
@@ -318,7 +318,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiTypeParameter))
 		{
-			throw new IncorrectOperationException("Incorrect type parameter \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect type parameter '" + text + "'");
 		}
 		return (PsiTypeParameter) element;
 	}
@@ -342,7 +342,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 			}
 		}
 
-		throw new IncorrectOperationException("Incorrect comment \"" + text + "\".");
+		throw new IncorrectOperationException("Incorrect comment '" + text + "'");
 	}
 
 	@NotNull
@@ -353,34 +353,9 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
 		if(!(element instanceof PsiEnumConstant))
 		{
-			throw new IncorrectOperationException("Incorrect enum constant \"" + text + "\".");
+			throw new IncorrectOperationException("Incorrect enum constant '" + text + "'");
 		}
 		return (PsiEnumConstant) element;
-	}
-
-	@NotNull
-	@Override
-	public PsiType createPrimitiveType(@NotNull final String text, @NotNull final PsiAnnotation[] annotations) throws IncorrectOperationException
-	{
-		final PsiPrimitiveType primitiveType = getPrimitiveType(text);
-		if(primitiveType == null)
-		{
-			throw new IncorrectOperationException("Incorrect primitive type \"" + text + "\".");
-		}
-		return annotations.length == 0 ? primitiveType : new PsiPrimitiveType(text, annotations);
-	}
-
-	@Override
-	@NotNull
-	public PsiJavaModule createModuleFromText(@NotNull String text) throws IncorrectOperationException
-	{
-		DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, MODULE, LanguageLevel.JDK_1_9), null);
-		PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
-		if(!(element instanceof PsiJavaModule))
-		{
-			throw new IncorrectOperationException("Incorrect module declaration '" + text + "'");
-		}
-		return (PsiJavaModule) element;
 	}
 
 	@NotNull
@@ -394,14 +369,24 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 		return primitiveType;
 	}
 
-	public PsiJavaFile getDummyJavaFile()
+	@NotNull
+	@Override
+	public PsiJavaModule createModuleFromText(@NotNull String text) throws IncorrectOperationException
 	{
-		if(myDummyJavaFile == null)
+		DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, MODULE, LanguageLevel.JDK_1_9), null);
+		PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
+		if(!(element instanceof PsiJavaModule))
 		{
-			myDummyJavaFile = createDummyJavaFile("");
+			throw new IncorrectOperationException("Incorrect module declaration '" + text + "'");
 		}
+		return (PsiJavaModule) element;
+	}
 
-		return myDummyJavaFile;
+	@NotNull
+	@Override
+	public PsiType createPrimitiveType(@NotNull String text, @NotNull PsiAnnotation[] annotations) throws IncorrectOperationException
+	{
+		return createPrimitiveTypeFromText(text).annotate(TypeAnnotationProvider.Static.create(annotations));
 	}
 
 	public static PsiPrimitiveType getPrimitiveType(final String text)
@@ -422,14 +407,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 			final Throwable cause = ((JavaDummyElement) root).getParserError();
 			if(cause != null)
 			{
-				return new IncorrectOperationException(msg)
-				{
-					@Override
-					public Throwable getCause()
-					{
-						return cause;
-					}
-				};
+				return new IncorrectOperationException(msg, cause);
 			}
 		}
 		return new IncorrectOperationException(msg);

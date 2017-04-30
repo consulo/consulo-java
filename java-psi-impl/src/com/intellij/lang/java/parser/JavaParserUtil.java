@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
-import com.intellij.lang.*;
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.Language;
+import com.intellij.lang.LighterASTNode;
+import com.intellij.lang.LighterLazyParseableNode;
+import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilderFactory;
+import com.intellij.lang.PsiBuilderUtil;
+import com.intellij.lang.WhitespacesAndCommentsBinder;
 import com.intellij.lang.impl.PsiBuilderAdapter;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.lexer.JavaDocLexer;
+import com.intellij.lang.java.lexer.JavaDocLexer;
+import com.intellij.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
@@ -43,267 +51,363 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.indexing.IndexingDataKeys;
 
-public class JavaParserUtil {
-  private static final Key<Boolean> DEEP_PARSE_BLOCKS_IN_STATEMENTS = Key.create("JavaParserUtil.ParserExtender");
+public class JavaParserUtil
+{
+	private static final Key<LanguageLevel> LANG_LEVEL_KEY = Key.create("JavaParserUtil.LanguageLevel");
+	private static final Key<Boolean> DEEP_PARSE_BLOCKS_IN_STATEMENTS = Key.create("JavaParserUtil.ParserExtender");
 
-  public interface ParserWrapper {
-    void parse(PsiBuilder builder, LanguageLevel languageLevel);
-  }
+	public interface ParserWrapper
+	{
+		void parse(PsiBuilder builder);
+	}
 
-  public static final WhitespacesAndCommentsBinder GREEDY_RIGHT_EDGE_PROCESSOR = new WhitespacesAndCommentsBinder() {
-    @Override
-    public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final TokenTextGetter getter) {
-      return tokens.size();
-    }
-  };
+	private static class PrecedingWhitespacesAndCommentsBinder implements WhitespacesAndCommentsBinder
+	{
+		private final boolean myAfterEmptyImport;
 
-  private static class PrecedingWhitespacesAndCommentsBinder implements WhitespacesAndCommentsBinder {
-    private final boolean myAfterEmptyImport;
+		public PrecedingWhitespacesAndCommentsBinder(final boolean afterImport)
+		{
+			this.myAfterEmptyImport = afterImport;
+		}
 
-    public PrecedingWhitespacesAndCommentsBinder(final boolean afterImport) {
-      this.myAfterEmptyImport = afterImport;
-    }
+		@Override
+		public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final TokenTextGetter getter)
+		{
+			if(tokens.size() == 0)
+			{
+				return 0;
+			}
 
-    @Override
-    public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final TokenTextGetter
-      getter) {
-      if (tokens.size() == 0) return 0;
+			// 1. bind doc comment
+			for(int idx = tokens.size() - 1; idx >= 0; idx--)
+			{
+				if(tokens.get(idx) == JavaDocElementType.DOC_COMMENT)
+				{
+					return idx;
+				}
+			}
 
-      // 1. bind doc comment
-      for (int idx = tokens.size() - 1; idx >= 0; idx--) {
-        if (tokens.get(idx) == JavaDocElementType.DOC_COMMENT) return idx;
-      }
+			// 2. bind plain comments
+			int result = tokens.size();
+			for(int idx = tokens.size() - 1; idx >= 0; idx--)
+			{
+				final IElementType tokenType = tokens.get(idx);
+				if(ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokenType))
+				{
+					if(StringUtil.getLineBreakCount(getter.get(idx)) > 1)
+					{
+						break;
+					}
+				}
+				else if(ElementType.JAVA_PLAIN_COMMENT_BIT_SET.contains(tokenType))
+				{
+					if(atStreamEdge || (idx == 0 && myAfterEmptyImport) || (idx > 0 && ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokens.get(idx - 1)) && StringUtil.containsLineBreak(getter.get
+							(idx - 1))))
+					{
+						result = idx;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
 
-      // 2. bind plain comments
-      int result = tokens.size();
-      for (int idx = tokens.size() - 1; idx >= 0; idx--) {
-        final IElementType tokenType = tokens.get(idx);
-        if (ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokenType)) {
-          if (StringUtil.getLineBreakCount(getter.get(idx)) > 1) break;
-        }
-        else if (ElementType.JAVA_PLAIN_COMMENT_BIT_SET.contains(tokenType)) {
-          if (atStreamEdge ||
-              (idx == 0 && myAfterEmptyImport) ||
-              (idx > 0 && ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokens.get(idx - 1)) && StringUtil.containsLineBreak(getter.get(idx - 1)))) {
-            result = idx;
-          }
-        }
-        else break;
-      }
+			return result;
+		}
+	}
 
-      return result;
-    }
-  }
+	private static class TrailingWhitespacesAndCommentsBinder implements WhitespacesAndCommentsBinder
+	{
+		@Override
+		public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final TokenTextGetter getter)
+		{
+			if(tokens.size() == 0)
+			{
+				return 0;
+			}
 
-  private static class TrailingWhitespacesAndCommentsBinder implements WhitespacesAndCommentsBinder {
-    @Override
-    public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final TokenTextGetter getter) {
-      if (tokens.size() == 0) return 0;
+			int result = 0;
+			for(int idx = 0; idx < tokens.size(); idx++)
+			{
+				final IElementType tokenType = tokens.get(idx);
+				if(ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokenType))
+				{
+					if(StringUtil.containsLineBreak(getter.get(idx)))
+					{
+						break;
+					}
+				}
+				else if(ElementType.JAVA_PLAIN_COMMENT_BIT_SET.contains(tokenType))
+				{
+					result = idx + 1;
+				}
+				else
+				{
+					break;
+				}
+			}
 
-      int result = 0;
-      for (int idx = 0; idx < tokens.size(); idx++) {
-        final IElementType tokenType = tokens.get(idx);
-        if (ElementType.JAVA_WHITESPACE_BIT_SET.contains(tokenType)) {
-          if (StringUtil.containsLineBreak(getter.get(idx))) break;
-        }
-        else if (ElementType.JAVA_PLAIN_COMMENT_BIT_SET.contains(tokenType)) {
-          result = idx + 1;
-        }
-        else break;
-      }
+			return result;
+		}
+	}
 
-      return result;
-    }
-  }
+	private static final TokenSet PRECEDING_COMMENT_SET = TokenSet.orSet(TokenSet.create(JavaElementType.MODULE), ElementType.FULL_MEMBER_BIT_SET);
 
-  private static final TokenSet PRECEDING_COMMENT_SET = ElementType.FULL_MEMBER_BIT_SET;
-  private static final TokenSet TRAILING_COMMENT_SET = TokenSet.orSet(
-    TokenSet.create(JavaElementType.PACKAGE_STATEMENT),
-    ElementType.IMPORT_STATEMENT_BASE_BIT_SET, ElementType.FULL_MEMBER_BIT_SET, ElementType.JAVA_STATEMENT_BIT_SET);
+	private static final TokenSet TRAILING_COMMENT_SET = TokenSet.orSet(TokenSet.create(JavaElementType.PACKAGE_STATEMENT), ElementType.IMPORT_STATEMENT_BASE_BIT_SET, ElementType
+			.FULL_MEMBER_BIT_SET, ElementType.JAVA_STATEMENT_BIT_SET);
 
-  public static final WhitespacesAndCommentsBinder PRECEDING_COMMENT_BINDER = new PrecedingWhitespacesAndCommentsBinder(false);
-  public static final WhitespacesAndCommentsBinder SPECIAL_PRECEDING_COMMENT_BINDER = new PrecedingWhitespacesAndCommentsBinder(true);
-  public static final WhitespacesAndCommentsBinder TRAILING_COMMENT_BINDER = new TrailingWhitespacesAndCommentsBinder();
+	public static final WhitespacesAndCommentsBinder PRECEDING_COMMENT_BINDER = new PrecedingWhitespacesAndCommentsBinder(false);
+	public static final WhitespacesAndCommentsBinder SPECIAL_PRECEDING_COMMENT_BINDER = new PrecedingWhitespacesAndCommentsBinder(true);
+	public static final WhitespacesAndCommentsBinder TRAILING_COMMENT_BINDER = new TrailingWhitespacesAndCommentsBinder();
 
-  private JavaParserUtil() { }
+	private JavaParserUtil()
+	{
+	}
 
-  public static void setParseStatementCodeBlocksDeep(final PsiBuilder builder, final boolean deep) {
-    builder.putUserDataUnprotected(DEEP_PARSE_BLOCKS_IN_STATEMENTS, deep);
-  }
+	public static void setLanguageLevel(final PsiBuilder builder, final LanguageLevel level)
+	{
+		builder.putUserDataUnprotected(LANG_LEVEL_KEY, level);
+	}
 
-  public static boolean isParseStatementCodeBlocksDeep(final PsiBuilder builder) {
-    return Boolean.TRUE.equals(builder.getUserDataUnprotected(DEEP_PARSE_BLOCKS_IN_STATEMENTS));
-  }
+	@NotNull
+	public static LanguageLevel getLanguageLevel(final PsiBuilder builder)
+	{
+		final LanguageLevel level = builder.getUserDataUnprotected(LANG_LEVEL_KEY);
+		assert level != null : builder;
+		return level;
+	}
 
-  @NotNull
-  @Deprecated
-  public static PsiBuilder createBuilder(final ASTNode chameleon) {
-    final PsiElement psi = chameleon.getPsi();
-    assert psi != null : chameleon;
-    final Project project = psi.getProject();
+	public static void setParseStatementCodeBlocksDeep(final PsiBuilder builder, final boolean deep)
+	{
+		builder.putUserDataUnprotected(DEEP_PARSE_BLOCKS_IN_STATEMENTS, deep);
+	}
 
-    CharSequence text;
-    if (TreeUtil.isCollapsedChameleon(chameleon)) {
-      text = chameleon.getChars();
-    }
-    else {
-      text = psi.getUserData(IndexingDataKeys.FILE_TEXT_CONTENT_KEY);
-      if (text == null) text = chameleon.getChars();
-    }
+	public static boolean isParseStatementCodeBlocksDeep(final PsiBuilder builder)
+	{
+		return Boolean.TRUE.equals(builder.getUserDataUnprotected(DEEP_PARSE_BLOCKS_IN_STATEMENTS));
+	}
 
-    final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
-    final LanguageLevel level = PsiUtil.getLanguageLevel(psi);
-    final Lexer lexer = LanguageParserDefinitions.INSTANCE.forLanguage(JavaLanguage.INSTANCE).createLexer(level.toLangVersion());
-    Language language = psi.getLanguage();
-    if (!language.isKindOf(JavaLanguage.INSTANCE)) language = JavaLanguage.INSTANCE;
+	@NotNull
+	public static PsiBuilder createBuilder(final ASTNode chameleon)
+	{
+		final PsiElement psi = chameleon.getPsi();
+		assert psi != null : chameleon;
+		final Project project = psi.getProject();
 
-    return factory.createBuilder(project, chameleon, lexer, language, level.toLangVersion(), text);
-  }
+		CharSequence text;
+		if(TreeUtil.isCollapsedChameleon(chameleon))
+		{
+			text = chameleon.getChars();
+		}
+		else
+		{
+			text = psi.getUserData(IndexingDataKeys.FILE_TEXT_CONTENT_KEY);
+			if(text == null)
+			{
+				text = chameleon.getChars();
+			}
+		}
 
-  @NotNull
-  @Deprecated
-  public static PsiBuilder createBuilder(final LighterLazyParseableNode chameleon) {
-    final PsiElement psi = chameleon.getContainingFile();
-    assert psi != null : chameleon;
-    final Project project = psi.getProject();
+		final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
+		final LanguageLevel level = PsiUtil.getLanguageLevel(psi);
+		final Lexer lexer = new JavaLexer(level);
+		Language language = psi.getLanguage();
+		if(!language.isKindOf(JavaLanguage.INSTANCE))
+		{
+			language = JavaLanguage.INSTANCE;
+		}
+		final PsiBuilder builder = factory.createBuilder(project, chameleon, lexer, language, level.toLangVersion(), text);
+		setLanguageLevel(builder, level);
 
-    final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
-    final LanguageLevel level = PsiUtil.getLanguageLevel(psi);
-    final Lexer lexer = LanguageParserDefinitions.INSTANCE.forLanguage(JavaLanguage.INSTANCE).createLexer(level.toLangVersion());
+		return builder;
+	}
 
-    return factory.createBuilder(project, chameleon, lexer, chameleon.getTokenType().getLanguage(), level.toLangVersion(), chameleon.getText());
-  }
+	@NotNull
+	public static PsiBuilder createBuilder(final LighterLazyParseableNode chameleon)
+	{
+		final PsiElement psi = chameleon.getContainingFile();
+		assert psi != null : chameleon;
+		final Project project = psi.getProject();
 
-  @Nullable
-  public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper) {
-    return parseFragment(chameleon, wrapper, true, LanguageLevel.HIGHEST);
-  }
+		final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
+		final LanguageLevel level = PsiUtil.getLanguageLevel(psi);
+		final Lexer lexer = new JavaLexer(level);
+		final PsiBuilder builder = factory.createBuilder(project, chameleon, lexer, chameleon.getTokenType().getLanguage(), level.toLangVersion(), chameleon.getText());
+		setLanguageLevel(builder, level);
 
-  @Nullable
-  public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper, final boolean eatAll, final LanguageLevel level) {
-    final PsiElement psi = (chameleon.getTreeParent() != null ? chameleon.getTreeParent().getPsi() : chameleon.getPsi());
-    assert psi != null : chameleon;
-    final Project project = psi.getProject();
+		return builder;
+	}
 
-    final ParserDefinition parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(JavaLanguage.INSTANCE);
-    final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
-    final Lexer lexer = chameleon.getElementType() == JavaDocElementType.DOC_COMMENT
-                        ? new JavaDocLexer(level.isAtLeast(LanguageLevel.JDK_1_5))
-                        : parserDefinition.createLexer(level.toLangVersion());
-    final PsiBuilder builder = factory.createBuilder(project, chameleon, lexer, chameleon.getElementType().getLanguage(), level.toLangVersion(), chameleon.getChars());
+	@Nullable
+	public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper)
+	{
+		return parseFragment(chameleon, wrapper, true, LanguageLevel.HIGHEST);
+	}
 
-    final PsiBuilder.Marker root = builder.mark();
-    wrapper.parse(builder, level);
-    if (!builder.eof()) {
-      if (!eatAll) throw new AssertionError("Unexpected tokens");
-      final PsiBuilder.Marker extras = builder.mark();
-      while (!builder.eof()) builder.advanceLexer();
-      extras.error(JavaErrorMessages.message("unexpected.tokens"));
-    }
-    root.done(chameleon.getElementType());
+	@Nullable
+	public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper, final boolean eatAll, final LanguageLevel level)
+	{
+		final PsiElement psi = (chameleon.getTreeParent() != null ? chameleon.getTreeParent().getPsi() : chameleon.getPsi());
+		assert psi != null : chameleon;
+		final Project project = psi.getProject();
 
-    return builder.getTreeBuilt().getFirstChildNode();
-  }
+		final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
+		final Lexer lexer = chameleon.getElementType() == JavaDocElementType.DOC_COMMENT ? new JavaDocLexer(level) : new JavaLexer(level);
+		final PsiBuilder builder = factory.createBuilder(project, chameleon, lexer, chameleon.getElementType().getLanguage(), level.toLangVersion(), chameleon.getChars());
+		setLanguageLevel(builder, level);
 
-  public static void done(final PsiBuilder.Marker marker, final IElementType type) {
-    marker.done(type);
-    final WhitespacesAndCommentsBinder left = PRECEDING_COMMENT_SET.contains(type) ? PRECEDING_COMMENT_BINDER : null;
-    final WhitespacesAndCommentsBinder right = TRAILING_COMMENT_SET.contains(type) ? TRAILING_COMMENT_BINDER : null;
-    marker.setCustomEdgeTokenBinders(left, right);
-  }
+		final PsiBuilder.Marker root = builder.mark();
+		wrapper.parse(builder);
+		if(!builder.eof())
+		{
+			if(!eatAll)
+			{
+				throw new AssertionError("Unexpected tokens");
+			}
+			final PsiBuilder.Marker extras = builder.mark();
+			while(!builder.eof())
+			{
+				builder.advanceLexer();
+			}
+			extras.error(JavaErrorMessages.message("unexpected.tokens"));
+		}
+		root.done(chameleon.getElementType());
 
-  @Nullable
-  public static IElementType exprType(@Nullable final PsiBuilder.Marker marker) {
-    return marker != null ? ((LighterASTNode)marker).getTokenType() : null;
-  }
+		return builder.getTreeBuilt().getFirstChildNode();
+	}
 
-  // used instead of PsiBuilder.error() as it keeps all subsequent error messages
-  public static void error(final PsiBuilder builder, final String message) {
-    builder.mark().error(message);
-  }
+	public static void done(final PsiBuilder.Marker marker, final IElementType type)
+	{
+		marker.done(type);
+		final WhitespacesAndCommentsBinder left = PRECEDING_COMMENT_SET.contains(type) ? PRECEDING_COMMENT_BINDER : null;
+		final WhitespacesAndCommentsBinder right = TRAILING_COMMENT_SET.contains(type) ? TRAILING_COMMENT_BINDER : null;
+		marker.setCustomEdgeTokenBinders(left, right);
+	}
 
-  public static void error(final PsiBuilder builder, final String message, @Nullable final PsiBuilder.Marker before) {
-    if (before == null) {
-      error(builder, message);
-    }
-    else {
-      before.precede().errorBefore(message, before);
-    }
-  }
+	@Nullable
+	public static IElementType exprType(@Nullable final PsiBuilder.Marker marker)
+	{
+		return marker != null ? ((LighterASTNode) marker).getTokenType() : null;
+	}
 
-  public static boolean expectOrError(PsiBuilder builder, TokenSet expected, @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String key) {
-    if (!PsiBuilderUtil.expect(builder, expected)) {
-      error(builder, JavaErrorMessages.message(key));
-      return false;
-    }
-    return true;
-  }
+	// used instead of PsiBuilder.error() as it keeps all subsequent error messages
+	public static void error(final PsiBuilder builder, final String message)
+	{
+		builder.mark().error(message);
+	}
 
-  public static boolean expectOrError(PsiBuilder builder, IElementType expected, @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String key) {
-    if (!PsiBuilderUtil.expect(builder, expected)) {
-      error(builder, JavaErrorMessages.message(key));
-      return false;
-    }
-    return true;
-  }
+	public static void error(final PsiBuilder builder, final String message, @Nullable final PsiBuilder.Marker before)
+	{
+		if(before == null)
+		{
+			error(builder, message);
+		}
+		else
+		{
+			before.precede().errorBefore(message, before);
+		}
+	}
 
-  public static void emptyElement(final PsiBuilder builder, final IElementType type) {
-    builder.mark().done(type);
-  }
+	public static boolean expectOrError(PsiBuilder builder, TokenSet expected, @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String key)
+	{
+		if(!PsiBuilderUtil.expect(builder, expected))
+		{
+			error(builder, JavaErrorMessages.message(key));
+			return false;
+		}
+		return true;
+	}
 
-  public static void emptyElement(final PsiBuilder.Marker before, final IElementType type) {
-    before.precede().doneBefore(type, before);
-  }
+	public static boolean expectOrError(PsiBuilder builder, IElementType expected, @PropertyKey(resourceBundle = JavaErrorMessages.BUNDLE) String key)
+	{
+		if(!PsiBuilderUtil.expect(builder, expected))
+		{
+			error(builder, JavaErrorMessages.message(key));
+			return false;
+		}
+		return true;
+	}
 
-  public static void semicolon(final PsiBuilder builder) {
-    expectOrError(builder, JavaTokenType.SEMICOLON, "expected.semicolon");
-  }
+	public static void emptyElement(final PsiBuilder builder, final IElementType type)
+	{
+		builder.mark().done(type);
+	}
 
-  public static PsiBuilder braceMatchingBuilder(final PsiBuilder builder) {
-    final PsiBuilder.Marker pos = builder.mark();
+	public static void emptyElement(final PsiBuilder.Marker before, final IElementType type)
+	{
+		before.precede().doneBefore(type, before);
+	}
 
-    int braceCount = 1;
-    while (!builder.eof()) {
-      final IElementType tokenType = builder.getTokenType();
-      if (tokenType == JavaTokenType.LBRACE) braceCount++;
-      else if (tokenType == JavaTokenType.RBRACE) braceCount--;
-      if (braceCount == 0) break;
-      builder.advanceLexer();
-    }
-    final int stopAt = builder.getCurrentOffset();
+	public static void semicolon(final PsiBuilder builder)
+	{
+		expectOrError(builder, JavaTokenType.SEMICOLON, "expected.semicolon");
+	}
 
-    pos.rollbackTo();
+	public static PsiBuilder braceMatchingBuilder(final PsiBuilder builder)
+	{
+		final PsiBuilder.Marker pos = builder.mark();
 
-    return stoppingBuilder(builder, stopAt);
-  }
+		int braceCount = 1;
+		while(!builder.eof())
+		{
+			final IElementType tokenType = builder.getTokenType();
+			if(tokenType == JavaTokenType.LBRACE)
+			{
+				braceCount++;
+			}
+			else if(tokenType == JavaTokenType.RBRACE)
+			{
+				braceCount--;
+			}
+			if(braceCount == 0)
+			{
+				break;
+			}
+			builder.advanceLexer();
+		}
+		final int stopAt = builder.getCurrentOffset();
 
-  public static PsiBuilder stoppingBuilder(final PsiBuilder builder, final int stopAt) {
-    return new PsiBuilderAdapter(builder) {
-      @Override
-      public IElementType getTokenType() {
-        return getCurrentOffset() < stopAt ? super.getTokenType() : null;
-      }
+		pos.rollbackTo();
 
-      @Override
-      public boolean eof() {
-        return getCurrentOffset() >= stopAt || super.eof();
-      }
-    };
-  }
+		return stoppingBuilder(builder, stopAt);
+	}
 
-  public static PsiBuilder stoppingBuilder(final PsiBuilder builder, final Condition<Pair<IElementType, String>> condition) {
-    return new PsiBuilderAdapter(builder) {
-      @Override
-      public IElementType getTokenType() {
-        final Pair<IElementType, String> input = Pair.create(builder.getTokenType(), builder.getTokenText());
-        return condition.value(input) ? null : super.getTokenType();
-      }
+	public static PsiBuilder stoppingBuilder(final PsiBuilder builder, final int stopAt)
+	{
+		return new PsiBuilderAdapter(builder)
+		{
+			@Override
+			public IElementType getTokenType()
+			{
+				return getCurrentOffset() < stopAt ? super.getTokenType() : null;
+			}
 
-      @Override
-      public boolean eof() {
-        final Pair<IElementType, String> input = Pair.create(builder.getTokenType(), builder.getTokenText());
-        return condition.value(input) || super.eof();
-      }
-    };
-  }
+			@Override
+			public boolean eof()
+			{
+				return getCurrentOffset() >= stopAt || super.eof();
+			}
+		};
+	}
+
+	public static PsiBuilder stoppingBuilder(final PsiBuilder builder, final Condition<Pair<IElementType, String>> condition)
+	{
+		return new PsiBuilderAdapter(builder)
+		{
+			@Override
+			public IElementType getTokenType()
+			{
+				final Pair<IElementType, String> input = Pair.create(builder.getTokenType(), builder.getTokenText());
+				return condition.value(input) ? null : super.getTokenType();
+			}
+
+			@Override
+			public boolean eof()
+			{
+				final Pair<IElementType, String> input = Pair.create(builder.getTokenType(), builder.getTokenText());
+				return condition.value(input) || super.eof();
+			}
+		};
+	}
 }

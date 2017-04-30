@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,38 +18,37 @@ package com.intellij.psi;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a list of Java classes referenced by the <code>implements</code>,
- * <code>extends</code> or <code>throws</code> clause.
+ * Represents a list of Java classes referenced by the {@code implements}, {@code extends}, {@code throws}, or {@code with} clause.
  *
  * @see PsiClass#getExtendsList()
  * @see PsiClass#getImplementsList()
  * @see PsiMethod#getThrowsList()
+ * @see PsiProvidesStatement#getImplementationList()
  */
-public interface PsiReferenceList extends PsiElement {
-  PsiReferenceList[] EMPTY_ARRAY = new PsiReferenceList[0];
-  
-  /**
-   * Returns the array of reference elements contained in the list.
-   *
-   * @return the array of reference elements.
-   */
-  @NotNull
-  PsiJavaCodeReferenceElement[] getReferenceElements();
+public interface PsiReferenceList extends PsiElement
+{
+	PsiReferenceList[] EMPTY_ARRAY = new PsiReferenceList[0];
 
-  /**
-   * Returns the array of classes referenced by elements in the list.
-   *
-   * @return the array of referenced classes.
-   */
-  @NotNull
-  PsiClassType[] getReferencedTypes();
+	/**
+	 * Returns the array of reference elements contained in the list.
+	 */
+	@NotNull
+	PsiJavaCodeReferenceElement[] getReferenceElements();
 
-  Role getRole();
+	/**
+	 * Returns the array of classes referenced by elements in the list.
+	 */
+	@NotNull
+	PsiClassType[] getReferencedTypes();
 
-  enum Role {
-    THROWS_LIST,
-    EXTENDS_LIST,
-    IMPLEMENTS_LIST,
-    EXTENDS_BOUNDS_LIST
-  }
+	Role getRole();
+
+	enum Role
+	{
+		THROWS_LIST,
+		EXTENDS_LIST,
+		IMPLEMENTS_LIST,
+		EXTENDS_BOUNDS_LIST,
+		PROVIDES_WITH_LIST
+	}
 }

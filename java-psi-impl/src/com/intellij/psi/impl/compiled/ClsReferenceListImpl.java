@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,101 +15,136 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.util.AtomicNotNullLazyValue;
+import com.intellij.openapi.util.NotNullLazyValue;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiKeyword;
+import com.intellij.psi.PsiReferenceList;
 import com.intellij.psi.impl.java.stubs.PsiClassReferenceListStub;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings({"HardCodedStringLiteral"})
-public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassReferenceListStub> implements PsiReferenceList {
-  private static final ClsJavaCodeReferenceElementImpl[] EMPTY_REFS_ARRAY = new ClsJavaCodeReferenceElementImpl[0];
+public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassReferenceListStub> implements PsiReferenceList
+{
+	private static final ClsJavaCodeReferenceElementImpl[] EMPTY_REFS_ARRAY = new ClsJavaCodeReferenceElementImpl[0];
 
-  private ClsJavaCodeReferenceElementImpl[] myRefs;
+	private final NotNullLazyValue<ClsJavaCodeReferenceElementImpl[]> myRefs;
 
-  public ClsReferenceListImpl(@NotNull PsiClassReferenceListStub stub) {
-    super(stub);
-  }
+	public ClsReferenceListImpl(@NotNull PsiClassReferenceListStub stub)
+	{
+		super(stub);
+		myRefs = new AtomicNotNullLazyValue<ClsJavaCodeReferenceElementImpl[]>()
+		{
+			@NotNull
+			@Override
+			protected ClsJavaCodeReferenceElementImpl[] compute()
+			{
+				String[] strings = getStub().getReferencedNames();
+				if(strings.length > 0)
+				{
+					ClsJavaCodeReferenceElementImpl[] refs = new ClsJavaCodeReferenceElementImpl[strings.length];
+					for(int i = 0; i < strings.length; i++)
+					{
+						refs[i] = new ClsJavaCodeReferenceElementImpl(ClsReferenceListImpl.this, strings[i]);
+					}
+					return refs;
+				}
+				else
+				{
+					return EMPTY_REFS_ARRAY;
+				}
+			}
+		};
+	}
 
-  @Override
-  @NotNull
-  public PsiJavaCodeReferenceElement[] getReferenceElements() {
-    synchronized (LAZY_BUILT_LOCK) {
-      if (myRefs == null) {
-        final String[] strings = getStub().getReferencedNames();
-        if (strings.length > 0) {
-          myRefs = new ClsJavaCodeReferenceElementImpl[strings.length];
-          for (int i = 0; i < strings.length; i++) {
-            myRefs[i] = new ClsJavaCodeReferenceElementImpl(this, strings[i]);
-          }
-        }
-        else {
-          myRefs = EMPTY_REFS_ARRAY;
-        }
-      }
-      return myRefs;
-    }
-  }
+	@Override
+	@NotNull
+	public PsiJavaCodeReferenceElement[] getReferenceElements()
+	{
+		return myRefs.getValue();
+	}
 
-  @Override
-  @NotNull
-  public PsiElement[] getChildren() {
-    return getReferenceElements();
-  }
+	@Override
+	@NotNull
+	public PsiElement[] getChildren()
+	{
+		return getReferenceElements();
+	}
 
-  @Override
-  @NotNull
-  public PsiClassType[] getReferencedTypes() {
-    return getStub().getReferencedTypes();
-  }
+	@Override
+	@NotNull
+	public PsiClassType[] getReferencedTypes()
+	{
+		return getStub().getReferencedTypes();
+	}
 
-  @Override
-  public Role getRole() {
-    return getStub().getRole();
-  }
+	@Override
+	public Role getRole()
+	{
+		return getStub().getRole();
+	}
 
-  @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
-    final String[] names = getStub().getReferencedNames();
-    if (names.length != 0) {
-      final Role role = getStub().getRole();
-      switch (role) {
-        case EXTENDS_BOUNDS_LIST:
-        case EXTENDS_LIST:
-          buffer.append("extends ");
-          break;
-        case IMPLEMENTS_LIST:
-          buffer.append("implements ");
-          break;
-        case THROWS_LIST:
-          buffer.append("throws ");
-          break;
-      }
-      for (int i = 0; i < names.length; i++) {
-        if (i > 0) buffer.append(", ");
-        buffer.append(names[i]);
-      }
-    }
-  }
+	@Override
+	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	{
+		String[] names = getStub().getReferencedNames();
+		if(names.length != 0)
+		{
+			switch(getRole())
+			{
+				case EXTENDS_BOUNDS_LIST:
+				case EXTENDS_LIST:
+					buffer.append(PsiKeyword.EXTENDS).append(' ');
+					break;
+				case IMPLEMENTS_LIST:
+					buffer.append(PsiKeyword.IMPLEMENTS).append(' ');
+					break;
+				case THROWS_LIST:
+					buffer.append(PsiKeyword.THROWS).append(' ');
+					break;
+				case PROVIDES_WITH_LIST:
+					buffer.append(PsiKeyword.WITH).append(' ');
+					break;
+			}
+			for(int i = 0; i < names.length; i++)
+			{
+				if(i > 0)
+				{
+					buffer.append(", ");
+				}
+				buffer.append(names[i]);
+			}
+		}
+	}
 
-  @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, null);
-    setMirrors(getReferenceElements(), SourceTreeToPsiMap.<PsiReferenceList>treeToPsiNotNull(element).getReferenceElements());
-  }
+	@Override
+	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	{
+		setMirrorCheckingType(element, null);
+		setMirrors(getReferenceElements(), SourceTreeToPsiMap.<PsiReferenceList>treeToPsiNotNull(element).getReferenceElements());
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitReferenceList(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitReferenceList(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @Override
-  public String toString() {
-    return "PsiReferenceList";
-  }
+	@Override
+	public String toString()
+	{
+		return "PsiReferenceList";
+	}
 }

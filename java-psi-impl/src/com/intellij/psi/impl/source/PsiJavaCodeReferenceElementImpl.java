@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ import com.intellij.psi.scope.processor.FilterScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
@@ -129,16 +130,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		{
 			return treeParent.getTreeParent().getPsi() instanceof PsiTypeCodeFragment ? CLASS_OR_PACKAGE_NAME_KIND : CLASS_NAME_KIND;
 		}
-		if(i == JavaElementType.EXTENDS_LIST ||
-				i == JavaElementType.IMPLEMENTS_LIST ||
-				i == JavaElementType.EXTENDS_BOUND_LIST ||
-				i == JavaElementType.THROWS_LIST ||
-				i == JavaElementType.THIS_EXPRESSION ||
-				i == JavaElementType.SUPER_EXPRESSION ||
-				i == JavaDocElementType.DOC_METHOD_OR_FIELD_REF ||
-				i == JavaDocElementType.DOC_TAG_VALUE_ELEMENT ||
-				i == JavaElementType.REFERENCE_PARAMETER_LIST ||
-				i == JavaElementType.ANNOTATION)
+		if(i == JavaElementType.EXTENDS_LIST || i == JavaElementType.IMPLEMENTS_LIST || i == JavaElementType.EXTENDS_BOUND_LIST || i == JavaElementType.THROWS_LIST || i == JavaElementType
+				.THIS_EXPRESSION || i == JavaElementType.SUPER_EXPRESSION || i == JavaDocElementType.DOC_METHOD_OR_FIELD_REF || i == JavaDocElementType.DOC_TAG_VALUE_ELEMENT || i == JavaElementType
+				.REFERENCE_PARAMETER_LIST || i == JavaElementType.ANNOTATION)
 		{
 			if(isQualified())
 			{
@@ -164,7 +158,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 				return CLASS_OR_PACKAGE_NAME_KIND; // incomplete code
 			}
 		}
-		if(i == JavaElementType.PACKAGE_STATEMENT || i == JavaElementType.EXPORTS_STATEMENT)
+		if(i == JavaElementType.PACKAGE_STATEMENT || i == JavaElementType.EXPORTS_STATEMENT || i == JavaElementType.OPENS_STATEMENT)
 		{
 			return PACKAGE_NAME_KIND;
 		}
@@ -198,10 +192,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		{
 			return CLASS_FQ_OR_PACKAGE_NAME_KIND;
 		}
-		if(i == JavaDocElementType.DOC_TAG ||
-				i == JavaDocElementType.DOC_INLINE_TAG ||
-				i == JavaDocElementType.DOC_REFERENCE_HOLDER ||
-				i == JavaDocElementType.DOC_TYPE_HOLDER)
+		if(i == JavaDocElementType.DOC_TAG || i == JavaDocElementType.DOC_INLINE_TAG || i == JavaDocElementType.DOC_REFERENCE_HOLDER || i == JavaDocElementType.DOC_TYPE_HOLDER)
 		{
 			PsiDocComment docComment = PsiTreeUtil.getParentOfType(this, PsiDocComment.class);
 			if(JavaDocUtil.isInsidePackageInfo(docComment))
@@ -216,9 +207,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			PsiJavaCodeReferenceCodeFragment fragment = (PsiJavaCodeReferenceCodeFragment) treeParent.getPsi();
 			return fragment.isClassesAccepted() ? CLASS_FQ_OR_PACKAGE_NAME_KIND : PACKAGE_NAME_KIND;
 		}
-		if(i == JavaElementType.USES_STATEMENT || i == JavaElementType.PROVIDES_STATEMENT)
+		if(i == JavaElementType.USES_STATEMENT || i == JavaElementType.PROVIDES_STATEMENT || i == JavaElementType.PROVIDES_WITH_LIST)
 		{
-			return CLASS_FQ_NAME_KIND;
+			return CLASS_NAME_KIND;
 		}
 
 		diagnoseUnknownParent();
@@ -589,7 +580,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 
 				//A single-type-import declaration d in a compilation unit c of package p that imports a type named n shadows, throughout c, the declarations of:
 				//any top level type named n declared in another compilation unit of p
-				if(PsiTreeUtil.getParentOfType(this, PsiImportStatementBase.class) != null)
+				if(PsiTreeUtil.getParentOfType(this, PsiImportStatement.class) != null)
 				{
 					JavaResolveResult[] result = resolve(PACKAGE_NAME_KIND, containingFile);
 					return result.length == 0 ? resolve(classKind, containingFile) : result;
@@ -874,8 +865,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 						return false;
 					}
 					PsiElement nameElement = getReferenceNameElement();
-					return nameElement != null && nameElement.textMatches(nameIdentifier) &&
-							containingFile.getManager().areElementsEquivalent(resolve(), element);
+					return nameElement != null && nameElement.textMatches(nameIdentifier) && containingFile.getManager().areElementsEquivalent(resolve(), element);
 				}
 				return false;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiExportsStatement;
-import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.PsiJavaModuleReferenceElement;
-import com.intellij.psi.PsiRequiresStatement;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiJavaModuleStub;
 import com.intellij.psi.impl.source.tree.JavaElementType;
@@ -52,28 +45,6 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
 
 	@NotNull
 	@Override
-	public PsiJavaModuleReferenceElement getNameElement()
-	{
-		return PsiTreeUtil.getRequiredChildOfType(this, PsiJavaModuleReferenceElement.class);
-	}
-
-	@NotNull
-	@Override
-	public String getModuleName()
-	{
-		PsiJavaModuleStub stub = getGreenStub();
-		if(stub != null)
-		{
-			return stub.getName();
-		}
-		else
-		{
-			return getNameElement().getReferenceText();
-		}
-	}
-
-	@NotNull
-	@Override
 	public Iterable<PsiRequiresStatement> getRequires()
 	{
 		PsiJavaModuleStub stub = getGreenStub();
@@ -89,32 +60,90 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
 
 	@NotNull
 	@Override
-	public Iterable<PsiExportsStatement> getExports()
+	public Iterable<PsiPackageAccessibilityStatement> getExports()
 	{
 		PsiJavaModuleStub stub = getGreenStub();
 		if(stub != null)
 		{
-			return JBIterable.of(stub.getChildrenByType(JavaElementType.EXPORTS_STATEMENT, PsiExportsStatement.EMPTY_ARRAY));
+			return JBIterable.of(stub.getChildrenByType(JavaElementType.EXPORTS_STATEMENT, PsiPackageAccessibilityStatement.EMPTY_ARRAY));
 		}
 		else
 		{
-			return psiTraverser().children(this).filter(PsiExportsStatement.class);
+			return psiTraverser().children(this).filter(PsiPackageAccessibilityStatement.class).filter(statement -> statement.getRole() == PsiPackageAccessibilityStatement.Role.EXPORTS);
 		}
 	}
 
+	@NotNull
+	@Override
+	public Iterable<PsiPackageAccessibilityStatement> getOpens()
+	{
+		PsiJavaModuleStub stub = getGreenStub();
+		if(stub != null)
+		{
+			return JBIterable.of(stub.getChildrenByType(JavaElementType.OPENS_STATEMENT, PsiPackageAccessibilityStatement.EMPTY_ARRAY));
+		}
+		else
+		{
+			return psiTraverser().children(this).filter(PsiPackageAccessibilityStatement.class).filter(statement -> statement.getRole() == PsiPackageAccessibilityStatement.Role.OPENS);
+		}
+	}
+
+	@NotNull
+	@Override
+	public Iterable<PsiUsesStatement> getUses()
+	{
+		return psiTraverser().children(this).filter(PsiUsesStatement.class);
+	}
+
+	@NotNull
+	@Override
+	public Iterable<PsiProvidesStatement> getProvides()
+	{
+		return psiTraverser().children(this).filter(PsiProvidesStatement.class);
+	}
+
+	@NotNull
+	@Override
+	public PsiJavaModuleReferenceElement getNameIdentifier()
+	{
+		return PsiTreeUtil.getRequiredChildOfType(this, PsiJavaModuleReferenceElement.class);
+	}
+
+	@NotNull
 	@Override
 	public String getName()
 	{
-		return getModuleName();
+		PsiJavaModuleStub stub = getGreenStub();
+		if(stub != null)
+		{
+			return stub.getName();
+		}
+		else
+		{
+			return getNameIdentifier().getReferenceText();
+		}
 	}
 
 	@Override
 	public PsiElement setName(@NotNull String name) throws IncorrectOperationException
 	{
 		PsiElementFactory factory = PsiElementFactory.SERVICE.getInstance(getProject());
-		PsiJavaModuleReferenceElement newName = factory.createModuleFromText("module " + name + " {}").getNameElement();
-		getNameElement().replace(newName);
+		PsiJavaModuleReferenceElement newName = factory.createModuleFromText("module " + name + " {}").getNameIdentifier();
+		getNameIdentifier().replace(newName);
 		return this;
+	}
+
+	@Override
+	public PsiModifierList getModifierList()
+	{
+		return getStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
+	}
+
+	@Override
+	public boolean hasModifierProperty(@NotNull String name)
+	{
+		PsiModifierList modifierList = getModifierList();
+		return modifierList != null && modifierList.hasModifierProperty(name);
 	}
 
 	@Nullable
@@ -130,11 +159,17 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
 		return ItemPresentationProviders.getItemPresentation(this);
 	}
 
+	@Override
+	public int getTextOffset()
+	{
+		return getNameIdentifier().getTextOffset();
+	}
+
 	@NotNull
 	@Override
 	public PsiElement getNavigationElement()
 	{
-		return getNameElement();
+		return getNameIdentifier();
 	}
 
 	@Override
@@ -153,6 +188,6 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
 	@Override
 	public String toString()
 	{
-		return "PsiJavaModule:" + getModuleName();
+		return "PsiJavaModule:" + getName();
 	}
 }

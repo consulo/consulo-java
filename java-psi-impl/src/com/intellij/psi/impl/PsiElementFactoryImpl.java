@@ -883,7 +883,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 	private static final JavaParserUtil.ParserWrapper CATCH_SECTION = new JavaParserUtil.ParserWrapper()
 	{
 		@Override
-		public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
+		public void parse(final PsiBuilder builder)
 		{
 			JavaParser.INSTANCE.getStatementParser().parseCatchBlock(builder);
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,18 @@
  */
 package com.intellij.psi.impl.source;
 
+import static com.intellij.openapi.util.text.StringUtil.nullize;
+
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiJavaModuleReferenceElement;
+import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiRequiresStatement;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiRequiresStatementStub;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
 
 public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStatementStub> implements PsiRequiresStatement
 {
@@ -41,21 +40,19 @@ public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStat
 		super(node);
 	}
 
-	@Nullable
 	@Override
 	public PsiJavaModuleReferenceElement getReferenceElement()
 	{
 		return PsiTreeUtil.getChildOfType(this, PsiJavaModuleReferenceElement.class);
 	}
 
-	@Nullable
 	@Override
 	public String getModuleName()
 	{
 		PsiRequiresStatementStub stub = getGreenStub();
 		if(stub != null)
 		{
-			return stub.getModuleName();
+			return nullize(stub.getModuleName());
 		}
 		else
 		{
@@ -65,28 +62,16 @@ public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStat
 	}
 
 	@Override
-	public boolean isPublic()
+	public PsiModifierList getModifierList()
 	{
-		PsiRequiresStatementStub stub = getGreenStub();
-		if(stub != null)
-		{
-			return stub.isPublic();
-		}
-		else
-		{
-			for(PsiElement child = getFirstChild(); child != null; child = child.getNextSibling())
-			{
-				if(PsiUtil.isJavaToken(child, JavaTokenType.PUBLIC_KEYWORD))
-				{
-					return true;
-				}
-				if(child instanceof PsiJavaModuleReferenceElement)
-				{
-					break;
-				}
-			}
-			return false;
-		}
+		return getStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
+	}
+
+	@Override
+	public boolean hasModifierProperty(@NotNull String name)
+	{
+		PsiModifierList modifierList = getModifierList();
+		return modifierList != null && modifierList.hasModifierProperty(name);
 	}
 
 	@Override

@@ -15,13 +15,18 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.javadoc.JavadocTagInfo;
 import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author mike
@@ -92,11 +97,6 @@ class ExceptionTagInfo implements JavadocTagInfo {
   @Override
   public String getName() {
     return myName;
-  }
-
-  @Override
-  public Object[] getPossibleValues(PsiElement context, PsiElement place, String prefix) {
-    return ArrayUtil.EMPTY_OBJECT_ARRAY;
   }
 
   @Override

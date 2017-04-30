@@ -24,24 +24,30 @@ import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
 
-public class ImportListElement extends CompositeElement{
-  public ImportListElement() {
-    super(JavaElementType.IMPORT_LIST);
-  }
+public class ImportListElement extends CompositeElement
+{
+	public ImportListElement()
+	{
+		super(JavaElementType.IMPORT_LIST);
+	}
 
-  @Override
-  public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before){
-    if (before == null){
-      if (first == last && (first.getElementType() == JavaElementType.IMPORT_STATEMENT || first.getElementType() == JavaElementType.IMPORT_STATIC_STATEMENT)){
-        final PsiImportList list = (PsiImportList)SourceTreeToPsiMap.treeElementToPsi(this);
-        final PsiImportStatementBase statement = (PsiImportStatementBase)SourceTreeToPsiMap.treeElementToPsi(first);
-        final JavaPsiImplementationHelper instance = JavaPsiImplementationHelper.getInstance(list.getProject());
-        if (instance != null) {
-          anchor = instance.getDefaultImportAnchor(list, statement);
-        }
-        before = Boolean.TRUE;
-      }
-    }
-    return super.addInternal(first, last, anchor, before);
-  }
+	@Override
+	public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before)
+	{
+		if(before == null)
+		{
+			if(first == last && (first.getElementType() == JavaElementType.IMPORT_STATEMENT || first.getElementType() == JavaElementType.IMPORT_STATIC_STATEMENT))
+			{
+				final PsiImportList list = (PsiImportList) SourceTreeToPsiMap.treeElementToPsi(this);
+				final PsiImportStatementBase statement = (PsiImportStatementBase) SourceTreeToPsiMap.treeElementToPsi(first);
+				final JavaPsiImplementationHelper instance = JavaPsiImplementationHelper.getInstance(list.getProject());
+				if(instance != null)
+				{
+					anchor = instance.getDefaultImportAnchor(list, statement);
+				}
+				before = Boolean.TRUE;
+			}
+		}
+		return super.addInternal(first, last, anchor, before);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	private boolean myPhysical;
 	private PsiType myThisType;
 	private PsiType mySuperType;
-	private LinkedHashMap<String, String> myPseudoImports = new LinkedHashMap<String, String>();
+	private LinkedHashMap<String, String> myPseudoImports = new LinkedHashMap<>();
 	private VisibilityChecker myVisibilityChecker;
 	private ExceptionHandler myExceptionHandler;
 	private GlobalSearchScope myResolveScope;
@@ -58,8 +58,8 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 
 	public PsiCodeFragmentImpl(Project project, IElementType contentElementType, boolean isPhysical, @NonNls String name, CharSequence text, @Nullable PsiElement context)
 	{
-		super(TokenType.CODE_FRAGMENT, contentElementType, ((PsiManagerEx) PsiManager.getInstance(project)).getFileManager().createFileViewProvider(new LightVirtualFile(name, FileTypeManager
-				.getInstance().getFileTypeByFileName(name), text), isPhysical));
+		super(TokenType.CODE_FRAGMENT, contentElementType, PsiManagerEx.getInstanceEx(project).getFileManager().createFileViewProvider(new LightVirtualFile(name, FileTypeManager.getInstance()
+				.getFileTypeByFileName(name), text), isPhysical));
 		myContext = context;
 		((SingleRootFileViewProvider) getViewProvider()).forceCachedPsi(this);
 		myPhysical = isPhysical;
@@ -78,7 +78,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 		final PsiCodeFragmentImpl clone = (PsiCodeFragmentImpl) cloneImpl((FileElement) calcTreeElement().clone());
 		clone.myPhysical = false;
 		clone.myOriginalFile = this;
-		clone.myPseudoImports = new LinkedHashMap<String, String>(myPseudoImports);
+		clone.myPseudoImports = new LinkedHashMap<>(myPseudoImports);
 		FileManager fileManager = ((PsiManagerEx) getManager()).getFileManager();
 		SingleRootFileViewProvider cloneViewProvider = (SingleRootFileViewProvider) fileManager.createFileViewProvider(new LightVirtualFile(getName(), getLanguage(), getText()), false);
 		cloneViewProvider.forceCachedPsi(clone);
@@ -86,7 +86,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 		return clone;
 	}
 
-	private FileViewProvider myViewProvider = null;
+	private FileViewProvider myViewProvider;
 
 	@Override
 	@NotNull
@@ -231,7 +231,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 		}
 
 		IElementType i = myContentElementType;
-		if(i == JavaElementType.TYPE_TEXT || i == JavaElementType.EXPRESSION_STATEMENT || i == JavaElementType.REFERENCE_TEXT)
+		if(i == JavaElementType.TYPE_WITH_CONJUNCTIONS_TEXT || i == JavaElementType.TYPE_WITH_DISJUNCTIONS_TEXT || i == JavaElementType.EXPRESSION_STATEMENT || i == JavaElementType.REFERENCE_TEXT)
 		{
 			return true;
 		}
@@ -312,7 +312,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public void setIntentionActionsFilter(final IntentionActionsFilter filter)
+	public void setIntentionActionsFilter(@NotNull final IntentionActionsFilter filter)
 	{
 		myIntentionActionsFilter = filter;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,58 +17,40 @@ package com.intellij.psi.impl.source;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiProvidesStatement;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.PsiReferenceList;
+import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.psi.impl.java.stubs.PsiProvidesStatementStub;
+import com.intellij.psi.util.PsiTreeUtil;
 
-public class PsiProvidesStatementImpl extends CompositePsiElement implements PsiProvidesStatement
+public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement
 {
-	public PsiProvidesStatementImpl()
+	public PsiProvidesStatementImpl(@NotNull PsiProvidesStatementStub stub)
 	{
-		super(JavaElementType.PROVIDES_STATEMENT);
+		super(stub, JavaStubElementTypes.PROVIDES_STATEMENT);
+	}
+
+	public PsiProvidesStatementImpl(@NotNull ASTNode node)
+	{
+		super(node);
 	}
 
 	@Nullable
 	@Override
 	public PsiJavaCodeReferenceElement getInterfaceReference()
 	{
-		for(PsiElement child = getFirstChild(); child != null; child = child.getNextSibling())
-		{
-			if(child instanceof PsiJavaCodeReferenceElement)
-			{
-				return (PsiJavaCodeReferenceElement) child;
-			}
-			if(PsiUtil.isJavaToken(child, JavaTokenType.WITH_KEYWORD))
-			{
-				break;
-			}
-		}
-		return null;
+		return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
 	}
 
 	@Nullable
 	@Override
-	public PsiJavaCodeReferenceElement getImplementationReference()
+	public PsiReferenceList getImplementationList()
 	{
-		boolean afterWith = false;
-		for(PsiElement child = getFirstChild(); child != null; child = child.getNextSibling())
-		{
-			if(afterWith && child instanceof PsiJavaCodeReferenceElement)
-			{
-				return (PsiJavaCodeReferenceElement) child;
-			}
-			if(PsiUtil.isJavaToken(child, JavaTokenType.WITH_KEYWORD))
-			{
-				afterWith = true;
-			}
-		}
-		return null;
+		return PsiTreeUtil.getChildOfType(this, PsiReferenceList.class);
 	}
 
 	@Override

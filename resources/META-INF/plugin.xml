@@ -36,6 +36,12 @@
 	<xi:include href="/META-INF/Guava.xml" xpointer="xpointer(/idea-plugin/*)"/>
 
 	<actions>
+		<group id="NewJavaSpecialFile">
+			<action id="NewPackageInfo" class="com.intellij.ide.actions.CreatePackageInfoAction" require-module-extensions="java"/>
+			<action id="NewModuleInfo" class="com.intellij.ide.actions.CreateModuleInfoAction" require-module-extensions="java"/>
+			<add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
+		</group>
+
 		<group id="JavaGenerateGroup1">
 			<action id="GenerateTestMethod" class="com.intellij.testIntegration.GenerateTestMethodAction"/>
 			<action id="GenerateSetUpMethod" class="com.intellij.testIntegration.GenerateSetUpMethodAction"/>
@@ -1663,7 +1669,9 @@
 		<liveTemplateOptionalProcessor implementation="com.intellij.codeInsight.template.impl.ShortenToStaticImportProcessor"/>
 		<liveTemplateOptionalProcessor implementation="com.intellij.codeInsight.template.impl.ShortenFQNamesProcessor"/>
 
+		<createFromTemplateHandler implementation="com.intellij.ide.fileTemplates.JavaInternalTemplatesHandler"/>
 		<createFromTemplateHandler implementation="com.intellij.ide.fileTemplates.JavaCreateFromTemplateHandler"/>
+
 		<defaultTemplatePropertiesProvider implementation="com.intellij.ide.fileTemplates.TemplatePackagePropertyProvider"/>
 		<favoriteNodeProvider implementation="com.intellij.ide.favoritesTreeView.PsiClassFavoriteNodeProvider"/>
 		<favoriteNodeProvider implementation="com.intellij.ide.favoritesTreeView.PsiFieldFavoriteNodeProvider"/>
@@ -1684,6 +1692,8 @@
 		<internalFileTemplate name="Java Interface"/>
 		<internalFileTemplate name="Java Enum"/>
 		<internalFileTemplate name="Java AnnotationType" subject="@interface"/>
+		<internalFileTemplate name="package-info"/>
+		<internalFileTemplate name="module-info"/>
 
 		<saveFileAsTemplateHandler implementation="com.intellij.ide.fileTemplates.SaveJavaAsTemplateHandler"/>
 

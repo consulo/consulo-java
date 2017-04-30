@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -164,15 +164,8 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 	@Override
 	public PsiMember getPotentiallyApplicableMember()
 	{
-		return CachedValuesManager.getCachedValue(this, new CachedValueProvider<PsiMember>()
-		{
-			@Nullable
-			@Override
-			public Result<PsiMember> compute()
-			{
-				return Result.create(getPotentiallyApplicableMemberInternal(), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT, PsiMethodReferenceExpressionImpl.this);
-			}
-		});
+		return CachedValuesManager.getCachedValue(this, () -> CachedValueProvider.Result.create(getPotentiallyApplicableMemberInternal(), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT,
+				this));
 	}
 
 	private PsiMember getPotentiallyApplicableMemberInternal()
@@ -201,7 +194,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 		if(element instanceof PsiIdentifier)
 		{
 			final String identifierName = element.getText();
-			final List<PsiMethod> result = new ArrayList<PsiMethod>();
+			final List<PsiMethod> result = new ArrayList<>();
 			for(HierarchicalMethodSignature signature : containingClass.getVisibleSignatures())
 			{
 				if(identifierName.equals(signature.getName()))
@@ -222,7 +215,12 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 			final PsiClass arrayClass = factory.getArrayClass(PsiUtil.getLanguageLevel(this));
 			if(arrayClass == containingClass)
 			{
-				final PsiType componentType = qualifierResolveResult.getSubstitutor().substitute(arrayClass.getTypeParameters()[0]);
+				final PsiTypeParameter[] typeParameters = arrayClass.getTypeParameters();
+				if(typeParameters.length != 1)
+				{
+					return null;
+				}
+				final PsiType componentType = qualifierResolveResult.getSubstitutor().substitute(typeParameters[0]);
 				LOG.assertTrue(componentType != null, qualifierResolveResult.getSubstitutor());
 				//15.13.1 A method reference expression of the form ArrayType :: new is always exact.
 				return factory.createMethodFromText("public " + componentType.createArrayType().getCanonicalText() + " __array__(int i) {return null;}", this);
@@ -440,10 +438,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
 			throw new IncorrectOperationException();
 		}
 		final String oldRefName = oldIdentifier.getText();
-		if(PsiKeyword.THIS.equals(oldRefName) ||
-				PsiKeyword.SUPER.equals(oldRefName) ||
-				PsiKeyword.NEW.equals(oldRefName) ||
-				Comparing.strEqual(oldRefName, newElementName))
+		if(PsiKeyword.THIS.equals(oldRefName) || PsiKeyword.SUPER.equals(oldRefName) || PsiKeyword.NEW.equals(oldRefName) || Comparing.strEqual(oldRefName, newElementName))
 		{
 			return this;
 		}

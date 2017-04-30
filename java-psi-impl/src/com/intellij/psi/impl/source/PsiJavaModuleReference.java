@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleReferenceElement>
@@ -61,13 +60,6 @@ public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleR
 
 	@NotNull
 	@Override
-	public Object[] getVariants()
-	{
-		return ArrayUtil.EMPTY_OBJECT_ARRAY;
-	}
-
-	@NotNull
-	@Override
 	public ResolveResult[] multiResolve(boolean incompleteCode)
 	{
 		return ResolveCache.getInstance(getProject()).resolveWithCaching(this, Resolver.INSTANCE, false, incompleteCode);
@@ -82,7 +74,7 @@ public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleR
 			throw new IncorrectOperationException(JavaCoreBundle.message("psi.error.attempt.to.edit.class.file", element.getContainingFile()));
 		}
 		PsiElementFactory factory = PsiElementFactory.SERVICE.getInstance(element.getProject());
-		PsiJavaModuleReferenceElement newElement = factory.createModuleFromText("module " + newName + " {}").getNameElement();
+		PsiJavaModuleReferenceElement newElement = factory.createModuleFromText("module " + newName + " {}").getNameIdentifier();
 		return element.replace(newElement);
 	}
 
@@ -145,14 +137,10 @@ public class PsiJavaModuleReference extends PsiReferenceBase.Poly<PsiJavaModuleR
 		}
 		CachedValuesManager manager = CachedValuesManager.getManager(refOwner.getProject());
 		Key<CachedValue<Collection<PsiJavaModule>>> key = incompleteCode ? K_INCOMPLETE : K_COMPLETE;
-		return manager.getCachedValue(refOwner, key, new CachedValueProvider<Collection<PsiJavaModule>>()
+		return manager.getCachedValue(refOwner, key, () ->
 		{
-			@Override
-			public Result<Collection<PsiJavaModule>> compute()
-			{
-				Collection<PsiJavaModule> modules = Resolver.findModules(refOwner.getContainingFile(), refText, incompleteCode);
-				return Result.create(modules, OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
-			}
+			Collection<PsiJavaModule> modules = Resolver.findModules(refOwner.getContainingFile(), refText, incompleteCode);
+			return CachedValueProvider.Result.create(modules, OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
 		}, false);
 	}
 }

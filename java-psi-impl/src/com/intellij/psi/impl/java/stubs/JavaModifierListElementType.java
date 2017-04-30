@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,13 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
+import static com.intellij.psi.impl.source.tree.JavaElementType.LOCAL_VARIABLE;
+import static com.intellij.psi.impl.source.tree.JavaElementType.RESOURCE_LIST;
+import static com.intellij.psi.impl.source.tree.JavaElementType.RESOURCE_VARIABLE;
+
+import java.io.IOException;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
@@ -22,75 +29,83 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.impl.cache.RecordUtil;
 import com.intellij.psi.impl.java.stubs.impl.PsiModifierListStubImpl;
 import com.intellij.psi.impl.source.PsiModifierListImpl;
-import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.java.ModifierListElement;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 /**
  * @author max
  */
-public class JavaModifierListElementType extends JavaStubElementType<PsiModifierListStub, PsiModifierList> {
-  public JavaModifierListElementType() {
-    super("MODIFIER_LIST");
-  }
+public class JavaModifierListElementType extends JavaStubElementType<PsiModifierListStub, PsiModifierList>
+{
+	public JavaModifierListElementType()
+	{
+		super("MODIFIER_LIST");
+	}
 
-  @NotNull
-  @Override
-  public ASTNode createCompositeNode() {
-    return new ModifierListElement();
-  }
+	@NotNull
+	@Override
+	public ASTNode createCompositeNode()
+	{
+		return new ModifierListElement();
+	}
 
-  @Override
-  public PsiModifierList createPsi(@NotNull final PsiModifierListStub stub) {
-    return getPsiFactory(stub).createModifierList(stub);
-  }
+	@Override
+	public PsiModifierList createPsi(@NotNull final PsiModifierListStub stub)
+	{
+		return getPsiFactory(stub).createModifierList(stub);
+	}
 
-  @Override
-  public PsiModifierList createPsi(@NotNull final ASTNode node) {
-    return new PsiModifierListImpl(node);
-  }
+	@Override
+	public PsiModifierList createPsi(@NotNull final ASTNode node)
+	{
+		return new PsiModifierListImpl(node);
+	}
 
-  @Override
-  public PsiModifierListStub createStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub) {
-    return new PsiModifierListStubImpl(parentStub, RecordUtil.packModifierList(tree, node, parentStub));
-  }
+	@Override
+	public PsiModifierListStub createStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub)
+	{
+		return new PsiModifierListStubImpl(parentStub, RecordUtil.packModifierList(tree, node));
+	}
 
-  @Override
-  public void serialize(@NotNull final PsiModifierListStub stub, @NotNull final StubOutputStream dataStream) throws IOException {
-    dataStream.writeVarInt(stub.getModifiersMask());
-  }
+	@Override
+	public void serialize(@NotNull final PsiModifierListStub stub, @NotNull final StubOutputStream dataStream) throws IOException
+	{
+		dataStream.writeVarInt(stub.getModifiersMask());
+	}
 
-  @Override
-  public boolean shouldCreateStub(final ASTNode node) {
-    final IElementType parentType = node.getTreeParent().getElementType();
-    return shouldCreateStub(parentType);
-  }
+	@Override
+	public boolean shouldCreateStub(final ASTNode node)
+	{
+		final IElementType parentType = node.getTreeParent().getElementType();
+		return shouldCreateStub(parentType);
+	}
 
-  @Override
-  public boolean shouldCreateStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub) {
-    final LighterASTNode parent = tree.getParent(node);
-    final IElementType parentType = parent != null ? parent.getTokenType() : null;
-    return shouldCreateStub(parentType);
-  }
+	@Override
+	public boolean shouldCreateStub(final LighterAST tree, final LighterASTNode node, final StubElement parentStub)
+	{
+		final LighterASTNode parent = tree.getParent(node);
+		final IElementType parentType = parent != null ? parent.getTokenType() : null;
+		return shouldCreateStub(parentType);
+	}
 
-  private static boolean shouldCreateStub(final IElementType parentType) {
-    return parentType != null && parentType != JavaElementType.LOCAL_VARIABLE && parentType != JavaElementType.RESOURCE_VARIABLE;
-  }
+	private static boolean shouldCreateStub(IElementType parentType)
+	{
+		return parentType != null && parentType != LOCAL_VARIABLE && parentType != RESOURCE_VARIABLE && parentType != RESOURCE_LIST;
+	}
 
-  @NotNull
-  @Override
-  public PsiModifierListStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
-    return new PsiModifierListStubImpl(parentStub, dataStream.readVarInt());
-  }
+	@NotNull
+	@Override
+	public PsiModifierListStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	{
+		return new PsiModifierListStubImpl(parentStub, dataStream.readVarInt());
+	}
 
-  @Override
-  public void indexStub(@NotNull final PsiModifierListStub stub, @NotNull final IndexSink sink) {
-  }
+	@Override
+	public void indexStub(@NotNull final PsiModifierListStub stub, @NotNull final IndexSink sink)
+	{
+	}
 }

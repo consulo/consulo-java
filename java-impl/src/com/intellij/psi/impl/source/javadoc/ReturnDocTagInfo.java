@@ -15,13 +15,12 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.javadoc.JavadocTagInfo;
 import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
-import com.intellij.util.ArrayUtil;
 
 /**
  * @author mike
@@ -35,11 +34,6 @@ class ReturnDocTagInfo implements JavadocTagInfo {
   @Override
   public String getName() {
     return "return";
-  }
-
-  @Override
-  public Object[] getPossibleValues(PsiElement context, PsiElement place, String prefix) {
-    return ArrayUtil.EMPTY_OBJECT_ARRAY;
   }
 
   @Override

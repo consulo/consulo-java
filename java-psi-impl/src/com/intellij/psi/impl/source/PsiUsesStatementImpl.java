@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,25 @@ package com.intellij.psi.impl.source;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiUsesStatement;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.psi.impl.java.stubs.PsiUsesStatementStub;
 import com.intellij.psi.util.PsiTreeUtil;
 
-public class PsiUsesStatementImpl extends CompositePsiElement implements PsiUsesStatement
+public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStub> implements PsiUsesStatement
 {
-	public PsiUsesStatementImpl()
+	public PsiUsesStatementImpl(@NotNull PsiUsesStatementStub stub)
 	{
-		super(JavaElementType.USES_STATEMENT);
+		super(stub, JavaStubElementTypes.USES_STATEMENT);
+	}
+
+	public PsiUsesStatementImpl(@NotNull ASTNode node)
+	{
+		super(node);
 	}
 
 	@Nullable

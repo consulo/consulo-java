@@ -45,11 +45,6 @@ public class ValueDocTagInfo implements JavadocTagInfo {
   }
 
   @Override
-  public Object[] getPossibleValues(PsiElement context, PsiElement place, String prefix) {
-    return null;
-  }
-
-  @Override
   public String checkTagValue(PsiDocTagValue value) {
     boolean hasReference = (value != null && value.getFirstChild() != null);
     if (hasReference) {

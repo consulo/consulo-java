@@ -58,7 +58,7 @@ public class JavaModuleRootTreeNode extends PsiDirectoryNode
 			PsiJavaModule moduleDeclaration = ((PsiJavaFile) file).getModuleDeclaration();
 			if(moduleDeclaration != null)
 			{
-				name = StringUtil.notNullize(moduleDeclaration.getModuleName(), name);
+				name = StringUtil.notNullize(moduleDeclaration.getName(), name);
 			}
 			data.setPresentableText(name);
 		}

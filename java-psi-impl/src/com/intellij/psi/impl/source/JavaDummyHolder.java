@@ -37,9 +37,12 @@ import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.CharTable;
+import com.intellij.util.ExceptionUtil;
 
 public class JavaDummyHolder extends DummyHolder implements PsiImportHolder
 {
+	private final String myExceptionText = ExceptionUtil.getThrowableText(new Exception());
+
 	private static final Map<String, PsiClass> EMPTY = Collections.emptyMap();
 	private Map<String, PsiClass> myPseudoImports = EMPTY;
 

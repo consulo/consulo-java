@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,10 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import java.util.List;
-
-import com.intellij.psi.PsiExportsStatement;
+import com.intellij.psi.PsiUsesStatement;
 import com.intellij.psi.stubs.StubElement;
 
-public interface PsiExportsStatementStub extends StubElement<PsiExportsStatement>
+public interface PsiUsesStatementStub extends StubElement<PsiUsesStatement>
 {
-	String getPackageName();
-
-	List<String> getTargets();
+	String getClassName();
 }

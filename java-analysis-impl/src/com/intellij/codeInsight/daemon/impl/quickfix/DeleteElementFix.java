@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,32 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.intention.IntentionAction;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.FileModificationService;
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.ObjectUtils;
+import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.java.JavaQuickFixBundle;
 
-public class DeleteElementFix implements IntentionAction
+public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElement
 {
-	private final SmartPsiElementPointer<PsiElement> myPointer;
+	private final String myText;
 
 	public DeleteElementFix(@NotNull PsiElement element)
 	{
-		myPointer = SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element);
+		super(element);
+		myText = null;
+	}
+
+	public DeleteElementFix(@NotNull PsiElement element, @NotNull @Nls String text)
+	{
+		super(element);
+		myText = text;
 	}
 
 	@Nls
@@ -41,7 +50,7 @@ public class DeleteElementFix implements IntentionAction
 	@Override
 	public String getText()
 	{
-		return JavaQuickFixBundle.message("delete.element.fix.text");
+		return ObjectUtils.notNull(myText, getFamilyName());
 	}
 
 	@Nls
@@ -49,28 +58,21 @@ public class DeleteElementFix implements IntentionAction
 	@Override
 	public String getFamilyName()
 	{
-		return getText();
+		return JavaQuickFixBundle.message("delete.element.fix.text");
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
 	{
-		return myPointer.getElement() != null;
-	}
-
-	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		PsiElement element = myPointer.getElement();
-		if(element != null)
+		if(FileModificationService.getInstance().preparePsiElementForWrite(file))
 		{
-			element.delete();
+			WriteAction.run(() -> new CommentTracker().deleteAndRestoreComments(startElement));
 		}
 	}
 
 	@Override
 	public boolean startInWriteAction()
 	{
-		return true;
+		return false;
 	}
 }

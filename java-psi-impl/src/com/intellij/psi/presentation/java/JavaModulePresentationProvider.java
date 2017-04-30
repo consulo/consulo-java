@@ -44,7 +44,7 @@ public class JavaModulePresentationProvider implements ItemPresentationProvider<
 			@Override
 			public String getPresentableText()
 			{
-				return item.getModuleName();
+				return item.getName();
 			}
 
 			@Nullable

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.source;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +27,10 @@ import com.intellij.psi.impl.light.LightClassReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.SmartList;
+import com.intellij.util.containers.ContainerUtil;
 
 /**
  * @author max
@@ -44,12 +47,12 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 	public PsiClassReferenceType(@NotNull PsiJavaCodeReferenceElement reference, LanguageLevel level, @NotNull PsiAnnotation[] annotations)
 	{
 		super(level, annotations);
-		myReference = new Computable.PredefinedValueComputable<PsiJavaCodeReferenceElement>(reference);
+		myReference = new Computable.PredefinedValueComputable<>(reference);
 	}
 
 	public PsiClassReferenceType(@NotNull PsiJavaCodeReferenceElement reference, LanguageLevel level, @NotNull TypeAnnotationProvider provider)
 	{
-		this(new Computable.PredefinedValueComputable<PsiJavaCodeReferenceElement>(reference), level, provider);
+		this(new Computable.PredefinedValueComputable<>(reference), level, provider);
 	}
 
 	public PsiClassReferenceType(@NotNull Computable<PsiJavaCodeReferenceElement> reference, LanguageLevel level, @NotNull TypeAnnotationProvider provider)
@@ -58,6 +61,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 		myReference = reference;
 	}
 
+	@NotNull
 	private static PsiAnnotation[] collectAnnotations(PsiJavaCodeReferenceElement reference)
 	{
 		List<PsiAnnotation> result = null;
@@ -67,7 +71,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 			{
 				if(result == null)
 				{
-					result = new SmartList<PsiAnnotation>();
+					result = new SmartList<>();
 				}
 				result.add((PsiAnnotation) child);
 			}
@@ -93,6 +97,40 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 	public GlobalSearchScope getResolveScope()
 	{
 		return getReference().getResolveScope();
+	}
+
+	@NotNull
+	@Override
+	public PsiAnnotation[] getAnnotations()
+	{
+		return getAnnotations(true);
+	}
+
+	private PsiAnnotation[] getAnnotations(boolean merge)
+	{
+		PsiAnnotation[] annotations = super.getAnnotations();
+
+		if(merge)
+		{
+			PsiJavaCodeReferenceElement reference = myReference.compute();
+			if(reference != null && reference.isValid() && reference.isQualified())
+			{
+				PsiAnnotation[] embedded = collectAnnotations(reference);
+				if(annotations.length > 0 && embedded.length > 0)
+				{
+					LinkedHashSet<PsiAnnotation> set = ContainerUtil.newLinkedHashSet();
+					ContainerUtil.addAll(set, annotations);
+					ContainerUtil.addAll(set, embedded);
+					annotations = set.toArray(PsiAnnotation.EMPTY_ARRAY);
+				}
+				else
+				{
+					annotations = ArrayUtil.mergeArrays(annotations, embedded);
+				}
+			}
+		}
+
+		return annotations;
 	}
 
 	@Override
@@ -242,7 +280,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 	{
 		String presentableText = PsiNameHelper.getPresentableText(getReference());
 
-		PsiAnnotation[] annotations = annotated ? getAnnotations() : PsiAnnotation.EMPTY_ARRAY;
+		PsiAnnotation[] annotations = annotated ? getAnnotations(false) : PsiAnnotation.EMPTY_ARRAY;
 		if(annotations.length == 0)
 		{
 			return presentableText;
@@ -274,7 +312,7 @@ public class PsiClassReferenceType extends PsiClassType.Stub
 		if(reference instanceof PsiAnnotatedJavaCodeReferenceElement)
 		{
 			PsiAnnotatedJavaCodeReferenceElement ref = (PsiAnnotatedJavaCodeReferenceElement) reference;
-			PsiAnnotation[] annotations = annotated ? getAnnotations() : PsiAnnotation.EMPTY_ARRAY;
+			PsiAnnotation[] annotations = annotated ? getAnnotations(false) : PsiAnnotation.EMPTY_ARRAY;
 			return ref.getCanonicalText(annotated, annotations.length == 0 ? null : annotations);
 		}
 		return reference.getCanonicalText();

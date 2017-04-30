@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,31 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaModule;
+import com.intellij.psi.PsiJavaModuleReferenceElement;
+import com.intellij.psi.PsiJavaParserFacade;
+import com.intellij.psi.PsiRequiresStatement;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.JavaQuickFixBundle;
 
 /**
  * @author Pavel.Dolgov
  */
-public class AddRequiredModuleFix implements IntentionAction
+public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiElement
 {
-	private final SmartPsiElementPointer<PsiJavaModule> myModulePointer;
 	private final String myRequiredName;
 
 	public AddRequiredModuleFix(PsiJavaModule module, String requiredName)
 	{
-		myModulePointer = SmartPointerManager.getInstance(module.getProject()).createSmartPsiElementPointer(module);
+		super(module);
 		myRequiredName = requiredName;
 	}
 
@@ -58,27 +63,19 @@ public class AddRequiredModuleFix implements IntentionAction
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
 	{
-		if(!PsiUtil.isLanguageLevel9OrHigher(file))
-		{
-			return false;
-		}
-		PsiJavaModule module = myModulePointer.getElement();
-		return module != null && module.isValid() && module.getManager().isInProject(module) && getLBrace(module) != null;
+		return PsiUtil.isLanguageLevel9OrHigher(file) && startElement instanceof PsiJavaModule && startElement.getManager().isInProject(startElement) && getLBrace((PsiJavaModule) startElement) !=
+				null;
 	}
 
 	@Override
-	public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable Editor editor, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
 	{
-		PsiJavaModule module = myModulePointer.getElement();
-		if(module == null)
-		{
-			return;
-		}
+		PsiJavaModule module = (PsiJavaModule) startElement;
 
 		PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
-		PsiJavaModule tempModule = parserFacade.createModuleFromText("module " + module.getModuleName() + " { requires " + myRequiredName + "; }");
+		PsiJavaModule tempModule = parserFacade.createModuleFromText("module " + module.getName() + " { requires " + myRequiredName + "; }");
 		Iterable<PsiRequiresStatement> tempModuleRequires = tempModule.getRequires();
 		PsiRequiresStatement requiresStatement = tempModuleRequires.iterator().next();
 
@@ -105,7 +102,7 @@ public class AddRequiredModuleFix implements IntentionAction
 	@Nullable
 	private static PsiElement getLBrace(@NotNull PsiJavaModule module)
 	{
-		PsiJavaModuleReferenceElement nameElement = module.getNameElement();
+		PsiJavaModuleReferenceElement nameElement = module.getNameIdentifier();
 		for(PsiElement element = nameElement.getNextSibling(); element != null; element = element.getNextSibling())
 		{
 			if(PsiUtil.isJavaToken(element, JavaTokenType.LBRACE))

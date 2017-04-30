@@ -25,7 +25,6 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.codeInspection.dataFlow.Nullness;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -40,8 +39,6 @@ import consulo.java.JavaQuickFixBundle;
  */
 public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix implements HighPriorityAction
 {
-	private static final Logger LOG = Logger.getInstance(WrapObjectWithOptionalOfNullableFix.class);
-
 	public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
 	protected WrapObjectWithOptionalOfNullableFix(final @NotNull PsiExpressionList list, final int i, final @NotNull PsiType toType, final @NotNull ArgumentFixerActionFactory fixerActionFactory)
@@ -67,51 +64,6 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
 	{
 		return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
-	}
-
-	public static class MyIntentionAction extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction
-	{
-		@Nullable
-		private final PsiType myType;
-
-		protected MyIntentionAction(@NotNull PsiExpression element, @Nullable PsiType type)
-		{
-			super(element);
-			myType = type;
-		}
-
-		@Nls
-		@NotNull
-		@Override
-		public String getFamilyName()
-		{
-			return JavaQuickFixBundle.message("wrap.with.optional.single.parameter.text");
-		}
-
-		@Override
-		public void invoke(@NotNull Project project,
-				@NotNull PsiFile file,
-				@Nullable("is null when called from inspection") Editor editor,
-				@NotNull PsiElement startElement,
-				@NotNull PsiElement endElement)
-		{
-			startElement.replace(getModifiedExpression((PsiExpression) getStartElement()));
-		}
-
-		@Override
-		public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
-		{
-			return startElement.isValid() &&
-					startElement.getManager().isInProject(startElement) &&
-					PsiUtil.isLanguageLevel8OrHigher(startElement) && areConvertible(((PsiExpression) startElement).getType(), myType);
-		}
-
-		@NotNull
-		@Override
-		public String getText()
-		{
-			return getFamilyName();
-		}
 	}
 
 	public static IntentionAction createFix(@Nullable PsiType type, @NotNull PsiExpression expression)
@@ -144,9 +96,8 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 			@Override
 			public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement)
 			{
-				return startElement.isValid() &&
-						startElement.getManager().isInProject(startElement) &&
-						PsiUtil.isLanguageLevel8OrHigher(startElement) && areConvertible(((PsiExpression) startElement).getType(), type);
+				return startElement.isValid() && startElement.getManager().isInProject(startElement) && PsiUtil.isLanguageLevel8OrHigher(startElement) && areConvertible(((PsiExpression)
+						startElement).getType(), type);
 			}
 
 			@NotNull
@@ -184,10 +135,7 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
 	private static boolean areConvertible(@Nullable PsiType exprType, @Nullable PsiType parameterType)
 	{
-		if(exprType == null ||
-				!exprType.isValid() ||
-				!(parameterType instanceof PsiClassType) ||
-				!parameterType.isValid())
+		if(exprType == null || !exprType.isValid() || !(parameterType instanceof PsiClassType) || !parameterType.isValid())
 		{
 			return false;
 		}

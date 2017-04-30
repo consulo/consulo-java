@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import static com.intellij.lang.java.parser.JavaParserUtil.done;
 import static com.intellij.lang.java.parser.JavaParserUtil.exprType;
 import static com.intellij.lang.java.parser.JavaParserUtil.semicolon;
 
+import java.util.function.Predicate;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
@@ -41,77 +43,75 @@ public class FileParser
 
 	private final JavaParser myParser;
 
-	public FileParser(@NotNull final JavaParser javaParser)
+	public FileParser(@NotNull JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
-	public void parse(final PsiBuilder builder)
+	public void parse(@NotNull PsiBuilder builder)
 	{
-		parseFile(builder, IMPORT_LIST_STOPPER_SET, "expected.class.or.interface");
+		parseFile(builder, FileParser::stopImportListParsing, "expected.class.or.interface");
 	}
 
-	private static String error(@NotNull String errorMessageKey)
+	public void parseFile(@NotNull PsiBuilder builder, @NotNull Predicate<PsiBuilder> importListStopper, @NotNull String errorMessageKey)
 	{
-		return JavaErrorMessages.message(errorMessageKey);
-	}
-
-	public void parseFile(@NotNull final PsiBuilder builder, @NotNull final TokenSet importListStoppers, @NotNull final String errorMessageKey)
-	{
-		if(PsiKeyword.MODULE.equals(builder.getTokenText()))
-		{
-			ModuleParser.parseModule(builder);
-			return;
-		}
-
 		parsePackageStatement(builder);
 
-		Pair<PsiBuilder.Marker, Boolean> impListInfo = parseImportList(builder, importListStoppers);
-
+		Pair<PsiBuilder.Marker, Boolean> impListInfo = parseImportList(builder, importListStopper);  // (importList, isEmpty)
 		Boolean firstDeclarationOk = null;
 		PsiBuilder.Marker firstDeclaration = null;
-		PsiBuilder.Marker invalidElements = null;
-		while(!builder.eof())
-		{
-			if(builder.getTokenType() == JavaTokenType.SEMICOLON)
-			{
-				builder.advanceLexer();
-				continue;
-			}
 
-			final PsiBuilder.Marker declaration = parseInitial(builder);
-			if(declaration != null)
+		PsiBuilder.Marker module = myParser.getModuleParser().parse(builder);
+		if(module != null)
+		{
+			firstDeclarationOk = true;
+			firstDeclaration = module;
+		}
+		else
+		{
+			PsiBuilder.Marker invalidElements = null;
+			while(!builder.eof())
 			{
-				if(invalidElements != null)
+				if(builder.getTokenType() == JavaTokenType.SEMICOLON)
 				{
-					invalidElements.errorBefore(error(errorMessageKey), declaration);
-					invalidElements = null;
+					builder.advanceLexer();
+					continue;
 				}
+
+				final PsiBuilder.Marker declaration = parseInitial(builder);
+				if(declaration != null)
+				{
+					if(invalidElements != null)
+					{
+						invalidElements.errorBefore(error(errorMessageKey), declaration);
+						invalidElements = null;
+					}
+					if(firstDeclarationOk == null)
+					{
+						firstDeclarationOk = exprType(declaration) != JavaElementType.MODIFIER_LIST;
+						if(firstDeclarationOk)
+						{
+							firstDeclaration = declaration;
+						}
+					}
+					continue;
+				}
+
+				if(invalidElements == null)
+				{
+					invalidElements = builder.mark();
+				}
+				builder.advanceLexer();
 				if(firstDeclarationOk == null)
 				{
-					firstDeclarationOk = exprType(declaration) != JavaElementType.MODIFIER_LIST;
-					if(firstDeclarationOk)
-					{
-						firstDeclaration = declaration;
-					}
+					firstDeclarationOk = false;
 				}
-				continue;
 			}
 
-			if(invalidElements == null)
+			if(invalidElements != null)
 			{
-				invalidElements = builder.mark();
+				invalidElements.error(error(errorMessageKey));
 			}
-			builder.advanceLexer();
-			if(firstDeclarationOk == null)
-			{
-				firstDeclarationOk = false;
-			}
-		}
-
-		if(invalidElements != null)
-		{
-			invalidElements.error(error(errorMessageKey));
 		}
 
 		if(impListInfo.second && firstDeclarationOk == Boolean.TRUE)
@@ -121,14 +121,31 @@ public class FileParser
 		}
 	}
 
+	private static boolean stopImportListParsing(PsiBuilder b)
+	{
+		IElementType type = b.getTokenType();
+		if(IMPORT_LIST_STOPPER_SET.contains(type))
+		{
+			return true;
+		}
+		if(type == JavaTokenType.IDENTIFIER)
+		{
+			String text = b.getTokenText();
+			if(PsiKeyword.OPEN.equals(text) || PsiKeyword.MODULE.equals(text))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Nullable
 	protected PsiBuilder.Marker parseInitial(PsiBuilder builder)
 	{
 		return myParser.getDeclarationParser().parse(builder, DeclarationParser.Context.FILE);
 	}
 
-	@Nullable
-	public PsiBuilder.Marker parsePackageStatement(final PsiBuilder builder)
+	private void parsePackageStatement(PsiBuilder builder)
 	{
 		final PsiBuilder.Marker statement = builder.mark();
 
@@ -140,7 +157,7 @@ public class FileParser
 			if(!expect(builder, JavaTokenType.PACKAGE_KEYWORD))
 			{
 				statement.rollbackTo();
-				return null;
+				return;
 			}
 		}
 
@@ -148,17 +165,16 @@ public class FileParser
 		if(ref == null)
 		{
 			statement.error(JavaErrorMessages.message("expected.class.or.interface"));
-			return null;
+			return;
 		}
 
 		semicolon(builder);
 
 		done(statement, JavaElementType.PACKAGE_STATEMENT);
-		return statement;
 	}
 
 	@NotNull
-	public Pair<PsiBuilder.Marker, Boolean> parseImportList(final PsiBuilder builder, final TokenSet stoppers)
+	private Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<PsiBuilder> stopper)
 	{
 		PsiBuilder.Marker list = builder.mark();
 
@@ -169,12 +185,11 @@ public class FileParser
 			PsiBuilder.Marker invalidElements = null;
 			while(!builder.eof())
 			{
-				tokenType = builder.getTokenType();
-				if(stoppers.contains(tokenType))
+				if(stopper.test(builder))
 				{
 					break;
 				}
-				else if(tokenType == JavaTokenType.SEMICOLON)
+				else if(builder.getTokenType() == JavaTokenType.SEMICOLON)
 				{
 					builder.advanceLexer();
 					continue;
@@ -209,7 +224,7 @@ public class FileParser
 	}
 
 	@Nullable
-	private PsiBuilder.Marker parseImportStatement(final PsiBuilder builder)
+	private PsiBuilder.Marker parseImportStatement(PsiBuilder builder)
 	{
 		if(builder.getTokenType() != JavaTokenType.IMPORT_KEYWORD)
 		{
@@ -230,5 +245,10 @@ public class FileParser
 
 		done(statement, type);
 		return statement;
+	}
+
+	private static String error(@NotNull String errorMessageKey)
+	{
+		return JavaErrorMessages.message(errorMessageKey);
 	}
 }

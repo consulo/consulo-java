@@ -163,6 +163,12 @@ public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager
 	}
 
 	@Override
+	public boolean hasConflictingOnDemandImport(@NotNull PsiJavaFile file, @NotNull PsiClass psiClass, @NotNull String referenceName)
+	{
+		return ImportHelper.hasConflictingOnDemandImport(file, psiClass, referenceName);
+	}
+
+	@Override
 	public PsiImportList prepareOptimizeImportsResult(@NotNull PsiJavaFile file)
 	{
 		return new ImportHelper(getSettings()).prepareOptimizeImportsResult(file);

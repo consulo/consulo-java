@@ -21,7 +21,6 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.javadoc.JavadocTagInfo;
 import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.util.ArrayUtil;
 
 public class SerialDocTagInfo implements JavadocTagInfo {
   @Override
@@ -39,10 +38,6 @@ public class SerialDocTagInfo implements JavadocTagInfo {
     return element instanceof PsiClass || element instanceof PsiField;
   }
 
-  @Override
-  public Object[] getPossibleValues(PsiElement context, PsiElement place, String prefix) {
-    return ArrayUtil.EMPTY_OBJECT_ARRAY;
-  }
 
   @Override
   public String checkTagValue(PsiDocTagValue value) {

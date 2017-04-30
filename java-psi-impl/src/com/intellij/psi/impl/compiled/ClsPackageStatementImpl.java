@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,90 +15,97 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiPackageStatement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import org.jetbrains.annotations.NotNull;
 
-class ClsPackageStatementImpl extends ClsElementImpl implements PsiPackageStatement {
-  private final ClsFileImpl myFile;
-  private final String myPackageName;
+class ClsPackageStatementImpl extends ClsElementImpl implements PsiPackageStatement
+{
+	static ClsPackageStatementImpl NULL_PACKAGE = new ClsPackageStatementImpl();
 
-  public ClsPackageStatementImpl(@NotNull ClsFileImpl file) {
-    myFile = file;
-    String packageName = null;
-    PsiClass[] psiClasses = file.getClasses();
-    if (psiClasses.length > 0) {
-      String className = psiClasses[0].getQualifiedName();
-      if (className != null) {
-        int index = className.lastIndexOf('.');
-        if (index >= 0) {
-          packageName = className.substring(0, index);
-        }
-      }
-    }
-    myPackageName = packageName;
-  }
+	private final ClsFileImpl myFile;
+	private final String myPackageName;
 
-  @Override
-  public PsiElement getParent() {
-    return myFile;
-  }
+	private ClsPackageStatementImpl()
+	{
+		myFile = null;
+		myPackageName = null;
+	}
 
-  /**
-   * @not_implemented
-   */
-  @Override
-  public PsiJavaCodeReferenceElement getPackageReference() {
-    throw new UnsupportedOperationException("Method not implemented");
-  }
+	public ClsPackageStatementImpl(@NotNull ClsFileImpl file, String packageName)
+	{
+		myFile = file;
+		myPackageName = packageName;
+	}
 
-  /**
-   * @not_implemented
-   */
-  @Override
-  public PsiModifierList getAnnotationList() {
-    throw new UnsupportedOperationException("Method not implemented");
-  }
+	@Override
+	public PsiElement getParent()
+	{
+		return myFile;
+	}
 
-  /**
-   * @not_implemented
-   */
-  @Override
-  @NotNull
-  public PsiElement[] getChildren() {
-    throw new UnsupportedOperationException("Method not implemented");
-  }
+	@Override
+	public PsiJavaCodeReferenceElement getPackageReference()
+	{
+		throw new UnsupportedOperationException("Method not implemented");
+	}
 
-  @Override
-  public String getPackageName() {
-    return myPackageName;
-  }
+	@Override
+	public PsiModifierList getAnnotationList()
+	{
+		throw new UnsupportedOperationException("Method not implemented");
+	}
 
-  @Override
-  public void appendMirrorText(final int indentLevel, @NotNull final StringBuilder buffer) {
-    if (myPackageName != null) {
-      buffer.append("package ").append(getPackageName()).append(";");
-    }
-  }
+	@Override
+	@NotNull
+	public PsiElement[] getChildren()
+	{
+		throw new UnsupportedOperationException("Method not implemented");
+	}
 
-  @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaElementType.PACKAGE_STATEMENT);
-  }
+	@Override
+	public String getPackageName()
+	{
+		return myPackageName;
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitPackageStatement(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public void appendMirrorText(final int indentLevel, @NotNull final StringBuilder buffer)
+	{
+		if(myPackageName != null)
+		{
+			buffer.append("package ").append(getPackageName()).append(';');
+		}
+	}
 
-  @Override
-  public String toString() {
-    return "PsiJavaPackageStatement:" + getPackageName();
-  }
+	@Override
+	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	{
+		setMirrorCheckingType(element, JavaElementType.PACKAGE_STATEMENT);
+	}
+
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitPackageStatement(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PsiPackageStatement:" + getPackageName();
+	}
 }
