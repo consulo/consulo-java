@@ -17,8 +17,11 @@ package com.intellij.codeInsight.completion;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.TailType;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.TailTypeDecorator;
 import com.intellij.patterns.ElementPattern;
@@ -27,6 +30,7 @@ import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.PsiLabelReference;
 import com.intellij.util.ProcessingContext;
+import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;
 
@@ -37,12 +41,9 @@ class LabelReferenceCompletion implements CompletionProvider
 {
 	static final ElementPattern<PsiElement> LABEL_REFERENCE = psiElement().afterLeaf(PsiKeyword.BREAK, PsiKeyword.CONTINUE);
 
-	static void processLabelReference(CompletionResultSet result, PsiLabelReference ref)
+	static List<LookupElement> processLabelReference(PsiLabelReference ref)
 	{
-		for(String s : ref.getVariants())
-		{
-			result.addElement(TailTypeDecorator.withTail(LookupElementBuilder.create(s), TailType.SEMICOLON));
-		}
+		return ContainerUtil.map(ref.getVariants(), s -> TailTypeDecorator.withTail(LookupElementBuilder.create(s), TailType.SEMICOLON));
 	}
 
 	@RequiredReadAction
@@ -52,7 +53,7 @@ class LabelReferenceCompletion implements CompletionProvider
 		PsiReference ref = parameters.getPosition().getContainingFile().findReferenceAt(parameters.getOffset());
 		if(ref instanceof PsiLabelReference)
 		{
-			processLabelReference(result, (PsiLabelReference) ref);
+			result.addAllElements(processLabelReference((PsiLabelReference) ref));
 		}
 	}
 }

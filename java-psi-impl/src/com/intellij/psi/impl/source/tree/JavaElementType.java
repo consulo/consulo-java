@@ -246,7 +246,7 @@ public interface JavaElementType
 		private final JavaParserUtil.ParserWrapper myParser = new JavaParserUtil.ParserWrapper()
 		{
 			@Override
-			public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
+			public void parse(final PsiBuilder builder)
 			{
 				JavaParser.INSTANCE.getStatementParser().parseStatements(builder);
 			}
@@ -265,7 +265,7 @@ public interface JavaElementType
 		private final JavaParserUtil.ParserWrapper myParser = new JavaParserUtil.ParserWrapper()
 		{
 			@Override
-			public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
+			public void parse(final PsiBuilder builder)
 			{
 				JavaParser.INSTANCE.getExpressionParser().parse(builder);
 			}
@@ -284,7 +284,7 @@ public interface JavaElementType
 		private final JavaParserUtil.ParserWrapper myParser = new JavaParserUtil.ParserWrapper()
 		{
 			@Override
-			public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
+			public void parse(final PsiBuilder builder)
 			{
 				JavaParser.INSTANCE.getReferenceParser().parseJavaCodeReference(builder, false, true, false, false);
 			}
@@ -314,7 +314,7 @@ public interface JavaElementType
 		private final JavaParserUtil.ParserWrapper myParser = new JavaParserUtil.ParserWrapper()
 		{
 			@Override
-			public void parse(final PsiBuilder builder, LanguageLevel languageLevel)
+			public void parse(final PsiBuilder builder)
 			{
 				JavaParser.INSTANCE.getReferenceParser().parseType(builder, ReferenceParser.EAT_LAST_DOT | ReferenceParser.ELLIPSIS | ReferenceParser.WILDCARD | myFlags);
 			}

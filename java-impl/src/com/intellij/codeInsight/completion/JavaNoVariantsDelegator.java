@@ -81,9 +81,9 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		result.runRemainingContributors(parameters, tracker);
 		final boolean empty = tracker.containsOnlyPackages || suggestAllAnnotations(parameters);
 
-		if(!empty && parameters.getInvocationCount() == 0)
+		if(JavaCompletionContributor.isClassNamePossible(parameters) && !JavaCompletionContributor.mayStartClassName(result))
 		{
-			result.restartCompletionWhenNothingMatches();
+			result.restartCompletionOnAnyPrefixChange();
 		}
 
 		if(empty)
@@ -246,7 +246,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor
 		public ResultTracker(CompletionResultSet result)
 		{
 			myResult = result;
-			betterMatcher = new BetterPrefixMatcher(result);
+			betterMatcher = new BetterPrefixMatcher.AutoRestarting(result);
 		}
 
 		@Override

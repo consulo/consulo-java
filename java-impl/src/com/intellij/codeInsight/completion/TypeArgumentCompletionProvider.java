@@ -40,6 +40,7 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.util.Consumer;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
@@ -67,27 +68,30 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 	@Override
 	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext processingContext, @NotNull final CompletionResultSet resultSet)
 	{
-		final PsiElement context = parameters.getPosition();
+		addTypeArgumentVariants(parameters, resultSet, resultSet.getPrefixMatcher());
+	}
 
-		final Pair<PsiTypeParameterListOwner, Integer> pair = getTypeParameterInfo(context);
+	void addTypeArgumentVariants(CompletionParameters parameters, Consumer<LookupElement> result, PrefixMatcher matcher)
+	{
+		final Pair<PsiTypeParameterListOwner, Integer> pair = getTypeParameterInfo(parameters.getPosition());
 		if(pair == null)
 		{
 			return;
 		}
 
 		PsiTypeParameterListOwner paramOwner = pair.first;
-		if(suggestByExpectedType(resultSet, context, paramOwner, pair.second))
+		if(suggestByExpectedType(result, parameters.getPosition(), paramOwner, pair.second))
 		{
 			return;
 		}
 
 		if(mySmart && paramOwner instanceof PsiClass)
 		{
-			addInheritors(parameters, resultSet, (PsiClass) paramOwner, pair.second);
+			addInheritors(parameters, result, (PsiClass) paramOwner, pair.second, matcher);
 		}
 	}
 
-	private boolean suggestByExpectedType(@NotNull CompletionResultSet resultSet, PsiElement context, PsiTypeParameterListOwner paramOwner, int index)
+	private boolean suggestByExpectedType(Consumer<LookupElement> result, PsiElement context, PsiTypeParameterListOwner paramOwner, int index)
 	{
 		PsiExpression expression = PsiTreeUtil.getContextOfType(context, PsiExpression.class, true);
 		ExpectedTypeInfo[] types = ExpectedTypesProvider.getExpectedTypes(expression, true, false, false);
@@ -103,7 +107,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 			{
 				JBIterable<PsiTypeParameter> remainingParams = JBIterable.of(paramOwner.getTypeParameters()).skip(index);
 				List<PsiType> expectedArgs = getExpectedTypeArgs(context, paramOwner, remainingParams, (PsiClassType) type);
-				createLookupItems(resultSet, context, info, expectedArgs, paramOwner);
+				createLookupItems(result, context, info, expectedArgs, paramOwner);
 			}
 		}
 		return true;
@@ -132,29 +136,29 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 		return typeParams.map(substitutor::substitute).toList();
 	}
 
-	private void createLookupItems(CompletionResultSet resultSet, PsiElement context, ExpectedTypeInfo info, List<PsiType> expectedArgs, PsiTypeParameterListOwner paramOwner)
+	private void createLookupItems(Consumer<LookupElement> result, PsiElement context, ExpectedTypeInfo info, List<PsiType> expectedArgs, PsiTypeParameterListOwner paramOwner)
 	{
 		if(expectedArgs.contains(null))
 		{
 			PsiType arg = expectedArgs.get(0);
 			if(arg != null)
 			{
-				resultSet.addElement(TailTypeDecorator.withTail(PsiTypeLookupItem.createLookupItem(arg, context), getTail(expectedArgs.size() == 1)));
+				result.consume(TailTypeDecorator.withTail(PsiTypeLookupItem.createLookupItem(arg, context), getTail(expectedArgs.size() == 1)));
 			}
 		}
 		else
 		{
-			fillAllArgs(resultSet, context, info, expectedArgs, paramOwner);
+			fillAllArgs(result, context, info, expectedArgs, paramOwner);
 		}
 	}
 
-	private void fillAllArgs(CompletionResultSet resultSet, PsiElement context, ExpectedTypeInfo info, List<PsiType> expectedArgs, PsiTypeParameterListOwner paramOwner)
+	private void fillAllArgs(Consumer<LookupElement> resultSet, PsiElement context, ExpectedTypeInfo info, List<PsiType> expectedArgs, PsiTypeParameterListOwner paramOwner)
 	{
 		List<PsiTypeLookupItem> typeItems = ContainerUtil.map(expectedArgs, arg -> PsiTypeLookupItem.createLookupItem(arg, context));
 		TailType globalTail = mySmart ? info.getTailType() : TailType.NONE;
 		TypeArgsLookupElement element = new TypeArgsLookupElement(typeItems, globalTail, hasParameters(paramOwner, context));
 		element.registerSingleClass(mySession);
-		resultSet.addElement(element);
+		resultSet.consume(element);
 	}
 
 	private static boolean hasParameters(PsiTypeParameterListOwner paramOwner, PsiElement context)
@@ -181,10 +185,10 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 		return null;
 	}
 
-	private static void addInheritors(CompletionParameters parameters, final CompletionResultSet resultSet, final PsiClass referencedClass, final int parameterIndex)
+	private static void addInheritors(CompletionParameters parameters, Consumer<LookupElement> resultSet, PsiClass referencedClass, int parameterIndex, PrefixMatcher matcher)
 	{
 		final List<PsiClassType> typeList = Collections.singletonList((PsiClassType) TypeConversionUtil.typeParameterErasure(referencedClass.getTypeParameters()[parameterIndex]));
-		JavaInheritorsGetter.processInheritors(parameters, typeList, resultSet.getPrefixMatcher(), type ->
+		JavaInheritorsGetter.processInheritors(parameters, typeList, matcher, type ->
 		{
 			final PsiClass psiClass = PsiUtil.resolveClassInType(type);
 			if(psiClass == null)
@@ -192,7 +196,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider
 				return;
 			}
 
-			resultSet.addElement(TailTypeDecorator.withTail(new JavaPsiClassReferenceElement(psiClass), getTail(parameterIndex == referencedClass.getTypeParameters().length - 1)));
+			resultSet.consume(TailTypeDecorator.withTail(new JavaPsiClassReferenceElement(psiClass), getTail(parameterIndex == referencedClass.getTypeParameters().length - 1)));
 		});
 	}
 

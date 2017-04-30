@@ -65,10 +65,10 @@ class SmartCastProvider implements CompletionProvider
 	@Override
 	public void addCompletions(@NotNull final CompletionParameters parameters, final ProcessingContext context, @NotNull final CompletionResultSet result)
 	{
-		addCastVariants(parameters, result.getPrefixMatcher(), result);
+		addCastVariants(parameters, result.getPrefixMatcher(), result, false);
 	}
 
-	static void addCastVariants(@NotNull CompletionParameters parameters, PrefixMatcher matcher, @NotNull Consumer<LookupElement> result)
+	static void addCastVariants(@NotNull CompletionParameters parameters, PrefixMatcher matcher, @NotNull Consumer<LookupElement> result, boolean quick)
 	{
 		if(!shouldSuggestCast(parameters))
 		{
@@ -94,7 +94,7 @@ class SmartCastProvider implements CompletionProvider
 				ExpectedTypeInfo info = getParenthesizedCastExpectationByOperandType(position);
 				if(info != null)
 				{
-					addHierarchyTypes(parameters, matcher, info, type -> result.consume(PsiTypeLookupItem.createLookupItem(type, parent)));
+					addHierarchyTypes(parameters, matcher, info, type -> result.consume(PsiTypeLookupItem.createLookupItem(type, parent)), quick);
 				}
 				return;
 			}
@@ -149,7 +149,7 @@ class SmartCastProvider implements CompletionProvider
 		return type == null || type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? null : new ExpectedTypeInfoImpl(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, TailType.NONE, null, () -> null);
 	}
 
-	private static void addHierarchyTypes(CompletionParameters parameters, PrefixMatcher matcher, ExpectedTypeInfo info, Consumer<PsiType> result)
+	private static void addHierarchyTypes(CompletionParameters parameters, PrefixMatcher matcher, ExpectedTypeInfo info, Consumer<PsiType> result, boolean quick)
 	{
 		PsiType infoType = info.getType();
 		PsiClass infoClass = PsiUtil.resolveClassInClassTypeOnly(infoType);
@@ -164,7 +164,7 @@ class SmartCastProvider implements CompletionProvider
 				return true;
 			});
 		}
-		else if(infoType instanceof PsiClassType)
+		else if(infoType instanceof PsiClassType && !quick)
 		{
 			JavaInheritorsGetter.processInheritors(parameters, Collections.singleton((PsiClassType) infoType), matcher, type ->
 			{
