@@ -20,12 +20,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.cache.TypeInfo;
-import com.intellij.psi.stubs.NamedStub;
 
 /**
  * @author max
  */
-public interface PsiMethodStub extends NamedStub<PsiMethod>
+public interface PsiMethodStub extends PsiMemberStub<PsiMethod>
 {
 	boolean isConstructor();
 

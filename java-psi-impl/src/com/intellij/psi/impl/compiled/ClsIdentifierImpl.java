@@ -15,73 +15,94 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaToken;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NotNull;
 
-class ClsIdentifierImpl extends ClsElementImpl implements PsiIdentifier, PsiJavaToken {
-  private final PsiElement myParent;
-  private final String myText;
+class ClsIdentifierImpl extends ClsElementImpl implements PsiIdentifier, PsiJavaToken
+{
+	private final PsiElement myParent;
+	private final String myText;
 
-  ClsIdentifierImpl(@NotNull PsiElement parent, String text) {
-    myParent = parent;
-    myText = text;
-  }
+	ClsIdentifierImpl(@NotNull PsiElement parent, String text)
+	{
+		myParent = parent;
+		myText = text;
+	}
 
-  @Override
-  public IElementType getTokenType() {
-    return JavaTokenType.IDENTIFIER;
-  }
+	@Override
+	public IElementType getTokenType()
+	{
+		return JavaTokenType.IDENTIFIER;
+	}
 
-  @Override
-  public String getText() {
-    return myText;
-  }
+	@Override
+	public String getText()
+	{
+		return myText;
+	}
 
-  @Override
-  @NotNull
-  public PsiElement[] getChildren() {
-    return PsiElement.EMPTY_ARRAY;
-  }
+	@Override
+	@NotNull
+	public PsiElement[] getChildren()
+	{
+		return PsiElement.EMPTY_ARRAY;
+	}
 
-  @Override
-  public PsiElement getParent() {
-    return myParent;
-  }
+	@Override
+	public PsiElement getParent()
+	{
+		return myParent;
+	}
 
-  private boolean isCorrectName(String name) {
-    return name != null && ClsParsingUtil.isJavaIdentifier(name, ((PsiJavaFile)getContainingFile()).getLanguageLevel());
-  }
+	private boolean isCorrectName(String name)
+	{
+		return name != null && ClsParsingUtil.isJavaIdentifier(name, ((PsiJavaFile) getContainingFile()).getLanguageLevel());
+	}
 
-  @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
-    String original = getText();
-    if (isCorrectName(original)) {
-      buffer.append(original);
-    }
-    else {
-      buffer.append("$$").append(original).append(" /* Real name is '").append(original).append("' */");
-    }
-  }
+	@Override
+	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	{
+		String original = getText();
+		if(isCorrectName(original))
+		{
+			buffer.append(original);
+		}
+		else
+		{
+			buffer.append("$$").append(original).append(" /* Real name is '").append(original).append("' */");
+		}
+	}
 
-  @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaTokenType.IDENTIFIER);
-  }
+	@Override
+	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	{
+		setMirrorCheckingType(element, JavaTokenType.IDENTIFIER);
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitIdentifier(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitIdentifier(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @Override
-  public String toString() {
-    return "PsiIdentifier:" + getText();
-  }
+	@Override
+	public String toString()
+	{
+		return "PsiIdentifier:" + getText();
+	}
 }

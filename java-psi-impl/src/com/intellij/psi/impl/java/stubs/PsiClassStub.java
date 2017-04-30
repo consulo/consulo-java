@@ -19,13 +19,12 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.stubs.NamedStub;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.PsiClass;
 
-public interface PsiClassStub<T extends PsiClass> extends NamedStub<T> {
+public interface PsiClassStub<T extends PsiClass> extends PsiMemberStub<T> {
   @NonNls
   @Nullable
   String getQualifiedName();

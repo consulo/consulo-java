@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,6 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
-import consulo.java.psi.augment.JavaEnumAugmentProvider;
 import com.intellij.psi.impl.InheritanceImplUtil;
 import com.intellij.psi.impl.PsiClassImplUtil;
 import com.intellij.psi.impl.PsiImplUtil;
@@ -51,6 +51,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.psi.augment.JavaEnumAugmentProvider;
 
 public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiExtensibleClass, PsiQualifiedNamedElement, Queryable
 {
@@ -143,6 +144,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 		return PsiClassImplUtil.getSuperClass(this);
 	}
 
+	@NotNull
 	@Override
 	public PsiClass[] getInterfaces()
 	{
@@ -217,21 +219,21 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	@Override
 	public List<PsiField> getOwnFields()
 	{
-		return Arrays.asList(getStub().getChildrenByType(Constants.FIELD_BIT_SET, PsiField.ARRAY_FACTORY));
+		return asList(getStub().getChildrenByType(Constants.FIELD_BIT_SET, PsiField.ARRAY_FACTORY));
 	}
 
 	@NotNull
 	@Override
 	public List<PsiMethod> getOwnMethods()
 	{
-		return Arrays.asList(getStub().getChildrenByType(Constants.METHOD_BIT_SET, PsiMethod.ARRAY_FACTORY));
+		return asList(getStub().getChildrenByType(Constants.METHOD_BIT_SET, PsiMethod.ARRAY_FACTORY));
 	}
 
 	@NotNull
 	@Override
 	public List<PsiClass> getOwnInnerClasses()
 	{
-		return Arrays.asList(getStub().getChildrenByType(JavaStubElementTypes.CLASS, PsiClass.ARRAY_FACTORY));
+		return asList(getStub().getChildrenByType(JavaStubElementTypes.CLASS, PsiClass.ARRAY_FACTORY));
 	}
 
 	@Override
@@ -318,7 +320,7 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 	@Override
 	public boolean isDeprecated()
 	{
-		return getStub().isDeprecated();
+		return getStub().isDeprecated() || PsiImplUtil.isDeprecatedByAnnotation(this);
 	}
 
 	public String getSourceFileName()
@@ -497,9 +499,9 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
 		}
 		else
 		{
-			setMirrors(getOwnFields(), mirror.getFields());
-			setMirrors(getOwnMethods(), mirror.getMethods());
-			setMirrors(getOwnInnerClasses(), mirror.getInnerClasses());
+			setMirrors(getOwnFields(), asList(mirror.getFields()));
+			setMirrors(getOwnMethods(), asList(mirror.getMethods()));
+			setMirrors(getOwnInnerClasses(), asList(mirror.getInnerClasses()));
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,23 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import static com.intellij.util.ObjectUtils.assertNotNull;
+
+import gnu.trove.THashSet;
+
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
 import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.project.IndexNotReadyException;
+import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.NotNullLazyValue;
+import com.intellij.openapi.util.NullableLazyValue;
+import com.intellij.openapi.util.VolatileNullableLazyValue;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiClassImplUtil;
 import com.intellij.psi.impl.PsiConstantEvaluationHelperImpl;
@@ -31,195 +44,268 @@ import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
-import gnu.trove.THashSet;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiField, PsiVariableEx, ClsModifierListOwner
+{
+	private final NotNullLazyValue<PsiTypeElement> myTypeElement;
+	private final NullableLazyValue<PsiExpression> myInitializer;
 
-public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiField, PsiVariableEx, ClsModifierListOwner {
-  private PsiTypeElement myType = null;
-  private PsiExpression myInitializer = null;
-  private boolean myInitializerInitialized = false;
+	public ClsFieldImpl(@NotNull PsiFieldStub stub)
+	{
+		super(stub);
+		myTypeElement = new AtomicNotNullLazyValue<PsiTypeElement>()
+		{
+			@NotNull
+			@Override
+			protected PsiTypeElement compute()
+			{
+				PsiFieldStub stub = getStub();
+				String typeText = TypeInfo.createTypeText(stub.getType(false));
+				assert typeText != null : stub;
+				return new ClsTypeElementImpl(ClsFieldImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
+			}
+		};
+		myInitializer = new VolatileNullableLazyValue<PsiExpression>()
+		{
+			@Nullable
+			@Override
+			protected PsiExpression compute()
+			{
+				String initializerText = getStub().getInitializerText();
+				return initializerText != null && !Comparing.equal(PsiFieldStub.INITIALIZER_TOO_LONG, initializerText) ? ClsParsingUtil.createExpressionFromText(initializerText, getManager(),
+						ClsFieldImpl.this) : null;
+			}
+		};
+	}
 
-  public ClsFieldImpl(@NotNull PsiFieldStub stub) {
-    super(stub);
-  }
+	@Override
+	@NotNull
+	public PsiElement[] getChildren()
+	{
+		return getChildren(getDocComment(), getModifierList(), getTypeElement(), getNameIdentifier());
+	}
 
-  @Override
-  @NotNull
-  public PsiElement[] getChildren() {
-    return getChildren(getDocComment(), getModifierList(), getTypeElement(), getNameIdentifier());
-  }
+	@Override
+	public PsiClass getContainingClass()
+	{
+		return (PsiClass) getParent();
+	}
 
-  @Override
-  public PsiClass getContainingClass() {
-    return (PsiClass)getParent();
-  }
+	@Override
+	@NotNull
+	public PsiType getType()
+	{
+		return assertNotNull(getTypeElement()).getType();
+	}
 
-  @Override
-  @NotNull
-  public PsiType getType() {
-    return getTypeElement().getType();
-  }
+	@Override
+	public PsiTypeElement getTypeElement()
+	{
+		return myTypeElement.getValue();
+	}
 
-  @Override
-  @NotNull
-  public PsiTypeElement getTypeElement() {
-    synchronized (LAZY_BUILT_LOCK) {
-      if (myType == null) {
-        PsiFieldStub stub = getStub();
-        String typeText = TypeInfo.createTypeText(stub.getType(false));
-        assert typeText != null : stub;
-        myType = new ClsTypeElementImpl(this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
-      }
-      return myType;
-    }
-  }
+	@Override
+	public PsiModifierList getModifierList()
+	{
+		return assertNotNull(getStub().findChildStubByType(JavaStubElementTypes.MODIFIER_LIST)).getPsi();
+	}
 
-  @Override
-  public PsiModifierList getModifierList() {
-    return getStub().findChildStubByType(JavaStubElementTypes.MODIFIER_LIST).getPsi();
-  }
+	@Override
+	public boolean hasModifierProperty(@NotNull String name)
+	{
+		return assertNotNull(getModifierList()).hasModifierProperty(name);
+	}
 
-  @Override
-  public boolean hasModifierProperty(@NotNull String name) {
-    return getModifierList().hasModifierProperty(name);
-  }
+	@Override
+	public PsiExpression getInitializer()
+	{
+		return myInitializer.getValue();
+	}
 
-  @Override
-  public PsiExpression getInitializer() {
-    synchronized (LAZY_BUILT_LOCK) {
-      if (!myInitializerInitialized) {
-        myInitializerInitialized = true;
-        String initializerText = getStub().getInitializerText();
-        if (initializerText != null && !Comparing.equal(PsiFieldStub.INITIALIZER_TOO_LONG, initializerText)) {
-          myInitializer = ClsParsingUtil.createExpressionFromText(initializerText, getManager(), this);
-        }
-      }
+	@Override
+	public boolean hasInitializer()
+	{
+		return getInitializer() != null;
+	}
 
-      return myInitializer;
-    }
-  }
+	@Override
+	public Object computeConstantValue()
+	{
+		return computeConstantValue(new THashSet<>());
+	}
 
-  @Override
-  public boolean hasInitializer() {
-    return getInitializer() != null;
-  }
+	@Override
+	public Object computeConstantValue(Set<PsiVariable> visitedVars)
+	{
+		if(!hasModifierProperty(PsiModifier.FINAL))
+		{
+			return null;
+		}
 
-  @Override
-  public Object computeConstantValue() {
-    return computeConstantValue(new THashSet<PsiVariable>());
-  }
+		PsiExpression initializer = getInitializer();
+		if(initializer == null)
+		{
+			return null;
+		}
 
-  @Override
-  public Object computeConstantValue(Set<PsiVariable> visitedVars) {
-    if (!hasModifierProperty(PsiModifier.FINAL)) return null;
-    PsiExpression initializer = getInitializer();
-    if (initializer == null) return null;
+		PsiClass containingClass = getContainingClass();
+		if(containingClass != null)
+		{
+			String qName = containingClass.getQualifiedName();
+			if("java.lang.Float".equals(qName))
+			{
+				String name = getName();
+				if("POSITIVE_INFINITY".equals(name))
+				{
+					return Float.POSITIVE_INFINITY;
+				}
+				if("NEGATIVE_INFINITY".equals(name))
+				{
+					return Float.NEGATIVE_INFINITY;
+				}
+				if("NaN".equals(name))
+				{
+					return Float.NaN;
+				}
+			}
+			else if("java.lang.Double".equals(qName))
+			{
+				String name = getName();
+				if("POSITIVE_INFINITY".equals(name))
+				{
+					return Double.POSITIVE_INFINITY;
+				}
+				if("NEGATIVE_INFINITY".equals(name))
+				{
+					return Double.NEGATIVE_INFINITY;
+				}
+				if("NaN".equals(name))
+				{
+					return Double.NaN;
+				}
+			}
+		}
 
-    final PsiClass containingClass = getContainingClass();
-    final String qName = containingClass != null ? containingClass.getQualifiedName() : null;
-    if ("java.lang.Float".equals(qName)) {
-      @NonNls final String name = getName();
-      if ("POSITIVE_INFINITY".equals(name)) return new Float(Float.POSITIVE_INFINITY);
-      if ("NEGATIVE_INFINITY".equals(name)) return new Float(Float.NEGATIVE_INFINITY);
-      if ("NaN".equals(name)) return new Float(Float.NaN);
-    }
-    else if ("java.lang.Double".equals(qName)) {
-      @NonNls final String name = getName();
-      if ("POSITIVE_INFINITY".equals(name)) return new Double(Double.POSITIVE_INFINITY);
-      if ("NEGATIVE_INFINITY".equals(name)) return new Double(Double.NEGATIVE_INFINITY);
-      if ("NaN".equals(name)) return new Double(Double.NaN);
-    }
+		return PsiConstantEvaluationHelperImpl.computeCastTo(initializer, getType(), visitedVars);
+	}
 
-    return PsiConstantEvaluationHelperImpl.computeCastTo(initializer, getType(), visitedVars);
-  }
+	@Override
+	public boolean isDeprecated()
+	{
+		return getStub().isDeprecated() || PsiImplUtil.isDeprecatedByAnnotation(this);
+	}
 
-  @Override
-  public boolean isDeprecated() {
-    return getStub().isDeprecated();
-  }
+	@Override
+	public void normalizeDeclaration() throws IncorrectOperationException
+	{
+	}
 
-  @Override
-  public void normalizeDeclaration() throws IncorrectOperationException {
-  }
+	@Override
+	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	{
+		appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
+		appendText(getModifierList(), indentLevel, buffer, "");
+		appendText(getTypeElement(), indentLevel, buffer, " ");
+		appendText(getNameIdentifier(), indentLevel, buffer);
 
-  @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
-    appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
-    appendText(getModifierList(), indentLevel, buffer, "");
-    appendText(getTypeElement(), indentLevel, buffer, " ");
-    appendText(getNameIdentifier(), indentLevel, buffer);
+		PsiExpression initializer = getInitializer();
+		if(initializer != null)
+		{
+			buffer.append(" = ");
+			buffer.append(initializer.getText());
+		}
 
-    PsiExpression initializer = getInitializer();
-    if (initializer != null) {
-      buffer.append(" = ");
-      buffer.append(initializer.getText());
-    }
+		buffer.append(';');
+	}
 
-    buffer.append(';');
-  }
+	@Override
+	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	{
+		setMirrorCheckingType(element, null);
 
-  @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, null);
+		PsiField mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
+		setMirrorIfPresent(getDocComment(), mirror.getDocComment());
+		setMirror(getModifierList(), mirror.getModifierList());
+		setMirror(getTypeElement(), mirror.getTypeElement());
+		setMirror(getNameIdentifier(), mirror.getNameIdentifier());
+	}
 
-    PsiField mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
-    setMirrorIfPresent(getDocComment(), mirror.getDocComment());
-    setMirror(getModifierList(), mirror.getModifierList());
-    setMirror(getTypeElement(), mirror.getTypeElement());
-    setMirror(getNameIdentifier(), mirror.getNameIdentifier());
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitField(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitField(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	@NotNull
+	@SuppressWarnings({
+			"Duplicates",
+			"deprecation"
+	})
+	public PsiElement getNavigationElement()
+	{
+		for(ClsCustomNavigationPolicy customNavigationPolicy : Extensions.getExtensions(ClsCustomNavigationPolicy.EP_NAME))
+		{
+			try
+			{
+				PsiElement navigationElement = customNavigationPolicy.getNavigationElement(this);
+				if(navigationElement != null)
+				{
+					return navigationElement;
+				}
+			}
+			catch(IndexNotReadyException ignore)
+			{
+			}
+		}
 
-  @Override
-  @NotNull
-  public PsiElement getNavigationElement() {
-    for (ClsCustomNavigationPolicy customNavigationPolicy : Extensions.getExtensions(ClsCustomNavigationPolicy.EP_NAME)) {
-      PsiElement navigationElement = customNavigationPolicy.getNavigationElement(this);
-      if (navigationElement != null) {
-        return navigationElement;
-      }
-    }
+		try
+		{
+			PsiClass sourceClassMirror = ((ClsClassImpl) getParent()).getSourceMirrorClass();
+			PsiElement sourceFieldMirror = sourceClassMirror != null ? sourceClassMirror.findFieldByName(getName(), false) : null;
+			return sourceFieldMirror != null ? sourceFieldMirror.getNavigationElement() : this;
+		}
+		catch(IndexNotReadyException e)
+		{
+			return this;
+		}
+	}
 
-    PsiClass sourceClassMirror = ((ClsClassImpl)getParent()).getSourceMirrorClass();
-    PsiElement sourceFieldMirror = sourceClassMirror != null ? sourceClassMirror.findFieldByName(getName(), false) : null;
-    return sourceFieldMirror != null ? sourceFieldMirror.getNavigationElement() : this;
-  }
+	@Override
+	public ItemPresentation getPresentation()
+	{
+		return ItemPresentationProviders.getItemPresentation(this);
+	}
 
-  @Override
-  public ItemPresentation getPresentation() {
-    return ItemPresentationProviders.getItemPresentation(this);
-  }
+	@Override
+	public void setInitializer(PsiExpression initializer) throws IncorrectOperationException
+	{
+		throw new IncorrectOperationException();
+	}
 
-  @Override
-  public void setInitializer(PsiExpression initializer) throws IncorrectOperationException {
-    throw new IncorrectOperationException();
-  }
+	@Override
+	public boolean isEquivalentTo(final PsiElement another)
+	{
+		return PsiClassImplUtil.isFieldEquivalentTo(this, another);
+	}
 
-  @Override
-  public boolean isEquivalentTo(final PsiElement another) {
-    return PsiClassImplUtil.isFieldEquivalentTo(this, another);
-  }
+	@Override
+	@NotNull
+	public SearchScope getUseScope()
+	{
+		return PsiImplUtil.getMemberUseScope(this);
+	}
 
-  @Override
-  @NotNull
-  public SearchScope getUseScope() {
-    return PsiImplUtil.getMemberUseScope(this);
-  }
-
-  @Override
-  public String toString() {
-    return "PsiField:" + getName();
-  }
+	@Override
+	public String toString()
+	{
+		return "PsiField:" + getName();
+	}
 }

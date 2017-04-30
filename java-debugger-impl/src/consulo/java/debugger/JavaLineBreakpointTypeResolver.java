@@ -2,7 +2,6 @@ package consulo.java.debugger;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.debugger.ui.breakpoints.JavaFieldBreakpointType;
 import com.intellij.debugger.ui.breakpoints.JavaLineBreakpointType;
 import com.intellij.debugger.ui.breakpoints.JavaLineBreakpointTypeBase;
@@ -17,6 +16,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.breakpoints.XLineBreakpointType;
+import consulo.annotations.RequiredReadAction;
 import consulo.xdebugger.breakpoints.XLineBreakpointTypeResolver;
 
 /**
@@ -45,7 +45,7 @@ public class JavaLineBreakpointTypeResolver implements XLineBreakpointTypeResolv
 			public boolean process(PsiElement element)
 			{
 				// avoid comments
-				if((element instanceof PsiWhiteSpace) || (PsiTreeUtil.getParentOfType(element, PsiComment.class, false) != null))
+				if((element instanceof PsiWhiteSpace) || (PsiTreeUtil.getParentOfType(element, PsiComment.class, PsiImportStatementBase.class, PsiPackageStatement.class) != null))
 				{
 					return true;
 				}

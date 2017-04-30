@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,91 +15,114 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiAnnotationMemberValue;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiNameValuePair;
+import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import com.intellij.psi.impl.source.tree.TreeElement;
 
 /**
  * @author ven
  */
-public class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair {
-  private final ClsElementImpl myParent;
-  private final ClsIdentifierImpl myNameIdentifier;
-  private final PsiAnnotationMemberValue myMemberValue;
+class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair
+{
+	private final ClsElementImpl myParent;
+	private final ClsIdentifierImpl myNameIdentifier;
+	private final PsiAnnotationMemberValue myMemberValue;
 
-  public ClsNameValuePairImpl(@NotNull ClsElementImpl parent, @Nullable String name, @NotNull PsiAnnotationMemberValue value) {
-    myParent = parent;
-    myNameIdentifier = name != null ? new ClsIdentifierImpl(this, name) : null;
-    myMemberValue = ClsParsingUtil.getMemberValue(value, this);
-  }
+	ClsNameValuePairImpl(@NotNull ClsElementImpl parent, @Nullable String name, @NotNull PsiAnnotationMemberValue value)
+	{
+		myParent = parent;
+		myNameIdentifier = name != null ? new ClsIdentifierImpl(this, name) : null;
+		myMemberValue = ClsParsingUtil.getMemberValue(value, this);
+	}
 
-  @Override
-  public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer) {
-    appendText(myNameIdentifier, 0, buffer, " = ");
-    appendText(myMemberValue, 0, buffer);
-  }
+	@Override
+	public void appendMirrorText(int indentLevel, @NotNull StringBuilder buffer)
+	{
+		appendText(myNameIdentifier, 0, buffer, " = ");
+		appendText(myMemberValue, 0, buffer);
+	}
 
-  @Override
-  public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, null);
+	@Override
+	public void setMirror(@NotNull TreeElement element) throws InvalidMirrorException
+	{
+		setMirrorCheckingType(element, null);
 
-    PsiNameValuePair mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
-    setMirrorIfPresent(getNameIdentifier(), mirror.getNameIdentifier());
-    setMirrorIfPresent(getValue(), mirror.getValue());
-  }
+		PsiNameValuePair mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
+		setMirrorIfPresent(getNameIdentifier(), mirror.getNameIdentifier());
+		setMirrorIfPresent(getValue(), mirror.getValue());
+	}
 
-  @Override
-  @NotNull
-  public PsiElement[] getChildren() {
-    if (myNameIdentifier != null) {
-      return new PsiElement[]{myNameIdentifier, myMemberValue};
-    }
-    else {
-      return new PsiElement[]{myMemberValue};
-    }
-  }
+	@Override
+	@NotNull
+	public PsiElement[] getChildren()
+	{
+		if(myNameIdentifier != null)
+		{
+			return new PsiElement[]{
+					myNameIdentifier,
+					myMemberValue
+			};
+		}
+		else
+		{
+			return new PsiElement[]{myMemberValue};
+		}
+	}
 
-  @Override
-  public PsiElement getParent() {
-    return myParent;
-  }
+	@Override
+	public PsiElement getParent()
+	{
+		return myParent;
+	}
 
-  @Override
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitNameValuePair(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
+	@Override
+	public void accept(@NotNull PsiElementVisitor visitor)
+	{
+		if(visitor instanceof JavaElementVisitor)
+		{
+			((JavaElementVisitor) visitor).visitNameValuePair(this);
+		}
+		else
+		{
+			visitor.visitElement(this);
+		}
+	}
 
-  @Override
-  public PsiIdentifier getNameIdentifier() {
-    return myNameIdentifier;
-  }
+	@Override
+	public PsiIdentifier getNameIdentifier()
+	{
+		return myNameIdentifier;
+	}
 
-  @Override
-  public String getName() {
-    return myNameIdentifier != null ? myNameIdentifier.getText() : null;
-  }
+	@Override
+	public String getName()
+	{
+		return myNameIdentifier != null ? myNameIdentifier.getText() : null;
+	}
 
-  @Override
-  public String getLiteralValue() {
-    return null;
-  }
+	@Override
+	public String getLiteralValue()
+	{
+		return null;
+	}
 
-  @Override
-  public PsiAnnotationMemberValue getValue() {
-    return myMemberValue;
-  }
+	@Override
+	public PsiAnnotationMemberValue getValue()
+	{
+		return myMemberValue;
+	}
 
-  @Override
-  @NotNull
-  public PsiAnnotationMemberValue setValue(@NotNull PsiAnnotationMemberValue newValue) {
-    throw new IncorrectOperationException(CAN_NOT_MODIFY_MESSAGE);
-  }
+	@Override
+	@NotNull
+	public PsiAnnotationMemberValue setValue(@NotNull PsiAnnotationMemberValue newValue)
+	{
+		throw cannotModifyException(this);
+	}
 }
