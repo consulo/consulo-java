@@ -15,15 +15,12 @@
  */
 package com.intellij.psi.impl;
 
-import gnu.trove.THashSet;
-
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
@@ -35,12 +32,14 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.impl.DirectoryIndex;
+import com.intellij.openapi.roots.impl.LibraryScopeCache;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
@@ -49,10 +48,13 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.arrangement.MemberOrderService;
 import com.intellij.psi.impl.compiled.ClsClassImpl;
+import com.intellij.psi.impl.compiled.ClsElementImpl;
 import com.intellij.psi.impl.source.codeStyle.ImportHelper;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.roots.OrderEntryWithTracking;
 import consulo.roots.types.SourcesOrderRootType;
 
@@ -73,62 +75,55 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 	@Override
 	public PsiClass getOriginalClass(PsiClass psiClass)
 	{
-		PsiFile psiFile = psiClass.getContainingFile();
+		PsiCompiledElement cls = psiClass.getUserData(ClsElementImpl.COMPILED_ELEMENT);
+		if(cls != null && cls.isValid())
+		{
+			return (PsiClass) cls;
+		}
 
-		VirtualFile vFile = psiFile.getVirtualFile();
-		final Project project = psiClass.getProject();
-		final ProjectFileIndex idx = ProjectRootManager.getInstance(project).getFileIndex();
+		if(DumbService.isDumb(myProject))
+		{
+			return psiClass;
+		}
 
+		VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
+		final ProjectFileIndex idx = ProjectRootManager.getInstance(myProject).getFileIndex();
 		if(vFile == null || !idx.isInLibrarySource(vFile))
 		{
 			return psiClass;
 		}
-		final Set<OrderEntry> orderEntries = new THashSet<OrderEntry>(idx.getOrderEntriesForFile(vFile));
-		final String fqn = psiClass.getQualifiedName();
+
+		String fqn = psiClass.getQualifiedName();
 		if(fqn == null)
 		{
 			return psiClass;
 		}
 
-		PsiClass original = JavaPsiFacade.getInstance(project).findClass(fqn, new GlobalSearchScope(project)
+		final Set<OrderEntry> orderEntries = ContainerUtil.newHashSet(idx.getOrderEntriesForFile(vFile));
+		GlobalSearchScope librariesScope = LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope();
+		for(PsiClass original : JavaPsiFacade.getInstance(myProject).findClasses(fqn, librariesScope))
 		{
-			@Override
-			public int compare(VirtualFile file1, VirtualFile file2)
+			PsiFile psiFile = original.getContainingFile();
+			if(psiFile != null)
 			{
-				return 0;
-			}
-
-			@Override
-			public boolean contains(VirtualFile file)
-			{
-				// order for file and vFile has non empty intersection.
-				List<OrderEntry> entries = idx.getOrderEntriesForFile(file);
-				//noinspection ForLoopReplaceableByForEach
-				for(int i = 0; i < entries.size(); i++)
+				VirtualFile candidateFile = psiFile.getVirtualFile();
+				if(candidateFile != null)
 				{
-					final OrderEntry entry = entries.get(i);
-					if(orderEntries.contains(entry))
+					// order for file and vFile has non empty intersection.
+					List<OrderEntry> entries = idx.getOrderEntriesForFile(candidateFile);
+					//noinspection ForLoopReplaceableByForEach
+					for(int i = 0; i < entries.size(); i++)
 					{
-						return true;
+						if(orderEntries.contains(entries.get(i)))
+						{
+							return original;
+						}
 					}
 				}
-				return false;
 			}
+		}
 
-			@Override
-			public boolean isSearchInModuleContent(@NotNull Module aModule)
-			{
-				return false;
-			}
-
-			@Override
-			public boolean isSearchInLibraries()
-			{
-				return true;
-			}
-		});
-
-		return original != null ? original : psiClass;
+		return psiClass;
 	}
 
 	@Override

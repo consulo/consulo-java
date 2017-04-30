@@ -18,13 +18,7 @@ package com.intellij.psi.impl.smartPointers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiIdentifier;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiVariable;
+import com.intellij.psi.*;
 
 /**
  * @author Dennis.Ushakov
@@ -39,24 +33,17 @@ public class JavaAnchorProvider implements SmartPointerAnchorProvider
 			return null;
 		}
 
-		if(element instanceof PsiClass)
+		if(element instanceof PsiAnonymousClass)
 		{
-			if(element instanceof PsiAnonymousClass)
-			{
-				return ((PsiAnonymousClass) element).getBaseClassReference().getReferenceNameElement();
-			}
-			else
-			{
-				return ((PsiClass) element).getNameIdentifier();
-			}
+			return ((PsiAnonymousClass) element).getBaseClassReference().getReferenceNameElement();
 		}
-		else if(element instanceof PsiMethod)
+		if(element instanceof PsiClass || element instanceof PsiMethod || element instanceof PsiVariable)
 		{
-			return ((PsiMethod) element).getNameIdentifier();
+			return ((PsiNameIdentifierOwner) element).getNameIdentifier();
 		}
-		else if(element instanceof PsiVariable)
+		if(element instanceof PsiImportList)
 		{
-			return ((PsiVariable) element).getNameIdentifier();
+			return element.getContainingFile();
 		}
 		return null;
 	}
@@ -68,12 +55,16 @@ public class JavaAnchorProvider implements SmartPointerAnchorProvider
 		if(anchor instanceof PsiIdentifier)
 		{
 			PsiElement parent = anchor.getParent();
-			if(parent instanceof PsiJavaCodeReferenceElement)   // anonymous class, type
-			{
+			if(parent instanceof PsiJavaCodeReferenceElement)
+			{ // anonymous class, type
 				parent = parent.getParent();
 			}
 
 			return parent;
+		}
+		if(anchor instanceof PsiJavaFile)
+		{
+			return ((PsiJavaFile) anchor).getImportList();
 		}
 		return null;
 	}
