@@ -180,7 +180,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 			{
 				return null;
 			}
-			reportStubAstMismatch(stub + "; " + stub.getChildrenStubs(), getStubTree(), PsiDocumentManager.getInstance(getProject()).getCachedDocument(this));
+			reportStubAstMismatch(stub + "; " + stub.getChildrenStubs(), getStubTree());
 		}
 
 		ASTNode node = calcTreeElement().findChildByType(JavaElementType.IMPORT_LIST);

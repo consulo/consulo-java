@@ -45,12 +45,18 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	public Collection<AbstractTreeNode> getChildrenImpl()
 	{
 		PsiClass parent = getValue();
-		final ArrayList<AbstractTreeNode> treeNodes = new ArrayList<AbstractTreeNode>();
+		final ArrayList<AbstractTreeNode> treeNodes = new ArrayList<>();
 
 		if(getSettings().isShowMembers())
 		{
-			ArrayList<PsiElement> result = new ArrayList<PsiElement>();
-			PsiClassChildrenSource.DEFAULT_CHILDREN.addChildren(parent, result);
+			ArrayList<PsiElement> result = new ArrayList<>();
+			try
+			{
+				PsiClassChildrenSource.DEFAULT_CHILDREN.addChildren(parent, result);
+			}
+			catch(IndexNotReadyException ignore)
+			{
+			}
 			for(PsiElement psiElement : result)
 			{
 				if(!psiElement.isPhysical())
@@ -233,13 +239,13 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 
 	private boolean canRepresent(final PsiClass psiClass, final Object element)
 	{
-		if(psiClass == null || !psiClass.isValid())
+		if(psiClass == null || !psiClass.isValid() || element == null)
 		{
 			return false;
 		}
 
 		final PsiFile parentFile = parentFileOf(psiClass);
-		if(parentFile != null && (parentFile == element || parentFile.getVirtualFile() == element))
+		if(parentFile != null && (parentFile == element || element.equals(parentFile.getVirtualFile())))
 		{
 			return true;
 		}

@@ -78,6 +78,7 @@ import com.intellij.xdebugger.impl.evaluate.XValueCompactPresentation;
 import com.intellij.xdebugger.impl.ui.XValueTextProvider;
 import com.intellij.xdebugger.impl.ui.tree.XValueExtendedPresentation;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.concurrency.Promises;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
@@ -633,7 +634,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 	{
 		if(evaluationExpression != null)
 		{
-			return Promise.resolve(evaluationExpression);
+			return Promises.resolve(evaluationExpression);
 		}
 		else
 		{
