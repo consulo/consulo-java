@@ -530,7 +530,8 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		{
 			myResult = Spacing.createSpacing(0, 0, 1, mySettings.KEEP_LINE_BREAKS, 0);
 		}
-		else */if(processMethod())
+		else */
+		if(processMethod())
 		{
 		}
 		else if(myRole2 == ChildRole.CLASS_INITIALIZER)
@@ -1046,7 +1047,8 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 			myResult = Spacing.createSpacing(0, 0, 1, mySettings.KEEP_LINE_BREAKS, mySettings.KEEP_BLANK_LINES_IN_CODE);
 		}
 
-		else*/ if(myRole1 == ChildRoleBase.NONE && !lhsStatement || myRole2 == ChildRoleBase.NONE && !rhsStatement)
+		else*/
+		if(myRole1 == ChildRoleBase.NONE && !lhsStatement || myRole2 == ChildRoleBase.NONE && !rhsStatement)
 		{
 			final IElementType firstElementType = myChild1.getElementType();
 			if(firstElementType == JavaTokenType.END_OF_LINE_COMMENT || firstElementType == JavaTokenType.C_STYLE_COMMENT)
@@ -1095,7 +1097,15 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		}
 		else if(myChild1.getElementType() == JavaElementType.SWITCH_LABEL_STATEMENT)
 		{
-			myResult = getSpaceBeforeLBrace(myChild2, mySettings.SPACE_BEFORE_SWITCH_LBRACE, null);
+			if(myChild2.getElementType() == JavaElementType.BLOCK_STATEMENT)
+			{
+				myResult = getSpaceBeforeLBrace(myChild2, mySettings.SPACE_BEFORE_SWITCH_LBRACE, null);
+			}
+			else
+			{
+				int lineFeeds = true/*TODO [VISTALL]m ySettings.CASE_STATEMENT_ON_NEW_LINE*/ ? 1 : 0;
+				myResult = Spacing.createSpacing(1, 1, lineFeeds, true, mySettings.KEEP_BLANK_LINES_IN_CODE);
+			}
 		}
 		else if(lhsStatement && rhsStatement)
 		{
@@ -1641,7 +1651,7 @@ public class JavaSpacePropertyProcessor extends JavaElementVisitor
 		{
 			if(myRole2 == ChildRole.LBRACE)
 			{
-				switch(mySettings.BRACE_STYLE)
+				switch(mySettings.BRACE_STYLE) /* TODO [VISTALL] LAMBDA_BRACE_STYLE */
 				{
 					case NEXT_LINE:
 					case NEXT_LINE_SHIFTED:

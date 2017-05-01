@@ -124,8 +124,8 @@ public class CandidateInfo implements JavaResolveResult
 			{
 				final PsiMember member = (PsiMember) myCandidate;
 				accessible = JavaPsiFacade.getInstance(myPlace.getProject()).getResolveHelper().isAccessible(member, member.getModifierList(), myPlace, myAccessClass, myCurrentFileResolveContext);
-				if(accessible && member.hasModifierProperty(PsiModifier.PRIVATE) && myPlace instanceof PsiReferenceExpression && JavaVersionService.getInstance().isAtLeast(myPlace,
-						JavaSdkVersion.JDK_1_7))
+				if(accessible && member.hasModifierProperty(PsiModifier.PRIVATE) && myPlace instanceof PsiReferenceExpression && JavaVersionService.getInstance().isAtLeast(myPlace, JavaSdkVersion
+						.JDK_1_7))
 				{
 					accessible = !isAccessedThroughTypeParameterBound();
 				}
