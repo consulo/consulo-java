@@ -19,18 +19,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.formatting.ASTBlock;
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.ChildAttributes;
+import com.intellij.formatting.FormattingRangesInfo;
 import com.intellij.formatting.Indent;
 import com.intellij.formatting.Spacing;
 import com.intellij.formatting.Wrap;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.formatter.common.ExtraRangesProvider;
+import com.intellij.psi.formatter.common.NodeIndentRangesCalculator;
 import com.intellij.psi.impl.source.codeStyle.ShiftIndentInsideHelper;
 
-public class LeafBlock implements ASTBlock
+public class LeafBlock implements ASTBlock, ExtraRangesProvider
 {
 	private int myStartOffset = -1;
 	private final ASTNode myNode;
@@ -126,7 +130,7 @@ public class LeafBlock implements ASTBlock
 		// if (startOffset != -1) assert startOffset == myNode.getTextRange().getStartOffset();
 	}
 
-	/*@Override
+	@Override
 	@Nullable
 	public List<TextRange> getExtraRangesToFormat(@NotNull FormattingRangesInfo info)
 	{
@@ -137,6 +141,5 @@ public class LeafBlock implements ASTBlock
 			return new NodeIndentRangesCalculator(parent).calculateExtraRanges();
 		}
 		return null;
-	}*/
-
+	}
 }
