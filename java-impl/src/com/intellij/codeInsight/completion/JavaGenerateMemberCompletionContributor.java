@@ -151,7 +151,6 @@ public class JavaGenerateMemberCompletionContributor
 
 	private static LookupElementBuilder createOverridingLookupElement(boolean implemented, final PsiMethod baseMethod, PsiClass baseClass, PsiSubstitutor substitutor)
 	{
-
 		RowIcon icon = new RowIcon(IconDescriptorUpdaters.getIcon(baseMethod, 0), implemented ? AllIcons.Gutter.ImplementingMethod : AllIcons.Gutter.OverridingMethod);
 		return createGenerateMethodElement(baseMethod, substitutor, icon, baseClass.getName(), new InsertHandler<LookupElement>()
 		{

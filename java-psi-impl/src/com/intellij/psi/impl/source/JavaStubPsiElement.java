@@ -64,12 +64,6 @@ public abstract class JavaStubPsiElement<T extends StubElement> extends StubBase
 		return JavaLanguage.INSTANCE;
 	}
 
-	@Override
-	public PsiElement getParent()
-	{
-		return getParentByStub();
-	}
-
 	@RequiredReadAction
 	@Override
 	public int getTextOffset()
