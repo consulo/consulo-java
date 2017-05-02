@@ -1421,6 +1421,8 @@
 		<lang.formatter language="JAVA" implementationClass="com.intellij.lang.java.JavaFormattingModelBuilder"/>
 		<lang.whiteSpaceFormattingStrategy language="JAVA"
 										   implementationClass="com.intellij.psi.formatter.JavadocWhiteSpaceFormattingStrategy"/>
+		<lineIndentProvider implementation="com.intellij.codeInsight.editorActions.JavaLineIndentProvider"/>
+
 		<lang.rearranger language="JAVA" implementationClass="com.intellij.psi.codeStyle.arrangement.JavaRearranger"/>
 
 		<lang.documentationProvider language="JAVA" implementationClass="com.intellij.lang.java.JavaDocumentationProvider"/>
