@@ -233,7 +233,7 @@ public class AddImportAction implements QuestionAction
 			}
 
 			final JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable(project);
-			ShowSettingsUtil.getInstance().editConfigurable(project, configurable, () -> configurable.addExcludePackage(prefix));
+			ShowSettingsUtil.getInstance().editConfigurable("Auto Import", project, configurable, () -> configurable.addExcludePackage(prefix));
 		});
 	}
 
