@@ -15,19 +15,15 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
-import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.List;
-
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeHighlighting.Pass;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
-import com.intellij.codeInsight.daemon.LineMarkerProvider;
+import com.intellij.codeInsight.daemon.LineMarkerProviderDescriptor;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
@@ -41,29 +37,18 @@ import consulo.annotations.RequiredReadAction;
 
 /**
  * Shows small (16x16 or less) icons as gutters.
- * <p/>
+ * <p>
  * Works in places where it's possible to resolve from literal expression
  * to an icon image.
  *
  * @author Konstantin Bulenkov
  */
-public class IconLineMarkerProvider implements LineMarkerProvider
+public class IconLineMarkerProvider extends LineMarkerProviderDescriptor
 {
-	@RequiredReadAction
-	@Override
-	public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result)
-	{
-	}
-
 	@RequiredReadAction
 	@Override
 	public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element)
 	{
-		if(!DaemonCodeAnalyzerSettings.getInstance().SHOW_SMALL_ICONS_IN_GUTTER)
-		{
-			return null;
-		}
-
 		if(element instanceof PsiAssignmentExpression)
 		{
 			final PsiExpression lExpression = ((PsiAssignmentExpression) element).getLExpression();
@@ -99,8 +84,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 						final PsiElement field = ref.resolve();
 						if(field instanceof PsiField)
 						{
-							return createIconLineMarker(returnType, ((PsiField) field).getInitializer(),
-									psiReturnStatement);
+							return createIconLineMarker(returnType, ((PsiField) field).getInitializer(), psiReturnStatement);
 						}
 					}
 				}
@@ -140,9 +124,7 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 	}
 
 	@Nullable
-	private static LineMarkerInfo<PsiElement> createIconLineMarker(PsiType type,
-			@Nullable PsiExpression initializer,
-			PsiElement bindingElement)
+	private static LineMarkerInfo<PsiElement> createIconLineMarker(PsiType type, @Nullable PsiExpression initializer, PsiElement bindingElement)
 	{
 		if(initializer == null)
 		{
@@ -163,16 +145,21 @@ public class IconLineMarkerProvider implements LineMarkerProvider
 			return null;
 		}
 
-		final GutterIconNavigationHandler<PsiElement> navHandler = new GutterIconNavigationHandler<PsiElement>()
-		{
-			@Override
-			public void navigate(MouseEvent e, PsiElement elt)
-			{
-				FileEditorManager.getInstance(project).openFile(file, true);
-			}
-		};
+		final GutterIconNavigationHandler<PsiElement> navHandler = (e, elt) -> FileEditorManager.getInstance(project).openFile(file, true);
 
-		return new LineMarkerInfo<PsiElement>(bindingElement, bindingElement.getTextRange(), icon, Pass.UPDATE_ALL,
-				null, navHandler, GutterIconRenderer.Alignment.LEFT);
+		return new LineMarkerInfo<>(bindingElement, bindingElement.getTextRange(), icon, Pass.UPDATE_ALL, null, navHandler, GutterIconRenderer.Alignment.LEFT);
+	}
+
+	@Override
+	public Icon getIcon()
+	{
+		return AllIcons.Gutter.Colors;
+	}
+
+	@NotNull
+	@Override
+	public String getName()
+	{
+		return "Icon preview";
 	}
 }
