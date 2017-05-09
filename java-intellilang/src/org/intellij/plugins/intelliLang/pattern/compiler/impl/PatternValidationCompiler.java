@@ -26,7 +26,6 @@ import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.JavaPsiFacade;
@@ -104,9 +103,5 @@ public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompi
   @NotNull
   public String getDescription() {
     return "Pattern Validation";
-  }
-
-  @Override
-  public void init(@NotNull CompilerManager compilerManager) {
   }
 }

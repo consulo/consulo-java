@@ -38,7 +38,6 @@ import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.openapi.compiler.ClassInstrumentingCompiler;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TimestampValidityState;
 import com.intellij.openapi.compiler.ValidityState;
@@ -249,12 +248,6 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 	public boolean validateConfiguration(CompileScope compileScope)
 	{
 		return true;
-	}
-
-	@Override
-	public void init(@NotNull CompilerManager compilerManager)
-	{
-
 	}
 
 	@Override

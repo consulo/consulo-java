@@ -21,6 +21,7 @@ import gnu.trove.THashMap;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.CompilerException;
@@ -31,7 +32,6 @@ import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.TranslatingCompiler;
 import com.intellij.openapi.compiler.ex.CompileContextEx;
@@ -151,9 +151,9 @@ public class JavaCompiler implements TranslatingCompiler
 	}
 
 	@Override
-	public void init(@NotNull CompilerManager compilerManager)
+	public void registerCompilableFileTypes(@NotNull Consumer<FileType> fileTypeConsumer)
 	{
-		compilerManager.addCompilableFileType(JavaFileType.INSTANCE);
+		fileTypeConsumer.accept(JavaFileType.INSTANCE);
 	}
 
 	private BackendCompiler getBackEndCompiler()
