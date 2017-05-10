@@ -104,6 +104,12 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 		}
 
 		@Override
+		public boolean startInWriteAction()
+		{
+			return false;
+		}
+
+		@Override
 		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
 		{
 			final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
