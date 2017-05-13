@@ -687,6 +687,7 @@
 		<generation.topLevelFactory language="JAVA" implementationClass="com.intellij.psi.impl.JavaFactoryProvider"/>
 
 		<elementFinder implementation="com.intellij.psi.impl.migration.MigrationElementFinder"/>
+		<elementFinder implementation="com.intellij.debugger.impl.AlternativeJreClassFinder" order="last"/>
 
 		<backendCompiler implementationClass="com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler"/>
 

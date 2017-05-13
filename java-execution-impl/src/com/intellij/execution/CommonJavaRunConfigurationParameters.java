@@ -16,23 +16,27 @@
 package com.intellij.execution;
 
 import org.jetbrains.annotations.Nullable;
+import com.intellij.execution.configurations.ConfigurationWithAlternativeJre;
 
-public interface CommonJavaRunConfigurationParameters extends CommonProgramRunConfigurationParameters {
-  void setVMParameters(String value);
+public interface CommonJavaRunConfigurationParameters extends CommonProgramRunConfigurationParameters, ConfigurationWithAlternativeJre
+{
+	void setVMParameters(String value);
 
-  String getVMParameters();
+	String getVMParameters();
 
-  boolean isAlternativeJrePathEnabled();
+	@Override
+	boolean isAlternativeJrePathEnabled();
 
-  void setAlternativeJrePathEnabled(boolean enabled);
+	void setAlternativeJrePathEnabled(boolean enabled);
 
-  String getAlternativeJrePath();
+	@Override
+	String getAlternativeJrePath();
 
-  void setAlternativeJrePath(String path);
+	void setAlternativeJrePath(String path);
 
-  @Nullable
-  String getRunClass();
+	@Nullable
+	String getRunClass();
 
-  @Nullable
-  String getPackage();
+	@Nullable
+	String getPackage();
 }
