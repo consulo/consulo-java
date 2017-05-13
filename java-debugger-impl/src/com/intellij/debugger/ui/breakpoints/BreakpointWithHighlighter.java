@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.java.debugger.breakpoints.properties.JavaBreakpointProperties;
-import com.intellij.CommonBundle;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.DebuggerManagerEx;
@@ -34,35 +33,29 @@ import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
-import com.intellij.debugger.settings.DebuggerSettings;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XBreakpointManager;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xml.util.XmlStringUtil;
+import com.intellij.xml.CommonXmlStrings;
+import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
-/**
- * User: lex
- * Date: Sep 2, 2003
- * Time: 3:22:55 PM
- */
 public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperties> extends Breakpoint<P>
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.BreakpointWithHighlighter");
@@ -85,7 +78,10 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 
 	protected abstract Icon getInvalidIcon(boolean isMuted);
 
-	protected abstract Icon getSetIcon(boolean isMuted);
+	protected Icon getSetIcon(boolean isMuted)
+	{
+		return null;
+	}
 
 	protected abstract Icon getVerifiedIcon(boolean isMuted);
 
@@ -111,10 +107,10 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		final SourcePosition pos = getSourcePosition();
 		if(pos != null)
 		{
-		/*	if(pos.getFile() instanceof JspFile)
+			/*if(pos.getFile() instanceof JspFile)
 			{
 				return getClassName();
-			}    */
+			} */
 		}
 		return super.getShortClassName();
 	}
@@ -197,7 +193,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	{
 		//for persistency
 		super(project, xBreakpoint);
-		reload();
+		ApplicationManager.getApplication().runReadAction((Runnable) this::reload);
 	}
 
 	@Override
@@ -208,14 +204,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 
 	protected static boolean isPositionValid(@Nullable final XSourcePosition sourcePosition)
 	{
-		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
-		{
-			@Override
-			public Boolean compute()
-			{
-				return sourcePosition != null && sourcePosition.getFile().isValid() ? Boolean.TRUE : Boolean.FALSE;
-			}
-		}).booleanValue();
+		return ReadAction.compute(() -> sourcePosition != null && sourcePosition.getFile().isValid()).booleanValue();
 	}
 
 	@Nullable
@@ -231,43 +220,8 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		final StringBuilder buf = StringBuilderSpinAllocator.alloc();
 		try
 		{
-			buf.append("<html><body>");
 			buf.append(getDisplayName());
-			if(myInvalidMessage != null && !myInvalidMessage.isEmpty())
-			{
-				buf.append("<br><font color='red'>");
-				buf.append(DebuggerBundle.message("breakpoint.warning", myInvalidMessage));
-				buf.append("</font>");
-			}
-			buf.append("&nbsp;<br>&nbsp;");
-			buf.append(DebuggerBundle.message("breakpoint.property.name.suspend.policy")).append(" : ");
-			if(DebuggerSettings.SUSPEND_NONE.equals(getSuspendPolicy()) || !isSuspend())
-			{
-				buf.append(DebuggerBundle.message("breakpoint.properties.panel.option.suspend.none"));
-			}
-			else if(DebuggerSettings.SUSPEND_ALL.equals(getSuspendPolicy()))
-			{
-				buf.append(DebuggerBundle.message("breakpoint.properties.panel.option.suspend.all"));
-			}
-			else if(DebuggerSettings.SUSPEND_THREAD.equals(getSuspendPolicy()))
-			{
-				buf.append(DebuggerBundle.message("breakpoint.properties.panel.option.suspend.thread"));
-			}
-			buf.append("&nbsp;<br>&nbsp;");
-			buf.append(DebuggerBundle.message("breakpoint.property.name.log.message")).append(": ");
-			buf.append(isLogEnabled() ? CommonBundle.getYesButtonText() : CommonBundle.getNoButtonText());
-			if(isLogExpressionEnabled())
-			{
-				buf.append("&nbsp;<br>&nbsp;");
-				buf.append(DebuggerBundle.message("breakpoint.property.name.log.expression")).append(": ");
-				buf.append(XmlStringUtil.escapeString(getLogMessage().getText()));
-			}
-			if(isConditionEnabled() && getCondition() != null && getCondition().getText() != null && !getCondition().getText().isEmpty())
-			{
-				buf.append("&nbsp;<br>&nbsp;");
-				buf.append(DebuggerBundle.message("breakpoint.property.name.condition")).append(": ");
-				buf.append(XmlStringUtil.escapeString(getCondition().getText()));
-			}
+
 			if(isCountFilterEnabled())
 			{
 				buf.append("&nbsp;<br>&nbsp;");
@@ -294,7 +248,6 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 					buf.append(Long.toString(instanceFilter.getId())).append(" ");
 				}
 			}
-			buf.append("</body></html>");
 			return buf.toString();
 		}
 		finally
@@ -307,33 +260,20 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	public void reload()
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
-		XSourcePosition position = myXBreakpoint.getSourcePosition();
-		PsiFile psiFile = getPsiFile();
-		if(position != null && psiFile != null)
+		mySourcePosition = DebuggerUtilsEx.toSourcePosition(myXBreakpoint.getSourcePosition(), myProject);
+		if(mySourcePosition != null)
 		{
-			mySourcePosition = SourcePosition.createFromLine(psiFile, position.getLine());
-			reload(psiFile);
-		}
-		else
-		{
-			mySourcePosition = null;
+			reload(mySourcePosition.getFile());
 		}
 	}
 
-	@Nullable
-	public PsiFile getPsiFile()
+	static void createLocationBreakpointRequest(@NotNull FilteredRequestor requestor, @Nullable Location location, @NotNull DebugProcessImpl debugProcess)
 	{
-		ApplicationManager.getApplication().assertReadAccessAllowed();
-		XSourcePosition position = myXBreakpoint.getSourcePosition();
-		if(position != null)
+		if(location != null)
 		{
-			VirtualFile file = position.getFile();
-			if(file.isValid())
-			{
-				return PsiManager.getInstance(myProject).findFile(file);
-			}
+			RequestManagerImpl requestsManager = debugProcess.getRequestsManager();
+			requestsManager.enableRequest(requestsManager.createBreakpointRequest(requestor, location));
 		}
-		return null;
 	}
 
 	@Override
@@ -341,10 +281,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		// check is this breakpoint is enabled, vm reference is valid and there're no requests created yet
-		if(!isEnabled() ||
-				!debugProcess.isAttached() ||
-				isMuted(debugProcess) ||
-				!debugProcess.getRequestsManager().findRequests(this).isEmpty())
+		if(!shouldCreateRequest(debugProcess))
 		{
 			return;
 		}
@@ -361,8 +298,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 		else
 		{
-			LOG.error("Unable to create request for breakpoint with null position: " + getDisplayName() + " at " + myXBreakpoint.getSourcePosition
-					());
+			LOG.error("Unable to create request for breakpoint with null position: " + toString() + " at " + myXBreakpoint.getSourcePosition());
 		}
 		updateUI();
 	}
@@ -373,14 +309,14 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	}
 
 	@Override
-	public void processClassPrepare(final DebugProcess debugProcess, final ReferenceType classType)
+	public void processClassPrepare(DebugProcess debugProcess, ReferenceType classType)
 	{
-		if(!isEnabled() || !isValid())
+		DebugProcessImpl process = (DebugProcessImpl) debugProcess;
+		if(shouldCreateRequest(process, true))
 		{
-			return;
+			createRequestForPreparedClass(process, classType);
+			updateUI();
 		}
-		createRequestForPreparedClass((DebugProcessImpl) debugProcess, classType);
-		updateUI();
 	}
 
 	/**
@@ -389,67 +325,50 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	@Override
 	public final void updateUI()
 	{
-		if(ApplicationManager.getApplication().isUnitTestMode())
+		if(!isVisible() || ApplicationManager.getApplication().isUnitTestMode())
 		{
 			return;
 		}
-		final Project project = getProject();
-		DebuggerInvocationUtil.swingInvokeLater(project, new Runnable()
+		DebuggerInvocationUtil.swingInvokeLater(myProject, () ->
 		{
-			@Override
-			public void run()
+			if(!isValid())
 			{
-				if(!isValid())
-				{
-					return;
-				}
+				return;
+			}
 
-				DebuggerContextImpl context = DebuggerManagerEx.getInstanceEx(project).getContext();
-				final DebugProcessImpl debugProcess = context.getDebugProcess();
-				if(debugProcess == null || !debugProcess.isAttached())
+			DebuggerContextImpl context = DebuggerManagerEx.getInstanceEx(myProject).getContext();
+			DebugProcessImpl debugProcess = context.getDebugProcess();
+			if(debugProcess == null || !debugProcess.isAttached())
+			{
+				updateCaches(null);
+				updateGutter();
+			}
+			else
+			{
+				debugProcess.getManagerThread().invoke(new DebuggerCommandImpl()
 				{
-					updateCaches(null);
-					updateGutter();
-				}
-				else
-				{
-					debugProcess.getManagerThread().invoke(new DebuggerCommandImpl()
+					@Override
+					protected void action() throws Exception
 					{
-						@Override
-						protected void action() throws Exception
+						ApplicationManager.getApplication().runReadAction(() ->
 						{
-							ApplicationManager.getApplication().runReadAction(new Runnable()
+							if(!myProject.isDisposed())
 							{
-								@Override
-								public void run()
-								{
-									updateCaches(debugProcess);
-								}
-							});
-							DebuggerInvocationUtil.swingInvokeLater(project, new Runnable()
-							{
-								@Override
-								public void run()
-								{
-									updateGutter();
-								}
-							});
-						}
-					});
-				}
+								updateCaches(debugProcess);
+							}
+						});
+						DebuggerInvocationUtil.swingInvokeLater(myProject, BreakpointWithHighlighter.this::updateGutter);
+					}
+				});
 			}
 		});
 	}
 
 	private void updateGutter()
 	{
-		if(myVisible)
+		if(isVisible() && isValid())
 		{
-			if(isValid())
-			{
-				final XBreakpointManager breakpointManager = XDebuggerManager.getInstance(myProject).getBreakpointManager();
-				breakpointManager.updateBreakpointPresentation((XLineBreakpoint) myXBreakpoint, getIcon(), null);
-			}
+			XDebuggerManager.getInstance(myProject).getBreakpointManager().updateBreakpointPresentation((XLineBreakpoint) myXBreakpoint, getIcon(), myInvalidMessage);
 		}
 	}
 
@@ -474,21 +393,13 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 
 	protected static PsiClass getPsiClassAt(@Nullable final SourcePosition sourcePosition)
 	{
-		return ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>()
-		{
-			@Nullable
-			@Override
-			public PsiClass compute()
-			{
-				return JVMNameUtil.getClassAt(sourcePosition);
-			}
-		});
+		return ReadAction.compute(() -> JVMNameUtil.getClassAt(sourcePosition));
 	}
 
 	@Override
 	public abstract Key<? extends BreakpointWithHighlighter> getCategory();
 
-	public boolean isVisible()
+	protected boolean isVisible()
 	{
 		return myVisible;
 	}
@@ -501,10 +412,10 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	@Nullable
 	public Document getDocument()
 	{
-		final PsiFile file = getPsiFile();
+		PsiFile file = DebuggerUtilsEx.getPsiFile(myXBreakpoint.getSourcePosition(), myProject);
 		if(file != null)
 		{
-			return PsiDocumentManager.getInstance(getProject()).getDocument(file);
+			return PsiDocumentManager.getInstance(myProject).getDocument(file);
 		}
 		return null;
 	}
@@ -541,5 +452,10 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		{
 			myPackageName = packageName;
 		}
+	}
+
+	public String toString()
+	{
+		return ReadAction.compute(() -> CommonXmlStrings.HTML_START + CommonXmlStrings.BODY_START + getDescription() + CommonXmlStrings.BODY_END + CommonXmlStrings.HTML_END);
 	}
 }

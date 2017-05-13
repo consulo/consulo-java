@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.MutableTreeNode;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
@@ -43,6 +44,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.ui.SimpleColoredText;
 import com.intellij.util.containers.HashMap;
+import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
 
 public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTreeNode, NodeDescriptorProvider, MutableTreeNode
@@ -105,7 +107,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		final NodeDescriptorImpl descriptor = getDescriptor();
 		myIcon = DebuggerTreeRenderer.getDescriptorIcon(descriptor);
 		final DebuggerContextImpl context = getTree().getDebuggerContext();
-		myText = DebuggerTreeRenderer.getDescriptorText(context, descriptor, DebuggerTreeRenderer.getColorScheme(myTree), false);
+		myText = DebuggerTreeRenderer.getDescriptorText(context, descriptor, DebuggerUIUtil.getColorScheme(myTree), false);
 		if(descriptor instanceof ValueDescriptor)
 		{
 			final ValueMarkup markup = ((ValueDescriptor) descriptor).getMarkup(context.getDebugProcess());
@@ -194,66 +196,48 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 	public void calcLabel()
 	{
 		final DebuggerContextImpl context = getTree().getDebuggerContext();
-		update(context, new Runnable()
+		update(context, () -> getDescriptor().updateRepresentation(context.createEvaluationContext(), new DescriptorLabelListener()
 		{
 			@Override
-			public void run()
+			public void labelChanged()
 			{
-				getDescriptor().updateRepresentation(context.createEvaluationContext(), new DescriptorLabelListener()
-				{
-					@Override
-					public void labelChanged()
-					{
-						updateCaches();
-						DebuggerTreeNodeImpl.this.labelChanged();
-					}
-				});
+				updateCaches();
+				DebuggerTreeNodeImpl.this.labelChanged();
 			}
-		}, true);
+		}), true);
 	}
 
 	public void calcRepresentation()
 	{
 		final DebuggerContextImpl context = getTree().getDebuggerContext();
-		update(context, new Runnable()
+		update(context, () -> getDescriptor().updateRepresentation(context.createEvaluationContext(), new DescriptorLabelListener()
 		{
 			@Override
-			public void run()
+			public void labelChanged()
 			{
-				getDescriptor().updateRepresentation(context.createEvaluationContext(), new DescriptorLabelListener()
-				{
-					@Override
-					public void labelChanged()
-					{
-						updateCaches();
-						DebuggerTreeNodeImpl.this.labelChanged();
-					}
-				});
+				updateCaches();
+				DebuggerTreeNodeImpl.this.labelChanged();
 			}
-		}, false);
+		}), false);
 	}
 
 	public void calcValue()
 	{
 		final DebuggerContextImpl context = getTree().getDebuggerContext();
-		update(context, new Runnable()
+		update(context, () ->
 		{
-			@Override
-			public void run()
+			EvaluationContextImpl evaluationContext = context.createEvaluationContext();
+			getDescriptor().setContext(evaluationContext);
+			getDescriptor().updateRepresentation(evaluationContext, new DescriptorLabelListener()
 			{
-				EvaluationContextImpl evaluationContext = context.createEvaluationContext();
-				getDescriptor().setContext(evaluationContext);
-				getDescriptor().updateRepresentation(evaluationContext, new DescriptorLabelListener()
+				@Override
+				public void labelChanged()
 				{
-					@Override
-					public void labelChanged()
-					{
-						updateCaches();
-						DebuggerTreeNodeImpl.this.labelChanged();
-					}
-				});
-				childrenChanged(true);
-			}
+					updateCaches();
+					DebuggerTreeNodeImpl.this.labelChanged();
+				}
+			});
+			childrenChanged(true);
 		}, false);
 	}
 
@@ -271,27 +255,19 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 
 	public void labelChanged()
 	{
-		invoke(new Runnable()
+		invoke(() ->
 		{
-			@Override
-			public void run()
-			{
-				updateCaches();
-				getTree().getMutableModel().nodeChanged(DebuggerTreeNodeImpl.this);
-			}
+			updateCaches();
+			getTree().getMutableModel().nodeChanged(this);
 		});
 	}
 
 	public void childrenChanged(final boolean scrollToVisible)
 	{
-		invoke(new Runnable()
+		invoke(() ->
 		{
-			@Override
-			public void run()
-			{
-				getTree().getMutableModel().nodeStructureChanged(DebuggerTreeNodeImpl.this);
-				getTree().restoreState(DebuggerTreeNodeImpl.this);
-			}
+			getTree().getMutableModel().nodeStructureChanged(this);
+			getTree().restoreState(this);
 		});
 	}
 
@@ -317,6 +293,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		myProperties.put(key, data);
 	}
 
+	@NotNull
 	public static DebuggerTreeNodeImpl createNodeNoUpdate(DebuggerTree tree, NodeDescriptor descriptor)
 	{
 		DebuggerTreeNodeImpl node = new DebuggerTreeNodeImpl(tree, descriptor);
@@ -324,6 +301,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		return node;
 	}
 
+	@NotNull
 	protected static DebuggerTreeNodeImpl createNode(DebuggerTree tree, NodeDescriptorImpl descriptor, EvaluationContextImpl evaluationContext)
 	{
 		final DebuggerTreeNodeImpl node = new DebuggerTreeNodeImpl(tree, descriptor);

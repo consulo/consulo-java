@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.actions.DebuggerAction;
 import com.intellij.debugger.apiAdapters.TransportServiceWrapper;
 import com.intellij.debugger.engine.DebugProcess;
@@ -38,18 +39,41 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.application.ex.ApplicationManagerEx;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.progress.util.ProgressIndicatorUtils;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
+import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.PsiJavaParserFacadeImpl;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.net.NetUtils;
+import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
+import com.intellij.util.xmlb.XmlSerializer;
+import com.intellij.xdebugger.XExpression;
+import com.intellij.xdebugger.impl.breakpoints.XExpressionState;
+import consulo.internal.com.sun.jdi.InternalException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 
 public class DebuggerUtilsImpl extends DebuggerUtilsEx
 {
+	public static final Key<PsiType> PSI_TYPE_KEY = Key.create("PSI_TYPE_KEY");
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.DebuggerUtilsImpl");
 
 	@Override
@@ -107,19 +131,40 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 	@Override
 	public void writeTextWithImports(Element root, String name, TextWithImports value)
 	{
-		LOG.assertTrue(value.getKind() == CodeFragmentKind.EXPRESSION);
-		JDOMExternalizerUtil.writeField(root, name, value.toExternalForm());
+		if(value.getKind() == CodeFragmentKind.EXPRESSION)
+		{
+			JDOMExternalizerUtil.writeField(root, name, value.toExternalForm());
+		}
+		else
+		{
+			Element element = JDOMExternalizerUtil.writeOption(root, name);
+			XExpression expression = TextWithImportsImpl.toXExpression(value);
+			if(expression != null)
+			{
+				XmlSerializer.serializeInto(new XExpressionState(expression), element, new SkipDefaultValuesSerializationFilters());
+			}
+		}
 	}
 
 	@Override
 	public TextWithImports readTextWithImports(Element root, String name)
 	{
 		String s = JDOMExternalizerUtil.readField(root, name);
-		if(s == null)
+		if(s != null)
 		{
-			return null;
+			return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, s);
 		}
-		return new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, s);
+		else
+		{
+			Element option = JDOMExternalizerUtil.getOption(root, name);
+			if(option != null)
+			{
+				XExpressionState state = new XExpressionState();
+				XmlSerializer.deserializeInto(state, option);
+				return TextWithImportsImpl.fromXExpression(state.toXExpression());
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -132,6 +177,40 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 	public PsiElement getContextElement(StackFrameContext context)
 	{
 		return PositionUtil.getContextElement(context);
+	}
+
+	@NotNull
+	public static Pair<PsiElement, PsiType> getPsiClassAndType(@Nullable String className, Project project)
+	{
+		PsiElement contextClass = null;
+		PsiType contextType = null;
+		if(!StringUtil.isEmpty(className))
+		{
+			PsiPrimitiveType primitiveType = PsiJavaParserFacadeImpl.getPrimitiveType(className);
+			if(primitiveType != null)
+			{
+				contextClass = JavaPsiFacade.getInstance(project).findClass(primitiveType.getBoxedTypeName(), GlobalSearchScope.allScope(project));
+				contextType = primitiveType;
+			}
+			else
+			{
+				contextClass = findClass(className, project, GlobalSearchScope.allScope(project));
+				if(contextClass != null)
+				{
+					contextClass = contextClass.getNavigationElement();
+				}
+				if(contextClass instanceof PsiCompiledElement)
+				{
+					contextClass = ((PsiCompiledElement) contextClass).getMirror();
+				}
+				contextType = getType(className, project);
+			}
+			if(contextClass != null)
+			{
+				contextClass.putUserData(PSI_TYPE_KEY, contextType);
+			}
+		}
+		return Pair.create(contextClass, contextType);
 	}
 
 	@Override
@@ -184,5 +263,62 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 	public static boolean isRemote(DebugProcess debugProcess)
 	{
 		return Boolean.TRUE.equals(debugProcess.getUserData(BatchEvaluator.REMOTE_SESSION_KEY));
+	}
+
+	public static <T, E extends Exception> T suppressExceptions(ThrowableComputable<T, E> supplier, T defaultValue) throws E
+	{
+		return suppressExceptions(supplier, defaultValue, true, null);
+	}
+
+	public static <T, E extends Exception> T suppressExceptions(ThrowableComputable<T, E> supplier, T defaultValue, boolean ignorePCE, Class<E> rethrow) throws E
+	{
+		try
+		{
+			return supplier.compute();
+		}
+		catch(ProcessCanceledException e)
+		{
+			if(!ignorePCE)
+			{
+				throw e;
+			}
+		}
+		catch(VMDisconnectedException | ObjectCollectedException e)
+		{
+			throw e;
+		}
+		catch(InternalException e)
+		{
+			LOG.info(e);
+		}
+		catch(Exception | AssertionError e)
+		{
+			if(rethrow != null && rethrow.isInstance(e))
+			{
+				throw e;
+			}
+			else
+			{
+				LOG.error(e);
+			}
+		}
+		return defaultValue;
+	}
+
+	public static <T> T runInReadActionWithWriteActionPriorityWithRetries(@NotNull Computable<T> action)
+	{
+		if(ApplicationManagerEx.getApplicationEx().holdsReadLock())
+		{
+			return action.compute();
+		}
+		Ref<T> res = Ref.create();
+		while(true)
+		{
+			if(ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(() -> res.set(action.compute())))
+			{
+				return res.get();
+			}
+			ProgressIndicatorUtils.yieldToPendingWriteActions();
+		}
 	}
 }

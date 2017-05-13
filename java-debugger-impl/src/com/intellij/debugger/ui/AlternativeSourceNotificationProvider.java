@@ -19,21 +19,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JList;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
+import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.engine.JavaStackFrame;
+import com.intellij.debugger.engine.events.DebuggerCommandImpl;
+import com.intellij.debugger.impl.DebuggerContextImpl;
+import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
-import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.debugger.settings.DebuggerSettings;
+import com.intellij.ide.util.PsiElementModuleRenderer;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -43,11 +48,14 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
-import com.intellij.util.Function;
+import com.intellij.ui.components.JBList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.internal.com.sun.jdi.Location;
 
 /**
  * @author egor
@@ -74,6 +82,10 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 	@Override
 	public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor)
 	{
+		if(!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE)
+		{
+			return null;
+		}
 		XDebugSession session = XDebuggerManager.getInstance(myProject).getCurrentSession();
 		if(session == null)
 		{
@@ -85,11 +97,6 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 		if(position == null || !file.equals(position.getFile()))
 		{
 			FILE_PROCESSED_KEY.set(file, null);
-			return null;
-		}
-
-		if(file.getFileType() == JavaClassFileType.INSTANCE)
-		{
 			return null;
 		}
 
@@ -123,13 +130,13 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 			return null;
 		}
 
-		PsiClass[] alternatives = JavaPsiFacade.getInstance(myProject).findClasses(name, GlobalSearchScope.allScope(myProject));
+		ArrayList<PsiClass> alts = ContainerUtil.newArrayList(JavaPsiFacade.getInstance(myProject).findClasses(name, GlobalSearchScope.allScope(myProject)));
+		ContainerUtil.removeDuplicates(alts);
 
 		FILE_PROCESSED_KEY.set(file, true);
 
-		if(alternatives.length > 1)
+		if(alts.size() > 1)
 		{
-			ArrayList<PsiClass> alts = ContainerUtil.newArrayList(alternatives);
 			for(PsiClass cls : alts)
 			{
 				if(cls.equals(baseClass) || cls.getNavigationElement().equals(baseClass))
@@ -140,16 +147,20 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 			}
 			alts.add(0, baseClass);
 
-			ComboBoxClassElement[] elems = ContainerUtil.map2Array(alts, ComboBoxClassElement.class, new Function<PsiClass, ComboBoxClassElement>()
-			{
-				@Override
-				public ComboBoxClassElement fun(PsiClass psiClass)
-				{
-					return new ComboBoxClassElement(psiClass);
-				}
-			});
+			ComboBoxClassElement[] elems = ContainerUtil.map2Array(alts, ComboBoxClassElement.class, psiClass -> new ComboBoxClassElement((PsiClass) psiClass.getNavigationElement()));
 
-			return new AlternativeSourceNotificationPanel(elems, baseClass, myProject, file);
+			String locationDeclName = null;
+			XStackFrame frame = session.getCurrentStackFrame();
+			if(frame instanceof JavaStackFrame)
+			{
+				Location location = ((JavaStackFrame) frame).getDescriptor().getLocation();
+				if(location != null)
+				{
+					locationDeclName = location.declaringType().name();
+				}
+			}
+
+			return new AlternativeSourceNotificationPanel(elems, baseClass, myProject, file, locationDeclName);
 		}
 		return null;
 	}
@@ -164,34 +175,16 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 			myClass = aClass;
 		}
 
+		private static JList ourDummyList = new JBList(); // to use ModuleRendererFactory
+
 		@Override
 		public String toString()
 		{
 			if(myText == null)
 			{
-				Module module = ModuleUtilCore.findModuleForPsiElement(myClass);
-				if(module != null)
-				{
-					myText = module.getName();
-				}
-				else
-				{
-					VirtualFile virtualFile = myClass.getContainingFile().getVirtualFile();
-					final ProjectFileIndex index = ProjectRootManager.getInstance(myClass.getProject()).getFileIndex();
-					VirtualFile root = index.getSourceRootForFile(virtualFile);
-					if(root == null)
-					{
-						root = index.getClassRootForFile(virtualFile);
-					}
-					if(root != null)
-					{
-						myText = root.getName();
-					}
-					else
-					{
-						myText = virtualFile.getPath();
-					}
-				}
+				PsiElementModuleRenderer renderer = new PsiElementModuleRenderer();
+				renderer.getListCellRendererComponent(ourDummyList, myClass, 1, false, false);
+				myText = renderer.getText();
 			}
 			return myText;
 		}
@@ -204,28 +197,57 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 
 	private static class AlternativeSourceNotificationPanel extends EditorNotificationPanel
 	{
-		public AlternativeSourceNotificationPanel(ComboBoxClassElement[] alternatives, final PsiClass aClass, final Project project, final VirtualFile file)
+		public AlternativeSourceNotificationPanel(ComboBoxClassElement[] alternatives, final PsiClass aClass, final Project project, final VirtualFile file, String locationDeclName)
 		{
 			setText(DebuggerBundle.message("editor.notification.alternative.source", aClass.getQualifiedName()));
-			final ComboBox switcher = new ComboBox(alternatives);
+			final ComboBox<ComboBoxClassElement> switcher = new ComboBox<>(alternatives);
 			switcher.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					FileEditorManager.getInstance(project).closeFile(file);
-					PsiClass item = ((ComboBoxClassElement) switcher.getSelectedItem()).myClass;
-					item = (PsiClass) item.getNavigationElement(); // go through compiled
-					DebuggerUtilsEx.setAlternativeSource(file, item.getContainingFile().getVirtualFile());
-					item.navigate(true);
-					XDebugSession session = XDebuggerManager.getInstance(project).getCurrentSession();
-					if(session != null)
+					final DebuggerContextImpl context = DebuggerManagerEx.getInstanceEx(project).getContext();
+					final DebuggerSession session = context.getDebuggerSession();
+					final PsiClass item = ((ComboBoxClassElement) switcher.getSelectedItem()).myClass;
+					final VirtualFile vFile = item.getContainingFile().getVirtualFile();
+					if(session != null && vFile != null)
 					{
-						session.updateExecutionPosition();
+						session.getProcess().getManagerThread().schedule(new DebuggerCommandImpl()
+						{
+							@Override
+							protected void action() throws Exception
+							{
+								if(!StringUtil.isEmpty(locationDeclName))
+								{
+									DebuggerUtilsEx.setAlternativeSourceUrl(locationDeclName, vFile.getUrl(), project);
+								}
+								DebuggerUIUtil.invokeLater(() ->
+								{
+									FileEditorManager.getInstance(project).closeFile(file);
+									session.refresh(true);
+								});
+							}
+						});
+					}
+					else
+					{
+						FileEditorManager.getInstance(project).closeFile(file);
+						item.navigate(true);
 					}
 				}
 			});
 			myLinksPanel.add(switcher);
+			createActionLabel(DebuggerBundle.message("action.disable.text"), () ->
+			{
+				DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE = false;
+				FILE_PROCESSED_KEY.set(file, null);
+				FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+				FileEditor editor = fileEditorManager.getSelectedEditor(file);
+				if(editor != null)
+				{
+					fileEditorManager.removeTopComponent(editor, this);
+				}
+			});
 		}
 	}
 }

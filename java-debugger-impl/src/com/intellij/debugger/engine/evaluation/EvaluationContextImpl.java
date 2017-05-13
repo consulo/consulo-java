@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,22 +22,38 @@ import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.NullableLazyValue;
 import consulo.internal.com.sun.jdi.ClassLoaderReference;
 import consulo.internal.com.sun.jdi.Value;
 
 public final class EvaluationContextImpl implements EvaluationContext
 {
-	private final Value myThisObject;
+	private final NullableLazyValue<Value> myThisObject;
 	private final SuspendContextImpl mySuspendContext;
 	private final StackFrameProxyImpl myFrameProxy;
 	private boolean myAutoLoadClasses = true;
 	private ClassLoaderReference myClassLoader;
 
-	public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext,
-			StackFrameProxyImpl frameProxy,
-			@Nullable Value thisObject)
+	public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, @Nullable Value thisObject)
 	{
-		myThisObject = thisObject;
+		myThisObject = NullableLazyValue.of(() -> thisObject);
+		myFrameProxy = frameProxy;
+		mySuspendContext = suspendContext;
+	}
+
+	public EvaluationContextImpl(@NotNull SuspendContextImpl suspendContext, @NotNull StackFrameProxyImpl frameProxy)
+	{
+		myThisObject = NullableLazyValue.of(() ->
+		{
+			try
+			{
+				return frameProxy.thisObject();
+			}
+			catch(EvaluateException ignore)
+			{
+			}
+			return null;
+		});
 		myFrameProxy = frameProxy;
 		mySuspendContext = suspendContext;
 	}
@@ -46,7 +62,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 	@Override
 	public Value getThisObject()
 	{
-		return myThisObject;
+		return myThisObject.getValue();
 	}
 
 	@NotNull
@@ -71,7 +87,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 
 	public DebuggerManagerThreadImpl getManagerThread()
 	{
-		return getSuspendContext().getDebugProcessNoAssert().getManagerThread();
+		return getDebugProcess().getManagerThread();
 	}
 
 	@Override

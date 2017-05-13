@@ -15,15 +15,15 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import consulo.internal.com.sun.jdi.*;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Eugene Zhuravlev
@@ -33,7 +33,7 @@ public class BoxingEvaluator implements Evaluator{
   private final Evaluator myOperand;
 
   public BoxingEvaluator(Evaluator operand) {
-    myOperand = new DisableGC(operand);
+    myOperand = DisableGC.create(operand);
   }
 
   public Object evaluate(EvaluationContextImpl context) throws EvaluateException {

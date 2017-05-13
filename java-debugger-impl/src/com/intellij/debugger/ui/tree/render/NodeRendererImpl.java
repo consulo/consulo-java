@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@ import javax.swing.Icon;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
+import com.intellij.debugger.ui.tree.DebuggerTreeNode;
+import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.psi.PsiElement;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 
@@ -38,7 +40,7 @@ import consulo.internal.com.sun.jdi.Value;
 public abstract class NodeRendererImpl implements NodeRenderer
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.NodeRendererImpl");
-	protected BasicRendererProperties myProperties = new BasicRendererProperties();
+	protected BasicRendererProperties myProperties;
 
 	protected NodeRendererImpl()
 	{
@@ -47,7 +49,14 @@ public abstract class NodeRendererImpl implements NodeRenderer
 
 	protected NodeRendererImpl(@NotNull String presentableName)
 	{
+		this(presentableName, false);
+	}
+
+	protected NodeRendererImpl(@NotNull String presentableName, boolean enabledDefaultValue)
+	{
+		myProperties = new BasicRendererProperties(enabledDefaultValue);
 		myProperties.setName(presentableName);
+		myProperties.setEnabled(enabledDefaultValue);
 	}
 
 	@Override
@@ -91,6 +100,23 @@ public abstract class NodeRendererImpl implements NodeRenderer
 	}
 
 	@Override
+	public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext)
+	{
+	}
+
+	@Override
+	public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
+	{
+		return null;
+	}
+
+	@Override
+	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		return false;
+	}
+
+	@Override
 	public NodeRendererImpl clone()
 	{
 		try
@@ -107,13 +133,13 @@ public abstract class NodeRendererImpl implements NodeRenderer
 	}
 
 	@Override
-	public void readExternal(Element element) throws InvalidDataException
+	public void readExternal(Element element)
 	{
 		myProperties.readExternal(element);
 	}
 
 	@Override
-	public void writeExternal(Element element) throws WriteExternalException
+	public void writeExternal(Element element)
 	{
 		myProperties.writeExternal(element);
 	}

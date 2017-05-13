@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,7 @@
 package com.intellij.debugger.ui.breakpoints;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,17 +25,20 @@ import com.intellij.debugger.engine.BreakpointStepMethodFilter;
 import com.intellij.debugger.engine.CompoundPositionManager;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.LambdaMethodFilter;
+import com.intellij.debugger.engine.RequestHint;
+import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.intellij.debugger.engine.requests.RequestManagerImpl;
+import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.containers.MultiMap;
 import consulo.internal.com.sun.jdi.ClassNotPreparedException;
-import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.request.BreakpointRequest;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
 
 /**
  * @author Eugene Zhuravlev
@@ -49,8 +49,10 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.StepIntoBreakpoint");
 	@NotNull
 	private final BreakpointStepMethodFilter myFilter;
+	@Nullable
+	private RequestHint myHint;
 
-	StepIntoBreakpoint(@NotNull Project project, @NotNull SourcePosition pos, @NotNull BreakpointStepMethodFilter filter)
+	protected StepIntoBreakpoint(@NotNull Project project, @NotNull SourcePosition pos, @NotNull BreakpointStepMethodFilter filter)
 	{
 		super(project, pos, false);
 		myFilter = filter;
@@ -74,27 +76,26 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 					int nextLine = myCustomPosition.getLine() + 1;
 					while(nextLine <= lastLine && locations.isEmpty())
 					{
-						locations = positionManager.locationsOfLine(classType, SourcePosition.createFromLine(myCustomPosition.getFile(),
-								nextLine++));
+						locations = positionManager.locationsOfLine(classType, SourcePosition.createFromLine(myCustomPosition.getFile(), nextLine++));
 					}
 				}
 			}
 
 			if(!locations.isEmpty())
 			{
-				final Set<Method> methods = new HashSet<Method>();
+				MultiMap<Method, Location> methods = new MultiMap<>();
 				for(Location loc : locations)
 				{
 					if(acceptLocation(debugProcess, classType, loc))
 					{
-						methods.add(loc.method());
+						methods.putValue(loc.method(), loc);
 					}
 				}
 				Location location = null;
 				final int methodsFound = methods.size();
 				if(methodsFound == 1)
 				{
-					location = methods.iterator().next().location();
+					location = methods.values().iterator().next();
 				}
 				else
 				{
@@ -103,32 +104,20 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 						final LambdaMethodFilter lambdaFilter = (LambdaMethodFilter) myFilter;
 						if(lambdaFilter.getLambdaOrdinal() < methodsFound)
 						{
-							final Method[] candidates = methods.toArray(new Method[methodsFound]);
-							Arrays.sort(candidates, new Comparator<Method>()
-							{
-								@Override
-								public int compare(Method m1, Method m2)
-								{
-									return getMethodOrdinal(m1) - getMethodOrdinal(m2);
-								}
-							});
-							location = candidates[lambdaFilter.getLambdaOrdinal()].location();
+							Method[] candidates = methods.keySet().toArray(new Method[methodsFound]);
+							Arrays.sort(candidates, DebuggerUtilsEx.LAMBDA_ORDINAL_COMPARATOR);
+							location = methods.get(candidates[lambdaFilter.getLambdaOrdinal()]).iterator().next();
 						}
 					}
 					else
 					{
 						if(methodsFound > 0)
 						{
-							location = methods.iterator().next().location();
+							location = methods.values().iterator().next();
 						}
 					}
 				}
-				if(location != null)
-				{
-					final RequestManagerImpl requestsManager = debugProcess.getRequestsManager();
-					final BreakpointRequest request = requestsManager.createBreakpointRequest(this, location);
-					requestsManager.enableRequest(request);
-				}
+				createLocationBreakpointRequest(this, location, debugProcess);
 			}
 		}
 		catch(ClassNotPreparedException ex)
@@ -145,35 +134,12 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 				LOG.debug("ObjectCollectedException: " + ex.getMessage());
 			}
 		}
-		catch(InternalException ex)
-		{
-			LOG.info(ex);
-		}
 		catch(Exception ex)
 		{
 			LOG.info(ex);
 		}
 	}
 
-	private static int getMethodOrdinal(Method m)
-	{
-		final String name = m.name();
-		final int dollarIndex = name.lastIndexOf("$");
-		if(dollarIndex < 0)
-		{
-			return 0;
-		}
-		try
-		{
-			return Integer.parseInt(name.substring(dollarIndex + 1));
-		}
-		catch(NumberFormatException e)
-		{
-			return 0;
-		}
-	}
-
-	@Override
 	protected boolean acceptLocation(DebugProcessImpl debugProcess, ReferenceType classType, Location loc)
 	{
 		try
@@ -198,5 +164,26 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 			return breakpoint;
 		}
 		return null;
+	}
+
+	@Override
+	public boolean processLocatableEvent(SuspendContextCommandImpl action, LocatableEvent event) throws EventProcessingException
+	{
+		boolean res = super.processLocatableEvent(action, event);
+		if(res && myHint != null && myHint.isResetIgnoreFilters())
+		{
+			SuspendContextImpl context = action.getSuspendContext();
+			if(context != null)
+			{
+				DebugProcessImpl process = context.getDebugProcess();
+				process.checkPositionNotFiltered(context.getThread(), f -> process.getSession().resetIgnoreStepFiltersFlag());
+			}
+		}
+		return res;
+	}
+
+	public void setRequestHint(RequestHint hint)
+	{
+		myHint = hint;
 	}
 }

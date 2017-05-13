@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,8 @@
 package com.intellij.debugger.ui.impl;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import javax.swing.Icon;
-import javax.swing.JComponent;
 import javax.swing.JTree;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,14 +26,14 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.impl.watch.*;
+import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
+import com.intellij.debugger.ui.tree.render.EnumerationChildrenRenderer;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.ColorUtil;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
@@ -43,18 +41,23 @@ import com.intellij.ui.LayeredIcon;
 import com.intellij.ui.RowIcon;
 import com.intellij.ui.SimpleColoredText;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.util.PlatformIcons;
+import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.XDebuggerManager;
+import com.intellij.xdebugger.impl.XDebugSessionImpl;
+import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import com.intellij.xdebugger.impl.ui.XDebugSessionTab;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import consulo.annotations.RequiredDispatchThread;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Value;
 
 public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 {
+	private static final SimpleTextAttributes DEFAULT_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, null);
+	private static final SimpleTextAttributes SPECIAL_NODE_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, new JBColor(Color.lightGray, Gray._130));
+	private static final SimpleTextAttributes OBJECT_ID_HIGHLIGHT_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, new JBColor(Color.lightGray, Gray._130));
 
-	private static final SimpleTextAttributes DEFAULT_ATTRIBUTES = new SimpleTextAttributes(Font.PLAIN, null);
-	private static final SimpleTextAttributes SPECIAL_NODE_ATTRIBUTES = new SimpleTextAttributes(Font.PLAIN, new JBColor(Color.lightGray, Gray._130));
-	private static final SimpleTextAttributes OBJECT_ID_HIGHLIGHT_ATTRIBUTES = new SimpleTextAttributes(Font.PLAIN, new JBColor(Color.lightGray, Gray._130));
-
-	@RequiredDispatchThread
 	@Override
 	public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
 	{
@@ -72,7 +75,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 	}
 
 	@Nullable
-	public static Icon getDescriptorIcon(NodeDescriptorImpl descriptor)
+	public static Icon getDescriptorIcon(NodeDescriptor descriptor)
 	{
 		Icon nodeIcon = null;
 		if(descriptor instanceof ThreadGroupDescriptorImpl)
@@ -91,7 +94,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 		}
 		else if(descriptor instanceof ValueDescriptorImpl)
 		{
-			nodeIcon = getValueIcon((ValueDescriptorImpl) descriptor);
+			nodeIcon = getValueIcon((ValueDescriptorImpl) descriptor, null);
 		}
 		else if(descriptor instanceof MessageDescriptor)
 		{
@@ -117,13 +120,21 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 		return nodeIcon;
 	}
 
-	public static Icon getValueIcon(ValueDescriptorImpl valueDescriptor)
+	public static Icon getValueIcon(ValueDescriptorImpl valueDescriptor, @Nullable ValueDescriptorImpl parentDescriptor)
 	{
 		Icon nodeIcon;
 		if(valueDescriptor instanceof FieldDescriptorImpl)
 		{
 			FieldDescriptorImpl fieldDescriptor = (FieldDescriptorImpl) valueDescriptor;
-			nodeIcon = AllIcons.Nodes.Field;
+			nodeIcon = PlatformIcons.FIELD_ICON;
+			if(parentDescriptor != null)
+			{
+				Value value = valueDescriptor.getValue();
+				if(value instanceof ObjectReference && value.equals(parentDescriptor.getValue()))
+				{
+					nodeIcon = AllIcons.Debugger.Selfreference;
+				}
+			}
 			if(fieldDescriptor.getField().isFinal())
 			{
 				nodeIcon = new LayeredIcon(nodeIcon, AllIcons.Nodes.FinalMark);
@@ -143,11 +154,11 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 		}
 		else if(isParameter(valueDescriptor))
 		{
-			nodeIcon = AllIcons.Nodes.Parameter;
+			nodeIcon = PlatformIcons.PARAMETER_ICON;
 		}
 		else if(valueDescriptor.isEnumConstant())
 		{
-			nodeIcon = AllIcons.Nodes.Enum;
+			nodeIcon = PlatformIcons.ENUM_ICON;
 		}
 		else if(valueDescriptor.isArray())
 		{
@@ -157,17 +168,38 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 		{
 			nodeIcon = AllIcons.Debugger.Db_primitive;
 		}
+		else if(valueDescriptor instanceof WatchItemDescriptor)
+		{
+			nodeIcon = AllIcons.Debugger.Watch;
+		}
 		else
 		{
-			if(valueDescriptor instanceof WatchItemDescriptor)
+			nodeIcon = AllIcons.Debugger.Value;
+		}
+
+		if(valueDescriptor instanceof UserExpressionDescriptorImpl)
+		{
+			EnumerationChildrenRenderer enumerationChildrenRenderer = EnumerationChildrenRenderer.getCurrent(((UserExpressionDescriptorImpl) valueDescriptor).getParentDescriptor());
+			if(enumerationChildrenRenderer != null && enumerationChildrenRenderer.isAppendDefaultChildren())
 			{
 				nodeIcon = AllIcons.Debugger.Watch;
 			}
-			else
+		}
+
+		// if watches in variables enabled, always use watch icon
+		if(valueDescriptor instanceof WatchItemDescriptor && nodeIcon != AllIcons.Debugger.Watch)
+		{
+			XDebugSession session = XDebuggerManager.getInstance(valueDescriptor.getProject()).getCurrentSession();
+			if(session != null)
 			{
-				nodeIcon = AllIcons.Debugger.Value;
+				XDebugSessionTab tab = ((XDebugSessionImpl) session).getSessionTab();
+				if(tab != null && tab.isWatchesInVariables())
+				{
+					nodeIcon = AllIcons.Debugger.Watch;
+				}
 			}
 		}
+
 		final Icon valueIcon = valueDescriptor.getValueIcon();
 		if(nodeIcon != null && valueIcon != null)
 		{
@@ -195,21 +227,6 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 		return false;
 	}
 
-	@NotNull
-	public static EditorColorsScheme getColorScheme(@Nullable JComponent component)
-	{
-		EditorColorsScheme globalScheme = EditorColorsManager.getInstance().getGlobalScheme();
-		if(component != null && ColorUtil.isDark(component.getBackground()) != ColorUtil.isDark(globalScheme.getDefaultBackground()))
-		{
-			EditorColorsScheme scheme = EditorColorsManager.getInstance().getScheme(EditorColorsScheme.DEFAULT_SCHEME_NAME);
-			if(scheme != null)
-			{
-				return scheme;
-			}
-		}
-		return globalScheme;
-	}
-
 	public static SimpleColoredText getDescriptorText(DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, EditorColorsScheme colorsScheme, boolean multiline)
 	{
 		return getDescriptorText(debuggerContext, descriptor, colorsScheme, multiline, true);
@@ -217,12 +234,12 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer
 
 	public static SimpleColoredText getDescriptorText(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, boolean multiline)
 	{
-		return getDescriptorText(debuggerContext, descriptor, getColorScheme(null), multiline, true);
+		return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), multiline, true);
 	}
 
 	public static SimpleColoredText getDescriptorTitle(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor)
 	{
-		return getDescriptorText(debuggerContext, descriptor, getColorScheme(null), false, false);
+		return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), false, false);
 	}
 
 	private static SimpleColoredText getDescriptorText(DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, EditorColorsScheme colorScheme, boolean multiline, boolean appendValue)

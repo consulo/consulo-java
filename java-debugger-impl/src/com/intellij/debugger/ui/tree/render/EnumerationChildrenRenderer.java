@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,15 @@ import java.util.List;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerContext;
+import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.impl.descriptors.data.UserExpressionData;
+import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
@@ -33,23 +36,24 @@ import com.intellij.debugger.ui.tree.NodeDescriptorFactory;
 import com.intellij.debugger.ui.tree.NodeManager;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
 import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.PsiElement;
 import consulo.internal.com.sun.jdi.Value;
 
-/**
- * User: lex
- * Date: Dec 19, 2003
- * Time: 1:25:15 PM
- */
-public final class EnumerationChildrenRenderer extends ReferenceRenderer implements ChildrenRenderer
+public final class EnumerationChildrenRenderer extends TypeRenderer implements ChildrenRenderer
 {
 	public static final
 	@NonNls
 	String UNIQUE_ID = "EnumerationChildrenRenderer";
 
+	private boolean myAppendDefaultChildren;
 	private List<Pair<String, TextWithImports>> myChildren;
+
+	public static final
+	@NonNls
+	String APPEND_DEFAULT_NAME = "AppendDefault";
 	public static final
 	@NonNls
 	String CHILDREN_EXPRESSION = "ChildrenExpression";
@@ -59,13 +63,23 @@ public final class EnumerationChildrenRenderer extends ReferenceRenderer impleme
 
 	public EnumerationChildrenRenderer()
 	{
-		this(new ArrayList<Pair<String, TextWithImports>>());
+		this(new ArrayList<>());
 	}
 
 	public EnumerationChildrenRenderer(List<Pair<String, TextWithImports>> children)
 	{
 		super();
 		myChildren = children;
+	}
+
+	public void setAppendDefaultChildren(boolean appendDefaultChildren)
+	{
+		myAppendDefaultChildren = appendDefaultChildren;
+	}
+
+	public boolean isAppendDefaultChildren()
+	{
+		return myAppendDefaultChildren;
 	}
 
 	@Override
@@ -87,6 +101,8 @@ public final class EnumerationChildrenRenderer extends ReferenceRenderer impleme
 
 		myChildren.clear();
 
+		myAppendDefaultChildren = "true".equals(JDOMExternalizerUtil.readField(element, APPEND_DEFAULT_NAME));
+
 		List<Element> children = element.getChildren(CHILDREN_EXPRESSION);
 		for(Element item : children)
 		{
@@ -102,6 +118,11 @@ public final class EnumerationChildrenRenderer extends ReferenceRenderer impleme
 	{
 		super.writeExternal(element);
 
+		if(myAppendDefaultChildren)
+		{
+			JDOMExternalizerUtil.writeField(element, APPEND_DEFAULT_NAME, "true");
+		}
+
 		for(Pair<String, TextWithImports> pair : myChildren)
 		{
 			Element child = new Element(CHILDREN_EXPRESSION);
@@ -112,19 +133,25 @@ public final class EnumerationChildrenRenderer extends ReferenceRenderer impleme
 		}
 	}
 
-	@Override
 	public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext)
 	{
 		NodeManager nodeManager = builder.getNodeManager();
 		NodeDescriptorFactory descriptorFactory = builder.getDescriptorManager();
 
-		List<DebuggerTreeNode> children = new ArrayList<DebuggerTreeNode>();
+		List<DebuggerTreeNode> children = new ArrayList<>();
+		int idx = 0;
 		for(Pair<String, TextWithImports> pair : myChildren)
 		{
-			children.add(nodeManager.createNode(descriptorFactory.getUserExpressionDescriptor(builder.getParentDescriptor(), new UserExpressionData((ValueDescriptorImpl) builder.getParentDescriptor
-					(), getClassName(), pair.getFirst(), pair.getSecond())), evaluationContext));
+			UserExpressionData data = new UserExpressionData((ValueDescriptorImpl) builder.getParentDescriptor(), getClassName(), pair.getFirst(), pair.getSecond());
+			data.setEnumerationIndex(idx++);
+			children.add(nodeManager.createNode(descriptorFactory.getUserExpressionDescriptor(builder.getParentDescriptor(), data), evaluationContext));
 		}
 		builder.setChildren(children);
+
+		if(myAppendDefaultChildren)
+		{
+			DebugProcessImpl.getDefaultRenderer(value).buildChildren(value, builder, evaluationContext);
+		}
 	}
 
 	@Override
@@ -133,10 +160,9 @@ public final class EnumerationChildrenRenderer extends ReferenceRenderer impleme
 		return ((ValueDescriptor) node.getDescriptor()).getDescriptorEvaluation(context);
 	}
 
-	@Override
 	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
 	{
-		return myChildren.size() > 0;
+		return myChildren.size() > 0 || (myAppendDefaultChildren && DebugProcessImpl.getDefaultRenderer(value).isExpandable(value, evaluationContext, parentDescriptor));
 	}
 
 	public List<Pair<String, TextWithImports>> getChildren()
@@ -147,5 +173,20 @@ public final class EnumerationChildrenRenderer extends ReferenceRenderer impleme
 	public void setChildren(List<Pair<String, TextWithImports>> children)
 	{
 		myChildren = children;
+	}
+
+	@Nullable
+	public static EnumerationChildrenRenderer getCurrent(ValueDescriptorImpl valueDescriptor)
+	{
+		Renderer renderer = valueDescriptor.getLastRenderer();
+		if(renderer instanceof CompoundNodeRenderer && NodeRendererSettings.getInstance().getCustomRenderers().contains((NodeRenderer) renderer))
+		{
+			ChildrenRenderer childrenRenderer = ((CompoundNodeRenderer) renderer).getChildrenRenderer();
+			if(childrenRenderer instanceof EnumerationChildrenRenderer)
+			{
+				return (EnumerationChildrenRenderer) childrenRenderer;
+			}
+		}
+		return null;
 	}
 }

@@ -30,7 +30,7 @@ public abstract class LoopEvaluator implements Evaluator
 	public LoopEvaluator(String labelName, Evaluator bodyEvaluator)
 	{
 		myLabelName = labelName;
-		myBodyEvaluator = bodyEvaluator != null ? new DisableGC(bodyEvaluator) : null;
+		myBodyEvaluator = bodyEvaluator != null ? DisableGC.create(bodyEvaluator) : null;
 	}
 
 	protected boolean body(EvaluationContextImpl context) throws EvaluateException

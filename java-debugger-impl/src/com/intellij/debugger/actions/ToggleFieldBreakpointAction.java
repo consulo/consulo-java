@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import com.intellij.debugger.InstanceFilter;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerUtils;
+import com.intellij.debugger.engine.SourcePositionProvider;
 import com.intellij.debugger.engine.events.DebuggerContextCommandImpl;
-import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
@@ -57,11 +57,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
-/**
- * User: lex
- * Date: Sep 4, 2003
- * Time: 8:59:30 PM
- */
 public class ToggleFieldBreakpointAction extends AnAction
 {
 
@@ -106,8 +101,6 @@ public class ToggleFieldBreakpointAction extends AnAction
 							}
 						}
 
-						RequestManagerImpl.createRequests(fieldBreakpoint);
-
 						final Editor editor = CommonDataKeys.EDITOR.getData(e.getDataContext());
 						if(editor != null)
 						{
@@ -130,9 +123,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 		boolean toEnable = place != null;
 
 		Presentation presentation = event.getPresentation();
-		if(ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) ||
-				ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace()) ||
-				ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace()))
+		if(ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace()))
 		{
 			presentation.setVisible(toEnable);
 		}
@@ -147,8 +138,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 				{
 					final int offset = place.getOffset();
 					final BreakpointManager breakpointManager = (DebuggerManagerEx.getInstanceEx(project)).getBreakpointManager();
-					final Breakpoint fieldBreakpoint = offset >= 0 ? breakpointManager.findBreakpoint(document, offset,
-							FieldBreakpoint.CATEGORY) : null;
+					final Breakpoint fieldBreakpoint = offset >= 0 ? breakpointManager.findBreakpoint(document, offset, FieldBreakpoint.CATEGORY) : null;
 					if(fieldBreakpoint != null)
 					{
 						presentation.setEnabled(false);
@@ -169,9 +159,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 		{
 			return null;
 		}
-		if(ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) ||
-				ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace()) ||
-				ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace()))
+		if(ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.STRUCTURE_VIEW_POPUP.equals(event.getPlace()) || ActionPlaces.FAVORITES_VIEW_POPUP.equals(event.getPlace()))
 		{
 			final PsiElement psiElement = event.getData(CommonDataKeys.PSI_ELEMENT);
 			if(psiElement instanceof PsiField)
@@ -187,25 +175,20 @@ public class ToggleFieldBreakpointAction extends AnAction
 			final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(dataContext);
 			final DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
 			if(debugProcess != null)
-			{ // if there is an active debugsession
-				final Ref<SourcePosition> positionRef = new Ref<SourcePosition>(null);
+			{ // if there is an active debug session
+				final Ref<SourcePosition> positionRef = new Ref<>(null);
 				debugProcess.getManagerThread().invokeAndWait(new DebuggerContextCommandImpl(debuggerContext)
 				{
+					@Override
 					public Priority getPriority()
 					{
 						return Priority.HIGH;
 					}
 
+					@Override
 					public void threadAction()
 					{
-						ApplicationManager.getApplication().runReadAction(new Runnable()
-						{
-							public void run()
-							{
-								final FieldDescriptorImpl descriptor = (FieldDescriptorImpl) selectedNode.getDescriptor();
-								positionRef.set(descriptor.getSourcePosition(project, debuggerContext));
-							}
-						});
+						ApplicationManager.getApplication().runReadAction(() -> positionRef.set(SourcePositionProvider.getSourcePosition(selectedNode.getDescriptor(), project, debuggerContext)));
 					}
 				});
 				final SourcePosition sourcePosition = positionRef.get();
@@ -226,8 +209,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 				{
 					Field field = ((FieldDescriptorImpl) node.getDescriptor()).getField();
 					DebuggerSession session = tree.getDebuggerContext().getDebuggerSession();
-					PsiClass psiClass = DebuggerUtils.findClass(field.declaringType().name(), project, (session != null) ? session.getSearchScope()
-							: GlobalSearchScope.allScope(project));
+					PsiClass psiClass = DebuggerUtils.findClass(field.declaringType().name(), project, (session != null) ? session.getSearchScope() : GlobalSearchScope.allScope(project));
 					if(psiClass != null)
 					{
 						psiClass = (PsiClass) psiClass.getNavigationElement();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.intellij.util.ArrayUtil;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.MethodEntryEvent;
@@ -35,6 +36,7 @@ import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
+import consulo.java.JavaRegistry;
 
 /**
  * @author Eugene Zhuravlev
@@ -80,12 +82,9 @@ public class MethodReturnValueWatcher
 		}
 		try
 		{
-			if(Comparing.equal(myEntryMethod, event.method()))
+			if(JavaRegistry.DEBUGGER_WATCH_RETURN_SPEEDUP && Comparing.equal(myEntryMethod, event.method()))
 			{
-				if(LOG.isDebugEnabled())
-				{
-					LOG.debug("Now watching all");
-				}
+				LOG.debug("Now watching all");
 				enableEntryWatching(true);
 				createExitRequest().enable();
 			}
@@ -107,13 +106,7 @@ public class MethodReturnValueWatcher
 					myLastMethodReturnValue = retVal;
 				}
 			}
-			catch(NoSuchMethodException ignored)
-			{
-			}
-			catch(IllegalAccessException ignored)
-			{
-			}
-			catch(InvocationTargetException ignored)
+			catch(NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored)
 			{
 			}
 		}
@@ -145,6 +138,10 @@ public class MethodReturnValueWatcher
 
 				enableEntryWatching(false);
 			}
+		}
+		catch(VMDisconnectedException e)
+		{
+			throw e;
 		}
 		catch(Exception e)
 		{
@@ -185,8 +182,7 @@ public class MethodReturnValueWatcher
 	public void setFeatureEnabled(final boolean featureEnabled)
 	{
 		myFeatureEnabled = featureEnabled;
-		myLastExecutedMethod = null;
-		myLastMethodReturnValue = null;
+		clear();
 	}
 
 	public void enable(ThreadReference thread)
@@ -203,6 +199,13 @@ public class MethodReturnValueWatcher
 	{
 		myEnabled = trackingEnabled;
 		updateRequestState(trackingEnabled && myFeatureEnabled, thread);
+	}
+
+	public void clear()
+	{
+		myLastExecutedMethod = null;
+		myLastMethodReturnValue = null;
+		myThread = null;
 	}
 
 	private void updateRequestState(final boolean enabled, @Nullable final ThreadReference thread)
@@ -222,11 +225,13 @@ public class MethodReturnValueWatcher
 			}
 			if(enabled)
 			{
-				myLastExecutedMethod = null;
-				myLastMethodReturnValue = null;
+				clear();
 				myThread = thread;
 
-				createEntryRequest().enable();
+				if(JavaRegistry.DEBUGGER_WATCH_RETURN_SPEEDUP)
+				{
+					createEntryRequest().enable();
+				}
 				createExitRequest().enable();
 			}
 		}
@@ -259,7 +264,7 @@ public class MethodReturnValueWatcher
 	@NotNull
 	private <T extends EventRequest> T prepareRequest(T request)
 	{
-		request.setSuspendPolicy(EventRequest.SUSPEND_EVENT_THREAD);
+		request.setSuspendPolicy(JavaRegistry.DEBUGGER_WATCH_RETURN_SPEEDUP ? EventRequest.SUSPEND_EVENT_THREAD : EventRequest.SUSPEND_NONE);
 		if(myThread != null)
 		{
 			if(request instanceof MethodEntryRequest)

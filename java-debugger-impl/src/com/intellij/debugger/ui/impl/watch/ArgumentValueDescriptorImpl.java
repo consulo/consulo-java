@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,30 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
+import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.engine.JavaValue;
+import com.intellij.debugger.engine.JavaValueModifier;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
+import com.intellij.debugger.impl.DebuggerContextImpl;
 import com.intellij.debugger.impl.PositionUtil;
 import com.intellij.debugger.jdi.DecompiledLocalVariable;
+import com.intellij.debugger.jdi.LocalVariablesUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.xdebugger.frame.XValueModifier;
+import consulo.internal.com.sun.jdi.ClassNotLoadedException;
+import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
+import consulo.internal.com.sun.jdi.InvalidTypeException;
+import consulo.internal.com.sun.jdi.InvocationException;
 import consulo.internal.com.sun.jdi.PrimitiveValue;
+import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
 
 public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
@@ -43,7 +55,7 @@ public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
 	@Override
 	public boolean canSetValue()
 	{
-		return false;
+		return LocalVariablesUtil.canSetValues();
 	}
 
 	@Override
@@ -77,7 +89,7 @@ public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
 	@Override
 	public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException
 	{
-		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
+		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myProject).getElementFactory();
 		try
 		{
 			return elementFactory.createExpressionFromText(getName(), PositionUtil.getContextElement(context));
@@ -86,5 +98,38 @@ public class ArgumentValueDescriptorImpl extends ValueDescriptorImpl
 		{
 			throw new EvaluateException(DebuggerBundle.message("error.invalid.local.variable.name", getName()), e);
 		}
+	}
+
+	@Override
+	public XValueModifier getModifier(JavaValue value)
+	{
+		return new JavaValueModifier(value)
+		{
+			@Override
+			protected void setValueImpl(@NotNull String expression, @NotNull XModificationCallback callback)
+			{
+				final DecompiledLocalVariable local = ArgumentValueDescriptorImpl.this.getVariable();
+				if(local != null)
+				{
+					final DebuggerContextImpl debuggerContext = DebuggerManagerEx.getInstanceEx(getProject()).getContext();
+					set(expression, callback, debuggerContext, new SetValueRunnable()
+					{
+						@Override
+						public void setValue(EvaluationContextImpl evaluationContext, Value newValue) throws ClassNotLoadedException, InvalidTypeException, EvaluateException
+						{
+							LocalVariablesUtil.setValue(debuggerContext.getFrameProxy().getStackFrame(), local.getSlot(), newValue);
+							update(debuggerContext);
+						}
+
+						@Override
+						public ReferenceType loadClass(EvaluationContextImpl evaluationContext,
+								String className) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException, EvaluateException
+						{
+							return evaluationContext.getDebugProcess().loadClass(evaluationContext, className, evaluationContext.getClassLoader());
+						}
+					});
+				}
+			}
+		};
 	}
 }

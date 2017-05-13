@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.debugger.ui;
+package com.intellij.debugger.memory.filtering;
 
-import javax.swing.JComponent;
-
-import org.jetbrains.annotations.Nullable;
-import com.intellij.debugger.engine.evaluation.TextWithImports;
-import com.intellij.psi.PsiElement;
-
-public abstract class CompletionEditor extends JComponent
+/**
+ * @author Vitaliy.Bibaev
+ */
+public enum FilteringResult
 {
-	public abstract void setText(TextWithImports text);
+	ALL_CHECKED,
 
-	public abstract TextWithImports getText();
+	INTERRUPTED,
 
-	public abstract void setContext(@Nullable PsiElement context);
-
-	public abstract PsiElement getContext();
-
-	public abstract String getRecentsId();
+	LIMIT_REACHED
 }

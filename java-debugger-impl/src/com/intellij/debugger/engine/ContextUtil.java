@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.SourcePosition;
+import com.intellij.debugger.engine.evaluation.DefaultCodeFragmentFactory;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.jdi.StackFrameProxy;
 import com.intellij.debugger.jdi.LocalVariableProxyImpl;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.JavaPsiFacade;
@@ -35,12 +36,11 @@ import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiResolveHelper;
 import com.intellij.psi.PsiStatement;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.StringBuilderSpinAllocator;
 import consulo.internal.com.sun.jdi.Location;
 
 public class ContextUtil
 {
-	public static final Key<Boolean> IS_JSP_IMPLICIT = new Key<Boolean>("JspImplicit");
+	public static final Key<Boolean> IS_JSP_IMPLICIT = new Key<>("JspImplicit");
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.impl.PositionUtil");
 
 	@Nullable
@@ -69,20 +69,11 @@ public class ContextUtil
 		{
 			LOG.debug(e);
 		}
-		final CompoundPositionManager positionManager = debugProcess.getPositionManager();
-		if(positionManager == null)
-		{
-			// process already closed
-			return null;
-		}
-		try
-		{
-			return positionManager.getSourcePosition(location);
-		}
-		catch(IndexNotReadyException ignored)
+		if(location == null)
 		{
 			return null;
 		}
+		return debugProcess.getPositionManager().getSourcePosition(location);
 	}
 
 	@Nullable
@@ -92,7 +83,7 @@ public class ContextUtil
 	}
 
 	@Nullable
-	protected static PsiElement getContextElement(final StackFrameContext context, final SourcePosition position)
+	public static PsiElement getContextElement(final StackFrameContext context, final SourcePosition position)
 	{
 		if(LOG.isDebugEnabled())
 		{
@@ -100,71 +91,76 @@ public class ContextUtil
 			LOG.assertTrue(Comparing.equal(sourcePosition, position));
 		}
 
-		final PsiElement element = getContextElement(position);
-
-		if(element == null)
+		return ReadAction.compute(() ->
 		{
-			return null;
-		}
+			final PsiElement element = getContextElement(position);
 
-		final StackFrameProxyImpl frameProxy = (StackFrameProxyImpl) context.getFrameProxy();
-
-		if(frameProxy == null)
-		{
-			return element;
-		}
-
-		final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-		try
-		{
-			List<LocalVariableProxyImpl> list = frameProxy.visibleVariables();
-
-			PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(element.getProject()).getResolveHelper();
-			buf.append('{');
-			for(LocalVariableProxyImpl localVariable : list)
+			if(element == null)
 			{
-				final String varName = localVariable.name();
-				if(resolveHelper.resolveReferencedVariable(varName, element) == null)
-				{
-					buf.append(localVariable.getVariable().typeName()).append(" ").append(varName).append(";");
-				}
+				return null;
 			}
-			buf.append('}');
 
-			if(buf.length() <= 2)
+			// further code is java specific, actually
+			if(element.getLanguage().getAssociatedFileType() != DefaultCodeFragmentFactory.getInstance().getFileType())
 			{
 				return element;
 			}
-			final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(element.getProject()).getElementFactory();
-			final PsiCodeBlock codeBlockFromText = elementFactory.createCodeBlockFromText(buf.toString(), element);
 
-			final PsiStatement[] statements = codeBlockFromText.getStatements();
-			for(PsiStatement statement : statements)
+			final StackFrameProxyImpl frameProxy = (StackFrameProxyImpl) context.getFrameProxy();
+
+			if(frameProxy == null)
 			{
-				if(statement instanceof PsiDeclarationStatement)
+				return element;
+			}
+
+			try
+			{
+				List<LocalVariableProxyImpl> list = frameProxy.visibleVariables();
+
+				PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(element.getProject()).getResolveHelper();
+				StringBuilder buf = null;
+				for(LocalVariableProxyImpl localVariable : list)
 				{
-					PsiDeclarationStatement declStatement = (PsiDeclarationStatement) statement;
-					PsiElement[] declaredElements = declStatement.getDeclaredElements();
-					for(PsiElement declaredElement : declaredElements)
+					final String varName = localVariable.name();
+					if(resolveHelper.resolveReferencedVariable(varName, element) == null)
 					{
-						declaredElement.putUserData(IS_JSP_IMPLICIT, Boolean.TRUE);
+						if(buf == null)
+						{
+							buf = new StringBuilder("{");
+						}
+						buf.append(localVariable.getVariable().typeName()).append(" ").append(varName).append(";");
 					}
 				}
+				if(buf == null)
+				{
+					return element;
+				}
+
+				buf.append('}');
+
+				final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(element.getProject()).getElementFactory();
+				final PsiCodeBlock codeBlockFromText = elementFactory.createCodeBlockFromText(buf.toString(), element);
+
+				final PsiStatement[] statements = codeBlockFromText.getStatements();
+				for(PsiStatement statement : statements)
+				{
+					if(statement instanceof PsiDeclarationStatement)
+					{
+						PsiDeclarationStatement declStatement = (PsiDeclarationStatement) statement;
+						PsiElement[] declaredElements = declStatement.getDeclaredElements();
+						for(PsiElement declaredElement : declaredElements)
+						{
+							declaredElement.putUserData(IS_JSP_IMPLICIT, Boolean.TRUE);
+						}
+					}
+				}
+				return codeBlockFromText;
 			}
-			return codeBlockFromText;
-		}
-		catch(IncorrectOperationException ignored)
-		{
-			return element;
-		}
-		catch(EvaluateException ignored)
-		{
-			return element;
-		}
-		finally
-		{
-			StringBuilderSpinAllocator.dispose(buf);
-		}
+			catch(IncorrectOperationException | EvaluateException ignored)
+			{
+				return element;
+			}
+		});
 	}
 
 	@Nullable

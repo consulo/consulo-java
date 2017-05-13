@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import com.intellij.debugger.requests.RequestManager;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.psi.search.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
@@ -42,19 +42,16 @@ import consulo.internal.com.sun.jdi.Value;
 /**
  * @author lex
  */
-public interface DebugProcess
+public interface DebugProcess extends UserDataHolder
 {
 	@NonNls
 	String JAVA_STRATUM = "Java";
-
-	<T> T getUserData(Key<T> key);
-
-	<T> void putUserData(Key<T> key, T value);
 
 	Project getProject();
 
 	RequestManager getRequestsManager();
 
+	@NotNull
 	PositionManager getPositionManager();
 
 	VirtualMachineProxy getVirtualMachineProxy();
@@ -66,7 +63,7 @@ public interface DebugProcess
 	/**
 	 * The usual place to call this method is vmAttachedEvent. No additional actions are needed in this case.
 	 * If position manager is appended later, when DebugSession is up and running, one might need to call BreakpointManager.updateAllRequests()
-	 * to ensure that just adedd position manager was considered when creating breakpoint requests
+	 * to ensure that just added position manager was considered when creating breakpoint requests
 	 *
 	 * @param positionManager to be appended
 	 */
@@ -82,20 +79,20 @@ public interface DebugProcess
 
 	DebuggerManagerThread getManagerThread();
 
-	Value invokeMethod(EvaluationContext evaluationContext, ObjectReference objRef, Method method, List args) throws EvaluateException;
+	Value invokeMethod(EvaluationContext evaluationContext, ObjectReference objRef, Method method, List<? extends Value> args) throws EvaluateException;
 
 	/**
 	 * Is equivalent to invokeInstanceMethod(evaluationContext, classType, method, args, 0)
 	 */
-	Value invokeMethod(EvaluationContext evaluationContext, ClassType classType, Method method, List args) throws EvaluateException;
+	Value invokeMethod(EvaluationContext evaluationContext, ClassType classType, Method method, List<? extends Value> args) throws EvaluateException;
 
-	Value invokeInstanceMethod(EvaluationContext evaluationContext, ObjectReference objRef, Method method, List args, int invocationOptions) throws EvaluateException;
+	Value invokeInstanceMethod(EvaluationContext evaluationContext, ObjectReference objRef, Method method, List<? extends Value> args, int invocationOptions) throws EvaluateException;
 
 	ReferenceType findClass(EvaluationContext evaluationContext, String name, ClassLoaderReference classLoader) throws EvaluateException;
 
 	ArrayReference newInstance(ArrayType arrayType, int dimension) throws EvaluateException;
 
-	ObjectReference newInstance(EvaluationContext evaluationContext, ClassType classType, Method constructor, List paramList) throws EvaluateException;
+	ObjectReference newInstance(EvaluationContext evaluationContext, ClassType classType, Method constructor, List<? extends Value> paramList) throws EvaluateException;
 
 	boolean isAttached();
 

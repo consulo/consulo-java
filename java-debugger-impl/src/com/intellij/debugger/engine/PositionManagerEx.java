@@ -24,12 +24,10 @@ import com.intellij.util.ThreeState;
 import com.intellij.xdebugger.frame.XStackFrame;
 import consulo.internal.com.sun.jdi.Location;
 
-public interface PositionManagerEx extends PositionManager
+public abstract class PositionManagerEx implements PositionManager
 {
 	@Nullable
-	XStackFrame createStackFrame(
-			@NotNull StackFrameProxyImpl frame, @NotNull DebugProcessImpl debugProcess, @NotNull Location location);
+	public abstract XStackFrame createStackFrame(@NotNull StackFrameProxyImpl frame, @NotNull DebugProcessImpl debugProcess, @NotNull Location location);
 
-	ThreeState evaluateCondition(
-			@NotNull EvaluationContext context, @NotNull StackFrameProxyImpl frame, @NotNull Location location, @NotNull String expression);
+	public abstract ThreeState evaluateCondition(@NotNull EvaluationContext context, @NotNull StackFrameProxyImpl frame, @NotNull Location location, @NotNull String expression);
 }

@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -36,6 +35,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.NonClasspathDirectoriesScope;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.psi.PsiPackageManager;
 
 /**
@@ -60,6 +60,11 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 		myProject = project;
 		myManager = PsiManager.getInstance(myProject);
 		myCheckForSources = checkForSources;
+	}
+
+	public void clearCache()
+	{
+		myCache = null;
 	}
 
 	protected List<VirtualFile> getClassRoots(@Nullable GlobalSearchScope scope)
@@ -134,8 +139,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 				{
 					if(!classFile.isValid())
 					{
-						LOG.error("Invalid child of valid parent: " + classFile.getPath() + "; " + classRoot.isValid() + " path=" + classRoot
-								.getPath());
+						LOG.error("Invalid child of valid parent: " + classFile.getPath() + "; " + classRoot.isValid() + " path=" + classRoot.getPath());
 						return null;
 					}
 					final PsiFile file = myManager.findFile(classFile);
@@ -213,8 +217,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 				{
 					for(final VirtualFile file : dir.getChildren())
 					{
-						if((myCheckForSources && !file.isDirectory() && JavaFileType.DEFAULT_EXTENSION.equals(file.getExtension())) || (!file
-								.isDirectory() && "class".equals(file.getExtension())))
+						if((myCheckForSources && !file.isDirectory() && JavaFileType.DEFAULT_EXTENSION.equals(file.getExtension())) || (!file.isDirectory() && "class".equals(file.getExtension())))
 						{
 							result.add(file.getNameWithoutExtension());
 						}
@@ -251,8 +254,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder
 	}
 
 	@Override
-	public boolean processPackageDirectories(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope,
-			@NotNull Processor<PsiDirectory> consumer, boolean includeLibrarySources)
+	public boolean processPackageDirectories(@NotNull PsiJavaPackage psiPackage, @NotNull GlobalSearchScope scope, @NotNull Processor<PsiDirectory> consumer, boolean includeLibrarySources)
 	{
 		final List<VirtualFile> classRoots = getClassRoots(scope);
 		if(classRoots.isEmpty())

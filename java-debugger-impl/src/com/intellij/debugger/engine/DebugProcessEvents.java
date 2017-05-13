@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,35 +15,37 @@
  */
 package com.intellij.debugger.engine;
 
-import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
+import com.intellij.debugger.DebuggerManager;
 import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.PositionManagerFactory;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.engine.requests.LocatableEventRequestor;
 import com.intellij.debugger.engine.requests.MethodReturnValueWatcher;
+import com.intellij.debugger.impl.DebuggerManagerImpl;
 import com.intellij.debugger.impl.DebuggerSession;
-import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
 import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.debugger.requests.Requestor;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
-import com.intellij.debugger.ui.breakpoints.LineBreakpoint;
+import com.intellij.debugger.ui.breakpoints.StackCapturingLineBreakpoint;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
@@ -69,6 +71,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 	public DebugProcessEvents(Project project)
 	{
 		super(project);
+		DebuggerSettings.getInstance().addCapturePointsSettingsListener(this::createStackCapturingBreakpoints, myDisposable);
 	}
 
 	@Override
@@ -102,20 +105,13 @@ public class DebugProcessEvents extends DebugProcessImpl
 		final Breakpoint breakpoint = descriptor.getFirst();
 		if(event instanceof LocatableEvent)
 		{
-			if(breakpoint instanceof LineBreakpoint && !((LineBreakpoint) breakpoint).isVisible())
+			try
 			{
-				text = DebuggerBundle.message("status.stopped.at.cursor");
+				text = breakpoint != null ? breakpoint.getEventMessage(((LocatableEvent) event)) : DebuggerBundle.message("status.generic.breakpoint.reached");
 			}
-			else
+			catch(InternalException e)
 			{
-				try
-				{
-					text = breakpoint != null ? breakpoint.getEventMessage(((LocatableEvent) event)) : DebuggerBundle.message("status.generic.breakpoint.reached");
-				}
-				catch(InternalException e)
-				{
-					text = DebuggerBundle.message("status.generic.breakpoint.reached");
-				}
+				text = DebuggerBundle.message("status.generic.breakpoint.reached");
 			}
 		}
 		else if(event instanceof VMStartEvent)
@@ -160,6 +156,9 @@ public class DebugProcessEvents extends DebugProcessImpl
 		@Override
 		public void run()
 		{
+			String oldThreadName = Thread.currentThread().getName();
+			Thread.currentThread().setName("DebugProcessEvents");
+
 			try
 			{
 				EventQueue eventQueue = myVmProxy.eventQueue();
@@ -213,6 +212,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 									return;
 								}
 
+								LocatableEvent locatableEvent = getLocatableEvent(eventSet);
 								if(eventSet.suspendPolicy() == EventRequest.SUSPEND_ALL)
 								{
 									// check if there is already one request with policy SUSPEND_ALL
@@ -220,7 +220,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 									{
 										if(context.getSuspendPolicy() == EventRequest.SUSPEND_ALL)
 										{
-											if(DEBUGGER_STEP_RESUMES_ONE_THREAD && getStepEvent(eventSet) != null)
+											if(isResumeOnlyCurrentThread() && locatableEvent != null && !context.isEvaluating())
 											{
 												// if step event is present - switch context
 												getSuspendManager().resume(context);
@@ -229,6 +229,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 											}
 											if(!DebuggerSession.enableBreakpointsDuringEvaluation())
 											{
+												notifySkippedBreakpoints(locatableEvent);
 												eventSet.resume();
 												return;
 											}
@@ -238,12 +239,11 @@ public class DebugProcessEvents extends DebugProcessImpl
 
 								SuspendContextImpl suspendContext = null;
 
-								StepEvent stepEvent = getStepEvent(eventSet);
-								if(DEBUGGER_STEP_RESUMES_ONE_THREAD && stepEvent != null)
+								if(isResumeOnlyCurrentThread() && locatableEvent != null)
 								{
 									for(SuspendContextImpl context : getSuspendManager().getEventContexts())
 									{
-										ThreadReferenceProxyImpl threadProxy = getVirtualMachineProxy().getThreadReferenceProxy(stepEvent.thread());
+										ThreadReferenceProxyImpl threadProxy = getVirtualMachineProxy().getThreadReferenceProxy(locatableEvent.thread());
 										if(context.getSuspendPolicy() == EventRequest.SUSPEND_ALL && context.isExplicitlyResumed(threadProxy))
 										{
 											context.myResumedThreads.remove(threadProxy);
@@ -314,15 +314,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 					{
 						LOG.debug(e);
 					}
-					catch(InterruptedException e)
-					{
-						throw e;
-					}
-					catch(VMDisconnectedException e)
-					{
-						throw e;
-					}
-					catch(ProcessCanceledException e)
+					catch(InterruptedException | ProcessCanceledException | VMDisconnectedException e)
 					{
 						throw e;
 					}
@@ -332,17 +324,14 @@ public class DebugProcessEvents extends DebugProcessImpl
 					}
 				}
 			}
-			catch(InterruptedException e)
-			{
-				invokeVMDeathEvent();
-			}
-			catch(VMDisconnectedException e)
+			catch(InterruptedException | VMDisconnectedException e)
 			{
 				invokeVMDeathEvent();
 			}
 			finally
 			{
 				Thread.interrupted(); // reset interrupted status
+				Thread.currentThread().setName(oldThreadName);
 			}
 		}
 
@@ -376,10 +365,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 	{
 		preprocessEvent(suspendContext, event.thread());
 
-		if(LOG.isDebugEnabled())
-		{
-			LOG.debug("enter: processVMStartEvent()");
-		}
+		LOG.debug("enter: processVMStartEvent()");
 
 		showStatusText(this, event);
 
@@ -390,7 +376,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		LOG.assertTrue(!isAttached());
-		if(myState.compareAndSet(STATE_INITIAL, STATE_ATTACHED))
+		if(myState.compareAndSet(State.INITIAL, State.ATTACHED))
 		{
 			final VirtualMachineProxyImpl machineProxy = getVirtualMachineProxy();
 			final EventRequestManager requestManager = machineProxy.eventRequestManager();
@@ -407,30 +393,49 @@ public class DebugProcessEvents extends DebugProcessImpl
 			threadDeathRequest.setSuspendPolicy(EventRequest.SUSPEND_NONE);
 			threadDeathRequest.enable();
 
+			// fill position managers
+			((DebuggerManagerImpl) DebuggerManager.getInstance(getProject())).getCustomPositionManagerFactories().map(factory -> factory.fun(this)).filter(Objects::nonNull).forEach
+					(this::appendPositionManager);
+			Stream.of(Extensions.getExtensions(PositionManagerFactory.EP_NAME, getProject())).map(factory -> factory.createPositionManager(this)).filter(Objects::nonNull).forEach
+					(this::appendPositionManager);
+
 			myDebugProcessDispatcher.getMulticaster().processAttached(this);
 
+			createStackCapturingBreakpoints();
+
 			// breakpoints should be initialized after all processAttached listeners work
-			ApplicationManager.getApplication().runReadAction(new Runnable()
+			ApplicationManager.getApplication().runReadAction(() ->
 			{
-				@Override
-				public void run()
+				XDebugSession session = getSession().getXDebugSession();
+				if(session != null)
 				{
-					XDebugSession session = getSession().getXDebugSession();
-					if(session != null)
-					{
-						session.initBreakpoints();
-					}
+					session.initBreakpoints();
 				}
 			});
 
 			final String addressDisplayName = DebuggerBundle.getAddressDisplayName(getConnection());
 			final String transportName = DebuggerBundle.getTransportName(getConnection());
 			showStatusText(DebuggerBundle.message("status.connected", addressDisplayName, transportName));
-			if(LOG.isDebugEnabled())
-			{
-				LOG.debug("leave: processVMStartEvent()");
-			}
+			LOG.debug("leave: processVMStartEvent()");
 		}
+	}
+
+	private void createStackCapturingBreakpoints()
+	{
+		getManagerThread().invoke(new DebuggerCommandImpl()
+		{
+			@Override
+			public Priority getPriority()
+			{
+				return Priority.HIGH;
+			}
+
+			@Override
+			protected void action() throws Exception
+			{
+				StackCapturingLineBreakpoint.recreateAll(DebugProcessEvents.this);
+			}
+		});
 	}
 
 	private void processVMDeathEvent(SuspendContextImpl suspendContext, Event event)
@@ -487,7 +492,6 @@ public class DebugProcessEvents extends DebugProcessImpl
 			final int nextStepDepth = hint.getNextStepDepth(suspendContext);
 			if(nextStepDepth == RequestHint.RESUME)
 			{
-				getSession().resetIgnoreStepFiltersFlag();
 				getSession().clearSteppingThrough();
 				shouldResume = true;
 			}
@@ -526,12 +530,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 				}
 				if(hint.wasStepTargetMethodMatched() && hint.isResetIgnoreFilters())
 				{
-					List<ClassFilter> activeFilters = getActiveFilters();
-					String currentClassName = getCurrentClassName(suspendContext.getThread());
-					if(currentClassName == null || !DebuggerUtilsEx.isFiltered(currentClassName, activeFilters))
-					{
-						mySession.resetIgnoreStepFiltersFlag();
-					}
+					checkPositionNotFiltered(suspendContext.getThread(), filters -> mySession.resetIgnoreStepFiltersFlag());
 				}
 			}
 		}
@@ -555,6 +554,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 
 				if(evaluatingContext != null && !DebuggerSession.enableBreakpointsDuringEvaluation())
 				{
+					notifySkippedBreakpoints(event);
 					// is inside evaluation, so ignore any breakpoints
 					suspendManager.voteResume(suspendContext);
 					return;
@@ -575,15 +575,11 @@ public class DebugProcessEvents extends DebugProcessImpl
 						LOG.debug(ex.getMessage());
 					}
 					final boolean[] considerRequestHit = new boolean[]{true};
-					DebuggerInvocationUtil.invokeAndWait(getProject(), new Runnable()
+					DebuggerInvocationUtil.invokeAndWait(getProject(), () ->
 					{
-						@Override
-						public void run()
-						{
-							final String displayName = requestor instanceof Breakpoint ? ((Breakpoint) requestor).getDisplayName() : requestor.getClass().getSimpleName();
-							final String message = DebuggerBundle.message("error.evaluating.breakpoint.condition.or.action", displayName, ex.getMessage());
-							considerRequestHit[0] = Messages.showYesNoDialog(getProject(), message, ex.getTitle(), Messages.getQuestionIcon()) == Messages.YES;
-						}
+						final String displayName = requestor instanceof Breakpoint ? ((Breakpoint) requestor).getDisplayName() : requestor.getClass().getSimpleName();
+						final String message = DebuggerBundle.message("error.evaluating.breakpoint.condition.or.action", displayName, ex.getMessage());
+						considerRequestHit[0] = Messages.showYesNoDialog(getProject(), message, ex.getTitle(), Messages.getQuestionIcon()) == Messages.YES;
 					}, ModalityState.NON_MODAL);
 					requestHit = considerRequestHit[0];
 					resumePreferred = !requestHit;
@@ -592,19 +588,15 @@ public class DebugProcessEvents extends DebugProcessImpl
 				if(requestHit && requestor instanceof Breakpoint)
 				{
 					// if requestor is a breakpoint and this breakpoint was hit, no matter its suspend policy
-					ApplicationManager.getApplication().runReadAction(new Runnable()
+					ApplicationManager.getApplication().runReadAction(() ->
 					{
-						@Override
-						public void run()
+						XDebugSession session = getSession().getXDebugSession();
+						if(session != null)
 						{
-							XDebugSession session = getSession().getXDebugSession();
-							if(session != null)
+							XBreakpoint breakpoint = ((Breakpoint) requestor).getXBreakpoint();
+							if(breakpoint != null)
 							{
-								XBreakpoint breakpoint = ((Breakpoint) requestor).getXBreakpoint();
-								if(breakpoint != null)
-								{
-									((XDebugSessionImpl) session).processDependencies(breakpoint);
-								}
+								((XDebugSessionImpl) session).processDependencies(breakpoint);
 							}
 						}
 					});
@@ -634,17 +626,15 @@ public class DebugProcessEvents extends DebugProcessImpl
 		});
 	}
 
-	@Nullable
-	private static StepEvent getStepEvent(EventSet eventSet)
+	private void notifySkippedBreakpoints(LocatableEvent event)
 	{
-		for(Event event : eventSet)
-		{
-			if(event instanceof StepEvent)
-			{
-				return (StepEvent) event;
-			}
-		}
-		return null;
+		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.breakpoint.skipped", event.location()), MessageType.INFO).notify(getProject());
+	}
+
+	@Nullable
+	private static LocatableEvent getLocatableEvent(EventSet eventSet)
+	{
+		return (LocatableEvent) eventSet.stream().filter(event -> event instanceof LocatableEvent).findFirst().orElse(null);
 	}
 
 	private void processDefaultEvent(SuspendContextImpl suspendContext)

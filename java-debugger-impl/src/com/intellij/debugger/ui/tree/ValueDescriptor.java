@@ -23,6 +23,7 @@ import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.psi.PsiElement;
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 
 public interface ValueDescriptor extends NodeDescriptor
@@ -30,6 +31,13 @@ public interface ValueDescriptor extends NodeDescriptor
 	PsiElement getDescriptorEvaluation(DebuggerContext context) throws EvaluateException;
 
 	Value getValue();
+
+	@Nullable
+	default Type getType()
+	{
+		Value value = getValue();
+		return value != null ? value.type() : null;
+	}
 
 	void setValueLabel(String label);
 

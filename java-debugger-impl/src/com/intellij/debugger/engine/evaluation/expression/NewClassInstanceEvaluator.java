@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,74 +14,86 @@
  * limitations under the License.
  */
 
-/**
- * class NewArrayInstanceEvaluator
- * created Jun 27, 2001
- * @author Jeka
- */
 package com.intellij.debugger.engine.evaluation.expression;
-
-import com.intellij.debugger.engine.DebugProcessImpl;
-import com.intellij.debugger.engine.JVMName;
-import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
-import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.intellij.debugger.impl.DebuggerUtilsEx;
-import com.intellij.debugger.DebuggerBundle;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class NewClassInstanceEvaluator implements Evaluator {
-  private final Evaluator myClassTypeEvaluator;
-  private final JVMName myConstructorSignature;
-  private final Evaluator[] myParamsEvaluators;
+import com.intellij.debugger.DebuggerBundle;
+import com.intellij.debugger.engine.DebugProcessImpl;
+import com.intellij.debugger.engine.DebuggerUtils;
+import com.intellij.debugger.engine.JVMName;
+import com.intellij.debugger.engine.JVMNameUtil;
+import com.intellij.debugger.engine.evaluation.EvaluateException;
+import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
+import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.util.ArrayUtil;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Value;
 
-  public NewClassInstanceEvaluator(Evaluator classTypeEvaluator, JVMName constructorSignature, Evaluator[] argumentEvaluators) {
-    myClassTypeEvaluator = classTypeEvaluator;
-    myConstructorSignature = constructorSignature;
-    myParamsEvaluators = argumentEvaluators;
-  }
+class NewClassInstanceEvaluator implements Evaluator
+{
+	private static final Logger LOG = Logger.getInstance(NewClassInstanceEvaluator.class);
 
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    DebugProcessImpl debugProcess = context.getDebugProcess();
-    Object obj = myClassTypeEvaluator.evaluate(context);
-    if (!(obj instanceof ClassType)) {
-      throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.cannot.evaluate.class.type"));
-    }
-    ClassType classType = (ClassType)obj;
-    // find constructor
-    Method method = DebuggerUtilsEx.findMethod(classType, "<init>", myConstructorSignature.getName(debugProcess));
-    if (method == null) {
-      throw EvaluateExceptionUtil.createEvaluateException(
-        DebuggerBundle.message("evaluation.error.cannot.resolve.constructor", myConstructorSignature.getDisplayName(debugProcess)));
-    }
-    // evaluate arguments
-    List<Object> arguments;
-    if (myParamsEvaluators != null) {
-      arguments = new ArrayList<Object>(myParamsEvaluators.length);
-      for (Evaluator evaluator : myParamsEvaluators) {
-        arguments.add(evaluator.evaluate(context));
-      }
-    }
-    else {
-      arguments = Collections.emptyList();
-    }
-    ObjectReference objRef;
-    try {
-      objRef = debugProcess.newInstance(context, classType, method, arguments);
-    }
-    catch (EvaluateException e) {
-      throw EvaluateExceptionUtil.createEvaluateException(e);
-    }
-    return objRef;
-  }
+	private final TypeEvaluator myClassTypeEvaluator;
+	private final JVMName myConstructorSignature;
+	private final Evaluator[] myParamsEvaluators;
 
-  public Modifier getModifier() {
-    return null;
-  }
+	public NewClassInstanceEvaluator(TypeEvaluator classTypeEvaluator, JVMName constructorSignature, Evaluator[] argumentEvaluators)
+	{
+		myClassTypeEvaluator = classTypeEvaluator;
+		myConstructorSignature = constructorSignature;
+		myParamsEvaluators = argumentEvaluators;
+	}
+
+	public Object evaluate(EvaluationContextImpl context) throws EvaluateException
+	{
+		DebugProcessImpl debugProcess = context.getDebugProcess();
+		Object obj = myClassTypeEvaluator.evaluate(context);
+		if(!(obj instanceof ClassType))
+		{
+			throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.cannot.evaluate.class.type"));
+		}
+		ClassType classType = (ClassType) obj;
+		// find constructor
+		Method method = DebuggerUtils.findMethod(classType, JVMNameUtil.CONSTRUCTOR_NAME, myConstructorSignature.getName(debugProcess));
+		if(method == null)
+		{
+			throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.cannot.resolve.constructor", myConstructorSignature.getDisplayName(debugProcess)));
+		}
+		// evaluate arguments
+		List<Value> arguments;
+		if(!ArrayUtil.isEmpty(myParamsEvaluators))
+		{
+			arguments = new ArrayList<>(myParamsEvaluators.length);
+			for(Evaluator evaluator : myParamsEvaluators)
+			{
+				Object res = evaluator.evaluate(context);
+				if(!(res instanceof Value) && res != null)
+				{
+					LOG.error("Unable to call newInstance, evaluator " + evaluator + " result is not Value, but " + res);
+				}
+				//noinspection ConstantConditions
+				arguments.add((Value) res);
+			}
+		}
+		else
+		{
+			arguments = Collections.emptyList();
+		}
+		ObjectReference objRef;
+		try
+		{
+			objRef = debugProcess.newInstance(context, classType, method, arguments);
+		}
+		catch(EvaluateException e)
+		{
+			throw EvaluateExceptionUtil.createEvaluateException(e);
+		}
+		return objRef;
+	}
 }

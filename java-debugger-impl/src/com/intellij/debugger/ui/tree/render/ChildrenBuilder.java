@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,16 @@ package com.intellij.debugger.ui.tree.render;
 
 import java.util.List;
 
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptorFactory;
 import com.intellij.debugger.ui.tree.NodeManager;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.xdebugger.frame.XDebuggerTreeNodeHyperlink;
 
 public interface ChildrenBuilder
 {
@@ -31,6 +37,15 @@ public interface ChildrenBuilder
 	ValueDescriptor getParentDescriptor();
 
 	void setChildren(List<DebuggerTreeNode> children);
+
+	default void addChildren(List<DebuggerTreeNode> children, boolean last)
+	{
+		setChildren(children);
+	}
+
+	default void setMessage(@NotNull String message, @Nullable Icon icon, @NotNull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
+	{
+	}
 
 	void setRemaining(int remaining);
 

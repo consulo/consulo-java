@@ -15,8 +15,10 @@
  */
 package com.intellij.debugger.ui.breakpoints;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import javax.swing.Icon;
 
@@ -29,21 +31,23 @@ import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.engine.DebugProcess;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.DebuggerManagerThreadImpl;
+import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import com.intellij.debugger.engine.requests.RequestManagerImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.PatternUtil;
 import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import consulo.internal.com.sun.jdi.AbsentInformationException;
@@ -53,41 +57,35 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.internal.com.sun.jdi.event.MethodEntryEvent;
 import consulo.internal.com.sun.jdi.event.MethodExitEvent;
-import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.MethodEntryRequest;
 import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 
-public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointProperties>
+public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointProperties> implements MethodBreakpointBase
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.breakpoints.ExceptionBreakpoint");
 
-	public static final String JDOM_LABEL = "wildcard_breakpoint";
-
-	public WildcardMethodBreakpoint(Project project, XBreakpoint breakpoint)
+	public WildcardMethodBreakpoint(Project project, XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
 	{
 		super(project, breakpoint);
 	}
 
-	@Override
 	public Key<MethodBreakpoint> getCategory()
 	{
 		return MethodBreakpoint.CATEGORY;
 	}
 
-	protected WildcardMethodBreakpoint(Project project, @NotNull String classPattern, @NotNull String methodName, XBreakpoint breakpoint)
+	protected WildcardMethodBreakpoint(Project project, @NotNull String classPattern, @NotNull String methodName, XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
 	{
 		super(project, breakpoint);
 		setClassPattern(classPattern);
 		setMethodName(methodName);
 	}
 
-	@Override
 	public String getClassName()
 	{
 		return getClassPattern();
 	}
 
-	@Override
 	public
 	@Nullable
 	String getShortClassName()
@@ -101,19 +99,16 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 	}
 
 	@Override
-	public PsiClass getPsiClass()
+	public void disableEmulation()
 	{
-		return PsiDocumentManager.getInstance(myProject).commitAndRunReadAction(new Computable<PsiClass>()
-		{
-			@Override
-			public PsiClass compute()
-			{
-				return getClassName() != null ? DebuggerUtilsEx.findClass(getClassName(), myProject, GlobalSearchScope.allScope(myProject)) : null;
-			}
-		});
+		MethodBreakpointBase.disableEmulation(this);
 	}
 
-	@Override
+	public PsiClass getPsiClass()
+	{
+		return ReadAction.compute(() -> getClassName() != null ? DebuggerUtils.findClass(getClassName(), myProject, GlobalSearchScope.allScope(myProject)) : null);
+	}
+
 	public String getDisplayName()
 	{
 		if(!isValid())
@@ -135,7 +130,6 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 		}
 	}
 
-	@Override
 	public Icon getIcon()
 	{
 		if(!isEnabled())
@@ -146,91 +140,84 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 		return AllIcons.Debugger.Db_method_breakpoint;
 	}
 
-	@Override
 	public void reload()
 	{
 	}
 
-	@Override
 	public boolean evaluateCondition(EvaluationContextImpl context, LocatableEvent event) throws EvaluateException
 	{
-		return matchesEvent(event) && super.evaluateCondition(context, event);
+		return (isEmulated() || matchesMethod(event.location().method())) && super.evaluateCondition(context, event);
 	}
 
-	@Override
 	public void createRequest(DebugProcessImpl debugProcess)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
-		if(!isEnabled() || !debugProcess.isAttached() || debugProcess.areBreakpointsMuted() || !debugProcess.getRequestsManager().findRequests(this)
-				.isEmpty())
+		if(!shouldCreateRequest(debugProcess))
 		{
 			return;
 		}
-		try
+		if(isEmulated())
 		{
-			RequestManagerImpl requestManager = debugProcess.getRequestsManager();
-			if(isWatchEntry())
-			{
-				MethodEntryRequest entryRequest = (MethodEntryRequest) findRequest(debugProcess, MethodEntryRequest.class);
-				if(entryRequest == null)
-				{
-					entryRequest = requestManager.createMethodEntryRequest(this);
-				}
-				else
-				{
-					entryRequest.disable();
-				}
-				entryRequest.addClassFilter(getClassPattern());
-				debugProcess.getRequestsManager().enableRequest(entryRequest);
-			}
-			if(isWatchExit())
-			{
-				MethodExitRequest exitRequest = (MethodExitRequest) findRequest(debugProcess, MethodExitRequest.class);
-				if(exitRequest == null)
-				{
-					exitRequest = requestManager.createMethodExitRequest(this);
-				}
-				else
-				{
-					exitRequest.disable();
-				}
-				exitRequest.addClassFilter(getClassPattern());
-				debugProcess.getRequestsManager().enableRequest(exitRequest);
-			}
+			createOrWaitPrepare(debugProcess, getClassPattern());
 		}
-		catch(Exception e)
+		else
 		{
-			LOG.debug(e);
+			try
+			{
+				RequestManagerImpl requestManager = debugProcess.getRequestsManager();
+				if(isWatchEntry())
+				{
+					MethodEntryRequest entryRequest = MethodBreakpoint.findRequest(debugProcess, MethodEntryRequest.class, this);
+					if(entryRequest == null)
+					{
+						entryRequest = requestManager.createMethodEntryRequest(this);
+					}
+					else
+					{
+						entryRequest.disable();
+					}
+					entryRequest.addClassFilter(getClassPattern());
+					debugProcess.getRequestsManager().enableRequest(entryRequest);
+				}
+				if(isWatchExit())
+				{
+					MethodExitRequest exitRequest = MethodBreakpoint.findRequest(debugProcess, MethodExitRequest.class, this);
+					if(exitRequest == null)
+					{
+						exitRequest = requestManager.createMethodExitRequest(this);
+					}
+					else
+					{
+						exitRequest.disable();
+					}
+					exitRequest.addClassFilter(getClassPattern());
+					debugProcess.getRequestsManager().enableRequest(exitRequest);
+				}
+			}
+			catch(Exception e)
+			{
+				LOG.debug(e);
+			}
 		}
 	}
 
-	private EventRequest findRequest(DebugProcessImpl debugProcess, Class requestClass)
-	{
-		Set reqSet = debugProcess.getRequestsManager().findRequests(this);
-		for(Iterator iterator = reqSet.iterator(); iterator.hasNext(); )
-		{
-			EventRequest eventRequest = (EventRequest) iterator.next();
-			if(eventRequest.getClass().equals(requestClass))
-			{
-				return eventRequest;
-			}
-		}
-
-		return null;
-	}
-
-	@Override
 	public void processClassPrepare(DebugProcess debugProcess, ReferenceType refType)
 	{
-		// should be emty - does not make sense for this breakpoint
+		if(isEmulated())
+		{
+			MethodBreakpoint.createRequestForPreparedClassEmulated(this, (DebugProcessImpl) debugProcess, refType, true);
+		}
+		else
+		{
+			// should be empty - does not make sense for this breakpoint
+		}
 	}
 
-	@Override
 	public String getEventMessage(LocatableEvent event)
 	{
 		final Location location = event.location();
-		final String locationQName = location.declaringType().name() + "." + location.method().name();
-		String locationFileName = "";
+		final String locationQName = DebuggerUtilsEx.getLocationMethodQName(location);
+		String locationFileName;
 		try
 		{
 			locationFileName = location.sourceName();
@@ -245,24 +232,21 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 		{
 			MethodEntryEvent entryEvent = (MethodEntryEvent) event;
 			final Method method = entryEvent.method();
-			return DebuggerBundle.message("status.method.entry.breakpoint.reached", method.declaringType().name() + "." + method.name() + "()",
-					locationQName, locationFileName, locationLine);
+			return DebuggerBundle.message("status.method.entry.breakpoint.reached", method.declaringType().name() + "." + method.name() + "()", locationQName, locationFileName, locationLine);
 		}
 
 		if(event instanceof MethodExitEvent)
 		{
 			MethodExitEvent exitEvent = (MethodExitEvent) event;
 			final Method method = exitEvent.method();
-			return DebuggerBundle.message("status.method.exit.breakpoint.reached", method.declaringType().name() + "." + method.name() + "()",
-					locationQName, locationFileName, locationLine);
+			return DebuggerBundle.message("status.method.exit.breakpoint.reached", method.declaringType().name() + "." + method.name() + "()", locationQName, locationFileName, locationLine);
 		}
 		return "";
 	}
 
-	@Override
 	public boolean isValid()
 	{
-		return getClassPattern() != null && getMethodName() != null;
+		return !StringUtil.isEmpty(getClassPattern()) && !StringUtil.isEmpty(getMethodName());
 	}
 
 	//@SuppressWarnings({"HardCodedStringLiteral"}) public void writeExternal(Element parentNode) throws WriteExternalException {
@@ -276,13 +260,11 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 	//  }
 	//}
 
-	@Override
 	public PsiElement getEvaluationElement()
 	{
 		return null;
 	}
 
-	@Override
 	public void readExternal(Element parentNode) throws InvalidDataException
 	{
 		super.readExternal(parentNode);
@@ -299,14 +281,14 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 		{
 			getProperties().WATCH_ENTRY = Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "WATCH_ENTRY"));
 		}
-		catch(Exception e)
+		catch(Exception ignored)
 		{
 		}
 		try
 		{
 			getProperties().WATCH_EXIT = Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "WATCH_EXIT"));
 		}
-		catch(Exception e)
+		catch(Exception ignored)
 		{
 		}
 
@@ -316,35 +298,53 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
 		}
 	}
 
-	public boolean matchesEvent(final LocatableEvent event)
+	@Override
+	public List<Method> matchingMethods(List<Method> methods, DebugProcessImpl debugProcess)
 	{
-		final Method method = event.location().method();
-		return method != null && getMethodName().equals(method.name());
+		return methods.stream().filter(this::matchesMethod).collect(Collectors.toList());
 	}
 
-	public static WildcardMethodBreakpoint create(Project project, final String classPattern, final String methodName, XBreakpoint xBreakpoint)
+	private boolean matchesMethod(Method method)
+	{
+		StringBuilder sb = new StringBuilder();
+		for(String mask : StringUtil.split(getMethodName(), ","))
+		{
+			if(sb.length() > 0)
+			{
+				sb.append('|');
+			}
+			sb.append('(').append(PatternUtil.convertToRegex(mask)).append(')');
+		}
+
+		try
+		{
+			return method != null && Pattern.compile(sb.toString()).matcher(method.name()).matches();
+		}
+		catch(PatternSyntaxException e)
+		{
+			LOG.warn(e);
+			return false;
+		}
+	}
+
+	public static WildcardMethodBreakpoint create(Project project, final String classPattern, final String methodName, XBreakpoint<JavaMethodBreakpointProperties> xBreakpoint)
 	{
 		return new WildcardMethodBreakpoint(project, classPattern, methodName, xBreakpoint);
 	}
 
-	private boolean isWatchEntry()
+	public boolean isEmulated()
+	{
+		return getProperties().EMULATED;
+	}
+
+	public boolean isWatchEntry()
 	{
 		return getProperties().WATCH_ENTRY;
 	}
 
-	private void setWatchEntry(boolean WATCH_ENTRY)
-	{
-		getProperties().WATCH_ENTRY = WATCH_ENTRY;
-	}
-
-	private boolean isWatchExit()
+	public boolean isWatchExit()
 	{
 		return getProperties().WATCH_EXIT;
-	}
-
-	private void setWatchExit(boolean WATCH_EXIT)
-	{
-		getProperties().WATCH_EXIT = WATCH_EXIT;
 	}
 
 	private String getClassPattern()

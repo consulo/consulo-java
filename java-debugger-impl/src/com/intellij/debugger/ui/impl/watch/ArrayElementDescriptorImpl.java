@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,33 @@
  */
 package com.intellij.debugger.ui.impl.watch;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
+import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.engine.JavaValue;
+import com.intellij.debugger.engine.JavaValueModifier;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
+import com.intellij.debugger.impl.DebuggerContextImpl;
+import com.intellij.debugger.jdi.VirtualMachineProxyImpl;
 import com.intellij.debugger.ui.tree.ArrayElementDescriptor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.xdebugger.frame.XValueModifier;
 import consulo.internal.com.sun.jdi.ArrayReference;
+import consulo.internal.com.sun.jdi.ArrayType;
+import consulo.internal.com.sun.jdi.ClassNotLoadedException;
+import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
+import consulo.internal.com.sun.jdi.InvalidTypeException;
+import consulo.internal.com.sun.jdi.InvocationException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
 
 public class ArrayElementDescriptorImpl extends ValueDescriptorImpl implements ArrayElementDescriptor
@@ -61,17 +76,16 @@ public class ArrayElementDescriptorImpl extends ValueDescriptorImpl implements A
 	}
 
 	@Override
-	public String calcValueName()
+	public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException
 	{
-		return "[" + getName() + "]";
+		return getArrayElement(myArray, myIndex);
 	}
 
-	@Override
-	public Value calcValue(EvaluationContextImpl evaluationContext) throws EvaluateException
+	public static Value getArrayElement(ArrayReference reference, int idx) throws EvaluateException
 	{
 		try
 		{
-			return myArray.getValue(myIndex);
+			return reference.getValue(idx);
 		}
 		catch(ObjectCollectedException e)
 		{
@@ -82,7 +96,7 @@ public class ArrayElementDescriptorImpl extends ValueDescriptorImpl implements A
 	@Override
 	public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException
 	{
-		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
+		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myProject).getElementFactory();
 		try
 		{
 			return elementFactory.createExpressionFromText("this[" + myIndex + "]", null);
@@ -91,5 +105,48 @@ public class ArrayElementDescriptorImpl extends ValueDescriptorImpl implements A
 		{
 			throw new EvaluateException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public XValueModifier getModifier(JavaValue value)
+	{
+		return new JavaValueModifier(value)
+		{
+			@Override
+			protected void setValueImpl(@NotNull String expression, @NotNull XModificationCallback callback)
+			{
+				final ArrayElementDescriptorImpl elementDescriptor = ArrayElementDescriptorImpl.this;
+				final ArrayReference array = elementDescriptor.getArray();
+				if(array != null)
+				{
+					if(VirtualMachineProxyImpl.isCollected(array))
+					{
+						// will only be the case if debugger does not use ObjectReference.disableCollection() because of Patches.IBM_JDK_DISABLE_COLLECTION_BUG
+						Messages.showWarningDialog(getProject(), DebuggerBundle.message("evaluation.error.array.collected") + "\n" + DebuggerBundle.message("warning.recalculate"), DebuggerBundle
+								.message("title.set.value"));
+						//node.getParent().calcValue();
+						return;
+					}
+					final ArrayType arrType = (ArrayType) array.referenceType();
+					final DebuggerContextImpl debuggerContext = DebuggerManagerEx.getInstanceEx(getProject()).getContext();
+					set(expression, callback, debuggerContext, new SetValueRunnable()
+					{
+						@Override
+						public void setValue(EvaluationContextImpl evaluationContext, Value newValue) throws ClassNotLoadedException, InvalidTypeException, EvaluateException
+						{
+							array.setValue(elementDescriptor.getIndex(), preprocessValue(evaluationContext, newValue, arrType.componentType()));
+							update(debuggerContext);
+						}
+
+						@Override
+						public ReferenceType loadClass(EvaluationContextImpl evaluationContext,
+								String className) throws InvocationException, ClassNotLoadedException, IncompatibleThreadStateException, InvalidTypeException, EvaluateException
+						{
+							return evaluationContext.getDebugProcess().loadClass(evaluationContext, className, arrType.classLoader());
+						}
+					});
+				}
+			}
+		};
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2010 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.intellij.debugger.engine.evaluation.expression;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -23,26 +24,47 @@ import consulo.internal.com.sun.jdi.ObjectReference;
  * @author Eugene Zhuravlev
  *         Date: 9/30/10
  */
-public class DisableGC implements Evaluator{
-  private final Evaluator myDelegate;
+public class DisableGC implements Evaluator
+{
+	private final Evaluator myDelegate;
 
-  public DisableGC(Evaluator delegate) {
-    myDelegate = delegate;
-  }
+	private DisableGC(@NotNull Evaluator delegate)
+	{
+		myDelegate = delegate;
+	}
 
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    final Object result = myDelegate.evaluate(context);
-    if (result instanceof ObjectReference) {
-      context.getSuspendContext().keep((ObjectReference)result);
-    }
-    return result;
-  }
+	public static Evaluator create(@NotNull Evaluator delegate)
+	{
+		if(!(delegate instanceof DisableGC))
+		{
+			return new DisableGC(delegate);
+		}
+		return delegate;
+	}
 
-  public Evaluator getDelegate() {
-    return myDelegate;
-  }
+	public Object evaluate(EvaluationContextImpl context) throws EvaluateException
+	{
+		final Object result = myDelegate.evaluate(context);
+		if(result instanceof ObjectReference)
+		{
+			context.getSuspendContext().keep((ObjectReference) result);
+		}
+		return result;
+	}
 
-  public Modifier getModifier() {
-    return myDelegate.getModifier();
-  }
+	public Evaluator getDelegate()
+	{
+		return myDelegate;
+	}
+
+	public Modifier getModifier()
+	{
+		return myDelegate.getModifier();
+	}
+
+	@Override
+	public String toString()
+	{
+		return "NoGC -> " + myDelegate;
+	}
 }

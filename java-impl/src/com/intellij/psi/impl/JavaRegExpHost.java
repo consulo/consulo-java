@@ -442,7 +442,7 @@ public class JavaRegExpHost implements RegExpLanguageHost
 				}
 			}
 		}
-		return JavaSdkVersion.LAST;
+		return JavaSdkVersion.MAX_JDK;
 	}
 
 	@Override

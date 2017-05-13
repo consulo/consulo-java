@@ -31,7 +31,7 @@ public class DoWhileStatementEvaluator extends LoopEvaluator
 	public DoWhileStatementEvaluator(@NotNull Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName)
 	{
 		super(labelName, bodyEvaluator);
-		myConditionEvaluator = new DisableGC(conditionEvaluator);
+		myConditionEvaluator = DisableGC.create(conditionEvaluator);
 	}
 
 	public Modifier getModifier()

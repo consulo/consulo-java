@@ -15,34 +15,50 @@
  */
 package com.intellij.debugger.engine;
 
+import java.util.EventListener;
+
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RemoteConnection;
 import com.intellij.execution.configurations.RunProfileState;
 import consulo.internal.com.sun.jdi.ThreadReference;
 
-import java.util.EventListener;
+public interface DebugProcessListener extends EventListener
+{
+	//executed in manager thread
+	default void connectorIsReady()
+	{
+	}
 
+	//executed in manager thread
+	default void paused(SuspendContext suspendContext)
+	{
+	}
 
-public interface DebugProcessListener extends EventListener{
-  //executed in manager thread
-  void connectorIsReady();
+	//executed in manager thread
+	default void resumed(SuspendContext suspendContext)
+	{
+	}
 
-  //executed in manager thread
-  void paused(SuspendContext suspendContext);
+	//executed in manager thread
+	default void processDetached(DebugProcess process, boolean closedByUser)
+	{
+	}
 
-  //executed in manager thread
-  void resumed(SuspendContext suspendContext);
+	//executed in manager thread
+	default void processAttached(DebugProcess process)
+	{
+	}
 
-  //executed in manager thread
-  void processDetached(DebugProcess process, boolean closedByUser);
+	default void attachException(RunProfileState state, ExecutionException exception, RemoteConnection remoteConnection)
+	{
+	}
 
-  //executed in manager thread
-  void processAttached(DebugProcess process);
+	default void threadStarted(DebugProcess proc, ThreadReference thread)
+	{
+	}
 
-  void attachException(RunProfileState state, ExecutionException exception, RemoteConnection remoteConnection);
-  
-  void threadStarted(DebugProcess proc, ThreadReference thread);
-  
-  void threadStopped(DebugProcess proc, ThreadReference thread);
+	default void threadStopped(DebugProcess proc, ThreadReference thread)
+	{
+	}
 }
 

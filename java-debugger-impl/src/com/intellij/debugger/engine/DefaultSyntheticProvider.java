@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 package com.intellij.debugger.engine;
 
-import consulo.internal.com.sun.jdi.ReferenceType;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import consulo.internal.com.sun.jdi.TypeComponent;
 import consulo.internal.com.sun.jdi.VirtualMachine;
 
@@ -25,17 +26,21 @@ import consulo.internal.com.sun.jdi.VirtualMachine;
 public class DefaultSyntheticProvider implements SyntheticTypeComponentProvider
 {
 	@Override
-	public boolean isSynthetic(TypeComponent typeComponent)
+	public boolean isSynthetic(@NotNull TypeComponent typeComponent)
+	{
+		return checkIsSynthetic(typeComponent);
+	}
+
+	public static boolean checkIsSynthetic(@NotNull TypeComponent typeComponent)
 	{
 		String name = typeComponent.name();
-		if(LambdaMethodFilter.isLambdaName(name))
+		if(DebuggerUtilsEx.isLambdaName(name))
 		{
 			return false;
 		}
 		else
 		{
-			ReferenceType type = typeComponent.declaringType();
-			if(type.name().contains("$$Lambda$"))
+			if(DebuggerUtilsEx.isLambdaClassName(typeComponent.declaringType().name()))
 			{
 				return true;
 			}

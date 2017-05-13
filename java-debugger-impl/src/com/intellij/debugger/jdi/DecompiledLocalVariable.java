@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.intellij.debugger.jdi;
 
 import java.util.Collection;
-import java.util.Comparator;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,15 +27,8 @@ import com.intellij.openapi.util.text.StringUtil;
  */
 public class DecompiledLocalVariable
 {
-	public static final Comparator<DecompiledLocalVariable> COMPARATOR = new Comparator<DecompiledLocalVariable>()
-	{
-		@Override
-		public int compare(DecompiledLocalVariable v1, DecompiledLocalVariable v2)
-		{
-			return v1.getSlot() - v2.getSlot();
-		}
-	};
-
+	public static final String PARAM_PREFIX = "param_";
+	public static final String SLOT_PREFIX = "slot_";
 	private final int mySlot;
 	private final String mySignature;
 	private final boolean myIsParam;
@@ -69,7 +61,7 @@ public class DecompiledLocalVariable
 	@NotNull
 	public String getDefaultName()
 	{
-		return myIsParam ? "arg_" + mySlot : "slot_" + mySlot;
+		return (myIsParam ? PARAM_PREFIX : SLOT_PREFIX) + mySlot;
 	}
 
 	public String getDisplayName()
@@ -96,5 +88,24 @@ public class DecompiledLocalVariable
 	public String toString()
 	{
 		return getDisplayName() + " (slot " + mySlot + ", " + mySignature + ")";
+	}
+
+	public static int getParamId(@Nullable String name)
+	{
+		if(!StringUtil.isEmpty(name))
+		{
+			String idString = StringUtil.substringAfter(name, PARAM_PREFIX);
+			if(idString != null)
+			{
+				try
+				{
+					return Integer.parseInt(idString);
+				}
+				catch(NumberFormatException ignored)
+				{
+				}
+			}
+		}
+		return -1;
 	}
 }

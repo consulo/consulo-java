@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
+<project>
   <component name="ModuleManager">
     <modules>
       <module name="consulo-java" dirurl="file://$PROJECT_DIR$" current-layer="Default">
@@ -197,6 +197,7 @@
           <orderEntry type="module" module-name="java-rt" />
           <orderEntry type="library" name="jetbrains-asm" level="project" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.images" level="project" />
+          <orderEntry type="module" module-name="java-compiler-impl" />
         </module-layer>
       </module>
       <module name="java-execution-impl" dirurl="file://$PROJECT_DIR$/java-execution-impl" current-layer="Default">

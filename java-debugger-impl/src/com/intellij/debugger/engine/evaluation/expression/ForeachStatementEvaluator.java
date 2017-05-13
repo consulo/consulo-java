@@ -41,7 +41,7 @@ public class ForeachStatementEvaluator extends ForStatementEvaluatorBase
 	{
 		super(labelName, bodyEvaluator);
 		myIterationParameterEvaluator = iterationParameterEvaluator;
-		myIterableEvaluator = new DisableGC(iterableEvaluator);
+		myIterableEvaluator = DisableGC.create(iterableEvaluator);
 	}
 
 	@Override

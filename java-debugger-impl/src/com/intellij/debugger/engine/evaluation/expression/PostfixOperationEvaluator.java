@@ -18,27 +18,33 @@ package com.intellij.debugger.engine.evaluation.expression;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
 
-public class PostfixOperationEvaluator implements Evaluator{
-  private final Evaluator myOperandEvaluator;
+public class PostfixOperationEvaluator implements Evaluator
+{
+	private final Evaluator myOperandEvaluator;
 
-  private final Evaluator myIncrementImpl;
+	private final Evaluator myIncrementImpl;
 
-  private Modifier myModifier;
+	private Modifier myModifier;
 
-  public PostfixOperationEvaluator(Evaluator operandEvaluator, Evaluator incrementImpl) {
-    myOperandEvaluator = new DisableGC(operandEvaluator);
-    myIncrementImpl = new DisableGC(incrementImpl);
-  }
+	public PostfixOperationEvaluator(Evaluator operandEvaluator, Evaluator incrementImpl)
+	{
+		myOperandEvaluator = DisableGC.create(operandEvaluator);
+		myIncrementImpl = DisableGC.create(incrementImpl);
+	}
 
-  public Object evaluate(EvaluationContextImpl context) throws EvaluateException {
-    final Object value = myOperandEvaluator.evaluate(context);
-    myModifier = myOperandEvaluator.getModifier();
-    Object operationResult = myIncrementImpl.evaluate(context);
-    AssignmentEvaluator.assign(myModifier, operationResult, context);
-    return value;
-  }
+	@Override
+	public Object evaluate(EvaluationContextImpl context) throws EvaluateException
+	{
+		final Object value = myOperandEvaluator.evaluate(context);
+		myModifier = myOperandEvaluator.getModifier();
+		Object operationResult = myIncrementImpl.evaluate(context);
+		AssignmentEvaluator.assign(myModifier, operationResult, context);
+		return value;
+	}
 
-  public Modifier getModifier() {
-    return myModifier;
-  }
+	@Override
+	public Modifier getModifier()
+	{
+		return myModifier;
+	}
 }

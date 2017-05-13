@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ import com.intellij.debugger.jdi.DecompiledLocalVariable;
 import com.intellij.debugger.jdi.LocalVariableProxyImpl;
 import com.intellij.debugger.jdi.LocalVariablesUtil;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
+import com.intellij.debugger.memory.utils.StackFrameItem;
+import com.intellij.debugger.settings.CapturePoint;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.settings.NodeRendererSettings;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
@@ -51,12 +53,12 @@ import com.intellij.debugger.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.debugger.ui.impl.watch.WatchItemDescriptor;
 import com.intellij.debugger.ui.tree.render.DescriptorLabelListener;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
@@ -65,7 +67,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
-import com.intellij.util.Function;
+import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.xdebugger.XDebugSession;
@@ -87,9 +89,11 @@ import consulo.internal.com.sun.jdi.event.ExceptionEvent;
 /**
  * @author egor
  */
-public class JavaStackFrame extends XStackFrame
+public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProvider
 {
 	private static final Logger LOG = Logger.getInstance(JavaStackFrame.class);
+	public static final DummyMessageValueNode LOCAL_VARIABLES_INFO_UNAVAILABLE_MESSAGE_NODE = new DummyMessageValueNode(MessageDescriptor.LOCAL_VARIABLES_INFO_UNAVAILABLE.getLabel(),
+			XDebuggerUIConstants.INFORMATION_MESSAGE_ICON);
 
 	private final DebugProcessImpl myDebugProcess;
 	@Nullable
@@ -100,6 +104,7 @@ public class JavaStackFrame extends XStackFrame
 	private static final JavaFramesListRenderer FRAME_RENDERER = new JavaFramesListRenderer();
 	private JavaDebuggerEvaluator myEvaluator = null;
 	private final String myEqualityObject;
+	private CapturePoint myInsertCapturePoint;
 
 	public JavaStackFrame(@NotNull StackFrameDescriptorImpl descriptor, boolean update)
 	{
@@ -112,7 +117,7 @@ public class JavaStackFrame extends XStackFrame
 		myEqualityObject = update ? NodeManagerImpl.getContextKeyForFrame(myDescriptor.getFrameProxy()) : null;
 		myDebugProcess = ((DebugProcessImpl) descriptor.getDebugProcess());
 		myNodeManager = myDebugProcess.getXdebugProcess().getNodeManager();
-		myXSourcePosition = myDescriptor.getSourcePosition() != null ? DebuggerUtilsEx.toXSourcePosition(myDescriptor.getSourcePosition()) : null;
+		myXSourcePosition = DebuggerUtilsEx.toXSourcePosition(myDescriptor.getSourcePosition());
 	}
 
 	@NotNull
@@ -157,6 +162,10 @@ public class JavaStackFrame extends XStackFrame
 			}
 		}
 		FRAME_RENDERER.customizePresentation(myDescriptor, component, selectedDescriptor);
+		if(myInsertCapturePoint != null)
+		{
+			component.setIcon(XDebuggerUIConstants.INFORMATION_MESSAGE_ICON);
+		}
 	}
 
 	@Override
@@ -180,6 +189,11 @@ public class JavaStackFrame extends XStackFrame
 				if(node.isObsolete())
 				{
 					return;
+				}
+				if(myInsertCapturePoint != null)
+				{
+					node.setMessage("Async stacktrace from " + myInsertCapturePoint.myClassName + "." + myInsertCapturePoint.myMethodName + " could be available here, enable in",
+							XDebuggerUIConstants.INFORMATION_MESSAGE_ICON, SimpleTextAttributes.REGULAR_ATTRIBUTES, StackFrameItem.CAPTURE_SETTINGS_OPENER);
 				}
 				XValueChildrenList children = new XValueChildrenList();
 				buildVariablesThreadAction(getFrameDebuggerContext(getDebuggerContext()), children, node);
@@ -229,8 +243,7 @@ public class JavaStackFrame extends XStackFrame
 				ValueDescriptorImpl thisDescriptor = myNodeManager.getThisDescriptor(null, thisObjectReference);
 				children.add(JavaValue.create(thisDescriptor, evaluationContext, myNodeManager));
 			}
-
-			if(location != null)
+			else if(location != null)
 			{
 				StaticDescriptorImpl staticDecriptor = myNodeManager.getStaticDescriptor(myDescriptor, location.declaringType());
 				if(staticDecriptor.isExpandable())
@@ -253,19 +266,20 @@ public class JavaStackFrame extends XStackFrame
 				children.add(JavaValue.create(returnValueDescriptor, evaluationContext, myNodeManager));
 			}
 			// add context exceptions
+			Set<ObjectReference> exceptions = new HashSet<>();
 			for(Pair<Breakpoint, Event> pair : DebuggerUtilsEx.getEventDescriptors(debuggerContext.getSuspendContext()))
 			{
-				final Event debugEvent = pair.getSecond();
+				Event debugEvent = pair.getSecond();
 				if(debugEvent instanceof ExceptionEvent)
 				{
-					final ObjectReference exception = ((ExceptionEvent) debugEvent).exception();
+					ObjectReference exception = ((ExceptionEvent) debugEvent).exception();
 					if(exception != null)
 					{
-						final ValueDescriptorImpl exceptionDescriptor = myNodeManager.getThrownExceptionObjectDescriptor(myDescriptor, exception);
-						children.add(JavaValue.create(exceptionDescriptor, evaluationContext, myNodeManager));
+						exceptions.add(exception);
 					}
 				}
 			}
+			exceptions.forEach(e -> children.add(JavaValue.create(myNodeManager.getThrownExceptionObjectDescriptor(myDescriptor, e), evaluationContext, myNodeManager)));
 
 			try
 			{
@@ -301,7 +315,7 @@ public class JavaStackFrame extends XStackFrame
 		}
 	}
 
-	private static final Pair<Set<String>, Set<TextWithImports>> EMPTY_USED_VARS = Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
+	private static final Pair<Set<String>, Set<TextWithImports>> EMPTY_USED_VARS = Pair.create(Collections.emptySet(), Collections.<TextWithImports>emptySet());
 
 	// copied from FrameVariablesTree
 	private void buildVariables(DebuggerContextImpl debuggerContext,
@@ -311,7 +325,7 @@ public class JavaStackFrame extends XStackFrame
 			ObjectReference thisObjectReference,
 			Location location) throws EvaluateException
 	{
-		final Set<String> visibleLocals = new HashSet<String>();
+		final Set<String> visibleLocals = new HashSet<>();
 		if(NodeRendererSettings.getInstance().getClassRenderer().SHOW_VAL_FIELDS_AS_LOCAL_VARIABLES)
 		{
 			if(thisObjectReference != null && debugProcess.getVirtualMachineProxy().canGetSyntheticAttribute())
@@ -348,26 +362,12 @@ public class JavaStackFrame extends XStackFrame
 			else
 			{
 				final SourcePosition sourcePosition = debuggerContext.getSourcePosition();
-				final Map<String, LocalVariableProxyImpl> visibleVariables = ContainerUtil.map2Map(getVisibleVariables(), new Function<LocalVariableProxyImpl, Pair<String, LocalVariableProxyImpl>>()
-				{
-					@Override
-					public Pair<String, LocalVariableProxyImpl> fun(LocalVariableProxyImpl var)
-					{
-						return Pair.create(var.name(), var);
-					}
-				});
+				final Map<String, LocalVariableProxyImpl> visibleVariables = ContainerUtil.map2Map(getVisibleVariables(), var -> Pair.create(var.name(), var));
 
 				Pair<Set<String>, Set<TextWithImports>> usedVars = EMPTY_USED_VARS;
 				if(sourcePosition != null)
 				{
-					usedVars = ApplicationManager.getApplication().runReadAction(new Computable<Pair<Set<String>, Set<TextWithImports>>>()
-					{
-						@Override
-						public Pair<Set<String>, Set<TextWithImports>> compute()
-						{
-							return findReferencedVars(ContainerUtil.union(visibleVariables.keySet(), visibleLocals), sourcePosition);
-						}
-					});
+					usedVars = ReadAction.compute(() -> findReferencedVars(ContainerUtil.union(visibleVariables.keySet(), visibleLocals), sourcePosition));
 				}
 				// add locals
 				if(myAutoWatchMode)
@@ -403,11 +403,11 @@ public class JavaStackFrame extends XStackFrame
 		{
 			if(e.getCause() instanceof AbsentInformationException)
 			{
-				children.add(new DummyMessageValueNode(MessageDescriptor.LOCAL_VARIABLES_INFO_UNAVAILABLE.getLabel(), XDebuggerUIConstants.INFORMATION_MESSAGE_ICON));
+				children.add(LOCAL_VARIABLES_INFO_UNAVAILABLE_MESSAGE_NODE);
 				// trying to collect values from variable slots
 				try
 				{
-					for(Map.Entry<DecompiledLocalVariable, Value> entry : LocalVariablesUtil.fetchValues(getStackFrameProxy(), debugProcess).entrySet())
+					for(Map.Entry<DecompiledLocalVariable, Value> entry : LocalVariablesUtil.fetchValues(getStackFrameProxy(), debugProcess, true).entrySet())
 					{
 						children.add(JavaValue.create(myNodeManager.getArgumentValueDescriptor(null, entry.getKey(), entry.getValue()), evaluationContext, myNodeManager));
 					}
@@ -426,12 +426,9 @@ public class JavaStackFrame extends XStackFrame
 
 	private static Set<TextWithImports> computeExtraVars(Pair<Set<String>, Set<TextWithImports>> usedVars, @NotNull SourcePosition sourcePosition, @NotNull EvaluationContextImpl evalContext)
 	{
-		Set<String> alreadyCollected = new HashSet<String>(usedVars.first);
-		for(TextWithImports text : usedVars.second)
-		{
-			alreadyCollected.add(text.getText());
-		}
-		Set<TextWithImports> extra = new HashSet<TextWithImports>();
+		Set<String> alreadyCollected = new HashSet<>(usedVars.first);
+		usedVars.second.stream().map(TextWithImports::getText).forEach(alreadyCollected::add);
+		Set<TextWithImports> extra = new HashSet<>();
 		for(FrameExtraVariablesProvider provider : FrameExtraVariablesProvider.EP_NAME.getExtensions())
 		{
 			if(provider.isAvailable(sourcePosition, evalContext))
@@ -449,6 +446,11 @@ public class JavaStackFrame extends XStackFrame
 			WatchItemDescriptor descriptor = myNodeManager.getWatchItemDescriptor(null, text, null);
 			children.add(JavaValue.create(descriptor, evaluationContext, myNodeManager));
 		}
+	}
+
+	public static XNamedValue createMessageNode(String text, Icon icon)
+	{
+		return new DummyMessageValueNode(text, icon);
 	}
 
 	static class DummyMessageValueNode extends XNamedValue
@@ -481,6 +483,12 @@ public class JavaStackFrame extends XStackFrame
 					renderer.renderValue(myMessage);
 				}
 			}, false);
+		}
+
+		@Override
+		public String toString()
+		{
+			return myMessage;
 		}
 	}
 
@@ -522,8 +530,8 @@ public class JavaStackFrame extends XStackFrame
 	{
 		private final Set<String> myVisibleLocals;
 		private final TextRange myLineRange;
-		private final Set<TextWithImports> myExpressions = new HashSet<TextWithImports>();
-		private final Set<String> myVars = new HashSet<String>();
+		private final Set<TextWithImports> myExpressions = new HashSet<>();
+		private final Set<String> myVars = new HashSet<>();
 		private final boolean myCollectExpressions = XDebuggerSettingsManager.getInstance().getDataViewSettings().isAutoExpressions();
 
 		public VariablesCollector(Set<String> visibleLocals, TextRange lineRange)
@@ -699,8 +707,15 @@ public class JavaStackFrame extends XStackFrame
 
 				if(_elem instanceof PsiJavaCodeReferenceElement)
 				{
-					final PsiElement resolved = ((PsiJavaCodeReferenceElement) _elem).resolve();
-					if(resolved instanceof PsiVariable)
+					try
+					{
+						final PsiElement resolved = ((PsiJavaCodeReferenceElement) _elem).resolve();
+						if(resolved instanceof PsiVariable)
+						{
+							return false;
+						}
+					}
+					catch(IndexNotReadyException e)
 					{
 						return false;
 					}
@@ -715,19 +730,19 @@ public class JavaStackFrame extends XStackFrame
 		final int line = position.getLine();
 		if(line < 0)
 		{
-			return Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
+			return Pair.create(Collections.emptySet(), Collections.<TextWithImports>emptySet());
 		}
 		final PsiFile positionFile = position.getFile();
 		if(!positionFile.isValid() || !positionFile.getLanguage().isKindOf(JavaLanguage.INSTANCE))
 		{
-			return Pair.create(visibleVars, Collections.<TextWithImports>emptySet());
+			return Pair.create(visibleVars, Collections.emptySet());
 		}
 
 		final VirtualFile vFile = positionFile.getVirtualFile();
 		final Document doc = vFile != null ? FileDocumentManager.getInstance().getDocument(vFile) : null;
 		if(doc == null || doc.getLineCount() == 0 || line > (doc.getLineCount() - 1))
 		{
-			return Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
+			return Pair.create(Collections.emptySet(), Collections.<TextWithImports>emptySet());
 		}
 
 		final TextRange limit = calculateLimitRange(positionFile, doc, line);
@@ -779,7 +794,7 @@ public class JavaStackFrame extends XStackFrame
 				//noinspection unchecked
 				if(element instanceof PsiCompiledElement)
 				{
-					return Pair.create(visibleVars, Collections.<TextWithImports>emptySet());
+					return Pair.create(visibleVars, Collections.emptySet());
 				}
 				else
 				{
@@ -789,7 +804,7 @@ public class JavaStackFrame extends XStackFrame
 				}
 			}
 		}
-		return Pair.create(Collections.<String>emptySet(), Collections.<TextWithImports>emptySet());
+		return Pair.create(Collections.emptySet(), Collections.<TextWithImports>emptySet());
 	}
 
 	private static TextRange calculateLimitRange(final PsiFile file, final Document doc, final int line)
@@ -809,7 +824,7 @@ public class JavaStackFrame extends XStackFrame
 
 	private static TextRange adjustRange(final PsiElement element, final TextRange originalRange)
 	{
-		final Ref<TextRange> rangeRef = new Ref<TextRange>(originalRange);
+		final Ref<TextRange> rangeRef = new Ref<>(originalRange);
 		element.accept(new JavaRecursiveElementVisitor()
 		{
 			@Override
@@ -826,5 +841,22 @@ public class JavaStackFrame extends XStackFrame
 			}
 		});
 		return rangeRef.get();
+	}
+
+	public void setInsertCapturePoint(CapturePoint insertCapturePoint)
+	{
+		myInsertCapturePoint = insertCapturePoint;
+	}
+
+	@Override
+	public boolean isSynthetic()
+	{
+		return myDescriptor.isSynthetic();
+	}
+
+	@Override
+	public boolean isInLibraryContent()
+	{
+		return myDescriptor.isInLibraryContent();
 	}
 }

@@ -31,9 +31,9 @@ public class IfStatementEvaluator implements Evaluator {
   private Modifier myModifier;
 
   public IfStatementEvaluator(Evaluator conditionEvaluator, Evaluator thenEvaluator, Evaluator elseEvaluator) {
-    myConditionEvaluator = new DisableGC(conditionEvaluator);
-    myThenEvaluator = new DisableGC(thenEvaluator);
-    myElseEvaluator = elseEvaluator == null ? null : new DisableGC(elseEvaluator);
+    myConditionEvaluator = DisableGC.create(conditionEvaluator);
+    myThenEvaluator = DisableGC.create(thenEvaluator);
+    myElseEvaluator = elseEvaluator == null ? null : DisableGC.create(elseEvaluator);
   }
 
   public Modifier getModifier() {

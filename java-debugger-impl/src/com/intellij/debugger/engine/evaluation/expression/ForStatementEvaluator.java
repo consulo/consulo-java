@@ -32,9 +32,9 @@ public class ForStatementEvaluator extends ForStatementEvaluatorBase
 	public ForStatementEvaluator(Evaluator initializationEvaluator, Evaluator conditionEvaluator, Evaluator updateEvaluator, Evaluator bodyEvaluator, String labelName)
 	{
 		super(labelName, bodyEvaluator);
-		myInitializationEvaluator = initializationEvaluator != null ? new DisableGC(initializationEvaluator) : null;
-		myConditionEvaluator = conditionEvaluator != null ? new DisableGC(conditionEvaluator) : null;
-		myUpdateEvaluator = updateEvaluator != null ? new DisableGC(updateEvaluator) : null;
+		myInitializationEvaluator = initializationEvaluator != null ? DisableGC.create(initializationEvaluator) : null;
+		myConditionEvaluator = conditionEvaluator != null ? DisableGC.create(conditionEvaluator) : null;
+		myUpdateEvaluator = updateEvaluator != null ? DisableGC.create(updateEvaluator) : null;
 	}
 
 	@Override

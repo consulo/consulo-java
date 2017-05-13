@@ -66,7 +66,7 @@ public class MethodEvaluator implements Evaluator
 			boolean checkDefaultInterfaceMethod,
 			boolean mustBeVararg)
 	{
-		myObjectEvaluator = new DisableGC(objectEvaluator);
+		myObjectEvaluator = DisableGC.create(objectEvaluator);
 		myClassName = className;
 		myMethodName = methodName;
 		myMethodSignature = signature;

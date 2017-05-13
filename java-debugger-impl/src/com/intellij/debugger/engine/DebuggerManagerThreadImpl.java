@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.util.ProgressIndicatorListenerAdapter;
+import com.intellij.openapi.progress.util.ProgressWindow;
 import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
@@ -42,7 +43,7 @@ import consulo.internal.com.sun.jdi.VMDisconnectedException;
 public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerCommandImpl> implements DebuggerManagerThread, Disposable
 {
 	private static final Logger LOG = Logger.getInstance(DebuggerManagerThreadImpl.class);
-	public static final int COMMAND_TIMEOUT = 3000;
+	static final int COMMAND_TIMEOUT = 3000;
 
 	private volatile boolean myDisposed;
 
@@ -120,7 +121,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 	 * if worker thread is still processing the same command
 	 * calls terminateCommand
 	 */
-	public void terminateAndInvoke(DebuggerCommandImpl command, int terminateTimeout)
+	public void terminateAndInvoke(DebuggerCommandImpl command, int terminateTimeoutMillis)
 	{
 		final DebuggerCommandImpl currentCommand = myEvents.getCurrentEvent();
 
@@ -128,7 +129,8 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 		if(currentCommand != null)
 		{
-			AppExecutorUtil.getAppScheduledExecutorService().schedule(() -> {
+			AppExecutorUtil.getAppScheduledExecutorService().schedule(() ->
+			{
 				if(currentCommand == myEvents.getCurrentEvent())
 				{
 					// if current command is still in progress, cancel it
@@ -152,7 +154,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 						}
 					}
 				}
-			}, terminateTimeout, TimeUnit.MILLISECONDS);
+			}, terminateTimeoutMillis, TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -189,36 +191,28 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 		}
 	}
 
+	@Deprecated
 	public void startProgress(final DebuggerCommandImpl command, final ProgressWindowWithNotification progressWindow)
 	{
-		progressWindow.addListener(new ProgressIndicatorListenerAdapter()
+		startProgress(command, (ProgressWindow) progressWindow);
+	}
+
+	public void startProgress(DebuggerCommandImpl command, ProgressWindow progressWindow)
+	{
+		new ProgressIndicatorListenerAdapter()
 		{
 			@Override
 			public void cancelled()
 			{
 				command.release();
 			}
-		});
+		}.installToProgress(progressWindow);
 
-		ApplicationManager.getApplication().executeOnPooledThread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				ProgressManager.getInstance().runProcess(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						invokeAndWait(command);
-					}
-				}, progressWindow);
-			}
-		});
+		ApplicationManager.getApplication().executeOnPooledThread(() -> ProgressManager.getInstance().runProcess(() -> invokeAndWait(command), progressWindow));
 	}
 
 
-	public void startLongProcessAndFork(Runnable process)
+	void startLongProcessAndFork(Runnable process)
 	{
 		assertIsManagerThread();
 		startNewWorkerThread();
@@ -247,10 +241,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 				@Override
 				protected void commandCancelled()
 				{
-					if(LOG.isDebugEnabled())
-					{
-						LOG.debug("Event queue was closed, killing request");
-					}
+					LOG.debug("Event queue was closed, killing request");
 					request.requestStop();
 				}
 			});
@@ -298,7 +289,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 	}
 
-	public void restartIfNeeded()
+	void restartIfNeeded()
 	{
 		if(myEvents.isClosed())
 		{

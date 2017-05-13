@@ -31,7 +31,7 @@ public class WhileStatementEvaluator extends LoopEvaluator
 	public WhileStatementEvaluator(@NotNull Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName)
 	{
 		super(labelName, bodyEvaluator);
-		myConditionEvaluator = new DisableGC(conditionEvaluator);
+		myConditionEvaluator = DisableGC.create(conditionEvaluator);
 	}
 
 	@Override

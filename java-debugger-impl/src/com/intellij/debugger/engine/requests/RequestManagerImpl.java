@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
-import com.intellij.debugger.DebuggerManagerEx;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.DebugProcessAdapterImpl;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -32,20 +31,17 @@ import com.intellij.debugger.engine.DebuggerUtils;
 import com.intellij.debugger.engine.JVMName;
 import com.intellij.debugger.engine.JVMNameUtil;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
-import com.intellij.debugger.engine.events.DebuggerCommandImpl;
-import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.requests.ClassPrepareRequestor;
 import com.intellij.debugger.requests.RequestManager;
 import com.intellij.debugger.requests.Requestor;
 import com.intellij.debugger.settings.DebuggerSettings;
-import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.breakpoints.FilteredRequestor;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.diagnostic.ThreadDumper;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.containers.HashMap;
@@ -72,9 +68,9 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 	private static final Key<Requestor> REQUESTOR = Key.create("Requestor");
 
 	private final DebugProcessImpl myDebugProcess;
-	private final Map<Requestor, String> myRequestWarnings = new HashMap<Requestor, String>();
+	private final Map<Requestor, String> myRequestWarnings = new HashMap<>();
 
-	private final Map<Requestor, Set<EventRequest>> myRequestorToBelongedRequests = new HashMap<Requestor, Set<EventRequest>>();
+	private final Map<Requestor, Set<EventRequest>> myRequestorToBelongedRequests = new HashMap<>();
 	private EventRequestManager myEventRequestManager;
 	private
 	@Nullable
@@ -189,13 +185,13 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 			request.setSuspendPolicy(EventRequest.SUSPEND_EVENT_THREAD);
 		}
 
-		if(requestor.isCountFilterEnabled() && requestor.getCountFilter() > 0)
+		// count filter has to be applied manually if condition is specified
+		if(requestor.isCountFilterEnabled() && !requestor.isConditionEnabled())
 		{
 			request.addCountFilter(requestor.getCountFilter());
 		}
 
-		if(requestor.isClassFiltersEnabled() && !(request instanceof BreakpointRequest) /*no built-in class filters support for breakpoint
-		requests*/)
+		if(requestor.isClassFiltersEnabled() && !(request instanceof BreakpointRequest) /*no built-in class filters support for breakpoint requests*/)
 		{
 			ClassFilter[] classFilters = requestor.getClassFilters();
 			if(DebuggerUtilsEx.getEnabledNumber(classFilters) == 1)
@@ -206,19 +202,14 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 					{
 						continue;
 					}
-					final JVMName jvmClassName = ApplicationManager.getApplication().runReadAction(new Computable<JVMName>()
+					final JVMName jvmClassName = ReadAction.compute(() ->
 					{
-						@Override
-						public JVMName compute()
+						PsiClass psiClass = DebuggerUtils.findClass(filter.getPattern(), myDebugProcess.getProject(), myDebugProcess.getSearchScope());
+						if(psiClass == null)
 						{
-							PsiClass psiClass = DebuggerUtils.findClass(filter.getPattern(), myDebugProcess.getProject(),
-									myDebugProcess.getSearchScope());
-							if(psiClass == null)
-							{
-								return null;
-							}
-							return JVMNameUtil.getJVMQualifiedName(psiClass);
+							return null;
 						}
+						return JVMNameUtil.getJVMQualifiedName(psiClass);
 					});
 					String pattern = filter.getPattern();
 					try
@@ -233,8 +224,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 					}
 
 					addClassFilter(request, pattern);
-					break; // adding more than one inclusion filter does not work, only events that satisfy ALL filters are placed in the event
-					// queue.
+					break; // adding more than one inclusion filter does not work, only events that satisfy ALL filters are placed in the event queue.
 				}
 			}
 
@@ -256,34 +246,33 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		request.putProperty(REQUESTOR, requestor);
 	}
 
-	private void registerRequest(Requestor requestor, EventRequest request)
+	public void registerRequest(Requestor requestor, EventRequest request)
 	{
-		Set<EventRequest> reqSet = myRequestorToBelongedRequests.get(requestor);
-		if(reqSet == null)
-		{
-			reqSet = new HashSet<EventRequest>();
-			myRequestorToBelongedRequests.put(requestor, reqSet);
-		}
-		reqSet.add(request);
+		myRequestorToBelongedRequests.computeIfAbsent(requestor, r -> new HashSet<>()).add(request);
 	}
 
 	// requests creation
-	@Override
+	@Nullable
 	public ClassPrepareRequest createClassPrepareRequest(ClassPrepareRequestor requestor, String pattern)
 	{
+		if(myEventRequestManager == null)
+		{ // detached already
+			return null;
+		}
+
 		ClassPrepareRequest classPrepareRequest = myEventRequestManager.createClassPrepareRequest();
 		classPrepareRequest.setSuspendPolicy(EventRequest.SUSPEND_EVENT_THREAD);
-		classPrepareRequest.addClassFilter(pattern);
-		classPrepareRequest.putProperty(CLASS_NAME, pattern);
+		if(!StringUtil.isEmpty(pattern))
+		{
+			classPrepareRequest.addClassFilter(pattern);
+			classPrepareRequest.putProperty(CLASS_NAME, pattern);
+		}
 
 		registerRequestInternal(requestor, classPrepareRequest);
 		return classPrepareRequest;
 	}
 
-	public ExceptionRequest createExceptionRequest(FilteredRequestor requestor,
-			ReferenceType referenceType,
-			boolean notifyCaught,
-			boolean notifyUnCaught)
+	public ExceptionRequest createExceptionRequest(FilteredRequestor requestor, ReferenceType referenceType, boolean notifyCaught, boolean notifyUnCaught)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		ExceptionRequest req = myEventRequestManager.createExceptionRequest(referenceType, notifyCaught, notifyUnCaught);
@@ -335,6 +324,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 	public void deleteRequest(Requestor requestor)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
+		myRequestWarnings.remove(requestor);
 		if(!myDebugProcess.isAttached())
 		{
 			return;
@@ -354,17 +344,24 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 					// the same request may be assigned to more than one requestor, but
 					// there is only one 'targetRequestor' for each request, so if target requestor and requestor being processed are different,
 					// should clear also the mapping targetRequestor->request
-					final Set<EventRequest> allTargetRequestorRequests = myRequestorToBelongedRequests.get(targetRequestor);
+					Set<EventRequest> allTargetRequestorRequests = myRequestorToBelongedRequests.get(targetRequestor);
 					if(allTargetRequestorRequests != null)
 					{
 						allTargetRequestorRequests.remove(request);
-						if(allTargetRequestorRequests.size() == 0)
+						if(allTargetRequestorRequests.isEmpty())
 						{
 							myRequestorToBelongedRequests.remove(targetRequestor);
 						}
 					}
 				}
-				myEventRequestManager.deleteEventRequest(request);
+				try
+				{
+					myEventRequestManager.deleteEventRequest(request);
+				}
+				catch(ArrayIndexOutOfBoundsException e)
+				{
+					LOG.error("Exception in EventRequestManager.deleteEventRequest", e, ThreadDumper.dumpThreadsToString());
+				}
 			}
 			catch(InvalidRequestStateException ignored)
 			{
@@ -386,7 +383,6 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		}
 	}
 
-	@Override
 	public void callbackOnPrepareClasses(final ClassPrepareRequestor requestor, final SourcePosition classPosition)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -400,26 +396,32 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 
 		for(ClassPrepareRequest prepareRequest : prepareRequests)
 		{
-			registerRequest(requestor, prepareRequest);
-			prepareRequest.enable();
+			if(prepareRequest != null)
+			{
+				registerRequest(requestor, prepareRequest);
+				prepareRequest.enable();
+			}
 		}
+		myDebugProcess.getVirtualMachineProxy().clearCaches(); // to force reload classes available so far
 	}
 
-	@Override
 	public void callbackOnPrepareClasses(ClassPrepareRequestor requestor, String classOrPatternToBeLoaded)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		ClassPrepareRequest classPrepareRequest = createClassPrepareRequest(requestor, classOrPatternToBeLoaded);
 
-		registerRequest(requestor, classPrepareRequest);
-		classPrepareRequest.enable();
-		if(LOG.isDebugEnabled())
+		if(classPrepareRequest != null)
 		{
-			LOG.debug("classOrPatternToBeLoaded = " + classOrPatternToBeLoaded);
+			registerRequest(requestor, classPrepareRequest);
+			classPrepareRequest.enable();
+			if(LOG.isDebugEnabled())
+			{
+				LOG.debug("classOrPatternToBeLoaded = " + classOrPatternToBeLoaded);
+			}
+			myDebugProcess.getVirtualMachineProxy().clearCaches(); // to force reload classes available so far
 		}
 	}
 
-	@Override
 	public void enableRequest(EventRequest request)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -446,20 +448,23 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		}
 		catch(InternalException e)
 		{
-			//noinspection StatementWithEmptyBody
-			if(e.errorCode() == 41)
+			switch(e.errorCode())
 			{
+				case 40 /* DUPLICATE */ :
+					LOG.info(e);
+					break;
+
+				case 41 /* NOT_FOUND */ :
+					break;
 				//event request not found
 				//there could be no requests after hotswap
-			}
-			else
-			{
-				LOG.error(e);
+
+				default:
+					LOG.error(e);
 			}
 		}
 	}
 
-	@Override
 	public void setInvalid(Requestor requestor, String message)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -493,7 +498,6 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		return false;
 	}
 
-	@Override
 	public void processDetached(DebugProcessImpl process, boolean closedByUser)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -502,7 +506,6 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		myRequestorToBelongedRequests.clear();
 	}
 
-	@Override
 	public void processAttached(DebugProcessImpl process)
 	{
 		myEventRequestManager = myDebugProcess.getVirtualMachineProxy().eventRequestManager();
@@ -533,69 +536,6 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 				requestor.processClassPrepare(myDebugProcess, refType);
 			}
 		}
-	}
-
-	private interface AllProcessesCommand
-	{
-		void action(DebugProcessImpl process);
-	}
-
-	private static void invoke(Project project, final AllProcessesCommand command)
-	{
-		for(DebuggerSession debuggerSession : (DebuggerManagerEx.getInstanceEx(project)).getSessions())
-		{
-			final DebugProcessImpl process = debuggerSession.getProcess();
-			if(process != null)
-			{
-				process.getManagerThread().invoke(new DebuggerCommandImpl()
-				{
-					@Override
-					protected void action() throws Exception
-					{
-						command.action(process);
-					}
-				});
-			}
-		}
-	}
-
-	public static void createRequests(final Breakpoint breakpoint)
-	{
-		invoke(breakpoint.getProject(), new AllProcessesCommand()
-		{
-			@Override
-			public void action(DebugProcessImpl process)
-			{
-				breakpoint.createRequest(process);
-			}
-		});
-	}
-
-	public static void updateRequests(final Breakpoint breakpoint)
-	{
-		invoke(breakpoint.getProject(), new AllProcessesCommand()
-		{
-			@Override
-			public void action(DebugProcessImpl process)
-			{
-				process.getRequestsManager().myRequestWarnings.remove(breakpoint);
-				process.getRequestsManager().deleteRequest(breakpoint);
-				breakpoint.createRequest(process);
-			}
-		});
-	}
-
-	public static void deleteRequests(final Breakpoint breakpoint)
-	{
-		invoke(breakpoint.getProject(), new AllProcessesCommand()
-		{
-			@Override
-			public void action(DebugProcessImpl process)
-			{
-				process.getRequestsManager().myRequestWarnings.remove(breakpoint);
-				process.getRequestsManager().deleteRequest(breakpoint);
-			}
-		});
 	}
 
 	public void clearWarnings()

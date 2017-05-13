@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -34,13 +33,13 @@ import com.intellij.psi.controlFlow.ControlFlowFactory;
 import com.intellij.psi.controlFlow.ControlFlowUtil;
 import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.refactoring.extractMethod.AbstractExtractDialog;
 import com.intellij.refactoring.extractMethod.InputVariables;
 import com.intellij.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.refactoring.util.VariableData;
 import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -79,7 +78,10 @@ public class ExtractLightMethodObjectHandler
 	}
 
 	@Nullable
-	public static ExtractedData extractLightMethodObject(final Project project, final PsiFile file, @NotNull final PsiCodeFragment fragment, final String methodName) throws PrepareFailedException
+	public static ExtractedData extractLightMethodObject(final Project project,
+			@Nullable PsiElement originalContext,
+			@NotNull final PsiCodeFragment fragment,
+			final String methodName) throws PrepareFailedException
 	{
 		final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
 		PsiElement[] elements = completeToStatementArray(fragment, elementFactory);
@@ -92,13 +94,14 @@ public class ExtractLightMethodObjectHandler
 			return null;
 		}
 
-		final PsiFile copy = PsiFileFactory.getInstance(project).createFileFromText(file.getName(), file.getFileType(), file.getText(), file.getModificationStamp(), false);
-
-		PsiElement originalContext = fragment.getContext();
 		if(originalContext == null)
 		{
 			return null;
 		}
+
+		PsiFile file = originalContext.getContainingFile();
+
+		final PsiFile copy = PsiFileFactory.getInstance(project).createFileFromText(file.getName(), file.getFileType(), file.getText(), file.getModificationStamp(), false);
 
 		if(originalContext instanceof PsiKeyword && PsiModifier.PRIVATE.equals(originalContext.getText()))
 		{
@@ -124,7 +127,7 @@ public class ExtractLightMethodObjectHandler
 			}
 		}
 
-		final PsiClass containingClass = PsiTreeUtil.getParentOfType(originalAnchor, PsiClass.class);
+		final PsiClass containingClass = PsiTreeUtil.getParentOfType(originalAnchor, PsiClass.class, false);
 		if(containingClass == null)
 		{
 			return null;
@@ -170,8 +173,8 @@ public class ExtractLightMethodObjectHandler
 				{
 					final String uniqueResultName = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName("result", elementsCopy[0], true);
 					final String statementText = expressionType.getCanonicalText() + " " + uniqueResultName + " = " + expr.getText() + ";";
-					elementsCopy[elementsCopy.length - 1] = elementsCopy[elementsCopy.length - 1].replace(elementFactory.createStatementFromText(statementText,
-							elementsCopy[elementsCopy.length - 1]));
+					elementsCopy[elementsCopy.length - 1] = elementsCopy[elementsCopy.length - 1].replace(elementFactory.createStatementFromText(statementText, elementsCopy[elementsCopy.length -
+							1]));
 				}
 			}
 		}
@@ -191,26 +194,13 @@ public class ExtractLightMethodObjectHandler
 
 		List<PsiVariable> variables = ControlFlowUtil.getUsedVariables(controlFlow, controlFlow.getStartOffset(elementsCopy[0]), controlFlow.getEndOffset(elementsCopy[elementsCopy.length - 1]));
 
-		variables = ContainerUtil.filter(variables, new Condition<PsiVariable>()
+		variables = ContainerUtil.filter(variables, variable ->
 		{
-			@Override
-			public boolean value(PsiVariable variable)
-			{
-				final PsiElement variableScope = variable instanceof PsiParameter ? ((PsiParameter) variable).getDeclarationScope() : PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class,
-						PsiForStatement.class);
-				return variableScope != null && PsiTreeUtil.isAncestor(variableScope, elementsCopy[elementsCopy.length - 1], false);
-			}
+			PsiElement variableScope = PsiUtil.getVariableCodeBlock(variable, null);
+			return variableScope != null && PsiTreeUtil.isAncestor(variableScope, elementsCopy[elementsCopy.length - 1], true);
 		});
 
-
-		final String outputVariables = StringUtil.join(variables, new Function<PsiVariable, String>()
-		{
-			@Override
-			public String fun(PsiVariable variable)
-			{
-				return "\"variable: \" + " + variable.getName();
-			}
-		}, " +");
+		final String outputVariables = StringUtil.join(variables, variable -> "\"variable: \" + " + variable.getName(), " +");
 		PsiStatement outStatement = elementFactory.createStatementFromText("System.out.println(" + outputVariables + ");", anchor);
 		outStatement = (PsiStatement) container.addAfter(outStatement, elementsCopy[elementsCopy.length - 1]);
 
@@ -324,9 +314,7 @@ public class ExtractLightMethodObjectHandler
 
 	private static boolean isValidVariableType(PsiType type)
 	{
-		if(type instanceof PsiClassType ||
-				type instanceof PsiArrayType ||
-				type instanceof PsiPrimitiveType && !PsiType.VOID.equals(type))
+		if(type instanceof PsiClassType || type instanceof PsiArrayType || type instanceof PsiPrimitiveType && !PsiType.VOID.equals(type))
 		{
 			return true;
 		}

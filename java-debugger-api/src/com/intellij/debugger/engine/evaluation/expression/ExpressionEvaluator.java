@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,17 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import consulo.internal.com.sun.jdi.Value;
 
-/**
- * Created by IntelliJ IDEA.
- * User: lex
- * Date: Jul 15, 2003
- * Time: 1:44:35 PM
- * To change this template use Options | File Templates.
- */
-public interface ExpressionEvaluator {
-  //call evaluate before
-  public Value getValue();
+public interface ExpressionEvaluator
+{
+	//call evaluate before
+	@Deprecated
+	default Value getValue()
+	{
+		return null;
+	}
 
-  //call evaluate before
-  public Modifier getModifier();
+	//call evaluate before
+	Modifier getModifier();
 
-  public Value evaluate(final EvaluationContext context) throws EvaluateException;
+	Value evaluate(final EvaluationContext context) throws EvaluateException;
 }
