@@ -33,6 +33,10 @@ import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.debugger.impl.DebuggerStateManager;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
+import com.intellij.debugger.memory.component.InstancesTracker;
+import com.intellij.debugger.memory.component.MemoryViewDebugProcessData;
+import com.intellij.debugger.memory.component.MemoryViewManager;
+import com.intellij.debugger.memory.ui.ClassesFilteredView;
 import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.debugger.ui.AlternativeSourceNotificationProvider;
 import com.intellij.debugger.ui.DebuggerContentInfo;
@@ -59,7 +63,6 @@ import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.EditorNotifications;
@@ -69,6 +72,7 @@ import com.intellij.ui.content.ContentManagerEvent;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebugSessionAdapter;
+import com.intellij.xdebugger.XDebugSessionListener;
 import com.intellij.xdebugger.XDebuggerBundle;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XSourcePosition;
@@ -374,10 +378,32 @@ public class JavaDebugProcess extends XDebugProcess
 			@Override
 			public void registerAdditionalContent(@NotNull RunnerLayoutUi ui)
 			{
+				registerThreadsPanel(ui);
+				registerMemoryViewPanel(ui);
+			}
+
+			@NotNull
+			@Override
+			public Content registerConsoleContent(@NotNull RunnerLayoutUi ui, @NotNull ExecutionConsole console)
+			{
+				Content content = null;
+				if(console instanceof ExecutionConsoleEx)
+				{
+					((ExecutionConsoleEx) console).buildUi(ui);
+					content = ui.findContent(DebuggerContentInfo.CONSOLE_CONTENT);
+				}
+				if(content == null)
+				{
+					content = super.registerConsoleContent(ui, console);
+				}
+				return content;
+			}
+
+			private void registerThreadsPanel(@NotNull RunnerLayoutUi ui)
+			{
 				final ThreadsPanel panel = new ThreadsPanel(myJavaSession.getProject(), getDebuggerStateManager());
 				final Content threadsContent = ui.createContent(DebuggerContentInfo.THREADS_CONTENT, panel, XDebuggerBundle.message("debugger.session.tab.threads.title"), AllIcons.Debugger.Threads,
 						null);
-				Disposer.register(threadsContent, panel);
 				threadsContent.setCloseable(false);
 				ui.addContent(threadsContent, 0, PlaceInGrid.left, true);
 				ui.addListener(new ContentManagerAdapter()
@@ -404,21 +430,44 @@ public class JavaDebugProcess extends XDebugProcess
 				}, threadsContent);
 			}
 
-			@NotNull
-			@Override
-			public Content registerConsoleContent(@NotNull RunnerLayoutUi ui, @NotNull ExecutionConsole console)
+			private void registerMemoryViewPanel(@NotNull RunnerLayoutUi ui)
 			{
-				Content content = null;
-				if(console instanceof ExecutionConsoleEx)
+				final XDebugSession session = getSession();
+				final DebugProcessImpl process = myJavaSession.getProcess();
+				final InstancesTracker tracker = InstancesTracker.getInstance(myJavaSession.getProject());
+
+				final ClassesFilteredView classesFilteredView = new ClassesFilteredView(session, process, tracker);
+
+				final Content memoryViewContent = ui.createContent(MemoryViewManager.MEMORY_VIEW_CONTENT, classesFilteredView, "Memory View", AllIcons.Debugger.MemoryView.Active, null);
+
+				memoryViewContent.setCloseable(false);
+				memoryViewContent.setShouldDisposeContent(true);
+
+				final MemoryViewDebugProcessData data = new MemoryViewDebugProcessData();
+				process.putUserData(MemoryViewDebugProcessData.KEY, data);
+				session.addSessionListener(new XDebugSessionListener()
 				{
-					((ExecutionConsoleEx) console).buildUi(ui);
-					content = ui.findContent(DebuggerContentInfo.CONSOLE_CONTENT);
-				}
-				if(content == null)
+					@Override
+					public void sessionStopped()
+					{
+						session.removeSessionListener(this);
+						data.getTrackedStacks().clear();
+					}
+				});
+
+				ui.addContent(memoryViewContent, 0, PlaceInGrid.right, true);
+				final DebuggerManagerThreadImpl managerThread = process.getManagerThread();
+				ui.addListener(new ContentManagerAdapter()
 				{
-					content = super.registerConsoleContent(ui, console);
-				}
-				return content;
+					@Override
+					public void selectionChanged(ContentManagerEvent event)
+					{
+						if(event != null && event.getContent() == memoryViewContent)
+						{
+							classesFilteredView.setActive(memoryViewContent.isSelected(), managerThread);
+						}
+					}
+				}, memoryViewContent);
 			}
 		};
 	}
