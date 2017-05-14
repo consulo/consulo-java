@@ -247,7 +247,8 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 
 		Object lock = new Object();
 		ProgressIndicator indicator = ProgressIndicatorProvider.getGlobalProgressIndicator();
-		JobLauncher.getInstance().invokeConcurrentlyUnderProgress(tasks, indicator, true, computable -> {
+		JobLauncher.getInstance().invokeConcurrentlyUnderProgress(tasks, indicator, true, computable ->
+		{
 			List<LineMarkerInfo> infos = computable.compute();
 			synchronized(lock)
 			{
@@ -260,9 +261,10 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 	private static List<LineMarkerInfo> collectSiblingInheritedMethods(@NotNull final Collection<PsiMethod> methods)
 	{
 		Map<PsiMethod, FindSuperElementsHelper.SiblingInfo> map = FindSuperElementsHelper.getSiblingInheritanceInfos(methods);
-		return ContainerUtil.map(map.keySet(), method -> {
+		return ContainerUtil.map(map.keySet(), method ->
+		{
 			PsiElement range = getMethodRange(method);
-			ArrowUpLineMarkerInfo upInfo = new ArrowUpLineMarkerInfo(range, AllIcons.Gutter.ImplementingMethod, MarkerType.SIBLING_OVERRIDING_METHOD, Pass.LINE_MARKERS);
+			ArrowUpLineMarkerInfo upInfo = new ArrowUpLineMarkerInfo(range, AllIcons.Gutter.SiblingInheritedMethod, MarkerType.SIBLING_OVERRIDING_METHOD, Pass.LINE_MARKERS);
 			return NavigateAction.setNavigateAction(upInfo, "Go to super method", IdeActions.ACTION_GOTO_SUPER);
 		});
 	}
@@ -341,7 +343,8 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor
 
 		Set<PsiMethod> methodSet = ContainerUtil.newHashSet(_methods);
 
-		AllOverridingMethodsSearch.search(containingClass).forEach(pair -> {
+		AllOverridingMethodsSearch.search(containingClass).forEach(pair ->
+		{
 			ProgressManager.checkCanceled();
 
 			final PsiMethod superMethod = pair.getFirst();
