@@ -59,7 +59,6 @@ import com.intellij.psi.scope.processor.FilterScopeProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
@@ -738,6 +737,9 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 			JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
 			ref = (PsiJavaCodeReferenceElement) codeStyleManager.shortenClassReferences(ref, JavaCodeStyleManager.INCOMPLETE_CODE);
 		}
+
+		// FIXME [VISTALL] hack due platform bug, i can't find where cache is dropped drop it by hands (dropping resolve cache due replaceChildInternal() do not inc mod count)
+		getManager().dropPsiCaches();
 
 		return ref;
 	}
