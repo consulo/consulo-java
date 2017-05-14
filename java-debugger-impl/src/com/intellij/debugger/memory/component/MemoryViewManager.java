@@ -18,15 +18,14 @@ package com.intellij.debugger.memory.component;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.memory.event.MemoryViewManagerListener;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.EventDispatcher;
 
 @State(name = "MemoryViewSettings", storages = @Storage("memory.view.xml"))
-public class MemoryViewManager implements ApplicationComponent, PersistentStateComponent<MemoryViewManagerState>
+public class MemoryViewManager implements PersistentStateComponent<MemoryViewManagerState>
 {
 	public static final String MEMORY_VIEW_CONTENT = "MemoryView";
 
@@ -35,7 +34,7 @@ public class MemoryViewManager implements ApplicationComponent, PersistentStateC
 
 	public static MemoryViewManager getInstance()
 	{
-		return ApplicationManager.getApplication().getComponent(MemoryViewManager.class);
+		return ServiceManager.getService(MemoryViewManager.class);
 	}
 
 	@NotNull

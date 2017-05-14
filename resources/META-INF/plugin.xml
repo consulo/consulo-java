@@ -835,6 +835,9 @@
 		<applicationService serviceInterface="com.intellij.util.xml.converters.values.ClassValueConverter"
 							serviceImplementation="com.intellij.util.xml.converters.ClassValueConverterImpl"/>
 
+		<applicationService serviceImplementation="com.intellij.debugger.memory.component.MemoryViewManager" />
+		<projectService serviceImplementation="com.intellij.debugger.memory.component.InstancesTracker" />
+
 		<applicationService serviceInterface="com.intellij.util.xml.converters.values.ClassArrayConverter"
 							serviceImplementation="com.intellij.util.xml.converters.ClassArrayConverterImpl"/>
 

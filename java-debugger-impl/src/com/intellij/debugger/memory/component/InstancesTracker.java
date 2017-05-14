@@ -23,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.memory.event.InstancesTrackerListener;
 import com.intellij.debugger.memory.tracking.TrackingType;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
@@ -34,19 +34,14 @@ import com.intellij.util.containers.HashMap;
 import com.intellij.util.xmlb.annotations.AbstractCollection;
 
 @State(name = "InstancesTracker", storages = @Storage(StoragePathMacros.WORKSPACE_FILE))
-public class InstancesTracker extends AbstractProjectComponent implements PersistentStateComponent<InstancesTracker.MyState>
+public class InstancesTracker implements PersistentStateComponent<InstancesTracker.MyState>
 {
 	private final EventDispatcher<InstancesTrackerListener> myDispatcher = EventDispatcher.create(InstancesTrackerListener.class);
 	private MyState myState = new MyState();
 
-	public InstancesTracker(Project project)
-	{
-		super(project);
-	}
-
 	public static InstancesTracker getInstance(@NotNull Project project)
 	{
-		return project.getComponent(InstancesTracker.class);
+		return ServiceManager.getService(project, InstancesTracker.class);
 	}
 
 	public boolean isTracked(@NotNull String className)
