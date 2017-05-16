@@ -17,7 +17,6 @@ package com.intellij.refactoring.changeSignature;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.codeInsight.JavaTargetElementUtilEx;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -33,6 +32,7 @@ import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.java.codeInsight.JavaTargetElementUtilEx;
 
 public class JavaChangeSignatureHandler implements ChangeSignatureHandler
 {
@@ -51,15 +51,8 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler
 
 	private static void invokeOnElement(Project project, Editor editor, PsiElement element)
 	{
-		if(element instanceof PsiMethod)
+		if(element instanceof PsiMethod && ((PsiMethod) element).getNameIdentifier() != null)
 		{
-			final ChangeSignatureGestureDetector detector = ChangeSignatureGestureDetector.getInstance(project);
-			final PsiIdentifier nameIdentifier = ((PsiMethod) element).getNameIdentifier();
-			if(nameIdentifier != null && detector.isChangeSignatureAvailable(element))
-			{
-				detector.changeSignature(element.getContainingFile(), false);
-				return;
-			}
 			invoke((PsiMethod) element, project, editor);
 		}
 		else if(element instanceof PsiClass)
@@ -68,8 +61,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler
 		}
 		else
 		{
-			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class" +
-					".name"));
+			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("error.wrong.caret.position.method.or.class" + ".name"));
 			CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.CHANGE_SIGNATURE);
 		}
 	}
@@ -229,8 +221,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler
 		final PsiReferenceParameterList referenceParameterList = PsiTreeUtil.getParentOfType(element, PsiReferenceParameterList.class);
 		if(referenceParameterList != null)
 		{
-			final PsiJavaCodeReferenceElement referenceElement = PsiTreeUtil.getParentOfType(referenceParameterList,
-					PsiJavaCodeReferenceElement.class);
+			final PsiJavaCodeReferenceElement referenceElement = PsiTreeUtil.getParentOfType(referenceParameterList, PsiJavaCodeReferenceElement.class);
 			if(referenceElement != null)
 			{
 				final PsiElement resolved = referenceElement.resolve();
