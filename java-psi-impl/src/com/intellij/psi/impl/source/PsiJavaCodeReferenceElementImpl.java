@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -739,7 +740,7 @@ public class PsiJavaCodeReferenceElementImpl extends CompositePsiElement impleme
 		}
 
 		// FIXME [VISTALL] hack due platform bug, i can't find where cache is dropped drop it by hands (dropping resolve cache due replaceChildInternal() do not inc mod count)
-		getManager().dropPsiCaches();
+		WriteAction.run(() -> getManager().dropPsiCaches());
 
 		return ref;
 	}
