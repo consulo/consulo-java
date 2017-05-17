@@ -180,6 +180,15 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 		myBreakpointManager = new BreakpointManager(myProject, startupManager, this);
 		if(!project.isDefault())
 		{
+			if(!project.isDefault())
+			{
+				DebuggerManagerListener[] extensions = DebuggerManagerListener.EP_NAME.getExtensions(project);
+				for(DebuggerManagerListener extension : extensions)
+				{
+					myDispatcher.addListener(extension);
+				}
+			}
+
 			project.getMessageBus().connect().subscribe(EditorColorsManager.TOPIC, new EditorColorsListener()
 			{
 				@Override
