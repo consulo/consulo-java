@@ -26,14 +26,14 @@ package org.osmorc.manifest.lang;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import consulo.java.manifest.lang.headerparser.HeaderUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import consulo.java.manifest.lang.headerparser.HeaderUtil;
 import consulo.lang.LanguageVersion;
+import consulo.util.SandboxUtil;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -50,7 +50,7 @@ public class ManifestParser implements PsiParser {
 
   @NotNull
   public ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder, @NotNull LanguageVersion languageVersion) {
-    builder.setDebugMode(ApplicationManager.getApplication().isInternal());
+    builder.setDebugMode(SandboxUtil.isInsideSandbox());
     final PsiBuilder.Marker rootMarker = builder.mark();
 
     while (!builder.eof()) {
