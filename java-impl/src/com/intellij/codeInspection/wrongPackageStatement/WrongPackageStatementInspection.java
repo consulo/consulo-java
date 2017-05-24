@@ -15,18 +15,32 @@
  */
 package com.intellij.codeInspection.wrongPackageStatement;
 
-import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInsight.daemon.JavaErrorMessages;
-import com.intellij.codeInspection.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.codeHighlighting.HighlightDisplayLevel;
+import com.intellij.codeInsight.daemon.JavaErrorMessages;
+import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.MoveToPackageFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiPackageStatement;
+import com.intellij.psi.PsiSyntheticClass;
 
 /**
  * User: anna
@@ -39,7 +53,6 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
     // does not work in tests since CodeInsightTestCase copies file into temporary location
     if (ApplicationManager.getApplication().isUnitTestMode()) return null;
     if (file instanceof PsiJavaFile) {
-      //if (JspPsiUtil.isInJspFile(file)) return null;
       PsiJavaFile javaFile = (PsiJavaFile)file;
 
       PsiDirectory directory = javaFile.getContainingDirectory();
@@ -50,7 +63,7 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
 
       // highlight the first class in the file only
       PsiClass[] classes = javaFile.getClasses();
-      if (classes.length == 0 && packageStatement == null) return null;
+      if (classes.length == 0 && packageStatement == null || classes[0] instanceof PsiSyntheticClass) return null;
 
       String packageName = dirPackage.getQualifiedName();
       if (!Comparing.strEqual(packageName, "", true) && packageStatement == null) {
