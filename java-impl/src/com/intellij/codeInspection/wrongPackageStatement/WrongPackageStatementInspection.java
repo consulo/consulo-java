@@ -63,7 +63,7 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
 
       // highlight the first class in the file only
       PsiClass[] classes = javaFile.getClasses();
-      if (classes.length == 0 && packageStatement == null || classes[0] instanceof PsiSyntheticClass) return null;
+      if (classes.length == 0 && packageStatement == null || classes.length == 1 && classes[0] instanceof PsiSyntheticClass) return null;
 
       String packageName = dirPackage.getQualifiedName();
       if (!Comparing.strEqual(packageName, "", true) && packageStatement == null) {
