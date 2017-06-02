@@ -110,5 +110,4 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder
 	{
 		return new NonClasspathDirectoriesScope(getClassRoots(jre));
 	}
-
 }
