@@ -62,7 +62,7 @@ public class JavaCoreProjectEnvironment  extends CoreProjectEnvironment {
     myFileManager = createCoreFileManager();
     myProject.registerService(JavaFileManager.class, myFileManager);
 
-    PsiPackageManager manager = new PsiPackageManagerImpl(getProject(), PsiManager.getInstance(getProject()), DirectoryIndex.getInstance(getProject()), myMessageBus);
+    PsiPackageManager manager = new PsiPackageManagerImpl(getProject(), DirectoryIndex.getInstance(getProject()));
 
     myProject.registerService(PsiPackageManager.class, manager);
 
