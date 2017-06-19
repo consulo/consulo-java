@@ -163,7 +163,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 	{
 		if(myAnnotationList == null)
 		{
-			myAnnotationList = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new PackageAnnotationValueProvider());
+			myAnnotationList = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new PackageAnnotationValueProvider(), false);
 		}
 		return myAnnotationList.getValue();
 	}

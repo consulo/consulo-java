@@ -40,7 +40,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.DeepestSuperMethodsSearch;
 import com.intellij.psi.search.searches.SuperMethodsSearch;
 import com.intellij.psi.util.*;
-import com.intellij.util.Function;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
@@ -52,31 +51,16 @@ import com.intellij.util.containers.hash.LinkedHashMap;
 public class PsiSuperMethodImplUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.PsiSuperMethodImplUtil");
-	private static final PsiCacheKey<Map<MethodSignature, HierarchicalMethodSignature>, PsiClass> SIGNATURES_FOR_CLASS_KEY = PsiCacheKey.create("SIGNATURES_FOR_CLASS_KEY", new
-			NotNullFunction<PsiClass, Map<MethodSignature, HierarchicalMethodSignature>>()
+	private static final PsiCacheKey<Map<MethodSignature, HierarchicalMethodSignature>, PsiClass> SIGNATURES_FOR_CLASS_KEY = PsiCacheKey.create("SIGNATURES_FOR_CLASS_KEY", (NotNullFunction<PsiClass,
+			Map<MethodSignature, HierarchicalMethodSignature>>) dom -> buildMethodHierarchy(dom, null, PsiSubstitutor.EMPTY, true, new THashSet<PsiClass>(), false, dom.getResolveScope()));
+	private static final PsiCacheKey<FactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>>, PsiClass> SIGNATURES_BY_NAME_KEY = PsiCacheKey.create("SIGNATURES_BY_NAME_KEY", psiClass
+			-> new ConcurrentFactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>>()
 	{
-		@NotNull
+		@Nullable
 		@Override
-		public Map<MethodSignature, HierarchicalMethodSignature> fun(PsiClass dom)
+		protected Map<MethodSignature, HierarchicalMethodSignature> create(String methodName)
 		{
-			return buildMethodHierarchy(dom, null, PsiSubstitutor.EMPTY, true, new THashSet<PsiClass>(), false, dom.getResolveScope());
-		}
-	});
-	private static final PsiCacheKey<FactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>>, PsiClass> SIGNATURES_BY_NAME_KEY = PsiCacheKey.create("SIGNATURES_BY_NAME_KEY", new
-			Function<PsiClass, FactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>>>()
-	{
-		@Override
-		public FactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>> fun(final PsiClass psiClass)
-		{
-			return new ConcurrentFactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>>()
-			{
-				@Nullable
-				@Override
-				protected Map<MethodSignature, HierarchicalMethodSignature> create(String methodName)
-				{
-					return buildMethodHierarchy(psiClass, methodName, PsiSubstitutor.EMPTY, true, new THashSet<PsiClass>(), false, psiClass.getResolveScope());
-				}
-			};
+			return buildMethodHierarchy(psiClass, methodName, PsiSubstitutor.EMPTY, true, new THashSet<>(), false, psiClass.getResolveScope());
 		}
 	});
 
@@ -132,7 +116,7 @@ public class PsiSuperMethodImplUtil
 	@NotNull
 	private static List<MethodSignatureBackedByPsiMethod> findSuperMethodSignatures(@NotNull PsiMethod method, PsiClass parentClass, boolean allowStaticMethod)
 	{
-		return new ArrayList<MethodSignatureBackedByPsiMethod>(SuperMethodsSearch.search(method, parentClass, true, allowStaticMethod).findAll());
+		return new ArrayList<>(SuperMethodsSearch.search(method, parentClass, true, allowStaticMethod).findAll());
 	}
 
 	private static boolean canHaveSuperMethod(@NotNull PsiMethod method, boolean checkAccess, boolean allowStaticMethod)
@@ -184,7 +168,7 @@ public class PsiSuperMethodImplUtil
 			GlobalSearchScope resolveScope)
 	{
 		ProgressManager.checkCanceled();
-		Map<MethodSignature, HierarchicalMethodSignature> result = new LinkedHashMap<MethodSignature, HierarchicalMethodSignature>(new EqualityPolicy<MethodSignature>()
+		Map<MethodSignature, HierarchicalMethodSignature> result = new LinkedHashMap<>(new EqualityPolicy<MethodSignature>()
 		{
 			@Override
 			public int getHashCode(MethodSignature object)
@@ -221,9 +205,9 @@ public class PsiSuperMethodImplUtil
 				return false;
 			}
 		});
-		final Map<MethodSignature, List<PsiMethod>> sameParameterErasureMethods = new THashMap<MethodSignature, List<PsiMethod>>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
+		final Map<MethodSignature, List<PsiMethod>> sameParameterErasureMethods = new THashMap<>(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 
-		Map<MethodSignature, HierarchicalMethodSignatureImpl> map = new THashMap<MethodSignature, HierarchicalMethodSignatureImpl>(new TObjectHashingStrategy<MethodSignature>()
+		Map<MethodSignature, HierarchicalMethodSignatureImpl> map = new THashMap<>(new TObjectHashingStrategy<MethodSignature>()
 		{
 			@Override
 			public int computeHashCode(MethodSignature signature)
@@ -282,7 +266,7 @@ public class PsiSuperMethodImplUtil
 			List<PsiMethod> list = sameParameterErasureMethods.get(signature);
 			if(list == null)
 			{
-				list = new SmartList<PsiMethod>();
+				list = new SmartList<>();
 				sameParameterErasureMethods.put(signature, list);
 			}
 			list.add(method);
@@ -312,13 +296,13 @@ public class PsiSuperMethodImplUtil
 			Map<MethodSignature, HierarchicalMethodSignature> superResult = buildMethodHierarchy(superClass, nameHint, finalSubstitutor, false, visited, isInRawContextSuper, resolveScope);
 			visited.remove(superClass);
 
-			List<Pair<MethodSignature, HierarchicalMethodSignature>> flattened = new ArrayList<Pair<MethodSignature, HierarchicalMethodSignature>>();
+			List<Pair<MethodSignature, HierarchicalMethodSignature>> flattened = new ArrayList<>();
 			for(Map.Entry<MethodSignature, HierarchicalMethodSignature> entry : superResult.entrySet())
 			{
 				HierarchicalMethodSignature hms = entry.getValue();
 				MethodSignature signature = MethodSignatureBackedByPsiMethod.create(hms.getMethod(), hms.getSubstitutor(), hms.isRaw());
 				PsiClass containingClass = hms.getMethod().getContainingClass();
-				List<HierarchicalMethodSignature> supers = new ArrayList<HierarchicalMethodSignature>(hms.getSuperSignatures());
+				List<HierarchicalMethodSignature> supers = new ArrayList<>(hms.getSuperSignatures());
 				for(HierarchicalMethodSignature aSuper : supers)
 				{
 					PsiClass superContainingClass = aSuper.getMethod().getContainingClass();
@@ -389,6 +373,12 @@ public class PsiSuperMethodImplUtil
 	{
 		PsiType thisRet = thisSig.getSubstitutor().substitute(thisSig.getMethod().getReturnType());
 		PsiType thatRet = thatSig.getSubstitutor().substitute(thatSig.getMethod().getReturnType());
+		PsiSubstitutor unifyingSubstitutor = MethodSignatureUtil.isSubsignature(thatSig, thisSig) ? MethodSignatureUtil.getSuperMethodSignatureSubstitutor(thisSig, thatSig) : null;
+		if(unifyingSubstitutor != null)
+		{
+			thisRet = unifyingSubstitutor.substitute(thisRet);
+			thatRet = unifyingSubstitutor.substitute(thatRet);
+		}
 		return thatRet != null && thisRet != null && !thatRet.equals(thisRet) && TypeConversionUtil.isAssignable(thatRet, thisRet, false);
 	}
 
@@ -431,15 +421,12 @@ public class PsiSuperMethodImplUtil
 		PsiClass superClass = superMethod.getContainingClass();
 		PsiMethod method = hierarchicalMethodSignature.getMethod();
 		PsiClass containingClass = method.getContainingClass();
-		if(!superMethod.isConstructor() &&
-				!aClass.equals(superClass) &&
-				MethodSignatureUtil.isSubsignature(superSignatureHierarchical, hierarchicalMethodSignature) && superClass != null)
+		if(!superMethod.isConstructor() && !aClass.equals(superClass) && MethodSignatureUtil.isSubsignature(superSignatureHierarchical, hierarchicalMethodSignature) && superClass != null)
 		{
 			if(superClass.isInterface() || CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName()))
 			{
-				if(superMethod.hasModifierProperty(PsiModifier.STATIC) || superMethod.hasModifierProperty(PsiModifier.DEFAULT) &&
-						method.hasModifierProperty(PsiModifier.STATIC) &&
-						!InheritanceUtil.isInheritorOrSelf(containingClass, superClass, true))
+				if(superMethod.hasModifierProperty(PsiModifier.STATIC) || superMethod.hasModifierProperty(PsiModifier.DEFAULT) && method.hasModifierProperty(PsiModifier.STATIC) && !InheritanceUtil
+						.isInheritorOrSelf(containingClass, superClass, true))
 				{
 					return false;
 				}
