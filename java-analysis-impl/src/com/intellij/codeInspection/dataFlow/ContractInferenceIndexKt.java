@@ -27,7 +27,9 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.psi.DummyHolderViewProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.JavaLightStubBuilder;
 import com.intellij.psi.impl.source.PsiFileImpl;
 import com.intellij.psi.impl.source.PsiMethodImpl;
@@ -83,9 +85,15 @@ class ContractInferenceIndexKt
 		return result;
 	}
 
+	@Nullable
 	public static MethodData getIndexedData(PsiMethodImpl method)
 	{
-		Map<Integer, MethodData> map = ourMethodDataPsiFileGist.getFileData(method.getContainingFile());
+		PsiFile containingFile = method.getContainingFile();
+		if(containingFile.getViewProvider() instanceof DummyHolderViewProvider)
+		{
+			return null;
+		}
+		Map<Integer, MethodData> map = ourMethodDataPsiFileGist.getFileData(containingFile);
 		return map == null ? null : map.get(methodIndex(method));
 	}
 
