@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2016 Dave Griffith, Bas Leijdekkers
+ * Copyright 2003-2017 Dave Griffith, Bas Leijdekkers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
+import static com.intellij.util.ObjectUtils.tryCast;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -23,6 +25,7 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.MethodSignatureUtil;
@@ -125,7 +128,7 @@ public class MethodCallUtils
 	{
 		if(parameterTypeStrings == null)
 		{
-			return isCallToMethod(expression, calledOnClassName, returnType, methodName, null);
+			return isCallToMethod(expression, calledOnClassName, returnType, methodName, (PsiType[]) null);
 		}
 		final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(expression.getProject());
 		final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -141,14 +144,14 @@ public class MethodCallUtils
 
 	public static boolean isCallToStaticMethod(@NotNull PsiMethodCallExpression expression, @NonNls @NotNull String calledOnClassName, @NonNls @NotNull String methodName, int parameterCount)
 	{
-		if(!methodName.equals(getMethodName(expression)) || expression.getArgumentList().getExpressions().length != parameterCount)
+		PsiExpression[] args = expression.getArgumentList().getExpressions();
+		if(!methodName.equals(getMethodName(expression)) || args.length < parameterCount)
 		{
 			return false;
 		}
 		PsiMethod method = expression.resolveMethod();
-		if(method == null ||
-				!method.getModifierList().hasExplicitModifier(PsiModifier.STATIC) ||
-				method.getParameterList().getParametersCount() != parameterCount)
+		if(method == null || !method.hasModifierProperty(PsiModifier.STATIC) || method.getParameterList().getParametersCount() != parameterCount || !method.isVarArgs() && args.length !=
+				parameterCount)
 		{
 			return false;
 		}
@@ -166,6 +169,10 @@ public class MethodCallUtils
 		if(methodNamePattern != null)
 		{
 			final String referenceName = methodExpression.getReferenceName();
+			if(referenceName == null)
+			{
+				return false;
+			}
 			final Matcher matcher = methodNamePattern.matcher(referenceName);
 			if(!matcher.matches())
 			{
@@ -339,7 +346,45 @@ public class MethodCallUtils
 		assert copyArgumentList != null;
 		final PsiExpression[] arguments = copyArgumentList.getExpressions();
 		arguments[index].replace(replacement);
+		if(call instanceof PsiEnumConstant)
+		{
+			final PsiClass containingClass = ((PsiEnumConstant) call).getContainingClass();
+			assert containingClass != null;
+			final JavaPsiFacade facade = JavaPsiFacade.getInstance(call.getProject());
+			final PsiClassType type = facade.getElementFactory().createType(containingClass);
+			final JavaResolveResult resolveResult = facade.getResolveHelper().resolveConstructor(type, copy.getArgumentList(), call);
+			return (PsiMethod) resolveResult.getElement();
+		}
 		return copy.resolveMethod();
+	}
+
+	/**
+	 * Checks if the specified expression is an argument for any method call (skipping parentheses in between).
+	 * If the method call is found, checks if same method is called when argument is replaced with replacement.
+	 *
+	 * @param expression  the expression to check
+	 * @param replacement the replacement to replace expression with
+	 * @return true, if method was found and a different method was called with replacement. false, otherwise.
+	 */
+	public static boolean isNecessaryForSurroundingMethodCall(PsiExpression expression, PsiExpression replacement)
+	{
+		PsiElement parent = expression.getParent();
+		while(parent instanceof PsiParenthesizedExpression)
+		{
+			expression = (PsiExpression) parent;
+			parent = parent.getParent();
+		}
+		if(!(parent instanceof PsiExpressionList))
+		{
+			return false;
+		}
+		final PsiElement grandParent = parent.getParent();
+		if(!(grandParent instanceof PsiCall))
+		{
+			return false;
+		}
+		final PsiCall call = (PsiCall) grandParent;
+		return call.resolveMethod() != findMethodWithReplacedArgument(call, expression, replacement);
 	}
 
 	public static boolean isSuperMethodCall(@NotNull PsiMethodCallExpression expression, @NotNull PsiMethod method)
@@ -352,6 +397,24 @@ public class MethodCallUtils
 		}
 		final PsiMethod targetMethod = expression.resolveMethod();
 		return targetMethod != null && MethodSignatureUtil.isSuperMethod(targetMethod, method);
+	}
+
+	/**
+	 * Returns true if given method call is a var-arg call
+	 *
+	 * @param call a call to test
+	 * @return true if call is resolved to the var-arg method and var-arg form is actually used
+	 */
+	public static boolean isVarArgCall(PsiMethodCallExpression call)
+	{
+		JavaResolveResult result = call.resolveMethodGenerics();
+		PsiMethod method = tryCast(result.getElement(), PsiMethod.class);
+		if(method == null || !method.isVarArgs())
+		{
+			return false;
+		}
+		PsiSubstitutor substitutor = result.getSubstitutor();
+		return MethodCallInstruction.isVarArgCall(method, substitutor, call.getArgumentList().getExpressions(), method.getParameterList().getParameters());
 	}
 
 	public static boolean containsSuperMethodCall(@NotNull PsiMethod method)
@@ -419,6 +482,18 @@ public class MethodCallUtils
 		return !PsiUtil.isConstantExpression(argument);
 	}
 
+	/**
+	 * For given method call, returns a qualifier if it's also a method call, or null otherwise
+	 *
+	 * @param methodCall call to check
+	 * @return a qualifier call
+	 */
+	@Nullable
+	public static PsiMethodCallExpression getQualifierMethodCall(@NotNull PsiMethodCallExpression methodCall)
+	{
+		return tryCast(PsiUtil.skipParenthesizedExprDown(methodCall.getMethodExpression().getQualifierExpression()), PsiMethodCallExpression.class);
+	}
+
 	private static class SuperCallVisitor extends JavaRecursiveElementWalkingVisitor
 	{
 
@@ -442,11 +517,15 @@ public class MethodCallUtils
 		@Override
 		public void visitClass(PsiClass aClass)
 		{
+			// anonymous and inner classes inside methods are visited to reduce false positives
+			super.visitClass(aClass);
 		}
 
 		@Override
 		public void visitLambdaExpression(PsiLambdaExpression expression)
 		{
+			// lambda's are visited to reduce false positives
+			super.visitLambdaExpression(expression);
 		}
 
 		@Override
@@ -473,6 +552,29 @@ public class MethodCallUtils
 			{
 				mySuperCallFound = true;
 			}
+		}
+
+		@Override
+		public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression)
+		{
+			if(mySuperCallFound)
+			{
+				return;
+			}
+			final PsiExpression qualifier = expression.getQualifierExpression();
+			if(qualifier instanceof PsiSuperExpression)
+			{
+				final PsiElement target = expression.resolve();
+				if(target instanceof PsiMethod)
+				{
+					if(MethodSignatureUtil.isSuperMethod((PsiMethod) target, myMethod))
+					{
+						mySuperCallFound = true;
+						return;
+					}
+				}
+			}
+			super.visitMethodReferenceExpression(expression);
 		}
 
 		boolean isSuperCallFound()

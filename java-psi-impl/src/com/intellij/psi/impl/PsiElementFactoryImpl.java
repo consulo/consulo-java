@@ -788,7 +788,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 
 	@NotNull
 	@Override
-	public PsiCodeBlock createCodeBlockFromText(@NotNull final String text, @Nullable final PsiElement context) throws IncorrectOperationException
+	public PsiCodeBlock createCodeBlockFromText(@NotNull final CharSequence text, @Nullable final PsiElement context) throws IncorrectOperationException
 	{
 		final PsiCodeBlock psiCodeBlock = super.createCodeBlockFromText(text, context);
 		GeneratedMarkerVisitor.markGenerated(psiCodeBlock);

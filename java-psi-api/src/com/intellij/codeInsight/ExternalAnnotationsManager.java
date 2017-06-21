@@ -64,7 +64,10 @@ public abstract class ExternalAnnotationsManager
 	@Nullable
 	public abstract PsiAnnotation[] findExternalAnnotations(@NotNull PsiModifierListOwner listOwner);
 
-	public abstract void annotateExternally(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQName, @NotNull PsiFile fromFile, @Nullable PsiNameValuePair[] value);
+	public abstract void annotateExternally(@NotNull PsiModifierListOwner listOwner,
+			@NotNull String annotationFQName,
+			@NotNull PsiFile fromFile,
+			@Nullable PsiNameValuePair[] value) throws CanceledConfigurationException;
 
 	public abstract boolean deannotate(@NotNull PsiModifierListOwner listOwner, @NotNull String annotationFQN);
 
@@ -75,4 +78,13 @@ public abstract class ExternalAnnotationsManager
 
 	@Nullable
 	public abstract List<PsiFile> findExternalAnnotationsFiles(@NotNull PsiModifierListOwner listOwner);
+
+	public static class CanceledConfigurationException extends RuntimeException
+	{
+		public static final CanceledConfigurationException INSTANCE = new CanceledConfigurationException();
+
+		private CanceledConfigurationException()
+		{
+		}
+	}
 }

@@ -24,8 +24,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.util.Processor;
+import com.intellij.util.containers.HashSet;
 
 public class InheritanceUtil
 {
@@ -170,7 +172,12 @@ public class InheritanceUtil
 		}
 	}
 
-	public static boolean hasEnclosingInstanceInScope(PsiClass aClass, PsiElement scope, final boolean isSuperClassAccepted, boolean isTypeParamsAccepted)
+	public static boolean hasEnclosingInstanceInScope(PsiClass aClass, PsiElement scope, boolean isSuperClassAccepted, boolean isTypeParamsAccepted)
+	{
+		return hasEnclosingInstanceInScope(aClass, scope, psiClass -> isSuperClassAccepted, isTypeParamsAccepted);
+	}
+
+	public static boolean hasEnclosingInstanceInScope(PsiClass aClass, PsiElement scope, Condition<PsiClass> isSuperClassAccepted, boolean isTypeParamsAccepted)
 	{
 		PsiManager manager = aClass.getManager();
 		PsiElement place = scope;
@@ -178,7 +185,7 @@ public class InheritanceUtil
 		{
 			if(place instanceof PsiClass)
 			{
-				if(isSuperClassAccepted)
+				if(isSuperClassAccepted.value((PsiClass) place))
 				{
 					if(isInheritorOrSelf((PsiClass) place, aClass, true))
 					{
@@ -209,4 +216,31 @@ public class InheritanceUtil
 		}
 		return place == aClass;
 	}
+
+	public static boolean processSuperTypes(@NotNull PsiType type, boolean includeSelf, @NotNull Processor<PsiType> processor)
+	{
+		if(includeSelf && !processor.process(type))
+		{
+			return false;
+		}
+		return processSuperTypes(type, processor, new HashSet<>());
+	}
+
+	private static boolean processSuperTypes(PsiType type, Processor<PsiType> processor, Set<PsiType> visited)
+	{
+		if(!visited.add(type))
+		{
+			return true;
+		}
+		for(PsiType superType : type.getSuperTypes())
+		{
+			if(!processor.process(superType))
+			{
+				return false;
+			}
+			processSuperTypes(superType, processor, visited);
+		}
+		return true;
+	}
+
 }

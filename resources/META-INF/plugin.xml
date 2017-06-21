@@ -577,6 +577,9 @@
 			<with attribute="implementationClass" implements="com.intellij.psi.PsiAnnotationSupport"/>
 		</extensionPoint>
 
+		<extensionPoint name="projectModelModifier" interface="com.intellij.openapi.roots.JavaProjectModelModifier" area="PROJECT"/>
+		<extensionPoint name="codeInsight.externalLibraryResolver" interface="com.intellij.codeInsight.daemon.quickFix.ExternalLibraryResolver"/>
+
 		<extensionPoint name="constantExpressionEvaluator" beanClass="com.intellij.lang.LanguageExtensionPoint">
 			<with attribute="implementationClass" implements="com.intellij.psi.impl.ConstantExpressionEvaluator"/>
 		</extensionPoint>
@@ -760,6 +763,8 @@
 		<classTypePointerFactory implementation="com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
 		<generation.toStringClassFilter implementation="org.jetbrains.generate.tostring.GenerateToStringInterfaceFilter" order="last"/>
+
+		<projectModelModifier implementation="com.intellij.openapi.roots.impl.IdeaProjectModelModifier" order="last"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
@@ -1442,11 +1447,6 @@
 			<category>Other</category>
 		</intentionAction>
 
-
-		<intentionAction>
-			<className>com.intellij.codeInspection.concurrencyAnnotations.JCiPOrderEntryFix</className>
-		</intentionAction>
-
 		<intentionAction>
 			<className>com.intellij.codeInsight.intention.impl.RemoveLiteralUnderscoresAction</className>
 			<category>Numbers</category>
@@ -1884,6 +1884,7 @@
 		<stubIndex implementation="com.intellij.psi.impl.java.stubs.index.JavaModuleNameIndex"/>
 
 		<fileBasedIndex implementation="com.intellij.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
+		<fileBasedIndex implementation="com.intellij.psi.impl.search.JavaNullMethodArgumentIndex"/>
 
 		<stubElementTypeHolder class="com.intellij.psi.impl.java.stubs.JavaStubElementTypes"/>
 
@@ -2052,6 +2053,9 @@
 
 		<xdebugger.lineBreakpointTypeResolver filetype="CLASS" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>
 		<xdebugger.lineBreakpointTypeResolver filetype="JAVA" implementationClass="consulo.java.debugger.JavaLineBreakpointTypeResolver"/>
+
+		<projectService serviceInterface="com.intellij.openapi.roots.JavaProjectModelModificationService"
+						serviceImplementation="com.intellij.openapi.roots.impl.JavaProjectModelModificationServiceImpl"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

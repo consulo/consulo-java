@@ -1,27 +1,42 @@
+/*
+ * Copyright 2000-2017 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.intellij.codeInsight.folding.impl;
+
+import static com.intellij.psi.SyntaxTraverser.psiTraverser;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 import com.intellij.codeInsight.folding.JavaCodeFoldingSettings;
-import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.CustomFoldingBuilder;
 import com.intellij.lang.folding.FoldingDescriptor;
+import com.intellij.lang.folding.NamedFoldingDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.FoldingGroup;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.UnfairTextRange;
@@ -36,50 +51,75 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.Function;
-import com.intellij.util.ObjectUtils;
+import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.text.CharArrayUtil;
 
 public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implements DumbAware
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.folding.impl.JavaFoldingBuilder");
-	private static final String SMILEY = "<~>";
 
-	private static String getPlaceholderText(PsiElement element)
+	private static String getPlaceholderText(@NotNull PsiElement element)
 	{
 		if(element instanceof PsiImportList)
 		{
 			return "...";
 		}
-		else if(element instanceof PsiMethod || element instanceof PsiClassInitializer || element instanceof PsiClass)
+		if(element instanceof PsiMethod)
 		{
-			return "{...}";
+			return getCodeBlockPlaceholder(((PsiMethod) element).getBody());
 		}
-		else if(element instanceof PsiDocComment)
+		else if(element instanceof PsiClassInitializer)
+		{
+			return getCodeBlockPlaceholder(((PsiClassInitializer) element).getBody());
+		}
+		else if(element instanceof PsiClass || element instanceof PsiJavaModule)
+		{
+			return getCodeBlockPlaceholder(null);
+		}
+		else if(element instanceof PsiLambdaExpression)
+		{
+			return getCodeBlockPlaceholder(((PsiLambdaExpression) element).getBody());
+		}
+		if(element instanceof PsiDocComment)
 		{
 			return "/**...*/";
 		}
-		else if(element instanceof PsiFile)
+		if(element instanceof PsiFile)
 		{
 			return "/.../";
 		}
-		else if(element instanceof PsiAnnotation)
+		if(element instanceof PsiAnnotation)
 		{
 			return "@{...}";
 		}
-		else if(element instanceof PsiReferenceParameterList)
+		if(element instanceof PsiReferenceParameterList)
 		{
-			return SMILEY;
+			return "<~>";
 		}
-		else if(element instanceof PsiComment)
+		if(element instanceof PsiComment)
 		{
 			return "//...";
 		}
 		return "...";
 	}
 
-	private static boolean isSimplePropertyAccessor(PsiMethod method)
+	private static String getCodeBlockPlaceholder(PsiElement codeBlock)
 	{
+		return codeBlock instanceof PsiCodeBlock && ((PsiCodeBlock) codeBlock).getStatements().length == 0 ? "{}" : "{...}";
+	}
+
+	private static boolean areOnAdjacentLines(@NotNull PsiElement e1, @NotNull PsiElement e2, @NotNull Document document)
+	{
+		return document.getLineNumber(e1.getTextRange().getEndOffset()) + 1 == document.getLineNumber(e2.getTextRange().getStartOffset());
+	}
+
+	private static boolean isSimplePropertyAccessor(@NotNull PsiMethod method)
+	{
+		if(DumbService.isDumb(method.getProject()))
+		{
+			return false;
+		}
+
 		PsiCodeBlock body = method.getBody();
 		if(body == null || body.getLBrace() == null || body.getRBrace() == null)
 		{
@@ -90,6 +130,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		{
 			return false;
 		}
+
 		PsiStatement statement = statements[0];
 		if(PropertyUtil.isSimplePropertyGetter(method))
 		{
@@ -114,18 +155,21 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			{
 				PsiExpression lhs = ((PsiAssignmentExpression) expr).getLExpression();
 				PsiExpression rhs = ((PsiAssignmentExpression) expr).getRExpression();
-				return lhs instanceof PsiReferenceExpression &&
-						rhs instanceof PsiReferenceExpression &&
-						!((PsiReferenceExpression) rhs).isQualified() &&
-						PropertyUtil.isSimplePropertySetter(method); // last check because it can perform long return type resolve
+				return lhs instanceof PsiReferenceExpression && rhs instanceof PsiReferenceExpression && !((PsiReferenceExpression) rhs).isQualified() && PropertyUtil.isSimplePropertySetter(method);
+				// last check because it can perform long return type resolve
 			}
 		}
 		return false;
 	}
 
 	@Nullable
-	public TextRange getRangeToFold(PsiElement element)
+	private static TextRange getRangeToFold(@NotNull PsiElement element)
 	{
+		if(element instanceof SyntheticElement)
+		{
+			return null;
+		}
+
 		if(element instanceof PsiMethod)
 		{
 			PsiCodeBlock body = ((PsiMethod) element).getBody();
@@ -135,10 +179,12 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			}
 			return body.getTextRange();
 		}
+
 		if(element instanceof PsiClassInitializer)
 		{
 			return ((PsiClassInitializer) element).getBody().getTextRange();
 		}
+
 		if(element instanceof PsiClass)
 		{
 			PsiClass aClass = (PsiClass) element;
@@ -154,10 +200,19 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			}
 			return new TextRange(lBrace.getTextOffset(), rBrace.getTextOffset() + 1);
 		}
+
+		if(element instanceof PsiJavaModule)
+		{
+			PsiElement left = psiTraverser().children(element).find(e -> PsiUtil.isJavaToken(e, JavaTokenType.LBRACE));
+			PsiElement right = psiTraverser().children(element).find(e -> PsiUtil.isJavaToken(e, JavaTokenType.RBRACE));
+			return left != null && right != null ? new TextRange(left.getTextOffset(), right.getTextOffset() + 1) : null;
+		}
+
 		if(element instanceof PsiJavaFile)
 		{
 			return getFileHeader((PsiJavaFile) element);
 		}
+
 		if(element instanceof PsiImportList)
 		{
 			PsiImportList list = (PsiImportList) element;
@@ -178,10 +233,12 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 				return new TextRange(startOffset, endOffset);
 			}
 		}
+
 		if(element instanceof PsiDocComment)
 		{
 			return element.getTextRange();
 		}
+
 		if(element instanceof PsiAnnotation)
 		{
 			int startOffset = element.getTextRange().getStartOffset();
@@ -194,10 +251,20 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 
 			return new TextRange(startOffset, last.getTextRange().getEndOffset());
 		}
+
+		if(element instanceof PsiLambdaExpression)
+		{
+			PsiElement body = ((PsiLambdaExpression) element).getBody();
+			if(body instanceof PsiCodeBlock)
+			{
+				return body.getTextRange();
+			}
+		}
+
 		return null;
 	}
 
-	public static boolean hasErrorElementsNearby(final PsiFile file, int startOffset, int endOffset)
+	public static boolean hasErrorElementsNearby(@NotNull PsiFile file, int startOffset, int endOffset)
 	{
 		endOffset = CharArrayUtil.shiftForward(file.getViewProvider().getContents(), endOffset, " \t\n");
 		for(PsiElement element : CollectHighlightsUtil.getElementsInRange(file, startOffset, endOffset))
@@ -211,7 +278,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 	}
 
 	@Nullable
-	private static TextRange getFileHeader(PsiJavaFile file)
+	private static TextRange getFileHeader(@NotNull PsiJavaFile file)
 	{
 		PsiElement first = file.getFirstChild();
 		if(first instanceof PsiWhiteSpace)
@@ -235,18 +302,19 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		{
 			return null;
 		}
-		if(element.getPrevSibling() instanceof PsiWhiteSpace)
+		PsiElement prevSibling = element.getPrevSibling();
+		if(prevSibling instanceof PsiWhiteSpace)
 		{
-			element = element.getPrevSibling();
+			element = prevSibling;
 		}
-		if(element == null || element.equals(first))
+		if(element.equals(first))
 		{
 			return null;
 		}
 		return new UnfairTextRange(first.getTextOffset(), element.getTextOffset());
 	}
 
-	private void addAnnotationsToFold(PsiModifierList modifierList, List<FoldingDescriptor> foldElements, Document document)
+	private static void addAnnotationsToFold(@Nullable PsiModifierList modifierList, @NotNull List<FoldingDescriptor> foldElements, @NotNull Document document)
 	{
 		if(modifierList == null)
 		{
@@ -289,13 +357,13 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 	 *                          skip processing when current method is called for the second element
 	 * @param foldElements      fold descriptors holder to store newly created descriptor (if any)
 	 */
-	private static void addCommentFolds(@NotNull PsiComment comment, @NotNull Set<PsiElement> processedComments,
-			@NotNull List<FoldingDescriptor> foldElements)
+	private static void addCommentFolds(@NotNull PsiComment comment, @NotNull Set<PsiElement> processedComments, @NotNull List<FoldingDescriptor> foldElements)
 	{
-		if(processedComments.contains(comment) || comment.getTokenType() != JavaTokenType.END_OF_LINE_COMMENT)
+		if(processedComments.contains(comment) || comment.getTokenType() != JavaTokenType.END_OF_LINE_COMMENT || isCustomRegionElement(comment))
 		{
 			return;
 		}
+		processedComments.add(comment);
 
 		PsiElement end = null;
 		for(PsiElement current = comment.getNextSibling(); current != null; current = current.getNextSibling())
@@ -306,7 +374,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 				break;
 			}
 			IElementType elementType = node.getElementType();
-			if(elementType == JavaTokenType.END_OF_LINE_COMMENT)
+			if(elementType == JavaTokenType.END_OF_LINE_COMMENT && !isCustomRegionElement(current) && !processedComments.contains(current))
 			{
 				end = current;
 				// We don't want to process, say, the second comment in case of three subsequent comments when it's being examined
@@ -324,13 +392,11 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 
 		if(end != null)
 		{
-			foldElements.add(new FoldingDescriptor(comment, new TextRange(comment.getTextRange().getStartOffset(),
-					end.getTextRange().getEndOffset())));
+			foldElements.add(new FoldingDescriptor(comment, new TextRange(comment.getTextRange().getStartOffset(), end.getTextRange().getEndOffset())));
 		}
 	}
 
-	private static void addMethodGenericParametersFolding(PsiMethodCallExpression expression, List<FoldingDescriptor> foldElements,
-			Document document, boolean quick)
+	private static void addMethodGenericParametersFolding(@NotNull PsiMethodCallExpression expression, @NotNull List<FoldingDescriptor> foldElements, @NotNull Document document, boolean quick)
 	{
 		final PsiReferenceExpression methodExpression = expression.getMethodExpression();
 		final PsiReferenceParameterList list = methodExpression.getParameterList();
@@ -357,7 +423,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		addTypeParametersFolding(foldElements, document, list, 3, quick);
 	}
 
-	private static boolean resolvesCorrectly(PsiReferenceExpression expression)
+	private static boolean resolvesCorrectly(@NotNull PsiReferenceExpression expression)
 	{
 		for(final JavaResolveResult result : expression.multiResolve(true))
 		{
@@ -369,8 +435,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		return true;
 	}
 
-	private static void addGenericParametersFolding(PsiNewExpression expression, List<FoldingDescriptor> foldElements, Document document,
-			boolean quick)
+	private static void addGenericParametersFolding(@NotNull PsiNewExpression expression, @NotNull List<FoldingDescriptor> foldElements, @NotNull Document document, boolean quick)
 	{
 		final PsiElement parent = expression.getParent();
 		if(!(parent instanceof PsiVariable))
@@ -398,7 +463,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			{
 				classReference = anonymousClass.getBaseClassReference();
 
-				if(quick || seemsLikeLambda(anonymousClass.getSuperClass()))
+				if(quick || ClosureFolding.seemsLikeLambda(anonymousClass.getSuperClass(), anonymousClass))
 				{
 					return;
 				}
@@ -432,8 +497,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		}
 	}
 
-	private static void addTypeParametersFolding(List<FoldingDescriptor> foldElements, Document document, PsiReferenceParameterList list,
-			final int ifLongerThan, boolean quick)
+	private static void addTypeParametersFolding(@NotNull List<FoldingDescriptor> foldElements, @NotNull Document document, @NotNull PsiReferenceParameterList list, int ifLongerThan, boolean quick)
 	{
 		if(!quick)
 		{
@@ -461,127 +525,33 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		}
 	}
 
-	private static boolean hasOnlyOneLambdaMethod(@NotNull PsiAnonymousClass anonymousClass, boolean checkResolve)
+	protected abstract boolean shouldShowExplicitLambdaType(@NotNull PsiAnonymousClass anonymousClass, @NotNull PsiNewExpression expression);
+
+	private static void addToFold(@NotNull List<FoldingDescriptor> list, @NotNull PsiElement elementToFold, @NotNull Document document, boolean allowOneLiners)
 	{
-		PsiField[] fields = anonymousClass.getFields();
-		if(fields.length != 0)
-		{
-			if(fields.length == 1 && HighlightUtilBase.SERIAL_VERSION_UID_FIELD_NAME.equals(fields[0].getName()) &&
-					fields[0].hasModifierProperty(PsiModifier.STATIC))
-			{
-				//ok
-			}
-			else
-			{
-				return false;
-			}
-		}
-		if(anonymousClass.getInitializers().length != 0)
-		{
-			return false;
-		}
-		if(anonymousClass.getInnerClasses().length != 0)
-		{
-			return false;
-		}
-
-		if(anonymousClass.getMethods().length != 1)
-		{
-			return false;
-		}
-
-		PsiMethod method = anonymousClass.getMethods()[0];
-		if(method.hasModifierProperty(PsiModifier.SYNCHRONIZED))
-		{
-			return false;
-		}
-
-		if(checkResolve)
-		{
-			PsiReferenceList throwsList = method.getThrowsList();
-			for(PsiClassType type : throwsList.getReferencedTypes())
-			{
-				if(type.resolve() == null)
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	private String getOptionalLambdaType(PsiAnonymousClass anonymousClass, PsiNewExpression expression)
-	{
-		if(shouldShowExplicitLambdaType(anonymousClass, expression))
-		{
-			final String baseClassName = ObjectUtils.assertNotNull(anonymousClass.getBaseClassType().resolve()).getName();
-			if(baseClassName != null)
-			{
-				return "(" + baseClassName + ") ";
-			}
-		}
-		return "";
-	}
-
-	protected abstract boolean shouldShowExplicitLambdaType(PsiAnonymousClass anonymousClass, PsiNewExpression expression);
-
-	private static boolean seemsLikeLambda(@Nullable final PsiClass baseClass)
-	{
-		return baseClass != null && PsiUtil.hasDefaultConstructor(baseClass, true);
-	}
-
-	private static boolean isImplementingLambdaMethod(PsiClass baseClass)
-	{
-		if(!baseClass.hasModifierProperty(PsiModifier.ABSTRACT))
-		{
-			return false;
-		}
-
-		for(final PsiMethod method : baseClass.getMethods())
-		{
-			if(method.hasModifierProperty(PsiModifier.ABSTRACT))
-			{
-				return true;
-			}
-		}
-
-		try
-		{
-			return !OverrideImplementExploreUtil.getMethodSignaturesToImplement(baseClass).isEmpty();
-		}
-		catch(IndexNotReadyException e)
-		{
-			return false;
-		}
-	}
-
-	private boolean addToFold(List<FoldingDescriptor> list, PsiElement elementToFold, Document document, boolean allowOneLiners)
-	{
-		LOG.assertTrue(elementToFold.isValid());
+		PsiUtilCore.ensureValid(elementToFold);
 		TextRange range = getRangeToFold(elementToFold);
-		if(range == null)
+		if(range != null)
 		{
-			return false;
+			addFoldRegion(list, elementToFold, document, allowOneLiners, range);
 		}
-		return addFoldRegion(list, elementToFold, document, allowOneLiners, range);
 	}
 
-	private static boolean addFoldRegion(final List<FoldingDescriptor> list, final PsiElement elementToFold, final Document document,
-			final boolean allowOneLiners, final TextRange range)
+	private static void addFoldRegion(@NotNull List<FoldingDescriptor> list, @NotNull PsiElement elementToFold, @NotNull Document document, boolean allowOneLiners, @NotNull TextRange range)
 	{
 		final TextRange fileRange = elementToFold.getContainingFile().getTextRange();
 		if(range.equals(fileRange))
 		{
-			return false;
+			return;
 		}
 
 		LOG.assertTrue(range.getStartOffset() >= 0 && range.getEndOffset() <= fileRange.getEndOffset());
 		// PSI element text ranges may be invalid because of reparse exception (see, for example, IDEA-10617)
 		if(range.getStartOffset() < 0 || range.getEndOffset() > fileRange.getEndOffset())
 		{
-			return false;
+			return;
 		}
+
 		if(!allowOneLiners)
 		{
 			int startLine = document.getLineNumber(range.getStartOffset());
@@ -589,24 +559,16 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			if(startLine < endLine && range.getLength() > 1)
 			{
 				list.add(new FoldingDescriptor(elementToFold, range));
-				return true;
 			}
-			return false;
 		}
-		else
+		else if(range.getLength() > getPlaceholderText(elementToFold).length())
 		{
-			if(range.getLength() > getPlaceholderText(elementToFold).length())
-			{
-				list.add(new FoldingDescriptor(elementToFold, range));
-				return true;
-			}
-			return false;
+			list.add(new FoldingDescriptor(elementToFold, range));
 		}
 	}
 
 	@Override
-	protected void buildLanguageFoldRegions(@NotNull List<FoldingDescriptor> descriptors, @NotNull PsiElement root, @NotNull Document document,
-			boolean quick)
+	protected void buildLanguageFoldRegions(@NotNull List<FoldingDescriptor> descriptors, @NotNull PsiElement root, @NotNull Document document, boolean quick)
 	{
 		if(!(root instanceof PsiJavaFile))
 		{
@@ -623,14 +585,24 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 				final TextRange rangeToFold = getRangeToFold(importList);
 				if(rangeToFold != null && rangeToFold.getLength() > 1)
 				{
-					descriptors.add(new FoldingDescriptor(importList, rangeToFold));
+					FoldingDescriptor descriptor = new FoldingDescriptor(importList, rangeToFold);
+					// imports are often added/removed automatically, so we enable auto-update of folded region for foldings even if it's collapsed
+					descriptor.setCanBeRemovedWhenCollapsed(true);
+					descriptors.add(descriptor);
 				}
 			}
+		}
+
+		PsiJavaModule module = file.getModuleDeclaration();
+		if(module != null)
+		{
+			addElementsToFold(descriptors, module, document);
 		}
 
 		PsiClass[] classes = file.getClasses();
 		for(PsiClass aClass : classes)
 		{
+			ProgressManager.checkCanceled();
 			ProgressIndicatorProvider.checkCanceled();
 			addElementsToFold(descriptors, aClass, document, true, quick);
 		}
@@ -660,51 +632,52 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		}
 	}
 
-	private void addElementsToFold(List<FoldingDescriptor> list, PsiClass aClass, Document document, boolean foldJavaDocs, boolean quick)
+	private static void addElementsToFold(@NotNull List<FoldingDescriptor> list, @NotNull PsiJavaModule module, @NotNull Document document)
 	{
-		if(!(aClass.getParent() instanceof PsiJavaFile) || ((PsiJavaFile) aClass.getParent()).getClasses().length > 1)
+		addToFold(list, module, document, true);
+		addDocCommentToFold(list, document, module);
+		addAnnotationsToFold(module.getModifierList(), list, document);
+	}
+
+	private void addElementsToFold(@NotNull List<FoldingDescriptor> list, @NotNull PsiClass aClass, @NotNull Document document, boolean foldJavaDocs, boolean quick)
+	{
+		PsiElement parent = aClass.getParent();
+		if(!(parent instanceof PsiJavaFile) || ((PsiJavaFile) parent).getClasses().length > 1)
 		{
 			addToFold(list, aClass, document, true);
 		}
 
-		PsiDocComment docComment;
 		if(foldJavaDocs)
 		{
-			docComment = aClass.getDocComment();
-			if(docComment != null)
-			{
-				addToFold(list, docComment, document, true);
-			}
+			addDocCommentToFold(list, document, aClass);
 		}
+
 		addAnnotationsToFold(aClass.getModifierList(), list, document);
 
-		PsiElement[] children = aClass.getChildren();
-		Set<PsiElement> processedComments = new HashSet<PsiElement>();
-		for(PsiElement child : children)
+		Set<PsiElement> processedComments = new HashSet<>();
+		for(PsiElement child = aClass.getFirstChild(); child != null; child = child.getNextSibling())
 		{
 			ProgressIndicatorProvider.checkCanceled();
 
 			if(child instanceof PsiMethod)
 			{
 				PsiMethod method = (PsiMethod) child;
-				boolean accessor = isSimplePropertyAccessor(method) && addInlineAccessorFolding(list, method);
-				if(!accessor)
+
+				boolean oneLiner = addOneLineMethodFolding(list, method);
+				if(!oneLiner)
 				{
 					addToFold(list, method, document, true);
 				}
+
 				addAnnotationsToFold(method.getModifierList(), list, document);
 
 				if(foldJavaDocs)
 				{
-					docComment = method.getDocComment();
-					if(docComment != null)
-					{
-						addToFold(list, docComment, document, true);
-					}
+					addDocCommentToFold(list, document, method);
 				}
 
 				PsiCodeBlock body = method.getBody();
-				if(body != null && !accessor)
+				if(body != null && !oneLiner)
 				{
 					addCodeBlockFolds(body, list, processedComments, document, quick);
 				}
@@ -712,15 +685,14 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			else if(child instanceof PsiField)
 			{
 				PsiField field = (PsiField) child;
+
 				if(foldJavaDocs)
 				{
-					docComment = field.getDocComment();
-					if(docComment != null)
-					{
-						addToFold(list, docComment, document, true);
-					}
+					addDocCommentToFold(list, document, field);
 				}
+
 				addAnnotationsToFold(field.getModifierList(), list, document);
+
 				PsiExpression initializer = field.getInitializer();
 				if(initializer != null)
 				{
@@ -733,42 +705,75 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			}
 			else if(child instanceof PsiClassInitializer)
 			{
-				PsiClassInitializer initializer = (PsiClassInitializer) child;
-				addToFold(list, initializer, document, true);
-				addCodeBlockFolds(initializer, list, processedComments, document, quick);
+				addToFold(list, child, document, true);
+				addCodeBlockFolds(child, list, processedComments, document, quick);
 			}
 			else if(child instanceof PsiClass)
 			{
 				addElementsToFold(list, (PsiClass) child, document, true, quick);
 			}
-			else if(child instanceof PsiComment && !isCustomRegionStart(child.getNode()) && !isCustomRegionEnd(child.getNode()))
+			else if(child instanceof PsiComment)
 			{
 				addCommentFolds((PsiComment) child, processedComments, list);
 			}
 		}
 	}
 
-	private static boolean addInlineAccessorFolding(List<FoldingDescriptor> descriptorList, PsiMethod accessor)
+	private static void addDocCommentToFold(@NotNull List<FoldingDescriptor> list, @NotNull Document document, @NotNull PsiJavaDocumentedElement element)
 	{
-		if(!JavaCodeFoldingSettings.getInstance().isCollapseAccessors())
+		PsiDocComment docComment = element.getDocComment();
+		if(docComment != null)
+		{
+			addToFold(list, docComment, document, true);
+		}
+	}
+
+	private boolean addOneLineMethodFolding(@NotNull List<FoldingDescriptor> descriptorList, @NotNull PsiMethod method)
+	{
+		if(!JavaCodeFoldingSettings.getInstance().isCollapseOneLineMethods())
 		{
 			return false;
 		}
 
-		PsiCodeBlock body = accessor.getBody();
-		assert body != null;
-		if(body.getStatements().length > 1)
+		Document document = method.getContainingFile().getViewProvider().getDocument();
+		PsiCodeBlock body = method.getBody();
+		PsiIdentifier nameIdentifier = method.getNameIdentifier();
+		if(body == null || document == null || nameIdentifier == null)
+		{
+			return false;
+		}
+		if(document.getLineNumber(nameIdentifier.getTextRange().getStartOffset()) != document.getLineNumber(method.getParameterList().getTextRange().getEndOffset()))
 		{
 			return false;
 		}
 
-		PsiStatement statement = body.getStatements()[0];
+		PsiJavaToken lBrace = body.getLBrace();
+		PsiJavaToken rBrace = body.getRBrace();
+		PsiStatement[] statements = body.getStatements();
+		if(lBrace == null || rBrace == null || statements.length != 1)
+		{
+			return false;
+		}
+
+		PsiStatement statement = statements[0];
 		if(statement.textContains('\n'))
 		{
 			return false;
 		}
 
-		int leftStart = accessor.getParameterList().getTextRange().getEndOffset();
+		if(!areOnAdjacentLines(lBrace, statement, document) || !areOnAdjacentLines(statement, rBrace, document))
+		{
+			//the user might intend to type at an empty line
+			return false;
+		}
+
+		int leftStart = method.getParameterList().getTextRange().getEndOffset();
+		int bodyStart = body.getTextRange().getStartOffset();
+		if(bodyStart > leftStart && !StringUtil.isEmptyOrSpaces(document.getCharsSequence().subSequence(leftStart + 1, bodyStart)))
+		{
+			return false;
+		}
+
 		int leftEnd = statement.getTextRange().getStartOffset();
 		int rightStart = statement.getTextRange().getEndOffset();
 		int rightEnd = body.getTextRange().getEndOffset();
@@ -777,37 +782,23 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			return false;
 		}
 
-		FoldingGroup group = FoldingGroup.newGroup("simple property accessor");
-		PsiJavaToken lBrace = body.getLBrace();
-		assert lBrace != null;
-		descriptorList.add(new FoldingDescriptor(lBrace.getNode(), new TextRange(leftStart, leftEnd), group)
+		String leftText = " { ";
+		String rightText = " }";
+		if(!fitsRightMargin(method, document, leftStart, rightEnd, rightStart - leftEnd + leftText.length() + rightText.length()))
 		{
-			@Nullable
-			@Override
-			public String getPlaceholderText()
-			{
-				return " { ";
-			}
-		});
+			return false;
+		}
 
-		PsiJavaToken rBrace = body.getRBrace();
-		assert rBrace != null;
-		descriptorList.add(new FoldingDescriptor(rBrace.getNode(), new TextRange(rightStart, rightEnd), group)
-		{
-			@Nullable
-			@Override
-			public String getPlaceholderText()
-			{
-				return " }";
-			}
-		});
+		FoldingGroup group = FoldingGroup.newGroup("one-liner");
+		descriptorList.add(new NamedFoldingDescriptor(lBrace, leftStart, leftEnd, group, leftText));
+		descriptorList.add(new NamedFoldingDescriptor(rBrace, rightStart, rightEnd, group, rightText));
 		return true;
 	}
 
 	@Override
 	protected String getLanguagePlaceholderText(@NotNull ASTNode node, @NotNull TextRange range)
 	{
-		return getPlaceholderText(SourceTreeToPsiMap.treeElementToPsi(node));
+		return getPlaceholderText(SourceTreeToPsiMap.<PsiElement>treeToPsiNotNull(node));
 	}
 
 	@Override
@@ -819,11 +810,9 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		{
 			return settings.isCollapseLambdas();
 		}
-		if(element instanceof PsiJavaToken &&
-				element.getParent() instanceof PsiCodeBlock &&
-				element.getParent().getParent() instanceof PsiMethod)
+		if(element instanceof PsiJavaToken && element.getParent() instanceof PsiCodeBlock && element.getParent().getParent() instanceof PsiMethod)
 		{
-			return settings.isCollapseAccessors();
+			return settings.isCollapseOneLineMethods();
 		}
 		if(element instanceof PsiReferenceParameterList)
 		{
@@ -836,13 +825,18 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		}
 		else if(element instanceof PsiMethod || element instanceof PsiClassInitializer || element instanceof PsiCodeBlock)
 		{
-			if(!settings.isCollapseAccessors() && !settings.isCollapseMethods())
+			if(element instanceof PsiMethod)
 			{
-				return false;
-			}
-			if(element instanceof PsiMethod && isSimplePropertyAccessor((PsiMethod) element))
-			{
-				return settings.isCollapseAccessors();
+
+				if(!settings.isCollapseAccessors() && !settings.isCollapseMethods())
+				{
+					return false;
+				}
+
+				if(isSimplePropertyAccessor((PsiMethod) element))
+				{
+					return settings.isCollapseAccessors();
+				}
 			}
 			return settings.isCollapseMethods();
 		}
@@ -887,6 +881,14 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		{
 			return settings.isCollapseEndOfLineComments();
 		}
+		else if(element instanceof PsiLambdaExpression)
+		{
+			return settings.isCollapseAnonymousClasses();
+		}
+		else if(element instanceof PsiJavaModule)
+		{
+			return false;
+		}
 		else
 		{
 			LOG.error("Unknown element:" + element);
@@ -894,8 +896,11 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		}
 	}
 
-	private void addCodeBlockFolds(PsiElement scope, final List<FoldingDescriptor> foldElements, final @NotNull Set<PsiElement> processedComments,
-			final Document document, final boolean quick)
+	private void addCodeBlockFolds(@NotNull PsiElement scope,
+			@NotNull final List<FoldingDescriptor> foldElements,
+			@NotNull final Set<PsiElement> processedComments,
+			@NotNull final Document document,
+			final boolean quick)
 	{
 		final boolean dumb = DumbService.isDumb(scope.getProject());
 		scope.accept(new JavaRecursiveElementWalkingVisitor()
@@ -933,6 +938,17 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 			}
 
 			@Override
+			public void visitLambdaExpression(PsiLambdaExpression expression)
+			{
+				PsiElement body = expression.getBody();
+				if(body instanceof PsiCodeBlock)
+				{
+					addToFold(foldElements, expression, document, true);
+				}
+				super.visitLambdaExpression(expression);
+			}
+
+			@Override
 			public void visitComment(PsiComment comment)
 			{
 				addCommentFolds(comment, processedComments, foldElements);
@@ -941,158 +957,58 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
 		});
 	}
 
-	private boolean addClosureFolding(final PsiClass aClass, final Document document, final List<FoldingDescriptor> foldElements,
-			@NotNull Set<PsiElement> processedComments, final boolean quick)
+	private boolean addClosureFolding(@NotNull PsiClass aClass, @NotNull Document document, @NotNull List<FoldingDescriptor> foldElements, @NotNull Set<PsiElement> processedComments, boolean quick)
 	{
 		if(!JavaCodeFoldingSettings.getInstance().isCollapseLambdas())
 		{
 			return false;
 		}
 
-		boolean isClosure = false;
 		if(aClass instanceof PsiAnonymousClass)
 		{
 			final PsiAnonymousClass anonymousClass = (PsiAnonymousClass) aClass;
-			final PsiElement element = anonymousClass.getParent();
-			if(element instanceof PsiNewExpression)
+			ClosureFolding closureFolding = ClosureFolding.prepare(anonymousClass, quick, this);
+			List<NamedFoldingDescriptor> descriptors = closureFolding == null ? null : closureFolding.process(document);
+			if(descriptors != null)
 			{
-				final PsiNewExpression expression = (PsiNewExpression) element;
-				final PsiExpressionList argumentList = expression.getArgumentList();
-				if(argumentList != null && argumentList.getExpressions().length == 0)
-				{
-					final PsiMethod[] methods = anonymousClass.getMethods();
-					PsiClass baseClass = anonymousClass.getBaseClassType().resolve();
-					if(hasOnlyOneLambdaMethod(anonymousClass, !quick) && seemsLikeLambda(baseClass))
-					{
-						final PsiMethod method = methods[0];
-						final PsiCodeBlock body = method.getBody();
-						if(body != null)
-						{
-							isClosure = true;
-							int rangeStart = body.getTextRange().getStartOffset();
-							int rangeEnd = body.getTextRange().getEndOffset();
-							final PsiJavaToken lbrace = body.getLBrace();
-							if(lbrace != null)
-							{
-								rangeStart = lbrace.getTextRange().getEndOffset();
-							}
-							final PsiJavaToken rbrace = body.getRBrace();
-							if(rbrace != null)
-							{
-								rangeEnd = rbrace.getTextRange().getStartOffset();
-							}
-
-							final CharSequence seq = document.getCharsSequence();
-							final PsiElement classRBrace = anonymousClass.getRBrace();
-							if(classRBrace != null && rbrace != null)
-							{
-								final int methodEndLine = document.getLineNumber(rangeEnd);
-								final int methodEndLineStart = document.getLineStartOffset(methodEndLine);
-								if("}".equals(seq.subSequence(methodEndLineStart, document.getLineEndOffset(methodEndLine)).toString().trim()))
-								{
-									int classEndStart = classRBrace.getTextRange().getStartOffset();
-									int classEndCol = classEndStart - document.getLineStartOffset(document.getLineNumber(classEndStart));
-									rangeEnd = classEndCol + methodEndLineStart;
-								}
-							}
-
-							int firstLineStart = CharArrayUtil.shiftForward(seq, rangeStart, " \t");
-							if(firstLineStart < seq.length() - 1 && seq.charAt(firstLineStart) == '\n')
-							{
-								firstLineStart++;
-							}
-
-							int lastLineEnd = CharArrayUtil.shiftBackward(seq, rangeEnd - 1, " \t");
-							if(lastLineEnd > 0 && seq.charAt(lastLineEnd) == '\n')
-							{
-								lastLineEnd--;
-							}
-							if(lastLineEnd < firstLineStart)
-							{
-								return false;
-							}
-
-							String type = quick ? "" : getOptionalLambdaType(anonymousClass, expression);
-							String methodName = quick || !isImplementingLambdaMethod(baseClass) ? method.getName() : "";
-
-							final String params = StringUtil.join(method.getParameterList().getParameters(), new Function<PsiParameter, String>()
-							{
-								@Override
-								public String fun(final PsiParameter psiParameter)
-								{
-									return psiParameter.getName();
-								}
-							}, ", ");
-							@NonNls final String lambdas = type + methodName + "(" + params + ") -> {";
-
-							final int closureStart = expression.getTextRange().getStartOffset();
-							final int closureEnd = expression.getTextRange().getEndOffset();
-							boolean oneLine = false;
-							String contents = seq.subSequence(firstLineStart, lastLineEnd).toString();
-							if(contents.indexOf('\n') < 0)
-							{
-								final int beforeLength = closureStart - document.getLineStartOffset(document.getLineNumber(closureStart));
-								final int afterLength = document.getLineEndOffset(document.getLineNumber(closureEnd)) - closureEnd;
-								final int resultLineLength = beforeLength + lambdas.length() + contents.length() + 5 + afterLength;
-
-								if(isBelowRightMargin(aClass.getProject(), resultLineLength))
-								{
-									rangeStart = CharArrayUtil.shiftForward(seq, rangeStart, " \n\t");
-									rangeEnd = CharArrayUtil.shiftBackward(seq, rangeEnd - 1, " \n\t") + 1;
-									oneLine = true;
-								}
-							}
-
-							if(rangeStart >= rangeEnd)
-							{
-								return false;
-							}
-
-							FoldingGroup group = FoldingGroup.newGroup("lambda");
-
-							final String prettySpace = oneLine ? " " : "";
-
-							foldElements.add(new FoldingDescriptor(expression.getNode(), new TextRange(closureStart, rangeStart), group)
-							{
-								@Override
-								public String getPlaceholderText()
-								{
-									return lambdas + prettySpace;
-								}
-							});
-
-							if(rbrace != null && rangeEnd + 1 < closureEnd)
-							{
-								foldElements.add(new FoldingDescriptor(rbrace.getNode(), new TextRange(rangeEnd, closureEnd), group)
-								{
-									@Override
-									public String getPlaceholderText()
-									{
-										return prettySpace + "}";
-									}
-								});
-							}
-							addCodeBlockFolds(body, foldElements, processedComments, document, quick);
-						}
-					}
-				}
+				foldElements.addAll(descriptors);
+				addCodeBlockFolds(closureFolding.methodBody, foldElements, processedComments, document, quick);
+				return true;
 			}
 		}
-		return isClosure;
+		return false;
 	}
 
-	protected abstract boolean isBelowRightMargin(Project project, final int lineLength);
+	@NotNull
+	protected String rightArrow()
+	{
+		return "->";
+	}
+
+	boolean fitsRightMargin(@NotNull PsiElement element, @NotNull Document document, int foldingStart, int foldingEnd, int collapsedLength)
+	{
+		final int beforeLength = foldingStart - document.getLineStartOffset(document.getLineNumber(foldingStart));
+		final int afterLength = document.getLineEndOffset(document.getLineNumber(foldingEnd)) - foldingEnd;
+		return isBelowRightMargin(element.getProject(), beforeLength + collapsedLength + afterLength);
+	}
+
+	protected abstract boolean isBelowRightMargin(@NotNull Project project, final int lineLength);
 
 	@Override
-	protected boolean isCustomFoldingCandidate(ASTNode node)
+	protected boolean isCustomFoldingCandidate(@NotNull ASTNode node)
 	{
 		return node.getElementType() == JavaTokenType.END_OF_LINE_COMMENT;
 	}
 
 	@Override
-	protected boolean isCustomFoldingRoot(ASTNode node)
+	protected boolean isCustomFoldingRoot(@NotNull ASTNode node)
 	{
 		IElementType nodeType = node.getElementType();
-		return nodeType == JavaElementType.CLASS || nodeType == JavaElementType.CODE_BLOCK;
+		if(nodeType == JavaElementType.CLASS)
+		{
+			ASTNode parent = node.getTreeParent();
+			return parent == null || parent.getElementType() != JavaElementType.CLASS;
+		}
+		return nodeType == JavaElementType.CODE_BLOCK;
 	}
 }

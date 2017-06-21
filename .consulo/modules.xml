@@ -233,6 +233,7 @@
           <orderEntry type="module" module-name="java-psi-impl" />
           <orderEntry type="module" module-name="java-indexing-api" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
+          <orderEntry type="library" name="streamex" level="project" />
         </module-layer>
       </module>
       <module name="java-psi-impl" dirurl="file://$PROJECT_DIR$/java-psi-impl" current-layer="Default">
@@ -289,6 +290,7 @@
           <orderEntry type="module" module-name="java-execution-api" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.regexp" level="project" />
+          <orderEntry type="library" name="streamex" level="project" />
         </module-layer>
       </module>
       <module name="java-manifest" dirurl="file://$PROJECT_DIR$/java-manifest" current-layer="Default">

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,13 @@ import com.intellij.codeInspection.dataFlow.value.DfaRelationValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 
-/**
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Jul 16, 2003
- * Time: 10:25:44 PM
- * To change this template use Options | File Templates.
- */
 public interface DfaMemoryState
 {
+	@NotNull
 	DfaMemoryState createCopy();
+
+	@NotNull
+	DfaMemoryState createClosureState();
 
 	DfaValue pop();
 
@@ -43,9 +40,23 @@ public interface DfaMemoryState
 
 	void setVarValue(DfaVariableValue var, DfaValue value);
 
-	boolean applyInstanceofOrNull(DfaRelationValue dfaCond);
+	boolean applyInstanceofOrNull(@NotNull DfaRelationValue dfaCond);
 
 	boolean applyCondition(DfaValue dfaCond);
+
+	boolean applyContractCondition(DfaValue dfaCond);
+
+	/**
+	 * Returns a value fact about supplied value within the context of current memory state.
+	 * Returns null if the fact of given type is not known or not applicable to a given value.
+	 *
+	 * @param factType a type of the fact to get
+	 * @param value    a value to get the fact about
+	 * @param <T>      a type of the fact value
+	 * @return a fact about value, if known
+	 */
+	@Nullable
+	<T> T getValueFact(@NotNull DfaFactType<T> factType, @NotNull DfaValue value);
 
 	void flushFields();
 
@@ -58,13 +69,12 @@ public interface DfaMemoryState
 	boolean isNotNull(DfaValue dfaVar);
 
 	@Nullable
-	DfaConstValue getConstantValue(DfaVariableValue value);
+	DfaConstValue getConstantValue(@NotNull DfaVariableValue value);
 
 	/**
 	 * Ephemeral means a state that was created when considering a method contract and checking if one of its arguments is null.
 	 * With explicit null check, that would result in any non-annotated variable being treated as nullable and producing possible NPE warnings later.
-	 * With contracts, we don't want this. So the state where this variable is null is marked ephemeral and no NPE warnings are issued for such
-	 * states.
+	 * With contracts, we don't want this. So the state where this variable is null is marked ephemeral and no NPE warnings are issued for such states.
 	 */
 	void markEphemeral();
 

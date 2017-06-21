@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -113,6 +112,11 @@ public class DfaOptionalSupport
 		return null;
 	}
 
+	static boolean isOptionalGetMethodName(String name)
+	{
+		return "get".equals(name) || "getAsDouble".equals(name) || "getAsInt".equals(name) || "getAsLong".equals(name);
+	}
+
 	private static class ReplaceOptionalCallFix implements LocalQuickFix
 	{
 		private final String myTargetMethodName;
@@ -122,14 +126,6 @@ public class DfaOptionalSupport
 		{
 			myTargetMethodName = targetMethodName;
 			myClearArguments = clearArguments;
-		}
-
-		@Nls
-		@NotNull
-		@Override
-		public String getName()
-		{
-			return getFamilyName();
 		}
 
 		@NotNull
@@ -145,8 +141,8 @@ public class DfaOptionalSupport
 			final PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
 			if(methodCallExpression != null)
 			{
-				final PsiElement ofNullableExprName = ((PsiMethodCallExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("Optional." + myTargetMethodName + "(null)",
-						null)).getMethodExpression();
+				final PsiElement ofNullableExprName = ((PsiMethodCallExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("Optional." + myTargetMethodName + "(null)", null))
+						.getMethodExpression();
 				final PsiElement referenceNameElement = methodCallExpression.getMethodExpression().getReferenceNameElement();
 				if(referenceNameElement != null)
 				{

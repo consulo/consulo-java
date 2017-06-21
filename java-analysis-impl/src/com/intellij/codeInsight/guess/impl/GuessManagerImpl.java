@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.intellij.codeInspection.dataFlow.instructions.InstanceofInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.PushInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.TypeCastInstruction;
+import com.intellij.codeInspection.dataFlow.value.DfaInstanceofValue;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -47,6 +48,7 @@ import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.BitUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 public class GuessManagerImpl extends GuessManager
@@ -90,10 +92,11 @@ public class GuessManagerImpl extends GuessManager
 		myProject = project;
 	}
 
+	@NotNull
 	@Override
 	public PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore)
 	{
-		HashSet<PsiType> typesSet = new HashSet<PsiType>();
+		HashSet<PsiType> typesSet = new HashSet<>();
 
 		PsiType type = containerExpr.getType();
 		PsiType elemType;
@@ -113,7 +116,7 @@ public class GuessManagerImpl extends GuessManager
 				{
 					file = containerExpr.getContainingFile(); // implicit variable in jsp
 				}
-				HashSet<PsiVariable> checkedVariables = new HashSet<PsiVariable>();
+				HashSet<PsiVariable> checkedVariables = new HashSet<>();
 				addTypesByVariable(typesSet, (PsiVariable) refElement, file, checkedVariables, CHECK_USAGE | CHECK_DOWN, rangeToIgnore);
 				checkedVariables.clear();
 				addTypesByVariable(typesSet, (PsiVariable) refElement, file, checkedVariables, CHECK_UP, rangeToIgnore);
@@ -138,12 +141,14 @@ public class GuessManagerImpl extends GuessManager
 		return null;
 	}
 
+	@NotNull
 	@Override
 	public PsiType[] guessTypeToCast(PsiExpression expr)
-	{ //TODO : make better guess based on control flow
-		LinkedHashSet<PsiType> types = new LinkedHashSet<PsiType>();
+	{
+		//TODO : make better guess based on control flow
+		LinkedHashSet<PsiType> types = new LinkedHashSet<>();
 
-		ContainerUtil.addIfNotNull(getControlFlowExpressionType(expr), types);
+		ContainerUtil.addIfNotNull(types, getControlFlowExpressionType(expr));
 		addExprTypesWhenContainerElement(types, expr);
 		addExprTypesByDerivedClasses(types, expr);
 
@@ -180,6 +185,7 @@ public class GuessManagerImpl extends GuessManager
 
 		DataFlowRunner runner = new DataFlowRunner()
 		{
+			@NotNull
 			@Override
 			protected DfaMemoryState createMemoryState()
 			{
@@ -199,7 +205,7 @@ public class GuessManagerImpl extends GuessManager
 	{
 		assert forPlace.isValid();
 		final int start = forPlace.getTextRange().getStartOffset();
-		final Map<PsiExpression, PsiType> allCasts = new THashMap<PsiExpression, PsiType>(ExpressionTypeMemoryState.EXPRESSION_HASHING_STRATEGY);
+		final Map<PsiExpression, PsiType> allCasts = new THashMap<>(ExpressionTypeMemoryState.EXPRESSION_HASHING_STRATEGY);
 		getTopmostBlock(forPlace).accept(new JavaRecursiveElementWalkingVisitor()
 		{
 			@Override
@@ -278,8 +284,8 @@ public class GuessManagerImpl extends GuessManager
 		}
 
 		PsiManager manager = PsiManager.getInstance(myProject);
-		PsiElementProcessor.CollectElementsWithLimit<PsiClass> processor = new PsiElementProcessor.CollectElementsWithLimit<PsiClass>(5);
-		ClassInheritorsSearch.search(refClass, true).forEach(new PsiElementProcessorAdapter<PsiClass>(processor));
+		PsiElementProcessor.CollectElementsWithLimit<PsiClass> processor = new PsiElementProcessor.CollectElementsWithLimit<>(5);
+		ClassInheritorsSearch.search(refClass).forEach(new PsiElementProcessorAdapter<>(processor));
 		if(processor.isOverflow())
 		{
 			return;
@@ -339,13 +345,13 @@ public class GuessManagerImpl extends GuessManager
 		//System.out.println("analyzing usages of " + var + " in file " + scopeFile);
 		SearchScope searchScope = new LocalSearchScope(scopeFile);
 
-		if((flags & (CHECK_USAGE | CHECK_DOWN)) != 0)
+		if(BitUtil.isSet(flags, CHECK_USAGE) || BitUtil.isSet(flags, CHECK_DOWN))
 		{
 			for(PsiReference varRef : ReferencesSearch.search(var, searchScope, false))
 			{
 				PsiElement ref = varRef.getElement();
 
-				if((flags & CHECK_USAGE) != 0)
+				if(BitUtil.isSet(flags, CHECK_USAGE))
 				{
 					PsiType type = guessElementTypeFromReference(myMethodPatternMap, ref, rangeToIgnore);
 					if(type != null && !(type instanceof PsiPrimitiveType))
@@ -354,7 +360,7 @@ public class GuessManagerImpl extends GuessManager
 					}
 				}
 
-				if((flags & CHECK_DOWN) != 0)
+				if(BitUtil.isSet(flags, CHECK_DOWN))
 				{
 					if(ref.getParent() instanceof PsiExpressionList && ref.getParent().getParent() instanceof PsiMethodCallExpression)
 					{ //TODO : new
@@ -386,7 +392,7 @@ public class GuessManagerImpl extends GuessManager
 			}
 		}
 
-		if((flags & CHECK_UP) != 0)
+		if(BitUtil.isSet(flags, CHECK_UP))
 		{
 			if(var instanceof PsiParameter && var.getParent() instanceof PsiParameterList && var.getParent().getParent() instanceof PsiMethod)
 			{
@@ -538,7 +544,7 @@ public class GuessManagerImpl extends GuessManager
 		{
 			if(myResult == null)
 			{
-				myResult = new THashMap<PsiExpression, PsiType>(map, ExpressionTypeMemoryState.EXPRESSION_HASHING_STRATEGY);
+				myResult = new THashMap<>(map, ExpressionTypeMemoryState.EXPRESSION_HASHING_STRATEGY);
 			}
 			else
 			{

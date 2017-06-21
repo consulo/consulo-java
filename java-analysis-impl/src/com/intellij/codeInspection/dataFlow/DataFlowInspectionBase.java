@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Dec 24, 2001
- * Time: 2:46:32 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.swing.JComponent;
 
@@ -39,10 +34,11 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.impl.quickfix.SimplifyBooleanExpressionFix;
+import com.intellij.codeInsight.intention.impl.AddNotNullAnnotationFix;
 import com.intellij.codeInsight.intention.impl.AddNullableAnnotationFix;
 import com.intellij.codeInspection.AnnotateMethodFix;
 import com.intellij.codeInspection.BaseJavaBatchLocalInspectionTool;
@@ -52,19 +48,25 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.ReplaceWithTernaryOperatorFix;
+import com.intellij.codeInspection.dataFlow.fix.RedundantInstanceofFix;
+import com.intellij.codeInspection.dataFlow.fix.ReplaceWithConstantValueFix;
+import com.intellij.codeInspection.dataFlow.fix.ReplaceWithObjectsEqualsFix;
+import com.intellij.codeInspection.dataFlow.fix.SimplifyToAssignmentFix;
 import com.intellij.codeInspection.dataFlow.instructions.BinopInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.BranchingInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.InstanceofInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
+import com.intellij.codeInspection.dataFlow.instructions.PushInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.TypeCastInstruction;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
+import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.nullable.NullableStuffInspectionBase;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
@@ -74,25 +76,33 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.refactoring.extractMethod.ExtractMethodUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.SmartList;
+import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
+import com.siyeh.ig.psiutils.ComparisonUtils;
+import com.siyeh.ig.psiutils.ExpressionUtils;
+import com.siyeh.ig.psiutils.TypeUtils;
+import one.util.streamex.StreamEx;
 
+@SuppressWarnings("ConditionalExpressionWithIdenticalBranches")
 public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.DataFlowInspection");
 	@NonNls
 	private static final String SHORT_NAME = "ConstantConditions";
-	public boolean SUGGEST_NULLABLE_ANNOTATIONS = false;
-	public boolean DONT_REPORT_TRUE_ASSERT_STATEMENTS = false;
-	public boolean TREAT_UNKNOWN_MEMBERS_AS_NULLABLE = false;
-	public boolean IGNORE_ASSERT_STATEMENTS = false;
+	public boolean SUGGEST_NULLABLE_ANNOTATIONS;
+	public boolean DONT_REPORT_TRUE_ASSERT_STATEMENTS;
+	public boolean TREAT_UNKNOWN_MEMBERS_AS_NULLABLE;
+	public boolean IGNORE_ASSERT_STATEMENTS;
 	public boolean REPORT_CONSTANT_REFERENCE_VALUES = true;
+	public boolean REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER = true;
+	public boolean REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL = true;
+	public boolean REPORT_UNCHECKED_OPTIONALS = true;
 
 	@Override
 	public JComponent createOptionsPanel()
@@ -117,6 +127,18 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		{
 			node.addContent(new Element("option").setAttribute("name", "TREAT_UNKNOWN_MEMBERS_AS_NULLABLE").setAttribute("value", "true"));
 		}
+		if(!REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER)
+		{
+			node.addContent(new Element("option").setAttribute("name", "REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER").setAttribute("value", "false"));
+		}
+		if(!REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL)
+		{
+			node.addContent(new Element("option").setAttribute("name", "REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL").setAttribute("value", "false"));
+		}
+		if(!REPORT_UNCHECKED_OPTIONALS)
+		{
+			node.addContent(new Element("option").setAttribute("name", "REPORT_UNCHECKED_OPTIONALS").setAttribute("value", "false"));
+		}
 	}
 
 	@Override
@@ -135,6 +157,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			public void visitMethod(PsiMethod method)
 			{
 				analyzeCodeBlock(method.getBody(), holder, isOnTheFly);
+				analyzeNullLiteralMethodArguments(method, holder, isOnTheFly);
 			}
 
 			@Override
@@ -165,7 +188,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			@Override
 			public void visitIfStatement(PsiIfStatement statement)
 			{
-				PsiExpression condition = statement.getCondition();
+				PsiExpression condition = PsiUtil.skipParenthesizedExprDown(statement.getCondition());
 				if(BranchingInstruction.isBoolConst(condition))
 				{
 					LocalQuickFix fix = createSimplifyBooleanExpressionFix(condition, condition.textMatches(PsiKeyword.TRUE));
@@ -173,7 +196,50 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 				}
 			}
 
+			@Override
+			public void visitWhileStatement(PsiWhileStatement statement)
+			{
+				checkLoopCondition(statement.getCondition());
+			}
+
+			@Override
+			public void visitDoWhileStatement(PsiDoWhileStatement statement)
+			{
+				checkLoopCondition(statement.getCondition());
+			}
+
+			@Override
+			public void visitForStatement(PsiForStatement statement)
+			{
+				checkLoopCondition(statement.getCondition());
+			}
+
+			private void checkLoopCondition(PsiExpression condition)
+			{
+				condition = PsiUtil.skipParenthesizedExprDown(condition);
+				if(condition != null && condition.textMatches(PsiKeyword.FALSE))
+				{
+					holder.registerProblem(condition, "Condition is always false", createSimplifyBooleanExpressionFix(condition, false));
+				}
+			}
 		};
+	}
+
+	protected LocalQuickFix createNavigateToNullParameterUsagesFix(PsiParameter parameter)
+	{
+		return null;
+	}
+
+	private void analyzeNullLiteralMethodArguments(PsiMethod method, ProblemsHolder holder, boolean isOnTheFly)
+	{
+		if(REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER && isOnTheFly)
+		{
+			for(PsiParameter parameter : NullParameterConstraintChecker.checkMethodParameters(method))
+			{
+				holder.registerProblem(parameter.getNameIdentifier(), InspectionsBundle.message("dataflow.method.fails.with.null.argument"), ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+						createNavigateToNullParameterUsagesFix(parameter));
+			}
+		}
 	}
 
 	private void analyzeCodeBlock(@Nullable final PsiElement scope, ProblemsHolder holder, final boolean onTheFly)
@@ -189,19 +255,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			return;
 		}
 
-		final StandardDataFlowRunner dfaRunner = new StandardDataFlowRunner(TREAT_UNKNOWN_MEMBERS_AS_NULLABLE, !isInsideConstructorOrInitializer(scope))
-		{
-			@Override
-			protected boolean shouldCheckTimeLimit()
-			{
-				if(!onTheFly)
-				{
-					return false;
-				}
-				return super.shouldCheckTimeLimit();
-			}
-		};
-		analyzeDfaWithNestedClosures(scope, holder, dfaRunner, Arrays.asList(dfaRunner.createMemoryState()), onTheFly);
+		final StandardDataFlowRunner dfaRunner = new StandardDataFlowRunner(TREAT_UNKNOWN_MEMBERS_AS_NULLABLE, !isInsideConstructorOrInitializer(scope));
+		analyzeDfaWithNestedClosures(scope, holder, dfaRunner, Collections.singletonList(dfaRunner.createMemoryState()), onTheFly);
 	}
 
 	private static boolean isInsideConstructorOrInitializer(PsiElement element)
@@ -221,14 +276,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 				}
 
 				final PsiClass containingClass = ((PsiMethod) element).getContainingClass();
-				return !InheritanceUtil.processSupers(containingClass, true, new Processor<PsiClass>()
-				{
-					@Override
-					public boolean process(PsiClass psiClass)
-					{
-						return !canCallMethodsInConstructors(psiClass, psiClass != containingClass);
-					}
-				});
+				return !InheritanceUtil.processSupers(containingClass, true, psiClass -> !canCallMethodsInConstructors(psiClass, psiClass != containingClass));
 
 			}
 		}
@@ -253,7 +301,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			for(PsiMethodCallExpression call : SyntaxTraverser.psiTraverser().withRoot(body).filter(PsiMethodCallExpression.class))
 			{
 				PsiReferenceExpression methodExpression = call.getMethodExpression();
-				if(methodExpression instanceof PsiThisExpression || methodExpression instanceof PsiSuperExpression)
+				if(methodExpression.textMatches(PsiKeyword.THIS) || methodExpression.textMatches(PsiKeyword.SUPER))
 				{
 					continue;
 				}
@@ -301,27 +349,22 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		}
 	}
 
-	@Nullable
-	private LocalQuickFix[] createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly)
+	@NotNull
+	private List<LocalQuickFix> createNPEFixes(PsiExpression qualifier, PsiExpression expression, boolean onTheFly)
 	{
+		final List<LocalQuickFix> fixes = new SmartList<>();
 		if(qualifier == null || expression == null)
 		{
-			return null;
-		}
-		if(qualifier instanceof PsiMethodCallExpression)
-		{
-			return null;
+			return fixes;
 		}
 
 		try
 		{
-			final List<LocalQuickFix> fixes = new SmartList<LocalQuickFix>();
-
 			if(isVolatileFieldReference(qualifier))
 			{
 				ContainerUtil.addIfNotNull(fixes, createIntroduceVariableFix(qualifier));
 			}
-			else if(!(qualifier instanceof PsiLiteralExpression && ((PsiLiteralExpression) qualifier).getValue() == null))
+			else if(!isNullLiteral(qualifier) && !(qualifier instanceof PsiMethodCallExpression))
 			{
 				if(PsiUtil.getLanguageLevel(qualifier).isAtLeast(LanguageLevel.JDK_1_4))
 				{
@@ -341,13 +384,17 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			}
 
 			ContainerUtil.addIfNotNull(fixes, DfaOptionalSupport.registerReplaceOptionalOfWithOfNullableFix(qualifier));
-			return fixes.isEmpty() ? null : fixes.toArray(new LocalQuickFix[fixes.size()]);
 		}
 		catch(IncorrectOperationException e)
 		{
 			LOG.error(e);
-			return null;
 		}
+		return fixes;
+	}
+
+	private static boolean isNullLiteral(PsiExpression qualifier)
+	{
+		return qualifier instanceof PsiLiteralExpression && ((PsiLiteralExpression) qualifier).getValue() == null;
 	}
 
 	@Nullable
@@ -367,6 +414,11 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		return null;
 	}
 
+	protected LocalQuickFix createReplaceWithTrivialLambdaFix(Object value)
+	{
+		return null;
+	}
+
 	protected void addSurroundWithIfFix(PsiExpression qualifier, List<LocalQuickFix> fixes, boolean onTheFly)
 	{
 	}
@@ -377,20 +429,14 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		Set<Instruction> trueSet = constConditions.getFirst();
 		Set<Instruction> falseSet = constConditions.getSecond();
 
-		ArrayList<Instruction> allProblems = new ArrayList<Instruction>();
+		ArrayList<Instruction> allProblems = new ArrayList<>();
 		allProblems.addAll(trueSet);
 		allProblems.addAll(falseSet);
 		allProblems.addAll(visitor.myCCEInstructions);
-		allProblems.addAll(ContainerUtil.filter(runner.getInstructions(), new Condition<Instruction>()
-		{
-			@Override
-			public boolean value(Instruction instruction1)
-			{
-				return instruction1 instanceof InstanceofInstruction && visitor.isInstanceofRedundant((InstanceofInstruction) instruction1);
-			}
-		}));
+		allProblems.addAll(ContainerUtil.filter(runner.getInstructions(), instruction1 -> instruction1 instanceof InstanceofInstruction && visitor.isInstanceofRedundant((InstanceofInstruction)
+				instruction1)));
 
-		HashSet<PsiElement> reportedAnchors = new HashSet<PsiElement>();
+		HashSet<PsiElement> reportedAnchors = new HashSet<>();
 		for(PsiElement element : visitor.getProblems(NullabilityProblem.callNPE))
 		{
 			if(reportedAnchors.add(element))
@@ -420,6 +466,10 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			}
 		}
 
+		reportAlwaysFailingCalls(holder, visitor, reportedAnchors);
+
+		reportConstantPushes(runner, holder, visitor, reportedAnchors);
+
 		reportNullableArguments(visitor, holder, reportedAnchors);
 		reportNullableAssignments(visitor, holder, reportedAnchors);
 		reportUnboxedNullables(visitor, holder, reportedAnchors);
@@ -431,10 +481,173 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 		reportOptionalOfNullableImprovements(holder, reportedAnchors, runner.getInstructions());
 
+		reportUncheckedOptionalGet(holder, visitor.getOptionalCalls(), visitor.getOptionalQualifiers());
+
+		visitor.getBooleanCalls().forEach((call, state) ->
+		{
+			if(state != ThreeState.UNSURE && reportedAnchors.add(call))
+			{
+				reportConstantCondition(holder, visitor, call, state.toBoolean());
+			}
+		});
+
+		reportMethodReferenceProblems(holder, visitor);
+
+		reportArrayAccessProblems(holder, visitor);
 
 		if(REPORT_CONSTANT_REFERENCE_VALUES)
 		{
 			reportConstantReferenceValues(holder, visitor, reportedAnchors);
+		}
+
+		if(REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL && visitor.isAlwaysReturnsNotNull())
+		{
+			reportAlwaysReturnsNotNull(holder, scope);
+		}
+	}
+
+	private static void reportArrayAccessProblems(ProblemsHolder holder, DataFlowInstructionVisitor visitor)
+	{
+		visitor.outOfBoundsArrayAccesses().forEach(access ->
+		{
+			PsiExpression indexExpression = access.getIndexExpression();
+			if(indexExpression != null)
+			{
+				holder.registerProblem(indexExpression, InspectionsBundle.message("dataflow.message.array.index.out.of.bounds"));
+			}
+		});
+	}
+
+	private void reportMethodReferenceProblems(ProblemsHolder holder, DataFlowInstructionVisitor visitor)
+	{
+		visitor.getMethodReferenceResults().forEach((methodRef, dfaValue) ->
+		{
+			if(dfaValue instanceof DfaConstValue)
+			{
+				Object value = ((DfaConstValue) dfaValue).getValue();
+				if(value instanceof Boolean)
+				{
+					holder.registerProblem(methodRef, InspectionsBundle.message("dataflow.message.constant.method.reference", value), createReplaceWithTrivialLambdaFix(value));
+				}
+			}
+		});
+	}
+
+	private void reportUncheckedOptionalGet(ProblemsHolder holder, Map<PsiMethodCallExpression, ThreeState> calls, List<PsiExpression> qualifiers)
+	{
+		if(!REPORT_UNCHECKED_OPTIONALS)
+		{
+			return;
+		}
+		for(Map.Entry<PsiMethodCallExpression, ThreeState> entry : calls.entrySet())
+		{
+			ThreeState state = entry.getValue();
+			if(state != ThreeState.UNSURE)
+			{
+				continue;
+			}
+			PsiMethodCallExpression call = entry.getKey();
+			PsiMethod method = call.resolveMethod();
+			if(method == null)
+			{
+				continue;
+			}
+			PsiClass optionalClass = method.getContainingClass();
+			if(optionalClass == null)
+			{
+				continue;
+			}
+			PsiExpression qualifier = PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression());
+			if(qualifier instanceof PsiMethodCallExpression && qualifiers.stream().anyMatch(q -> PsiEquivalenceUtil.areElementsEquivalent(q, qualifier)))
+			{
+				// Conservatively do not report methodCall().get() cases if methodCall().isPresent() was found in the same method
+				// without deep correspondence analysis
+				continue;
+			}
+			holder.registerProblem(getElementToHighlight(call), InspectionsBundle.message("dataflow.message.optional.get.without.is.present", optionalClass.getName()));
+		}
+	}
+
+	private static void reportAlwaysReturnsNotNull(ProblemsHolder holder, PsiElement scope)
+	{
+		if(!(scope.getParent() instanceof PsiMethod))
+		{
+			return;
+		}
+
+		PsiMethod method = (PsiMethod) scope.getParent();
+		if(PsiUtil.canBeOverriden(method))
+		{
+			return;
+		}
+
+		PsiAnnotation nullableAnno = NullableNotNullManager.getInstance(scope.getProject()).getNullableAnnotation(method, false);
+		if(nullableAnno == null || !nullableAnno.isPhysical())
+		{
+			return;
+		}
+
+		PsiJavaCodeReferenceElement annoName = nullableAnno.getNameReferenceElement();
+		assert annoName != null;
+		String msg = "@" + NullableStuffInspectionBase.getPresentableAnnoName(nullableAnno) + " method '" + method.getName() + "' always return a non-null value";
+		holder.registerProblem(annoName, msg, new AddNotNullAnnotationFix(method));
+	}
+
+	private static void reportAlwaysFailingCalls(ProblemsHolder holder, DataFlowInstructionVisitor visitor, HashSet<PsiElement> reportedAnchors)
+	{
+		if(ProjectFileIndex.SERVICE.getInstance(holder.getProject()).isInTestSourceContent(holder.getFile().getViewProvider().getVirtualFile()))
+		{
+			return;
+		}
+
+		for(PsiCall call : visitor.getAlwaysFailingCalls())
+		{
+			PsiMethod method = call.resolveMethod();
+			if(method != null && reportedAnchors.add(call))
+			{
+				holder.registerProblem(getElementToHighlight(call), "The call to '#ref' always fails, according to its method contracts");
+			}
+		}
+	}
+
+	@NotNull
+	private static PsiElement getElementToHighlight(@NotNull PsiCall call)
+	{
+		PsiJavaCodeReferenceElement ref;
+		if(call instanceof PsiNewExpression)
+		{
+			ref = ((PsiNewExpression) call).getClassReference();
+		}
+		else if(call instanceof PsiMethodCallExpression)
+		{
+			ref = ((PsiMethodCallExpression) call).getMethodExpression();
+		}
+		else
+		{
+			return call;
+		}
+		if(ref != null)
+		{
+			PsiElement name = ref.getReferenceNameElement();
+			return name != null ? name : ref;
+		}
+		return call;
+	}
+
+	private void reportConstantPushes(StandardDataFlowRunner runner, ProblemsHolder holder, DataFlowInstructionVisitor visitor, Set<PsiElement> reportedAnchors)
+	{
+		for(Instruction instruction : runner.getInstructions())
+		{
+			if(instruction instanceof PushInstruction)
+			{
+				PsiExpression place = ((PushInstruction) instruction).getPlace();
+				DfaValue value = ((PushInstruction) instruction).getValue();
+				Object constant = value instanceof DfaConstValue ? ((DfaConstValue) value).getValue() : null;
+				if(place instanceof PsiPolyadicExpression && constant instanceof Boolean && !isFlagCheck(place) && reportedAnchors.add(place))
+				{
+					reportConstantCondition(holder, visitor, place, (Boolean) constant);
+				}
+			}
 		}
 	}
 
@@ -492,49 +705,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 				continue;
 			}
 
-			holder.registerProblem(ref, "Value <code>#ref</code> #loc is always '" + presentableName + "'", new LocalQuickFix()
-			{
-				@NotNull
-				@Override
-				public String getName()
-				{
-					return "Replace with '" + presentableName + "'";
-				}
-
-				@NotNull
-				@Override
-				public String getFamilyName()
-				{
-					return "Replace with constant value";
-				}
-
-				@Override
-				public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
-				{
-					if(!FileModificationService.getInstance().preparePsiElementsForWrite(descriptor.getPsiElement()))
-					{
-						return;
-					}
-
-					PsiElement problemElement = descriptor.getPsiElement();
-					if(problemElement == null)
-					{
-						return;
-					}
-
-					PsiMethodCallExpression call = problemElement.getParent() instanceof PsiExpressionList && problemElement.getParent().getParent() instanceof PsiMethodCallExpression ?
-							(PsiMethodCallExpression) problemElement.getParent().getParent() : null;
-					PsiMethod targetMethod = call == null ? null : call.resolveMethod();
-
-					JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-					problemElement.replace(facade.getElementFactory().createExpressionFromText(exprText, null));
-
-					if(targetMethod != null)
-					{
-						ExtractMethodUtil.addCastsToEnsureResolveTarget(targetMethod, call);
-					}
-				}
-			});
+			holder.registerProblem(ref, "Value <code>#ref</code> #loc is always '" + presentableName + "'", new ReplaceWithConstantValueFix(presentableName, exprText));
 		}
 	}
 
@@ -549,7 +720,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 			final String text = isNullLiteralExpression(expr) ? "Passing <code>null</code> argument to non annotated parameter" : "Argument <code>#ref</code> #loc might be null but passed to non " +
 					"annotated parameter";
-			LocalQuickFix[] fixes = createNPEFixes((PsiExpression) expr, (PsiExpression) expr, holder.isOnTheFly());
+			List<LocalQuickFix> fixes = createNPEFixes((PsiExpression) expr, (PsiExpression) expr, holder.isOnTheFly());
 			final PsiElement parent = expr.getParent();
 			if(parent instanceof PsiExpressionList)
 			{
@@ -565,9 +736,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 							final PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
 							if(idx < parameters.length)
 							{
-								final AddNullableAnnotationFix addNullableAnnotationFix = new AddNullableAnnotationFix(parameters[idx]);
-								fixes = fixes == null ? new LocalQuickFix[]{addNullableAnnotationFix} : ArrayUtil.append(fixes, addNullableAnnotationFix);
-								holder.registerProblem(expr, text, fixes);
+								fixes.add(new AddNullableAnnotationFix(parameters[idx]));
+								holder.registerProblem(expr, text, fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
 								reportedAnchors.add(expr);
 							}
 						}
@@ -580,23 +750,27 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 	private void reportCallMayProduceNpe(ProblemsHolder holder, PsiMethodCallExpression callExpression, boolean onTheFly)
 	{
-		LocalQuickFix[] fix = createNPEFixes(callExpression.getMethodExpression().getQualifierExpression(), callExpression, onTheFly);
+		PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
+		List<LocalQuickFix> fixes = createNPEFixes(methodExpression.getQualifierExpression(), callExpression, onTheFly);
+		ContainerUtil.addIfNotNull(fixes, ReplaceWithObjectsEqualsFix.createFix(callExpression, methodExpression));
 
-		holder.registerProblem(callExpression, InspectionsBundle.message("dataflow.message.npe.method.invocation"), fix);
+		PsiElement toHighlight = getElementToHighlight(callExpression);
+		holder.registerProblem(toHighlight, InspectionsBundle.message("dataflow.message.npe.method.invocation"), fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
 	}
 
-	private void reportFieldAccessMayProduceNpe(ProblemsHolder holder, PsiElement elementToAssert, PsiExpression expression)
+	private void reportFieldAccessMayProduceNpe(ProblemsHolder holder, PsiElement elementToAssert, @NotNull PsiExpression expression)
 	{
+		LocalQuickFix[] fix = createNPEFixes((PsiExpression) elementToAssert, expression, holder.isOnTheFly()).toArray(LocalQuickFix.EMPTY_ARRAY);
 		if(expression instanceof PsiArrayAccessExpression)
 		{
-			LocalQuickFix[] fix = createNPEFixes((PsiExpression) elementToAssert, expression, holder.isOnTheFly());
 			holder.registerProblem(expression, InspectionsBundle.message("dataflow.message.npe.array.access"), fix);
 		}
 		else
 		{
-			LocalQuickFix[] fix = createNPEFixes((PsiExpression) elementToAssert, expression, holder.isOnTheFly());
 			assert elementToAssert != null;
-			holder.registerProblem(elementToAssert, InspectionsBundle.message("dataflow.message.npe.field.access"), fix);
+			//noinspection ConditionalExpressionWithIdenticalBranches
+			holder.registerProblem(elementToAssert, expression.textMatches("null") ? InspectionsBundle.message("dataflow.message.npe.field.access.sure") : InspectionsBundle.message("dataflow.message" +
+					".npe.field.access"), fix);
 		}
 	}
 
@@ -619,7 +793,6 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			final boolean onTheFly)
 	{
 		PsiElement psiAnchor = instruction.getPsiAnchor();
-		boolean underBinary = isAtRHSOfBooleanAnd(psiAnchor);
 		if(instruction instanceof InstanceofInstruction && visitor.isInstanceofRedundant((InstanceofInstruction) instruction))
 		{
 			if(visitor.canBeNull((BinopInstruction) instruction))
@@ -629,8 +802,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			else
 			{
 				final LocalQuickFix localQuickFix = createSimplifyBooleanExpressionFix(psiAnchor, true);
-				holder.registerProblem(psiAnchor, InspectionsBundle.message(underBinary ? "dataflow.message.constant.condition.when.reached" : "dataflow.message.constant.condition",
-						Boolean.toString(true)), localQuickFix == null ? null : new LocalQuickFix[]{localQuickFix});
+				holder.registerProblem(psiAnchor, InspectionsBundle.message(isAtRHSOfBooleanAnd(psiAnchor) ? "dataflow.message.constant.condition.when.reached" : "dataflow.message.constant" +
+						".condition", Boolean.toString(true)), localQuickFix == null ? null : new LocalQuickFix[]{localQuickFix});
 			}
 		}
 		else if(psiAnchor instanceof PsiSwitchLabelStatement)
@@ -646,17 +819,39 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			final PsiElement parent = psiAnchor.getParent();
 			if(parent instanceof PsiAssignmentExpression && ((PsiAssignmentExpression) parent).getLExpression() == psiAnchor)
 			{
-				holder.registerProblem(psiAnchor, InspectionsBundle.message("dataflow.message.pointless.assignment.expression", Boolean.toString(evaluatesToTrue)),
-						createConditionalAssignmentFixes(evaluatesToTrue, (PsiAssignmentExpression) parent, onTheFly));
+				holder.registerProblem(psiAnchor, InspectionsBundle.message("dataflow.message.pointless.assignment.expression", Boolean.toString(evaluatesToTrue)), createConditionalAssignmentFixes
+						(evaluatesToTrue, (PsiAssignmentExpression) parent, onTheFly));
 			}
-			else if(!skipReportingConstantCondition(visitor, psiAnchor, evaluatesToTrue))
+			else
 			{
-				final LocalQuickFix fix = createSimplifyBooleanExpressionFix(psiAnchor, evaluatesToTrue);
-				String message = InspectionsBundle.message(underBinary ? "dataflow.message.constant.condition.when.reached" : "dataflow.message.constant.condition",
-						Boolean.toString(evaluatesToTrue));
-				holder.registerProblem(psiAnchor, message, fix == null ? null : new LocalQuickFix[]{fix});
+				reportConstantCondition(holder, visitor, psiAnchor, evaluatesToTrue);
 			}
 			reportedAnchors.add(psiAnchor);
+		}
+	}
+
+	private void reportConstantCondition(ProblemsHolder holder, StandardInstructionVisitor visitor, PsiElement psiAnchor, boolean evaluatesToTrue)
+	{
+		if(!skipReportingConstantCondition(visitor, psiAnchor, evaluatesToTrue))
+		{
+			if(psiAnchor.getParent() instanceof PsiForeachStatement)
+			{
+				// highlighted for-each iterated value means evaluatesToTrue == "collection is always empty"
+				if(!evaluatesToTrue)
+				{
+					// loop on always non-empty collection -- nothing to report
+					return;
+				}
+				boolean array = psiAnchor instanceof PsiExpression && ((PsiExpression) psiAnchor).getType() instanceof PsiArrayType;
+				holder.registerProblem(psiAnchor, array ? InspectionsBundle.message("dataflow.message.loop.on.empty.array") : InspectionsBundle.message("dataflow.message.loop.on.empty.collection"));
+			}
+			else
+			{
+				final LocalQuickFix fix = createSimplifyBooleanExpressionFix(psiAnchor, evaluatesToTrue);
+				String message = InspectionsBundle.message(isAtRHSOfBooleanAnd(psiAnchor) ? "dataflow.message.constant.condition.when.reached" : "dataflow.message.constant.condition", Boolean
+						.toString(evaluatesToTrue));
+				holder.registerProblem(psiAnchor, message, fix == null ? null : new LocalQuickFix[]{fix});
+			}
 		}
 	}
 
@@ -681,8 +876,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 			final String text = isNullLiteralExpression(expr) ? InspectionsBundle.message("dataflow.message.passing.null.argument") : InspectionsBundle.message("dataflow.message.passing.nullable" +
 					".argument");
-			LocalQuickFix[] fixes = createNPEFixes((PsiExpression) expr, (PsiExpression) expr, holder.isOnTheFly());
-			holder.registerProblem(expr, text, fixes);
+			List<LocalQuickFix> fixes = createNPEFixes((PsiExpression) expr, (PsiExpression) expr, holder.isOnTheFly());
+			holder.registerProblem(expr, text, fixes.toArray(LocalQuickFix.EMPTY_ARRAY));
 		}
 	}
 
@@ -735,8 +930,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			return;
 		}
 
-		boolean notNullRequired = NullableNotNullManager.isNotNull(method);
-		if(!notNullRequired && !SUGGEST_NULLABLE_ANNOTATIONS)
+		PsiAnnotation notNullAnno = NullableNotNullManager.getInstance(method.getProject()).getNotNullAnnotation(method, true);
+		if(notNullAnno == null && (!SUGGEST_NULLABLE_ANNOTATIONS || block.getParent() instanceof PsiLambdaExpression))
 		{
 			return;
 		}
@@ -763,10 +958,11 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 				continue;
 			}
 
-			if(notNullRequired)
+			if(notNullAnno != null)
 			{
-				final String text = isNullLiteralExpression(expr) ? InspectionsBundle.message("dataflow.message.return.null.from.notnull") : InspectionsBundle.message("dataflow.message.return" +
-						".nullable.from.notnull");
+				String presentable = NullableStuffInspectionBase.getPresentableAnnoName(notNullAnno);
+				final String text = isNullLiteralExpression(expr) ? InspectionsBundle.message("dataflow.message.return.null.from.notnull", presentable) : InspectionsBundle.message("dataflow.message" +
+						".return.nullable.from.notnull", presentable);
 				holder.registerProblem(expr, text);
 			}
 			else if(AnnotationUtil.isAnnotatingApplicable(statement))
@@ -774,8 +970,8 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 				final NullableNotNullManager manager = NullableNotNullManager.getInstance(expr.getProject());
 				final String defaultNullable = manager.getDefaultNullable();
 				final String presentableNullable = StringUtil.getShortName(defaultNullable);
-				final String text = isNullLiteralExpression(expr) ? InspectionsBundle.message("dataflow.message.return.null.from.notnullable",
-						presentableNullable) : InspectionsBundle.message("dataflow.message.return.nullable.from.notnullable", presentableNullable);
+				final String text = isNullLiteralExpression(expr) ? InspectionsBundle.message("dataflow.message.return.null.from.notnullable", presentableNullable) : InspectionsBundle.message
+						("dataflow.message.return.nullable.from.notnullable", presentableNullable);
 				final LocalQuickFix[] fixes = PsiTreeUtil.getParentOfType(expr, PsiMethod.class, PsiLambdaExpression.class) instanceof PsiLambdaExpression ? LocalQuickFix.EMPTY_ARRAY : new
 						LocalQuickFix[]{
 						new AnnotateMethodFix(defaultNullable, ArrayUtil.toStringArray(manager.getNotNulls()))
@@ -839,35 +1035,59 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 	private static boolean isFlagCheck(PsiElement element)
 	{
-		PsiStatement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
-		if(!(statement instanceof PsiIfStatement))
+		PsiElement scope = PsiTreeUtil.getParentOfType(element, PsiStatement.class, PsiVariable.class);
+		PsiExpression topExpression = scope instanceof PsiIfStatement ? ((PsiIfStatement) scope).getCondition() : scope instanceof PsiVariable ? ((PsiVariable) scope).getInitializer() : null;
+		if(!PsiTreeUtil.isAncestor(topExpression, element, false))
 		{
 			return false;
 		}
 
-		PsiExpression condition = ((PsiIfStatement) statement).getCondition();
-		if(!PsiTreeUtil.isAncestor(condition, element, false))
-		{
-			return false;
-		}
-
-		if(isCompileTimeFlagReference(condition))
-		{
-			return true;
-		}
-
-		Collection<PsiReferenceExpression> refs = PsiTreeUtil.findChildrenOfType(condition, PsiReferenceExpression.class);
-		return ContainerUtil.or(refs, new Condition<PsiReferenceExpression>()
-		{
-			@Override
-			public boolean value(PsiReferenceExpression ref)
-			{
-				return isCompileTimeFlagReference(ref);
-			}
-		});
+		return StreamEx.<PsiElement>ofTree(topExpression, e -> StreamEx.of(e.getChildren())).anyMatch(DataFlowInspectionBase::isCompileTimeFlagCheck);
 	}
 
-	private static boolean isCompileTimeFlagReference(PsiElement element)
+	private static boolean isCompileTimeFlagCheck(PsiElement element)
+	{
+		if(element instanceof PsiBinaryExpression)
+		{
+			PsiBinaryExpression binOp = (PsiBinaryExpression) element;
+			if(ComparisonUtils.isComparisonOperation(binOp.getOperationTokenType()))
+			{
+				PsiExpression comparedWith = null;
+				if(ExpressionUtils.isLiteral(binOp.getROperand()))
+				{
+					comparedWith = binOp.getLOperand();
+				}
+				else if(ExpressionUtils.isLiteral(binOp.getLOperand()))
+				{
+					comparedWith = binOp.getROperand();
+				}
+				comparedWith = PsiUtil.skipParenthesizedExprDown(comparedWith);
+				if(isConstantOfType(comparedWith, PsiType.INT, PsiType.LONG))
+				{
+					// like "if(DEBUG_LEVEL > 2)"
+					return true;
+				}
+				if(comparedWith instanceof PsiBinaryExpression)
+				{
+					PsiBinaryExpression subOp = (PsiBinaryExpression) comparedWith;
+					if(subOp.getOperationTokenType().equals(JavaTokenType.AND))
+					{
+						PsiExpression left = PsiUtil.skipParenthesizedExprDown(subOp.getLOperand());
+						PsiExpression right = PsiUtil.skipParenthesizedExprDown(subOp.getROperand());
+						if(isConstantOfType(left, PsiType.INT, PsiType.LONG) || isConstantOfType(right, PsiType.INT, PsiType.LONG))
+						{
+							// like "if((FLAGS & SOME_FLAG) != 0)"
+							return true;
+						}
+					}
+				}
+			}
+		}
+		// like "if(DEBUG)"
+		return isConstantOfType(element, PsiType.BOOLEAN);
+	}
+
+	private static boolean isConstantOfType(PsiElement element, PsiPrimitiveType... types)
 	{
 		PsiElement resolved = element instanceof PsiReferenceExpression ? ((PsiReferenceExpression) element).resolve() : null;
 		if(!(resolved instanceof PsiField))
@@ -875,8 +1095,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 			return false;
 		}
 		PsiField field = (PsiField) resolved;
-		return field.hasModifierProperty(PsiModifier.FINAL) && field.hasModifierProperty(PsiModifier.STATIC) &&
-				PsiType.BOOLEAN.equals(field.getType());
+		return field.hasModifierProperty(PsiModifier.FINAL) && field.hasModifierProperty(PsiModifier.STATIC) && ArrayUtil.contains(field.getType(), types);
 	}
 
 	private static boolean isNullLiteralExpression(PsiElement expr)
@@ -943,44 +1162,7 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 	@NotNull
 	protected static LocalQuickFix createSimplifyToAssignmentFix()
 	{
-		return new LocalQuickFix()
-		{
-			@NotNull
-			@Override
-			public String getName()
-			{
-				return InspectionsBundle.message("inspection.data.flow.simplify.to.assignment.quickfix.name");
-			}
-
-			@NotNull
-			@Override
-			public String getFamilyName()
-			{
-				return InspectionsBundle.message("inspection.data.flow.simplify.boolean.expression.quickfix");
-			}
-
-			@Override
-			public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
-			{
-				final PsiElement psiElement = descriptor.getPsiElement();
-				if(psiElement == null)
-				{
-					return;
-				}
-
-				final PsiAssignmentExpression assignmentExpression = PsiTreeUtil.getParentOfType(psiElement, PsiAssignmentExpression.class);
-				if(assignmentExpression == null)
-				{
-					return;
-				}
-
-				final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-				final String lExpressionText = assignmentExpression.getLExpression().getText();
-				final PsiExpression rExpression = assignmentExpression.getRExpression();
-				final String rExpressionText = rExpression != null ? rExpression.getText() : "";
-				assignmentExpression.replace(factory.createExpressionFromText(lExpressionText + " = " + rExpressionText, psiElement));
-			}
-		};
+		return new SimplifyToAssignmentFix();
 	}
 
 	private static SimplifyBooleanExpressionFix createIntention(PsiElement element, boolean value)
@@ -1008,46 +1190,6 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 		return fix;
 	}
 
-	private static class RedundantInstanceofFix implements LocalQuickFix
-	{
-		@Override
-		@NotNull
-		public String getName()
-		{
-			return InspectionsBundle.message("inspection.data.flow.redundant.instanceof.quickfix");
-		}
-
-		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
-		{
-			if(!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement()))
-			{
-				return;
-			}
-			final PsiElement psiElement = descriptor.getPsiElement();
-			if(psiElement instanceof PsiInstanceOfExpression)
-			{
-				try
-				{
-					final PsiExpression compareToNull = JavaPsiFacade.getInstance(psiElement.getProject()).getElementFactory().
-							createExpressionFromText(((PsiInstanceOfExpression) psiElement).getOperand().getText() + " != null", psiElement.getParent());
-					psiElement.replace(compareToNull);
-				}
-				catch(IncorrectOperationException e)
-				{
-					LOG.error(e);
-				}
-			}
-		}
-
-		@Override
-		@NotNull
-		public String getFamilyName()
-		{
-			return getName();
-		}
-	}
-
 
 	@Override
 	@NotNull
@@ -1072,9 +1214,16 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 	private static class DataFlowInstructionVisitor extends StandardInstructionVisitor
 	{
-		private final MultiMap<NullabilityProblem, PsiElement> myProblems = new MultiMap<NullabilityProblem, PsiElement>();
+		private final MultiMap<NullabilityProblem, PsiElement> myProblems = new MultiMap<>();
 		private final Map<Pair<NullabilityProblem, PsiElement>, StateInfo> myStateInfos = ContainerUtil.newHashMap();
 		private final Set<Instruction> myCCEInstructions = ContainerUtil.newHashSet();
+		private final Map<MethodCallInstruction, Boolean> myFailingCalls = new HashMap<>();
+		private final Map<PsiMethodCallExpression, ThreeState> myOptionalCalls = new HashMap<>();
+		private final Map<PsiMethodCallExpression, ThreeState> myBooleanCalls = new HashMap<>();
+		private final Map<PsiMethodReferenceExpression, DfaValue> myMethodReferenceResults = new HashMap<>();
+		private final Map<PsiArrayAccessExpression, ThreeState> myOutOfBoundsArrayAccesses = new HashMap<>();
+		private final List<PsiExpression> myOptionalQualifiers = new ArrayList<>();
+		private boolean myAlwaysReturnsNotNull = true;
 
 		@Override
 		protected void onInstructionProducesCCE(TypeCastInstruction instruction)
@@ -1084,34 +1233,169 @@ public class DataFlowInspectionBase extends BaseJavaBatchLocalInspectionTool
 
 		Collection<PsiElement> getProblems(final NullabilityProblem kind)
 		{
-			return ContainerUtil.filter(myProblems.get(kind), new Condition<PsiElement>()
+			return ContainerUtil.filter(myProblems.get(kind), psiElement ->
 			{
-				@Override
-				public boolean value(PsiElement psiElement)
-				{
-					StateInfo info = myStateInfos.get(Pair.create(kind, psiElement));
-					// non-ephemeral NPE should be reported
-					// ephemeral NPE should also be reported if only ephemeral states have reached a particular problematic instruction
-					//  (e.g. if it's inside "if (var == null)" check after contract method invocation
-					return info.normalNpe || info.ephemeralNpe && !info.normalOk;
-				}
+				StateInfo info = myStateInfos.get(Pair.create(kind, psiElement));
+				// non-ephemeral NPE should be reported
+				// ephemeral NPE should also be reported if only ephemeral states have reached a particular problematic instruction
+				//  (e.g. if it's inside "if (var == null)" check after contract method invocation
+				return info.normalNpe || info.ephemeralNpe && !info.normalOk;
 			});
+		}
+
+		Map<PsiMethodCallExpression, ThreeState> getOptionalCalls()
+		{
+			return myOptionalCalls;
+		}
+
+		Map<PsiMethodCallExpression, ThreeState> getBooleanCalls()
+		{
+			return myBooleanCalls;
+		}
+
+		Map<PsiMethodReferenceExpression, DfaValue> getMethodReferenceResults()
+		{
+			return myMethodReferenceResults;
+		}
+
+		Stream<PsiArrayAccessExpression> outOfBoundsArrayAccesses()
+		{
+			return StreamEx.ofKeys(myOutOfBoundsArrayAccesses, ThreeState.YES::equals);
+		}
+
+		List<PsiExpression> getOptionalQualifiers()
+		{
+			return myOptionalQualifiers;
+		}
+
+		Collection<PsiCall> getAlwaysFailingCalls()
+		{
+			return StreamEx.ofKeys(myFailingCalls, v -> v).map(MethodCallInstruction::getCallExpression).toList();
+		}
+
+		boolean isAlwaysReturnsNotNull()
+		{
+			return myAlwaysReturnsNotNull;
+		}
+
+		@Override
+		public DfaInstructionState[] visitMethodCall(MethodCallInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
+		{
+			PsiMethodCallExpression call = ObjectUtils.tryCast(instruction.getCallExpression(), PsiMethodCallExpression.class);
+			if(call != null)
+			{
+				String methodName = call.getMethodExpression().getReferenceName();
+				PsiExpression qualifier = PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression());
+				if(qualifier != null && TypeUtils.isOptional(qualifier.getType()))
+				{
+					if("isPresent".equals(methodName) && qualifier instanceof PsiMethodCallExpression)
+					{
+						myOptionalQualifiers.add(qualifier);
+					}
+					else if(DfaOptionalSupport.isOptionalGetMethodName(methodName))
+					{
+						Boolean fact = memState.getValueFact(DfaFactType.OPTIONAL_PRESENCE, memState.peek());
+						ThreeState state = fact == null ? ThreeState.UNSURE : ThreeState.fromBoolean(fact);
+						myOptionalCalls.merge(call, state, ThreeState::merge);
+					}
+				}
+			}
+			DfaInstructionState[] states = super.visitMethodCall(instruction, runner, memState);
+			if(hasNonTrivialFailingContracts(instruction))
+			{
+				DfaConstValue fail = runner.getFactory().getConstFactory().getContractFail();
+				boolean allFail = Arrays.stream(states).allMatch(s -> s.getMemoryState().peek() == fail);
+				myFailingCalls.merge(instruction, allFail, Boolean::logicalAnd);
+			}
+			handleBooleanCalls(instruction, states);
+			return states;
+		}
+
+		void handleBooleanCalls(MethodCallInstruction instruction, DfaInstructionState[] states)
+		{
+			if(!hasNonTrivialBooleanContracts(instruction))
+			{
+				return;
+			}
+			PsiMethod method = instruction.getTargetMethod();
+			if(method == null || !ControlFlowAnalyzer.isPure(method))
+			{
+				return;
+			}
+			PsiMethodCallExpression call = ObjectUtils.tryCast(instruction.getCallExpression(), PsiMethodCallExpression.class);
+			if(call == null || myBooleanCalls.get(call) == ThreeState.UNSURE)
+			{
+				return;
+			}
+			PsiElement parent = call.getParent();
+			if(parent instanceof PsiExpressionStatement)
+			{
+				return;
+			}
+			if(parent instanceof PsiLambdaExpression && PsiType.VOID.equals(LambdaUtil.getFunctionalInterfaceReturnType((PsiLambdaExpression) parent)))
+			{
+				return;
+			}
+			for(DfaInstructionState s : states)
+			{
+				DfaValue val = s.getMemoryState().peek();
+				ThreeState state = ThreeState.UNSURE;
+				if(val instanceof DfaConstValue)
+				{
+					Object value = ((DfaConstValue) val).getValue();
+					if(value instanceof Boolean)
+					{
+						state = ThreeState.fromBoolean((Boolean) value);
+					}
+				}
+				myBooleanCalls.merge(call, state, ThreeState::merge);
+			}
+		}
+
+		@Override
+		protected void processArrayAccess(PsiArrayAccessExpression expression, boolean alwaysOutOfBounds)
+		{
+			myOutOfBoundsArrayAccesses.merge(expression, ThreeState.fromBoolean(alwaysOutOfBounds), ThreeState::merge);
+		}
+
+		@Override
+		protected void processMethodReferenceResult(PsiMethodReferenceExpression methodRef, List<? extends MethodContract> contracts, DfaValue res)
+		{
+			if(contracts.stream().anyMatch(c -> !c.isTrivial()))
+			{
+				// Do not track if method reference may have different results
+				myMethodReferenceResults.merge(methodRef, res, (a, b) -> a == b ? a : DfaUnknownValue.getInstance());
+			}
+		}
+
+		private static boolean hasNonTrivialFailingContracts(MethodCallInstruction instruction)
+		{
+			List<MethodContract> contracts = instruction.getContracts();
+			return !contracts.isEmpty() && contracts.stream().anyMatch(contract -> contract.getReturnValue() == MethodContract.ValueConstraint.THROW_EXCEPTION && !contract.isTrivial());
+		}
+
+		private static boolean hasNonTrivialBooleanContracts(MethodCallInstruction instruction)
+		{
+			List<MethodContract> contracts = instruction.getContracts();
+			return !contracts.isEmpty() && contracts.stream().anyMatch(contract -> (contract.getReturnValue() == MethodContract.ValueConstraint.FALSE_VALUE || contract.getReturnValue() ==
+					MethodContract.ValueConstraint.TRUE_VALUE) && !contract.isTrivial());
 		}
 
 		@Override
 		protected boolean checkNotNullable(DfaMemoryState state, DfaValue value, NullabilityProblem problem, PsiElement anchor)
 		{
+			if(problem == NullabilityProblem.nullableReturn && !state.isNotNull(value))
+			{
+				myAlwaysReturnsNotNull = false;
+			}
+
 			boolean ok = super.checkNotNullable(state, value, problem, anchor);
 			if(!ok && anchor != null)
 			{
 				myProblems.putValue(problem, anchor);
 			}
 			Pair<NullabilityProblem, PsiElement> key = Pair.create(problem, anchor);
-			StateInfo info = myStateInfos.get(key);
-			if(info == null)
-			{
-				myStateInfos.put(key, info = new StateInfo());
-			}
+			StateInfo info = myStateInfos.computeIfAbsent(key, k -> new StateInfo());
 			if(state.isEphemeral() && !ok)
 			{
 				info.ephemeralNpe = true;

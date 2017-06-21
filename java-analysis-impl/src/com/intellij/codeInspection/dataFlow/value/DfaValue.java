@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,39 @@
  */
 package com.intellij.codeInspection.dataFlow.value;
 
-public class DfaValue {
-  private final int myID;
-  protected final DfaValueFactory myFactory;
+public abstract class DfaValue
+{
+	private final int myID;
+	protected final DfaValueFactory myFactory;
 
-  protected DfaValue(final DfaValueFactory factory) {
-    myFactory = factory;
-    myID = factory == null ? 0 : factory.registerValue(this);
-  }
+	protected DfaValue(final DfaValueFactory factory)
+	{
+		myFactory = factory;
+		myID = factory == null ? 0 : factory.registerValue(this);
+	}
 
-  public int getID() {
-    return myID;
-  }
+	public DfaValueFactory getFactory()
+	{
+		return myFactory;
+	}
 
-  public DfaValue createNegated() {
-    return DfaUnknownValue.getInstance();
-  }
+	public int getID()
+	{
+		return myID;
+	}
 
-  public boolean equals(Object obj) {
-    return obj instanceof DfaValue && getID() == ((DfaValue)obj).getID();
-  }
+	public DfaValue createNegated()
+	{
+		return DfaUnknownValue.getInstance();
+	}
 
-  public int hashCode() {
-    return getID();
-  }
+	public boolean equals(Object obj)
+	{
+		return obj instanceof DfaValue && getID() == ((DfaValue) obj).getID();
+	}
+
+	public int hashCode()
+	{
+		return getID();
+	}
 }

@@ -15,31 +15,34 @@
  */
 package com.intellij.openapi.projectRoots;
 
-import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.module.Module;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
+import consulo.annotations.RequiredReadAction;
+import consulo.java.module.extension.JavaModuleExtension;
 
 /**
  * User: anna
  * Date: 3/28/12
  */
-public class JavaSdkVersionUtil {
-  public static boolean isAtLeast(@NotNull PsiElement element, @NotNull JavaSdkVersion minVersion) {
-    JavaSdkVersion version = getJavaSdkVersion(element);
-    return version == null || version.isAtLeast(minVersion);
-  }
+public class JavaSdkVersionUtil
+{
+	public static boolean isAtLeast(@NotNull PsiElement element, @NotNull JavaSdkVersion minVersion)
+	{
+		JavaSdkVersion version = getJavaSdkVersion(element);
+		return version == null || version.isAtLeast(minVersion);
+	}
 
-  public static JavaSdkVersion getJavaSdkVersion(@NotNull PsiElement element) {
-    final Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    if (module != null) {
-      final Sdk sdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
-      if (sdk != null) {
-        String version = sdk.getVersionString();
-        return version == null ? null : JdkVersionUtil.getVersion(version);
-      }
-    }
-    return null;
-  }
+	@RequiredReadAction
+	public static JavaSdkVersion getJavaSdkVersion(@NotNull PsiElement element)
+	{
+		final Sdk sdk = ModuleUtilCore.getSdk(element, JavaModuleExtension.class);
+		return getJavaSdkVersion(sdk);
+	}
+
+	public static JavaSdkVersion getJavaSdkVersion(@Nullable Sdk sdk)
+	{
+		return sdk != null && sdk.getSdkType() instanceof JavaSdk ? ((JavaSdk) sdk.getSdkType()).getVersion(sdk) : null;
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,36 @@ package com.intellij.codeInspection.dataFlow.value;
 
 import org.jetbrains.annotations.NonNls;
 
-public class DfaUnboxedValue extends DfaValue {
-  private final DfaVariableValue myVariable;
+public class DfaUnboxedValue extends DfaValue
+{
+	private final DfaVariableValue myVariable;
 
-  DfaUnboxedValue(DfaVariableValue valueToWrap, DfaValueFactory factory) {
-    super(factory);
-    myVariable = valueToWrap;
-  }
+	DfaUnboxedValue(DfaVariableValue valueToWrap, DfaValueFactory factory)
+	{
+		super(factory);
+		myVariable = valueToWrap;
+	}
 
-  @NonNls
-  public String toString() {
-    return "Unboxed "+myVariable.toString();
-  }
+	@NonNls
+	public String toString()
+	{
+		return "Unboxed " + myVariable.toString();
+	}
 
-  public DfaVariableValue getVariable() {
-    return myVariable;
-  }
+	public DfaVariableValue getVariable()
+	{
+		return myVariable;
+	}
 
 
-  public boolean isNegated() {
-    return myVariable.isNegated();
-  }
+	public boolean isNegated()
+	{
+		return myVariable.isNegated();
+	}
 
-  @Override
-  public DfaValue createNegated() {
-    return myFactory.getBoxedFactory().createUnboxed(myVariable.createNegated());
-  }
+	@Override
+	public DfaValue createNegated()
+	{
+		return myFactory.getBoxedFactory().createUnboxed(myVariable.createNegated());
+	}
 }

@@ -23,8 +23,8 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ipp.psiutils.EquivalenceChecker;
-import com.siyeh.ipp.psiutils.SideEffectChecker;
 
 class SwitchUtils {
 

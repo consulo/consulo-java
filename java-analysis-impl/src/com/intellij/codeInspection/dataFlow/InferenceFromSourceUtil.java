@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2014 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import com.intellij.psi.PsiNewExpression;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiVariable;
+import com.intellij.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.psi.util.CachedValueProvider;
@@ -41,7 +42,7 @@ import com.intellij.psi.util.PsiUtilCore;
  */
 public class InferenceFromSourceUtil
 {
-	static boolean shouldInferFromSource(@NotNull final PsiMethod method)
+	static boolean shouldInferFromSource(@NotNull PsiMethodImpl method)
 	{
 		return CachedValuesManager.getCachedValue(method, () -> CachedValueProvider.Result.create(calcShouldInferFromSource(method), method, PsiModificationTracker
 				.JAVA_STRUCTURE_MODIFICATION_COUNT));
@@ -49,7 +50,7 @@ public class InferenceFromSourceUtil
 
 	private static boolean calcShouldInferFromSource(@NotNull PsiMethod method)
 	{
-		if(isLibraryCode(method) || method.hasModifierProperty(PsiModifier.ABSTRACT) || PsiUtil.canBeOverriden(method) || method.getBody() == null)
+		if(isLibraryCode(method) || method.hasModifierProperty(PsiModifier.ABSTRACT) || PsiUtil.canBeOverriden(method))
 		{
 			return false;
 		}
@@ -121,7 +122,7 @@ public class InferenceFromSourceUtil
 			return false;
 		}
 
-		for(MethodContract contract : ControlFlowAnalyzer.getMethodContracts(method))
+		for(StandardMethodContract contract : ControlFlowAnalyzer.getMethodContracts(method))
 		{
 			if(contract.returnValue == MethodContract.ValueConstraint.NULL_VALUE)
 			{

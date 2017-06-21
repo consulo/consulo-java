@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,49 +14,51 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Feb 7, 2002
- * Time: 11:23:22 AM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.value;
 
-public class DfaUnknownValue extends DfaValue {
-  private static class DfaUnknownValueHolder {
-    private static final DfaUnknownValue myInstance = new DfaUnknownValue();
-  }
-  public static DfaUnknownValue getInstance() {
-    return DfaUnknownValueHolder.myInstance;
-  }
+public class DfaUnknownValue extends DfaValue
+{
+	private static class DfaUnknownValueHolder
+	{
+		private static final DfaUnknownValue myInstance = new DfaUnknownValue();
+	}
 
-  private DfaUnknownValue() {
-    super(null);
-  }
+	public static DfaUnknownValue getInstance()
+	{
+		return DfaUnknownValueHolder.myInstance;
+	}
 
-  @Override
-  public DfaValue createNegated() {
-    return this;
-  }
+	private DfaUnknownValue()
+	{
+		super(null);
+	}
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
-  public String toString() {
-    return "<unknown>";
-  }
+	@Override
+	public DfaValue createNegated()
+	{
+		return this;
+	}
 
-  public boolean equals(Object obj) {
-    return obj == this;
-  }
+	@SuppressWarnings({"HardCodedStringLiteral"})
+	public String toString()
+	{
+		return "<unknown>";
+	}
 
-  public int hashCode() {
-    return 0;
-  }
+	public boolean equals(Object obj)
+	{
+		return obj == this;
+	}
 
-  @Override
-  public int getID() {
-    return 0;
-  }
+	public int hashCode()
+	{
+		return 0;
+	}
+
+	@Override
+	public int getID()
+	{
+		return 0;
+	}
 
 }

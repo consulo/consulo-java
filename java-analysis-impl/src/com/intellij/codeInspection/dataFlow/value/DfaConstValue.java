@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Jan 28, 2002
- * Time: 6:31:23 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.value;
 
 import java.util.Map;
@@ -31,7 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiKeyword;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiVariable;
@@ -88,6 +82,11 @@ public class DfaConstValue extends DfaValue
 				{
 					DfaConstValue unboxed = createFromValue(boo, PsiType.BOOLEAN, variable);
 					return myFactory.getBoxedFactory().createBoxed(unboxed);
+				}
+				PsiExpression initializer = variable.getInitializer();
+				if(initializer instanceof PsiLiteralExpression && initializer.textMatches(PsiKeyword.NULL))
+				{
+					return dfaNull;
 				}
 				return null;
 			}

@@ -29,6 +29,7 @@ public class JavaCodeInsightSettings implements PersistentStateComponent<JavaCod
 
 	public boolean USE_INSTANCEOF_ON_EQUALS_PARAMETER = false;
 	public boolean USE_ACCESSORS_IN_EQUALS_HASHCODE = false;
+	public boolean SHOW_SOURCE_INFERRED_ANNOTATIONS = true;
 
 	@Nullable
 	@Override

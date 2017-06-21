@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 package com.intellij.codeInspection.dataFlow;
 
+import java.util.ArrayList;
+
 import com.intellij.codeInspection.dataFlow.instructions.*;
 import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
-import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.psi.PsiExpression;
-
-import java.util.ArrayList;
 
 /**
  * @author peter
@@ -95,7 +95,7 @@ public abstract class InstructionVisitor
 			return nextInstruction(instruction, runner, memState);
 		}
 
-		ArrayList<DfaInstructionState> result = new ArrayList<DfaInstructionState>();
+		ArrayList<DfaInstructionState> result = new ArrayList<>();
 
 		DfaMemoryState thenState = memState.createCopy();
 		DfaMemoryState elseState = memState.createCopy();
@@ -145,7 +145,17 @@ public abstract class InstructionVisitor
 		final DfaVariableValue variable = instruction.getVariable();
 		if(variable != null)
 		{
-			memState.flushVariable(variable);
+			if(instruction.isDependentsOnly())
+			{
+				for(DfaVariableValue qualified : runner.getFactory().getVarFactory().getAllQualifiedBy(variable))
+				{
+					memState.flushVariable(qualified);
+				}
+			}
+			else
+			{
+				memState.flushVariable(variable);
+			}
 		}
 		else
 		{
@@ -183,6 +193,14 @@ public abstract class InstructionVisitor
 
 	public DfaInstructionState[] visitPush(PushInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
+		memState.push(instruction.getValue());
+		return nextInstruction(instruction, runner, memState);
+	}
+
+	public DfaInstructionState[] visitArrayAccess(ArrayAccessInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
+	{
+		memState.pop(); // index
+		memState.pop(); // array reference
 		memState.push(instruction.getValue());
 		return nextInstruction(instruction, runner, memState);
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,15 @@ import com.intellij.codeInspection.dataFlow.value.DfaPsiType;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.util.containers.FList;
 
 /**
  * @author Gregory.Shrago
  */
-public class ValuableDataFlowRunner extends DataFlowRunner
+class ValuableDataFlowRunner extends DataFlowRunner
 {
-
-	protected ValuableDataFlowRunner(PsiElement block)
-	{
-		super();
-	}
-
+	@NotNull
 	@Override
 	protected DfaMemoryState createMemoryState()
 	{
@@ -47,24 +41,26 @@ public class ValuableDataFlowRunner extends DataFlowRunner
 
 	static class MyDfaMemoryState extends DfaMemoryStateImpl
 	{
-		private MyDfaMemoryState(final DfaValueFactory factory)
+		private MyDfaMemoryState(@NotNull DfaValueFactory factory)
 		{
 			super(factory);
 		}
 
-		MyDfaMemoryState(DfaMemoryStateImpl toCopy)
+		private MyDfaMemoryState(@NotNull DfaMemoryStateImpl toCopy)
 		{
 			super(toCopy);
 		}
 
+		@NotNull
 		@Override
 		public DfaMemoryStateImpl createCopy()
 		{
 			return new MyDfaMemoryState(this);
 		}
 
+		@NotNull
 		@Override
-		protected DfaVariableState createVariableState(DfaVariableValue var)
+		protected DfaVariableState createVariableState(@NotNull DfaVariableValue var)
 		{
 			return new ValuableDfaVariableState(var);
 		}
@@ -78,30 +74,36 @@ public class ValuableDataFlowRunner extends DataFlowRunner
 
 	static class ValuableDfaVariableState extends DfaVariableState
 	{
-		final DfaValue myValue;
+		private final DfaValue myValue;
 		@NotNull
 		final FList<PsiExpression> myConcatenation;
 
-		private ValuableDfaVariableState(final DfaVariableValue psiVariable)
+		private ValuableDfaVariableState(@NotNull DfaVariableValue psiVariable)
 		{
 			super(psiVariable);
 			myValue = null;
 			myConcatenation = FList.emptyList();
 		}
 
-		private ValuableDfaVariableState(Set<DfaPsiType> instanceofValues, Set<DfaPsiType> notInstanceofValues, Nullness nullability, DfaValue value, @NotNull FList<PsiExpression> concatenation)
+		private ValuableDfaVariableState(Set<DfaPsiType> instanceofValues,
+				Set<DfaPsiType> notInstanceofValues,
+				DfaValue value,
+				@NotNull FList<PsiExpression> concatenation,
+				@NotNull DfaFactMap factMap)
 		{
-			super(instanceofValues, notInstanceofValues, nullability);
+			super(instanceofValues, notInstanceofValues, factMap);
 			myValue = value;
 			myConcatenation = concatenation;
 		}
 
+		@NotNull
 		@Override
-		protected DfaVariableState createCopy(Set<DfaPsiType> instanceofValues, Set<DfaPsiType> notInstanceofValues, Nullness nullability)
+		protected DfaVariableState createCopy(@NotNull Set<DfaPsiType> instanceofValues, @NotNull Set<DfaPsiType> notInstanceofValues, @NotNull DfaFactMap factMap)
 		{
-			return new ValuableDfaVariableState(instanceofValues, notInstanceofValues, nullability, myValue, myConcatenation);
+			return new ValuableDfaVariableState(instanceofValues, notInstanceofValues, myValue, myConcatenation, factMap);
 		}
 
+		@NotNull
 		@Override
 		public DfaVariableState withValue(@Nullable final DfaValue value)
 		{
@@ -109,16 +111,16 @@ public class ValuableDataFlowRunner extends DataFlowRunner
 			{
 				return this;
 			}
-			return new ValuableDfaVariableState(myInstanceofValues, myNotInstanceofValues, myNullability, value, myConcatenation);
+			return new ValuableDfaVariableState(myInstanceofValues, myNotInstanceofValues, value, myConcatenation, myFactMap);
 		}
 
-		public ValuableDfaVariableState withExpression(@NotNull final FList<PsiExpression> concatenation)
+		ValuableDfaVariableState withExpression(@NotNull final FList<PsiExpression> concatenation)
 		{
 			if(concatenation == myConcatenation)
 			{
 				return this;
 			}
-			return new ValuableDfaVariableState(myInstanceofValues, myNotInstanceofValues, myNullability, myValue, concatenation);
+			return new ValuableDfaVariableState(myInstanceofValues, myNotInstanceofValues, myValue, concatenation, myFactMap);
 		}
 
 		@Override

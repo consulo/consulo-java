@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,10 @@ import gnu.trove.TObjectHashingStrategy;
 
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.codeInspection.dataFlow.DfaMemoryStateImpl;
+import com.intellij.codeInspection.dataFlow.value.DfaInstanceofValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.openapi.diagnostic.Logger;
@@ -58,7 +60,7 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 			return false;
 		}
 	};
-	private final Map<PsiExpression, PsiType> myStates = new THashMap<PsiExpression, PsiType>(EXPRESSION_HASHING_STRATEGY);
+	private final Map<PsiExpression, PsiType> myStates = new THashMap<>(EXPRESSION_HASHING_STRATEGY);
 
 	public ExpressionTypeMemoryState(final DfaValueFactory factory)
 	{
@@ -70,6 +72,7 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 		super(toCopy);
 	}
 
+	@NotNull
 	@Override
 	public DfaMemoryStateImpl createCopy()
 	{
@@ -135,11 +138,15 @@ public class ExpressionTypeMemoryState extends DfaMemoryStateImpl
 	@Override
 	public String toString()
 	{
-		return super.toString() + " states=[" + new HashMap<PsiExpression, PsiType>(myStates) + "]";
+		return super.toString() + " states=[" + new HashMap<>(myStates) + "]";
 	}
 
-	public void setExpressionType(PsiExpression expression, PsiType type)
+	public void setExpressionType(PsiExpression expression, @NotNull PsiType type)
 	{
-		myStates.put(expression, type);
+		PsiType prev = myStates.get(expression);
+		if(prev == null || !type.isAssignableFrom(prev))
+		{
+			myStates.put(expression, type);
+		}
 	}
 }

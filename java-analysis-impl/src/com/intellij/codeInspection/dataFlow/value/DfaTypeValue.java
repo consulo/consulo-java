@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Jan 28, 2002
- * Time: 6:32:01 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.value;
 
 import java.util.ArrayList;
@@ -32,62 +24,89 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.dataFlow.Nullness;
 import com.intellij.util.containers.ContainerUtil;
 
-public class DfaTypeValue extends DfaValue {
-  public static class Factory {
-    private final Map<DfaPsiType,ArrayList<DfaTypeValue>> myCache = ContainerUtil.newHashMap();
-    private final DfaValueFactory myFactory;
+public class DfaTypeValue extends DfaValue
+{
+	public static class Factory
+	{
+		private final Map<DfaPsiType, ArrayList<DfaTypeValue>> myCache = ContainerUtil.newHashMap();
+		@NotNull
+		private final DfaValueFactory myFactory;
 
-    Factory(DfaValueFactory factory) {
-      myFactory = factory;
-    }
+		Factory(@NotNull DfaValueFactory factory)
+		{
+			myFactory = factory;
+		}
 
-    @NotNull
-    public DfaTypeValue createTypeValue(@NotNull DfaPsiType type, @NotNull Nullness nullness) {
-      ArrayList<DfaTypeValue> conditions = myCache.get(type);
-      if (conditions == null) {
-        conditions = new ArrayList<DfaTypeValue>();
-        myCache.put(type, conditions);
-      } else {
-        for (DfaTypeValue aType : conditions) {
-          if (aType.myNullness == nullness) return aType;
-        }
-      }
+		@NotNull
+		DfaTypeValue createTypeValue(@NotNull DfaPsiType type, @NotNull Nullness nullness)
+		{
+			ArrayList<DfaTypeValue> conditions = myCache.get(type);
+			if(conditions == null)
+			{
+				conditions = new ArrayList<>();
+				myCache.put(type, conditions);
+			}
+			else
+			{
+				for(DfaTypeValue aType : conditions)
+				{
+					if(aType.myNullness == nullness)
+					{
+						return aType;
+					}
+				}
+			}
 
-      DfaTypeValue result = new DfaTypeValue(type, nullness, myFactory);
-      conditions.add(result);
-      return new DfaTypeValue(type, nullness, myFactory);
-    }
+			DfaTypeValue result = new DfaTypeValue(type, nullness, myFactory);
+			conditions.add(result);
+			return result;
+		}
 
-  }
+	}
 
-  private DfaPsiType myType;
-  private Nullness myNullness;
+	@NotNull
+	private final DfaPsiType myType;
+	@NotNull
+	private final Nullness myNullness;
 
-  private DfaTypeValue(DfaPsiType type, Nullness nullness, DfaValueFactory factory) {
-    super(factory);
-    myType = type;
-    myNullness = nullness;
-  }
+	private DfaTypeValue(@NotNull DfaPsiType type, @NotNull Nullness nullness, @NotNull DfaValueFactory factory)
+	{
+		super(factory);
+		myType = type;
+		myNullness = nullness;
+	}
 
-  public DfaPsiType getDfaType() {
-    return myType;
-  }
+	@NotNull
+	public DfaPsiType getDfaType()
+	{
+		return myType;
+	}
 
-  public boolean isNullable() {
-    return myNullness == Nullness.NULLABLE;
-  }
+	public boolean isNullable()
+	{
+		return myNullness == Nullness.NULLABLE;
+	}
 
-  public boolean isNotNull() {
-    return myNullness == Nullness.NOT_NULL;
-  }
+	public boolean isNotNull()
+	{
+		return myNullness == Nullness.NOT_NULL;
+	}
 
-  public Nullness getNullness() {
-    return myNullness;
-  }
+	@NotNull
+	public Nullness getNullness()
+	{
+		return myNullness;
+	}
 
-  @NonNls
-  public String toString() {
-    return myType + ", nullable=" + myNullness;
-  }
+	public DfaTypeValue withNullness(Nullness nullness)
+	{
+		return nullness == myNullness ? this : myFactory.getTypeFactory().createTypeValue(myType, nullness);
+	}
+
+	@NonNls
+	public String toString()
+	{
+		return myType + ", nullable=" + myNullness;
+	}
 
 }

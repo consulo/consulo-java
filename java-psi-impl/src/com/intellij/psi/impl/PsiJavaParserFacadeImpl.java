@@ -267,7 +267,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade
 
 	@NotNull
 	@Override
-	public PsiCodeBlock createCodeBlockFromText(@NotNull final String text, @Nullable final PsiElement context) throws IncorrectOperationException
+	public PsiCodeBlock createCodeBlockFromText(@NotNull final CharSequence text, @Nullable final PsiElement context) throws IncorrectOperationException
 	{
 		final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, CODE_BLOCK, level(context), true), context);
 		final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());

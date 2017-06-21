@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2017 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Jan 28, 2002
- * Time: 10:05:49 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.instructions;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInspection.dataFlow.DataFlowRunner;
-import com.intellij.codeInspection.dataFlow.DfaInstructionState;
-import com.intellij.codeInspection.dataFlow.DfaMemoryState;
-import com.intellij.codeInspection.dataFlow.InstructionVisitor;
+import com.intellij.codeInspection.dataFlow.ControlTransferInstruction;
+import com.intellij.codeInspection.dataFlow.DfaControlTransferValue;
+import com.intellij.codeInspection.dataFlow.ExceptionTransfer;
 import com.intellij.psi.PsiElement;
 
-public class ReturnInstruction extends Instruction
+public class ReturnInstruction extends ControlTransferInstruction
 {
-	private final boolean isViaException;
 	private final PsiElement myAnchor;
 
-	public ReturnInstruction(boolean isViaException, @Nullable PsiElement anchor)
+	public ReturnInstruction(@NotNull DfaControlTransferValue transfer, @Nullable PsiElement anchor)
 	{
-		this.isViaException = isViaException;
+		super(transfer);
 		myAnchor = anchor;
 	}
 
@@ -50,17 +41,7 @@ public class ReturnInstruction extends Instruction
 
 	public boolean isViaException()
 	{
-		return isViaException;
-	}
-
-	@Override
-	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
-	{
-		return DfaInstructionState.EMPTY_ARRAY;
-	}
-
-	public String toString()
-	{
-		return "RETURN";
+		DfaControlTransferValue transfer = getTransfer();
+		return transfer != null && transfer.getTarget() instanceof ExceptionTransfer;
 	}
 }

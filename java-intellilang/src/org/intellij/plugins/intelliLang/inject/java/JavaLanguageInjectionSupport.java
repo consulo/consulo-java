@@ -16,34 +16,22 @@
 
 package org.intellij.plugins.intelliLang.inject.java;
 
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
-import com.intellij.lang.Language;
-import com.intellij.lang.injection.MultiHostRegistrar;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogBuilder;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.Factory;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.patterns.PsiJavaPatterns;
-import com.intellij.patterns.compiler.PatternCompiler;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.ui.SimpleColoredText;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.*;
-import com.intellij.util.containers.ContainerUtil;
+import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.MethodInfo;
+import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.createMethodInfo;
+import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.getParameterTypesString;
+import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.isInjectable;
+
 import gnu.trove.THashSet;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.intellij.plugins.intelliLang.AdvancedSettingsUI;
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.inject.AbstractLanguageInjectionSupport;
@@ -62,12 +50,35 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection.*;
+import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.lang.Language;
+import com.intellij.lang.injection.MultiHostRegistrar;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogBuilder;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.util.Factory;
+import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.patterns.PsiJavaPatterns;
+import com.intellij.patterns.compiler.PatternCompiler;
+import com.intellij.psi.*;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.ui.SimpleColoredText;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.util.ArrayUtilRt;
+import com.intellij.util.Consumer;
+import com.intellij.util.NullableFunction;
+import com.intellij.util.PlatformIcons;
+import com.intellij.util.Processor;
+import com.intellij.util.containers.ContainerUtil;
 
 /**
  * @author Gregory.Shrago
@@ -237,9 +248,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
 
       return false;
     }
-    if (!OrderEntryFix.ensureAnnotationsJarInPath(ModuleUtilCore.findModuleForPsiElement(modifierListOwner))) {
-      return false;
-    }
+
     new WriteCommandAction(modifierListOwner.getProject(), modifierListOwner.getContainingFile()) {
       protected void run(final Result result) throws Throwable {
         JVMElementFactory factory = JVMElementFactories.getFactory(modifierListOwner.getLanguage(), modifierListOwner.getProject());

@@ -44,7 +44,6 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.JdkVersionUtil;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
@@ -516,14 +515,14 @@ public class JavaSdkImpl extends JavaSdk
 		{
 			return null;
 		}
-		return JdkVersionUtil.getVersion(version);
+		return JavaSdkVersion.fromVersionString(version);
 	}
 
 	@Override
 	@Nullable
 	public JavaSdkVersion getVersion(@NotNull String versionString)
 	{
-		return JdkVersionUtil.getVersion(versionString);
+		return JavaSdkVersion.fromVersionString(versionString);
 	}
 
 	@Override

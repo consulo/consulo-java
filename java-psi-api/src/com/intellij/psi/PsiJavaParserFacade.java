@@ -173,7 +173,7 @@ public interface PsiJavaParserFacade
 	 * @throws com.intellij.util.IncorrectOperationException if the text does not specify a valid code block.
 	 */
 	@NotNull
-	PsiCodeBlock createCodeBlockFromText(@NotNull @NonNls String text, @Nullable PsiElement context) throws IncorrectOperationException;
+	PsiCodeBlock createCodeBlockFromText(@NotNull @NonNls CharSequence text, @Nullable PsiElement context) throws IncorrectOperationException;
 
 	/**
 	 * Creates a Java statement from the specified text.

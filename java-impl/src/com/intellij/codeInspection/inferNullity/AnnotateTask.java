@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2015 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,47 +18,55 @@ package com.intellij.codeInspection.inferNullity;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
+import com.intellij.usageView.UsageInfo;
 import com.intellij.util.SequentialModalProgressTask;
 import com.intellij.util.SequentialTask;
 
-class AnnotateTask implements SequentialTask {
-  private final Project myProject;
-  private final NullityInferrer myInferrer;
-  private final SequentialModalProgressTask myTask;
-  private int myCount = 0;
-  private final int myTotal;
-  private final NullableNotNullManager myNotNullManager;
+class AnnotateTask implements SequentialTask
+{
+	private final Project myProject;
+	private final UsageInfo[] myInfos;
+	private final SequentialModalProgressTask myTask;
+	private int myCount;
+	private final int myTotal;
+	private final NullableNotNullManager myNotNullManager;
 
-  public AnnotateTask(Project project, NullityInferrer inferrer, SequentialModalProgressTask progressTask) {
-    myProject = project;
-    myNotNullManager = NullableNotNullManager.getInstance(myProject);
-    myInferrer = inferrer;
-    myTask = progressTask;
-    myTotal = myInferrer.getCount();
-  }
+	public AnnotateTask(Project project, SequentialModalProgressTask progressTask, UsageInfo[] infos)
+	{
+		myProject = project;
+		myInfos = infos;
+		myNotNullManager = NullableNotNullManager.getInstance(myProject);
+		myTask = progressTask;
+		myTotal = infos.length;
+	}
 
-  @Override
-  public void prepare() {
-  }
+	@Override
+	public void prepare()
+	{
+	}
 
-  @Override
-  public boolean isDone() {
-    return myCount > myTotal - 1;
-  }
+	@Override
+	public boolean isDone()
+	{
+		return myCount > myTotal - 1;
+	}
 
-  @Override
-  public boolean iteration() {
-    final ProgressIndicator indicator = myTask.getIndicator();
-    if (indicator != null) {
-      indicator.setFraction(((double)myCount) / myTotal);
-    }
+	@Override
+	public boolean iteration()
+	{
+		final ProgressIndicator indicator = myTask.getIndicator();
+		if(indicator != null)
+		{
+			indicator.setFraction(((double) myCount) / myTotal);
+		}
 
-    myInferrer.apply(myCount++, myProject, myNotNullManager);
+		NullityInferrer.apply(myProject, myNotNullManager, myInfos[myCount++]);
 
-    return isDone();
-  }
+		return isDone();
+	}
 
-  @Override
-  public void stop() {
-  }
+	@Override
+	public void stop()
+	{
+	}
 }

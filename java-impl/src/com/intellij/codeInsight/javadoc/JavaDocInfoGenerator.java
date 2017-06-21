@@ -2397,7 +2397,7 @@ public class JavaDocInfoGenerator
 		}
 	}
 
-	private static void generateLink(StringBuilder buffer, PsiElement element, String label, boolean plainLink)
+	public static void generateLink(StringBuilder buffer, PsiElement element, String label, boolean plainLink)
 	{
 		String refText = JavaDocUtil.getReferenceText(element.getProject(), element);
 		if(refText != null)
@@ -2409,7 +2409,7 @@ public class JavaDocInfoGenerator
 	/**
 	 * @return Length of the generated label.
 	 */
-	private static int generateLink(StringBuilder buffer, String refText, String label, @NotNull PsiElement context, boolean plainLink)
+	public static int generateLink(StringBuilder buffer, String refText, String label, @NotNull PsiElement context, boolean plainLink)
 	{
 		if(label == null)
 		{
