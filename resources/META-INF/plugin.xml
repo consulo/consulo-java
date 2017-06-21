@@ -815,9 +815,7 @@
 				id="editor.preferences.folding.java"
 				parentId="editor.preferences.folding"
 				displayName="Java"
-				instance="com.intellij.application.options.editor.JavaCodeFoldingConfigurable"/>
-
-		<!--<expectedTypesProvider implementation="com.intellij.codeInsight.JavaExpectedTypesProvider"/>-->
+				instance="consulo.java.application.options.JavaCodeFoldingConfigurable"/>
 
 		<referencesSearch implementation="com.intellij.psi.impl.search.PsiAnnotationMethodReferencesSearcher"/>
 		<referencesSearch implementation="com.intellij.psi.impl.search.ConstructorReferencesSearcher"/>
