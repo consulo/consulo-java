@@ -41,6 +41,7 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import consulo.annotations.RequiredReadAction;
 
 public class RefClassImpl extends RefJavaElementImpl implements RefClass
@@ -87,9 +88,9 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 		{
 			if(isSyntheticJSP())
 			{
-	   /* final RefFileImpl refFile = (RefFileImpl)getRefManager().getReference(JspPsiUtil.getJspFile(psiClass));
-        LOG.assertTrue(refFile != null);
-        refFile.add(this);     */
+				final RefFileImpl refFile = (RefFileImpl) getRefManager().getReference(getJspFile(psiClass));
+				LOG.assertTrue(refFile != null);
+				refFile.add(this);
 			}
 			else if(psiParent instanceof PsiJavaFile)
 			{
@@ -235,6 +236,12 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass
 				}
 			}
 		}
+	}
+
+	private static ServerPageFile getJspFile(PsiClass psiClass)
+	{
+		final PsiFile psiFile = PsiUtilCore.getTemplateLanguageFile(psiClass);
+		return psiFile instanceof ServerPageFile ? (ServerPageFile) psiFile : null;
 	}
 
 	@Override
