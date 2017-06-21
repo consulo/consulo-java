@@ -23,6 +23,7 @@ import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.roots.ExternalLibraryDescriptor;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -48,6 +49,16 @@ public abstract class JavaTestFramework implements TestFramework
 	@Nullable
 	@Override
 	public String getLibraryPath()
+	{
+		ExternalLibraryDescriptor descriptor = getFrameworkLibraryDescriptor();
+		if(descriptor != null)
+		{
+			return descriptor.getLibraryClassesRoots().get(0);
+		}
+		return null;
+	}
+
+	public ExternalLibraryDescriptor getFrameworkLibraryDescriptor()
 	{
 		return null;
 	}
