@@ -22,7 +22,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.ipp.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.BoolUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.NonNls;
 
@@ -50,7 +50,7 @@ public class CreateAssertIntention extends Intention {
     else {
       specifierString = "";
     }
-    if (BoolUtils.isNegation(expression)) {
+    if (com.siyeh.ig.psiutils.BoolUtils.isNegation(expression)) {
       @NonNls final String newExpression =
         specifierString + "assertFalse(" +
         BoolUtils.getNegatedExpressionText(expression) + ");";

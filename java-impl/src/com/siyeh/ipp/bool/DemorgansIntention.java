@@ -28,7 +28,7 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.ipp.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.BoolUtils;
 
 public class DemorgansIntention extends MutablyNamedIntention {
 

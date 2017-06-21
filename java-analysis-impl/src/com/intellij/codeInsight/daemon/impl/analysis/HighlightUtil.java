@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +77,7 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
+import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.javadoc.PsiDocComment;
@@ -88,6 +91,7 @@ import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.hash.HashSet;
 import com.intellij.util.ui.UIUtil;
@@ -103,27 +107,20 @@ public class HighlightUtil extends HighlightUtilBase
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil");
 
-	@NotNull
+	private static final QuickFixFactory QUICK_FIX_FACTORY = QuickFixFactory.getInstance();
+
 	private static final Map<String, Set<String>> ourInterfaceIncompatibleModifiers = new THashMap<>(7);
-	@NotNull
 	private static final Map<String, Set<String>> ourMethodIncompatibleModifiers = new THashMap<>(11);
-	@NotNull
 	private static final Map<String, Set<String>> ourFieldIncompatibleModifiers = new THashMap<>(8);
-	@NotNull
 	private static final Map<String, Set<String>> ourClassIncompatibleModifiers = new THashMap<>(8);
-	@NotNull
 	private static final Map<String, Set<String>> ourClassInitializerIncompatibleModifiers = new THashMap<>(1);
-	@NotNull
+	private static final Map<String, Set<String>> ourModuleIncompatibleModifiers = new THashMap<>(1);
+	private static final Map<String, Set<String>> ourRequiresIncompatibleModifiers = new THashMap<>(2);
+
 	private static final Set<String> ourConstructorNotAllowedModifiers = ContainerUtil.newTroveSet(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.NATIVE, PsiModifier.FINAL, PsiModifier
 			.STRICTFP, PsiModifier.SYNCHRONIZED);
 
-	@NonNls
 	private static final String SERIAL_PERSISTENT_FIELDS_FIELD_NAME = "serialPersistentFields";
-	private static final QuickFixFactory QUICK_FIX_FACTORY = QuickFixFactory.getInstance();
-
-	private HighlightUtil()
-	{
-	}
 
 	static
 	{
@@ -167,6 +164,15 @@ public class HighlightUtil extends HighlightUtilBase
 		ourFieldIncompatibleModifiers.put(PsiModifier.VOLATILE, ContainerUtil.newTroveSet(PsiModifier.FINAL));
 
 		ourClassInitializerIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
+
+		ourModuleIncompatibleModifiers.put(PsiModifier.OPEN, Collections.emptySet());
+
+		ourRequiresIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
+		ourRequiresIncompatibleModifiers.put(PsiModifier.TRANSITIVE, Collections.emptySet());
+	}
+
+	private HighlightUtil()
+	{
 	}
 
 	@Nullable
@@ -197,6 +203,7 @@ public class HighlightUtil extends HighlightUtilBase
 		{
 			return null;
 		}
+		final PsiElement parent = modifierList.getParent();
 		final boolean level8OrHigher = PsiUtil.isLanguageLevel8OrHigher(modifierList);
 		final boolean level9OrHigher = PsiUtil.isLanguageLevel9OrHigher(modifierList);
 		for(@PsiModifier.ModifierConstant String incompatible : incompatibles)
@@ -208,14 +215,14 @@ public class HighlightUtil extends HighlightUtilBase
 					continue;
 				}
 			}
-			if(level9OrHigher && modifier.equals(PsiModifier.PRIVATE) && incompatible.equals(PsiModifier.PUBLIC))
+			if(parent instanceof PsiMethod)
 			{
-				continue;
-			}
-			if(modifier.equals(PsiModifier.STATIC) && incompatible.equals(PsiModifier.FINAL))
-			{
-				final PsiElement parent = modifierList.getParent();
-				if(parent instanceof PsiMethod)
+				if(level9OrHigher && modifier.equals(PsiModifier.PRIVATE) && incompatible.equals(PsiModifier.PUBLIC))
+				{
+					continue;
+				}
+
+				if(modifier.equals(PsiModifier.STATIC) && incompatible.equals(PsiModifier.FINAL))
 				{
 					final PsiClass containingClass = ((PsiMethod) parent).getContainingClass();
 					if(containingClass == null || !containingClass.isInterface())
@@ -239,6 +246,7 @@ public class HighlightUtil extends HighlightUtilBase
 
 	/**
 	 * make element protected/package-private/public suggestion
+	 * for private method in the interface it should add default modifier as well
 	 */
 	static void registerAccessQuickFixAction(@NotNull PsiMember refElement, @NotNull PsiJavaCodeReferenceElement place, @Nullable HighlightInfo errorResult, final PsiElement fileResolveScope)
 	{
@@ -284,6 +292,11 @@ public class HighlightUtil extends HighlightUtilBase
 				minModifier = PsiModifier.PROTECTED;
 			}
 			if(refElement.hasModifierProperty(PsiModifier.PROTECTED))
+			{
+				minModifier = PsiModifier.PUBLIC;
+			}
+			PsiClass containingClass = refElement.getContainingClass();
+			if(containingClass != null && containingClass.isInterface())
 			{
 				minModifier = PsiModifier.PUBLIC;
 			}
@@ -374,9 +387,9 @@ public class HighlightUtil extends HighlightUtilBase
 	/**
 	 * 15.16 Cast Expressions
 	 * ( ReferenceType {AdditionalBound} ) expression, where AdditionalBound: & InterfaceType then all must be true
-	 * • ReferenceType must denote a class or interface type.
-	 * • The erasures of all the listed types must be pairwise different.
-	 * • No two listed types may be subtypes of different parameterization of the same generic interface.
+	 * - ReferenceType must denote a class or interface type.
+	 * - The erasures of all the listed types must be pairwise different.
+	 * - No two listed types may be subtypes of different parameterization of the same generic interface.
 	 */
 	@Nullable
 	static HighlightInfo checkIntersectionInTypeCast(@NotNull PsiTypeCastExpression expression, @NotNull LanguageLevel languageLevel, @NotNull PsiFile file)
@@ -405,8 +418,8 @@ public class HighlightUtil extends HighlightUtilBase
 						final PsiClass aClass = ((PsiClassType) conjType).resolve();
 						if(aClass != null && !aClass.isInterface())
 						{
-							final HighlightInfo errorResult = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(conjunct).descriptionAndTooltip(JavaErrorMessages.message("interface" + "" +
-									".expected")).create();
+							final HighlightInfo errorResult = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(conjunct).descriptionAndTooltip(JavaErrorMessages.message("interface" +
+							 ".expected")).create();
 							QuickFixAction.registerQuickFixAction(errorResult, new FlipIntersectionSidesFix(aClass.getName(), conjList, conjunct, castTypeElement), null);
 							return errorResult;
 						}
@@ -646,7 +659,8 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 		PsiType lType = variable.getType();
 		PsiType rType = initializer.getType();
-		int start = variable.getTypeElement().getTextRange().getStartOffset();
+		PsiTypeElement typeElement = variable.getTypeElement();
+		int start = typeElement != null ? typeElement.getTextRange().getStartOffset() : variable.getTextRange().getStartOffset();
 		int end = variable.getTextRange().getEndOffset();
 		HighlightInfo highlightInfo = checkAssignability(lType, rType, initializer, new TextRange(start, end), 0);
 		if(highlightInfo != null)
@@ -696,7 +710,9 @@ public class HighlightUtil extends HighlightUtilBase
 			QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createWrapLongWithMathToIntExactFix(lType, expression));
 			QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createWrapWithOptionalFix(lType, expression));
 			QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createWrapExpressionFix(lType, expression));
+			QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createWrapStringWithFileFix(lType, expression));
 			AddTypeArgumentsConditionalFix.register(highlightInfo, expression, lType);
+			registerCollectionToArrayFixAction(highlightInfo, rType, lType, expression);
 		}
 		ChangeNewOperatorTypeFix.register(highlightInfo, expression, lType);
 		return highlightInfo;
@@ -774,10 +790,15 @@ public class HighlightUtil extends HighlightUtilBase
 							QuickFixAction.registerQuickFixAction(errorResult, QUICK_FIX_FACTORY.createMethodReturnFix(method, valueType, true));
 						}
 						registerChangeParameterClassFix(returnType, valueType, errorResult);
-						if(returnType instanceof PsiArrayType && TypeConversionUtil.isAssignable(((PsiArrayType) returnType).getComponentType(), valueType))
+						if(returnType instanceof PsiArrayType)
 						{
-							QuickFixAction.registerQuickFixAction(errorResult, QUICK_FIX_FACTORY.createSurroundWithArrayFix(null, returnValue));
+							final PsiType erasedValueType = TypeConversionUtil.erasure(valueType);
+							if(erasedValueType != null && TypeConversionUtil.isAssignable(((PsiArrayType) returnType).getComponentType(), erasedValueType))
+							{
+								QuickFixAction.registerQuickFixAction(errorResult, QUICK_FIX_FACTORY.createSurroundWithArrayFix(null, returnValue));
+							}
 						}
+						registerCollectionToArrayFixAction(errorResult, valueType, returnType, returnValue);
 					}
 				}
 			}
@@ -794,6 +815,23 @@ public class HighlightUtil extends HighlightUtilBase
 		return errorResult;
 	}
 
+	private static void registerCollectionToArrayFixAction(@Nullable HighlightInfo info, @Nullable PsiType fromType, @Nullable PsiType toType, @NotNull PsiExpression expression)
+	{
+		if(toType instanceof PsiArrayType)
+		{
+			PsiType arrayComponentType = ((PsiArrayType) toType).getComponentType();
+			if(!(arrayComponentType instanceof PsiPrimitiveType) && !(PsiUtil.resolveClassInType(arrayComponentType) instanceof PsiTypeParameter) && InheritanceUtil.isInheritor(fromType,
+			CommonClassNames.JAVA_UTIL_COLLECTION))
+			{
+				PsiType collectionItemType = JavaGenericsUtil.getCollectionItemType(fromType, expression.getResolveScope());
+				if(collectionItemType != null && arrayComponentType.isAssignableFrom(collectionItemType))
+				{
+					QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createCollectionToArrayFix(expression, (PsiArrayType) toType));
+				}
+			}
+		}
+	}
+
 	@NotNull
 	public static String getUnhandledExceptionsDescriptor(@NotNull final Collection<PsiClassType> unhandled)
 	{
@@ -805,7 +843,7 @@ public class HighlightUtil extends HighlightUtilBase
 	{
 		final String exceptions = formatTypes(unhandled);
 		return source != null ? JavaErrorMessages.message("unhandled.close.exceptions", exceptions, unhandled.size(), source) : JavaErrorMessages.message("unhandled.exceptions", exceptions,
-				unhandled.size());
+		unhandled.size());
 	}
 
 	@NotNull
@@ -824,7 +862,7 @@ public class HighlightUtil extends HighlightUtilBase
 		boolean isIncorrect = false;
 		PsiElement declarationScope = null;
 		if(variable instanceof PsiLocalVariable || variable instanceof PsiParameter && ((declarationScope = ((PsiParameter) variable).getDeclarationScope()) instanceof PsiCatchSection ||
-				declarationScope instanceof PsiForeachStatement || declarationScope instanceof PsiLambdaExpression))
+		declarationScope instanceof PsiForeachStatement || declarationScope instanceof PsiLambdaExpression))
 		{
 			@SuppressWarnings("unchecked") PsiElement scope = PsiTreeUtil.getParentOfType(variable, PsiFile.class, PsiMethod.class, PsiClassInitializer.class, PsiResourceList.class);
 			VariablesNotProcessor proc = new VariablesNotProcessor(variable, false)
@@ -886,7 +924,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	private static boolean checkSameNames(PsiVariable variable)
+	private static boolean checkSameNames(@NotNull PsiVariable variable)
 	{
 		PsiElement scope = variable.getParent();
 		PsiElement[] children = scope.getChildren();
@@ -898,7 +936,7 @@ public class HighlightUtil extends HighlightUtilBase
 				{
 					continue;
 				}
-				if(variable.getName().equals(((PsiVariable) child).getName()))
+				if(Objects.equals(variable.getName(), ((PsiVariable) child).getName()))
 				{
 					return true;
 				}
@@ -944,7 +982,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@NotNull
-	static String formatField(@NotNull PsiField field)
+	private static String formatField(@NotNull PsiField field)
 	{
 		return PsiFormatUtil.formatVariable(field, PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_NAME, PsiSubstitutor.EMPTY);
 	}
@@ -1011,14 +1049,14 @@ public class HighlightUtil extends HighlightUtilBase
 	private static HighlightInfoType getUnhandledExceptionHighlightType(PsiElement element)
 	{
 		// JSP top level errors are handled by UnhandledExceptionInJSP inspection
-		/*if(FileTypeUtils.isInServerPageFile(element))
+		if(FileTypeUtils.isInServerPageFile(element))
 		{
 			PsiMethod targetMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class, true, PsiLambdaExpression.class);
 			if(targetMethod instanceof SyntheticElement)
 			{
 				return null;
 			}
-		} */
+		}
 
 		return HighlightInfoType.UNHANDLED_EXCEPTION;
 	}
@@ -1061,7 +1099,7 @@ public class HighlightUtil extends HighlightUtilBase
 				return null;
 			}
 			if(!(exitedStatement instanceof PsiForStatement) && !(exitedStatement instanceof PsiWhileStatement) && !(exitedStatement instanceof PsiDoWhileStatement) && !(exitedStatement instanceof
-					PsiForeachStatement))
+			PsiForeachStatement))
 			{
 				String description = JavaErrorMessages.message("not.loop.label", statement.getLabelIdentifier().getText());
 				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(statement).descriptionAndTooltip(description).create();
@@ -1086,56 +1124,58 @@ public class HighlightUtil extends HighlightUtilBase
 		return null;
 	}
 
-	@Nullable
-	private static Map<String, Set<String>> getIncompatibleModifierMap(@NotNull PsiModifierList modifierList)
+	@Contract("null -> null")
+	private static Map<String, Set<String>> getIncompatibleModifierMap(@Nullable PsiElement modifierListOwner)
 	{
-		PsiElement parent = modifierList.getParent();
-		if(parent == null || PsiUtilCore.hasErrorElementChild(parent))
+		if(modifierListOwner == null || PsiUtilCore.hasErrorElementChild(modifierListOwner))
 		{
 			return null;
 		}
-		return parent instanceof PsiClass ? ((PsiClass) parent).isInterface() ? ourInterfaceIncompatibleModifiers : ourClassIncompatibleModifiers : parent instanceof PsiMethod ?
-				ourMethodIncompatibleModifiers : parent instanceof PsiVariable ? ourFieldIncompatibleModifiers : parent instanceof PsiClassInitializer ? ourClassInitializerIncompatibleModifiers :
-				null;
+		if(modifierListOwner instanceof PsiClass)
+		{
+			return ((PsiClass) modifierListOwner).isInterface() ? ourInterfaceIncompatibleModifiers : ourClassIncompatibleModifiers;
+		}
+		if(modifierListOwner instanceof PsiMethod)
+		{
+			return ourMethodIncompatibleModifiers;
+		}
+		if(modifierListOwner instanceof PsiVariable)
+		{
+			return ourFieldIncompatibleModifiers;
+		}
+		if(modifierListOwner instanceof PsiClassInitializer)
+		{
+			return ourClassInitializerIncompatibleModifiers;
+		}
+		if(modifierListOwner instanceof PsiJavaModule)
+		{
+			return ourModuleIncompatibleModifiers;
+		}
+		if(modifierListOwner instanceof PsiRequiresStatement)
+		{
+			return ourRequiresIncompatibleModifiers;
+		}
+		return null;
 	}
 
 	@Nullable
 	static String getIncompatibleModifier(String modifier, @NotNull PsiModifierList modifierList)
 	{
-		PsiElement parent = modifierList.getParent();
-		if(parent == null || PsiUtilCore.hasErrorElementChild(parent))
-		{
-			return null;
-		}
-		final Map<String, Set<String>> incompatibleModifierMap = getIncompatibleModifierMap(modifierList);
-		if(incompatibleModifierMap == null)
-		{
-			return null;
-		}
-		return getIncompatibleModifier(modifier, modifierList, incompatibleModifierMap);
+		Map<String, Set<String>> incompatibleModifierMap = getIncompatibleModifierMap(modifierList.getParent());
+		return incompatibleModifierMap != null ? getIncompatibleModifier(modifier, modifierList, incompatibleModifierMap) : null;
 	}
-
 
 	@Nullable
 	static HighlightInfo checkNotAllowedModifier(@NotNull PsiKeyword keyword, @NotNull PsiModifierList modifierList)
 	{
 		PsiElement modifierOwner = modifierList.getParent();
-		if(modifierOwner == null)
-		{
-			return null;
-		}
-		if(PsiUtilCore.hasErrorElementChild(modifierOwner))
-		{
-			return null;
-		}
-
-		@PsiModifier.ModifierConstant String modifier = keyword.getText();
-		final Map<String, Set<String>> incompatibleModifierMap = getIncompatibleModifierMap(modifierList);
+		Map<String, Set<String>> incompatibleModifierMap = getIncompatibleModifierMap(modifierOwner);
 		if(incompatibleModifierMap == null)
 		{
 			return null;
 		}
 
+		@PsiModifier.ModifierConstant String modifier = keyword.getText();
 		Set<String> incompatibles = incompatibleModifierMap.get(modifier);
 		PsiElement modifierOwnerParent = modifierOwner instanceof PsiMember ? ((PsiMember) modifierOwner).getContainingClass() : modifierOwner.getParent();
 		if(modifierOwnerParent == null)
@@ -1158,11 +1198,11 @@ public class HighlightUtil extends HighlightUtilBase
 				if(PsiModifier.PUBLIC.equals(modifier))
 				{
 					isAllowed = modifierOwnerParent instanceof PsiJavaFile || modifierOwnerParent instanceof PsiClass && (modifierOwnerParent instanceof PsiSyntheticClass || ((PsiClass)
-							modifierOwnerParent).getQualifiedName() != null);
+					modifierOwnerParent).getQualifiedName() != null);
 				}
 				else if(PsiModifier.STATIC.equals(modifier) || PsiModifier.PRIVATE.equals(modifier) || PsiModifier.PROTECTED.equals(modifier) || PsiModifier.PACKAGE_LOCAL.equals(modifier))
 				{
-					isAllowed = modifierOwnerParent instanceof PsiClass && ((PsiClass) modifierOwnerParent).getQualifiedName() != null;
+					isAllowed = modifierOwnerParent instanceof PsiClass && ((PsiClass) modifierOwnerParent).getQualifiedName() != null || FileTypeUtils.isInServerPageFile(modifierOwnerParent);
 				}
 
 				if(aClass.isEnum())
@@ -1188,7 +1228,8 @@ public class HighlightUtil extends HighlightUtilBase
 
 			if(PsiModifier.PRIVATE.equals(modifier))
 			{
-				isAllowed &= modifierOwnerParent instanceof PsiClass && (!((PsiClass) modifierOwnerParent).isInterface() || PsiUtil.isLanguageLevel9OrHigher(modifierOwner));
+				isAllowed &= modifierOwnerParent instanceof PsiClass && (!((PsiClass) modifierOwnerParent).isInterface() || PsiUtil.isLanguageLevel9OrHigher(modifierOwner) && !((PsiClass)
+				modifierOwnerParent).isAnnotationType());
 			}
 			else if(PsiModifier.STRICTFP.equals(modifier))
 			{
@@ -1213,7 +1254,7 @@ public class HighlightUtil extends HighlightUtilBase
 		else if(modifierOwner instanceof PsiField)
 		{
 			if(PsiModifier.PRIVATE.equals(modifier) || PsiModifier.PROTECTED.equals(modifier) || PsiModifier.TRANSIENT.equals(modifier) || PsiModifier.STRICTFP.equals(modifier) || PsiModifier
-					.SYNCHRONIZED.equals(modifier))
+			.SYNCHRONIZED.equals(modifier))
 			{
 				isAllowed = modifierOwnerParent instanceof PsiClass && !((PsiClass) modifierOwnerParent).isInterface();
 			}
@@ -1235,11 +1276,11 @@ public class HighlightUtil extends HighlightUtilBase
 		if(!isAllowed)
 		{
 			String message = JavaErrorMessages.message("modifier.not.allowed", modifier);
-
 			HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(keyword).descriptionAndTooltip(message).create();
 			QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createModifierListFix(modifierList, modifier, false, false));
 			return highlightInfo;
 		}
+
 		return null;
 	}
 
@@ -1483,7 +1524,7 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	private static final Pattern FP_LITERAL_PARTS = Pattern.compile("(?:" + "(?:0x([_\\p{XDigit}]*)\\.?([_\\p{XDigit}]*)p[+-]?([_\\d]*))" + "|" + "(?:([_\\d]*)\\.?([_\\d]*)e?[+-]?([_\\d]*))" + ")" +
-			"[fd]?");
+	 "[fd]?");
 
 	@Nullable
 	private static HighlightInfo checkUnderscores(PsiElement expression, String text, boolean isInt)
@@ -1493,11 +1534,11 @@ public class HighlightUtil extends HighlightUtilBase
 		if(isInt)
 		{
 			int start = 0;
-			int end = text.length();
 			if(text.startsWith(PsiLiteralExpressionImpl.HEX_PREFIX) || text.startsWith(PsiLiteralExpressionImpl.BIN_PREFIX))
 			{
 				start += 2;
 			}
+			int end = text.length();
 			if(StringUtil.endsWithChar(text, 'l'))
 			{
 				--end;
@@ -1534,7 +1575,7 @@ public class HighlightUtil extends HighlightUtilBase
 	{
 		PsiElement parent = expr.getParent();
 		if(parent instanceof PsiIfStatement || parent instanceof PsiWhileStatement || parent instanceof PsiForStatement && expr.equals(((PsiForStatement) parent).getCondition()) || parent instanceof
-				PsiDoWhileStatement && expr.equals(((PsiDoWhileStatement) parent).getCondition()))
+		 PsiDoWhileStatement && expr.equals(((PsiDoWhileStatement) parent).getCondition()))
 		{
 			if(expr.getNextSibling() instanceof PsiErrorElement)
 			{
@@ -1552,6 +1593,10 @@ public class HighlightUtil extends HighlightUtilBase
 					{
 						QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createMethodReturnFix(method, PsiType.BOOLEAN, true));
 					}
+				}
+				else if(expr instanceof PsiAssignmentExpression && ((PsiAssignmentExpression) expr).getOperationTokenType() == JavaTokenType.EQ)
+				{
+					QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createAssignmentToComparisonFix((PsiAssignmentExpression) expr));
 				}
 				return info;
 			}
@@ -1625,7 +1670,7 @@ public class HighlightUtil extends HighlightUtilBase
 		return errorResult;
 	}
 
-	@Nullable
+	@NotNull
 	private static List<HighlightInfo> checkMultiCatchParameter(@NotNull final PsiParameter parameter, @NotNull final Collection<PsiClassType> thrownTypes)
 	{
 		final List<PsiTypeElement> typeElements = PsiUtil.getParameterTypeElements(parameter);
@@ -1756,7 +1801,12 @@ public class HighlightUtil extends HighlightUtilBase
 			}
 
 			String description = JavaErrorMessages.message(isDeclarationNotAllowed ? "declaration.not.allowed" : "not.a.statement");
-			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(statement).descriptionAndTooltip(description).create();
+			HighlightInfo error = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(statement).descriptionAndTooltip(description).create();
+			if(statement instanceof PsiExpressionStatement)
+			{
+				QuickFixAction.registerQuickFixAction(error, QuickFixFactory.getInstance().createDeleteSideEffectAwareFix((PsiExpressionStatement) statement));
+			}
+			return error;
 		}
 		return null;
 	}
@@ -1971,14 +2021,15 @@ public class HighlightUtil extends HighlightUtilBase
 				final PsiElement parent = expr.getParent();
 				final PsiElement resolved = parent instanceof PsiReferenceExpression ? ((PsiReferenceExpression) parent).resolve() : null;
 
+				PsiClass containingClass = ObjectUtils.notNull(resolved instanceof PsiMethod ? ((PsiMethod) resolved).getContainingClass() : null, aClass);
 				for(PsiClass superClass : classT.getSupers())
 				{
-					if(superClass.isInheritor(aClass, true))
+					if(superClass.isInheritor(containingClass, true))
 					{
 						String cause = null;
-						if(superClass.isInterface())
+						if(superClass.isInheritor(aClass, true) && superClass.isInterface())
 						{
-							cause = "redundant interface " + format(aClass) + " is extended by ";
+							cause = "redundant interface " + format(containingClass) + " is extended by ";
 						}
 						else if(resolved instanceof PsiMethod && MethodSignatureUtil.findMethodBySuperMethod(superClass, (PsiMethod) resolved, true) != resolved)
 						{
@@ -1988,7 +2039,7 @@ public class HighlightUtil extends HighlightUtilBase
 						if(cause != null)
 						{
 							return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(qualifier).descriptionAndTooltip(JavaErrorMessages.message("bad.qualifier.in.super.method.reference",
-									cause + formatClass(superClass))).create();
+							 cause + formatClass(superClass))).create();
 						}
 					}
 				}
@@ -1996,7 +2047,7 @@ public class HighlightUtil extends HighlightUtilBase
 				if(!classT.isInheritor(aClass, false))
 				{
 					return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(qualifier).descriptionAndTooltip(JavaErrorMessages.message("no.enclosing.instance.in.scope", format(aClass)))
-							.create();
+					.create();
 				}
 			}
 		}
@@ -2125,7 +2176,7 @@ public class HighlightUtil extends HighlightUtilBase
 	@NotNull
 	static String buildProblemWithAccessDescription(@NotNull final PsiElement reference, @NotNull final JavaResolveResult result)
 	{
-		return buildProblemWithAccessDescription(reference, result, result.getElement());
+		return buildProblemWithAccessDescription(reference, result, ObjectUtils.notNull(result.getElement()));
 	}
 
 	@NotNull
@@ -2262,25 +2313,9 @@ public class HighlightUtil extends HighlightUtilBase
 					return null;
 				}
 
-				PsiElement scope = null;
-				if(variable instanceof PsiParameter)
+				if(!(variable instanceof PsiField) && HighlightControlFlowUtil.isEffectivelyFinal(variable, resource, (PsiJavaCodeReferenceElement) expression))
 				{
-					scope = ((PsiParameter) variable).getDeclarationScope();
-				}
-				else if(variable instanceof PsiResourceVariable)
-				{
-					scope = variable.getParent().getParent();
-				}
-				else if(variable instanceof PsiLocalVariable)
-				{
-					scope = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
-				}
-				if(scope != null)
-				{
-					if(HighlightControlFlowUtil.isEffectivelyFinal(variable, scope, null))
-					{
-						return null;
-					}
+					return null;
 				}
 			}
 
@@ -2378,7 +2413,7 @@ public class HighlightUtil extends HighlightUtilBase
 	static HighlightInfo checkArrayInitializerApplicable(@NotNull PsiArrayInitializerExpression expression)
 	{
 	/*
-	JLS 10.6 Array Initializers
+    JLS 10.6 Array Initializers
     An array initializer may be specified in a declaration, or as part of an array creation expression
     */
 		PsiElement parent = expression.getParent();
@@ -2532,12 +2567,12 @@ public class HighlightUtil extends HighlightUtilBase
 	@Nullable
 	static HighlightInfo checkIllegalForwardReferenceToField(@NotNull PsiReferenceExpression expression, @NotNull PsiField referencedField)
 	{
-		final Boolean isIllegalForwardReference = isIllegalForwardReferenceToField(expression, referencedField, false);
+		Boolean isIllegalForwardReference = isIllegalForwardReferenceToField(expression, referencedField, false);
 		if(isIllegalForwardReference == null)
 		{
 			return null;
 		}
-		String description = isIllegalForwardReference ? JavaErrorMessages.message("illegal.forward.reference") : JavaErrorMessages.message("illegal.self.reference");
+		String description = JavaErrorMessages.message(isIllegalForwardReference ? "illegal.forward.reference" : "illegal.self.reference");
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(description).create();
 	}
 
@@ -2870,7 +2905,7 @@ public class HighlightUtil extends HighlightUtilBase
 			if(RefactoringChangeUtil.isSuperOrThisMethodCall(element))
 			{
 				PsiElement parentClass = new PsiMatcherImpl(element).parent(PsiMatchers.hasClass(PsiExpressionStatement.class)).parent(PsiMatchers.hasClass(PsiCodeBlock.class)).parent(PsiMatchers
-						.hasClass(PsiMethod.class)).dot(JavaMatchers.isConstructor(true)).parent(PsiMatchers.hasClass(PsiClass.class)).getElement();
+				.hasClass(PsiMethod.class)).dot(JavaMatchers.isConstructor(true)).parent(PsiMatchers.hasClass(PsiClass.class)).getElement();
 				if(parentClass == null)
 				{
 					return null;
@@ -2894,7 +2929,7 @@ public class HighlightUtil extends HighlightUtilBase
 				}
 
 				if(expression instanceof PsiJavaCodeReferenceElement && !aClass.equals(PsiTreeUtil.getParentOfType(expression, PsiClass.class)) && PsiTreeUtil.getParentOfType(expression,
-						PsiTypeElement.class) != null)
+				PsiTypeElement.class) != null)
 				{
 					return null;
 				}
@@ -3006,7 +3041,7 @@ public class HighlightUtil extends HighlightUtilBase
 		}
 		final PsiStatement statement = statements[0];
 		final PsiElement element = new PsiMatcherImpl(statement).dot(PsiMatchers.hasClass(PsiExpressionStatement.class)).firstChild(PsiMatchers.hasClass(PsiMethodCallExpression.class)).firstChild
-				(PsiMatchers.hasClass(PsiReferenceExpression.class)).firstChild(PsiMatchers.hasClass(PsiKeyword.class)).dot(PsiMatchers.hasText(PsiKeyword.SUPER)).getElement();
+		(PsiMatchers.hasClass(PsiReferenceExpression.class)).firstChild(PsiMatchers.hasClass(PsiKeyword.class)).dot(PsiMatchers.hasText(PsiKeyword.SUPER)).getElement();
 		return element != null;
 	}
 
@@ -3170,7 +3205,7 @@ public class HighlightUtil extends HighlightUtilBase
 				final PsiType upperCatchType = upperCatchSection.getCatchType();
 
 				final boolean highlight = upperCatchType instanceof PsiDisjunctionType ? checkMultipleTypes(catchClass, ((PsiDisjunctionType) upperCatchType).getDisjunctions()) : checkSingleType
-						(catchClass, upperCatchType);
+				(catchClass, upperCatchType);
 				if(highlight)
 				{
 					final String className = PsiFormatUtil.formatClass(catchClass, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_FQ_NAME);
@@ -3257,7 +3292,12 @@ public class HighlightUtil extends HighlightUtilBase
 		if(expression == assertStatement.getAssertCondition() && !TypeConversionUtil.isBooleanType(type))
 		{
 			// addTypeCast quickfix is not applicable here since no type can be cast to boolean
-			return createIncompatibleTypeHighlightInfo(PsiType.BOOLEAN, type, expression.getTextRange(), 0);
+			HighlightInfo highlightInfo = createIncompatibleTypeHighlightInfo(PsiType.BOOLEAN, type, expression.getTextRange(), 0);
+			if(expression instanceof PsiAssignmentExpression && ((PsiAssignmentExpression) expression).getOperationTokenType() == JavaTokenType.EQ)
+			{
+				QuickFixAction.registerQuickFixAction(highlightInfo, QUICK_FIX_FACTORY.createAssignmentToComparisonFix((PsiAssignmentExpression) expression));
+			}
+			return highlightInfo;
 		}
 		if(expression == assertStatement.getAssertDescription() && TypeConversionUtil.isVoidType(type))
 		{
@@ -3305,16 +3345,19 @@ public class HighlightUtil extends HighlightUtilBase
 		final PsiExpression thenExpression = conditionalExpression.getThenExpression();
 		assert thenExpression != null;
 		PsiType thenType = thenExpression.getType();
-		PsiType elseType = type;
-		if(thenType == null || elseType == null)
+		if(thenType == null || type == null)
 		{
 			return null;
 		}
 		if(conditionalExpression.getType() == null)
 		{
+			if(PsiUtil.isLanguageLevel8OrHigher(conditionalExpression) && PsiPolyExpressionUtil.isPolyExpression(conditionalExpression))
+			{
+				return null;
+			}
 			// cannot derive type of conditional expression
-			// elseType will never be castable to thenType, so no quick fix here
-			return createIncompatibleTypeHighlightInfo(thenType, elseType, expression.getTextRange(), 0);
+			// elseType will never be cast-able to thenType, so no quick fix here
+			return createIncompatibleTypeHighlightInfo(thenType, type, expression.getTextRange(), 0);
 		}
 		return null;
 	}
@@ -3495,15 +3538,14 @@ public class HighlightUtil extends HighlightUtilBase
 
 
 	@Nullable
-	static HighlightInfo checkReference(@NotNull final PsiJavaCodeReferenceElement ref, @NotNull final JavaResolveResult result, @NotNull PsiFile containingFile, @NotNull LanguageLevel languageLevel)
+	static HighlightInfo checkReference(@NotNull PsiJavaCodeReferenceElement ref, @NotNull JavaResolveResult result, @NotNull PsiFile containingFile, @NotNull LanguageLevel languageLevel)
 	{
-		final PsiElement refName = ref.getReferenceNameElement();
-
+		PsiElement refName = ref.getReferenceNameElement();
 		if(!(refName instanceof PsiIdentifier) && !(refName instanceof PsiKeyword))
 		{
 			return null;
 		}
-		final PsiElement resolved = result.getElement();
+		PsiElement resolved = result.getElement();
 
 		HighlightInfo highlightInfo = checkMemberReferencedBeforeConstructorCalled(ref, resolved, containingFile);
 		if(highlightInfo != null)
@@ -3517,36 +3559,33 @@ public class HighlightUtil extends HighlightUtilBase
 		{
 			PsiReferenceExpression referenceToMethod = ((PsiMethodCallExpression) granny).getMethodExpression();
 			PsiExpression qualifierExpression = referenceToMethod.getQualifierExpression();
-			if(qualifierExpression == ref)
+			if(qualifierExpression == ref && resolved != null && !(resolved instanceof PsiClass) && !(resolved instanceof PsiVariable))
 			{
-				@SuppressWarnings("UnnecessaryLocalVariable") PsiElement qualifier = resolved;
-				if(qualifier != null && !(qualifier instanceof PsiClass) && !(qualifier instanceof PsiVariable))
-				{
-					return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(qualifierExpression).descriptionAndTooltip("Qualifier must be an expression").create();
-				}
+				String message = JavaErrorMessages.message("qualifier.must.be.expression");
+				return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(qualifierExpression).descriptionAndTooltip(message).create();
 			}
 		}
 		else if(refParent instanceof PsiMethodCallExpression)
 		{
 			return null;  // methods checked elsewhere
 		}
+
 		if(resolved == null)
 		{
-			// do not highlight unknown packages - javac does not care about illegal package names
-			if(isInsidePackageStatement(refName))
+			// do not highlight unknown packages (javac does not care), Javadoc, and module references (checked elsewhere)
+			PsiElement outerParent = getOuterReferenceParent(ref);
+			if(outerParent instanceof PsiPackageStatement || result.isPackagePrefixPackageReference() || PsiUtil.isInsideJavadocComment(ref) || outerParent instanceof
+			PsiPackageAccessibilityStatement)
 			{
 				return null;
 			}
-			if(result.isPackagePrefixPackageReference())
-			{
-				return null;
-			}
+
 			JavaResolveResult[] results = ref.multiResolve(true);
 			String description;
 			if(results.length > 1)
 			{
-				String t1 = format(results[0].getElement());
-				String t2 = format(results[1].getElement());
+				String t1 = format(ObjectUtils.notNull(results[0].getElement()));
+				String t2 = format(ObjectUtils.notNull(results[1].getElement()));
 				description = JavaErrorMessages.message("ambiguous.reference", refName.getText(), t1, t2);
 			}
 			else
@@ -3554,14 +3593,7 @@ public class HighlightUtil extends HighlightUtilBase
 				description = JavaErrorMessages.message("cannot.resolve.symbol", refName.getText());
 			}
 
-			HighlightInfoType type = HighlightInfoType.WRONG_REF;
-			if(PsiUtil.isInsideJavadocComment(ref))
-			{
-				return null;
-			}
-
-			HighlightInfo info = HighlightInfo.newHighlightInfo(type).range(refName).descriptionAndTooltip(description).create();
-
+			HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refName).descriptionAndTooltip(description).create();
 			UnresolvedReferenceQuickFixProvider.registerReferenceFixes(ref, new QuickFixActionRegistrarImpl(info));
 			return info;
 		}
@@ -3570,8 +3602,8 @@ public class HighlightUtil extends HighlightUtilBase
 		{
 			if(!result.isAccessible())
 			{
-				String description = buildProblemWithAccessDescription(ref, result, resolved);
-				HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refName).descriptionAndTooltip(description).create();
+				String message = buildProblemWithAccessDescription(ref, result, resolved);
+				HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refName).descriptionAndTooltip(message).create();
 				if(result.isStaticsScopeCorrect())
 				{
 					registerAccessQuickFixAction((PsiMember) resolved, ref, info, result.getCurrentFileResolveScope());
@@ -3596,19 +3628,19 @@ public class HighlightUtil extends HighlightUtilBase
 				return info;
 			}
 		}
+
 		if((resolved instanceof PsiLocalVariable || resolved instanceof PsiParameter) && !(resolved instanceof ImplicitVariable))
 		{
-			highlightInfo = HighlightControlFlowUtil.checkVariableMustBeFinal((PsiVariable) resolved, ref, languageLevel);
+			return HighlightControlFlowUtil.checkVariableMustBeFinal((PsiVariable) resolved, ref, languageLevel);
 		}
-		else if(resolved instanceof PsiClass)
+		if(resolved instanceof PsiClass && ((PsiClass) resolved).getContainingClass() == null && PsiTreeUtil.getParentOfType(ref, PsiImportStatementBase.class) != null && PsiUtil
+		.isFromDefaultPackage((PsiClass) resolved))
 		{
-			if(((PsiClass) resolved).getContainingClass() == null && PsiTreeUtil.getParentOfType(ref, PsiImportStatementBase.class) != null && PsiUtil.isFromDefaultPackage((PsiClass) resolved))
-			{
-				String description = JavaErrorMessages.message("cannot.resolve.symbol", refName.getText());
-				return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refName).descriptionAndTooltip(description).create();
-			}
+			String description = JavaErrorMessages.message("cannot.resolve.symbol", refName.getText());
+			return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refName).descriptionAndTooltip(description).create();
 		}
-		return highlightInfo;
+
+		return null;
 	}
 
 	@NotNull
@@ -3629,27 +3661,20 @@ public class HighlightUtil extends HighlightUtilBase
 		return ElementDescriptionUtil.getElementDescription(element, HighlightUsagesDescriptionLocation.INSTANCE);
 	}
 
-	private static boolean isInsidePackageStatement(@Nullable PsiElement element)
+	private static PsiElement getOuterReferenceParent(PsiJavaCodeReferenceElement ref)
 	{
-		while(element != null)
+		PsiElement element = ref;
+		while(element instanceof PsiJavaCodeReferenceElement)
 		{
-			if(element instanceof PsiPackageStatement)
-			{
-				return true;
-			}
-			if(!(element instanceof PsiIdentifier) && !(element instanceof PsiJavaCodeReferenceElement))
-			{
-				return false;
-			}
 			element = element.getParent();
 		}
-		return false;
+		return element;
 	}
 
 	@Nullable
 	static HighlightInfo checkPackageAndClassConflict(@NotNull PsiJavaCodeReferenceElement ref, @NotNull PsiFile containingFile)
 	{
-		if(ref.isQualified() && isInsidePackageStatement(ref))
+		if(ref.isQualified() && getOuterReferenceParent(ref) instanceof PsiPackageStatement)
 		{
 			VirtualFile file = containingFile.getVirtualFile();
 			if(file != null)
@@ -3815,13 +3840,14 @@ public class HighlightUtil extends HighlightUtilBase
 	static HighlightInfo checkForStatement(@NotNull PsiForStatement statement)
 	{
 		PsiStatement init = statement.getInitialization();
-		if(!(init == null || init instanceof PsiEmptyStatement || init instanceof PsiDeclarationStatement || init instanceof PsiExpressionStatement || init instanceof PsiExpressionListStatement))
+		if(init == null || init instanceof PsiEmptyStatement || init instanceof PsiDeclarationStatement && ArrayUtil.getFirstElement(((PsiDeclarationStatement) init).getDeclaredElements())
+		instanceof PsiLocalVariable || init instanceof PsiExpressionStatement || init instanceof PsiExpressionListStatement)
 		{
-			String message = JavaErrorMessages.message("invalid.statement");
-			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(init).descriptionAndTooltip(message).create();
+			return null;
 		}
 
-		return null;
+		String message = JavaErrorMessages.message("invalid.statement");
+		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(init).descriptionAndTooltip(message).create();
 	}
 
 	private static void registerChangeParameterClassFix(PsiType lType, PsiType rType, HighlightInfo info)
@@ -3931,9 +3957,7 @@ public class HighlightUtil extends HighlightUtilBase
 	{
 		if(file.getManager().isInProject(file) && !level.isAtLeast(feature.level))
 		{
-			String message = JavaErrorMessages.message("insufficient.language.level", JavaErrorMessages.message(feature.key));
-
-			message = extendUnsupportedLanguageLevelDescription(message, element, level, file, feature.level);
+			String message = getUnsupportedFeatureMessage(element, feature, level, file);
 			HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(element).descriptionAndTooltip(message).create();
 			QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createIncreaseLanguageLevelFix(feature.level));
 			QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createShowModulePropertiesFix(element));
@@ -3944,23 +3968,22 @@ public class HighlightUtil extends HighlightUtilBase
 	}
 
 	@RequiredReadAction
-	static String extendUnsupportedLanguageLevelDescription(@NotNull String message,
-			@NotNull PsiElement element,
-			@NotNull LanguageLevel fileLanguageLevel,
-			@NotNull PsiFile file,
-			@NotNull LanguageLevel featureLevel)
+	private static String getUnsupportedFeatureMessage(PsiElement element, Feature feature, LanguageLevel level, PsiFile file)
 	{
+		String name = JavaErrorMessages.message(feature.key);
+		String message = JavaErrorMessages.message("insufficient.language.level", name, level.getCompilerComplianceDefaultOption());
+
 		Module module = ModuleUtilCore.findModuleForPsiElement(element);
 		if(module != null)
 		{
 			LanguageLevel moduleLanguageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
-			if(moduleLanguageLevel.isAtLeast(featureLevel))
+			if(moduleLanguageLevel.isAtLeast(feature.level))
 			{
 				for(FilePropertyPusher pusher : FilePropertyPusher.EP_NAME.getExtensions())
 				{
 					if(pusher instanceof JavaLanguageLevelPusher)
 					{
-						String newMessage = ((JavaLanguageLevelPusher) pusher).getInconsistencyLanguageLevelMessage(message, element, fileLanguageLevel, file);
+						String newMessage = ((JavaLanguageLevelPusher) pusher).getInconsistencyLanguageLevelMessage(message, element, level, file);
 						if(newMessage != null)
 						{
 							return newMessage;
@@ -3969,6 +3992,7 @@ public class HighlightUtil extends HighlightUtilBase
 				}
 			}
 		}
+
 		return message;
 	}
 }

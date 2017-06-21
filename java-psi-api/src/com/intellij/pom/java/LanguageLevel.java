@@ -19,6 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.containers.ContainerUtil;
 import consulo.java.psi.JavaLanguageVersion;
 import consulo.util.pointers.Named;
 import consulo.util.pointers.NamedPointer;
@@ -28,14 +31,14 @@ import consulo.util.pointers.NamedPointer;
  */
 public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 {
-	JDK_1_3("1.3", "Java 1.3", JavaCoreBundle.message("jdk.1.3.language.level.description")),
-	JDK_1_4("1.4", "Java 1.4", JavaCoreBundle.message("jdk.1.4.language.level.description")),
-	JDK_1_5("1.5", "Java 5", JavaCoreBundle.message("jdk.1.5.language.level.description")),
-	JDK_1_6("1.6", "Java 6", JavaCoreBundle.message("jdk.1.6.language.level.description")),
-	JDK_1_7("1.7", "Java 7", JavaCoreBundle.message("jdk.1.7.language.level.description")),
-	JDK_1_8("1.8", "Java 8", JavaCoreBundle.message("jdk.1.8.language.level.description")),
-	JDK_1_9("1.9", "Java 9", JavaCoreBundle.message("jdk.1.9.language.level.description")),
-	JDK_X("1.10", "Java X", JavaCoreBundle.message("jdk.X.language.level.description"));
+	JDK_1_3("1.3", "Java 1.3", JavaCoreBundle.message("jdk.1.3.language.level.description"), "1.3"),
+	JDK_1_4("1.4", "Java 1.4", JavaCoreBundle.message("jdk.1.4.language.level.description"), "1.4"),
+	JDK_1_5("1.5", "Java 5", JavaCoreBundle.message("jdk.1.5.language.level.description"), "1.5", "5"),
+	JDK_1_6("1.6", "Java 6", JavaCoreBundle.message("jdk.1.6.language.level.description"), "1.6", "6"),
+	JDK_1_7("1.7", "Java 7", JavaCoreBundle.message("jdk.1.7.language.level.description"), "1.7", "7"),
+	JDK_1_8("1.8", "Java 8", JavaCoreBundle.message("jdk.1.8.language.level.description"), "1.8", "8"),
+	JDK_1_9("1.9", "Java 9", JavaCoreBundle.message("jdk.1.9.language.level.description"), "9", "1.9"),
+	JDK_X("1.10", "Java X", JavaCoreBundle.message("jdk.X.language.level.description"), "");
 
 	public static final LanguageLevel HIGHEST = JDK_1_9;
 	public static final Key<LanguageLevel> KEY = Key.create("LANGUAGE_LEVEL");
@@ -43,15 +46,29 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	private final String myShortText;
 	private final String myFullText;
 	private final String myPresentableText;
+	private final String[] myCompilerComplianceOptions;
 
 	private JavaLanguageVersion myLangVersion;
 
-	LanguageLevel(String shortText, String fullText, String presentableText)
+	/**
+	 * @param compilerComplianceOptions versions supported by Javac '-source' parameter
+	 * @see <a href="http://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html">Javac Reference</a>
+	 */
+	LanguageLevel(String shortText, String fullText, String presentableText, String... compilerComplianceOptions)
 	{
 		myShortText = shortText;
 		myFullText = fullText;
 		myPresentableText = presentableText;
+		myCompilerComplianceOptions = compilerComplianceOptions;
 		myLangVersion = new JavaLanguageVersion(name(), shortText, this);
+	}
+
+	/**
+	 * String representation of the level, suitable to pass as a value of compiler's "-source" and "-target" options
+	 */
+	public String getCompilerComplianceDefaultOption()
+	{
+		return myCompilerComplianceOptions[0];
 	}
 
 	@NotNull
@@ -84,38 +101,13 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel>
 	}
 
 	@Nullable
-	public static LanguageLevel parse(final String value)
+	public static LanguageLevel parse(final String compilerComplianceOption)
 	{
-		if("1.3".equals(value))
+		if(StringUtil.isEmpty(compilerComplianceOption))
 		{
-			return JDK_1_3;
+			return null;
 		}
-		if("1.4".equals(value))
-		{
-			return JDK_1_4;
-		}
-		if("1.5".equals(value))
-		{
-			return JDK_1_5;
-		}
-		if("1.6".equals(value))
-		{
-			return JDK_1_6;
-		}
-		if("1.7".equals(value))
-		{
-			return JDK_1_7;
-		}
-		if("1.8".equals(value))
-		{
-			return JDK_1_8;
-		}
-		if("1.9".equals(value))
-		{
-			return JDK_1_9;
-		}
-
-		return null;
+		return ContainerUtil.find(values(), level -> ArrayUtil.contains(compilerComplianceOption, level.myCompilerComplianceOptions));
 	}
 
 	@NotNull

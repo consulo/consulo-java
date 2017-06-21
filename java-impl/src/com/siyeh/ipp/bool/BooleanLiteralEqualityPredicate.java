@@ -18,7 +18,7 @@ package com.siyeh.ipp.bool;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.ipp.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ipp.psiutils.ErrorUtil;
 
 class BooleanLiteralEqualityPredicate implements PsiElementPredicate {

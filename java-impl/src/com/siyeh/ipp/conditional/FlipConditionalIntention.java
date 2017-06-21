@@ -21,7 +21,6 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.ipp.psiutils.BoolUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class FlipConditionalIntention extends Intention {
@@ -43,7 +42,7 @@ public class FlipConditionalIntention extends Intention {
     assert elseExpression != null;
     assert thenExpression != null;
     final String newExpression =
-      BoolUtils.getNegatedExpressionText(condition) + '?' +
+      com.siyeh.ig.psiutils.BoolUtils.getNegatedExpressionText(condition) + '?' +
       elseExpression.getText() +
       ':' +
       thenExpression.getText();

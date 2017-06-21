@@ -20,7 +20,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.ipp.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ipp.psiutils.ConditionalUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.NonNls;
@@ -171,7 +171,7 @@ public class SimplifyIfElseIntention extends Intention {
     throws IncorrectOperationException {
     final PsiExpression condition = statement.getCondition();
     final String conditionText =
-      BoolUtils.getNegatedExpressionText(condition);
+      com.siyeh.ig.psiutils.BoolUtils.getNegatedExpressionText(condition);
     final PsiElement nextStatement =
       PsiTreeUtil.skipSiblingsForward(statement,
                                       PsiWhiteSpace.class);
@@ -196,7 +196,7 @@ public class SimplifyIfElseIntention extends Intention {
     throws IncorrectOperationException {
     final PsiExpression condition = statement.getCondition();
     final String conditionText =
-      BoolUtils.getNegatedExpressionText(condition);
+      com.siyeh.ig.psiutils.BoolUtils.getNegatedExpressionText(condition);
     final PsiStatement thenBranch = statement.getThenBranch();
     final PsiExpressionStatement assignmentStatement =
       (PsiExpressionStatement)ConditionalUtils.stripBraces(thenBranch);

@@ -39,7 +39,7 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.siyeh.ipp.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.BoolUtils;
 
 public abstract class Intention extends BaseElementAtCaretIntentionAction {
 
@@ -88,8 +88,8 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     PsiExpression expressionToReplace = expression;
     final String newExpressionText = newExpression.getText();
     final String expString;
-    if (BoolUtils.isNegated(expression)) {
-      expressionToReplace = BoolUtils.findNegation(expression);
+    if (com.siyeh.ig.psiutils.BoolUtils.isNegated(expression)) {
+      expressionToReplace = com.siyeh.ig.psiutils.BoolUtils.findNegation(expression);
       expString = newExpressionText;
     }
     else if (ComparisonUtils.isComparison(newExpression)) {

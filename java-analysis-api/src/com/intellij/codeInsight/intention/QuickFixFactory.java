@@ -71,6 +71,9 @@ public abstract class QuickFixFactory
 	public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@NotNull PsiElement psiElement);
 
 	@NotNull
+	public abstract LocalQuickFixAndIntentionActionOnPsiElement createAssignmentToComparisonFix(PsiAssignmentExpression expr);
+
+	@NotNull
 	public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@NotNull PsiClass psiElement);
 
 	@NotNull
@@ -237,6 +240,9 @@ public abstract class QuickFixFactory
 	public abstract IntentionAction createInsertSuperFix(@NotNull PsiMethod constructor);
 
 	@NotNull
+	public abstract IntentionAction createInsertThisFix(@NotNull PsiMethod constructor);
+
+	@NotNull
 	public abstract IntentionAction createChangeMethodSignatureFromUsageFix(@NotNull PsiMethod targetMethod,
 			@NotNull PsiExpression[] expressions,
 			@NotNull PsiSubstitutor substitutor,
@@ -348,6 +354,9 @@ public abstract class QuickFixFactory
 
 	@NotNull
 	public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@NotNull PsiElement element, @NotNull @Nls String text);
+
+	@NotNull
+	public abstract IntentionAction createDeleteSideEffectAwareFix(@NotNull PsiExpressionStatement statement);
 
 	@NotNull
 	public abstract IntentionAction createSafeDeleteFix(@NotNull PsiElement element);

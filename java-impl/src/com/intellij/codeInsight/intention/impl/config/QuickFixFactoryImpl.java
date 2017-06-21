@@ -37,6 +37,7 @@ import com.intellij.codeInsight.daemon.quickFix.CreateFieldOrPropertyFix;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.QuickFixFactory;
+import com.intellij.codeInsight.intention.impl.ReplaceAssignmentWithComparisonFix;
 import com.intellij.codeInspection.InspectionProfile;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -128,6 +129,13 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	public LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@NotNull PsiElement psiElement)
 	{
 		return new ImplementMethodsFix(psiElement);
+	}
+
+	@NotNull
+	@Override
+	public LocalQuickFixAndIntentionActionOnPsiElement createAssignmentToComparisonFix(PsiAssignmentExpression expr)
+	{
+		return new ReplaceAssignmentWithComparisonFix(expr);
 	}
 
 	@NotNull
@@ -506,6 +514,13 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 
 	@NotNull
 	@Override
+	public IntentionAction createInsertThisFix(@NotNull PsiMethod constructor)
+	{
+		return new InsertThisFix(constructor);
+	}
+
+	@NotNull
+	@Override
 	public IntentionAction createChangeMethodSignatureFromUsageFix(@NotNull PsiMethod targetMethod,
 			@NotNull PsiExpression[] expressions,
 			@NotNull PsiSubstitutor substitutor,
@@ -761,8 +776,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	public IntentionAction createAddToDependencyInjectionAnnotationsFix(@NotNull Project project, @NotNull String qualifiedName, @NotNull String element)
 	{
 		final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
-		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName), JavaQuickFixBundle
-				.message("fix.unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
+		return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName), JavaQuickFixBundle.message
+				("fix" +
+				".unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
 	}
 
 	@NotNull
@@ -989,5 +1005,12 @@ public class QuickFixFactoryImpl extends QuickFixFactory
 	public IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, @NotNull PsiExpression expression)
 	{
 		return new WrapStringWithFileFix(type, expression);
+	}
+
+	@NotNull
+	@Override
+	public IntentionAction createDeleteSideEffectAwareFix(@NotNull PsiExpressionStatement statement)
+	{
+		return new DeleteSideEffectsAwareFix(statement);
 	}
 }

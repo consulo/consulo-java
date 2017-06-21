@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.FileModificationService;
+import com.intellij.codeInsight.AnnotationTargetUtil;
 import com.intellij.codeInsight.daemon.JavaErrorMessages;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
@@ -41,20 +41,20 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
+import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.HashSet;
-import consulo.psi.PsiPackage;
 
 /**
  * @author ven
  */
 public class AnnotationsHighlightUtil
 {
-	private static final Logger LOG = Logger.getInstance("com.intellij.codeInsight.daemon.impl.analysis" + ".AnnotationsHighlightUtil");
+	private static final Logger LOG = Logger.getInstance("com.intellij.codeInsight.daemon.impl.analysis.AnnotationsHighlightUtil");
 
 	@Nullable
 	static HighlightInfo checkNameValuePair(PsiNameValuePair pair)
@@ -79,7 +79,12 @@ public class AnnotationsHighlightUtil
 			{
 				String description = JavaErrorMessages.message("annotation.missing.method", ref.getCanonicalText());
 				PsiElement element = ref.getElement();
-				return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(element).descriptionAndTooltip(description).create();
+				final HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(element).descriptionAndTooltip(description).create();
+				for(IntentionAction action : QuickFixFactory.getInstance().createAddAnnotationAttributeNameFixes(pair))
+				{
+					QuickFixAction.registerQuickFixAction(highlightInfo, action);
+				}
+				return highlightInfo;
 			}
 		}
 		else
@@ -272,8 +277,8 @@ public class AnnotationsHighlightUtil
 			PsiClass container = getRepeatableContainer(metaAnno);
 			if(container != null)
 			{
-				PsiAnnotation.TargetType[] targets = PsiImplUtil.getTargetsForLocation(owner);
-				PsiAnnotation.TargetType applicable = PsiImplUtil.findApplicableTarget(container, targets);
+				PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(owner);
+				PsiAnnotation.TargetType applicable = AnnotationTargetUtil.findAnnotationTarget(container, targets);
 				if(applicable == null)
 				{
 					String target = JavaErrorMessages.message("annotation.target." + targets[0]);
@@ -356,7 +361,7 @@ public class AnnotationsHighlightUtil
 		PsiClass aClass = (PsiClass) nameRef.resolve();
 		if(aClass != null && aClass.isAnnotationType())
 		{
-			Set<String> names = new HashSet<String>();
+			Set<String> names = new HashSet<>();
 			PsiNameValuePair[] attributes = annotation.getParameterList().getAttributes();
 			for(PsiNameValuePair attribute : attributes)
 			{
@@ -372,7 +377,7 @@ public class AnnotationsHighlightUtil
 			}
 
 			PsiMethod[] annotationMethods = aClass.getMethods();
-			List<String> missed = new ArrayList<String>();
+			List<String> missed = new ArrayList<>();
 			for(PsiMethod method : annotationMethods)
 			{
 				if(PsiUtil.isAnnotationMethod(method))
@@ -431,7 +436,7 @@ public class AnnotationsHighlightUtil
 		{
 			return null;
 		}
-		String description = JavaErrorMessages.message("annotation.invalid.annotation.member.type", type != null ? type.getPresentableText() : type);
+		String description = JavaErrorMessages.message("annotation.invalid.annotation.member.type", type != null ? type.getPresentableText() : null);
 		return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(typeElement).descriptionAndTooltip(description).create();
 	}
 
@@ -454,7 +459,7 @@ public class AnnotationsHighlightUtil
 		}
 
 		PsiAnnotationOwner owner = annotation.getOwner();
-		PsiAnnotation.TargetType[] targets = PsiImplUtil.getTargetsForLocation(owner);
+		PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(owner);
 		if(owner == null || targets.length == 0)
 		{
 			String message = JavaErrorMessages.message("annotation.not.allowed.here");
@@ -470,7 +475,7 @@ public class AnnotationsHighlightUtil
 			}
 		}
 
-		PsiAnnotation.TargetType applicable = PsiImplUtil.findApplicableTarget(annotation, targets);
+		PsiAnnotation.TargetType applicable = AnnotationTargetUtil.findAnnotationTarget(annotation, targets);
 		if(applicable == PsiAnnotation.TargetType.UNKNOWN)
 		{
 			return null;
@@ -588,64 +593,6 @@ public class AnnotationsHighlightUtil
 		return ref;
 	}
 
-	static HighlightInfo checkForeignInnerClassesUsed(final PsiAnnotation annotation)
-	{
-		final HighlightInfo[] infos = new HighlightInfo[1];
-		final PsiAnnotationOwner owner = annotation.getOwner();
-		if(owner instanceof PsiModifierList)
-		{
-			final PsiElement parent = ((PsiModifierList) owner).getParent();
-			if(parent instanceof PsiClass)
-			{
-				annotation.accept(new JavaRecursiveElementWalkingVisitor()
-				{
-					@Override
-					public void visitElement(PsiElement element)
-					{
-						if(infos[0] != null)
-						{
-							return;
-						}
-						super.visitElement(element);
-					}
-
-					@Override
-					public void visitClassObjectAccessExpression(PsiClassObjectAccessExpression expression)
-					{
-						super.visitClassObjectAccessExpression(expression);
-						final PsiTypeElement operand = expression.getOperand();
-						final PsiClass classType = PsiUtil.resolveClassInType(operand.getType());
-						if(classType != null)
-						{
-							checkAccessibility(expression, classType, HighlightUtil.formatClass(classType));
-						}
-					}
-
-					@Override
-					public void visitReferenceExpression(PsiReferenceExpression expression)
-					{
-						super.visitReferenceExpression(expression);
-						final PsiElement resolve = expression.resolve();
-						if(resolve instanceof PsiField)
-						{
-							checkAccessibility(expression, (PsiMember) resolve, HighlightUtil.formatField((PsiField) resolve));
-						}
-					}
-
-					private void checkAccessibility(PsiExpression expression, PsiMember resolve, String memberString)
-					{
-						if(resolve.hasModifierProperty(PsiModifier.PRIVATE) && PsiTreeUtil.isAncestor(parent, resolve, true))
-						{
-							String description = JavaErrorMessages.message("private.symbol", memberString, HighlightUtil.formatClass((PsiClass) parent));
-							infos[0] = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(description).create();
-						}
-					}
-				});
-			}
-		}
-		return infos[0];
-	}
-
 	@Nullable
 	static HighlightInfo checkAnnotationType(PsiAnnotation annotation)
 	{
@@ -667,7 +614,7 @@ public class AnnotationsHighlightUtil
 	{
 		LOG.assertTrue(aClass.isAnnotationType());
 		PsiType type = typeElement.getType();
-		final Set<PsiClass> checked = new HashSet<PsiClass>();
+		final Set<PsiClass> checked = new HashSet<>();
 		if(cyclicDependencies(aClass, type, checked, aClass.getManager()))
 		{
 			String description = JavaErrorMessages.message("annotation.cyclic.element.type");
@@ -747,7 +694,6 @@ public class AnnotationsHighlightUtil
 		return null;
 	}
 
-
 	@Nullable
 	static HighlightInfo checkPackageAnnotationContainingFile(PsiPackageStatement statement, PsiFile file)
 	{
@@ -786,7 +732,7 @@ public class AnnotationsHighlightUtil
 			return null;
 		}
 		PsiAnnotationMemberValue[] arrayInitializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
-		Set<PsiElement> targets = new HashSet<PsiElement>();
+		Set<PsiElement> targets = new HashSet<>();
 		for(PsiAnnotationMemberValue initializer : arrayInitializers)
 		{
 			if(initializer instanceof PsiReferenceExpression)
@@ -894,10 +840,10 @@ public class AnnotationsHighlightUtil
 			}
 		}
 
-		Set<PsiAnnotation.TargetType> repeatableTargets = PsiImplUtil.getAnnotationTargets((PsiClass) target);
+		Set<PsiAnnotation.TargetType> repeatableTargets = AnnotationTargetUtil.getAnnotationTargets((PsiClass) target);
 		if(repeatableTargets != null)
 		{
-			Set<PsiAnnotation.TargetType> containerTargets = PsiImplUtil.getAnnotationTargets(container);
+			Set<PsiAnnotation.TargetType> containerTargets = AnnotationTargetUtil.getAnnotationTargets(container);
 			if(containerTargets != null && !repeatableTargets.containsAll(containerTargets))
 			{
 				return JavaErrorMessages.message("annotation.container.wide.target", container.getQualifiedName());
@@ -944,7 +890,7 @@ public class AnnotationsHighlightUtil
 		}
 
 		PsiMethod method = (PsiMethod) owner;
-		if(isStatic(method) || (method).isConstructor() && isStatic(method.getContainingClass()))
+		if(isStatic(method) || method.isConstructor() && isStatic(method.getContainingClass()))
 		{
 			String text = JavaErrorMessages.message("receiver.static.context");
 			return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(parameter.getIdentifier()).descriptionAndTooltip(text).create();
@@ -999,7 +945,7 @@ public class AnnotationsHighlightUtil
 		{
 			return false;
 		}
-		if(owner instanceof PsiClass && ((PsiClass) owner).getContainingClass() == null)
+		if(owner instanceof PsiClass && ClassUtil.isTopLevelClass((PsiClass) owner))
 		{
 			return true;
 		}
@@ -1028,6 +974,7 @@ public class AnnotationsHighlightUtil
 					String name = ((PsiEnumConstant) field).getName();
 					try
 					{
+						//noinspection ConstantConditions
 						return Enum.valueOf(RetentionPolicy.class, name);
 					}
 					catch(Exception e)
@@ -1119,10 +1066,6 @@ public class AnnotationsHighlightUtil
 		@Override
 		public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 		{
-			if(!FileModificationService.getInstance().prepareFileForWrite(file))
-			{
-				return;
-			}
 			myAnnotation.delete();
 		}
 

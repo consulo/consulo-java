@@ -19,7 +19,6 @@ import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import com.siyeh.ipp.psiutils.BoolUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class IfToAssertionIntention extends Intention {
@@ -41,7 +40,7 @@ public class IfToAssertionIntention extends Intention {
 
     final PsiExpression condition = ifStatement.getCondition();
     final String negatedExpressionText =
-      BoolUtils.getNegatedExpressionText(condition);
+      com.siyeh.ig.psiutils.BoolUtils.getNegatedExpressionText(condition);
     final StringBuilder newStatementText = new StringBuilder("assert ");
     newStatementText.append(negatedExpressionText);
     final PsiStatement thenBranch = ifStatement.getThenBranch();
