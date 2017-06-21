@@ -19,7 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.util.FileTypeUtils;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -61,6 +63,12 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection
 			}
 		}
 		return new RenameFix(filenameWithoutPrefix);
+	}
+
+	@Override
+	public boolean shouldInspect(PsiFile file)
+	{
+		return !FileTypeUtils.isInServerPageFile(file);
 	}
 
 	@Override
