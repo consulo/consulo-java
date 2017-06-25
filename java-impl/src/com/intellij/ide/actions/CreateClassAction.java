@@ -19,8 +19,6 @@ package com.intellij.ide.actions;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.core.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -28,9 +26,7 @@ import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaCreateFromTemplateHandler;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.util.text.StringUtil;
@@ -39,9 +35,11 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.PlatformIcons;
+import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtension;
 
 /**
@@ -49,7 +47,7 @@ import consulo.module.extension.ModuleExtension;
  *
  * @since 5.1
  */
-public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClass>
+public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClass> implements DumbAware
 {
 	public CreateClassAction()
 	{
@@ -59,15 +57,9 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 	@Override
 	protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder)
 	{
-		builder.setTitle(JavaCoreBundle.message("action.create.new.class"))
-				.addKind("Class", AllIcons.Nodes.Class, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME)
-				.addKind("Interface", AllIcons.Nodes.Interface, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
-
-		Module module = ModuleUtilCore.findModuleForPsiElement(directory);
-		assert module != null;
-		LanguageLevel languageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
-
-		if(languageLevel.isAtLeast(LanguageLevel.JDK_1_5))
+		builder.setTitle(JavaCoreBundle.message("action.create.new.class")).addKind("Class", PlatformIcons.CLASS_ICON, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME).addKind("Interface", PlatformIcons
+				.INTERFACE_ICON, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
+		if(PsiUtil.getLanguageLevel(directory).isAtLeast(LanguageLevel.JDK_1_5))
 		{
 			builder.addKind("Enum", AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
 			builder.addKind("Annotation", AllIcons.Nodes.Annotationtype, JavaTemplateUtil.INTERNAL_ANNOTATION_TYPE_TEMPLATE_NAME);
@@ -108,7 +100,6 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 		});
 	}
 
-	@Nullable
 	@Override
 	protected Class<? extends ModuleExtension> getModuleExtensionClass()
 	{
@@ -124,9 +115,13 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 	@Override
 	protected String getActionName(PsiDirectory directory, String newName, String templateName)
 	{
-		PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
-		assert aPackage != null;
-		return JavaCoreBundle.message("progress.creating.class", StringUtil.getQualifiedName(aPackage.getQualifiedName(), newName));
+		return JavaCoreBundle.message("progress.creating.class", StringUtil.getQualifiedName(JavaDirectoryService.getInstance().getPackage(directory).getQualifiedName(), newName));
+	}
+
+	@Override
+	public boolean startInWriteAction()
+	{
+		return false;
 	}
 
 	protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException
