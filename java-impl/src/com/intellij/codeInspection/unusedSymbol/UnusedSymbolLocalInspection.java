@@ -21,14 +21,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiModifier;
+import com.intellij.util.ui.UIUtil;
 
-/**
- * User: anna
- * Date: 17-Feb-2006
- */
 public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 {
 
@@ -47,8 +46,14 @@ public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 		private JCheckBox myCheckFieldsCheckBox;
 		private JCheckBox myCheckMethodsCheckBox;
 		private JCheckBox myCheckParametersCheckBox;
-		private JCheckBox myReportUnusedParametersInPublics;
+		private JCheckBox myAccessors;
 		private JPanel myPanel;
+		private JLabel myClassVisibilityCb;
+		private JLabel myFieldVisibilityCb;
+		private JLabel myMethodVisibilityCb;
+		private JLabel myMethodParameterVisibilityCb;
+		private JCheckBox myInnerClassesCheckBox;
+		private JLabel myInnerClassVisibilityCb;
 
 		public OptionsPanel()
 		{
@@ -56,10 +61,10 @@ public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 			myCheckClassesCheckBox.setSelected(CLASS);
 			myCheckFieldsCheckBox.setSelected(FIELD);
 			myCheckMethodsCheckBox.setSelected(METHOD);
-
+			myInnerClassesCheckBox.setSelected(INNER_CLASS);
 			myCheckParametersCheckBox.setSelected(PARAMETER);
-			myReportUnusedParametersInPublics.setSelected(REPORT_PARAMETER_FOR_PUBLIC_METHODS);
-			myReportUnusedParametersInPublics.setEnabled(PARAMETER);
+			myAccessors.setSelected(!isIgnoreAccessors());
+			updateEnableState();
 
 			final ActionListener listener = new ActionListener()
 			{
@@ -68,12 +73,13 @@ public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 				{
 					LOCAL_VARIABLE = myCheckLocalVariablesCheckBox.isSelected();
 					CLASS = myCheckClassesCheckBox.isSelected();
+					INNER_CLASS = myInnerClassesCheckBox.isSelected();
 					FIELD = myCheckFieldsCheckBox.isSelected();
 					METHOD = myCheckMethodsCheckBox.isSelected();
-
+					setIgnoreAccessors(!myAccessors.isSelected());
 					PARAMETER = myCheckParametersCheckBox.isSelected();
-					REPORT_PARAMETER_FOR_PUBLIC_METHODS = PARAMETER && myReportUnusedParametersInPublics.isSelected();
-					myReportUnusedParametersInPublics.setEnabled(PARAMETER);
+
+					updateEnableState();
 				}
 			};
 			myCheckLocalVariablesCheckBox.addActionListener(listener);
@@ -81,12 +87,48 @@ public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 			myCheckMethodsCheckBox.addActionListener(listener);
 			myCheckClassesCheckBox.addActionListener(listener);
 			myCheckParametersCheckBox.addActionListener(listener);
-			myReportUnusedParametersInPublics.addActionListener(listener);
+			myInnerClassesCheckBox.addActionListener(listener);
+			myAccessors.addActionListener(listener);
+		}
+
+		private void updateEnableState()
+		{
+			UIUtil.setEnabled(myClassVisibilityCb, CLASS, true);
+			UIUtil.setEnabled(myInnerClassVisibilityCb, INNER_CLASS, true);
+			UIUtil.setEnabled(myFieldVisibilityCb, FIELD, true);
+			UIUtil.setEnabled(myMethodVisibilityCb, METHOD, true);
+			UIUtil.setEnabled(myMethodParameterVisibilityCb, PARAMETER, true);
+			myAccessors.setEnabled(METHOD);
 		}
 
 		public JComponent getPanel()
 		{
 			return myPanel;
+		}
+
+		private void createUIComponents()
+		{
+			myClassVisibilityCb = new VisibilityModifierChooser(() -> CLASS, myClassVisibility, modifier -> setClassVisibility(modifier), new String[]{
+					PsiModifier.PACKAGE_LOCAL,
+					PsiModifier.PUBLIC
+			});
+
+			myInnerClassVisibilityCb = new VisibilityModifierChooser(() -> INNER_CLASS, myInnerClassVisibility, modifier -> setInnerClassVisibility(modifier));
+
+			myFieldVisibilityCb = new VisibilityModifierChooser(() -> FIELD, myFieldVisibility, modifier -> setFieldVisibility(modifier));
+
+			myMethodVisibilityCb = new VisibilityModifierChooser(() -> METHOD, myMethodVisibility, modifier -> setMethodVisibility(modifier));
+
+			myMethodParameterVisibilityCb = new VisibilityModifierChooser(() -> PARAMETER, myParameterVisibility, modifier -> setParameterVisibility(modifier));
+
+			myAccessors = new JCheckBox()
+			{
+				@Override
+				public void setEnabled(boolean b)
+				{
+					super.setEnabled(b && METHOD);
+				}
+			};
 		}
 	}
 

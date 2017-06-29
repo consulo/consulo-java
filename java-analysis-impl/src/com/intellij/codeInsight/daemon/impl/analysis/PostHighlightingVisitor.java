@@ -59,23 +59,23 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.pom.PomNamedTarget;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.PsiClassImplUtil;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.SuperMethodsSearch;
+import com.intellij.psi.util.PropertyUtil;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.Processor;
+import com.intellij.util.VisibilityUtil;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import consulo.psi.PsiPackage;
 
 class PostHighlightingVisitor
 {
-	private static final Logger LOG = Logger.getInstance(PostHighlightingVisitor.class);
-	private final LanguageLevel myLanguageLevel;
+	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.PostHighlightingPass");
 	private final RefCountHolder myRefCountHolder;
 	@NotNull
 	private final Project myProject;
@@ -96,29 +96,21 @@ class PostHighlightingVisitor
 		if((myHasRedundantImports || myHasMissortedImports) && !progress.isCanceled())
 		{
 			// schedule optimise action at the time of session disposal, which is after all applyInformation() calls
-			Disposable invokeFixLater = new Disposable()
+			Disposable invokeFixLater = () ->
 			{
-				@Override
-				public void dispose()
+				// later because should invoke when highlighting is finished
+				TransactionGuard.getInstance().submitTransactionLater(myProject, () ->
 				{
-					// later because should invoke when highlighting is finished
-					TransactionGuard.getInstance().submitTransactionLater(myProject, new Runnable()
+					if(!myFile.isValid() || !myFile.isWritable())
 					{
-						@Override
-						public void run()
-						{
-							if(myProject.isDisposed() || !myFile.isValid() || !myFile.isWritable())
-							{
-								return;
-							}
-							IntentionAction optimizeImportsFix = QuickFixFactory.getInstance().createOptimizeImportsFix(true);
-							if(optimizeImportsFix.isAvailable(myProject, null, myFile))
-							{
-								optimizeImportsFix.invoke(myProject, null, myFile);
-							}
-						}
-					});
-				}
+						return;
+					}
+					IntentionAction optimizeImportsFix = QuickFixFactory.getInstance().createOptimizeImportsFix(true);
+					if(optimizeImportsFix.isAvailable(myProject, null, myFile))
+					{
+						optimizeImportsFix.invoke(myProject, null, myFile);
+					}
+				});
 			};
 			try
 			{
@@ -144,7 +136,6 @@ class PostHighlightingVisitor
 		myDocument = document;
 
 		myCurrentEntryIndex = -1;
-		myLanguageLevel = PsiUtil.getLanguageLevel(file);
 
 		myRefCountHolder = refCountHolder;
 
@@ -183,7 +174,7 @@ class PostHighlightingVisitor
 			{
 				progress.checkCanceled();
 				PsiElement psiRoot = viewProvider.getPsi(language);
-				if(!HighlightingLevelManager.getInstance(myProject).shouldHighlight(psiRoot))
+				if(!HighlightingLevelManager.getInstance(myProject).shouldInspect(psiRoot))
 				{
 					continue;
 				}
@@ -236,9 +227,7 @@ class PostHighlightingVisitor
 	private boolean isUnusedImportEnabled(HighlightDisplayKey unusedImportKey)
 	{
 		InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
-		if(profile.isToolEnabled(unusedImportKey, myFile) &&
-				myFile instanceof PsiJavaFile &&
-				HighlightingLevelManager.getInstance(myProject).shouldHighlight(myFile))
+		if(profile.isToolEnabled(unusedImportKey, myFile) && myFile instanceof PsiJavaFile && HighlightingLevelManager.getInstance(myProject).shouldInspect(myFile))
 		{
 			return true;
 		}
@@ -256,37 +245,74 @@ class PostHighlightingVisitor
 	@Nullable
 	private HighlightInfo processIdentifier(@NotNull PsiIdentifier identifier, @NotNull ProgressIndicator progress, @NotNull GlobalUsageHelper helper)
 	{
+		PsiElement parent = identifier.getParent();
+		if(!(parent instanceof PsiVariable || parent instanceof PsiMember))
+		{
+			return null;
+		}
+
 		if(SuppressionUtil.inspectionResultSuppressed(identifier, myUnusedSymbolInspection))
 		{
 			return null;
 		}
-		PsiElement parent = identifier.getParent();
 
 		if(parent instanceof PsiLocalVariable && myUnusedSymbolInspection.LOCAL_VARIABLE)
 		{
 			return processLocalVariable((PsiLocalVariable) parent, identifier, progress);
 		}
-		if(parent instanceof PsiField && myUnusedSymbolInspection.FIELD)
+		if(parent instanceof PsiField && compareVisibilities((PsiModifierListOwner) parent, myUnusedSymbolInspection.getFieldVisibility()))
 		{
 			return processField(myProject, (PsiField) parent, identifier, progress, helper);
 		}
-		if(parent instanceof PsiParameter && myUnusedSymbolInspection.PARAMETER)
+		if(parent instanceof PsiParameter)
 		{
-			if(SuppressionUtil.isSuppressed(identifier, UnusedSymbolLocalInspectionBase.UNUSED_PARAMETERS_SHORT_NAME))
+			final PsiElement declarationScope = ((PsiParameter) parent).getDeclarationScope();
+			if(declarationScope instanceof PsiMethod ? compareVisibilities((PsiModifierListOwner) declarationScope, myUnusedSymbolInspection.getParameterVisibility()) : myUnusedSymbolInspection
+					.LOCAL_VARIABLE)
+			{
+				if(SuppressionUtil.isSuppressed(identifier, UnusedSymbolLocalInspectionBase.UNUSED_PARAMETERS_SHORT_NAME))
+				{
+					return null;
+				}
+				return processParameter(myProject, (PsiParameter) parent, identifier, progress);
+			}
+		}
+		if(parent instanceof PsiMethod)
+		{
+			if(myUnusedSymbolInspection.isIgnoreAccessors() && PropertyUtil.isSimplePropertyAccessor((PsiMethod) parent))
 			{
 				return null;
 			}
-			return processParameter(myProject, (PsiParameter) parent, identifier, progress);
+			if(compareVisibilities((PsiModifierListOwner) parent, myUnusedSymbolInspection.getMethodVisibility()))
+			{
+				return processMethod(myProject, (PsiMethod) parent, identifier, progress, helper);
+			}
 		}
-		if(parent instanceof PsiMethod && myUnusedSymbolInspection.METHOD)
+		if(parent instanceof PsiClass)
 		{
-			return processMethod(myProject, (PsiMethod) parent, identifier, progress, helper);
-		}
-		if(parent instanceof PsiClass && myUnusedSymbolInspection.CLASS)
-		{
-			return processClass(myProject, (PsiClass) parent, identifier, progress, helper);
+			final String acceptedVisibility = ((PsiClass) parent).getContainingClass() == null ? myUnusedSymbolInspection.getClassVisibility() : myUnusedSymbolInspection.getInnerClassVisibility();
+			if(compareVisibilities((PsiModifierListOwner) parent, acceptedVisibility))
+			{
+				return processClass(myProject, (PsiClass) parent, identifier, progress, helper);
+			}
 		}
 		return null;
+	}
+
+	private static boolean compareVisibilities(PsiModifierListOwner listOwner, final String visibility)
+	{
+		if(visibility != null)
+		{
+			while(listOwner != null)
+			{
+				if(VisibilityUtil.compare(VisibilityUtil.getVisibilityModifier(listOwner.getModifierList()), visibility) >= 0)
+				{
+					return true;
+				}
+				listOwner = PsiTreeUtil.getParentOfType(listOwner, PsiModifierListOwner.class, true);
+			}
+		}
+		return false;
 	}
 
 	@Nullable
@@ -383,24 +409,27 @@ class PostHighlightingVisitor
 				{
 					QuickFixAction.registerQuickFixAction(info, HighlightMethodUtil.getFixRange(field), quickFixFactory.createCreateConstructorParameterFromFieldFix(field));
 				}
-				SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(field, new Processor<String>()
+				SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(field, annoName ->
 				{
-					@Override
-					public boolean process(String annoName)
-					{
-						QuickFixAction.registerQuickFixAction(info, quickFixFactory.createAddToDependencyInjectionAnnotationsFix(project, annoName, "fields"));
-						return true;
-					}
+					QuickFixAction.registerQuickFixAction(info, quickFixFactory.createAddToImplicitlyWrittenFieldsFix(project, annoName));
+					return true;
 				});
 				return info;
 			}
 		}
-		else if(UnusedSymbolUtil.isImplicitUsage(myProject, field, progress))
+		else if(UnusedSymbolUtil.isImplicitUsage(myProject, field, progress) && !UnusedSymbolUtil.isImplicitWrite(myProject, field, progress))
 		{
 			return null;
 		}
 		else if(UnusedSymbolUtil.isFieldUnused(myProject, myFile, field, progress, helper))
 		{
+			if(UnusedSymbolUtil.isImplicitWrite(myProject, field, progress))
+			{
+				String message = JavaErrorMessages.message("private.field.is.not.used.for.reading", identifier.getText());
+				HighlightInfo highlightInfo = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType);
+				QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createSafeDeleteFix(field), myDeadCodeKey);
+				return highlightInfo;
+			}
 			return formatUnusedSymbolHighlightInfo(project, "field.is.not.used", field, "fields", myDeadCodeKey, myDeadCodeInfoType, identifier);
 		}
 		return null;
@@ -444,14 +473,8 @@ class PostHighlightingVisitor
 			{
 				return null;
 			}
-			if((method.isConstructor() ||
-					method.hasModifierProperty(PsiModifier.PRIVATE) ||
-					method.hasModifierProperty(PsiModifier.STATIC) ||
-					!method.hasModifierProperty(PsiModifier.ABSTRACT) &&
-							myUnusedSymbolInspection.REPORT_PARAMETER_FOR_PUBLIC_METHODS &&
-							!isOverriddenOrOverrides(method)) &&
-					!method.hasModifierProperty(PsiModifier.NATIVE) &&
-					!JavaHighlightUtil.isSerializationRelatedMethod(method, method.getContainingClass()) &&
+			if((method.isConstructor() || method.hasModifierProperty(PsiModifier.PRIVATE) || method.hasModifierProperty(PsiModifier.STATIC) || !method.hasModifierProperty(PsiModifier.ABSTRACT) &&
+					!isOverriddenOrOverrides(method)) && !method.hasModifierProperty(PsiModifier.NATIVE) && !JavaHighlightUtil.isSerializationRelatedMethod(method, method.getContainingClass()) &&
 					!PsiClassImplUtil.isMainOrPremainMethod(method))
 			{
 				if(UnusedSymbolUtil.isInjected(project, method))
@@ -484,12 +507,6 @@ class PostHighlightingVisitor
 	{
 		if(!myRefCountHolder.isReferenced(parameter) && !UnusedSymbolUtil.isImplicitUsage(myProject, parameter, progress))
 		{
-			//parameter is defined by functional interface
-			final PsiElement declarationScope = parameter.getDeclarationScope();
-			if(declarationScope instanceof PsiMethod && myRefCountHolder.isReferencedByMethodReference((PsiMethod) declarationScope, myLanguageLevel))
-			{
-				return null;
-			}
 			String message = JavaErrorMessages.message("parameter.is.not.used", identifier.getText());
 			return UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType);
 		}
@@ -507,8 +524,6 @@ class PostHighlightingVisitor
 		{
 			return null;
 		}
-		final HighlightInfoType highlightInfoType = myDeadCodeInfoType;
-		final HighlightDisplayKey highlightDisplayKey = myDeadCodeKey;
 		String key;
 		if(method.hasModifierProperty(PsiModifier.PRIVATE))
 		{
@@ -520,17 +535,13 @@ class PostHighlightingVisitor
 		}
 		String symbolName = HighlightMessageUtil.getSymbolName(method, PsiSubstitutor.EMPTY);
 		String message = JavaErrorMessages.message(key, symbolName);
-		final HighlightInfo highlightInfo = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, highlightInfoType);
-		QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createSafeDeleteFix(method), highlightDisplayKey);
-		SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(method, new Processor<String>()
+		final HighlightInfo highlightInfo = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType);
+		QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createSafeDeleteFix(method), myDeadCodeKey);
+		SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(method, annoName ->
 		{
-			@Override
-			public boolean process(String annoName)
-			{
-				IntentionAction fix = QuickFixFactory.getInstance().createAddToDependencyInjectionAnnotationsFix(project, annoName, "methods");
-				QuickFixAction.registerQuickFixAction(highlightInfo, fix);
-				return true;
-			}
+			IntentionAction fix = QuickFixFactory.getInstance().createAddToDependencyInjectionAnnotationsFix(project, annoName, "methods");
+			QuickFixAction.registerQuickFixAction(highlightInfo, fix);
+			return true;
 		});
 		return highlightInfo;
 	}
@@ -544,8 +555,6 @@ class PostHighlightingVisitor
 		}
 
 		String pattern;
-		HighlightDisplayKey highlightDisplayKey = myDeadCodeKey;
-		HighlightInfoType highlightInfoType = myDeadCodeInfoType;
 		if(aClass.getContainingClass() != null && aClass.hasModifierProperty(PsiModifier.PRIVATE))
 		{
 			pattern = aClass.isInterface() ? "private.inner.interface.is.not.used" : "private.inner.class.is.not.used";
@@ -562,7 +571,7 @@ class PostHighlightingVisitor
 		{
 			pattern = "class.is.not.used";
 		}
-		return formatUnusedSymbolHighlightInfo(myProject, pattern, aClass, "classes", highlightDisplayKey, highlightInfoType, identifier);
+		return formatUnusedSymbolHighlightInfo(myProject, pattern, aClass, "classes", myDeadCodeKey, myDeadCodeInfoType, identifier);
 	}
 
 
@@ -578,14 +587,10 @@ class PostHighlightingVisitor
 		String message = JavaErrorMessages.message(pattern, symbolName);
 		final HighlightInfo highlightInfo = UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, highlightInfoType);
 		QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createSafeDeleteFix(aClass), highlightDisplayKey);
-		SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes((PsiModifierListOwner) aClass, new Processor<String>()
+		SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes((PsiModifierListOwner) aClass, annoName ->
 		{
-			@Override
-			public boolean process(String annoName)
-			{
-				QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createAddToDependencyInjectionAnnotationsFix(project, annoName, element));
-				return true;
-			}
+			QuickFixAction.registerQuickFixAction(highlightInfo, QuickFixFactory.getInstance().createAddToDependencyInjectionAnnotationsFix(project, annoName, element));
+			return true;
 		});
 		return highlightInfo;
 	}

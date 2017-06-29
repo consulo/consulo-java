@@ -15,50 +15,58 @@
  */
 package com.intellij.codeInspection.deadCode;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.GlobalInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemDescriptionsProcessor;
 import com.intellij.codeInspection.ex.JobDescriptor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author max
  */
-public class DummyEntryPointsTool extends UnusedDeclarationInspection {
-  public DummyEntryPointsTool() {
-  }
+public class DummyEntryPointsTool extends UnusedDeclarationInspection
+{
+	public DummyEntryPointsTool()
+	{
+	}
 
-  @Override
-  public void runInspection(@NotNull AnalysisScope scope,
-                            @NotNull InspectionManager manager,
-                            @NotNull GlobalInspectionContext globalContext,
-                            @NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
-  }
+	@Override
+	public void runInspection(@NotNull AnalysisScope scope,
+			@NotNull InspectionManager manager,
+			@NotNull GlobalInspectionContext globalContext,
+			@NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor)
+	{
+	}
 
-  @Nullable
-  @Override
-  public JobDescriptor[] getAdditionalJobs() {
-    return JobDescriptor.EMPTY_ARRAY;
-  }
+	@Nullable
+	@Override
+	public JobDescriptor[] getAdditionalJobs()
+	{
+		return JobDescriptor.EMPTY_ARRAY;
+	}
 
-  @Override
-  @NotNull
-  public String getDisplayName() {
-    return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
-  }
+	@Override
+	@NotNull
+	public String getDisplayName()
+	{
+		return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
+	}
 
-  @Override
-  @NotNull
-  public String getGroupDisplayName() {
-    return "";
-  }
+	@Override
+	@NotNull
+	public String getGroupDisplayName()
+	{
+		return "";
+	}
 
-  @Override
-  @NotNull
-  public String getShortName() {
-    return "";
-  }
+	@Override
+	@NotNull
+	public String getShortName()
+	{
+		//noinspection InspectionDescriptionNotFoundInspection
+		return "";
+	}
 }

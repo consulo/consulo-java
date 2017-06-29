@@ -17,9 +17,6 @@ package com.intellij.codeInspection.deadCode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -29,12 +26,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import org.jetbrains.annotations.TestOnly;
-import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ex.EntryPointsManagerImpl;
 import com.intellij.codeInspection.reference.EntryPoint;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.ui.components.JBTabbedPane;
+import com.intellij.util.ui.JBUI;
+import consulo.java.codeInsight.JavaInspectionsBundle;
 
 public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase
 {
@@ -48,6 +46,7 @@ public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase
 	{
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected UnusedSymbolLocalInspectionBase createUnusedSymbolLocalInspection()
 	{
@@ -76,47 +75,26 @@ public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase
 			GridBagConstraints gc = new GridBagConstraints();
 			gc.weightx = 1;
 			gc.weighty = 0;
-			gc.insets = new Insets(0, 20, 2, 0);
+			gc.insets = JBUI.insets(0, 20, 2, 0);
 			gc.fill = GridBagConstraints.HORIZONTAL;
 			gc.anchor = GridBagConstraints.NORTHWEST;
 
-			myMainsCheckbox = new JCheckBox(InspectionsBundle.message("inspection.dead.code.option.main"));
+			myMainsCheckbox = new JCheckBox(JavaInspectionsBundle.message("inspection.dead.code.option.main"));
 			myMainsCheckbox.setSelected(ADD_MAINS_TO_ENTRIES);
-			myMainsCheckbox.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					ADD_MAINS_TO_ENTRIES = myMainsCheckbox.isSelected();
-				}
-			});
+			myMainsCheckbox.addActionListener(e -> ADD_MAINS_TO_ENTRIES = myMainsCheckbox.isSelected());
 
 			gc.gridy = 0;
 			add(myMainsCheckbox, gc);
 
-			myAppletToEntries = new JCheckBox(InspectionsBundle.message("inspection.dead.code.option.applet"));
+			myAppletToEntries = new JCheckBox(JavaInspectionsBundle.message("inspection.dead.code.option.applet"));
 			myAppletToEntries.setSelected(ADD_APPLET_TO_ENTRIES);
-			myAppletToEntries.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					ADD_APPLET_TO_ENTRIES = myAppletToEntries.isSelected();
-				}
-			});
+			myAppletToEntries.addActionListener(e -> ADD_APPLET_TO_ENTRIES = myAppletToEntries.isSelected());
 			gc.gridy++;
 			add(myAppletToEntries, gc);
 
-			myServletToEntries = new JCheckBox(InspectionsBundle.message("inspection.dead.code.option.servlet"));
+			myServletToEntries = new JCheckBox(JavaInspectionsBundle.message("inspection.dead.code.option.servlet"));
 			myServletToEntries.setSelected(ADD_SERVLET_TO_ENTRIES);
-			myServletToEntries.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					ADD_SERVLET_TO_ENTRIES = myServletToEntries.isSelected();
-				}
-			});
+			myServletToEntries.addActionListener(e -> ADD_SERVLET_TO_ENTRIES = myServletToEntries.isSelected());
 			gc.gridy++;
 			add(myServletToEntries, gc);
 
@@ -126,29 +104,15 @@ public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase
 				{
 					final JCheckBox extCheckbox = new JCheckBox(extension.getDisplayName());
 					extCheckbox.setSelected(extension.isSelected());
-					extCheckbox.addActionListener(new ActionListener()
-					{
-						@Override
-						public void actionPerformed(ActionEvent e)
-						{
-							extension.setSelected(extCheckbox.isSelected());
-						}
-					});
+					extCheckbox.addActionListener(e -> extension.setSelected(extCheckbox.isSelected()));
 					gc.gridy++;
 					add(extCheckbox, gc);
 				}
 			}
 
-			myNonJavaCheckbox = new JCheckBox(InspectionsBundle.message("inspection.dead.code.option.external"));
+			myNonJavaCheckbox = new JCheckBox(JavaInspectionsBundle.message("inspection.dead.code.option.external"));
 			myNonJavaCheckbox.setSelected(ADD_NONJAVA_TO_ENTRIES);
-			myNonJavaCheckbox.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					ADD_NONJAVA_TO_ENTRIES = myNonJavaCheckbox.isSelected();
-				}
-			});
+			myNonJavaCheckbox.addActionListener(e -> ADD_NONJAVA_TO_ENTRIES = myNonJavaCheckbox.isSelected());
 
 			gc.gridy++;
 			add(myNonJavaCheckbox, gc);
