@@ -145,8 +145,8 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 		PsiElement parent = getParent();
 		if(parent instanceof PsiClass)
 		{
-			PsiElement grandParent = parent.getContext();
-			if(grandParent instanceof PsiClass && ((PsiClass) grandParent).isInterface())
+			PsiElement grandParent = ((PsiClass) parent).getContainingClass();
+			if(grandParent != null && ((PsiClass) grandParent).isInterface())
 			{
 				Collections.addAll(implicitModifiers, PUBLIC, STATIC);
 			}
@@ -155,14 +155,15 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 				implicitModifiers.add(ABSTRACT);
 
 				// nested interface is implicitly static
-				if(grandParent instanceof PsiClass)
+				if(grandParent != null)
 				{
 					implicitModifiers.add(STATIC);
 				}
 			}
 			if(((PsiClass) parent).isEnum())
 			{
-				if(!(grandParent instanceof PsiFile))
+				// parent is file
+				if(grandParent == null)
 				{
 					implicitModifiers.add(STATIC);
 				}
