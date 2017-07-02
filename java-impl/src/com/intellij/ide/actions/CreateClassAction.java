@@ -38,7 +38,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PlatformIcons;
+import consulo.annotations.RequiredDispatchThread;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtension;
 
@@ -57,8 +57,9 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 	@Override
 	protected void buildDialog(final Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder)
 	{
-		builder.setTitle(JavaCoreBundle.message("action.create.new.class")).addKind("Class", PlatformIcons.CLASS_ICON, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME).addKind("Interface", PlatformIcons
-				.INTERFACE_ICON, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
+		builder.setTitle(JavaCoreBundle.message("action.create.new.class"));
+		builder.addKind("Class", AllIcons.Nodes.Class, JavaTemplateUtil.INTERNAL_CLASS_TEMPLATE_NAME);
+		builder.addKind("Interface", AllIcons.Nodes.Interface, JavaTemplateUtil.INTERNAL_INTERFACE_TEMPLATE_NAME);
 		if(PsiUtil.getLanguageLevel(directory).isAtLeast(LanguageLevel.JDK_1_5))
 		{
 			builder.addKind("Enum", AllIcons.Nodes.Enum, JavaTemplateUtil.INTERNAL_ENUM_TEMPLATE_NAME);
@@ -86,12 +87,14 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 				return null;
 			}
 
+			@RequiredDispatchThread
 			@Override
 			public boolean checkInput(String inputString)
 			{
 				return true;
 			}
 
+			@RequiredDispatchThread
 			@Override
 			public boolean canClose(String inputString)
 			{
@@ -124,9 +127,16 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 		return false;
 	}
 
+	@Override
 	protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException
 	{
 		return JavaDirectoryService.getInstance().createClass(dir, className, templateName, true);
+	}
+
+	@Override
+	protected String removeExtension(String templateName, String className)
+	{
+		return StringUtil.trimEnd(className, ".java");
 	}
 
 	@Override
