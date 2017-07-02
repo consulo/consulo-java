@@ -44,7 +44,6 @@ import com.intellij.util.NotNullFunction;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ConcurrentFactoryMap;
-import com.intellij.util.containers.FactoryMap;
 import com.intellij.util.containers.hash.EqualityPolicy;
 import com.intellij.util.containers.hash.LinkedHashMap;
 
@@ -53,7 +52,7 @@ public class PsiSuperMethodImplUtil
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.PsiSuperMethodImplUtil");
 	private static final PsiCacheKey<Map<MethodSignature, HierarchicalMethodSignature>, PsiClass> SIGNATURES_FOR_CLASS_KEY = PsiCacheKey.create("SIGNATURES_FOR_CLASS_KEY", (NotNullFunction<PsiClass,
 			Map<MethodSignature, HierarchicalMethodSignature>>) dom -> buildMethodHierarchy(dom, null, PsiSubstitutor.EMPTY, true, new THashSet<PsiClass>(), false, dom.getResolveScope()));
-	private static final PsiCacheKey<FactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>>, PsiClass> SIGNATURES_BY_NAME_KEY = PsiCacheKey.create("SIGNATURES_BY_NAME_KEY", psiClass
+	private static final PsiCacheKey<Map<String, Map<MethodSignature, HierarchicalMethodSignature>>, PsiClass> SIGNATURES_BY_NAME_KEY = PsiCacheKey.create("SIGNATURES_BY_NAME_KEY", psiClass
 			-> new ConcurrentFactoryMap<String, Map<MethodSignature, HierarchicalMethodSignature>>()
 	{
 		@Nullable
