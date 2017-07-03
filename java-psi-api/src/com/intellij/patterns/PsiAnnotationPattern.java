@@ -18,6 +18,8 @@ package com.intellij.patterns;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiArrayInitializerMemberValue;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 
 /**
@@ -45,5 +47,24 @@ public class PsiAnnotationPattern extends PsiElementPattern<PsiAnnotation, PsiAn
 	public PsiAnnotationPattern qName(@NonNls String qname)
 	{
 		return qName(StandardPatterns.string().equalTo(qname));
+	}
+
+	public PsiAnnotationPattern insideAnnotationAttribute(@NotNull final String attributeName, @NotNull final ElementPattern<PsiAnnotation> parentAnnoPattern)
+	{
+		return with(new PatternCondition<PsiAnnotation>("insideAnnotationAttribute")
+		{
+			final PsiNameValuePairPattern attrPattern = PsiJavaPatterns.psiNameValuePair().withName(attributeName).withSuperParent(2, parentAnnoPattern);
+
+			@Override
+			public boolean accepts(@NotNull PsiAnnotation annotation, ProcessingContext context)
+			{
+				PsiElement attr = getParent(annotation);
+				if(attr instanceof PsiArrayInitializerMemberValue)
+				{
+					attr = getParent(attr);
+				}
+				return attrPattern.accepts(attr);
+			}
+		});
 	}
 }
