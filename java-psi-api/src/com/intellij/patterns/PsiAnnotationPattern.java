@@ -23,19 +23,27 @@ import com.intellij.util.ProcessingContext;
 /**
  * @author peter
  */
-public class PsiAnnotationPattern extends PsiElementPattern<PsiAnnotation, PsiAnnotationPattern> {
-  protected PsiAnnotationPattern() {
-    super(PsiAnnotation.class);
-  }
+public class PsiAnnotationPattern extends PsiElementPattern<PsiAnnotation, PsiAnnotationPattern>
+{
+	protected PsiAnnotationPattern()
+	{
+		super(PsiAnnotation.class);
+	}
 
-  public PsiAnnotationPattern qName(final ElementPattern<String> pattern) {
-    return with(new PatternCondition<PsiAnnotation>("qName") {
-      public boolean accepts(@NotNull final PsiAnnotation psiAnnotation, final ProcessingContext context) {
-        return pattern.getCondition().accepts(psiAnnotation.getQualifiedName(), context);
-      }
-    });
-  }
-  public PsiAnnotationPattern qName(@NonNls String qname) {
-    return qName(StandardPatterns.string().equalTo(qname));
-  }
+	public PsiAnnotationPattern qName(final ElementPattern<String> pattern)
+	{
+		return with(new PatternCondition<PsiAnnotation>("qName")
+		{
+			@Override
+			public boolean accepts(@NotNull final PsiAnnotation psiAnnotation, final ProcessingContext context)
+			{
+				return pattern.getCondition().accepts(psiAnnotation.getQualifiedName(), context);
+			}
+		});
+	}
+
+	public PsiAnnotationPattern qName(@NonNls String qname)
+	{
+		return qName(StandardPatterns.string().equalTo(qname));
+	}
 }
