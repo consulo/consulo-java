@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,14 @@
  */
 package com.intellij.psi.controlFlow;
 
+import gnu.trove.THashMap;
 import gnu.trove.THashSet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,9 +32,11 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilBase;
+import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.util.ExceptionUtil;
 import com.intellij.util.containers.IntArrayList;
 import com.intellij.util.containers.Queue;
+import com.intellij.util.containers.Stack;
 
 /**
  * @author max
@@ -73,80 +79,86 @@ public class DefUseUtil
 		}
 	}
 
-	private static class InstructionState
+	private static class InstructionState implements Comparable<InstructionState>
 	{
-		private Set<PsiVariable> myVariablesUseArmed;
-		private final int myInstructionIdx;
-		private final IntArrayList myBackwardTraces;
-		private boolean myIsVisited = false;
+		private Set<PsiVariable> myUsed;
+		private final InstructionKey myInstructionKey;
+		private final List<InstructionKey> myBackwardTraces;
+		private boolean myIsVisited;
 
-		public InstructionState(int instructionIdx)
+		public InstructionState(@NotNull InstructionKey instructionKey)
 		{
-			myInstructionIdx = instructionIdx;
-			myBackwardTraces = new IntArrayList();
-			myVariablesUseArmed = null;
+			myInstructionKey = instructionKey;
+			myBackwardTraces = new ArrayList<>(2);
+			myUsed = null;
 		}
 
-		public void addBackwardTrace(int i)
+		public void addBackwardTrace(InstructionKey key)
 		{
-			myBackwardTraces.add(i);
+			myBackwardTraces.add(key);
 		}
 
-		public IntArrayList getBackwardTraces()
+		public List<InstructionKey> getBackwardTraces()
 		{
 			return myBackwardTraces;
 		}
 
-		public int getInstructionIdx()
+		public InstructionKey getInstructionKey()
 		{
-			return myInstructionIdx;
+			return myInstructionKey;
 		}
 
-		void mergeUseArmed(PsiVariable psiVariable)
+		void addUsed(PsiVariable psiVariable)
 		{
 			touch();
-			myVariablesUseArmed.add(psiVariable);
+			myUsed.add(psiVariable);
 		}
 
-		boolean mergeUseDisarmed(PsiVariable psiVariable)
+		boolean removeUsed(PsiVariable psiVariable)
 		{
 			touch();
-
-			boolean result = myVariablesUseArmed.contains(psiVariable);
-			myVariablesUseArmed.remove(psiVariable);
-
-			return result;
+			return myUsed.remove(psiVariable);
 		}
 
 		private void touch()
 		{
-			if(myVariablesUseArmed == null)
+			if(myUsed == null)
 			{
-				myVariablesUseArmed = new THashSet<>();
+				myUsed = new THashSet<>();
 			}
 		}
 
-		public void merge(InstructionState state)
+		public void addUsedFrom(InstructionState state)
 		{
 			touch();
-			myVariablesUseArmed.addAll(state.myVariablesUseArmed);
+			myUsed.addAll(state.myUsed);
 		}
 
 		public boolean contains(InstructionState state)
 		{
-			return myVariablesUseArmed != null && state.myVariablesUseArmed != null && myVariablesUseArmed.containsAll(state.myVariablesUseArmed);
+			return myUsed != null && state.myUsed != null && myUsed.containsAll(state.myUsed);
 		}
 
-		public boolean markVisited()
+		public void markVisited()
 		{
-			boolean old = myIsVisited;
 			myIsVisited = true;
-			return old;
 		}
 
 		public boolean isVisited()
 		{
 			return myIsVisited;
+		}
+
+		@Override
+		public int compareTo(@NotNull InstructionState other)
+		{
+			return myInstructionKey.compareTo(other.myInstructionKey);
+		}
+
+		@Override
+		public String toString()
+		{
+			return myInstructionKey + " " + myBackwardTraces + (myIsVisited ? "(v)" : "(n)") + " " + (myUsed != null ? myUsed : "-");
 		}
 	}
 
@@ -197,9 +209,20 @@ public class DefUseUtil
 			}
 		}
 
-		InstructionState[] states = getStates(instructions);
+		Map<InstructionKey, InstructionState> stateMap;
+		try
+		{
+			stateMap = InstructionStateWalker.getStates(instructions);
+		}
+		catch(InstructionKey.OverflowException e)
+		{
+			LOG.error("Failed to compute paths in the control flow graph", e, flow.toString());
+			return null;
+		}
+		InstructionState[] states = stateMap.values().toArray(new InstructionState[0]);
+		Arrays.sort(states);
 
-		boolean[] defsArmed = new boolean[instructions.size()];
+		BitSet usefulWrites = new BitSet(instructions.size());
 
 		Queue<InstructionState> queue = new Queue<>(8);
 
@@ -216,7 +239,7 @@ public class DefUseUtil
 			{
 				if(psiVariable instanceof PsiField)
 				{
-					outerState.mergeUseArmed(psiVariable);
+					outerState.addUsed(psiVariable);
 				}
 			}
 			queue.addLast(outerState);
@@ -227,25 +250,25 @@ public class DefUseUtil
 				InstructionState state = queue.pullFirst();
 				state.markVisited();
 
-				int idx = state.getInstructionIdx();
-				if(idx < instructions.size())
+				InstructionKey key = state.getInstructionKey();
+				if(key.getOffset() < instructions.size())
 				{
-					Instruction instruction = instructions.get(idx);
+					Instruction instruction = instructions.get(key.getOffset());
 
 					if(instruction instanceof WriteVariableInstruction)
 					{
 						WriteVariableInstruction writeInstruction = (WriteVariableInstruction) instruction;
 						PsiVariable psiVariable = writeInstruction.variable;
 						outUsedVariables.add(psiVariable);
-						if(state.mergeUseDisarmed(psiVariable))
+						if(state.removeUsed(psiVariable))
 						{
-							defsArmed[idx] = true;
+							usefulWrites.set(key.getOffset());
 						}
 					}
 					else if(instruction instanceof ReadVariableInstruction)
 					{
 						ReadVariableInstruction readInstruction = (ReadVariableInstruction) instruction;
-						state.mergeUseArmed(readInstruction.variable);
+						state.addUsed(readInstruction.variable);
 						outUsedVariables.add(readInstruction.variable);
 					}
 					else
@@ -254,14 +277,13 @@ public class DefUseUtil
 					}
 				}
 
-				IntArrayList backwardTraces = state.getBackwardTraces();
-				for(int j = 0; j < backwardTraces.size(); j++)
+				List<InstructionKey> backwardTraces = state.getBackwardTraces();
+				for(InstructionKey prevKeys : backwardTraces)
 				{
-					int prevIdx = backwardTraces.get(j);
-					InstructionState prevState = states[prevIdx];
-					if(!prevState.contains(state))
+					InstructionState prevState = stateMap.get(prevKeys);
+					if(prevState != null && !prevState.contains(state))
 					{
-						prevState.merge(state);
+						prevState.addUsedFrom(state);
 						queue.addLast(prevState);
 					}
 				}
@@ -276,7 +298,7 @@ public class DefUseUtil
 			if(instruction instanceof WriteVariableInstruction)
 			{
 				WriteVariableInstruction writeInstruction = (WriteVariableInstruction) instruction;
-				if(!defsArmed[i])
+				if(!usefulWrites.get(i))
 				{
 					PsiElement context = PsiTreeUtil.getNonStrictParentOfType(flow.getElement(i), PsiStatement.class, PsiAssignmentExpression.class, PsiPostfixExpression.class, PsiPrefixExpression
 							.class);
@@ -305,22 +327,28 @@ public class DefUseUtil
 	@NotNull
 	public static PsiElement[] getDefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref)
 	{
+		return getDefs(body, def, ref, false);
+	}
+
+	@NotNull
+	public static PsiElement[] getDefs(PsiCodeBlock body, final PsiVariable def, PsiElement ref, boolean rethrow)
+	{
 		try
 		{
 			RefsDefs refsDefs = new RefsDefs(body)
 			{
-				private final InstructionState[] states = getStates(instructions);
+				private final IntArrayList[] myBackwardTraces = getBackwardTraces(instructions);
 
 				@Override
 				protected int nNext(int index)
 				{
-					return states[index].getBackwardTraces().size();
+					return myBackwardTraces[index].size();
 				}
 
 				@Override
 				protected int getNext(int index, int no)
 				{
-					return states[index].getBackwardTraces().get(no);
+					return myBackwardTraces[index].get(no);
 				}
 
 				@Override
@@ -370,6 +398,10 @@ public class DefUseUtil
 		}
 		catch(AnalysisCanceledException e)
 		{
+			if(rethrow)
+			{
+				ExceptionUtil.rethrowAllAsUnchecked(e);
+			}
 			return PsiElement.EMPTY_ARRAY;
 		}
 	}
@@ -502,7 +534,7 @@ public class DefUseUtil
 								}
 							}
 
-							// hack: ControlFlow doesnn't contains parameters initialization
+							// hack: ControlFlow doesn't contains parameters initialization
 							if(index == 0 && def instanceof PsiParameter)
 							{
 								res.add(def.getNameIdentifier());
@@ -538,19 +570,20 @@ public class DefUseUtil
 					}
 				}
 				new Inner().traverse(elem);
-				return PsiUtilBase.toPsiElementArray(res);
+				return PsiUtilCore.toPsiElementArray(res);
 			}
 			return PsiElement.EMPTY_ARRAY;
 		}
 	}
 
 
-	private static InstructionState[] getStates(final List<Instruction> instructions)
+	@NotNull
+	private static IntArrayList[] getBackwardTraces(final List<Instruction> instructions)
 	{
-		final InstructionState[] states = new InstructionState[instructions.size()];
+		final IntArrayList[] states = new IntArrayList[instructions.size()];
 		for(int i = 0; i < states.length; i++)
 		{
-			states[i] = new InstructionState(i);
+			states[i] = new IntArrayList();
 		}
 
 		for(int i = 0; i < instructions.size(); i++)
@@ -561,17 +594,156 @@ public class DefUseUtil
 				final int next = instruction.getNext(i, j);
 				if(next < states.length)
 				{
-					states[next].addBackwardTrace(i);
+					states[next].add(i);
 				}
 			}
 		}
 		return states;
 	}
 
+	private static class WalkThroughStack
+	{
+		private final Stack<InstructionKey> myFrom;
+		private final Stack<InstructionKey> myNext;
+
+		WalkThroughStack(int size)
+		{
+			if(size < 2)
+			{
+				size = 2;
+			}
+			myFrom = new Stack<>(size);
+			myNext = new Stack<>(size);
+		}
+
+		void push(InstructionKey fromKey, InstructionKey nextKey)
+		{
+			myFrom.push(fromKey);
+			myNext.push(nextKey);
+		}
+
+		InstructionKey peekFrom()
+		{
+			return myFrom.peek();
+		}
+
+		InstructionKey popNext()
+		{
+			myFrom.pop();
+			return myNext.pop();
+		}
+
+		boolean isEmpty()
+		{
+			return myFrom.isEmpty();
+		}
+
+		@Override
+		public String toString()
+		{
+			StringBuilder sb = new StringBuilder();
+			for(int i = 0, limit = Math.min(myFrom.size(), myNext.size()); i < limit; i++)
+			{
+				if(sb.length() != 0)
+				{
+					sb.append(", ");
+				}
+				sb.append(myFrom.get(i)).append("->").append(myNext.get(i));
+			}
+			return sb.toString();
+		}
+	}
+
+	private static class InstructionStateWalker
+	{
+		private final Map<InstructionKey, InstructionState> myStates;
+		private final WalkThroughStack myWalkThroughStack;
+		private final List<Instruction> myInstructions;
+
+		private InstructionStateWalker(List<Instruction> instructions)
+		{
+			myStates = new THashMap<>(instructions.size());
+			myWalkThroughStack = new WalkThroughStack(instructions.size() / 2);
+			myInstructions = instructions;
+		}
+
+		private Map<InstructionKey, InstructionState> walk()
+		{
+			InstructionKey startKey = InstructionKey.create(0);
+			myStates.put(startKey, new InstructionState(startKey));
+			myWalkThroughStack.push(InstructionKey.create(-1), startKey);
+
+			InstructionKeySet visited = new InstructionKeySet(myInstructions.size() + 1);
+			while(!myWalkThroughStack.isEmpty())
+			{
+				ProgressManager.checkCanceled();
+				InstructionKey fromKey = myWalkThroughStack.peekFrom();
+				InstructionKey nextKey = myWalkThroughStack.popNext();
+				addBackwardTrace(fromKey, nextKey);
+				if(!visited.contains(nextKey))
+				{
+					visit(nextKey);
+					visited.add(nextKey);
+				}
+			}
+			return myStates;
+		}
+
+		private void visit(InstructionKey fromKey)
+		{
+			if(fromKey.getOffset() >= myInstructions.size())
+			{
+				return;
+			}
+			final Instruction instruction = myInstructions.get(fromKey.getOffset());
+			if(instruction instanceof CallInstruction)
+			{
+				int nextOffset = ((CallInstruction) instruction).offset;
+				LOG.assertTrue(nextOffset != 0);
+				int returnOffset = fromKey.getOffset() + 1;
+				InstructionKey nextKey = fromKey.push(nextOffset, returnOffset);
+				myWalkThroughStack.push(fromKey, nextKey);
+			}
+			else if(instruction instanceof ReturnInstruction)
+			{
+				int overriddenOffset = ((ReturnInstruction) instruction).offset;
+				InstructionKey nextKey = fromKey.pop(overriddenOffset);
+				myWalkThroughStack.push(fromKey, nextKey);
+			}
+			else
+			{
+				for(int no = 0; no != instruction.nNext(); no++)
+				{
+					final int nextOffset = instruction.getNext(fromKey.getOffset(), no);
+					InstructionKey nextKey = fromKey.next(nextOffset);
+					myWalkThroughStack.push(fromKey, nextKey);
+				}
+			}
+		}
+
+		private void addBackwardTrace(InstructionKey fromKey, InstructionKey nextKey)
+		{
+			if(fromKey.getOffset() >= 0 && nextKey.getOffset() < myInstructions.size())
+			{
+				InstructionState state = myStates.get(nextKey);
+				if(state == null)
+				{
+					myStates.put(nextKey, state = new InstructionState(nextKey));
+				}
+				state.addBackwardTrace(fromKey);
+			}
+		}
+
+		static Map<InstructionKey, InstructionState> getStates(final List<Instruction> instructions)
+		{
+			return new InstructionStateWalker(instructions).walk();
+		}
+	}
+
 	private static final ControlFlowPolicy ourPolicy = new ControlFlowPolicy()
 	{
 		@Override
-		public PsiVariable getUsedVariable(PsiReferenceExpression refExpr)
+		public PsiVariable getUsedVariable(@NotNull PsiReferenceExpression refExpr)
 		{
 			if(refExpr.isQualified())
 			{
@@ -588,13 +760,13 @@ public class DefUseUtil
 		}
 
 		@Override
-		public boolean isParameterAccepted(PsiParameter psiParameter)
+		public boolean isParameterAccepted(@NotNull PsiParameter psiParameter)
 		{
 			return true;
 		}
 
 		@Override
-		public boolean isLocalVariableAccepted(PsiLocalVariable psiVariable)
+		public boolean isLocalVariableAccepted(@NotNull PsiLocalVariable psiVariable)
 		{
 			return true;
 		}
