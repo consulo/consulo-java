@@ -20,8 +20,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Icon;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
@@ -218,6 +216,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 		{
 			return StringUtil.getQualifiedName(((PsiJavaFile) parent).getPackageName(), getName());
 		}
+
 		if(parent instanceof PsiClass)
 		{
 			String parentQName = ((PsiClass) parent).getQualifiedName();
@@ -226,6 +225,15 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 				return null;
 			}
 			return StringUtil.getQualifiedName(parentQName, getName());
+		}
+
+		if(parent instanceof PsiClassLevelDeclarationStatement)
+		{
+			PsiFile containingFile = parent.getContainingFile();
+			if(containingFile instanceof PsiJavaFile)
+			{
+				return StringUtil.getQualifiedName(((PsiJavaFile) containingFile).getPackageName(), getName());
+			}
 		}
 
 		return null;
