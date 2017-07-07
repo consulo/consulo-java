@@ -229,10 +229,15 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 
 		if(parent instanceof PsiClassLevelDeclarationStatement)
 		{
-			PsiFile containingFile = parent.getContainingFile();
-			if(containingFile instanceof PsiJavaFile)
+			PsiElement context = parent.getContext();
+			if(context instanceof PsiClass)
 			{
-				return StringUtil.getQualifiedName(((PsiJavaFile) containingFile).getPackageName(), getName());
+				String parentQName = ((PsiClass) context).getQualifiedName();
+				if(parentQName == null)
+				{
+					return null;
+				}
+				return StringUtil.getQualifiedName(parentQName, getName());
 			}
 		}
 

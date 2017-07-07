@@ -184,7 +184,6 @@
 				<add-to-group group-id="XDebugger.Variables.Tree.Popup" anchor="last"/>
 				<add-to-group group-id="XDebugger.Watches.Tree.Popup" anchor="last"/>
 			</action>
-			<action id="Debugger.CompareValueWithClipboard" class="com.intellij.debugger.actions.CompareValueWithClipboardAction"/>
 			<action id="Debugger.CustomizeThreadsView" class="com.intellij.debugger.actions.CustomizeThreadsViewAction">
 				<add-to-group group-id="XDebugger.Frames.Tree.Popup" anchor="last"/>
 			</action>
@@ -316,7 +315,7 @@
 			<separator/>
 			<!--<reference ref="Debugger.CopyValue"/> -->
 			<!--<reference ref="Debugger.ViewText"/>-->
-			<reference ref="Debugger.CompareValueWithClipboard"/>
+			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
 			<reference ref="Debugger.CustomizeContextView"/>
 		</group>
 
@@ -337,7 +336,7 @@
 			<separator/>
 			<!--<reference ref="Debugger.CopyValue"/> -->
 			<!--<reference ref="Debugger.ViewText"/>-->
-			<reference ref="Debugger.CompareValueWithClipboard"/>
+			<!--<reference ref="Debugger.CompareValueWithClipboard"/> -->
 			<reference ref="Debugger.CustomizeContextView"/>
 		</group>
 
@@ -358,7 +357,7 @@
 			<separator/>
 			<!--<reference ref="Debugger.CopyValue"/> -->
 			<!--<reference ref="Debugger.ViewText"/>-->
-			<reference ref="Debugger.CompareValueWithClipboard"/>
+			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
 			<reference ref="Debugger.CustomizeContextView"/>
 		</group>
 
