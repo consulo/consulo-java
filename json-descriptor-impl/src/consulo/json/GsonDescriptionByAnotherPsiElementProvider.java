@@ -218,8 +218,10 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 						if(!values.isEmpty())
 						{
 							PsiType firstItem = ContainerUtil.getFirstItem(values);
-							assert firstItem != null;
-							return toType(project, field, new PsiArrayType(firstItem));
+							if(firstItem != null)
+							{
+								return toType(project, field, new PsiArrayType(firstItem));
+							}
 						}
 
 						return new PropertyType(new NativeArray(Object.class));
