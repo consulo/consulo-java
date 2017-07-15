@@ -37,7 +37,7 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
 	private final String myPackageName;
 	private final LanguageLevel myLanguageLevel;
 	private final boolean myCompiled;
-	private StubPsiFactory myFactory;
+	private final StubPsiFactory myFactory;
 
 	public PsiJavaFileStubImpl(String packageName, boolean compiled)
 	{
@@ -92,16 +92,11 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
 		return myCompiled;
 	}
 
+	@NotNull
 	@Override
 	public StubPsiFactory getPsiFactory()
 	{
 		return myFactory;
-	}
-
-	@Override
-	public void setPsiFactory(StubPsiFactory factory)
-	{
-		myFactory = factory;
 	}
 
 	@Override

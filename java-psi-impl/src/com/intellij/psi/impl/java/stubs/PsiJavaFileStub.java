@@ -19,6 +19,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiJavaModule;
@@ -34,10 +35,6 @@ public interface PsiJavaFileStub extends PsiClassHolderFileStub<PsiJavaFile>
 
 	boolean isCompiled();
 
+	@NotNull
 	StubPsiFactory getPsiFactory();
-
-	/**
-	 * @deprecated override {@link #getPsiFactory()} instead (to be removed in IDEA 18)
-	 */
-	void setPsiFactory(StubPsiFactory factory);
 }
