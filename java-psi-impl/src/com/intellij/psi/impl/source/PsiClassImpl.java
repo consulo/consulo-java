@@ -58,6 +58,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.psi.augment.JavaEnumAugmentProvider;
+import consulo.java.psi.impl.java.stub.PsiClassLevelDeclarationStatementStub;
 
 public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements PsiExtensibleClass, PsiQualifiedNamedElement, Queryable
 {
@@ -313,11 +314,19 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 	@Nullable
 	public PsiClass getContainingClass()
 	{
-		final PsiClassStub stub = getGreenStub();
+		final PsiClassStub<?> stub = getGreenStub();
 		if(stub != null)
 		{
-			StubElement parent = stub.getParentStub();
-			return parent instanceof PsiClassStub ? ((PsiClassStub<?>) parent).getPsi() : null;
+			StubElement<?> parent = stub.getParentStub();
+			if(parent instanceof PsiClassLevelDeclarationStatementStub)
+			{
+				return parent.getParentStubOfType(PsiSyntheticClass.class);
+			}
+			else if(parent instanceof PsiClassStub)
+			{
+				return (PsiClass) parent.getPsi();
+			}
+			return null;
 		}
 
 		PsiElement parent = getParent();
