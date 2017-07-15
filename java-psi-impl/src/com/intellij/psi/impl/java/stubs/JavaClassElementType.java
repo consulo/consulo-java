@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2013 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
@@ -48,7 +47,7 @@ import com.intellij.util.io.StringRef;
  */
 public abstract class JavaClassElementType extends JavaStubElementType<PsiClassStub, PsiClass>
 {
-	public JavaClassElementType(@NotNull @NonNls final String id)
+	public JavaClassElementType(@NotNull String id)
 	{
 		super(id);
 	}
@@ -138,7 +137,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 			if(parentStub instanceof PsiJavaFileStub)
 			{
 				final String pkg = ((PsiJavaFileStub) parentStub).getPackageName();
-				if(pkg.length() > 0)
+				if(!pkg.isEmpty())
 				{
 					qualifiedName = pkg + '.' + name;
 				}
@@ -174,7 +173,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	}
 
 	@Override
-	public void serialize(@NotNull final PsiClassStub stub, @NotNull final StubOutputStream dataStream) throws IOException
+	public void serialize(@NotNull PsiClassStub stub, @NotNull StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeByte(((PsiClassStubImpl) stub).getFlags());
 		if(!stub.isAnonymous())
@@ -191,32 +190,31 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 
 	@NotNull
 	@Override
-	public PsiClassStub deserialize(@NotNull final StubInputStream dataStream, final StubElement parentStub) throws IOException
+	public PsiClassStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		byte flags = dataStream.readByte();
-
-		final boolean isAnonymous = PsiClassStubImpl.isAnonymous(flags);
-		final boolean isEnumConst = PsiClassStubImpl.isEnumConstInitializer(flags);
-		final JavaClassElementType type = typeForClass(isAnonymous, isEnumConst);
+		boolean isAnonymous = PsiClassStubImpl.isAnonymous(flags);
+		boolean isEnumConst = PsiClassStubImpl.isEnumConstInitializer(flags);
+		JavaClassElementType type = typeForClass(isAnonymous, isEnumConst);
 
 		if(!isAnonymous)
 		{
 			StringRef name = dataStream.readName();
 			StringRef qname = dataStream.readName();
-			final StringRef sourceFileName = dataStream.readName();
-			final PsiClassStubImpl classStub = new PsiClassStubImpl(type, parentStub, qname, name, null, flags);
-			classStub.setSourceFileName(sourceFileName);
+			StringRef sourceFileName = dataStream.readName();
+			PsiClassStubImpl classStub = new PsiClassStubImpl(type, parentStub, StringRef.toString(qname), StringRef.toString(name), null, flags);
+			classStub.setSourceFileName(StringRef.toString(sourceFileName));
 			return classStub;
 		}
 		else
 		{
 			StringRef baseRef = dataStream.readName();
-			return new PsiClassStubImpl(type, parentStub, null, null, baseRef, flags);
+			return new PsiClassStubImpl(type, parentStub, null, null, StringRef.toString(baseRef), flags);
 		}
 	}
 
 	@Override
-	public void indexStub(@NotNull final PsiClassStub stub, @NotNull final IndexSink sink)
+	public void indexStub(@NotNull PsiClassStub stub, @NotNull IndexSink sink)
 	{
 		boolean isAnonymous = stub.isAnonymous();
 		if(isAnonymous)
@@ -244,7 +242,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	}
 
 	@Override
-	public String getId(final PsiClassStub stub)
+	public String getId(@NotNull final PsiClassStub stub)
 	{
 		final String name = stub.getName();
 		return name != null ? name : super.getId(stub);
