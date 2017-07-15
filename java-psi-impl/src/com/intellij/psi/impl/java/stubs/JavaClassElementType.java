@@ -41,6 +41,7 @@ import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.io.StringRef;
+import consulo.java.psi.impl.java.stub.PsiClassLevelDeclarationStatementStub;
 
 /**
  * @author max
@@ -150,6 +151,19 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 			{
 				final String parentFqn = ((PsiClassStub) parentStub).getQualifiedName();
 				qualifiedName = parentFqn != null ? parentFqn + '.' + name : null;
+			}
+			else if(parentStub instanceof PsiClassLevelDeclarationStatementStub)
+			{
+				StubElement parent = parentStub;
+				while(parent != null)
+				{
+					if(parent instanceof PsiClassStub)
+					{
+						qualifiedName = ((PsiClassStub) parent).getQualifiedName();
+						break;
+					}
+					parent = parent.getParentStub();
+				}
 			}
 		}
 
