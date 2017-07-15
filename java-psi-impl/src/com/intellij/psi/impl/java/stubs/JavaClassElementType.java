@@ -177,13 +177,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 		}
 
 		final byte flags = PsiClassStubImpl.packFlags(isDeprecatedByComment, isInterface, isEnum, isEnumConst, isAnonymous, isAnnotation, isInQualifiedNew, hasDeprecatedAnnotation);
-		final JavaClassElementType type = typeForClass(isAnonymous, isEnumConst);
-		return new PsiClassStubImpl(type, parentStub, qualifiedName, name, baseRef, flags);
-	}
-
-	public static JavaClassElementType typeForClass(final boolean anonymous, final boolean enumConst)
-	{
-		return enumConst ? JavaStubElementTypes.ENUM_CONSTANT_INITIALIZER : anonymous ? JavaStubElementTypes.ANONYMOUS_CLASS : JavaStubElementTypes.CLASS;
+		return new PsiClassStubImpl(this, parentStub, qualifiedName, name, baseRef, flags);
 	}
 
 	@Override
@@ -208,22 +202,20 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 	{
 		byte flags = dataStream.readByte();
 		boolean isAnonymous = PsiClassStubImpl.isAnonymous(flags);
-		boolean isEnumConst = PsiClassStubImpl.isEnumConstInitializer(flags);
-		JavaClassElementType type = typeForClass(isAnonymous, isEnumConst);
 
 		if(!isAnonymous)
 		{
 			StringRef name = dataStream.readName();
 			StringRef qname = dataStream.readName();
 			StringRef sourceFileName = dataStream.readName();
-			PsiClassStubImpl classStub = new PsiClassStubImpl(type, parentStub, StringRef.toString(qname), StringRef.toString(name), null, flags);
+			PsiClassStubImpl classStub = new PsiClassStubImpl(this, parentStub, StringRef.toString(qname), StringRef.toString(name), null, flags);
 			classStub.setSourceFileName(StringRef.toString(sourceFileName));
 			return classStub;
 		}
 		else
 		{
 			StringRef baseRef = dataStream.readName();
-			return new PsiClassStubImpl(type, parentStub, null, null, StringRef.toString(baseRef), flags);
+			return new PsiClassStubImpl(this, parentStub, null, null, StringRef.toString(baseRef), flags);
 		}
 	}
 
