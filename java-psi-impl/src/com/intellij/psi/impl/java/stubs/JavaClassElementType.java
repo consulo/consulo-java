@@ -159,7 +159,8 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
 				{
 					if(parent instanceof PsiClassStub)
 					{
-						qualifiedName = ((PsiClassStub) parent).getQualifiedName();
+						String parentQName = ((PsiClassStub) parent).getQualifiedName();
+						qualifiedName = parentQName + '.' + name;
 						break;
 					}
 					parent = parent.getParentStub();
