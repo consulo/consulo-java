@@ -15,5 +15,5 @@
  */
 package com.intellij.execution.configurations;
 
-public interface PatchedRunnableState extends RunnableState {
+public interface PatchedRunnableState extends RunProfileState {
 }
