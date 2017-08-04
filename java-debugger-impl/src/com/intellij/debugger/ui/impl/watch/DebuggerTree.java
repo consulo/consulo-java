@@ -27,12 +27,14 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerInvocationUtil;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -70,8 +72,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.SpeedSearchComparator;
 import com.intellij.ui.TreeSpeedSearch;
+import com.intellij.xdebugger.frame.XDebuggerTreeNodeHyperlink;
+import com.intellij.xdebugger.frame.XValueChildrenList;
 import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
@@ -711,12 +716,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 		}
 
 		@Override
-		public void setRemaining(int remaining)
-		{
-		}
-
-		@Override
-		public void initChildrenArrayRenderer(ArrayRenderer renderer)
+		public void initChildrenArrayRenderer(ArrayRenderer renderer, int arrayLength)
 		{
 		}
 
@@ -731,6 +731,42 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 				}
 			}
 			updateUI(false);
+		}
+
+		@Override
+		public void addChildren(@NotNull XValueChildrenList children, boolean last)
+		{
+		}
+
+		@Override
+		public void tooManyChildren(int remaining)
+		{
+		}
+
+		@Override
+		public void setAlreadySorted(boolean alreadySorted)
+		{
+		}
+
+		@Override
+		public void setErrorMessage(@NotNull String errorMessage)
+		{
+		}
+
+		@Override
+		public void setErrorMessage(@NotNull String errorMessage, @Nullable XDebuggerTreeNodeHyperlink link)
+		{
+		}
+
+		@Override
+		public void setMessage(@NotNull String message, @Nullable Icon icon, @NotNull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
+		{
+		}
+
+		@Override
+		public boolean isObsolete()
+		{
+			return false;
 		}
 	}
 

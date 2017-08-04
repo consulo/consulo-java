@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@ package com.intellij.debugger.ui.tree.render;
 
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
 
-import java.util.List;
-
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.DebuggerContext;
 import com.intellij.debugger.engine.DebugProcessImpl;
@@ -31,9 +30,7 @@ import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
-import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
-import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiElement;
@@ -45,18 +42,19 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 
-public class ToStringRenderer extends NodeRendererImpl
+public class ToStringRenderer extends NodeRendererImpl implements OnDemandRenderer
 {
 	public static final
 	@NonNls
 	String UNIQUE_ID = "ToStringRenderer";
 
 	private boolean USE_CLASS_FILTERS = false;
+	private boolean ON_DEMAND;
 	private ClassFilter[] myClassFilters = ClassFilter.EMPTY_ARRAY;
 
 	public ToStringRenderer()
 	{
-		setEnabled(true);
+		super("unnamed", true);
 	}
 
 	@Override
@@ -66,9 +64,7 @@ public class ToStringRenderer extends NodeRendererImpl
 	}
 
 	@Override
-	public
-	@NonNls
-	String getName()
+	public String getName()
 	{
 		return "toString";
 	}
@@ -95,6 +91,12 @@ public class ToStringRenderer extends NodeRendererImpl
 	@Override
 	public String calcLabel(final ValueDescriptor valueDescriptor, EvaluationContext evaluationContext, final DescriptorLabelListener labelListener) throws EvaluateException
 	{
+
+		if(!isShowValue(valueDescriptor, evaluationContext))
+		{
+			return "";
+		}
+
 		final Value value = valueDescriptor.getValue();
 		BatchEvaluator.getBatchEvaluator(evaluationContext.getDebugProcess()).invoke(new ToStringCommand(evaluationContext, value)
 		{
@@ -116,6 +118,13 @@ public class ToStringRenderer extends NodeRendererImpl
 		return XDebuggerUIConstants.COLLECTING_DATA_MESSAGE;
 	}
 
+	@NotNull
+	@Override
+	public String getLinkText()
+	{
+		return DebuggerBundle.message("message.node.toString");
+	}
+
 	public boolean isUseClassFilters()
 	{
 		return USE_CLASS_FILTERS;
@@ -124,6 +133,16 @@ public class ToStringRenderer extends NodeRendererImpl
 	public void setUseClassFilters(boolean value)
 	{
 		USE_CLASS_FILTERS = value;
+	}
+
+	@Override
+	public boolean isOnDemand(EvaluationContext evaluationContext, ValueDescriptor valueDescriptor)
+	{
+		if(ON_DEMAND || (USE_CLASS_FILTERS && !isFiltered(valueDescriptor.getType())))
+		{
+			return true;
+		}
+		return OnDemandRenderer.super.isOnDemand(evaluationContext, valueDescriptor);
 	}
 
 	@Override
@@ -139,20 +158,7 @@ public class ToStringRenderer extends NodeRendererImpl
 			return false; // do not render 'String' objects for performance reasons
 		}
 
-		if(!overridesToString(type))
-		{
-			return false;
-		}
-
-		if(USE_CLASS_FILTERS)
-		{
-			if(!isFiltered(type))
-			{
-				return false;
-			}
-		}
-
-		return true;
+		return overridesToString(type);
 	}
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
@@ -160,14 +166,8 @@ public class ToStringRenderer extends NodeRendererImpl
 	{
 		if(type instanceof ClassType)
 		{
-			final List<Method> methods = ((ClassType) type).methodsByName("toString", "()Ljava/lang/String;");
-			for(Method method : methods)
-			{
-				if(!(method.declaringType().name()).equals(CommonClassNames.JAVA_LANG_OBJECT))
-				{
-					return true;
-				}
-			}
+			Method toStringMethod = ((ClassType) type).concreteMethodByName("toString", "()Ljava/lang/String;");
+			return toStringMethod != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(toStringMethod.declaringType().name());
 		}
 		return false;
 	}
@@ -181,8 +181,7 @@ public class ToStringRenderer extends NodeRendererImpl
 	@Override
 	public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
 	{
-		final Value parentValue = ((ValueDescriptor) node.getParent().getDescriptor()).getValue();
-		return DebugProcessImpl.getDefaultRenderer(parentValue).getChildValueExpression(node, context);
+		return DebugProcessImpl.getDefaultRenderer(((ValueDescriptor) node.getParent().getDescriptor()).getType()).getChildValueExpression(node, context);
 	}
 
 	@Override
@@ -193,20 +192,29 @@ public class ToStringRenderer extends NodeRendererImpl
 
 	@Override
 	@SuppressWarnings({"HardCodedStringLiteral"})
-	public void readExternal(Element element) throws InvalidDataException
+	public void readExternal(Element element)
 	{
 		super.readExternal(element);
-		final String value = JDOMExternalizerUtil.readField(element, "USE_CLASS_FILTERS");
-		USE_CLASS_FILTERS = "true".equalsIgnoreCase(value);
+
+		ON_DEMAND = Boolean.parseBoolean(JDOMExternalizerUtil.readField(element, "ON_DEMAND"));
+		USE_CLASS_FILTERS = Boolean.parseBoolean(JDOMExternalizerUtil.readField(element, "USE_CLASS_FILTERS"));
 		myClassFilters = DebuggerUtilsEx.readFilters(element.getChildren("filter"));
 	}
 
 	@Override
 	@SuppressWarnings({"HardCodedStringLiteral"})
-	public void writeExternal(Element element) throws WriteExternalException
+	public void writeExternal(Element element)
 	{
 		super.writeExternal(element);
-		JDOMExternalizerUtil.writeField(element, "USE_CLASS_FILTERS", USE_CLASS_FILTERS ? "true" : "false");
+
+		if(ON_DEMAND)
+		{
+			JDOMExternalizerUtil.writeField(element, "ON_DEMAND", "true");
+		}
+		if(USE_CLASS_FILTERS)
+		{
+			JDOMExternalizerUtil.writeField(element, "USE_CLASS_FILTERS", "true");
+		}
 		DebuggerUtilsEx.writeFilters(element, "filter", myClassFilters);
 	}
 
@@ -226,12 +234,22 @@ public class ToStringRenderer extends NodeRendererImpl
 		{
 			for(ClassFilter classFilter : myClassFilters)
 			{
-				if(classFilter.isEnabled() && DebuggerUtils.getSuperType(t, classFilter.getPattern()) != null)
+				if(classFilter.isEnabled() && DebuggerUtils.instanceOf(t, classFilter.getPattern()))
 				{
 					return true;
 				}
 			}
 		}
 		return DebuggerUtilsEx.isFiltered(t.name(), myClassFilters);
+	}
+
+	public boolean isOnDemand()
+	{
+		return ON_DEMAND;
+	}
+
+	public void setOnDemand(boolean value)
+	{
+		ON_DEMAND = value;
 	}
 }

@@ -177,8 +177,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		if(Patches.IBM_JDK_DISABLE_COLLECTION_BUG)
 		{
 			final EvaluationContextImpl evalContext = myStoredEvaluationContext;
-			if(evalContext != null && !evalContext.getSuspendContext().isResumed() &&
-					myValue instanceof ObjectReference && VirtualMachineProxyImpl.isCollected((ObjectReference) myValue))
+			if(evalContext != null && !evalContext.getSuspendContext().isResumed() && myValue instanceof ObjectReference && VirtualMachineProxyImpl.isCollected((ObjectReference) myValue))
 			{
 
 				final Semaphore semaphore = new Semaphore();
@@ -393,8 +392,8 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 			final Value value = getValue();
 			Renderer lastRenderer = getLastRenderer();
 			final EvaluationContextImpl evalContext = myStoredEvaluationContext;
-			return evalContext != null && lastRenderer != null && !evalContext.getSuspendContext().isResumed() ? ((NodeRendererImpl) lastRenderer).getIdLabel(value,
-					evalContext.getDebugProcess()) : null;
+			return evalContext != null && lastRenderer != null && !evalContext.getSuspendContext().isResumed() ? ((NodeRendererImpl) lastRenderer).getIdLabel(value, evalContext.getDebugProcess()) :
+					null;
 		}
 		return null;
 	}
@@ -531,8 +530,8 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 				return null;
 			}
 
-			return DebuggerTreeNodeExpression.substituteThis(vDescriptor.getRenderer(context.getDebugProcess()).getChildValueExpression(new DebuggerTreeNodeMock(value), context),
-					((PsiExpression) parentEvaluation), vDescriptor.getValue());
+			return DebuggerTreeNodeExpression.substituteThis(vDescriptor.getRenderer(context.getDebugProcess()).getChildValueExpression(new DebuggerTreeNodeMock(value), context), ((PsiExpression)
+					parentEvaluation), vDescriptor.getValue());
 		}
 
 		return getDescriptorEvaluation(context);
@@ -749,5 +748,10 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 			}
 		}
 		return "";
+	}
+
+	public EvaluationContextImpl getStoredEvaluationContext()
+	{
+		return myStoredEvaluationContext;
 	}
 }

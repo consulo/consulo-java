@@ -194,7 +194,7 @@
 			<action id="Debugger.ViewAsGroup" class="com.intellij.debugger.actions.ViewAsGroup">
 				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
 			</action>
-			<action id="Debugger.AdjustArrayRange" class="com.intellij.debugger.actions.AdjustArrayRangeAction">
+			<action id="Debugger.AdjustArrayRange" class="com.intellij.debugger.actions.ArrayAction$AdjustArrayRangeAction">
 				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
 			</action>
 			<!--<action id="Debugger.SetValue" class="com.intellij.debugger.actions.SetValueAction"/>-->
@@ -202,11 +202,19 @@
 			<action id="Debugger.ResumeThread" class="com.intellij.debugger.actions.ResumeThreadAction"/>
 			<action id="Debugger.FreezeThread" class="com.intellij.debugger.actions.FreezeThreadAction"/>
 			<action id="Debugger.InterruptThread" class="com.intellij.debugger.actions.InterruptThreadAction"/>
+			<action id="Debugger.CreateRenderer" class="com.intellij.debugger.actions.CreateRendererAction" text="Create..."/>
+			<action id="Debugger.AutoRenderer" class="com.intellij.debugger.actions.AutoRendererAction"/>
+			<action id="Debugger.MuteRenderers" class="com.intellij.debugger.ui.tree.actions.ForceOnDemandRenderersAction" text="Mute Renderers">
+				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+			</action>
+
 			<add-to-group group-id="DebuggerActions" anchor="first"/>
 		</group>
 
 		<group id="Debugger.Representation">
-			<action id="Debugger.AutoRenderer" class="com.intellij.debugger.actions.AutoRendererAction"/>
+			<reference ref="Debugger.CreateRenderer"/>
+			<separator/>
+			<reference ref="Debugger.AutoRenderer"/>
 		</group>
 
 		<group id="EditorPopupMenuDebugJava">

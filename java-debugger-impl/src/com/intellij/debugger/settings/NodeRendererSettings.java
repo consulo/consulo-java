@@ -33,7 +33,6 @@ import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl;
-import com.intellij.debugger.engine.evaluation.TextWithImports;
 import com.intellij.debugger.engine.evaluation.TextWithImportsImpl;
 import com.intellij.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
@@ -83,8 +82,8 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 	private final ToStringRenderer myToStringRenderer = new ToStringRenderer();
 	// alternate collections
 	private final NodeRenderer[] myAlternateCollectionRenderers = new NodeRenderer[]{
-			createCompoundReferenceRenderer("Map", CommonClassNames.JAVA_UTIL_MAP, createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("entrySet().toArray()", "!isEmpty" +
-					"()")),
+			createCompoundReferenceRenderer("Map", CommonClassNames.JAVA_UTIL_MAP, createLabelRenderer(" size = ", "size()", null), createExpressionChildrenRenderer("entrySet().toArray()",
+					"!isEmpty" + "()")),
 			createCompoundReferenceRenderer("Map.Entry", "java.util.Map$Entry", new MapEntryLabelRenderer()/*createLabelRenderer(null, "\" \" + getKey() + \" -> \" + getValue()", null)*/,
 					createEnumerationChildrenRenderer(new String[][]{
 					{
@@ -430,13 +429,13 @@ public class NodeRendererSettings implements PersistentStateComponent<Element>
 
 	public static EnumerationChildrenRenderer createEnumerationChildrenRenderer(@NonNls String[][] expressions)
 	{
-		final EnumerationChildrenRenderer childrenRenderer = new EnumerationChildrenRenderer();
+		EnumerationChildrenRenderer childrenRenderer = new EnumerationChildrenRenderer();
 		if(expressions != null && expressions.length > 0)
 		{
-			final ArrayList<Pair<String, TextWithImports>> childrenList = new ArrayList<>(expressions.length);
-			for(final String[] expression : expressions)
+			ArrayList<EnumerationChildrenRenderer.ChildInfo> childrenList = new ArrayList<>(expressions.length);
+			for(String[] expression : expressions)
 			{
-				childrenList.add(new Pair<>(expression[0], new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression[1], "", JavaFileType.INSTANCE)));
+				childrenList.add(new EnumerationChildrenRenderer.ChildInfo(expression[0], new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, expression[1], "", JavaFileType.INSTANCE), false));
 			}
 			childrenRenderer.setChildren(childrenList);
 		}

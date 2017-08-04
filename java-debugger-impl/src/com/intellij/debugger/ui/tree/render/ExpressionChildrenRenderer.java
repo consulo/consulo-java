@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,29 +45,24 @@ import com.intellij.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.BooleanValue;
 import consulo.internal.com.sun.jdi.Value;
 
-/**
- * User: lex
- * Date: Sep 17, 2003
- * Time: 2:04:00 PM
- */
-public class ExpressionChildrenRenderer extends ReferenceRenderer implements ChildrenRenderer
+public class ExpressionChildrenRenderer extends TypeRenderer implements ChildrenRenderer
 {
 	public static final
 	@NonNls
 	String UNIQUE_ID = "ExpressionChildrenRenderer";
-	private static final Key<Value> EXPRESSION_VALUE = new Key<Value>("EXPRESSION_VALUE");
-	private static final Key<NodeRenderer> LAST_CHILDREN_RENDERER = new Key<NodeRenderer>("LAST_CHILDREN_RENDERER");
+	private static final Key<Value> EXPRESSION_VALUE = new Key<>("EXPRESSION_VALUE");
+	private static final Key<NodeRenderer> LAST_CHILDREN_RENDERER = new Key<>("LAST_CHILDREN_RENDERER");
 
 	private CachedEvaluator myChildrenExpandable = createCachedEvaluator();
 	private CachedEvaluator myChildrenExpression = createCachedEvaluator();
 
-	@Override
+	private NodeRenderer myPredictedRenderer;
+
 	public String getUniqueId()
 	{
 		return UNIQUE_ID;
 	}
 
-	@Override
 	public ExpressionChildrenRenderer clone()
 	{
 		ExpressionChildrenRenderer clone = (ExpressionChildrenRenderer) super.clone();
@@ -92,7 +87,7 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 		}
 		catch(final EvaluateException e)
 		{
-			List<DebuggerTreeNode> errorChildren = new ArrayList<DebuggerTreeNode>();
+			List<DebuggerTreeNode> errorChildren = new ArrayList<>();
 			errorChildren.add(nodeManager.createMessageNode(DebuggerBundle.message("error.unable.to.evaluate.expression") + " " + e.getMessage()));
 			builder.setChildren(errorChildren);
 		}
@@ -109,6 +104,11 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 		descriptor.putUserData(LAST_CHILDREN_RENDERER, renderer);
 	}
 
+	public static Value getLastChildrenValue(NodeDescriptor descriptor)
+	{
+		return descriptor.getUserData(EXPRESSION_VALUE);
+	}
+
 	private Value evaluateChildren(EvaluationContext context, NodeDescriptor descriptor) throws EvaluateException
 	{
 		final ExpressionEvaluator evaluator = myChildrenExpression.getEvaluator(context.getProject());
@@ -120,7 +120,6 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 		return value;
 	}
 
-	@Override
 	public void readExternal(Element element) throws InvalidDataException
 	{
 		super.readExternal(element);
@@ -139,7 +138,6 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 		}
 	}
 
-	@Override
 	public void writeExternal(Element element) throws WriteExternalException
 	{
 		super.writeExternal(element);
@@ -148,10 +146,9 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 		DebuggerUtils.getInstance().writeTextWithImports(element, "CHILDREN_EXPRESSION", getChildrenExpression());
 	}
 
-	@Override
 	public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
 	{
-		Value expressionValue = node.getParent().getDescriptor().getUserData(EXPRESSION_VALUE);
+		Value expressionValue = getLastChildrenValue(node.getParent().getDescriptor());
 		if(expressionValue == null)
 		{
 			throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("error.unable.to.evaluate.expression"));
@@ -159,8 +156,12 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 
 		NodeRenderer childrenRenderer = getChildrenRenderer(expressionValue, (ValueDescriptor) node.getParent().getDescriptor());
 
-		return DebuggerTreeNodeExpression.substituteThis(childrenRenderer.getChildValueExpression(node, context), (PsiExpression) myChildrenExpression.getPsiExpression(node.getProject()).copy(),
-				expressionValue);
+		PsiExpression childrenPsiExpression = myChildrenExpression.getPsiExpression(node.getProject());
+		if(childrenPsiExpression == null)
+		{
+			return null;
+		}
+		return DebuggerTreeNodeExpression.substituteThis(childrenRenderer.getChildValueExpression(node, context), (PsiExpression) childrenPsiExpression.copy(), expressionValue);
 	}
 
 	private static NodeRenderer getChildrenRenderer(Value childrenValue, ValueDescriptor parentDescriptor)
@@ -226,7 +227,6 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 		myChildrenExpandable.setReferenceExpression(childrenExpandable);
 	}
 
-	@Override
 	public void setClassName(String name)
 	{
 		super.setClassName(name);
@@ -234,4 +234,13 @@ public class ExpressionChildrenRenderer extends ReferenceRenderer implements Chi
 		myChildrenExpandable.clear();
 	}
 
+	public NodeRenderer getPredictedRenderer()
+	{
+		return myPredictedRenderer;
+	}
+
+	public void setPredictedRenderer(NodeRenderer predictedRenderer)
+	{
+		myPredictedRenderer = predictedRenderer;
+	}
 }

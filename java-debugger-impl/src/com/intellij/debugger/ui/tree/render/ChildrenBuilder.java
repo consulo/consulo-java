@@ -17,18 +17,13 @@ package com.intellij.debugger.ui.tree.render;
 
 import java.util.List;
 
-import javax.swing.Icon;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptorFactory;
 import com.intellij.debugger.ui.tree.NodeManager;
 import com.intellij.debugger.ui.tree.ValueDescriptor;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.xdebugger.frame.XDebuggerTreeNodeHyperlink;
+import com.intellij.xdebugger.frame.XCompositeNode;
 
-public interface ChildrenBuilder
+public interface ChildrenBuilder extends XCompositeNode
 {
 	NodeDescriptorFactory getDescriptorManager();
 
@@ -43,11 +38,14 @@ public interface ChildrenBuilder
 		setChildren(children);
 	}
 
-	default void setMessage(@NotNull String message, @Nullable Icon icon, @NotNull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link)
+	/**
+	 * @deprecated use {@link #tooManyChildren}
+	 */
+	@Deprecated
+	default void setRemaining(int remaining)
 	{
+		tooManyChildren(remaining);
 	}
 
-	void setRemaining(int remaining);
-
-	void initChildrenArrayRenderer(ArrayRenderer renderer);
+	void initChildrenArrayRenderer(ArrayRenderer renderer, int arrayLength);
 }
