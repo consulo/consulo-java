@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.intellij.debugger.engine;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +33,7 @@ import com.intellij.debugger.engine.events.SuspendContextCommandImpl;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.debugger.jdi.StackFrameProxyImpl;
 import com.intellij.debugger.jdi.ThreadReferenceProxyImpl;
+import com.intellij.diagnostic.ThreadDumper;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.containers.HashSet;
@@ -62,9 +62,9 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	private final EventSet myEventSet;
 	private volatile boolean myIsResumed;
 
-	private final ConcurrentLinkedQueue<SuspendContextCommandImpl> myPostponedCommands = new ConcurrentLinkedQueue<SuspendContextCommandImpl>();
+	private final ConcurrentLinkedQueue<SuspendContextCommandImpl> myPostponedCommands = new ConcurrentLinkedQueue<>();
 	public volatile boolean myInProgress;
-	private final HashSet<ObjectReference> myKeptReferences = new HashSet<ObjectReference>();
+	private final HashSet<ObjectReference> myKeptReferences = new HashSet<>();
 	private EvaluationContextImpl myEvaluationContext = null;
 
 	private JavaExecutionStack myActiveExecutionStack;
@@ -90,16 +90,16 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	protected void resume()
 	{
 		assertNotResumed();
-		LOG.assertTrue(!isEvaluating(), "resuming context while evaluating");
+		if(isEvaluating())
+		{
+			LOG.error("Resuming context while evaluating", ThreadDumper.dumpThreadsToString());
+		}
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		try
 		{
 			if(!Patches.IBM_JDK_DISABLE_COLLECTION_BUG)
 			{
-				for(ObjectReference objectReference : myKeptReferences)
-				{
-					DebuggerUtilsEx.enableCollection(objectReference);
-				}
+				myKeptReferences.forEach(DebuggerUtilsEx::enableCollection);
 				myKeptReferences.clear();
 			}
 
@@ -131,19 +131,12 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 	@Nullable
 	public EventSet getEventSet()
 	{
-		assertNotResumed();
 		return myEventSet;
 	}
 
 	@Override
 	@NotNull
 	public DebugProcessImpl getDebugProcess()
-	{
-		assertNotResumed();
-		return myDebugProcess;
-	}
-
-	public DebugProcessImpl getDebugProcessNoAssert()
 	{
 		return myDebugProcess;
 	}
@@ -294,9 +287,9 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myDebugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(this)
 		{
 			@Override
-			public void contextAction() throws Exception
+			public void contextAction(@NotNull SuspendContextImpl suspendContext) throws Exception
 			{
-				List<JavaExecutionStack> res = new ArrayList<JavaExecutionStack>();
+				List<JavaExecutionStack> res = new ArrayList<>();
 				Collection<ThreadReferenceProxyImpl> threads = getDebugProcess().getVirtualMachineProxy().allThreads();
 				JavaExecutionStack currentStack = null;
 				for(ThreadReferenceProxyImpl thread : threads)
@@ -312,7 +305,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 						currentStack = stack;
 					}
 				}
-				Collections.sort(res, THREADS_COMPARATOR);
+				res.sort(THREADS_COMPARATOR);
 				if(currentStack != null)
 				{
 					res.add(0, currentStack);
@@ -322,17 +315,13 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		});
 	}
 
-	private static final Comparator<JavaExecutionStack> THREADS_COMPARATOR = new Comparator<JavaExecutionStack>()
+	private static final Comparator<JavaExecutionStack> THREADS_COMPARATOR = (th1, th2) ->
 	{
-		@Override
-		public int compare(JavaExecutionStack th1, JavaExecutionStack th2)
+		int res = Comparing.compare(th2.getThreadProxy().isSuspended(), th1.getThreadProxy().isSuspended());
+		if(res == 0)
 		{
-			int res = Comparing.compare(th2.getThreadProxy().isSuspended(), th1.getThreadProxy().isSuspended());
-			if(res == 0)
-			{
-				return th1.getDisplayName().compareToIgnoreCase(th2.getDisplayName());
-			}
-			return res;
+			return th1.getDisplayName().compareToIgnoreCase(th2.getDisplayName());
 		}
+		return res;
 	};
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2015 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,22 @@ package com.intellij.debugger.engine;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.debugger.EvaluatingComputable;
+import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.engine.evaluation.EvaluateException;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.openapi.application.ReadAction;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.LambdaUtil;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLambdaExpression;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.Range;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
+import consulo.internal.com.sun.jdi.ObjectReference;
 
 /**
  * @author Eugene Zhuravlev
@@ -30,6 +40,8 @@ import consulo.internal.com.sun.jdi.Method;
  */
 public class BasicStepMethodFilter implements NamedMethodFilter
 {
+	private static final Logger LOG = Logger.getInstance(BasicStepMethodFilter.class);
+
 	@NotNull
 	protected final JVMName myDeclaringClassName;
 	@NotNull
@@ -51,27 +63,71 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		myCallingExpressionLines = callingExpressionLines;
 	}
 
+	@Override
 	@NotNull
 	public String getMethodName()
 	{
 		return myTargetMethodName;
 	}
 
+	@Override
 	public boolean locationMatches(DebugProcessImpl process, Location location) throws EvaluateException
 	{
-		final Method method = location.method();
-		if(!myTargetMethodName.equals(method.name()))
+		return locationMatches(process, location, () -> null);
+	}
+
+	public boolean locationMatches(DebugProcessImpl process, Location location, @NotNull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
+	{
+		Method method = location.method();
+		String name = method.name();
+		if(!myTargetMethodName.equals(name))
+		{
+			if(DebuggerUtilsEx.isLambdaName(name))
+			{
+				SourcePosition position = process.getPositionManager().getSourcePosition(location);
+				return ReadAction.compute(() ->
+				{
+					PsiElement psiMethod = DebuggerUtilsEx.getContainingMethod(position);
+					if(psiMethod instanceof PsiLambdaExpression)
+					{
+						PsiType type = ((PsiLambdaExpression) psiMethod).getFunctionalInterfaceType();
+						PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(type);
+						if(type != null && interfaceMethod != null && myTargetMethodName.equals(interfaceMethod.getName()))
+						{
+							try
+							{
+								return InheritanceUtil.isInheritor(type, myDeclaringClassName.getName(process).replace('$', '.'));
+							}
+							catch(EvaluateException e)
+							{
+								LOG.info(e);
+							}
+						}
+					}
+					return false;
+				});
+			}
+			return false;
+		}
+		if(myTargetMethodSignature != null && !signatureMatches(method, myTargetMethodSignature.getName(process)))
 		{
 			return false;
 		}
-		if(myTargetMethodSignature != null)
+		if(method.isBridge())
+		{ // skip bridge methods
+			return false;
+		}
+		String declaringClassNameName = myDeclaringClassName.getName(process);
+		boolean res = DebuggerUtilsEx.isAssignableFrom(declaringClassNameName, location.declaringType());
+		if(!res && !method.isStatic())
 		{
-			if(!signatureMatches(method, myTargetMethodSignature.getName(process)))
+			ObjectReference thisObject = thisProvider.compute();
+			if(thisObject != null)
 			{
-				return false;
+				res = DebuggerUtilsEx.isAssignableFrom(declaringClassNameName, thisObject.referenceType());
 			}
 		}
-		return DebuggerUtilsEx.isAssignableFrom(myDeclaringClassName.getName(process), location.declaringType());
+		return res;
 	}
 
 	private static boolean signatureMatches(Method method, final String expectedSignature) throws EvaluateException
