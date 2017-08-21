@@ -22,13 +22,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Sep 8, 2003
- * Time: 4:20:36 PM
- * To change this template use Options | File Templates.
- */
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class MissingReturnExpressionFixer implements Fixer
 {
@@ -93,7 +86,7 @@ public class MissingReturnExpressionFixer implements Fixer
 		if(!(prev instanceof PsiJavaToken))
 		{
 			int offset = returnStatement.getTextRange().getEndOffset();
-			final PsiMethod method = PsiTreeUtil.getParentOfType(returnStatement, PsiMethod.class);
+			final PsiMethod method = PsiTreeUtil.getParentOfType(returnStatement, PsiMethod.class, true, PsiLambdaExpression.class);
 			if(method != null && PsiType.VOID.equals(method.getReturnType()))
 			{
 				offset = returnStatement.getTextRange().getStartOffset() + "return".length();

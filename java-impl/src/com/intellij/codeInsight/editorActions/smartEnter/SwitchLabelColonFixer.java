@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,39 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaToken;
-import com.intellij.psi.PsiSwitchStatement;
+import com.intellij.psi.PsiSwitchLabelStatement;
 import com.intellij.util.IncorrectOperationException;
 
-public class MissingSwitchBodyFixer implements Fixer
+/**
+ * @author peter
+ */
+public class SwitchLabelColonFixer implements Fixer
 {
 	@Override
 	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
 	{
-		if(!(psiElement instanceof PsiSwitchStatement))
+		if(psiElement instanceof PsiSwitchLabelStatement && !psiElement.getText().endsWith(":"))
 		{
-			return;
+			PsiSwitchLabelStatement statement = (PsiSwitchLabelStatement) psiElement;
+			if(statement.getCaseValue() != null || statement.isDefaultCase())
+			{
+				editor.getDocument().insertString(psiElement.getTextRange().getEndOffset(), ":");
+			}
 		}
-		PsiSwitchStatement switchStatement = (PsiSwitchStatement) psiElement;
-
-		final Document doc = editor.getDocument();
-
-		final PsiCodeBlock body = switchStatement.getBody();
-		if(body != null)
-		{
-			return;
-		}
-
-		final PsiJavaToken rParenth = switchStatement.getRParenth();
-		assert rParenth != null;
-
-		doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");
 	}
 }

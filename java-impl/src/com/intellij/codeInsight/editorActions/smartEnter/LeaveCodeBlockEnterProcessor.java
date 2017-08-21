@@ -31,13 +31,6 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.text.CharArrayUtil;
 
-/**
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Sep 8, 2003
- * Time: 2:48:47 PM
- * To change this template use Options | File Templates.
- */
 public class LeaveCodeBlockEnterProcessor implements EnterProcessor
 {
 

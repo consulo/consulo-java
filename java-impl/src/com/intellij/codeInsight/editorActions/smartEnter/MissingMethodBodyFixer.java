@@ -33,13 +33,6 @@ import com.intellij.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Sep 5, 2003
- * Time: 7:24:03 PM
- * To change this template use Options | File Templates.
- */
 public class MissingMethodBodyFixer implements Fixer
 {
 	@Override
