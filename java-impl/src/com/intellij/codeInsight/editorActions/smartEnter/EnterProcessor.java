@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElement;
  * Time: 10:53:40 PM
  * To change this template use Options | File Templates.
  */
-public interface EnterProcessor {
-  boolean doEnter(Editor editor, PsiElement psiElement, boolean isModified);
+public interface EnterProcessor
+{
+	boolean doEnter(Editor editor, PsiElement psiElement, boolean isModified);
 }

@@ -29,26 +29,34 @@ import com.intellij.util.IncorrectOperationException;
  * Time: 7:24:03 PM
  * To change this template use Options | File Templates.
  */
-public class MissingArrayInitializerBraceFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (!(psiElement instanceof PsiArrayInitializerExpression)) return;
-    PsiArrayInitializerExpression expr = (PsiArrayInitializerExpression)psiElement;
-    final Document doc = editor.getDocument();
-    final String exprText = expr.getText();
-    final TextRange textRange = expr.getTextRange();
-    final int endOffset = textRange.getEndOffset();
-    int caretOffset = editor.getCaretModel().getOffset();
-    final int startOffset = textRange.getStartOffset();
-    if (caretOffset > startOffset && caretOffset < endOffset) {
-      final int index = exprText.indexOf('\n', caretOffset - startOffset);
-      if (index >= 0) {
-        doc.insertString(index + startOffset, "}");
-        return;
-      }
-    }
-    if (!exprText.endsWith("}")) {
-      doc.insertString(endOffset, "}");
-    }
-  }
+public class MissingArrayInitializerBraceFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(!(psiElement instanceof PsiArrayInitializerExpression))
+		{
+			return;
+		}
+		PsiArrayInitializerExpression expr = (PsiArrayInitializerExpression) psiElement;
+		final Document doc = editor.getDocument();
+		final String exprText = expr.getText();
+		final TextRange textRange = expr.getTextRange();
+		final int endOffset = textRange.getEndOffset();
+		int caretOffset = editor.getCaretModel().getOffset();
+		final int startOffset = textRange.getStartOffset();
+		if(caretOffset > startOffset && caretOffset < endOffset)
+		{
+			final int index = exprText.indexOf('\n', caretOffset - startOffset);
+			if(index >= 0)
+			{
+				doc.insertString(index + startOffset, "}");
+				return;
+			}
+		}
+		if(!exprText.endsWith("}"))
+		{
+			doc.insertString(endOffset, "}");
+		}
+	}
 }

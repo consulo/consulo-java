@@ -30,25 +30,37 @@ import com.intellij.util.IncorrectOperationException;
  * Time: 7:24:03 PM
  * To change this template use Options | File Templates.
  */
-public class MissingWhileBodyFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (!(psiElement instanceof PsiWhileStatement)) return;
-    PsiWhileStatement whileStatement = (PsiWhileStatement) psiElement;
+public class MissingWhileBodyFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(!(psiElement instanceof PsiWhileStatement))
+		{
+			return;
+		}
+		PsiWhileStatement whileStatement = (PsiWhileStatement) psiElement;
 
-    final Document doc = editor.getDocument();
+		final Document doc = editor.getDocument();
 
-    PsiElement body = whileStatement.getBody();
-    if (body instanceof PsiBlockStatement) return;
-    if (body != null && startLine(doc, body) == startLine(doc, whileStatement) && whileStatement.getCondition() != null) return;
+		PsiElement body = whileStatement.getBody();
+		if(body instanceof PsiBlockStatement)
+		{
+			return;
+		}
+		if(body != null && startLine(doc, body) == startLine(doc, whileStatement) && whileStatement.getCondition() != null)
+		{
+			return;
+		}
 
-    final PsiJavaToken rParenth = whileStatement.getRParenth();
-    assert rParenth != null;
+		final PsiJavaToken rParenth = whileStatement.getRParenth();
+		assert rParenth != null;
 
-    doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");
-  }
+		doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");
+	}
 
-  private static int startLine(Document doc, PsiElement psiElement) {
-    return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
-  }
+	private static int startLine(Document doc, PsiElement psiElement)
+	{
+		return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
+	}
 }

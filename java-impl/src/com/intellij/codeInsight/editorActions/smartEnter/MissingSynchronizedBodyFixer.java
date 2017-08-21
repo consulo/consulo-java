@@ -28,17 +28,25 @@ import com.intellij.util.IncorrectOperationException;
  * Time: 7:24:03 PM
  * To change this template use Options | File Templates.
  */
-public class MissingSynchronizedBodyFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (!(psiElement instanceof PsiSynchronizedStatement)) return;
-    PsiSynchronizedStatement syncStatement = (PsiSynchronizedStatement) psiElement;
+public class MissingSynchronizedBodyFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(!(psiElement instanceof PsiSynchronizedStatement))
+		{
+			return;
+		}
+		PsiSynchronizedStatement syncStatement = (PsiSynchronizedStatement) psiElement;
 
-    final Document doc = editor.getDocument();
+		final Document doc = editor.getDocument();
 
-    PsiElement body = syncStatement.getBody();
-    if (body != null) return;
+		PsiElement body = syncStatement.getBody();
+		if(body != null)
+		{
+			return;
+		}
 
-    doc.insertString(syncStatement.getTextRange().getEndOffset(), "{}");
-  }
+		doc.insertString(syncStatement.getTextRange().getEndOffset(), "{}");
+	}
 }

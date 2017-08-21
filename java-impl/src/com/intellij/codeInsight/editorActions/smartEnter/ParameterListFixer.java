@@ -26,22 +26,28 @@ import com.intellij.util.IncorrectOperationException;
  * @author max
  * @since Sep 5, 2003
  */
-public class ParameterListFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (psiElement instanceof PsiParameterList) {
-      String text = psiElement.getText();
-      if (StringUtil.startsWithChar(text, '(') && !StringUtil.endsWithChar(text, ')')) {
-        PsiParameter[] params = ((PsiParameterList)psiElement).getParameters();
-        int offset;
-        if (params.length == 0) {
-          offset = psiElement.getTextRange().getStartOffset() + 1;
-        }
-        else {
-          offset = params[params.length - 1].getTextRange().getEndOffset();
-        }
-        editor.getDocument().insertString(offset, ")");
-      }
-    }
-  }
+public class ParameterListFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(psiElement instanceof PsiParameterList)
+		{
+			String text = psiElement.getText();
+			if(StringUtil.startsWithChar(text, '(') && !StringUtil.endsWithChar(text, ')'))
+			{
+				PsiParameter[] params = ((PsiParameterList) psiElement).getParameters();
+				int offset;
+				if(params.length == 0)
+				{
+					offset = psiElement.getTextRange().getStartOffset() + 1;
+				}
+				else
+				{
+					offset = params[params.length - 1].getTextRange().getEndOffset();
+				}
+				editor.getDocument().insertString(offset, ")");
+			}
+		}
+	}
 }

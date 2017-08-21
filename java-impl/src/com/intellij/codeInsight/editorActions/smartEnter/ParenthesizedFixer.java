@@ -20,14 +20,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiParenthesizedExpression;
 import com.intellij.util.IncorrectOperationException;
 
-public class ParenthesizedFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (psiElement instanceof PsiParenthesizedExpression) {
-      final PsiElement lastChild = psiElement.getLastChild();
-      if (lastChild != null && !")".equals(lastChild.getText())) {
-        editor.getDocument().insertString(psiElement.getTextRange().getEndOffset(), ")");
-      }
-    }
-  }
+public class ParenthesizedFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(psiElement instanceof PsiParenthesizedExpression)
+		{
+			final PsiElement lastChild = psiElement.getLastChild();
+			if(lastChild != null && !")".equals(lastChild.getText()))
+			{
+				editor.getDocument().insertString(psiElement.getTextRange().getEndOffset(), ")");
+			}
+		}
+	}
 }

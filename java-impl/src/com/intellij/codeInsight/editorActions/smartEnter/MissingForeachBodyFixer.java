@@ -17,45 +17,66 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiBlockStatement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiForeachStatement;
+import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 
 /**
  * @author Maxim.Mossienko
  */
-public class MissingForeachBodyFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    PsiForeachStatement forStatement = getForeachStatementParent(psiElement);
-    if (forStatement == null) return;
+public class MissingForeachBodyFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		PsiForeachStatement forStatement = getForeachStatementParent(psiElement);
+		if(forStatement == null)
+		{
+			return;
+		}
 
-    final Document doc = editor.getDocument();
+		final Document doc = editor.getDocument();
 
-    PsiElement body = forStatement.getBody();
-    if (body instanceof PsiBlockStatement) return;
-    if (body != null && startLine(doc, body) == startLine(doc, forStatement)) return;
+		PsiElement body = forStatement.getBody();
+		if(body instanceof PsiBlockStatement)
+		{
+			return;
+		}
+		if(body != null && startLine(doc, body) == startLine(doc, forStatement))
+		{
+			return;
+		}
 
-    PsiElement eltToInsertAfter = forStatement.getRParenth();
-    String text = "{}";
-    if (eltToInsertAfter == null) {
-      eltToInsertAfter = forStatement;
-      text = "){}";
-    }
-    doc.insertString(eltToInsertAfter.getTextRange().getEndOffset(), text);
-  }
+		PsiElement eltToInsertAfter = forStatement.getRParenth();
+		String text = "{}";
+		if(eltToInsertAfter == null)
+		{
+			eltToInsertAfter = forStatement;
+			text = "){}";
+		}
+		doc.insertString(eltToInsertAfter.getTextRange().getEndOffset(), text);
+	}
 
-  private static PsiForeachStatement getForeachStatementParent(PsiElement psiElement) {
-    PsiForeachStatement statement = PsiTreeUtil.getParentOfType(psiElement, PsiForeachStatement.class);
-    if (statement == null) return null;
+	private static PsiForeachStatement getForeachStatementParent(PsiElement psiElement)
+	{
+		PsiForeachStatement statement = PsiTreeUtil.getParentOfType(psiElement, PsiForeachStatement.class);
+		if(statement == null)
+		{
+			return null;
+		}
 
-    PsiExpression iterated = statement.getIteratedValue();
-    PsiParameter parameter = statement.getIterationParameter();
+		PsiExpression iterated = statement.getIteratedValue();
+		PsiParameter parameter = statement.getIterationParameter();
 
-    return PsiTreeUtil.isAncestor(iterated, psiElement, false) || PsiTreeUtil.isAncestor(parameter, psiElement, false) ? statement : null;
-  }
+		return PsiTreeUtil.isAncestor(iterated, psiElement, false) || PsiTreeUtil.isAncestor(parameter, psiElement, false) ? statement : null;
+	}
 
-  private static int startLine(Document doc, PsiElement psiElement) {
-    return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
-  }
+	private static int startLine(Document doc, PsiElement psiElement)
+	{
+		return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
+	}
 }

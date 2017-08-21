@@ -26,6 +26,7 @@ import com.intellij.util.IncorrectOperationException;
  * Time: 3:34:15 PM
  * To change this template use Options | File Templates.
  */
-public interface Fixer {
-  void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException;
+public interface Fixer
+{
+	void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException;
 }

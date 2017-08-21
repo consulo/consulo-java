@@ -17,7 +17,10 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiCatchSection;
+import com.intellij.psi.PsiCodeBlock;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaToken;
 import com.intellij.util.IncorrectOperationException;
 
 /**
@@ -27,24 +30,36 @@ import com.intellij.util.IncorrectOperationException;
  * Time: 7:24:03 PM
  * To change this template use Options | File Templates.
  */
-public class MissingCatchBodyFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (!(psiElement instanceof PsiCatchSection)) return;
-    PsiCatchSection catchSection = (PsiCatchSection) psiElement;
+public class MissingCatchBodyFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(!(psiElement instanceof PsiCatchSection))
+		{
+			return;
+		}
+		PsiCatchSection catchSection = (PsiCatchSection) psiElement;
 
-    final Document doc = editor.getDocument();
+		final Document doc = editor.getDocument();
 
-    PsiCodeBlock body = catchSection.getCatchBlock();
-    if (body != null && startLine(doc, body) == startLine(doc, catchSection)) return;
+		PsiCodeBlock body = catchSection.getCatchBlock();
+		if(body != null && startLine(doc, body) == startLine(doc, catchSection))
+		{
+			return;
+		}
 
-    final PsiJavaToken rParenth = catchSection.getRParenth();
-    if (rParenth == null) return;
+		final PsiJavaToken rParenth = catchSection.getRParenth();
+		if(rParenth == null)
+		{
+			return;
+		}
 
-    doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");
-  }
+		doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");
+	}
 
-  private static int startLine(Document doc, PsiElement psiElement) {
-    return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
-  }
+	private static int startLine(Document doc, PsiElement psiElement)
+	{
+		return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
+	}
 }

@@ -37,20 +37,28 @@ import com.intellij.util.IncorrectOperationException;
  * Time: 7:24:03 PM
  * To change this template use Options | File Templates.
  */
-public class MissingSwitchBodyFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
-    if (!(psiElement instanceof PsiSwitchStatement)) return;
-    PsiSwitchStatement switchStatement = (PsiSwitchStatement) psiElement;
+public class MissingSwitchBodyFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(!(psiElement instanceof PsiSwitchStatement))
+		{
+			return;
+		}
+		PsiSwitchStatement switchStatement = (PsiSwitchStatement) psiElement;
 
-    final Document doc = editor.getDocument();
+		final Document doc = editor.getDocument();
 
-    final PsiCodeBlock body = switchStatement.getBody();
-    if (body != null) return;
+		final PsiCodeBlock body = switchStatement.getBody();
+		if(body != null)
+		{
+			return;
+		}
 
-    final PsiJavaToken rParenth = switchStatement.getRParenth();
-    assert rParenth != null;
+		final PsiJavaToken rParenth = switchStatement.getRParenth();
+		assert rParenth != null;
 
-    doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");
-  }
+		doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");
+	}
 }

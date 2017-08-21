@@ -28,26 +28,30 @@ import com.intellij.util.IncorrectOperationException;
  * To change this template use Options | File Templates.
  */
 @SuppressWarnings({"HardCodedStringLiteral"})
-public class MissingThrowExpressionFixer implements Fixer {
-  @Override
-  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement)
-      throws IncorrectOperationException {
-    if (psiElement instanceof PsiThrowStatement) {
-      PsiThrowStatement throwStatement = (PsiThrowStatement) psiElement;
-      if (throwStatement.getException() != null &&
-          startLine(editor, throwStatement) == startLine(editor, throwStatement.getException())) {
-        return;
-      }
+public class MissingThrowExpressionFixer implements Fixer
+{
+	@Override
+	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
+	{
+		if(psiElement instanceof PsiThrowStatement)
+		{
+			PsiThrowStatement throwStatement = (PsiThrowStatement) psiElement;
+			if(throwStatement.getException() != null && startLine(editor, throwStatement) == startLine(editor, throwStatement.getException()))
+			{
+				return;
+			}
 
-      final int startOffset = throwStatement.getTextRange().getStartOffset();
-      if (throwStatement.getException() != null) {
-        editor.getDocument().insertString(startOffset + "throw".length(), ";");
-      }
-      processor.registerUnresolvedError(startOffset + "throw".length());
-    }
-  }
+			final int startOffset = throwStatement.getTextRange().getStartOffset();
+			if(throwStatement.getException() != null)
+			{
+				editor.getDocument().insertString(startOffset + "throw".length(), ";");
+			}
+			processor.registerUnresolvedError(startOffset + "throw".length());
+		}
+	}
 
-  private int startLine(Editor editor, PsiElement psiElement) {
-    return editor.getDocument().getLineNumber(psiElement.getTextRange().getStartOffset());
-  }
+	private int startLine(Editor editor, PsiElement psiElement)
+	{
+		return editor.getDocument().getLineNumber(psiElement.getTextRange().getStartOffset());
+	}
 }
