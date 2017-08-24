@@ -46,17 +46,33 @@ public class FilePathActionJavac extends JavacParserAction
 	}
 
 	@Override
-	protected void doExecute(final String line, String filePath, final OutputParser.Callback callback)
+	protected void doExecute(final String line, final String originalPath, final OutputParser.Callback callback)
 	{
 		if(LOG.isDebugEnabled())
 		{
-			LOG.debug("Process parsing message: " + filePath);
+			LOG.debug("Process parsing message: " + originalPath);
 		}
 
+		String filePath = originalPath;
 		// for jdk7: cut off characters wrapping the path. e.g. "RegularFileObject[C:/tmp/bugs/src/a/Demo1.java]"
 		if(myJdk7FormatMatcher.reset(filePath).matches())
 		{
 			filePath = myJdk7FormatMatcher.group(1);
+		}
+
+		// jdk 9 specific
+		// C:\\Users\\VISTALL\\Documents\\Consulo\\untitled71\\out\\production\\untitled71:org\\example\\Main.class
+		int i = filePath.lastIndexOf(':');
+		if(i != -1)
+		{
+			// check next character - if it slash, it's not module separator
+			char next = filePath.charAt(i + 1);
+			if(next != '\\' && next != '/')
+			{
+				char[] chars = filePath.toCharArray();
+				chars[i] = '/';
+				filePath = FileUtil.toSystemIndependentName(new String(chars));
+			}
 		}
 
 		int index = filePath.lastIndexOf('/');

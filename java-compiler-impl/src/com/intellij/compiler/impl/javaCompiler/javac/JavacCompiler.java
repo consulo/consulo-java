@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,7 +49,6 @@ import com.intellij.openapi.compiler.CompileScope;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkType;
@@ -69,8 +69,10 @@ import consulo.annotations.RequiredReadAction;
 import consulo.compiler.roots.CompilerPathsImpl;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
+import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 public class JavacCompiler extends ExternalCompiler
 {
@@ -139,8 +141,8 @@ public class JavacCompiler extends ExternalCompiler
 			final VirtualFile homeDirectory = javaSdk.getHomeDirectory();
 			if(homeDirectory == null)
 			{
-				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath()), JavaCompilerBundle.message("compiler.javac" + ".name"),
-						Messages.getErrorIcon());
+				Messages.showMessageDialog(myProject, JavaCompilerBundle.message("javac.error.jdk.home.missing", javaSdk.getHomePath(), javaSdk.getName()), JavaCompilerBundle.message("compiler" +
+						".javac" + ".name"), Messages.getErrorIcon());
 				return false;
 			}
 			final String toolsJarPath = ((JavaSdkType) sdkType).getToolsPath(javaSdk);
@@ -415,8 +417,7 @@ public class JavacCompiler extends ExternalCompiler
 		commandLine.add("-verbose");
 
 		final Set<VirtualFile> cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
-		final Set<VirtualFile> bootCp = JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk);
-
+		final Set<VirtualFile> bootCp = filterModFiles(JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk));
 
 		final String classPath;
 		if(version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1)
@@ -426,8 +427,20 @@ public class JavacCompiler extends ExternalCompiler
 		else
 		{
 			classPath = asString(cp);
-			commandLine.add("-bootclasspath");
-			addClassPathValue(jdk, version, commandLine, asString(bootCp), "javac_bootcp", tempFiles, useTempFile);
+			if(version.isAtLeast(JavaSdkVersion.JDK_1_9))
+			{
+				// add bootpath if target is 1.8 or lower
+				if(languageLevel != null && !languageLevel.isAtLeast(LanguageLevel.JDK_1_9) && !bootCp.isEmpty())
+				{
+					commandLine.add("-bootclasspath");
+					addClassPathValue(jdk, version, commandLine, asString(bootCp), "javac_bootcp", tempFiles, useTempFile);
+				}
+			}
+			else
+			{
+				commandLine.add("-bootclasspath");
+				addClassPathValue(jdk, version, commandLine, asString(bootCp), "javac_bootcp", tempFiles, useTempFile);
+			}
 		}
 
 		commandLine.add("-classpath");
@@ -472,6 +485,23 @@ public class JavacCompiler extends ExternalCompiler
 			commandLine.add("-d");
 			commandLine.add(outputPath.replace('/', File.separatorChar));
 		}
+	}
+
+	@NotNull
+	private static Set<VirtualFile> filterModFiles(Set<VirtualFile> files)
+	{
+		Set<VirtualFile> newFiles = new LinkedHashSet<>(files.size());
+		for(VirtualFile file : files)
+		{
+			VirtualFile archive = ArchiveVfsUtil.getVirtualFileForArchive(file);
+			if(archive != null && archive.getFileType() == JModFileType.INSTANCE)
+			{
+				continue;
+			}
+
+			newFiles.add(file);
+		}
+		return newFiles;
 	}
 
 	@NotNull

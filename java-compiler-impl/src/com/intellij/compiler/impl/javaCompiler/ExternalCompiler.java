@@ -17,7 +17,6 @@ package com.intellij.compiler.impl.javaCompiler;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.execution.ExecutionException;
@@ -25,11 +24,10 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.EnvironmentUtil;
-import com.intellij.util.StringBuilderSpinAllocator;
 
 public abstract class ExternalCompiler implements BackendCompiler
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.impl.javaCompiler.ExternalCompiler");
+	private static final Logger LOG = Logger.getInstance(ExternalCompiler.class);
 
 	@NotNull
 	public abstract GeneralCommandLine createStartupCommand(ModuleChunk chunk, CompileContext context, String outputPath) throws IOException, IllegalArgumentException;
@@ -40,26 +38,16 @@ public abstract class ExternalCompiler implements BackendCompiler
 	{
 		final GeneralCommandLine commandLine = createStartupCommand(chunk, compileContext, outputDir);
 
-		if(LOG.isDebugEnabled())
+		StringBuilder buf = new StringBuilder();
+		buf.append("\n===================================Environment:===========================\n");
+		for(String pair : EnvironmentUtil.getEnvironment())
 		{
-			@NonNls final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-			try
-			{
-				buf.append("\n===================================Environment:===========================\n");
-				for(String pair : EnvironmentUtil.getEnvironment())
-				{
-					buf.append("\t").append(pair).append("\n");
-				}
-				buf.append("=============================================================================\n");
-				buf.append("Running compiler: ").append(commandLine);
-
-				LOG.debug(buf.toString());
-			}
-			finally
-			{
-				StringBuilderSpinAllocator.dispose(buf);
-			}
+			buf.append("\t").append(pair).append("\n");
 		}
+		buf.append("=============================================================================\n");
+		buf.append("Running compiler: ").append(commandLine);
+
+		LOG.info(buf.toString());
 
 		try
 		{
