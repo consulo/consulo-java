@@ -32,6 +32,8 @@ public class LazyValueBySdk<T>
 
 	private NotNullFunction<Sdk, T> myFunc;
 
+	private final T myDefaultValue;
+
 	private volatile T myValue;
 
 	private Sdk myLastSdk;
@@ -40,6 +42,7 @@ public class LazyValueBySdk<T>
 	{
 		myExtension = extension;
 		myFunc = func;
+		myDefaultValue = defaultValue;
 		myValue = defaultValue;
 	}
 
@@ -47,12 +50,20 @@ public class LazyValueBySdk<T>
 	{
 		Sdk lastSdk = myLastSdk;
 		Sdk currentSdk = myExtension.getSdk();
-		if(!Comparing.equal(lastSdk, currentSdk))
+
+		T value = myValue;
+
+		if(currentSdk == null)
+		{
+			value = myDefaultValue;
+		}
+		else if(!Comparing.equal(lastSdk, currentSdk))
 		{
 			myLastSdk = currentSdk;
-			myValue = myFunc.fun(myExtension.getSdk());
+			value = myFunc.fun(currentSdk);
 		}
 
-		return myValue;
+		myValue = value;
+		return value;
 	}
 }

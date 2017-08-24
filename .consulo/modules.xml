@@ -264,7 +264,7 @@
       <module name="java-impl" dirurl="file://$PROJECT_DIR$/java-impl" current-layer="Default">
         <module-layer name="Default">
           <extension id="consulo-plugin" sdk-module-name="consulo-java" />
-          <extension id="java" sdk-module-name="consulo-java" language-level-module-name="consulo-java" special-dir-location="MODULE_DIR" />>
+          <extension id="java" sdk-module-name="consulo-java" language-level-module-name="consulo-java" special-dir-location="MODULE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
             <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
