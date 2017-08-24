@@ -25,7 +25,6 @@ import com.intellij.debugger.HelpID;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
@@ -81,34 +80,27 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 
 	static String getText(XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
 	{
-		final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-		try
+		final StringBuilder buffer = new StringBuilder();
+		//if(isValid()) {
+		final String className = breakpoint.getProperties().myClassPattern;
+		final boolean classNameExists = className != null && className.length() > 0;
+		if(classNameExists)
 		{
-			//if(isValid()) {
-			final String className = breakpoint.getProperties().myClassPattern;
-			final boolean classNameExists = className != null && className.length() > 0;
+			buffer.append(className);
+		}
+		if(breakpoint.getProperties().myMethodName != null)
+		{
 			if(classNameExists)
 			{
-				buffer.append(className);
+				buffer.append(".");
 			}
-			if(breakpoint.getProperties().myMethodName != null)
-			{
-				if(classNameExists)
-				{
-					buffer.append(".");
-				}
-				buffer.append(breakpoint.getProperties().myMethodName);
-			}
-			//}
-			//else {
-			//  buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
-			//}
-			return buffer.toString();
+			buffer.append(breakpoint.getProperties().myMethodName);
 		}
-		finally
-		{
-			StringBuilderSpinAllocator.dispose(buffer);
-		}
+		//}
+		//else {
+		//  buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
+		//}
+		return buffer.toString();
 	}
 
 	@Nullable

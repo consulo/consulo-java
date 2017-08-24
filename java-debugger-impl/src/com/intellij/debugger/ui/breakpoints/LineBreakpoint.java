@@ -57,7 +57,6 @@ import com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex;
 import com.intellij.psi.search.EverythingGlobalScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
@@ -406,57 +405,50 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 			final boolean hasMethodInfo = displayName != null && displayName.length() > 0;
 			if(hasClassInfo || hasMethodInfo)
 			{
-				final StringBuilder info = StringBuilderSpinAllocator.alloc();
-				try
+				final StringBuilder info = new StringBuilder();
+				boolean isFile = myXBreakpoint.getSourcePosition().getFile().getName().equals(className);
+				String packageName = null;
+				if(hasClassInfo)
 				{
-					boolean isFile = myXBreakpoint.getSourcePosition().getFile().getName().equals(className);
-					String packageName = null;
-					if(hasClassInfo)
+					final int dotIndex = className.lastIndexOf(".");
+					if(dotIndex >= 0 && !isFile)
 					{
-						final int dotIndex = className.lastIndexOf(".");
-						if(dotIndex >= 0 && !isFile)
-						{
-							packageName = className.substring(0, dotIndex);
-							className = className.substring(dotIndex + 1);
-						}
+						packageName = className.substring(0, dotIndex);
+						className = className.substring(dotIndex + 1);
+					}
 
-						if(totalTextLength != -1)
+					if(totalTextLength != -1)
+					{
+						if(className.length() + (hasMethodInfo ? displayName.length() : 0) > totalTextLength + 3)
 						{
-							if(className.length() + (hasMethodInfo ? displayName.length() : 0) > totalTextLength + 3)
+							int offset = totalTextLength - (hasMethodInfo ? displayName.length() : 0);
+							if(offset > 0 && offset < className.length())
 							{
-								int offset = totalTextLength - (hasMethodInfo ? displayName.length() : 0);
-								if(offset > 0 && offset < className.length())
-								{
-									className = className.substring(className.length() - offset);
-									info.append("...");
-								}
+								className = className.substring(className.length() - offset);
+								info.append("...");
 							}
 						}
+					}
 
-						info.append(className);
-					}
-					if(hasMethodInfo)
-					{
-						if(isFile)
-						{
-							info.append(":");
-						}
-						else if(hasClassInfo)
-						{
-							info.append(".");
-						}
-						info.append(displayName);
-					}
-					if(showPackageInfo && packageName != null)
-					{
-						info.append(" (").append(packageName).append(")");
-					}
-					return DebuggerBundle.message("line.breakpoint.display.name.with.class.or.method", lineNumber, info.toString());
+					info.append(className);
 				}
-				finally
+				if(hasMethodInfo)
 				{
-					StringBuilderSpinAllocator.dispose(info);
+					if(isFile)
+					{
+						info.append(":");
+					}
+					else if(hasClassInfo)
+					{
+						info.append(".");
+					}
+					info.append(displayName);
 				}
+				if(showPackageInfo && packageName != null)
+				{
+					info.append(" (").append(packageName).append(")");
+				}
+				return DebuggerBundle.message("line.breakpoint.display.name.with.class.or.method", lineNumber, info.toString());
 			}
 			return DebuggerBundle.message("line.breakpoint.display.name", lineNumber);
 		}

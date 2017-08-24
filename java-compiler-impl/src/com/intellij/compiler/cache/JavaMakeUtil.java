@@ -36,7 +36,6 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.cls.ClsUtil;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
@@ -66,20 +65,13 @@ public class JavaMakeUtil extends MakeUtil
 		// the name of a dir should be lowercased because javac seem to allow difference in case
 		// between the physical directory and package name.
 		final int dotIndex = qName.lastIndexOf('.');
-		final StringBuilder builder = StringBuilderSpinAllocator.alloc();
-		try
+		final StringBuilder builder = new StringBuilder();
+		builder.append(qName);
+		for(int idx = 0; idx < dotIndex; idx++)
 		{
-			builder.append(qName);
-			for(int idx = 0; idx < dotIndex; idx++)
-			{
-				builder.setCharAt(idx, Character.toLowerCase(builder.charAt(idx)));
-			}
-			return builder.toString();
+			builder.setCharAt(idx, Character.toLowerCase(builder.charAt(idx)));
 		}
-		finally
-		{
-			StringBuilderSpinAllocator.dispose(builder);
-		}
+		return builder.toString();
 	}
 
 	public static boolean isAnonymous(String name)

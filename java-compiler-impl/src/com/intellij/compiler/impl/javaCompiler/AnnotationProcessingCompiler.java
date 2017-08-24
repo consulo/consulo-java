@@ -56,7 +56,6 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
-import com.intellij.util.StringBuilderSpinAllocator;
 import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
 
 public class AnnotationProcessingCompiler implements TranslatingCompiler
@@ -244,23 +243,16 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 
 	private static String getModulesString(Module[] modulesInChunk)
 	{
-		final StringBuilder moduleNames = StringBuilderSpinAllocator.alloc();
-		try
+		final StringBuilder moduleNames = new StringBuilder();
+		for(Module module : modulesInChunk)
 		{
-			for(Module module : modulesInChunk)
+			if(moduleNames.length() > 0)
 			{
-				if(moduleNames.length() > 0)
-				{
-					moduleNames.append("\n");
-				}
-				moduleNames.append("\"").append(module.getName()).append("\"");
+				moduleNames.append("\n");
 			}
-			return moduleNames.toString();
+			moduleNames.append("\"").append(module.getName()).append("\"");
 		}
-		finally
-		{
-			StringBuilderSpinAllocator.dispose(moduleNames);
-		}
+		return moduleNames.toString();
 	}
 
 	private JavacCompiler getBackEndCompiler()

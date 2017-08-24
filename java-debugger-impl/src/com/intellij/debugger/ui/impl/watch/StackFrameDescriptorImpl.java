@@ -41,7 +41,6 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.FileColorManager;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import com.intellij.xdebugger.impl.frame.XValueMarkers;
@@ -213,90 +212,83 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 			return "";
 		}
 		ThreadsViewSettings settings = ThreadsViewSettings.getInstance();
-		final StringBuilder label = StringBuilderSpinAllocator.alloc();
-		try
+		final StringBuilder label = new StringBuilder();
+		Method method = myMethodOccurrence.getMethod();
+		if(method != null)
 		{
-			Method method = myMethodOccurrence.getMethod();
-			if(method != null)
+			myName = method.name();
+			label.append(settings.SHOW_ARGUMENTS_TYPES ? DebuggerUtilsEx.methodNameWithArguments(method) : myName);
+		}
+		if(settings.SHOW_LINE_NUMBER)
+		{
+			String lineNumber;
+			try
 			{
-				myName = method.name();
-				label.append(settings.SHOW_ARGUMENTS_TYPES ? DebuggerUtilsEx.methodNameWithArguments(method) : myName);
+				lineNumber = Integer.toString(myLocation.lineNumber());
 			}
-			if(settings.SHOW_LINE_NUMBER)
+			catch(InternalError e)
 			{
-				String lineNumber;
+				lineNumber = e.toString();
+			}
+			if(lineNumber != null)
+			{
+				label.append(':');
+				label.append(lineNumber);
+			}
+		}
+		if(settings.SHOW_CLASS_NAME)
+		{
+			String name;
+			try
+			{
+				ReferenceType refType = myLocation.declaringType();
+				name = refType != null ? refType.name() : null;
+			}
+			catch(InternalError e)
+			{
+				name = e.toString();
+			}
+			if(name != null)
+			{
+				label.append(", ");
+				int dotIndex = name.lastIndexOf('.');
+				if(dotIndex < 0)
+				{
+					label.append(name);
+				}
+				else
+				{
+					label.append(name.substring(dotIndex + 1));
+					if(settings.SHOW_PACKAGE_NAME)
+					{
+						label.append(" {");
+						label.append(name.substring(0, dotIndex));
+						label.append("}");
+					}
+				}
+			}
+		}
+		if(settings.SHOW_SOURCE_NAME)
+		{
+			try
+			{
+				String sourceName;
 				try
 				{
-					lineNumber = Integer.toString(myLocation.lineNumber());
+					sourceName = myLocation.sourceName();
 				}
 				catch(InternalError e)
 				{
-					lineNumber = e.toString();
+					sourceName = e.toString();
 				}
-				if(lineNumber != null)
-				{
-					label.append(':');
-					label.append(lineNumber);
-				}
+				label.append(", ");
+				label.append(sourceName);
 			}
-			if(settings.SHOW_CLASS_NAME)
+			catch(AbsentInformationException ignored)
 			{
-				String name;
-				try
-				{
-					ReferenceType refType = myLocation.declaringType();
-					name = refType != null ? refType.name() : null;
-				}
-				catch(InternalError e)
-				{
-					name = e.toString();
-				}
-				if(name != null)
-				{
-					label.append(", ");
-					int dotIndex = name.lastIndexOf('.');
-					if(dotIndex < 0)
-					{
-						label.append(name);
-					}
-					else
-					{
-						label.append(name.substring(dotIndex + 1));
-						if(settings.SHOW_PACKAGE_NAME)
-						{
-							label.append(" {");
-							label.append(name.substring(0, dotIndex));
-							label.append("}");
-						}
-					}
-				}
 			}
-			if(settings.SHOW_SOURCE_NAME)
-			{
-				try
-				{
-					String sourceName;
-					try
-					{
-						sourceName = myLocation.sourceName();
-					}
-					catch(InternalError e)
-					{
-						sourceName = e.toString();
-					}
-					label.append(", ");
-					label.append(sourceName);
-				}
-				catch(AbsentInformationException ignored)
-				{
-				}
-			}
-			return label.toString();
 		}
-		finally
-		{
-			StringBuilderSpinAllocator.dispose(label);
-		}
+		return label.toString();
 	}
 
 	public final boolean stackFramesEqual(StackFrameDescriptorImpl d)

@@ -24,57 +24,66 @@ import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.StringBuilderSpinAllocator;
 
 
-public class JavaSourceRootDetectionUtil {
-  private static final TokenSet JAVA_FILE_FIRST_TOKEN_SET = TokenSet.orSet(
-    ElementType.MODIFIER_BIT_SET,
-    ElementType.CLASS_KEYWORD_BIT_SET,
-    TokenSet.create(JavaTokenType.AT, JavaTokenType.IMPORT_KEYWORD)
-  );
+public class JavaSourceRootDetectionUtil
+{
+	private static final TokenSet JAVA_FILE_FIRST_TOKEN_SET = TokenSet.orSet(ElementType.MODIFIER_BIT_SET, ElementType.CLASS_KEYWORD_BIT_SET, TokenSet.create(JavaTokenType.AT, JavaTokenType
+			.IMPORT_KEYWORD));
 
-  private JavaSourceRootDetectionUtil() { }
+	private JavaSourceRootDetectionUtil()
+	{
+	}
 
-  @Nullable
-  public static String getPackageName(CharSequence text) {
-    Lexer lexer = new JavaLexer(LanguageLevel.JDK_1_3);
-    lexer.start(text);
-    skipWhiteSpaceAndComments(lexer);
-    final IElementType firstToken = lexer.getTokenType();
-    if (firstToken != JavaTokenType.PACKAGE_KEYWORD) {
-      if (JAVA_FILE_FIRST_TOKEN_SET.contains(firstToken)) {
-        return "";
-      }
-      return null;
-    }
-    lexer.advance();
-    skipWhiteSpaceAndComments(lexer);
+	@Nullable
+	public static String getPackageName(CharSequence text)
+	{
+		Lexer lexer = new JavaLexer(LanguageLevel.JDK_1_3);
+		lexer.start(text);
+		skipWhiteSpaceAndComments(lexer);
+		final IElementType firstToken = lexer.getTokenType();
+		if(firstToken != JavaTokenType.PACKAGE_KEYWORD)
+		{
+			if(JAVA_FILE_FIRST_TOKEN_SET.contains(firstToken))
+			{
+				return "";
+			}
+			return null;
+		}
+		lexer.advance();
+		skipWhiteSpaceAndComments(lexer);
 
-    final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-    try {
-      while(true){
-        if (lexer.getTokenType() != JavaTokenType.IDENTIFIER) break;
-        buffer.append(text, lexer.getTokenStart(), lexer.getTokenEnd());
-        lexer.advance();
-        skipWhiteSpaceAndComments(lexer);
-        if (lexer.getTokenType() != JavaTokenType.DOT) break;
-        buffer.append('.');
-        lexer.advance();
-        skipWhiteSpaceAndComments(lexer);
-      }
-      String packageName = buffer.toString();
-      if (packageName.length() == 0 || StringUtil.endsWithChar(packageName, '.')) return null;
-      return packageName;
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(buffer);
-    }
-  }
+		final StringBuilder buffer = new StringBuilder();
+		while(true)
+		{
+			if(lexer.getTokenType() != JavaTokenType.IDENTIFIER)
+			{
+				break;
+			}
+			buffer.append(text, lexer.getTokenStart(), lexer.getTokenEnd());
+			lexer.advance();
+			skipWhiteSpaceAndComments(lexer);
+			if(lexer.getTokenType() != JavaTokenType.DOT)
+			{
+				break;
+			}
+			buffer.append('.');
+			lexer.advance();
+			skipWhiteSpaceAndComments(lexer);
+		}
+		String packageName = buffer.toString();
+		if(packageName.length() == 0 || StringUtil.endsWithChar(packageName, '.'))
+		{
+			return null;
+		}
+		return packageName;
+	}
 
-  public static void skipWhiteSpaceAndComments(Lexer lexer){
-    while(ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(lexer.getTokenType())) {
-      lexer.advance();
-    }
-  }
+	public static void skipWhiteSpaceAndComments(Lexer lexer)
+	{
+		while(ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(lexer.getTokenType()))
+		{
+			lexer.advance();
+		}
+	}
 }

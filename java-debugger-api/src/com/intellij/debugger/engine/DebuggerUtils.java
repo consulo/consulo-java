@@ -49,7 +49,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.StringBuilderSpinAllocator;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 
@@ -233,20 +232,13 @@ public abstract class DebuggerUtils
 	public static String translateStringValue(final String str)
 	{
 		int length = str.length();
-		final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-		try
+		final StringBuilder buffer = new StringBuilder();
+		StringUtil.escapeStringCharacters(length, str, buffer);
+		if(str.length() > length)
 		{
-			StringUtil.escapeStringCharacters(length, str, buffer);
-			if(str.length() > length)
-			{
-				buffer.append("...");
-			}
-			return buffer.toString();
+			buffer.append("...");
 		}
-		finally
-		{
-			StringBuilderSpinAllocator.dispose(buffer);
-		}
+		return buffer.toString();
 	}
 
 	@Nullable

@@ -34,7 +34,6 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.rt.compiler.JavacResourcesReader;
-import com.intellij.util.StringBuilderSpinAllocator;
 
 public class JavacOutputParser extends OutputParser
 {
@@ -167,24 +166,16 @@ public class JavacOutputParser extends OutputParser
 					if(colNum >= 0)
 					{
 						messages = convertMessages(messages);
-						final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-						try
+						final StringBuilder buf = new StringBuilder();
+						for(final String m : messages)
 						{
-							for(final String m : messages)
+							if(buf.length() > 0)
 							{
-								if(buf.length() > 0)
-								{
-									buf.append("\n");
-								}
-								buf.append(m);
+								buf.append("\n");
 							}
-							addMessage(callback, category, buf.toString(), VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL, filePath),
-									lineNum, colNum + 1);
+							buf.append(m);
 						}
-						finally
-						{
-							StringBuilderSpinAllocator.dispose(buf);
-						}
+						addMessage(callback, category, buf.toString(), VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL, filePath), lineNum, colNum + 1);
 						return true;
 					}
 				}
@@ -247,9 +238,7 @@ public class JavacOutputParser extends OutputParser
 		}
 		final String category = line.substring(0, dividerIndex);
 		final String resourceBundleValue = line.substring(dividerIndex + 1);
-		if(JavacResourcesReader.MSG_PARSING_COMPLETED.equals(category) ||
-				JavacResourcesReader.MSG_PARSING_STARTED.equals(category) ||
-				JavacResourcesReader.MSG_WROTE.equals(category))
+		if(JavacResourcesReader.MSG_PARSING_COMPLETED.equals(category) || JavacResourcesReader.MSG_PARSING_STARTED.equals(category) || JavacResourcesReader.MSG_WROTE.equals(category))
 		{
 			myParserActions.add(new FilePathActionJavac(createMatcher(resourceBundleValue)));
 		}
@@ -285,8 +274,7 @@ public class JavacOutputParser extends OutputParser
 					final boolean fileExists = filePath != null && new File(filePath).exists();
 					if(fileExists)
 					{
-						addMessage(callback, CompilerMessageCategory.WARNING, line, VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL,
-								filePath), -1, -1);
+						addMessage(callback, CompilerMessageCategory.WARNING, line, VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL, filePath), -1, -1);
 					}
 					else
 					{

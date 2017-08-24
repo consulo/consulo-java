@@ -36,14 +36,13 @@ import com.intellij.openapi.progress.util.ProgressWindow;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindowId;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.ui.MessageCategory;
 
 public class HotSwapProgressImpl extends HotSwapProgress
 {
 	static final NotificationGroup NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("HotSwap", ToolWindowId.DEBUG, true);
 
-	TIntObjectHashMap<List<String>> myMessages = new TIntObjectHashMap<List<String>>();
+	TIntObjectHashMap<List<String>> myMessages = new TIntObjectHashMap<>();
 	private final ProgressWindow myProgressWindow;
 	private String myTitle = DebuggerBundle.message("progress.hot.swap.title");
 
@@ -94,7 +93,7 @@ public class HotSwapProgressImpl extends HotSwapProgress
 		}
 		else if(!myMessages.isEmpty())
 		{
-			List<String> messages = new ArrayList<String>();
+			List<String> messages = new ArrayList<>();
 			for(int category : myMessages.keys())
 			{
 				messages.addAll(getMessages(category));
@@ -120,19 +119,12 @@ public class HotSwapProgressImpl extends HotSwapProgress
 		List<String> messages = myMessages.get(type);
 		if(messages == null)
 		{
-			messages = new ArrayList<String>();
+			messages = new ArrayList<>();
 			myMessages.put(type, messages);
 		}
-		final StringBuilder builder = StringBuilderSpinAllocator.alloc();
-		try
-		{
-			builder.append(session.getSessionName()).append(": ").append(text).append(";");
-			messages.add(builder.toString());
-		}
-		finally
-		{
-			StringBuilderSpinAllocator.dispose(builder);
-		}
+		final StringBuilder builder = new StringBuilder();
+		builder.append(session.getSessionName()).append(": ").append(text).append(";");
+		messages.add(builder.toString());
 	}
 
 	@Override

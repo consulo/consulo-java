@@ -74,7 +74,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.xdebugger.XDebuggerManager;
@@ -115,17 +114,20 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		return myIsStatic;
 	}
 
+	@Override
 	@NotNull
 	public Key<MethodBreakpoint> getCategory()
 	{
 		return CATEGORY;
 	}
 
+	@Override
 	public boolean isValid()
 	{
 		return super.isValid() && getMethodName() != null;
 	}
 
+	@Override
 	protected void reload(@NotNull PsiFile psiFile)
 	{
 		setMethodName(null);
@@ -294,6 +296,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		}
 	}
 
+	@Override
 	protected void createRequestForPreparedClass(@NotNull DebugProcessImpl debugProcess, @NotNull ReferenceType classType)
 	{
 		if(isEmulated())
@@ -369,6 +372,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 	}
 
 
+	@Override
 	public String getEventMessage(@NotNull LocatableEvent event)
 	{
 		final Location location = event.location();
@@ -398,11 +402,13 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		return "";
 	}
 
+	@Override
 	public PsiElement getEvaluationElement()
 	{
 		return getPsiClass();
 	}
 
+	@Override
 	protected Icon getDisabledIcon(boolean isMuted)
 	{
 		final Breakpoint master = DebuggerManagerEx.getInstanceEx(myProject).getBreakpointManager().findMasterBreakpoint(this);
@@ -413,58 +419,56 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		return null;
 	}
 
+	@Override
 	@NotNull
 	protected Icon getInvalidIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_invalid_method_breakpoint : AllIcons.Debugger.Db_invalid_method_breakpoint;
 	}
 
+	@Override
 	@NotNull
 	protected Icon getVerifiedIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_verified_method_breakpoint : AllIcons.Debugger.Db_verified_method_breakpoint;
 	}
 
+	@Override
 	@NotNull
 	protected Icon getVerifiedWarningsIcon(boolean isMuted)
 	{
 		return isMuted ? AllIcons.Debugger.Db_muted_method_warning_breakpoint : AllIcons.Debugger.Db_method_warning_breakpoint;
 	}
 
+	@Override
 	public String getDisplayName()
 	{
-		final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-		try
+		final StringBuilder buffer = new StringBuilder();
+		if(isValid())
 		{
-			if(isValid())
+			final String className = getClassName();
+			final boolean classNameExists = className != null && className.length() > 0;
+			if(classNameExists)
 			{
-				final String className = getClassName();
-				final boolean classNameExists = className != null && className.length() > 0;
+				buffer.append(className);
+			}
+			if(getMethodName() != null)
+			{
 				if(classNameExists)
 				{
-					buffer.append(className);
+					buffer.append(".");
 				}
-				if(getMethodName() != null)
-				{
-					if(classNameExists)
-					{
-						buffer.append(".");
-					}
-					buffer.append(getMethodName());
-				}
+				buffer.append(getMethodName());
 			}
-			else
-			{
-				buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
-			}
-			return buffer.toString();
 		}
-		finally
+		else
 		{
-			StringBuilderSpinAllocator.dispose(buffer);
+			buffer.append(DebuggerBundle.message("status.breakpoint.invalid"));
 		}
+		return buffer.toString();
 	}
 
+	@Override
 	public boolean evaluateCondition(@NotNull EvaluationContextImpl context, @NotNull LocatableEvent event) throws EvaluateException
 	{
 		if(!matchesEvent(event, context.getDebugProcess()))
@@ -588,11 +592,13 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		return getProperties().EMULATED;
 	}
 
+	@Override
 	public boolean isWatchEntry()
 	{
 		return getProperties().WATCH_ENTRY;
 	}
 
+	@Override
 	public boolean isWatchExit()
 	{
 		return getProperties().WATCH_EXIT;

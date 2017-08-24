@@ -15,137 +15,171 @@
  */
 package com.intellij.execution.junit2;
 
-import com.intellij.rt.execution.junit.segments.Packet;
-import com.intellij.rt.execution.junit.segments.PacketProcessor;
-import com.intellij.rt.execution.junit.segments.SegmentedStream;
-import com.intellij.util.StringBuilderSpinAllocator;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-public class SegmentedInputStream extends InputStream {
-  private final PushReader mySourceStream;
-  private PacketProcessor myEventsDispatcher;
-  private int myStartupPassed = 0;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.rt.execution.junit.segments.Packet;
+import com.intellij.rt.execution.junit.segments.PacketProcessor;
+import com.intellij.rt.execution.junit.segments.SegmentedStream;
 
-  public SegmentedInputStream(@NotNull InputStream sourceStream, @NotNull Charset charset) {
-    mySourceStream = new PushReader(new BufferedReader(new InputStreamReader(sourceStream, charset)));
-  }
+public class SegmentedInputStream extends InputStream
+{
+	private final PushReader mySourceStream;
+	private PacketProcessor myEventsDispatcher;
+	private int myStartupPassed = 0;
 
-  @Override
-  public int read() throws IOException {
-    if (myStartupPassed < SegmentedStream.STARTUP_MESSAGE.length()) {
-      return rawRead();
-    } else {
-      return findNextSymbol();
-    }
-  }
+	public SegmentedInputStream(@NotNull InputStream sourceStream, @NotNull Charset charset)
+	{
+		mySourceStream = new PushReader(new BufferedReader(new InputStreamReader(sourceStream, charset)));
+	}
 
-  private int rawRead() throws IOException {
-    while(myStartupPassed < SegmentedStream.STARTUP_MESSAGE.length()) {
-      final int aChar = readNext();
-      if (aChar != SegmentedStream.STARTUP_MESSAGE.charAt(myStartupPassed)) {
-        mySourceStream.pushBack(aChar);
-        mySourceStream.pushBack(SegmentedStream.STARTUP_MESSAGE.substring(0, myStartupPassed).toCharArray());
-        myStartupPassed = 0;
-        return readNext();
-      }
-      myStartupPassed++;
-    }
-    return read();
-  }
+	@Override
+	public int read() throws IOException
+	{
+		if(myStartupPassed < SegmentedStream.STARTUP_MESSAGE.length())
+		{
+			return rawRead();
+		}
+		else
+		{
+			return findNextSymbol();
+		}
+	}
 
-  private int findNextSymbol() throws IOException {
-    int nextByte;
-    while (true) {
-      nextByte = readNext();
-      if (nextByte != SegmentedStream.SPECIAL_SYMBOL) break;
-      final Integer packetRead = readControlSequence();
-      if (packetRead != null) break;
-      if (available() == 0) return -1;
-    }
-    return nextByte;
-  }
+	private int rawRead() throws IOException
+	{
+		while(myStartupPassed < SegmentedStream.STARTUP_MESSAGE.length())
+		{
+			final int aChar = readNext();
+			if(aChar != SegmentedStream.STARTUP_MESSAGE.charAt(myStartupPassed))
+			{
+				mySourceStream.pushBack(aChar);
+				mySourceStream.pushBack(SegmentedStream.STARTUP_MESSAGE.substring(0, myStartupPassed).toCharArray());
+				myStartupPassed = 0;
+				return readNext();
+			}
+			myStartupPassed++;
+		}
+		return read();
+	}
 
-  private Integer readControlSequence() throws IOException {
-    for (int idx = 1; idx < SegmentedStream.MARKER_PREFIX.length(); idx++) {
-      final int readAhead = readNext();
-      if (readAhead != SegmentedStream.MARKER_PREFIX.charAt(idx)) {
-        return readAhead;
-      }
-    }
-    final char[] marker = readMarker();
-    if(myEventsDispatcher != null) myEventsDispatcher.processPacket(decode(marker));
-    return null;
-  }
+	private int findNextSymbol() throws IOException
+	{
+		int nextByte;
+		while(true)
+		{
+			nextByte = readNext();
+			if(nextByte != SegmentedStream.SPECIAL_SYMBOL)
+			{
+				break;
+			}
+			final Integer packetRead = readControlSequence();
+			if(packetRead != null)
+			{
+				break;
+			}
+			if(available() == 0)
+			{
+				return -1;
+			}
+		}
+		return nextByte;
+	}
 
-  public void setEventsDispatcher(final PacketProcessor eventsDispatcher) {
-    myEventsDispatcher = eventsDispatcher;
-  }
+	private Integer readControlSequence() throws IOException
+	{
+		for(int idx = 1; idx < SegmentedStream.MARKER_PREFIX.length(); idx++)
+		{
+			final int readAhead = readNext();
+			if(readAhead != SegmentedStream.MARKER_PREFIX.charAt(idx))
+			{
+				return readAhead;
+			}
+		}
+		final char[] marker = readMarker();
+		if(myEventsDispatcher != null)
+		{
+			myEventsDispatcher.processPacket(decode(marker));
+		}
+		return null;
+	}
 
-  private char[] readMarker() throws IOException {
-    final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-    try {
-      int nextRead = '0';
-      while (nextRead != ' ' && nextRead != SegmentedStream.SPECIAL_SYMBOL) {
-        buffer.append((char)nextRead);
-        nextRead = readNext();
-      }
-      return readNext(Integer.valueOf(buffer.toString()).intValue());
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(buffer);
-    }
-  }
+	public void setEventsDispatcher(final PacketProcessor eventsDispatcher)
+	{
+		myEventsDispatcher = eventsDispatcher;
+	}
 
-  private char[] readNext(final int charCount) throws IOException {
-    return mySourceStream.next(charCount);
-  }
+	private char[] readMarker() throws IOException
+	{
+		final StringBuilder buffer = new StringBuilder();
+		int nextRead = '0';
+		while(nextRead != ' ' && nextRead != SegmentedStream.SPECIAL_SYMBOL)
+		{
+			buffer.append((char) nextRead);
+			nextRead = readNext();
+		}
+		return readNext(Integer.valueOf(buffer.toString()).intValue());
+	}
 
-  private int readNext() throws IOException {
-    return mySourceStream.next();
-  }
+	private char[] readNext(final int charCount) throws IOException
+	{
+		return mySourceStream.next(charCount);
+	}
 
-  @Override
-  public int available() throws IOException {
-    return mySourceStream.ready() ? 1 : 0;
-  }
+	private int readNext() throws IOException
+	{
+		return mySourceStream.next();
+	}
 
-  @Override
-  public void close() throws IOException {
-    mySourceStream.close();
-  }
+	@Override
+	public int available() throws IOException
+	{
+		return mySourceStream.ready() ? 1 : 0;
+	}
 
-  public static String decode(final char[] chars) {
-    final StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-    try {
-      for (int i = 0; i < chars.length; i++) {
-        char chr = chars[i];
-        final char decodedChar;
-        if (chr == Packet.ourSpecialSymbol) {
-          i++;
-          chr = chars[i];
-          if (chr != Packet.ourSpecialSymbol) {
-            final StringBuilder codeBuffer = new StringBuilder(Packet.CODE_LENGTH);
-            codeBuffer.append(chr);
-            for (int j = 1; j < Packet.CODE_LENGTH; j++) {
-              codeBuffer.append(chars[i + j]);
-            }
-            i += Packet.CODE_LENGTH - 1;
-            decodedChar = (char)Integer.parseInt(codeBuffer.toString());
-          }
-          else decodedChar = chr;
-        } else decodedChar = chr;
-        buffer.append(decodedChar);
-      }
-      return buffer.toString();
-    }
-    finally {
-      StringBuilderSpinAllocator.dispose(buffer);
-    }
-  }
+	@Override
+	public void close() throws IOException
+	{
+		mySourceStream.close();
+	}
+
+	public static String decode(final char[] chars)
+	{
+		final StringBuilder buffer = new StringBuilder();
+		for(int i = 0; i < chars.length; i++)
+		{
+			char chr = chars[i];
+			final char decodedChar;
+			if(chr == Packet.ourSpecialSymbol)
+			{
+				i++;
+				chr = chars[i];
+				if(chr != Packet.ourSpecialSymbol)
+				{
+					final StringBuilder codeBuffer = new StringBuilder(Packet.CODE_LENGTH);
+					codeBuffer.append(chr);
+					for(int j = 1; j < Packet.CODE_LENGTH; j++)
+					{
+						codeBuffer.append(chars[i + j]);
+					}
+					i += Packet.CODE_LENGTH - 1;
+					decodedChar = (char) Integer.parseInt(codeBuffer.toString());
+				}
+				else
+				{
+					decodedChar = chr;
+				}
+			}
+			else
+			{
+				decodedChar = chr;
+			}
+			buffer.append(decodedChar);
+		}
+		return buffer.toString();
+	}
 }

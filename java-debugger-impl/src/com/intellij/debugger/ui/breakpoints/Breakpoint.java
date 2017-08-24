@@ -73,7 +73,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.ui.AppUIUtil;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.ObjectUtils;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.ThreeState;
 import com.intellij.xdebugger.XExpression;
 import com.intellij.xdebugger.breakpoints.SuspendPolicy;
@@ -314,44 +313,37 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		DebugProcessImpl debugProcess = context.getDebugProcess();
 		if(isLogEnabled() || isLogExpressionEnabled())
 		{
-			StringBuilder buf = StringBuilderSpinAllocator.alloc();
-			try
+			StringBuilder buf = new StringBuilder();
+			if(myXBreakpoint.isLogMessage())
 			{
-				if(myXBreakpoint.isLogMessage())
-				{
-					buf.append(getEventMessage(event)).append("\n");
-				}
-				if(isLogExpressionEnabled())
-				{
-					if(!debugProcess.isAttached())
-					{
-						return;
-					}
-
-					TextWithImports logMessage = getLogMessage();
-					try
-					{
-						SourcePosition position = ContextUtil.getSourcePosition(context);
-						PsiElement element = ContextUtil.getContextElement(context, position);
-						ExpressionEvaluator evaluator = DebuggerInvocationUtil.commitAndRunReadAction(myProject, () -> EvaluatorCache.cacheOrGet("LogMessageEvaluator", event.request(), element,
-								logMessage, () -> createExpressionEvaluator(myProject, element, position, logMessage, this::createLogMessageCodeFragment)));
-						Value eval = evaluator.evaluate(context);
-						buf.append(eval instanceof VoidValue ? "void" : DebuggerUtils.getValueAsString(context, eval));
-					}
-					catch(EvaluateException e)
-					{
-						buf.append(DebuggerBundle.message("error.unable.to.evaluate.expression")).append(" \"").append(logMessage).append("\"").append(" : ").append(e.getMessage());
-					}
-					buf.append("\n");
-				}
-				if(buf.length() > 0)
-				{
-					debugProcess.printToConsole(buf.toString());
-				}
+				buf.append(getEventMessage(event)).append("\n");
 			}
-			finally
+			if(isLogExpressionEnabled())
 			{
-				StringBuilderSpinAllocator.dispose(buf);
+				if(!debugProcess.isAttached())
+				{
+					return;
+				}
+
+				TextWithImports logMessage = getLogMessage();
+				try
+				{
+					SourcePosition position = ContextUtil.getSourcePosition(context);
+					PsiElement element = ContextUtil.getContextElement(context, position);
+					ExpressionEvaluator evaluator = DebuggerInvocationUtil.commitAndRunReadAction(myProject, () -> EvaluatorCache.cacheOrGet("LogMessageEvaluator", event.request(), element,
+							logMessage, () -> createExpressionEvaluator(myProject, element, position, logMessage, this::createLogMessageCodeFragment)));
+					Value eval = evaluator.evaluate(context);
+					buf.append(eval instanceof VoidValue ? "void" : DebuggerUtils.getValueAsString(context, eval));
+				}
+				catch(EvaluateException e)
+				{
+					buf.append(DebuggerBundle.message("error.unable.to.evaluate.expression")).append(" \"").append(logMessage).append("\"").append(" : ").append(e.getMessage());
+				}
+				buf.append("\n");
+			}
+			if(buf.length() > 0)
+			{
+				debugProcess.printToConsole(buf.toString());
 			}
 		}
 		if(isRemoveAfterHit())

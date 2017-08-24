@@ -29,7 +29,6 @@ import com.intellij.debugger.ui.tree.DebuggerTreeNode;
 import com.intellij.debugger.ui.tree.NodeDescriptor;
 import com.intellij.debugger.ui.tree.NodeManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.containers.HashMap;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
@@ -60,6 +59,7 @@ public class NodeManagerImpl extends NodeDescriptorFactoryImpl implements NodeMa
 		return ourNodeComparator;
 	}
 
+	@Override
 	public DebuggerTreeNodeImpl createNode(NodeDescriptor descriptor, EvaluationContext evaluationContext)
 	{
 		((NodeDescriptorImpl) descriptor).setContext((EvaluationContextImpl) evaluationContext);
@@ -76,6 +76,7 @@ public class NodeManagerImpl extends NodeDescriptorFactoryImpl implements NodeMa
 		return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), descriptor);
 	}
 
+	@Override
 	public DebuggerTreeNodeImpl createMessageNode(String message)
 	{
 		return DebuggerTreeNodeImpl.createNodeNoUpdate(getTree(), new MessageDescriptor(message));
@@ -128,15 +129,8 @@ public class NodeManagerImpl extends NodeDescriptorFactoryImpl implements NodeMa
 			final Location location = frame.location();
 			final Method method = location.method();
 			final ReferenceType referenceType = location.declaringType();
-			final StringBuilder builder = StringBuilderSpinAllocator.alloc();
-			try
-			{
-				return builder.append(referenceType.signature()).append("#").append(method.name()).append(method.signature()).toString();
-			}
-			finally
-			{
-				StringBuilderSpinAllocator.dispose(builder);
-			}
+			final StringBuilder builder = new StringBuilder();
+			return builder.append(referenceType.signature()).append("#").append(method.name()).append(method.signature()).toString();
 		}
 		catch(EvaluateException e)
 		{
@@ -144,6 +138,7 @@ public class NodeManagerImpl extends NodeDescriptorFactoryImpl implements NodeMa
 		}
 	}
 
+	@Override
 	public void dispose()
 	{
 		clearHistory();

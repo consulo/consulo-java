@@ -109,7 +109,6 @@ import com.intellij.util.Alarm;
 import com.intellij.util.Consumer;
 import com.intellij.util.EventDispatcher;
 import com.intellij.util.ReflectionUtil;
-import com.intellij.util.StringBuilderSpinAllocator;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
@@ -1054,30 +1053,23 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 		}
 
 		String message;
-		final StringBuilder buf = StringBuilderSpinAllocator.alloc();
-		try
+		final StringBuilder buf = new StringBuilder();
+		buf.append(DebuggerBundle.message("error.cannot.open.debugger.port"));
+		if(address != null)
 		{
-			buf.append(DebuggerBundle.message("error.cannot.open.debugger.port"));
-			if(address != null)
-			{
-				buf.append(" (").append(address).append(")");
-			}
-			buf.append(": ");
-			buf.append(e.getClass().getName()).append(" ");
-			final String localizedMessage = e.getLocalizedMessage();
-			if(!StringUtil.isEmpty(localizedMessage))
-			{
-				buf.append('"');
-				buf.append(localizedMessage);
-				buf.append('"');
-			}
-			LOG.debug(e);
-			message = buf.toString();
+			buf.append(" (").append(address).append(")");
 		}
-		finally
+		buf.append(": ");
+		buf.append(e.getClass().getName()).append(" ");
+		final String localizedMessage = e.getLocalizedMessage();
+		if(!StringUtil.isEmpty(localizedMessage))
 		{
-			StringBuilderSpinAllocator.dispose(buf);
+			buf.append('"');
+			buf.append(localizedMessage);
+			buf.append('"');
 		}
+		LOG.debug(e);
+		message = buf.toString();
 		return message;
 	}
 
@@ -1634,27 +1626,20 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 			dims++;
 		}
 
-		StringBuilder buffer = StringBuilderSpinAllocator.alloc();
-		try
+		StringBuilder buffer = new StringBuilder();
+		StringUtil.repeatSymbol(buffer, '[', dims);
+		String primitiveSignature = JVMNameUtil.getPrimitiveSignature(className);
+		if(primitiveSignature != null)
 		{
-			StringUtil.repeatSymbol(buffer, '[', dims);
-			String primitiveSignature = JVMNameUtil.getPrimitiveSignature(className);
-			if(primitiveSignature != null)
-			{
-				buffer.append(primitiveSignature);
-			}
-			else
-			{
-				buffer.append('L');
-				buffer.append(className);
-				buffer.append(';');
-			}
-			return buffer.toString();
+			buffer.append(primitiveSignature);
 		}
-		finally
+		else
 		{
-			StringBuilderSpinAllocator.dispose(buffer);
+			buffer.append('L');
+			buffer.append(className);
+			buffer.append(';');
 		}
+		return buffer.toString();
 	}
 
 	@SuppressWarnings({
