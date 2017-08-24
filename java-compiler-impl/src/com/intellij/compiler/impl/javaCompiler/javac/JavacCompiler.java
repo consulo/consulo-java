@@ -33,6 +33,7 @@ import java.util.StringTokenizer;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.CompilerIOUtil;
 import com.intellij.compiler.OutputParser;
 import com.intellij.compiler.impl.CompilerUtil;
@@ -446,7 +447,12 @@ public class JavacCompiler extends ExternalCompiler
 		commandLine.add("-classpath");
 		addClassPathValue(jdk, version, commandLine, classPath, "javac_cp", tempFiles, useTempFile);
 
-		if(version != JavaSdkVersion.JDK_1_0 && version != JavaSdkVersion.JDK_1_1 && addSourcePath)
+		if(isAtLeast(version, languageLevel, JavaSdkVersion.JDK_1_9))
+		{
+			//commandLine.add("--module-source-path");
+			//commandLine.add(chunk.getSourcePath());
+		}
+		else if(version != JavaSdkVersion.JDK_1_0 && version != JavaSdkVersion.JDK_1_1 && addSourcePath)
 		{
 			commandLine.add("-sourcepath");
 			// this way we tell the compiler that the sourcepath is "empty". However, javac thinks that sourcepath is 'new File("")'
@@ -485,6 +491,11 @@ public class JavacCompiler extends ExternalCompiler
 			commandLine.add("-d");
 			commandLine.add(outputPath.replace('/', File.separatorChar));
 		}
+	}
+
+	private static boolean isAtLeast(@NotNull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @NotNull JavaSdkVersion target)
+	{
+		return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(version.getMaxLanguageLevel()));
 	}
 
 	@NotNull
