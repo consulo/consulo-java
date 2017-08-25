@@ -19,6 +19,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.pom.PomRenameableTarget;
+import consulo.annotations.RequiredReadAction;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,13 +39,7 @@ public interface PsiClass
    */
   @NotNull PsiClass[] EMPTY_ARRAY = new PsiClass[0];
 
-  ArrayFactory<PsiClass> ARRAY_FACTORY = new ArrayFactory<PsiClass>() {
-    @NotNull
-    @Override
-    public PsiClass[] create(final int count) {
-      return count == 0 ? EMPTY_ARRAY : new PsiClass[count];
-    }
-  };
+  ArrayFactory<PsiClass> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiClass[count];
 
   /**
    * Returns the fully qualified name of the class.
@@ -59,6 +54,7 @@ public interface PsiClass
    *
    * @return true if the class is an interface, false otherwise.
    */
+  @RequiredReadAction
   boolean isInterface();
 
   /**
@@ -66,6 +62,7 @@ public interface PsiClass
    *
    * @return true if the class is an annotation type, false otherwise
    */
+  @RequiredReadAction
   boolean isAnnotationType();
 
   /**
@@ -73,6 +70,7 @@ public interface PsiClass
    *
    * @return true if the class is an enumeration, false otherwise.
    */
+  @RequiredReadAction
   boolean isEnum();
 
   /**
