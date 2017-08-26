@@ -498,12 +498,6 @@ public class DefUseUtil
 			visited[visited.length - 1] = true; // stop on the code end
 			int elem = defs() ? flow.getStartOffset(refOrDef) : flow.getEndOffset(refOrDef);
 
-			// hack: ControlFlow doesn't contains parameters initialization
-			if(elem == -1 && def instanceof PsiParameter)
-			{
-				elem = 0;
-			}
-
 			if(elem != -1)
 			{
 				if(!defs() && instructions.get(elem) instanceof ReadVariableInstruction)
