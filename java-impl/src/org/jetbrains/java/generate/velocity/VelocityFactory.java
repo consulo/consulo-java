@@ -15,10 +15,10 @@
  */
 package org.jetbrains.java.generate.velocity;
 
-import org.apache.commons.collections.ExtendedProperties;
+import java.util.Properties;
+
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.log.SimpleLog4JLogSystem;
 import com.intellij.codeInsight.generation.VelocityIncludesClassLoader;
 
 /**
@@ -49,13 +49,11 @@ public class VelocityFactory
 	 */
 	private static VelocityEngine newVeloictyEngine()
 	{
-		ExtendedProperties prop = new ExtendedProperties();
-		prop.addProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, SimpleLog4JLogSystem.class.getName());
-		prop.addProperty("runtime.log.logsystem.log4j.category", "GenerateToString");
-		prop.addProperty(RuntimeConstants.RESOURCE_LOADER, "includes");
-		prop.addProperty("includes.resource.loader.instance", new VelocityIncludesClassLoader());
-		VelocityEngine velocity = new VelocityEngine();
-		velocity.setExtendedProperties(prop);
+		Properties prop = new Properties();
+		prop.setProperty("runtime.log.logsystem.log4j.category", "GenerateToString");
+		prop.setProperty(RuntimeConstants.RESOURCE_LOADER, "includes");
+		prop.put("includes.resource.loader.instance", new VelocityIncludesClassLoader());
+		VelocityEngine velocity = new VelocityEngine(prop);
 		velocity.init();
 		return velocity;
 	}

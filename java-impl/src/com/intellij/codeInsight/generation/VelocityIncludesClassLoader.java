@@ -16,6 +16,9 @@
 package com.intellij.codeInsight.generation;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
@@ -23,8 +26,17 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 public class VelocityIncludesClassLoader extends ClasspathResourceLoader
 {
 	@Override
-	public InputStream getResourceStream(String name) throws ResourceNotFoundException
+	public Reader getResourceReader(String name, String encoding) throws ResourceNotFoundException
 	{
-		return VelocityIncludesClassLoader.class.getResourceAsStream("/com/intellij/codeInsight/generation/" + name);
+		InputStream stream = VelocityIncludesClassLoader.class.getResourceAsStream("/com/intellij/codeInsight/generation/" + name);
+
+		try
+		{
+			return new InputStreamReader(stream, encoding);
+		}
+		catch(UnsupportedEncodingException e)
+		{
+			throw new ResourceNotFoundException(e);
+		}
 	}
 }
