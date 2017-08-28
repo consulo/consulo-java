@@ -205,7 +205,7 @@ public class DataFlowRunner
 						LOG.trace(instructionState.toString());
 					}
 					// useful for quick debugging by uncommenting and hot-swapping
-					System.out.println(instructionState.toString());
+					//System.out.println(instructionState.toString());
 
 					Instruction instruction = instructionState.getInstruction();
 
