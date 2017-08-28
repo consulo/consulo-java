@@ -29,6 +29,10 @@ public class VelocityIncludesClassLoader extends ClasspathResourceLoader
 	public Reader getResourceReader(String name, String encoding) throws ResourceNotFoundException
 	{
 		InputStream stream = VelocityIncludesClassLoader.class.getResourceAsStream("/com/intellij/codeInsight/generation/" + name);
+		if(stream == null)
+		{
+			throw new ResourceNotFoundException(name);
+		}
 
 		try
 		{
