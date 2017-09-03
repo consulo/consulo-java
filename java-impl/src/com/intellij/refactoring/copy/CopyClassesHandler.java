@@ -15,6 +15,17 @@
  */
 package com.intellij.refactoring.copy;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.ide.util.EditorHelper;
@@ -38,11 +49,6 @@ import com.intellij.refactoring.move.moveClassesOrPackages.MoveDirectoryWithClas
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.util.JavaProjectRootsUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.util.*;
 
 public class CopyClassesHandler extends CopyHandlerDelegateBase {
   private static final Logger LOG = Logger.getInstance("#" + CopyClassesHandler.class.getName());
@@ -369,7 +375,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
         if (relativePath != null && !relativePath.isEmpty()) {
           finalTarget = buildRelativeDir(targetDirectory, relativePath).findOrCreateTargetDirectory();
         }
-        final PsiFile fileCopy = CopyFilesOrDirectoriesHandler.copyToDirectory(file, getNewFileName(file, copyClassName), finalTarget, choice);
+        final PsiFile fileCopy = CopyFilesOrDirectoriesHandler.copyToDirectory(file, getNewFileName(file, copyClassName), finalTarget, choice, null);
         if (fileCopy != null) {
           createdFiles.add(fileCopy);
         }
