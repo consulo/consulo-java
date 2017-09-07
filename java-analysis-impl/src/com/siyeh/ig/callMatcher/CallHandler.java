@@ -18,6 +18,7 @@ package com.siyeh.ig.callMatcher;
 import java.util.function.Function;
 
 import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiMethodReferenceExpression;
 
 /**
  * A pair of {@link CallMatcher} and a transformer function which maps a call to some new object.
@@ -48,6 +49,11 @@ public class CallHandler<T> implements Function<PsiMethodCallExpression, T>
 	public T apply(PsiMethodCallExpression call)
 	{
 		return matcher().test(call) ? myTransformer.apply(call) : null;
+	}
+
+	public T applyMethodReference(PsiMethodReferenceExpression ref)
+	{
+		return matcher().methodReferenceMatches(ref) ? myTransformer.apply(null) : null;
 	}
 
 	/**

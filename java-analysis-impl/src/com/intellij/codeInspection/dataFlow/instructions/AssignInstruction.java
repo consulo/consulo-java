@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Jan 26, 2002
- * Time: 10:47:33 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.instructions;
 
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +22,7 @@ import com.intellij.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiVariable;
 
@@ -55,6 +48,20 @@ public class AssignInstruction extends Instruction
 	public PsiExpression getRExpression()
 	{
 		return myRExpression;
+	}
+
+	@Nullable
+	public PsiExpression getLExpression()
+	{
+		if(myRExpression == null)
+		{
+			return null;
+		}
+		if(myRExpression.getParent() instanceof PsiAssignmentExpression)
+		{
+			return ((PsiAssignmentExpression) myRExpression.getParent()).getLExpression();
+		}
+		return null;
 	}
 
 	public boolean isVariableInitializer()

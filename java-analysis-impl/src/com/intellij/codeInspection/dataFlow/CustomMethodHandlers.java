@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,19 @@ package com.intellij.codeInspection.dataFlow;
 
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_INTEGER;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_LONG;
+import static com.intellij.psi.CommonClassNames.JAVA_LANG_MATH;
 import static com.intellij.psi.CommonClassNames.JAVA_LANG_STRING;
 import static com.intellij.psi.CommonClassNames.JAVA_UTIL_LIST;
-import static com.siyeh.ig.callMatcher.CallMatcher.*;
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_MATH;
+import static com.siyeh.ig.callMatcher.CallMatcher.anyOf;
+import static com.siyeh.ig.callMatcher.CallMatcher.instanceCall;
+import static com.siyeh.ig.callMatcher.CallMatcher.staticCall;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.codeInspection.dataFlow.value.DfaConstValue;
 import com.intellij.codeInspection.dataFlow.value.DfaRelationValue.RelationType;
@@ -34,7 +37,9 @@ import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiMethodReferenceExpression;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMapper;
@@ -49,37 +54,31 @@ public class CustomMethodHandlers
 		List<DfaMemoryState> handle(DfaCallArguments callArguments, DfaMemoryState memState, DfaValueFactory factory);
 	}
 
-	private static final CallMapper<CustomMethodHandler> CUSTOM_METHOD_HANDLERS = new CallMapper<CustomMethodHandler>()
-			.register(instanceCall(JAVA_LANG_STRING, "indexOf", "lastIndexOf"),
-					(args, memState, factory) -> indexOf(args.myQualifier, memState, factory, SpecialField.STRING_LENGTH))
-			.register(instanceCall(JAVA_UTIL_LIST, "indexOf", "lastIndexOf"),
-					(args, memState, factory) -> indexOf(args.myQualifier, memState, factory, SpecialField.COLLECTION_SIZE))
-			.register(instanceCall(JAVA_LANG_STRING, "equals").parameterCount(1),
-					(args, memState, factory) -> stringEquals(args, memState, factory, false))
-			.register(instanceCall(JAVA_LANG_STRING, "equalsIgnoreCase").parameterCount(1),
-					(args, memState, factory) -> stringEquals(args, memState, factory, true))
-			.register(instanceCall(JAVA_LANG_STRING, "startsWith").parameterCount(1),
-					(args, memState, factory) -> stringStartsEnds(args, memState, factory, false))
-			.register(instanceCall(JAVA_LANG_STRING, "endsWith").parameterCount(1),
-					(args, memState, factory) -> stringStartsEnds(args, memState, factory, true))
-			.register(anyOf(staticCall(JAVA_LANG_MATH, "max").parameterTypes("int", "int"),
-					staticCall(JAVA_LANG_MATH, "max").parameterTypes("long", "long"),
-					staticCall(JAVA_LANG_INTEGER, "max").parameterTypes("int", "int"),
-					staticCall(JAVA_LANG_LONG, "max").parameterTypes("long", "long")),
-					(args, memState, factory) -> mathMinMax(args.myArguments, memState, factory, true))
-			.register(anyOf(staticCall(JAVA_LANG_MATH, "min").parameterTypes("int", "int"),
-					staticCall(JAVA_LANG_MATH, "min").parameterTypes("long", "long"),
-					staticCall(JAVA_LANG_INTEGER, "min").parameterTypes("int", "int"),
-					staticCall(JAVA_LANG_LONG, "min").parameterTypes("long", "long")),
-					(args, memState, factory) -> mathMinMax(args.myArguments, memState, factory, false))
-			.register(staticCall(JAVA_LANG_MATH, "abs").parameterTypes("int"),
-					(args, memState, factory) -> mathAbs(args.myArguments, memState, factory, false))
-			.register(staticCall(JAVA_LANG_MATH, "abs").parameterTypes("long"),
-					(args, memState, factory) -> mathAbs(args.myArguments, memState, factory, true));
+	private static final CallMapper<CustomMethodHandler> CUSTOM_METHOD_HANDLERS = new CallMapper<CustomMethodHandler>().register(instanceCall(JAVA_LANG_STRING, "indexOf", "lastIndexOf"), (args,
+			memState, factory) -> indexOf(args.myQualifier, memState, factory, SpecialField.STRING_LENGTH)).register(instanceCall(JAVA_UTIL_LIST, "indexOf", "lastIndexOf"), (args, memState, factory)
+			-> indexOf(args.myQualifier, memState, factory, SpecialField.COLLECTION_SIZE)).register(instanceCall(JAVA_LANG_STRING, "equals").parameterCount(1), (args, memState, factory) ->
+			stringEquals(args, memState, factory, false)).register(instanceCall(JAVA_LANG_STRING, "equalsIgnoreCase").parameterCount(1), (args, memState, factory) -> stringEquals(args, memState,
+			factory, true)).register(instanceCall(JAVA_LANG_STRING, "startsWith").parameterCount(1), (args, memState, factory) -> stringStartsEnds(args, memState, factory, false)).register
+			(instanceCall(JAVA_LANG_STRING, "endsWith").parameterCount(1), (args, memState, factory) -> stringStartsEnds(args, memState, factory, true)).register(anyOf(staticCall(JAVA_LANG_MATH,
+			"max").parameterTypes("int", "int"), staticCall(JAVA_LANG_MATH, "max").parameterTypes("long", "long"), staticCall(JAVA_LANG_INTEGER, "max").parameterTypes("int", "int"), staticCall
+			(JAVA_LANG_LONG, "max").parameterTypes("long", "long")), (args, memState, factory) -> mathMinMax(args.myArguments, memState, factory, true)).register(anyOf(staticCall(JAVA_LANG_MATH,
+			"min").parameterTypes("int", "int"), staticCall(JAVA_LANG_MATH, "min").parameterTypes("long", "long"), staticCall(JAVA_LANG_INTEGER, "min").parameterTypes("int", "int"), staticCall
+			(JAVA_LANG_LONG, "min").parameterTypes("long", "long")), (args, memState, factory) -> mathMinMax(args.myArguments, memState, factory, false)).register(staticCall(JAVA_LANG_MATH, "abs")
+			.parameterTypes("int"), (args, memState, factory) -> mathAbs(args.myArguments, memState, factory, false)).register(staticCall(JAVA_LANG_MATH, "abs").parameterTypes("long"), (args,
+			memState, factory) -> mathAbs(args.myArguments, memState, factory, true));
 
-	public static CustomMethodHandler find(PsiMethodCallExpression call)
+	public static CustomMethodHandler find(MethodCallInstruction instruction)
 	{
-		return CUSTOM_METHOD_HANDLERS.mapFirst(call);
+		PsiElement context = instruction.getContext();
+		if(context instanceof PsiMethodCallExpression)
+		{
+			return CUSTOM_METHOD_HANDLERS.mapFirst((PsiMethodCallExpression) context);
+		}
+		else if(context instanceof PsiMethodReferenceExpression)
+		{
+			return CUSTOM_METHOD_HANDLERS.mapFirst((PsiMethodReferenceExpression) context);
+		}
+		return null;
 	}
 
 	private static List<DfaMemoryState> stringStartsEnds(DfaCallArguments args, DfaMemoryState memState, DfaValueFactory factory, boolean ends)

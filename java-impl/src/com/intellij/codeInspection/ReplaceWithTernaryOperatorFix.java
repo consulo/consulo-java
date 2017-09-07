@@ -16,13 +16,18 @@
 package com.intellij.codeInspection;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.codeInsight.FileModificationService;
 import com.intellij.ide.SelectInEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.refactoring.util.LambdaRefactoringUtil;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.ObjectUtils;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.java.codeInsight.JavaInspectionsBundle;
 
 /**
  * @author Danila Ponomarenko
@@ -40,7 +45,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 
 	public ReplaceWithTernaryOperatorFix(@NotNull PsiExpression expressionToAssert)
 	{
-		myText = expressionToAssert.getText();
+		myText = ParenthesesUtils.getText(expressionToAssert, ParenthesesUtils.BINARY_AND_PRECEDENCE);
 	}
 
 	@NotNull
@@ -73,31 +78,29 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 		final PsiExpression expression = (PsiExpression) element;
 
 		final PsiFile file = expression.getContainingFile();
-		if(!FileModificationService.getInstance().prepareFileForWrite(file))
-		{
-			return;
-		}
-		PsiConditionalExpression conditionalExpression = replaceWthConditionalExpression(project, myText + "!=null", expression,
-				suggestDefaultValue(expression));
+		PsiConditionalExpression conditionalExpression = replaceWithConditionalExpression(project, myText + "!=null", expression, suggestDefaultValue(expression));
 
+		selectElseBranch(file, conditionalExpression);
+	}
+
+	static void selectElseBranch(PsiFile file, PsiConditionalExpression conditionalExpression)
+	{
 		PsiExpression elseExpression = conditionalExpression.getElseExpression();
 		if(elseExpression != null)
 		{
 			((Navigatable) elseExpression).navigate(true);
-			SelectInEditorManager.getInstance(project).selectInEditor(file.getVirtualFile(), elseExpression.getTextRange().getStartOffset(),
-					elseExpression.getTextRange().getEndOffset(), false, true);
+			SelectInEditorManager.getInstance(file.getProject()).selectInEditor(file.getVirtualFile(), elseExpression.getTextRange().getStartOffset(), elseExpression.getTextRange().getEndOffset(),
+					false, true);
 		}
 	}
 
 	@NotNull
-	private static PsiConditionalExpression replaceWthConditionalExpression(@NotNull Project project, @NotNull String condition,
-			@NotNull PsiExpression expression, @NotNull String defaultValue)
+	private static PsiConditionalExpression replaceWithConditionalExpression(@NotNull Project project, @NotNull String condition, @NotNull PsiExpression expression, @NotNull String defaultValue)
 	{
 		final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 
 		final PsiElement parent = expression.getParent();
-		final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) factory.createExpressionFromText(condition + " ? " +
-				expression.getText() + " : " + defaultValue, parent);
+		final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) factory.createExpressionFromText(condition + " ? " + expression.getText() + " : " + defaultValue, parent);
 
 		final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 		return (PsiConditionalExpression) expression.replace(codeStyleManager.reformat(conditionalExpression));
@@ -110,12 +113,52 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix
 			return false;
 		}
 
-		return !(expression.getParent() instanceof PsiExpressionStatement);
+		return !(expression.getParent() instanceof PsiExpressionStatement) && !PsiUtil.isAccessedForWriting(expression);
 	}
 
 	private static String suggestDefaultValue(@NotNull PsiExpression expression)
 	{
 		PsiType type = expression.getType();
 		return PsiTypesUtil.getDefaultValueOfType(type);
+	}
+
+	public static class ReplaceMethodRefWithTernaryOperatorFix implements LocalQuickFix
+	{
+		@NotNull
+		@Override
+		public String getFamilyName()
+		{
+			return JavaInspectionsBundle.message("inspection.replace.methodref.ternary.quickfix");
+		}
+
+		@Override
+		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		{
+			PsiMethodReferenceExpression element = ObjectUtils.tryCast(descriptor.getPsiElement(), PsiMethodReferenceExpression.class);
+			if(element == null)
+			{
+				return;
+			}
+			PsiLambdaExpression lambda = LambdaRefactoringUtil.convertMethodReferenceToLambda(element, false, true);
+			if(lambda == null)
+			{
+				return;
+			}
+			PsiExpression expression = LambdaUtil.extractSingleExpressionFromBody(lambda.getBody());
+			if(expression == null)
+			{
+				return;
+			}
+			PsiParameter parameter = ArrayUtil.getFirstElement(lambda.getParameterList().getParameters());
+			if(parameter == null)
+			{
+				return;
+			}
+			String text = parameter.getName();
+			final PsiFile file = expression.getContainingFile();
+			PsiConditionalExpression conditionalExpression = replaceWithConditionalExpression(project, text + "!=null", expression, suggestDefaultValue(expression));
+
+			selectElseBranch(file, conditionalExpression);
+		}
 	}
 }

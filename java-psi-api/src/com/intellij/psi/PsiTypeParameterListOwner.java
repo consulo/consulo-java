@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.intellij.psi;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.jvm.JvmTypeParametersOwner;
 
 /**
  * Represents a PSI element (class, interface, method or constructor) which can own a type
@@ -24,27 +25,29 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author dsl
  */
-public interface PsiTypeParameterListOwner extends PsiMember {
-  /**
-   * Checks if the element has any type parameters.
-   *
-   * @return true if the element has type parameters, false otherwise
-   */
-  boolean hasTypeParameters();
+public interface PsiTypeParameterListOwner extends PsiMember, JvmTypeParametersOwner
+{
+	/**
+	 * Checks if the element has any type parameters.
+	 *
+	 * @return true if the element has type parameters, false otherwise
+	 */
+	boolean hasTypeParameters();
 
-  /**
-   * Returns the type parameter list for the element.
-   *
-   * @return the type parameter list, or null if the element has no type parameters.
-   */
-  @Nullable
-  PsiTypeParameterList getTypeParameterList();
+	/**
+	 * Returns the type parameter list for the element.
+	 *
+	 * @return the type parameter list, or null if the element has no type parameters.
+	 */
+	@Nullable
+	PsiTypeParameterList getTypeParameterList();
 
-  /**
-   * Returns the array of type parameters for the element.
-   *
-   * @return the array of type parameters, or an empty array if the element has no type parameters.
-   */
-  @NotNull
-  PsiTypeParameter[] getTypeParameters();
+	/**
+	 * Returns the array of type parameters for the element.
+	 *
+	 * @return the array of type parameters, or an empty array if the element has no type parameters.
+	 */
+	@NotNull
+	@Override
+	PsiTypeParameter[] getTypeParameters();
 }

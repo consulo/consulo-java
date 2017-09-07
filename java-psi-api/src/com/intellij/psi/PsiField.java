@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,38 +15,42 @@
  */
 package com.intellij.psi;
 
-import com.intellij.util.ArrayFactory;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.jvm.JvmField;
+import com.intellij.util.ArrayFactory;
+import com.intellij.util.IncorrectOperationException;
 
 /**
  * Represents a Java field or enum constant.
  */
-public interface PsiField extends PsiMember, PsiVariable, PsiDocCommentOwner {
-  /**
-   * The empty array of PSI fields which can be reused to avoid unnecessary allocations.
-   */
-  PsiField[] EMPTY_ARRAY = new PsiField[0];
+public interface PsiField extends PsiMember, PsiVariable, PsiDocCommentOwner, JvmField
+{
+	/**
+	 * The empty array of PSI fields which can be reused to avoid unnecessary allocations.
+	 */
+	PsiField[] EMPTY_ARRAY = new PsiField[0];
 
-  ArrayFactory<PsiField> ARRAY_FACTORY = new ArrayFactory<PsiField>() {
-    @NotNull
-    @Override
-    public PsiField[] create(final int count) {
-      return count == 0 ? EMPTY_ARRAY : new PsiField[count];
-    }
-  };
+	ArrayFactory<PsiField> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiField[count];
 
-  /**
-   * Adds initializer to the field declaration or, if <code>initializer</code> parameter is null,
-   * removes the initializer from the field declaration.
-   *
-   * @param initializer the initializer to add.
-   * @throws IncorrectOperationException if the modifications fails for some reason.
-   * @since 5.0.2
-   */
-  void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException;
+	/**
+	 * Adds initializer to the field declaration or, if {@code initializer} parameter is null,
+	 * removes the initializer from the field declaration.
+	 *
+	 * @param initializer the initializer to add.
+	 * @throws IncorrectOperationException if the modifications fails for some reason.
+	 * @since 5.0.2
+	 */
+	void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException;
 
-  @Override
-  @NotNull PsiIdentifier getNameIdentifier();
+	@Override
+	@NotNull
+	PsiIdentifier getNameIdentifier();
+
+	/* This explicit declaration is required to force javac generate bridge method 'JvmType getType()'; without it calling
+	JvmField#getType() method on instances which weren't recompiled against the new API will cause AbstractMethodError. */
+	@NotNull
+	@Override
+	PsiType getType();
 }
+

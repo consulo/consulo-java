@@ -170,21 +170,32 @@ public interface JavaClassNames
 	String JAVA_UTIL_CONCURRENT_CALLABLE = "java.util.concurrent.Callable";
 
 	@NonNls
-	String JAVA_UTIL_STREAM_BASE_STREAM = "java.util.stream.BaseStream";
-	@NonNls
-	String JAVA_UTIL_STREAM_STREAM = "java.util.stream.Stream";
-	@NonNls
-	String JAVA_UTIL_STREAM_COLLECTORS = "java.util.stream.Collectors";
-
-	@NonNls
 	String JAVA_LANG_INVOKE_MH_POLYMORPHIC = "java.lang.invoke.MethodHandle.PolymorphicSignature";
-
-	@NonNls
-	String CLASS_FILE_EXTENSION = ".class";
 
 	@NonNls
 	String JAVA_LANG_FUNCTIONAL_INTERFACE = "java.lang.FunctionalInterface";
 
 	@NonNls
 	String JAVAX_ANNOTATION_GENERATED = "javax.annotation.Generated";
+
+	@NonNls
+	String JAVA_UTIL_STREAM_BASE_STREAM = "java.util.stream.BaseStream";
+	@NonNls
+	String JAVA_UTIL_STREAM_STREAM = "java.util.stream.Stream";
+	@NonNls
+	String JAVA_UTIL_STREAM_INT_STREAM = "java.util.stream.IntStream";
+	@NonNls
+	String JAVA_UTIL_STREAM_LONG_STREAM = "java.util.stream.LongStream";
+	@NonNls
+	String JAVA_UTIL_STREAM_DOUBLE_STREAM = "java.util.stream.DoubleStream";
+	@NonNls
+	String JAVA_UTIL_STREAM_COLLECTORS = "java.util.stream.Collectors";
+	@NonNls
+	String JAVA_UTIL_FUNCTION_PREDICATE = "java.util.function.Predicate";
+	@NonNls
+	String JAVA_UTIL_FUNCTION_CONSUMER = "java.util.function.Consumer";
+	@NonNls
+	String JAVA_UTIL_FUNCTION_FUNCTION = "java.util.function.Function";
+	@NonNls
+	String JAVA_UTIL_FUNCTION_BIFUNCTION = "java.util.function.BiFunction";
 }

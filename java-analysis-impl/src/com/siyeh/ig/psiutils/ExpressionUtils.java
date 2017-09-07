@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2016 Bas Leijdekkers
+ * Copyright 2005-2017 Bas Leijdekkers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ package com.siyeh.ig.psiutils;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -27,13 +30,17 @@ import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.ConstantExpressionUtil;
+import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.ObjectUtils;
 import com.siyeh.HardcodedMethodConstants;
+import one.util.streamex.StreamEx;
 
 public class ExpressionUtils
 {
@@ -191,9 +198,7 @@ public class ExpressionUtils
 			final PsiExpression condition = conditionalExpression.getCondition();
 			final PsiExpression thenExpression = conditionalExpression.getThenExpression();
 			final PsiExpression elseExpression = conditionalExpression.getElseExpression();
-			return isEvaluatedAtCompileTime(condition) &&
-					isEvaluatedAtCompileTime(thenExpression) &&
-					isEvaluatedAtCompileTime(elseExpression);
+			return isEvaluatedAtCompileTime(condition) && isEvaluatedAtCompileTime(thenExpression) && isEvaluatedAtCompileTime(elseExpression);
 		}
 		if(expression instanceof PsiTypeCastExpression)
 		{
@@ -262,10 +267,52 @@ public class ExpressionUtils
 		return "\"\"".equals(text);
 	}
 
+	@Contract("null -> false")
 	public static boolean isNullLiteral(@Nullable PsiExpression expression)
 	{
-		expression = ParenthesesUtils.stripParentheses(expression);
+		expression = PsiUtil.deparenthesizeExpression(expression);
 		return expression != null && PsiType.NULL.equals(expression.getType());
+	}
+
+	/**
+	 * Returns stream of sub-expressions of supplied expression which could be equal (by ==) to resulting
+	 * value of the expression. The expressions in returned stream are guaranteed not to be each other ancestors.
+	 * Also the expression value is guaranteed to be equal to one of returned sub-expressions.
+	 * <p>
+	 * <p>
+	 * E.g. for {@code ((a) ? (Foo)b : (c))} the stream will contain b and c.
+	 * </p>
+	 *
+	 * @param expression expression to create a stream from
+	 * @return a new stream
+	 */
+	public static Stream<PsiExpression> nonStructuralChildren(@NotNull PsiExpression expression)
+	{
+		return StreamEx.ofTree(expression, e ->
+		{
+			if(e instanceof PsiConditionalExpression)
+			{
+				PsiConditionalExpression ternary = (PsiConditionalExpression) e;
+				return StreamEx.of(ternary.getThenExpression(), ternary.getElseExpression()).nonNull();
+			}
+			if(e instanceof PsiParenthesizedExpression)
+			{
+				return StreamEx.ofNullable(((PsiParenthesizedExpression) e).getExpression());
+			}
+			return null;
+		}).remove(e -> e instanceof PsiConditionalExpression || e instanceof PsiParenthesizedExpression).map(e ->
+		{
+			if(e instanceof PsiTypeCastExpression)
+			{
+				PsiExpression operand = ((PsiTypeCastExpression) e).getOperand();
+				if(operand != null && !(e.getType() instanceof PsiPrimitiveType) && (!(operand.getType() instanceof PsiPrimitiveType) || PsiType.NULL.equals(operand.getType())))
+				{
+					// Ignore to-primitive/from-primitive casts as they may actually change the value
+					return PsiUtil.skipParenthesizedExprDown(operand);
+				}
+			}
+			return e;
+		});
 	}
 
 	public static boolean isZero(@Nullable PsiExpression expression)
@@ -498,35 +545,6 @@ public class ExpressionUtils
 		return false;
 	}
 
-	public static boolean isZeroLengthArrayConstruction(@Nullable PsiExpression expression)
-	{
-		if(!(expression instanceof PsiNewExpression))
-		{
-			return false;
-		}
-		final PsiNewExpression newExpression = (PsiNewExpression) expression;
-		final PsiExpression[] dimensions = newExpression.getArrayDimensions();
-		if(dimensions.length == 0)
-		{
-			final PsiArrayInitializerExpression arrayInitializer = newExpression.getArrayInitializer();
-			if(arrayInitializer == null)
-			{
-				return false;
-			}
-			final PsiExpression[] initializers = arrayInitializer.getInitializers();
-			return initializers.length == 0;
-		}
-		for(PsiExpression dimension : dimensions)
-		{
-			final String dimensionText = dimension.getText();
-			if(!"0".equals(dimensionText))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
 	public static boolean isStringConcatenationOperand(PsiExpression expression)
 	{
 		final PsiElement parent = expression.getParent();
@@ -731,6 +749,7 @@ public class ExpressionUtils
 		return JavaTokenType.MINUS.equals(tokenType);
 	}
 
+	@Contract("null, _ -> null")
 	@Nullable
 	public static PsiVariable getVariableFromNullComparison(PsiExpression expression, boolean equals)
 	{
@@ -739,6 +758,7 @@ public class ExpressionUtils
 		return target instanceof PsiVariable ? (PsiVariable) target : null;
 	}
 
+	@Contract("null, _ -> null")
 	@Nullable
 	public static PsiReferenceExpression getReferenceExpressionFromNullComparison(PsiExpression expression, boolean equals)
 	{
@@ -792,12 +812,13 @@ public class ExpressionUtils
 	@Nullable
 	public static PsiExpression getValueComparedWithNull(@NotNull PsiBinaryExpression binOp)
 	{
-		if(!binOp.getOperationTokenType().equals(JavaTokenType.EQEQ) && !binOp.getOperationTokenType().equals(JavaTokenType.NE))
+		final IElementType tokenType = binOp.getOperationTokenType();
+		if(!tokenType.equals(JavaTokenType.EQEQ) && !tokenType.equals(JavaTokenType.NE))
 		{
 			return null;
 		}
-		PsiExpression left = binOp.getLOperand();
-		PsiExpression right = binOp.getROperand();
+		final PsiExpression left = binOp.getLOperand();
+		final PsiExpression right = binOp.getROperand();
 		if(isNullLiteral(right))
 		{
 			return left;
@@ -864,10 +885,7 @@ public class ExpressionUtils
 	public static boolean isSimpleExpression(@Nullable PsiExpression expression)
 	{
 		expression = PsiUtil.skipParenthesizedExprDown(expression);
-		if(expression instanceof PsiLiteralExpression ||
-				expression instanceof PsiThisExpression ||
-				expression instanceof PsiClassObjectAccessExpression ||
-				isEvaluatedAtCompileTime(expression))
+		if(expression instanceof PsiLiteralExpression || expression instanceof PsiThisExpression || expression instanceof PsiClassObjectAccessExpression || isEvaluatedAtCompileTime(expression))
 		{
 			return true;
 		}
@@ -898,6 +916,7 @@ public class ExpressionUtils
 	 * @return extracted assignment or null if assignment is not found or assignment is compound
 	 */
 	@Contract("null -> null")
+	@Nullable
 	public static PsiAssignmentExpression getAssignment(PsiElement element)
 	{
 		if(element instanceof PsiExpressionStatement)
@@ -1000,8 +1019,7 @@ public class ExpressionUtils
 			{
 				return false;
 			}
-			if(!PsiType.BYTE.equals(expressionType) && !PsiType.CHAR.equals(expressionType) &&
-					!PsiType.SHORT.equals(expressionType) && !PsiType.INT.equals(expressionType))
+			if(!PsiType.BYTE.equals(expressionType) && !PsiType.CHAR.equals(expressionType) && !PsiType.SHORT.equals(expressionType) && !PsiType.INT.equals(expressionType))
 			{
 				return false;
 			}
@@ -1009,9 +1027,39 @@ public class ExpressionUtils
 		return true;
 	}
 
+	/**
+	 * If any operand of supplied binary expression refers to the supplied variable, returns other operand;
+	 * otherwise returns null.
+	 *
+	 * @param binOp    {@link PsiBinaryExpression} to extract the operand from
+	 * @param variable variable to check against
+	 * @return operand or null
+	 */
+	@Contract("null, _ -> null; !null, null -> null")
+	public static PsiExpression getOtherOperand(@Nullable PsiBinaryExpression binOp, @Nullable PsiVariable variable)
+	{
+		if(binOp == null || variable == null)
+		{
+			return null;
+		}
+		if(isReferenceTo(binOp.getLOperand(), variable))
+		{
+			return binOp.getROperand();
+		}
+		if(isReferenceTo(binOp.getROperand(), variable))
+		{
+			return binOp.getLOperand();
+		}
+		return null;
+	}
+
 	@Contract("null, _ -> false; _, null -> false")
 	public static boolean isReferenceTo(PsiExpression expression, PsiVariable variable)
 	{
+		if(variable == null)
+		{
+			return false;
+		}
 		expression = PsiUtil.skipParenthesizedExprDown(expression);
 		return expression instanceof PsiReferenceExpression && ((PsiReferenceExpression) expression).isReferenceTo(variable);
 	}
@@ -1076,5 +1124,217 @@ public class ExpressionUtils
 			return null;
 		}
 		return qualifier;
+	}
+
+	/**
+	 * Returns a qualifier for reference or creates a corresponding {@link PsiThisExpression} statement if
+	 * a qualifier is null
+	 *
+	 * @param ref a reference expression to get a qualifier from
+	 * @return a qualifier or created (non-physical) {@link PsiThisExpression}.
+	 */
+	@NotNull
+	public static PsiExpression getQualifierOrThis(@NotNull PsiReferenceExpression ref)
+	{
+		PsiExpression qualifier = ref.getQualifierExpression();
+		if(qualifier != null)
+		{
+			return qualifier;
+		}
+		PsiElementFactory factory = JavaPsiFacade.getElementFactory(ref.getProject());
+		PsiMember member = ObjectUtils.tryCast(ref.resolve(), PsiMember.class);
+		if(member != null)
+		{
+			PsiClass memberClass = member.getContainingClass();
+			if(memberClass != null)
+			{
+				PsiClass containingClass = ClassUtils.getContainingClass(ref);
+				if(containingClass == null)
+				{
+					containingClass = PsiTreeUtil.getContextOfType(ref, PsiClass.class);
+				}
+				if(!InheritanceUtil.isInheritorOrSelf(containingClass, memberClass, true))
+				{
+					containingClass = ClassUtils.getContainingClass(containingClass);
+					while(containingClass != null && !InheritanceUtil.isInheritorOrSelf(containingClass, memberClass, true))
+					{
+						containingClass = ClassUtils.getContainingClass(containingClass);
+					}
+					if(containingClass != null)
+					{
+						return factory.createExpressionFromText(containingClass.getQualifiedName() + "." + PsiKeyword.THIS, ref);
+					}
+				}
+			}
+		}
+		return factory.createExpressionFromText(PsiKeyword.THIS, ref);
+	}
+
+	/**
+	 * Bind a reference element to a new name. The qualifier and type arguments (if present) remain the same
+	 *
+	 * @param ref     reference element to rename
+	 * @param newName new name
+	 */
+	public static void bindReferenceTo(@NotNull PsiReferenceExpression ref, @NotNull String newName)
+	{
+		PsiElement nameElement = ref.getReferenceNameElement();
+		if(nameElement == null)
+		{
+			throw new IllegalStateException("Name element is null: " + ref);
+		}
+		if(newName.equals(nameElement.getText()))
+		{
+			return;
+		}
+		PsiIdentifier identifier = JavaPsiFacade.getElementFactory(ref.getProject()).createIdentifier(newName);
+		nameElement.replace(identifier);
+	}
+
+	/**
+	 * Bind method call to a new name. Everything else like qualifier, type arguments or call arguments remain the same.
+	 *
+	 * @param call    to rename
+	 * @param newName new name
+	 */
+	public static void bindCallTo(@NotNull PsiMethodCallExpression call, @NotNull String newName)
+	{
+		bindReferenceTo(call.getMethodExpression(), newName);
+	}
+
+	/**
+	 * Returns the expression itself (probably with stripped parentheses) or the corresponding value if the expression is a local variable
+	 * reference which is initialized and not used anywhere else
+	 *
+	 * @param expression
+	 * @return a resolved expression or expression itself
+	 */
+	@Contract("null -> null")
+	@Nullable
+	public static PsiExpression resolveExpression(@Nullable PsiExpression expression)
+	{
+		expression = PsiUtil.skipParenthesizedExprDown(expression);
+		if(expression instanceof PsiReferenceExpression)
+		{
+			PsiReferenceExpression reference = (PsiReferenceExpression) expression;
+			PsiLocalVariable variable = ObjectUtils.tryCast(reference.resolve(), PsiLocalVariable.class);
+			if(variable != null)
+			{
+				PsiExpression initializer = variable.getInitializer();
+				if(initializer != null && ReferencesSearch.search(variable).forEach(ref -> ref == reference))
+				{
+					return initializer;
+				}
+			}
+		}
+		return expression;
+	}
+
+	@Contract(value = "null -> null")
+	@Nullable
+	public static PsiLocalVariable resolveLocalVariable(@Nullable PsiExpression expression)
+	{
+		PsiReferenceExpression referenceExpression = ObjectUtils.tryCast(expression, PsiReferenceExpression.class);
+		if(referenceExpression == null)
+		{
+			return null;
+		}
+		return ObjectUtils.tryCast(referenceExpression.resolve(), PsiLocalVariable.class);
+	}
+
+	public static boolean isOctalLiteral(PsiLiteralExpression literal)
+	{
+		final PsiType type = literal.getType();
+		if(!PsiType.INT.equals(type) && !PsiType.LONG.equals(type))
+		{
+			return false;
+		}
+		if(literal.getValue() == null)
+		{
+			// red code
+			return false;
+		}
+		@NonNls final String text = literal.getText();
+		if(text.charAt(0) != '0' || text.length() < 2)
+		{
+			return false;
+		}
+		final char c1 = text.charAt(1);
+		return c1 == '_' || (c1 >= '0' && c1 <= '7');
+	}
+
+	@Contract("null, _ -> false")
+	public static boolean isMatchingChildAlwaysExecuted(@Nullable PsiExpression root, @NotNull Predicate<PsiExpression> matcher)
+	{
+		if(root == null)
+		{
+			return false;
+		}
+		AtomicBoolean result = new AtomicBoolean(false);
+		root.accept(new JavaRecursiveElementWalkingVisitor()
+		{
+			@Override
+			public void visitExpression(PsiExpression expression)
+			{
+				super.visitExpression(expression);
+				if(matcher.test(expression))
+				{
+					result.set(true);
+					stopWalking();
+				}
+			}
+
+			@Override
+			public void visitConditionalExpression(PsiConditionalExpression expression)
+			{
+				if(isMatchingChildAlwaysExecuted(expression.getCondition(), matcher) || (isMatchingChildAlwaysExecuted(expression.getThenExpression(), matcher) && isMatchingChildAlwaysExecuted
+						(expression.getElseExpression(), matcher)))
+				{
+					result.set(true);
+					stopWalking();
+				}
+			}
+
+			@Override
+			public void visitPolyadicExpression(PsiPolyadicExpression expression)
+			{
+				IElementType type = expression.getOperationTokenType();
+				if(type.equals(JavaTokenType.OROR) || type.equals(JavaTokenType.ANDAND))
+				{
+					PsiExpression firstOperand = ArrayUtil.getFirstElement(expression.getOperands());
+					if(isMatchingChildAlwaysExecuted(firstOperand, matcher))
+					{
+						result.set(true);
+						stopWalking();
+					}
+				}
+				else
+				{
+					super.visitPolyadicExpression(expression);
+				}
+			}
+
+			@Override
+			public void visitClass(PsiClass aClass)
+			{
+			}
+
+			@Override
+			public void visitLambdaExpression(PsiLambdaExpression expression)
+			{
+			}
+		});
+		return result.get();
+	}
+
+	/**
+	 * @param expression expression to test
+	 * @return true if the expression return value is a new object which is guaranteed to be distinct from any other object created
+	 * in the program.
+	 */
+	@Contract("null -> false")
+	public static boolean isNewObject(@Nullable PsiExpression expression)
+	{
+		return expression != null && nonStructuralChildren(expression).allMatch(PsiNewExpression.class::isInstance);
 	}
 }

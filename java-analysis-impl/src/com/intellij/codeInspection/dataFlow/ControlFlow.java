@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,29 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Jan 11, 2002
- * Time: 3:05:34 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow;
 
 import gnu.trove.TObjectIntHashMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.dataFlow.instructions.FlushVariableInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
+import com.intellij.codeInspection.dataFlow.instructions.PushInstruction;
 import com.intellij.codeInspection.dataFlow.value.DfaValueFactory;
+import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiVariable;
+import one.util.streamex.StreamEx;
 
 public class ControlFlow
 {
-	private final List<Instruction> myInstructions = new ArrayList<Instruction>();
-	private final TObjectIntHashMap<PsiElement> myElementToStartOffsetMap = new TObjectIntHashMap<PsiElement>();
-	private final TObjectIntHashMap<PsiElement> myElementToEndOffsetMap = new TObjectIntHashMap<PsiElement>();
+	private final List<Instruction> myInstructions = new ArrayList<>();
+	private final TObjectIntHashMap<PsiElement> myElementToStartOffsetMap = new TObjectIntHashMap<>();
+	private final TObjectIntHashMap<PsiElement> myElementToEndOffsetMap = new TObjectIntHashMap<>();
 	private final DfaValueFactory myFactory;
 
 	public ControlFlow(final DfaValueFactory factory)
@@ -96,6 +92,14 @@ public class ControlFlow
 		addInstruction(new FlushVariableInstruction(myFactory.getVarFactory().createVariableValue(variable, false)));
 	}
 
+	/**
+	 * @return stream of all accessed variables within this flow
+	 */
+	public Stream<DfaVariableValue> accessedVariables()
+	{
+		return StreamEx.of(myInstructions).select(PushInstruction.class).remove(PushInstruction::isReferenceWrite).map(PushInstruction::getValue).select(DfaVariableValue.class).distinct();
+	}
+
 	public ControlFlowOffset getStartOffset(final PsiElement element)
 	{
 		return new ControlFlowOffset()
@@ -104,6 +108,12 @@ public class ControlFlow
 			public int getInstructionOffset()
 			{
 				return myElementToStartOffsetMap.get(element);
+			}
+
+			@Override
+			public String toString()
+			{
+				return String.valueOf(myElementToStartOffsetMap.get(element));
 			}
 		};
 	}
@@ -117,10 +127,15 @@ public class ControlFlow
 			{
 				return myElementToEndOffsetMap.get(element);
 			}
+
+			@Override
+			public String toString()
+			{
+				return String.valueOf(myElementToEndOffsetMap.get(element));
+			}
 		};
 	}
 
-	@Override
 	public String toString()
 	{
 		StringBuilder result = new StringBuilder();

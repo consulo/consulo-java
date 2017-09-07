@@ -19,11 +19,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.Contract;
 import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiMethodReferenceExpression;
+import one.util.streamex.StreamEx;
 
 /**
  * A mutable bunch of CallHandlers which allows to dispatch a transformer call based on CallMatcher
@@ -32,7 +34,7 @@ import com.intellij.psi.PsiMethodCallExpression;
  */
 public class CallMapper<T>
 {
-	private Map<String, List<Function<PsiMethodCallExpression, T>>> myMap = new HashMap<>();
+	private Map<String, List<CallHandler<T>>> myMap = new HashMap<>();
 
 	public CallMapper()
 	{
@@ -68,13 +70,14 @@ public class CallMapper<T>
 		return this;
 	}
 
+	@Contract("null -> null")
 	public T mapFirst(PsiMethodCallExpression call)
 	{
 		if(call == null)
 		{
 			return null;
 		}
-		List<Function<PsiMethodCallExpression, T>> functions = myMap.get(call.getMethodExpression().getReferenceName());
+		List<CallHandler<T>> functions = myMap.get(call.getMethodExpression().getReferenceName());
 		if(functions == null)
 		{
 			return null;
@@ -90,17 +93,39 @@ public class CallMapper<T>
 		return null;
 	}
 
+	public T mapFirst(PsiMethodReferenceExpression methodRef)
+	{
+		if(methodRef == null)
+		{
+			return null;
+		}
+		List<CallHandler<T>> functions = myMap.get(methodRef.getReferenceName());
+		if(functions == null)
+		{
+			return null;
+		}
+		for(CallHandler<T> function : functions)
+		{
+			T t = function.applyMethodReference(methodRef);
+			if(t != null)
+			{
+				return t;
+			}
+		}
+		return null;
+	}
+
 	public Stream<T> mapAll(PsiMethodCallExpression call)
 	{
 		if(call == null)
 		{
 			return null;
 		}
-		List<Function<PsiMethodCallExpression, T>> functions = myMap.get(call.getMethodExpression().getReferenceName());
+		List<CallHandler<T>> functions = myMap.get(call.getMethodExpression().getReferenceName());
 		if(functions == null)
 		{
-			return Stream.empty();
+			return StreamEx.empty();
 		}
-		return functions.stream().map(fn -> fn.apply(call)).filter(Objects::nonNull);
+		return StreamEx.of(functions).map(fn -> fn.apply(call)).nonNull();
 	}
 }

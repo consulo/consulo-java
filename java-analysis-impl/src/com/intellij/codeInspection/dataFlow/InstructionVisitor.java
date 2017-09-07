@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import com.intellij.codeInspection.dataFlow.instructions.*;
 import com.intellij.codeInspection.dataFlow.value.DfaUnknownValue;
 import com.intellij.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.psi.PsiExpression;
 
 /**
  * @author peter
@@ -33,6 +32,11 @@ public abstract class InstructionVisitor
 	{
 		memState.pop();
 		memState.push(memState.pop());
+		return nextInstruction(instruction, runner, memState);
+	}
+
+	public DfaInstructionState[] visitCheckNotNull(CheckNotNullInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
+	{
 		return nextInstruction(instruction, runner, memState);
 	}
 
@@ -166,8 +170,7 @@ public abstract class InstructionVisitor
 
 	public DfaInstructionState[] visitMethodCall(MethodCallInstruction instruction, DataFlowRunner runner, DfaMemoryState memState)
 	{
-		//noinspection UnusedDeclaration
-		for(PsiExpression arg : instruction.getArgs())
+		for(int i = instruction.getArgCount(); i > 0; i--)
 		{
 			memState.pop();
 		}

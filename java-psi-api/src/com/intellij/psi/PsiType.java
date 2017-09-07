@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.intellij.psi;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.jvm.types.JvmType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.TypeConversionUtil;
@@ -25,7 +26,7 @@ import com.intellij.util.ArrayFactory;
 /**
  * Representation of Java type (primitive type, array or class type).
  */
-public abstract class PsiType implements PsiAnnotationOwner, Cloneable
+public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType
 {
 	@SuppressWarnings("StaticInitializerReferencesSubClass")
 	public static final PsiPrimitiveType BYTE = new PsiPrimitiveType("byte", "java.lang.Byte");
@@ -49,15 +50,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable
 	public static final PsiPrimitiveType NULL = new PsiPrimitiveType("null", (String) null);
 
 	public static final PsiType[] EMPTY_ARRAY = new PsiType[0];
-	public static final ArrayFactory<PsiType> ARRAY_FACTORY = new ArrayFactory<PsiType>()
-	{
-		@NotNull
-		@Override
-		public PsiType[] create(int count)
-		{
-			return count == 0 ? EMPTY_ARRAY : new PsiType[count];
-		}
-	};
+	public static final ArrayFactory<PsiType> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiType[count];
 
 	@NotNull
 	public static PsiType[] createArray(int count)

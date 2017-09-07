@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.codeInspection.dataFlow.instructions.Instruction;
 import com.intellij.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.codeInspection.dataFlow.instructions.ReturnInstruction;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.Ref;
-import com.intellij.patterns.PsiJavaPatterns;
 import com.intellij.psi.*;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -91,13 +91,24 @@ public class DfaPsiUtil
 	@NotNull
 	public static Nullness getElementNullability(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner)
 	{
-		Nullness x = getTypeNullability(resultType);
-		if(x != Nullness.UNKNOWN)
+		return getElementNullability(resultType, owner, false);
+	}
+
+	@NotNull
+	public static Nullness getElementNullabilityIgnoringParameterInference(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner)
+	{
+		return getElementNullability(resultType, owner, true);
+	}
+
+	@NotNull
+	private static Nullness getElementNullability(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner, boolean ignoreParameterNullabilityInference)
+	{
+		if(owner == null)
 		{
-			return x;
+			return getTypeNullability(resultType);
 		}
 
-		if(owner == null || resultType instanceof PsiPrimitiveType)
+		if(resultType instanceof PsiPrimitiveType)
 		{
 			return Nullness.UNKNOWN;
 		}
@@ -115,25 +126,48 @@ public class DfaPsiUtil
 		{
 			return Nullness.NULLABLE;
 		}
-		if(isNotNullLocally(owner))
+		if(isNotNullLocally(owner, ignoreParameterNullabilityInference))
 		{
 			return Nullness.NOT_NULL;
 		}
 
-		if(PsiJavaPatterns.psiParameter().withParents(PsiParameterList.class, PsiLambdaExpression.class).accepts(owner))
+		Nullness fromType = getTypeNullability(resultType);
+		if(fromType != Nullness.UNKNOWN)
 		{
-			PsiLambdaExpression lambda = (PsiLambdaExpression) owner.getParent().getParent();
-			int index = lambda.getParameterList().getParameterIndex((PsiParameter) owner);
-			return getFunctionalParameterNullability(lambda, index);
+			return fromType;
+		}
+
+		if(owner instanceof PsiParameter)
+		{
+			return inferParameterNullability((PsiParameter) owner);
 		}
 
 		return Nullness.UNKNOWN;
 	}
 
 	@NotNull
+	public static Nullness inferParameterNullability(@NotNull PsiParameter parameter)
+	{
+		PsiElement parent = parameter.getParent();
+		if(parent instanceof PsiParameterList && parent.getParent() instanceof PsiLambdaExpression)
+		{
+			return getFunctionalParameterNullability((PsiLambdaExpression) parent.getParent(), ((PsiParameterList) parent).getParameterIndex(parameter));
+		}
+		if(parent instanceof PsiForeachStatement)
+		{
+			PsiExpression iteratedValue = ((PsiForeachStatement) parent).getIteratedValue();
+			if(iteratedValue != null)
+			{
+				return getTypeNullability(JavaGenericsUtil.getCollectionItemType(iteratedValue));
+			}
+		}
+		return Nullness.UNKNOWN;
+	}
+
+	@NotNull
 	public static Nullness getTypeNullability(@Nullable PsiType type)
 	{
-		if(type == null)
+		if(type == null || type instanceof PsiPrimitiveType)
 		{
 			return Nullness.UNKNOWN;
 		}
@@ -181,7 +215,7 @@ public class DfaPsiUtil
 		{
 			return nullness;
 		}
-		PsiClassType type = ObjectUtils.tryCast(function.getFunctionalInterfaceType(), PsiClassType.class);
+		PsiClassType type = ObjectUtils.tryCast(LambdaUtil.getFunctionalInterfaceType(function, true), PsiClassType.class);
 		PsiMethod sam = LambdaUtil.getFunctionalInterfaceMethod(type);
 		if(sam != null && index < sam.getParameterList().getParametersCount())
 		{
@@ -192,7 +226,7 @@ public class DfaPsiUtil
 				return nullness;
 			}
 			PsiType parameterType = type.resolveGenerics().getSubstitutor().substitute(parameter.getType());
-			return getTypeNullability(parameterType);
+			return getTypeNullability(GenericsUtil.eliminateWildcards(parameterType, false, true));
 		}
 		return Nullness.UNKNOWN;
 	}
@@ -242,11 +276,11 @@ public class DfaPsiUtil
 		return Nullness.UNKNOWN;
 	}
 
-	private static boolean isNotNullLocally(@NotNull PsiModifierListOwner owner)
+	private static boolean isNotNullLocally(@NotNull PsiModifierListOwner owner, boolean ignoreParameterNullabilityInference)
 	{
 		NullableNotNullManager nnnm = NullableNotNullManager.getInstance(owner.getProject());
 		PsiAnnotation notNullAnno = nnnm.getNotNullAnnotation(owner, true);
-		if(notNullAnno == null)
+		if(notNullAnno == null || ignoreParameterNullabilityInference && owner instanceof PsiParameter && AnnotationUtil.isInferredAnnotation(notNullAnno))
 		{
 			return false;
 		}

@@ -32,14 +32,13 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.util.ArrayUtil;
 
 public class PsiTypesUtil
 {
 	@NonNls
-	private static final Map<String, String> ourUnboxedTypes = new THashMap<String, String>();
+	private static final Map<String, String> ourUnboxedTypes = new THashMap<>();
 	@NonNls
-	private static final Map<String, String> ourBoxedTypes = new THashMap<String, String>();
+	private static final Map<String, String> ourBoxedTypes = new THashMap<>();
 
 	static
 	{
@@ -69,8 +68,43 @@ public class PsiTypesUtil
 	{
 	}
 
+	public static Object getDefaultValue(PsiType type)
+	{
+		if(!(type instanceof PsiPrimitiveType))
+		{
+			return null;
+		}
+		switch(type.getCanonicalText())
+		{
+			case "boolean":
+				return false;
+			case "byte":
+				return (byte) 0;
+			case "char":
+				return '\0';
+			case "short":
+				return (short) 0;
+			case "int":
+				return 0;
+			case "long":
+				return 0L;
+			case "float":
+				return 0F;
+			case "double":
+				return 0D;
+			default:
+				return null;
+		}
+	}
+
 	@NotNull
 	public static String getDefaultValueOfType(PsiType type)
+	{
+		return getDefaultValueOfType(type, false);
+	}
+
+	@NotNull
+	public static String getDefaultValueOfType(PsiType type, boolean customDefaultValues)
 	{
 		if(type instanceof PsiArrayType)
 		{
@@ -86,10 +120,11 @@ public class PsiTypesUtil
 				}
 			}
 
+			PsiType erasedComponentType = TypeConversionUtil.erasure(componentType);
 			StringBuilder buffer = new StringBuilder();
 			buffer.append(PsiKeyword.NEW);
 			buffer.append(" ");
-			buffer.append(componentType.getCanonicalText());
+			buffer.append(erasedComponentType.getCanonicalText());
 			buffer.append("[0]");
 			for(int i = 0; i < count; i++)
 			{
@@ -100,6 +135,14 @@ public class PsiTypesUtil
 		if(type instanceof PsiPrimitiveType)
 		{
 			return PsiType.BOOLEAN.equals(type) ? PsiKeyword.FALSE : "0";
+		}
+		if(customDefaultValues)
+		{
+			PsiType rawType = type instanceof PsiClassType ? ((PsiClassType) type).rawType() : null;
+			if(rawType != null && rawType.equalsToText(CommonClassNames.JAVA_UTIL_OPTIONAL))
+			{
+				return CommonClassNames.JAVA_UTIL_OPTIONAL + ".empty()";
+			}
 		}
 		return PsiKeyword.NULL;
 	}
@@ -221,7 +264,12 @@ public class PsiTypesUtil
 
 	public static boolean isGetClass(PsiMethod method)
 	{
-		return GET_CLASS_METHOD.equals(method.getName()) && CommonClassNames.JAVA_LANG_OBJECT.equals(method.getContainingClass().getQualifiedName());
+		if(GET_CLASS_METHOD.equals(method.getName()))
+		{
+			PsiClass aClass = method.getContainingClass();
+			return aClass != null && CommonClassNames.JAVA_LANG_OBJECT.equals(aClass.getQualifiedName());
+		}
+		return false;
 	}
 
 	@Nullable
@@ -355,14 +403,17 @@ public class PsiTypesUtil
 			@Override
 			public Boolean visitClassType(PsiClassType classType)
 			{
-				final PsiClass psiClass = classType.resolve();
+				PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
+				final PsiClass psiClass = resolveResult.getElement();
 				if(psiClass == null)
 				{
 					return true;
 				}
-				for(PsiType param : classType.getParameters())
+				PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+				for(PsiTypeParameter param : PsiUtil.typeParametersIterable(psiClass))
 				{
-					if(param.accept(this))
+					PsiType psiType = substitutor.substitute(param);
+					if(psiType != null && psiType.accept(this))
 					{
 						return true;
 					}
@@ -377,7 +428,7 @@ public class PsiTypesUtil
 				return arrayType.getComponentType().accept(this);
 			}
 
-			@Nullable
+			@NotNull
 			@Override
 			public Boolean visitWildcardType(PsiWildcardType wildcardType)
 			{
@@ -408,48 +459,79 @@ public class PsiTypesUtil
 		return parameterType;
 	}
 
-	public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, final PsiTypeParameter[] typeParameters)
+	@NotNull
+	public static PsiTypeParameter[] filterUnusedTypeParameters(@NotNull PsiTypeParameter[] typeParameters, final PsiType... types)
 	{
 		if(typeParameters.length == 0)
 		{
-			return typeParameters;
+			return PsiTypeParameter.EMPTY_ARRAY;
 		}
 
-		final Set<PsiTypeParameter> usedParameters = new HashSet<PsiTypeParameter>();
-		superReturnTypeInBaseClassType.accept(new PsiTypeVisitor<Object>()
+		TypeParameterSearcher searcher = new TypeParameterSearcher();
+		for(PsiType type : types)
 		{
-			@Nullable
-			@Override
-			public Object visitClassType(PsiClassType classType)
+			type.accept(searcher);
+		}
+		return searcher.getTypeParameters().toArray(PsiTypeParameter.EMPTY_ARRAY);
+	}
+
+	@NotNull
+	public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, @NotNull PsiTypeParameter[] typeParameters)
+	{
+		return filterUnusedTypeParameters(typeParameters, superReturnTypeInBaseClassType);
+	}
+
+	public static class TypeParameterSearcher extends PsiTypeVisitor<Boolean>
+	{
+		private final Set<PsiTypeParameter> myTypeParams = new HashSet<>();
+
+		public Set<PsiTypeParameter> getTypeParameters()
+		{
+			return myTypeParams;
+		}
+
+		public Boolean visitType(final PsiType type)
+		{
+			return false;
+		}
+
+		public Boolean visitArrayType(final PsiArrayType arrayType)
+		{
+			return arrayType.getComponentType().accept(this);
+		}
+
+		public Boolean visitClassType(final PsiClassType classType)
+		{
+			PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
+			final PsiClass aClass = resolveResult.getElement();
+			if(aClass instanceof PsiTypeParameter)
 			{
-				final PsiClass aClass = classType.resolve();
-				if(aClass instanceof PsiTypeParameter && ArrayUtil.find(typeParameters, aClass) > -1)
-				{
-					usedParameters.add((PsiTypeParameter) aClass);
-					return null;
-				}
-				for(PsiType type : classType.getParameters())
-				{
-					type.accept(this);
-				}
-				return null;
+				myTypeParams.add((PsiTypeParameter) aClass);
 			}
 
-			@Nullable
-			@Override
-			public Object visitWildcardType(PsiWildcardType wildcardType)
+			if(aClass != null)
 			{
-				final PsiType bound = wildcardType.getBound();
-				return bound != null ? bound.accept(this) : null;
+				PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+				for(final PsiTypeParameter parameter : PsiUtil.typeParametersIterable(aClass))
+				{
+					PsiType psiType = substitutor.substitute(parameter);
+					if(psiType != null)
+					{
+						psiType.accept(this);
+					}
+				}
 			}
+			return false;
+		}
 
-			@Nullable
-			@Override
-			public Object visitArrayType(PsiArrayType arrayType)
+		public Boolean visitWildcardType(final PsiWildcardType wildcardType)
+		{
+			final PsiType bound = wildcardType.getBound();
+			if(bound != null)
 			{
-				return arrayType.getComponentType().accept(this);
+				bound.accept(this);
 			}
-		});
-		return usedParameters.toArray(new PsiTypeParameter[usedParameters.size()]);
+			return false;
+		}
 	}
 }
