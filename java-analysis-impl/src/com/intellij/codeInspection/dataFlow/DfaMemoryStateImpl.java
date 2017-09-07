@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,11 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.UnorderedPair;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
@@ -849,9 +849,9 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 		}
 
 		DfaConstValue dfaNull = myFactory.getConstFactory().getNull();
-		int c1Index = getEqClassIndex(dfaVar);
+		Integer c1Index = getOrCreateEqClassIndex(dfaVar);
 		int c2Index = getEqClassIndex(dfaNull);
-		if(c1Index < 0 || c2Index < 0)
+		if(c1Index == null || c2Index < 0)
 		{
 			return false;
 		}
@@ -1100,11 +1100,28 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 	{
 		if(!isUnknownState(dfaVar))
 		{
-			if(value instanceof DfaConstValue && ((DfaConstValue) value).getValue() == null)
+			if(value instanceof DfaConstValue)
 			{
-				setVariableState(dfaVar, getVariableState(dfaVar).withFact(DfaFactType.CAN_BE_NULL, true));
+				Object constValue = ((DfaConstValue) value).getValue();
+				if(constValue == null)
+				{
+					setVariableState(dfaVar, getVariableState(dfaVar).withFact(DfaFactType.CAN_BE_NULL, true));
+					return;
+				}
+				if(constValue instanceof PsiVariable)
+				{
+					DfaValue typeValue = myFactory.createTypeValue(((PsiVariable) constValue).getType(), Nullness.NOT_NULL);
+					if(typeValue instanceof DfaTypeValue)
+					{
+						DfaVariableState state = getVariableState(dfaVar).withInstanceofValue((DfaTypeValue) typeValue);
+						if(state != null)
+						{
+							setVariableState(dfaVar, state);
+						}
+					}
+				}
 			}
-			else if(isNotNull(value) && !isNotNull(dfaVar))
+			if(isNotNull(value) && !isNotNull(dfaVar))
 			{
 				setVariableState(dfaVar, getVariableState(dfaVar).withoutFact(DfaFactType.CAN_BE_NULL));
 				applyRelation(dfaVar, myFactory.getConstFactory().getNull(), true);
@@ -1301,7 +1318,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 
 	private static boolean preserveConstantDistinction(final Object c1, final Object c2)
 	{
-		return c1 == null && c2 instanceof PsiEnumConstant || c2 == null && c1 instanceof PsiEnumConstant;
+		return c1 == null && c2 instanceof PsiVariable || c2 == null && c1 instanceof PsiVariable;
 	}
 
 	private boolean areCompatibleConstants(int i1, int i2)
@@ -1372,17 +1389,10 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 	@SuppressWarnings("unchecked")
 	public <T> T getValueFact(@NotNull DfaFactType<T> factType, @NotNull DfaValue value)
 	{
-		if(factType == DfaFactType.RANGE)
-		{
-			LongRangeSet range = getRange(value);
-			if(range != null)
-			{
-				return (T) range;
-			}
-		}
 		if(value instanceof DfaVariableValue)
 		{
-			DfaVariableState state = myVariableStates.get((DfaVariableValue) value);
+			DfaVariableValue var = (DfaVariableValue) value;
+			DfaVariableState state = findVariableState(var);
 			if(state != null)
 			{
 				T fact = state.getFact(factType);
@@ -1391,13 +1401,45 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 					return fact;
 				}
 			}
-			DfaConstValue constValue = getConstantValue((DfaVariableValue) value);
-			if(constValue != null)
-			{
-				value = constValue;
-			}
+			value = resolveVariableValue(var);
 		}
 		return factType.fromDfaValue(value);
+	}
+
+	@NotNull
+	private DfaValue resolveVariableValue(DfaVariableValue var)
+	{
+		DfaConstValue constValue = getConstantValue(var);
+		if(constValue != null)
+		{
+			return constValue;
+		}
+		DfaVariableValue qualifier = var.getQualifier();
+		if(qualifier != null)
+		{
+			return StreamEx.of(SpecialField.values()).map(sf -> sf.createValue(myFactory, qualifier)).nonNull().findFirst().orElse(var);
+		}
+		return var;
+	}
+
+	DfaFactMap getFactMap(@NotNull DfaValue value)
+	{
+		if(value instanceof DfaVariableValue)
+		{
+			DfaVariableState state = findVariableState((DfaVariableValue) value);
+			if(state != null)
+			{
+				return state.myFactMap;
+			}
+			value = resolveVariableValue((DfaVariableValue) value);
+		}
+		DfaValue finalValue = value;
+		return StreamEx.of(DfaFactType.getTypes()).foldLeft(DfaFactMap.EMPTY, (map, type) -> updateMap(map, type, finalValue));
+	}
+
+	private static <T> DfaFactMap updateMap(DfaFactMap map, DfaFactType<T> factType, DfaValue value)
+	{
+		return map.with(factType, factType.fromDfaValue(value));
 	}
 
 	@Nullable
@@ -1436,9 +1478,41 @@ public class DfaMemoryStateImpl implements DfaMemoryState
 		myCachedHash = null;
 	}
 
+	private DfaVariableState findVariableState(DfaVariableValue var)
+	{
+		DfaVariableState state = myVariableStates.get(var);
+		if(state != null)
+		{
+			return state;
+		}
+		DfaVariableValue qualifier = var.getQualifier();
+		if(qualifier == null)
+		{
+			return null;
+		}
+		int qualifierIndex = getEqClassIndex(qualifier);
+		if(qualifierIndex == -1)
+		{
+			return null;
+		}
+		for(DfaValue eqQualifier : myEqClasses.get(qualifierIndex).getMemberValues())
+		{
+			if(eqQualifier != qualifier && eqQualifier instanceof DfaVariableValue)
+			{
+				DfaVariableValue eqValue = getFactory().getVarFactory().createVariableValue(var.getPsiVariable(), var.getVariableType(), var.isNegated(), (DfaVariableValue) eqQualifier);
+				state = myVariableStates.get(eqValue);
+				if(state != null)
+				{
+					return state;
+				}
+			}
+		}
+		return null;
+	}
+
 	DfaVariableState getVariableState(DfaVariableValue dfaVar)
 	{
-		DfaVariableState state = myVariableStates.get(dfaVar);
+		DfaVariableState state = findVariableState(dfaVar);
 
 		if(state == null)
 		{

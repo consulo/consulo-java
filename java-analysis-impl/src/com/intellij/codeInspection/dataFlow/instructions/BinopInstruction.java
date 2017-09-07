@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 consulo.io
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-/*
- * Created by IntelliJ IDEA.
- * User: max
- * Date: Feb 7, 2002
- * Time: 1:11:08 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.codeInspection.dataFlow.instructions;
 
+import static com.intellij.psi.JavaTokenType.AND;
 import static com.intellij.psi.JavaTokenType.EQEQ;
 import static com.intellij.psi.JavaTokenType.GE;
 import static com.intellij.psi.JavaTokenType.GT;
@@ -53,7 +46,7 @@ import com.intellij.psi.tree.TokenSet;
 
 public class BinopInstruction extends BranchingInstruction
 {
-	private static final TokenSet ourSignificantOperations = TokenSet.create(EQEQ, NE, LT, GT, LE, GE, INSTANCEOF_KEYWORD, PLUS);
+	private static final TokenSet ourSignificantOperations = TokenSet.create(EQEQ, NE, LT, GT, LE, GE, INSTANCEOF_KEYWORD, PLUS, AND);
 	private final IElementType myOperationSign;
 	private final Project myProject;
 
@@ -74,12 +67,10 @@ public class BinopInstruction extends BranchingInstruction
 	{
 		PsiElement anchor = getPsiAnchor();
 		Project project = myProject;
-		PsiClassType string = PsiType.getJavaLangString(PsiManager.getInstance(project), anchor == null ? GlobalSearchScope.allScope(project) :
-				anchor.getResolveScope());
+		PsiClassType string = PsiType.getJavaLangString(PsiManager.getInstance(project), anchor == null ? GlobalSearchScope.allScope(project) : anchor.getResolveScope());
 		return factory.createTypeValue(string, Nullness.NOT_NULL);
 	}
 
-	@Override
 	public String toString()
 	{
 		return "BINOP " + myOperationSign;
