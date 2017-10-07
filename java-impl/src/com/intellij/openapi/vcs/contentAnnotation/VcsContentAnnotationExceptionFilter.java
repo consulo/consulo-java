@@ -155,8 +155,10 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin
 				{
 					recentChangeRevision = null;
 				}
-				if(localChangesCorrector.isFileAlreadyIdentifiedAsChanged(vf) || ChangeListManager.isFileChanged(myProject, vf) ||
-						recentChangeRevision != null)
+
+				FileStatus status = ChangeListManager.getInstance(myProject).getStatus(vf);
+				boolean isFileChanged = FileStatus.NOT_CHANGED.equals(status) || FileStatus.UNKNOWN.equals(status) || FileStatus.IGNORED.equals(status);
+				if(localChangesCorrector.isFileAlreadyIdentifiedAsChanged(vf) || isFileChanged || recentChangeRevision != null)
 				{
 					final Document document = getDocumentForFile(worker);
 					if(document == null)
