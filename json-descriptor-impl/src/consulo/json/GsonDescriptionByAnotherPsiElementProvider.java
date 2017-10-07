@@ -21,12 +21,11 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.module.extension.JavaModuleExtension;
-import consulo.java.module.util.JavaClassNames;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -35,6 +34,8 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredDispatchThread;
 import consulo.annotations.RequiredReadAction;
+import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.util.JavaClassNames;
 import consulo.json.validation.NativeArray;
 import consulo.json.validation.descriptionByAnotherPsiElement.DescriptionByAnotherPsiElementProvider;
 import consulo.json.validation.descriptor.JsonObjectDescriptor;
@@ -259,7 +260,8 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 					{
 						continue;
 					}
-					PropertyType classType = toType(project, psiField, psiField.getType());
+
+					PropertyType classType = RecursionManager.doPreventingRecursion(GsonDescriptionByAnotherPsiElementProvider.class, false, () -> toType(project, psiField, psiField.getType()));
 
 					addIfNotNull(objectDescriptor, classType, psiField);
 				}
