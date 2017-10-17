@@ -51,7 +51,7 @@ public class CustomizeContextViewAction extends XDebuggerTreeActionBase
 	@Override
 	protected void perform(XValueNodeImpl node, @NotNull String nodeName, AnActionEvent e)
 	{
-		final Project project = CommonDataKeys.PROJECT.getData(e.getDataContext());
+		final Project project = e.getData(CommonDataKeys.PROJECT);
 		Disposable disposable = Disposer.newDisposable();
 		SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable)
 		{

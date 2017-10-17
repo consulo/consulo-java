@@ -63,7 +63,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 			return;
 		}
 		DataContext ctx = e.getDataContext();
-		boolean available = Optional.ofNullable(LangDataKeys.IDE_VIEW.getData(ctx)).map(view -> getTargetDirectory(ctx, view)).filter(PsiUtil::isLanguageLevel9OrHigher).map
+		boolean available = Optional.ofNullable(ctx.getData(LangDataKeys.IDE_VIEW)).map(view -> getTargetDirectory(ctx, view)).filter(PsiUtil::isLanguageLevel9OrHigher).map
 				(ModuleUtilCore::findModuleForPsiElement).map(module -> FilenameIndex.getVirtualFilesByName(module.getProject(), MODULE_INFO_FILE, module.getModuleScope()).isEmpty()).orElse(false);
 		e.getPresentation().setEnabledAndVisible(available);
 	}
@@ -102,7 +102,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 	@Override
 	protected Map<String, String> getLiveTemplateDefaults(@NotNull DataContext ctx, @NotNull PsiFile file)
 	{
-		Module module = LangDataKeys.MODULE.getData(ctx);
+		Module module = ctx.getData(LangDataKeys.MODULE);
 		return Collections.singletonMap("MODULE_NAME", module != null ? LightJavaModule.moduleName(module.getName()) : "module_name");
 	}
 }

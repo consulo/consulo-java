@@ -15,6 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
 import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.hint.QuestionAction;
@@ -35,19 +41,21 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringActionHandlerFactory;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @author cdr
@@ -153,7 +161,7 @@ public class MoveClassToModuleFix implements IntentionAction {
     LOG.assertTrue(fqName != null);
     PsiDirectory directory = PackageUtil
       .findOrCreateDirectoryForPackage(myCurrentModule, StringUtil.getPackageName(fqName), mySourceRoot, true);
-    DataContext context = SimpleDataContext.getSimpleContext(LangDataKeys.TARGET_PSI_ELEMENT.getName(), directory, dataContext);
+    DataContext context = SimpleDataContext.getSimpleContext(LangDataKeys.TARGET_PSI_ELEMENT, directory, dataContext);
 
     moveHandler.invoke(project, new PsiElement[]{aClass}, context);
     PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());

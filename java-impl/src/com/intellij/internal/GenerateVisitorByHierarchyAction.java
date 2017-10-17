@@ -147,7 +147,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
         return labeledComponent;
       }
     };
-    final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(e.getDataContext());
+    final PsiElement element = e.getData(LangDataKeys.PSI_ELEMENT);
     if (element instanceof PsiJavaPackage) {
       dialog.selectPackage(((PsiJavaPackage)element).getQualifiedName());
     }
@@ -165,7 +165,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       return;
     }
     final String visitorQName = generateEverything(dialog.getSelectedPackage(), parentClassRef.get(), visitorNameRef.get());
-    final IdeView ideView = LangDataKeys.IDE_VIEW.getData(e.getDataContext());
+    final IdeView ideView = e.getData(LangDataKeys.IDE_VIEW);
     final PsiClass visitorClass = JavaPsiFacade.getInstance(project).findClass(visitorQName, GlobalSearchScope.projectScope(project));
     if (ideView != null && visitorClass != null) {
       ideView.selectElement(visitorClass);

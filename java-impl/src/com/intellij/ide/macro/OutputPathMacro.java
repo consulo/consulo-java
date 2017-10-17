@@ -52,13 +52,13 @@ public final class OutputPathMacro extends Macro
 	@RequiredReadAction
 	public String expand(DataContext dataContext)
 	{
-		Project project = CommonDataKeys.PROJECT.getData(dataContext);
+		Project project = dataContext.getData(CommonDataKeys.PROJECT);
 		if(project == null)
 		{
 			return null;
 		}
 
-		VirtualFile file = PlatformDataKeys.VIRTUAL_FILE.getData(dataContext);
+		VirtualFile file = dataContext.getData(PlatformDataKeys.VIRTUAL_FILE);
 		if(file != null)
 		{
 			ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();

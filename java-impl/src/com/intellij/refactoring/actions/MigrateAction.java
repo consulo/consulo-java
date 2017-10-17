@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2000-2009 JetBrains s.r.o.
  *
@@ -16,19 +15,31 @@
  */
 package com.intellij.refactoring.actions;
 
-import com.intellij.openapi.actionSystem.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
 import com.intellij.refactoring.RefactoringManager;
+import consulo.annotations.RequiredDispatchThread;
 
-public class MigrateAction extends AnAction {
-  public void actionPerformed(AnActionEvent e) {
-    Project project = CommonDataKeys.PROJECT.getData(e.getDataContext());
-    RefactoringManager.getInstance(project).getMigrateManager().showMigrationDialog();
-  }
+public class MigrateAction extends AnAction
+{
+	@RequiredDispatchThread
+	@Override
+	public void actionPerformed(@NotNull AnActionEvent e)
+	{
+		Project project = e.getData(CommonDataKeys.PROJECT);
+		RefactoringManager.getInstance(project).getMigrateManager().showMigrationDialog();
+	}
 
-  public void update(AnActionEvent event){
-    Presentation presentation = event.getPresentation();
-    Project project = CommonDataKeys.PROJECT.getData(event.getDataContext());
-    presentation.setEnabled(project != null);
-  }
+	@RequiredDispatchThread
+	@Override
+	public void update(@NotNull AnActionEvent event)
+	{
+		Presentation presentation = event.getPresentation();
+		Project project = event.getData(CommonDataKeys.PROJECT);
+		presentation.setEnabled(project != null);
+	}
 }

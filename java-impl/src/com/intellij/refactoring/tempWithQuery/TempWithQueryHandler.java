@@ -210,8 +210,8 @@ public class TempWithQueryHandler implements RefactoringActionHandler
 		{
 			if(dataContext != null)
 			{
-				final PsiFile file = LangDataKeys.PSI_FILE.getData(dataContext);
-				final Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
+				final PsiFile file = dataContext.getData(LangDataKeys.PSI_FILE);
+				final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
 				if(file != null && editor != null)
 				{
 					invokeOnVariable(file, project, (PsiLocalVariable) elements[0], editor);

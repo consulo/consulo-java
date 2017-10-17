@@ -15,13 +15,26 @@
  */
 package com.intellij.refactoring.move.moveFilesOrDirectories;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.impl.file.JavaDirectoryServiceImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
@@ -30,9 +43,6 @@ import com.intellij.refactoring.move.MoveCallback;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHandler {
   @Override
@@ -46,7 +56,7 @@ public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHan
   @Override
   public PsiElement adjustTargetForMove(DataContext dataContext, PsiElement targetContainer) {
     if (targetContainer instanceof PsiJavaPackage) {
-      final Module module = LangDataKeys.TARGET_MODULE.getData(dataContext);
+      final Module module = dataContext.getData(LangDataKeys.TARGET_MODULE);
       if (module != null) {
         final PsiDirectory[] directories = ((PsiJavaPackage)targetContainer).getDirectories(GlobalSearchScope.moduleScope(module));
         if (directories.length == 1) {

@@ -15,7 +15,18 @@
  */
 package com.intellij.execution;
 
-import com.intellij.execution.configurations.*;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.execution.configurations.JavaCommandLineState;
+import com.intellij.execution.configurations.JavaParameters;
+import com.intellij.execution.configurations.JavaRunConfigurationModule;
+import com.intellij.execution.configurations.RunProfile;
+import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.TextConsoleBuilder;
@@ -29,17 +40,15 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author spleaner
@@ -54,7 +63,7 @@ public class JavaExecutionUtil {
   }
 
   public static boolean executeRun(@NotNull final Project project, String contentName, Icon icon, DataContext dataContext, Filter[] filters) throws ExecutionException {
-    final JavaParameters cmdLine = JavaParameters.JAVA_PARAMETERS.getData(dataContext);
+    final JavaParameters cmdLine = dataContext.getData(JavaParameters.JAVA_PARAMETERS);
     final DefaultRunProfile profile = new DefaultRunProfile(project, cmdLine, contentName, icon, filters);
     final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(DefaultRunExecutor.EXECUTOR_ID, profile);
     if (runner != null) {

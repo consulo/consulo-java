@@ -96,7 +96,7 @@ public class NullableNotNullDialog extends DialogWrapper
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				Project project = CommonDataKeys.PROJECT.getData(DataManager.getInstance().getDataContext(context));
+				Project project = DataManager.getInstance().getDataContext(context).getData(CommonDataKeys.PROJECT);
 				if(project == null)
 				{
 					project = ProjectManager.getInstance().getDefaultProject();

@@ -108,12 +108,6 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 	}
 
 	@Override
-	public Object getData(Collection<AbstractTreeNode> selected, String dataName)
-	{
-		return null;
-	}
-
-	@Override
 	@RequiredReadAction
 	public PsiElement getTopLevelElement(final PsiElement element)
 	{

@@ -15,17 +15,25 @@
  */
 package com.intellij.usages.impl.rules;
 
-import consulo.ide.IconDescriptorUpdaters;
+import javax.swing.Icon;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.navigation.NavigationItemFileStatus;
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataSink;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.TypeSafeDataProvider;
 import com.intellij.openapi.util.Iconable;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportList;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.SmartPointerManager;
+import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usages.Usage;
@@ -33,9 +41,7 @@ import com.intellij.usages.UsageGroup;
 import com.intellij.usages.UsageView;
 import com.intellij.usages.rules.PsiElementUsage;
 import com.intellij.usages.rules.UsageGroupingRule;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
+import consulo.ide.IconDescriptorUpdaters;
 
 /**
  * @author max
@@ -183,7 +189,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     @Override
-    public void calcData(final DataKey key, final DataSink sink) {
+    public void calcData(final Key<?> key, final DataSink sink) {
       if (!isValid()) return;
       if (LangDataKeys.PSI_ELEMENT == key) {
         sink.put(LangDataKeys.PSI_ELEMENT, getPsiClass());

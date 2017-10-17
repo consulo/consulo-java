@@ -34,7 +34,9 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.util.Key;
 import consulo.java.JavaIcons;
 import com.intellij.CommonBundle;
 import com.intellij.analysis.AnalysisScopeBundle;
@@ -404,8 +406,8 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
 
   @Nullable
   @NonNls
-  public Object getData(@NonNls String dataId) {
-    if (PlatformDataKeys.HELP_ID.is(dataId)) {
+  public Object getData(@NonNls Key<?> dataId) {
+    if (PlatformDataKeys.HELP_ID == dataId) {
       return "dependency.viewer.tool.window";
     }
     return null;
@@ -537,9 +539,9 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
   }
 
   private static class MyTree extends Tree implements DataProvider {
-    public Object getData(String dataId) {
+    public Object getData(@NotNull Key<?> dataId) {
       PackageDependenciesNode node = getSelectedNode();
-      if (PlatformDataKeys.NAVIGATABLE.is(dataId)) {
+      if (PlatformDataKeys.NAVIGATABLE == dataId) {
         return node;
       }
       return null;

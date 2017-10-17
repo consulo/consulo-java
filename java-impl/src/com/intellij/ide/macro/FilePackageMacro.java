@@ -15,6 +15,7 @@
  */
 package com.intellij.ide.macro;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -22,7 +23,6 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaPackage;
-import org.jetbrains.annotations.Nullable;
 
 public final class FilePackageMacro extends Macro {
   public String getName() {
@@ -41,7 +41,7 @@ public final class FilePackageMacro extends Macro {
 
   @Nullable
   static PsiJavaPackage getFilePackage(DataContext dataContext) {
-    PsiFile psiFile = LangDataKeys.PSI_FILE.getData(dataContext);
+    PsiFile psiFile = dataContext.getData(LangDataKeys.PSI_FILE);
     if (psiFile == null) return null;
     PsiDirectory containingDirectory = psiFile.getContainingDirectory();
     if (containingDirectory == null || !containingDirectory.isValid()) return null;

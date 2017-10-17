@@ -68,13 +68,13 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
 			}
 			if(directory.findFile(PsiJavaPackage.PACKAGE_INFO_FILE) != null)
 			{
-				Messages.showErrorDialog(CommonDataKeys.PROJECT.getData(dataContext), JavaBundle.message("error.package.already.contains.package-info", aPackage.getQualifiedName()), IdeBundle
+				Messages.showErrorDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package-info", aPackage.getQualifiedName()), IdeBundle
 						.message("title.cannot.create.file"));
 				return null;
 			}
 			else if(directory.findFile("package.html") != null)
 			{
-				if(Messages.showOkCancelDialog(CommonDataKeys.PROJECT.getData(dataContext), JavaBundle.message("error.package.already.contains.package.html", aPackage.getQualifiedName()), JavaBundle
+				if(Messages.showOkCancelDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package.html", aPackage.getQualifiedName()), JavaBundle
 						.message("error.package.html.found.title"), IdeBundle.message("button.create"), CommonBundle.message("button.cancel"), Messages.getQuestionIcon()) != Messages.OK)
 				{
 					return null;
@@ -98,8 +98,8 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
 
 	private static boolean isAvailable(DataContext dataContext)
 	{
-		final Project project = CommonDataKeys.PROJECT.getData(dataContext);
-		final IdeView view = LangDataKeys.IDE_VIEW.getData(dataContext);
+		final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+		final IdeView view = dataContext.getData(LangDataKeys.IDE_VIEW);
 		if(project == null || view == null)
 		{
 			return false;

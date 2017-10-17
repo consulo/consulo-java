@@ -36,9 +36,9 @@ public final class ClasspathEntryMacro extends Macro {
   }
 
   public String expand(final DataContext dataContext) {
-    final Project project = CommonDataKeys.PROJECT.getData(dataContext);
+    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     if (project == null) return null;
-    final VirtualFile file = PlatformDataKeys.VIRTUAL_FILE.getData(dataContext);
+    final VirtualFile file = dataContext.getData(PlatformDataKeys.VIRTUAL_FILE);
     if (file == null) return null;
     final VirtualFile classRoot = ProjectRootManager.getInstance(project).getFileIndex().getClassRootForFile(file);
     if (classRoot == null) return null;

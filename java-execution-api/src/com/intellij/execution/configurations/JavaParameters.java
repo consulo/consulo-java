@@ -20,7 +20,6 @@ import java.nio.charset.Charset;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -29,6 +28,7 @@ import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.OrderEnumerator;
 import com.intellij.openapi.roots.OrderRootsEnumerator;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
 import com.intellij.util.NotNullFunction;
@@ -40,7 +40,7 @@ import consulo.vfs.util.ArchiveVfsUtil;
 
 public class JavaParameters extends SimpleJavaParameters
 {
-	public static final DataKey<JavaParameters> JAVA_PARAMETERS = DataKey.create("javaParameters");
+	public static final Key<JavaParameters> JAVA_PARAMETERS = Key.create("javaParameters");
 
 	public String getJdkPath() throws CantRunException
 	{

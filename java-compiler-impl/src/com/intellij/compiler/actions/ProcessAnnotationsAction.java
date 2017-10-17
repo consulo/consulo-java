@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.compiler.impl.FileSetCompileScope;
 import com.intellij.compiler.impl.ModuleCompileScope;
@@ -52,13 +53,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.RequiredDispatchThread;
 
 public class ProcessAnnotationsAction extends CompileActionBase
 {
+	@RequiredDispatchThread
 	@Override
 	protected void doAction(DataContext dataContext, Project project)
 	{
-		final Module module = LangDataKeys.MODULE_CONTEXT.getData(dataContext);
+		final Module module = dataContext.getData(LangDataKeys.MODULE_CONTEXT);
 		final Condition<com.intellij.openapi.compiler.Compiler> filter = new Condition<com.intellij.openapi.compiler.Compiler>()
 		{
 			@Override
@@ -74,7 +77,7 @@ public class ProcessAnnotationsAction extends CompileActionBase
 		}
 		else
 		{
-			final FileSetCompileScope scope = getCompilableFiles(project, PlatformDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext));
+			final FileSetCompileScope scope = getCompilableFiles(project, dataContext.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY));
 			if(scope != null)
 			{
 				CompilerManager.getInstance(project).make(scope, filter, null);
@@ -82,8 +85,9 @@ public class ProcessAnnotationsAction extends CompileActionBase
 		}
 	}
 
+	@RequiredDispatchThread
 	@Override
-	public void update(AnActionEvent event)
+	public void update(@NotNull AnActionEvent event)
 	{
 		super.update(event);
 		Presentation presentation = event.getPresentation();
@@ -91,10 +95,9 @@ public class ProcessAnnotationsAction extends CompileActionBase
 		{
 			return;
 		}
-		DataContext dataContext = event.getDataContext();
 		presentation.setVisible(false);
 
-		Project project = CommonDataKeys.PROJECT.getData(dataContext);
+		Project project = event.getData(CommonDataKeys.PROJECT);
 		if(project == null)
 		{
 			presentation.setEnabled(false);
@@ -103,8 +106,8 @@ public class ProcessAnnotationsAction extends CompileActionBase
 
 		final JavaCompilerConfiguration compilerConfiguration = JavaCompilerConfiguration.getInstance(project);
 
-		final Module module = LangDataKeys.MODULE.getData(dataContext);
-		final Module moduleContext = LangDataKeys.MODULE_CONTEXT.getData(dataContext);
+		final Module module = event.getData(LangDataKeys.MODULE);
+		final Module moduleContext = event.getData(LangDataKeys.MODULE_CONTEXT);
 
 		if(module == null)
 		{
@@ -120,7 +123,7 @@ public class ProcessAnnotationsAction extends CompileActionBase
 
 		presentation.setVisible(true);
 		presentation.setText(createPresentationText(""), true);
-		final FileSetCompileScope scope = getCompilableFiles(project, PlatformDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext));
+		final FileSetCompileScope scope = getCompilableFiles(project, event.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY));
 		if(moduleContext == null && scope == null)
 		{
 			presentation.setEnabled(false);
@@ -146,7 +149,7 @@ public class ProcessAnnotationsAction extends CompileActionBase
 			}
 			else
 			{
-				PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+				PsiElement element = event.getData(LangDataKeys.PSI_ELEMENT);
 				if(element instanceof PsiJavaPackage)
 				{
 					aPackage = (PsiJavaPackage) element;

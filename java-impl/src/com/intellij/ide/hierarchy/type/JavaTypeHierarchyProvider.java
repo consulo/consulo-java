@@ -46,13 +46,13 @@ public class JavaTypeHierarchyProvider implements HierarchyProvider
 	@RequiredDispatchThread
 	public PsiElement getTarget(@NotNull final DataContext dataContext)
 	{
-		final Project project = CommonDataKeys.PROJECT.getData(dataContext);
+		final Project project = dataContext.getData(CommonDataKeys.PROJECT);
 		if(project == null)
 		{
 			return null;
 		}
 
-		final Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
+		final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
 		if(editor != null)
 		{
 			final PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
@@ -92,17 +92,19 @@ public class JavaTypeHierarchyProvider implements HierarchyProvider
 		}
 		else
 		{
-			final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+			final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
 			return element instanceof PsiClass ? (PsiClass) element : null;
 		}
 	}
 
+	@Override
 	@NotNull
 	public HierarchyBrowser createHierarchyBrowser(final PsiElement target)
 	{
 		return new TypeHierarchyBrowser(target.getProject(), (PsiClass) target);
 	}
 
+	@Override
 	public void browserActivated(@NotNull final HierarchyBrowser hierarchyBrowser)
 	{
 		final TypeHierarchyBrowser browser = (TypeHierarchyBrowser) hierarchyBrowser;

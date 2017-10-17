@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.replaceConstructorWithFactory;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
@@ -26,7 +27,6 @@ import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author dsl
@@ -91,7 +91,7 @@ public class ReplaceConstructorWithFactoryHandler
     if (elements.length != 1) return;
 
     myProject = project;
-    Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
+    Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
     if (elements[0] instanceof PsiMethod) {
       final PsiMethod method = (PsiMethod)elements[0];
       invoke(method, editor);

@@ -38,7 +38,6 @@ import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.ide.plugins.cl.PluginClassLoader;
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
@@ -48,6 +47,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -82,7 +82,7 @@ public class JavaSdkImpl extends JavaSdk
 	private static final String JAVA_VERSION_PREFIX = "java version ";
 	@NonNls
 	private static final String OPENJDK_VERSION_PREFIX = "openjdk version ";
-	public static final DataKey<Boolean> KEY = DataKey.create("JavaSdk");
+	public static final Key<Boolean> KEY = Key.create("JavaSdk");
 
 	public JavaSdkImpl()
 	{

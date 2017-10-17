@@ -20,6 +20,11 @@
  */
 package com.intellij.refactoring.extractSuperclass;
 
+import java.util.List;
+
+import javax.swing.SwingUtilities;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
@@ -45,10 +50,6 @@ import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.util.List;
 
 public class ExtractSuperclassHandler implements RefactoringActionHandler, ExtractSuperclassDialog.Callback, ElementsHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractSuperclass.ExtractSuperclassHandler");
@@ -85,7 +86,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, mySubclass)) return;
 
-    Editor editor = dataContext != null ? PlatformDataKeys.EDITOR.getData(dataContext) : null;
+    Editor editor = dataContext != null ? dataContext.getData(PlatformDataKeys.EDITOR) : null;
     if (mySubclass.isInterface()) {
       String message =
         RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("superclass.cannot.be.extracted.from.an.interface"));

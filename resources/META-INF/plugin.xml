@@ -1643,7 +1643,7 @@
 
 		<structureViewBuilder key="CLASS" factoryClass="com.intellij.ide.highlighter.JavaClsStructureViewBuilderProvider"/>
 
-		<getDataRule key="analysisScope" implementationClass="com.intellij.analysis.AnalysisScopeRule"/>
+		<getDataRule implementation="com.intellij.analysis.AnalysisScopeRule"/>
 
 		<vcsSelectionProvider implementation="com.intellij.vcsUtil.JavaVcsSelectionProvider"/>
 

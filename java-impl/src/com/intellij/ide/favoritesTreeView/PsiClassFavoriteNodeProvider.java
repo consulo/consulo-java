@@ -20,6 +20,10 @@
  */
 package com.intellij.ide.favoritesTreeView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.favoritesTreeView.smartPointerPsiNodes.ClassSmartPointerNode;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
@@ -40,19 +44,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class PsiClassFavoriteNodeProvider extends FavoriteNodeProvider {
   @Override
   public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
-    final Project project = CommonDataKeys.PROJECT.getData(context);
+    final Project project = context.getData(CommonDataKeys.PROJECT);
     if (project == null) return null;
-    PsiElement[] elements = LangDataKeys.PSI_ELEMENT_ARRAY.getData(context);
+    PsiElement[] elements = context.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
     if (elements == null) {
-      final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(context);
+      final PsiElement element = context.getData(LangDataKeys.PSI_ELEMENT);
       if (element != null) {
         elements = new PsiElement[]{element};
       }

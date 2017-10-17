@@ -30,7 +30,7 @@ import com.intellij.openapi.project.Project;
  */
 public class CustomizeThreadsViewAction extends DebuggerAction {
   public void actionPerformed(AnActionEvent e) {
-    Project project = CommonDataKeys.PROJECT.getData(e.getDataContext());
+    Project project = e.getData(CommonDataKeys.PROJECT);
     final SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new ThreadsViewConfigurable(ThreadsViewSettings.getInstance()));
     editor.show();
   }

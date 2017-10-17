@@ -83,7 +83,7 @@ public class DependencyInspection extends BaseLocalInspectionTool {
     editDependencies.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        Project project = CommonDataKeys.PROJECT.getData(DataManager.getInstance().getDataContext(editDependencies));
+        Project project = DataManager.getInstance().getDataContext(editDependencies).getData(CommonDataKeys.PROJECT);
         if (project == null) project = ProjectManager.getInstance().getDefaultProject();
         ShowSettingsUtil.getInstance().editConfigurable(editDependencies, new DependencyConfigurable(project));
       }

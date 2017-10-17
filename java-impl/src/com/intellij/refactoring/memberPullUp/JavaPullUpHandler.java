@@ -126,7 +126,7 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 
 	private void invoke(Project project, DataContext dataContext, PsiClass aClass, PsiElement aMember)
 	{
-		final Editor editor = dataContext != null ? CommonDataKeys.EDITOR.getData(dataContext) : null;
+		final Editor editor = dataContext != null ? dataContext.getData(CommonDataKeys.EDITOR) : null;
 		if(aClass == null)
 		{
 			String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("is.not.supported.in" +

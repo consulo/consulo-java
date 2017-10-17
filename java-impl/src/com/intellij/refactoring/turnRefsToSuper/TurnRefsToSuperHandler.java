@@ -20,6 +20,9 @@
  */
 package com.intellij.refactoring.turnRefsToSuper;
 
+import java.util.ArrayList;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
@@ -34,9 +37,6 @@ import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.RefactoringHierarchyUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 public class TurnRefsToSuperHandler implements RefactoringActionHandler {
   public static final String REFACTORING_NAME = RefactoringBundle.message("use.interface.where.possible.title");
@@ -69,7 +69,7 @@ public class TurnRefsToSuperHandler implements RefactoringActionHandler {
 
     if (basesList.isEmpty()) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("interface.does.not.have.base.interfaces", subClass.getQualifiedName()));
-      Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
+      Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.TURN_REFS_TO_SUPER);
       return;
     }

@@ -219,7 +219,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 			if(proxy != null)
 			{
 				final WiseDumpThreadsListener wiseListener = Boolean.TRUE.equals(Boolean.getBoolean(ourWiseThreadDumpProperty)) ? new
-						WiseDumpThreadsListener(CommonDataKeys.PROJECT.getData(e.getDataContext()), myProcessHandler) : null;
+						WiseDumpThreadsListener(e.getData(CommonDataKeys.PROJECT), myProcessHandler) : null;
 
 				proxy.sendBreak();
 

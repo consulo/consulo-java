@@ -36,7 +36,7 @@ public abstract class GotoFrameSourceAction extends DebuggerAction
 
 	protected static void doAction(DataContext dataContext)
 	{
-		final Project project = CommonDataKeys.PROJECT.getData(dataContext);
+		final Project project = dataContext.getData(CommonDataKeys.PROJECT);
 		if(project == null)
 		{
 			return;

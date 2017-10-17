@@ -46,9 +46,9 @@ import com.intellij.debugger.memory.utils.AbstractTableModelWithColumns;
 import com.intellij.debugger.memory.utils.InstancesProvider;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
 import com.intellij.psi.codeStyle.NameUtil;
@@ -65,9 +65,9 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class ClassesTable extends JBTable implements DataProvider, Disposable
 {
-	public static final DataKey<ReferenceType> SELECTED_CLASS_KEY = DataKey.create("ClassesTable.SelectedClass");
-	public static final DataKey<InstancesProvider> NEW_INSTANCES_PROVIDER_KEY = DataKey.create("ClassesTable.NewInstances");
-	public static final DataKey<ReferenceCountProvider> REF_COUNT_PROVIDER_KEY = DataKey.create("ClassesTable.ReferenceCountProvider");
+	public static final Key<ReferenceType> SELECTED_CLASS_KEY = Key.create("ClassesTable.SelectedClass");
+	public static final Key<InstancesProvider> NEW_INSTANCES_PROVIDER_KEY = Key.create("ClassesTable.NewInstances");
+	public static final Key<ReferenceCountProvider> REF_COUNT_PROVIDER_KEY = Key.create("ClassesTable.ReferenceCountProvider");
 
 	private static final Border EMPTY_BORDER = BorderFactory.createEmptyBorder();
 
@@ -305,13 +305,13 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 
 	@Nullable
 	@Override
-	public Object getData(@NonNls String dataId)
+	public Object getData(@NonNls Key dataId)
 	{
-		if(SELECTED_CLASS_KEY.is(dataId))
+		if(SELECTED_CLASS_KEY == dataId)
 		{
 			return getSelectedClass();
 		}
-		if(NEW_INSTANCES_PROVIDER_KEY.is(dataId))
+		if(NEW_INSTANCES_PROVIDER_KEY == dataId)
 		{
 			ReferenceType selectedClass = getSelectedClass();
 			if(selectedClass != null)
@@ -325,7 +325,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 			}
 		}
 
-		if(REF_COUNT_PROVIDER_KEY.is(dataId))
+		if(REF_COUNT_PROVIDER_KEY == dataId)
 		{
 			return myCountProvider;
 		}

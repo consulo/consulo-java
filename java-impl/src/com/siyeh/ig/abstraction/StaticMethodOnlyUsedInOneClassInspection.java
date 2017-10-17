@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JComponent;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -30,6 +29,7 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.AsyncResult;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
@@ -120,13 +120,14 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseInspection
 				final DataContext dataContext = new DataContext()
 				{
 					@Override
-					public Object getData(@NonNls String name)
+					@SuppressWarnings("unchecked")
+					public <T> T getData(@NotNull Key<T> key)
 					{
-						if(LangDataKeys.TARGET_PSI_ELEMENT.is(name))
+						if(LangDataKeys.TARGET_PSI_ELEMENT == key)
 						{
-							return usageClass.getElement();
+							return (T) usageClass.getElement();
 						}
-						return originalContext.getData(name);
+						return originalContext.getData(key);
 					}
 				};
 				moveHandler.invoke(project, new PsiElement[]{method}, dataContext);

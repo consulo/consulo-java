@@ -389,7 +389,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool
 		{
 			final AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
 			asyncResult.doWhenDone(dataContext -> {
-				final Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
+				final Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
 				assert editor != null;
 				final TextRange textRange = ((ProblemDescriptorBase) descriptor).getTextRange();
 				editor.getSelectionModel().setSelection(textRange.getStartOffset(), textRange.getEndOffset());

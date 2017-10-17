@@ -32,12 +32,12 @@ import com.intellij.debugger.ui.impl.watch.DebuggerTree;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionPopupMenu;
 import com.intellij.openapi.actionSystem.CustomShortcutSet;
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.keymap.KeymapManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.wm.ex.IdeFocusTraversalPolicy;
 import com.intellij.ui.PopupHandler;
 import com.intellij.util.SingleAlarm;
@@ -46,7 +46,7 @@ import consulo.internal.com.sun.jdi.VMDisconnectedException;
 
 public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements DataProvider, Disposable
 {
-	public static final DataKey<DebuggerTreePanel> DATA_KEY = DataKey.create("DebuggerPanel");
+	public static final Key<DebuggerTreePanel> DATA_KEY = Key.create("DebuggerPanel");
 
 	private final SingleAlarm myRebuildAlarm = new SingleAlarm(new Runnable()
 	{
@@ -154,9 +154,9 @@ public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements
 	}
 
 	@Override
-	public Object getData(String dataId)
+	public Object getData(Key dataId)
 	{
-		if(DATA_KEY.is(dataId))
+		if(DATA_KEY == dataId)
 		{
 			return this;
 		}

@@ -15,6 +15,19 @@
  */
 package com.intellij.refactoring.anonymousToInner;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -37,11 +50,6 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.classMembers.ElementNeedsThis;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class AnonymousToInnerHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.anonymousToInner.AnonymousToInnerHandler");
@@ -62,7 +70,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
 
   public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiAnonymousClass) {
-      invoke(project, PlatformDataKeys.EDITOR.getData(dataContext), (PsiAnonymousClass)elements[0]);
+      invoke(project, dataContext.getData(PlatformDataKeys.EDITOR), (PsiAnonymousClass)elements[0]);
     }
   }
 

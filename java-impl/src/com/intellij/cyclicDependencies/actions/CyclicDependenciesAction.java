@@ -15,22 +15,34 @@
  */
 package com.intellij.cyclicDependencies.actions;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import org.jetbrains.annotations.Nullable;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.analysis.JavaAnalysisScope;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.IdeBorderFactory;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 /**
  * User: anna
@@ -56,8 +68,8 @@ public class CyclicDependenciesAction extends AnAction{
 
   public void actionPerformed(AnActionEvent e) {
     DataContext dataContext = e.getDataContext();
-    final Project project = CommonDataKeys.PROJECT.getData(dataContext);
-    final Module module = LangDataKeys.MODULE.getData(dataContext);
+    final Project project = e.getData(CommonDataKeys.PROJECT);
+    final Module module = e.getData(LangDataKeys.MODULE);
     if (project != null) {
       AnalysisScope scope = getInspectionScope(dataContext);
       if (scope == null || scope.getScopeType() != AnalysisScope.MODULES){
@@ -90,7 +102,7 @@ public class CyclicDependenciesAction extends AnAction{
 
   @Nullable
   private static AnalysisScope getInspectionScope(final DataContext dataContext) {
-    final Project project = CommonDataKeys.PROJECT.getData(dataContext);
+    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     if (project == null) return null;
 
     AnalysisScope scope = getInspectionScopeImpl(dataContext);
@@ -101,22 +113,22 @@ public class CyclicDependenciesAction extends AnAction{
   @Nullable
   private static AnalysisScope getInspectionScopeImpl(DataContext dataContext) {
     //Possible scopes: package, project, module.
-    Project projectContext = PlatformDataKeys.PROJECT_CONTEXT.getData(dataContext);
+    Project projectContext = dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT);
     if (projectContext != null) {
       return null;
     }
 
-    Module moduleContext = LangDataKeys.MODULE_CONTEXT.getData(dataContext);
+    Module moduleContext = dataContext.getData(LangDataKeys.MODULE_CONTEXT);
     if (moduleContext != null) {
       return null;
     }
 
-    Module [] modulesArray = LangDataKeys.MODULE_CONTEXT_ARRAY.getData(dataContext);
+    Module [] modulesArray = dataContext.getData(LangDataKeys.MODULE_CONTEXT_ARRAY);
     if (modulesArray != null) {
       return new AnalysisScope(modulesArray);
     }
 
-    PsiElement psiTarget = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+    PsiElement psiTarget = dataContext.getData(LangDataKeys.PSI_ELEMENT);
     if (psiTarget instanceof PsiDirectory) {
       PsiDirectory psiDirectory = (PsiDirectory)psiTarget;
       if (!psiDirectory.getManager().isInProject(psiDirectory)) return null;
@@ -126,7 +138,7 @@ public class CyclicDependenciesAction extends AnAction{
       PsiJavaPackage pack = (PsiJavaPackage)psiTarget;
       PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(pack.getProject()));
       if (dirs.length == 0) return null;
-      return new JavaAnalysisScope(pack, LangDataKeys.MODULE.getData(dataContext));
+      return new JavaAnalysisScope(pack, dataContext.getData(LangDataKeys.MODULE));
     }
 
     return null;
@@ -134,7 +146,7 @@ public class CyclicDependenciesAction extends AnAction{
 
   @Nullable
   private static AnalysisScope getProjectScope(DataContext dataContext) {
-    final Project data = CommonDataKeys.PROJECT.getData(dataContext);
+    final Project data = dataContext.getData(CommonDataKeys.PROJECT);
     if (data == null) {
       return null;
     }
@@ -143,7 +155,7 @@ public class CyclicDependenciesAction extends AnAction{
 
   @Nullable
   private static AnalysisScope getModuleScope(DataContext dataContext) {
-    final Module data = LangDataKeys.MODULE.getData(dataContext);
+    final Module data = dataContext.getData(LangDataKeys.MODULE);
     if (data == null) {
       return null;
     }

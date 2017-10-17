@@ -44,7 +44,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler
 		PsiElement element = findTargetMember(file, editor);
 		if(element == null)
 		{
-			element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+			element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
 		}
 		invokeOnElement(project, editor, element);
 	}
@@ -73,7 +73,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler
 		{
 			return;
 		}
-		Editor editor = dataContext != null ? PlatformDataKeys.EDITOR.getData(dataContext) : null;
+		Editor editor = dataContext != null ? dataContext.getData(PlatformDataKeys.EDITOR) : null;
 		invokeOnElement(project, editor, elements[0]);
 	}
 

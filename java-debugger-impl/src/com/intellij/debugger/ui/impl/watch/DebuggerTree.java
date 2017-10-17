@@ -64,7 +64,6 @@ import com.intellij.debugger.ui.tree.render.ArrayRenderer;
 import com.intellij.debugger.ui.tree.render.ChildrenBuilder;
 import com.intellij.debugger.ui.tree.render.ClassRenderer;
 import com.intellij.debugger.ui.tree.render.NodeRenderer;
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -87,7 +86,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 	private static final Logger LOG = Logger.getInstance(DebuggerTree.class);
 	protected static final Key<Rectangle> VISIBLE_RECT = Key.create("VISIBLE_RECT");
 
-	public static final DataKey<DebuggerTree> DATA_KEY = DataKey.create("DebuggerTree");
+	public static final Key<DebuggerTree> DATA_KEY = Key.create("DebuggerTree");
 
 	protected final NodeManagerImpl myNodeManager;
 
@@ -174,9 +173,9 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
 	}
 
 	@Override
-	public Object getData(String dataId)
+	public Object getData(@NotNull Key dataId)
 	{
-		if(DATA_KEY.is(dataId))
+		if(DATA_KEY == dataId)
 		{
 			return this;
 		}

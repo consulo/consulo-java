@@ -15,6 +15,9 @@
  */
 package com.intellij.refactoring.encapsulateFields;
 
+import java.util.HashSet;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
@@ -29,9 +32,6 @@ import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashSet;
 
 public class EncapsulateFieldsHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.encapsulateFields.EncapsulateFieldsHandler");
@@ -98,7 +98,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
           else {
             String message = RefactoringBundle.getCannotRefactorMessage(
               RefactoringBundle.message("fields.to.be.refactored.should.belong.to.the.same.class"));
-            Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
+            Editor editor = dataContext.getData(CommonDataKeys.EDITOR);
             CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
             return;
           }
@@ -109,7 +109,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
     LOG.assertTrue(aClass != null);
     final PsiField[] fields = aClass.getFields();
     if (fields.length == 0) {
-      CommonRefactoringUtil.showErrorHint(project, CommonDataKeys.EDITOR.getData(dataContext), "Class has no fields to encapsulate",
+      CommonRefactoringUtil.showErrorHint(project, dataContext.getData(CommonDataKeys.EDITOR), "Class has no fields to encapsulate",
                                           REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
       return;
     }
@@ -117,7 +117,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
     if (aClass.isInterface()) {
       String message = RefactoringBundle.getCannotRefactorMessage(
         RefactoringBundle.message("encapsulate.fields.refactoring.cannot.be.applied.to.interface"));
-      Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
+      Editor editor = dataContext.getData(CommonDataKeys.EDITOR);
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.ENCAPSULATE_FIELDS);
       return;
     }

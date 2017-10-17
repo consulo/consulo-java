@@ -20,6 +20,10 @@
  */
 package com.intellij.ide.favoritesTreeView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.reference.RefMethodImpl;
 import com.intellij.ide.favoritesTreeView.smartPointerPsiNodes.MethodSmartPointerNode;
 import com.intellij.ide.projectView.ViewSettings;
@@ -37,101 +41,125 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.psi.util.PsiFormatUtil;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
+public class PsiMethodFavoriteNodeProvider extends FavoriteNodeProvider
+{
+	@Override
+	public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings)
+	{
+		final Project project = context.getData(CommonDataKeys.PROJECT);
+		if(project == null)
+		{
+			return null;
+		}
+		PsiElement[] elements = context.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
+		if(elements == null)
+		{
+			final PsiElement element = context.getData(LangDataKeys.PSI_ELEMENT);
+			if(element != null)
+			{
+				elements = new PsiElement[]{element};
+			}
+		}
+		if(elements != null)
+		{
+			final Collection<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+			for(PsiElement element : elements)
+			{
+				if(element instanceof PsiMethod)
+				{
+					result.add(new MethodSmartPointerNode(project, element, viewSettings));
+				}
+			}
+			return result.isEmpty() ? null : result;
+		}
+		return null;
+	}
 
-public class PsiMethodFavoriteNodeProvider extends FavoriteNodeProvider {
-  @Override
-  public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
-    final Project project = CommonDataKeys.PROJECT.getData(context);
-    if (project == null) return null;
-    PsiElement[] elements = LangDataKeys.PSI_ELEMENT_ARRAY.getData(context);
-    if (elements == null) {
-      final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(context);
-      if (element != null) {
-        elements = new PsiElement[]{element};
-      }
-    }
-    if (elements != null) {
-      final Collection<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
-      for (PsiElement element : elements) {
-        if (element instanceof PsiMethod) {
-          result.add(new MethodSmartPointerNode(project, element, viewSettings));
-        }
-      }
-      return result.isEmpty() ? null : result;
-    }
-    return null;
-  }
+	@Override
+	public AbstractTreeNode createNode(final Project project, final Object element, final ViewSettings viewSettings)
+	{
+		if(element instanceof PsiMethod)
+		{
+			return new MethodSmartPointerNode(project, element, viewSettings);
+		}
+		return super.createNode(project, element, viewSettings);
+	}
 
-  @Override
-  public AbstractTreeNode createNode(final Project project, final Object element, final ViewSettings viewSettings) {
-    if (element instanceof PsiMethod) {
-      return new MethodSmartPointerNode(project, element, viewSettings);
-    }
-    return super.createNode(project, element, viewSettings);
-  }
+	@Override
+	public boolean elementContainsFile(final Object element, final VirtualFile vFile)
+	{
+		return false;
+	}
 
-  @Override
-  public boolean elementContainsFile(final Object element, final VirtualFile vFile) {
-    return false;
-  }
+	@Override
+	public int getElementWeight(final Object value, final boolean isSortByType)
+	{
+		if(value instanceof PsiMethod)
+		{
+			return 5;
+		}
+		return -1;
+	}
 
-  @Override
-  public int getElementWeight(final Object value, final boolean isSortByType) {
-    if (value instanceof PsiMethod){
-      return 5;
-    }
-    return -1;
-  }
+	@Override
+	public String getElementLocation(final Object element)
+	{
+		if(element instanceof PsiMethod)
+		{
+			final PsiClass parent = ((PsiMethod) element).getContainingClass();
+			if(parent != null)
+			{
+				return ClassPresentationUtil.getNameForClass(parent, true);
+			}
+		}
+		return null;
+	}
 
-  @Override
-  public String getElementLocation(final Object element) {
-    if (element instanceof PsiMethod) {
-      final PsiClass parent = ((PsiMethod)element).getContainingClass();
-      if (parent != null) {
-        return ClassPresentationUtil.getNameForClass(parent, true);
-      }
-    }
-    return null;
-  }
+	@Override
+	public boolean isInvalidElement(final Object element)
+	{
+		return element instanceof PsiMethod && !((PsiMethod) element).isValid();
+	}
 
-  @Override
-  public boolean isInvalidElement(final Object element) {
-    return element instanceof PsiMethod && !((PsiMethod)element).isValid();
-  }
+	@Override
+	@NotNull
+	public String getFavoriteTypeId()
+	{
+		return "method";
+	}
 
-  @Override
-  @NotNull
-  public String getFavoriteTypeId() {
-    return "method";
-  }
+	@Override
+	public String getElementUrl(final Object element)
+	{
+		if(element instanceof PsiMethod)
+		{
+			PsiMethod aMethod = (PsiMethod) element;
+			return PsiFormatUtil.getExternalName(aMethod);
+		}
+		return null;
+	}
 
-  @Override
-  public String getElementUrl(final Object element) {
-     if (element instanceof PsiMethod) {
-      PsiMethod aMethod = (PsiMethod)element;
-      return PsiFormatUtil.getExternalName(aMethod);
-    }
-    return null;
-  }
+	@Override
+	public String getElementModuleName(final Object element)
+	{
+		if(element instanceof PsiMethod)
+		{
+			PsiMethod aMethod = (PsiMethod) element;
+			Module module = ModuleUtilCore.findModuleForPsiElement(aMethod);
+			return module != null ? module.getName() : null;
+		}
+		return null;
+	}
 
-  @Override
-  public String getElementModuleName(final Object element) {
-     if (element instanceof PsiMethod) {
-      PsiMethod aMethod = (PsiMethod)element;
-      Module module = ModuleUtilCore.findModuleForPsiElement(aMethod);
-      return module != null ? module.getName() : null;
-    }
-    return null;
-  }
-
-  @Override
-  public Object[] createPathFromUrl(final Project project, final String url, final String moduleName) {
-    final PsiMethod method = RefMethodImpl.findPsiMethod(PsiManager.getInstance(project), url);
-    if (method == null) return null;
-    return new Object[]{method};
-  }
+	@Override
+	public Object[] createPathFromUrl(final Project project, final String url, final String moduleName)
+	{
+		final PsiMethod method = RefMethodImpl.findPsiMethod(PsiManager.getInstance(project), url);
+		if(method == null)
+		{
+			return null;
+		}
+		return new Object[]{method};
+	}
 }

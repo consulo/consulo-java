@@ -15,9 +15,41 @@
  */
 package org.intellij.plugins.intelliLang.inject.config.ui;
 
+import gnu.trove.THashMap;
+import gnu.trove.THashSet;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+
+import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
+import org.intellij.plugins.intelliLang.util.PsiUtilEx;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CustomShortcutSet;
+import com.intellij.openapi.actionSystem.DataSink;
+import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.TypeSafeDataProvider;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
@@ -25,10 +57,15 @@ import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiFormatUtil;
-import com.intellij.ui.*;
+import com.intellij.ui.BooleanTableCellRenderer;
+import com.intellij.ui.ColoredTreeCellRenderer;
+import com.intellij.ui.ReferenceEditorWithBrowseButton;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.TreeTableSpeedSearch;
 import com.intellij.ui.dualView.TreeTableView;
 import com.intellij.ui.treeStructure.treetable.ListTreeTableModelOnColumns;
 import com.intellij.ui.treeStructure.treetable.TreeColumnInfo;
@@ -38,22 +75,6 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Convertor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.tree.TreeUtil;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
-import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
-import org.intellij.plugins.intelliLang.util.PsiUtilEx;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.*;
 
 public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameterInjection> {
 
@@ -391,8 +412,8 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
       super(treeTableModel);
     }
 
-    public void calcData(final DataKey key, final DataSink sink) {
-      if (LangDataKeys.PSI_ELEMENT.equals(key)) {
+    public void calcData(final Key<?> key, final DataSink sink) {
+      if (LangDataKeys.PSI_ELEMENT == key) {
         final Collection selection = getSelection();
         if (!selection.isEmpty()) {
           final Object o = ((DefaultMutableTreeNode)selection.iterator().next()).getUserObject();

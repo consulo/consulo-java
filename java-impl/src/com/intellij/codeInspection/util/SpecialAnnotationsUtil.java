@@ -16,6 +16,17 @@
 
 package com.intellij.codeInspection.util;
 
+import java.awt.BorderLayout;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.ide.DataManager;
@@ -31,18 +42,14 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.*;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.AnActionButtonRunnable;
+import com.intellij.ui.SeparatorFactory;
+import com.intellij.ui.SortedListModel;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IconUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import java.awt.*;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author Gregory.Shrago
@@ -94,7 +101,7 @@ public class SpecialAnnotationsUtil {
       .setAddAction(new AnActionButtonRunnable() {
         @Override
         public void run(AnActionButton button) {
-          Project project = CommonDataKeys.PROJECT.getData(DataManager.getInstance().getDataContext(injectionList));
+          Project project = DataManager.getInstance().getDataContext(injectionList).getData(CommonDataKeys.PROJECT);
           if (project == null) project = ProjectManager.getInstance().getDefaultProject();
           TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project)
             .createWithInnerClassesScopeChooser(InspectionsBundle.message("special.annotations.list.annotation.class"),

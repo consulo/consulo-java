@@ -24,13 +24,26 @@
  */
 package com.intellij.refactoring.inheritanceToDelegation;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.CommonClassNames;
+import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
@@ -39,12 +52,6 @@ import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.classMembers.MemberInfoStorage;
 import com.intellij.util.containers.HashMap;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class InheritanceToDelegationHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.inheritanceToDelegation.InheritanceToDelegationHandler");
@@ -89,7 +96,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
 
     final PsiClass aClass = (PsiClass)elements[0];
 
-    Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
+    Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
     if (aClass.isInterface()) {
       String message = RefactoringBundle.getCannotRefactorMessage(RefactoringBundle.message("class.is.interface", aClass.getQualifiedName()));
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INHERITANCE_TO_DELEGATION);

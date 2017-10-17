@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.introduceparameterobject;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -24,14 +25,19 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.ScrollingModel;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiCompiledElement;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiParameterList;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.NotNull;
 
 public class IntroduceParameterObjectHandler implements RefactoringActionHandler {
   private static final String REFACTORING_NAME = RefactorJBundle.message("introduce.parameter.object");
@@ -39,7 +45,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
   public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     final ScrollingModel scrollingModel = editor.getScrollingModel();
     scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-    final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+    final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
     PsiMethod selectedMethod = null;
     if (element instanceof PsiMethod) {
       selectedMethod = (PsiMethod)element;
@@ -79,7 +85,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     if (method == null) {
       return;
     }
-    Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
+    Editor editor = dataContext.getData(PlatformDataKeys.EDITOR);
     invoke(project, method, editor);
   }
 

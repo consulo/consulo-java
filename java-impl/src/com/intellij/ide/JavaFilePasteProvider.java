@@ -41,8 +41,8 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class JavaFilePasteProvider implements PasteProvider {
   public void performPaste(@NotNull final DataContext dataContext) {
-    final Project project = CommonDataKeys.PROJECT.getData(dataContext);
-    final IdeView ideView = LangDataKeys.IDE_VIEW.getData(dataContext);
+    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final IdeView ideView = dataContext.getData(LangDataKeys.IDE_VIEW);
     if (project == null || ideView == null) return;
     final PsiJavaFile javaFile = createJavaFileFromClipboardContent(project);
     if (javaFile == null) return;
@@ -114,8 +114,8 @@ public class JavaFilePasteProvider implements PasteProvider {
   }
 
   public boolean isPasteEnabled(@NotNull final DataContext dataContext) {
-    final Project project = CommonDataKeys.PROJECT.getData(dataContext);
-    final IdeView ideView = LangDataKeys.IDE_VIEW.getData(dataContext);
+    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final IdeView ideView = dataContext.getData(LangDataKeys.IDE_VIEW);
     if (project == null || ideView == null || ideView.getDirectories().length == 0) {
       return false;
     }

@@ -54,13 +54,13 @@ public final class UnscrambleAction extends AnAction implements DumbAware {
   }
   
   public void actionPerformed(AnActionEvent e) {
-    final Project project = CommonDataKeys.PROJECT.getData(e.getDataContext());
+    final Project project = e.getData(CommonDataKeys.PROJECT);
     new UnscrambleDialog(project).show();
   }
 
   public void update(AnActionEvent event) {
     final Presentation presentation = event.getPresentation();
-    final Project project = CommonDataKeys.PROJECT.getData(event.getDataContext());
+    final Project project = event.getData(CommonDataKeys.PROJECT);
     presentation.setEnabled(project != null);
   }
 }

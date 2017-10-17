@@ -44,6 +44,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.util.Key;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.Alarm;
 
@@ -213,9 +214,9 @@ public class ThreadsPanel extends DebuggerTreePanel
 	}
 
 	@Override
-	public Object getData(String dataId)
+	public Object getData(Key dataId)
 	{
-		if(PlatformDataKeys.HELP_ID.is(dataId))
+		if(PlatformDataKeys.HELP_ID == dataId)
 		{
 			return HELP_ID;
 		}

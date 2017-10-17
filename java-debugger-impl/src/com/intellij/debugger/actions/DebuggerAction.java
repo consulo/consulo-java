@@ -60,13 +60,13 @@ public abstract class DebuggerAction extends AnAction
 	@Nullable
 	public static DebuggerTree getTree(DataContext dataContext)
 	{
-		return DebuggerTree.DATA_KEY.getData(dataContext);
+		return dataContext.getData(DebuggerTree.DATA_KEY);
 	}
 
 	@Nullable
 	public static DebuggerTreePanel getPanel(DataContext dataContext)
 	{
-		return DebuggerTreePanel.DATA_KEY.getData(dataContext);
+		return dataContext.getData(DebuggerTreePanel.DATA_KEY);
 	}
 
 	@Nullable
@@ -129,7 +129,7 @@ public abstract class DebuggerAction extends AnAction
 		}
 		else
 		{
-			Project project = CommonDataKeys.PROJECT.getData(dataContext);
+			Project project = dataContext.getData(CommonDataKeys.PROJECT);
 			return project != null ? (DebuggerManagerEx.getInstanceEx(project)).getContext() : DebuggerContextImpl.EMPTY_CONTEXT;
 		}
 	}

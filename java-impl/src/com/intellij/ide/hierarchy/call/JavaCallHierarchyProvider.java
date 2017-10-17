@@ -15,17 +15,17 @@
  */
 package com.intellij.ide.hierarchy.call;
 
-import com.intellij.ide.hierarchy.HierarchyProvider;
-import com.intellij.ide.hierarchy.HierarchyBrowser;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.hierarchy.CallHierarchyBrowserBase;
+import com.intellij.ide.hierarchy.HierarchyBrowser;
+import com.intellij.ide.hierarchy.HierarchyProvider;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.util.PsiTreeUtil;
 
 /**
  * @author yole
@@ -33,10 +33,10 @@ import org.jetbrains.annotations.NotNull;
 public class JavaCallHierarchyProvider implements HierarchyProvider {
   @Override
   public PsiElement getTarget(@NotNull final DataContext dataContext) {
-    final Project project = CommonDataKeys.PROJECT.getData(dataContext);
+    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     if (project == null) return null;
 
-    final PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+    final PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
     return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
   }
 

@@ -20,32 +20,50 @@
  */
 package com.intellij.analysis;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.impl.dataRules.GetDataRule;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 
-public class AnalysisScopeRule implements GetDataRule {
-  @Override
-  public Object getData(final DataProvider dataProvider) {
-    final Object psiFile = dataProvider.getData(LangDataKeys.PSI_FILE.getName());
-    if (psiFile instanceof PsiJavaFile) {
-      return new JavaAnalysisScope((PsiJavaFile)psiFile);
-    }
-    Object psiTarget = dataProvider.getData(LangDataKeys.PSI_ELEMENT.getName());
-    if (psiTarget instanceof PsiJavaPackage) {
-      PsiJavaPackage pack = (PsiJavaPackage)psiTarget;
-      PsiManager manager = pack.getManager();
-      if (!manager.isInProject(pack)) return null;
-      PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(manager.getProject()));
-      if (dirs.length == 0) return null;
-      return new JavaAnalysisScope(pack, (Module)dataProvider.getData(LangDataKeys.MODULE.getName()));
-    }
-    return null;
-  }
+public class AnalysisScopeRule implements GetDataRule<AnalysisScope>
+{
+	@NotNull
+	@Override
+	public Key<AnalysisScope> getKey()
+	{
+		return AnalysisScopeUtil.KEY;
+	}
+
+	@Override
+	public AnalysisScope getData(@NotNull final DataProvider dataProvider)
+	{
+		final Object psiFile = dataProvider.getDataUnchecked(LangDataKeys.PSI_FILE);
+		if(psiFile instanceof PsiJavaFile)
+		{
+			return new JavaAnalysisScope((PsiJavaFile) psiFile);
+		}
+		Object psiTarget = dataProvider.getDataUnchecked(LangDataKeys.PSI_ELEMENT);
+		if(psiTarget instanceof PsiJavaPackage)
+		{
+			PsiJavaPackage pack = (PsiJavaPackage) psiTarget;
+			PsiManager manager = pack.getManager();
+			if(!manager.isInProject(pack))
+			{
+				return null;
+			}
+			PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(manager.getProject()));
+			if(dirs.length == 0)
+			{
+				return null;
+			}
+			return new JavaAnalysisScope(pack, dataProvider.getDataUnchecked(LangDataKeys.MODULE));
+		}
+		return null;
+	}
 }

@@ -15,18 +15,23 @@
  */
 package com.intellij.refactoring.invertBoolean;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.util.SuperMethodWarningUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiVariable;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ven
@@ -36,7 +41,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
 
   public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    PsiElement element = LangDataKeys.PSI_ELEMENT.getData(dataContext);
+    PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
     if (element instanceof PsiMethod) {
       invoke((PsiMethod)element, project, editor);
     }

@@ -97,7 +97,7 @@ public class I18nizeAction extends AnAction {
   }
 
   private static Editor getEditor(final AnActionEvent e) {
-    return PlatformDataKeys.EDITOR.getData(e.getDataContext());
+    return e.getData(PlatformDataKeys.EDITOR);
   }
 
   public static void doI18nSelectedString(final @NotNull Project project,
@@ -148,7 +148,7 @@ public class I18nizeAction extends AnAction {
     final Editor editor = getEditor(e);
     final Project project = editor.getProject();
     assert project != null;
-    final PsiFile psiFile = LangDataKeys.PSI_FILE.getData(e.getDataContext());
+    final PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
     if (psiFile == null) return;
     final I18nQuickFixHandler handler = getHandler(e);
     if (handler == null) return;

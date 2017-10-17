@@ -15,6 +15,22 @@
  */
 package com.siyeh.ig.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FontMetrics;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.util.Collection;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellEditor;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.ide.DataManager;
@@ -27,14 +43,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.ui.*;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.AnActionButtonRunnable;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.ListUtil;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
-import org.jetbrains.annotations.NonNls;
-
-import javax.swing.*;
-import javax.swing.table.TableCellEditor;
-import java.awt.*;
-import java.util.Collection;
 
 public class UiUtils {
 
@@ -95,7 +109,7 @@ public class UiUtils {
         @Override
         public void run(AnActionButton button) {
           final DataContext dataContext = DataManager.getInstance().getDataContext(table);
-          final Project project = CommonDataKeys.PROJECT.getData(dataContext);
+          final Project project = dataContext.getData(CommonDataKeys.PROJECT);
           if (project == null) {
             return;
           }
@@ -153,7 +167,7 @@ public class UiUtils {
         @Override
         public void run(AnActionButton anActionButton) {
           final DataContext dataContext = DataManager.getInstance().getDataContext(list);
-          final Project project = CommonDataKeys.PROJECT.getData(dataContext);
+          final Project project = dataContext.getData(CommonDataKeys.PROJECT);
           if (project == null) {
             return;
           }

@@ -54,7 +54,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 
 	public void actionPerformed(AnActionEvent e)
 	{
-		final Project project = CommonDataKeys.PROJECT.getData(e.getDataContext());
+		final Project project = e.getData(CommonDataKeys.PROJECT);
 		if(project == null)
 		{
 			return;
@@ -395,7 +395,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 	public void update(AnActionEvent event)
 	{
 		Presentation presentation = event.getPresentation();
-		Project project = CommonDataKeys.PROJECT.getData(event.getDataContext());
+		Project project = event.getData(CommonDataKeys.PROJECT);
 		if(project == null)
 		{
 			presentation.setEnabled(false);

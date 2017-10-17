@@ -19,6 +19,12 @@
  */
 package com.intellij.internal;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -44,12 +50,10 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;
 
-import java.util.*;
-
 public class UsedIconsListingAction extends AnAction {
   @Override
   public void actionPerformed(AnActionEvent e) {
-    final Project project = CommonDataKeys.PROJECT.getData(e.getDataContext());
+    final Project project = e.getData(CommonDataKeys.PROJECT);
 
     final MultiMap<String, PsiExpression> calls = new MultiMap<String, PsiExpression>();
 

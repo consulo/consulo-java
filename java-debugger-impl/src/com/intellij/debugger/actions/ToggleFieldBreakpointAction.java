@@ -101,7 +101,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 							}
 						}
 
-						final Editor editor = CommonDataKeys.EDITOR.getData(e.getDataContext());
+						final Editor editor = e.getData(CommonDataKeys.EDITOR);
 						if(editor != null)
 						{
 							manager.editBreakpoint(fieldBreakpoint, editor);
@@ -201,7 +201,7 @@ public class ToggleFieldBreakpointAction extends AnAction
 
 		if(DebuggerAction.isContextView(event))
 		{
-			DebuggerTree tree = DebuggerTree.DATA_KEY.getData(dataContext);
+			DebuggerTree tree = event.getData(DebuggerTree.DATA_KEY);
 			if(tree != null && tree.getSelectionPath() != null)
 			{
 				DebuggerTreeNodeImpl node = ((DebuggerTreeNodeImpl) tree.getSelectionPath().getLastPathComponent());
