@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
   <extensions defaultExtensionNs="com.intellij">
     <referenceProviderType key="Properties File Key Provider"
                            implementationClass="com.intellij.lang.properties.PropertiesReferenceProvider"/>
@@ -22,7 +22,7 @@
                      key="unused.message.format.parameter.display.name" groupKey="properties.files.inspection.group.display.name"
                      enabledByDefault="true" level="WARNING"
                      implementationClass="com.intellij.lang.properties.UnusedMessageFormatParameterInspection"/>
-    <localInspection language="JAVA" shortName="DuplicateStringLiteralInspection" bundle="messages.InspectionsBundle"
+    <localInspection language="JAVA" groupPath="Java" shortName="DuplicateStringLiteralInspection" bundle="messages.InspectionsBundle"
                      key="inspection.duplicates.display.name" groupName="Internationalization issues" enabledByDefault="false"
                      level="WARNING"
                      implementationClass="com.intellij.codeInspection.duplicateStringLiteral.DuplicateStringLiteralInspection"/>
