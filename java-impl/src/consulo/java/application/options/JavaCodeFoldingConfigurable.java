@@ -27,8 +27,6 @@ import consulo.java.JavaBundle;
 import consulo.options.SimpleConfigurableByProperties;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
-import consulo.ui.Components;
-import consulo.ui.Layouts;
 import consulo.ui.RequiredUIAccess;
 import consulo.ui.VerticalLayout;
 
@@ -43,7 +41,7 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
 	@Override
 	protected Component createLayout(PropertyBuilder propertyBuilder)
 	{
-		VerticalLayout layout = Layouts.vertical();
+		VerticalLayout layout = VerticalLayout.create();
 
 		JavaCodeFoldingSettings settings = JavaCodeFoldingSettings.getInstance();
 
@@ -73,7 +71,7 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
 	@RequiredUIAccess
 	private void checkBox(String text, VerticalLayout layout, @NotNull PropertyBuilder builder, @NotNull Supplier<Boolean> getter, @NotNull Consumer<Boolean> setter)
 	{
-		CheckBox checkBox = Components.checkBox(text);
+		CheckBox checkBox = CheckBox.create(text);
 		builder.add(checkBox, getter, setter);
 		layout.add(checkBox);
 	}
