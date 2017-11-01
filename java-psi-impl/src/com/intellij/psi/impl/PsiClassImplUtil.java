@@ -35,16 +35,13 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.UserDataHolderEx;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.PsiClassReferenceListStub;
-import com.intellij.psi.impl.source.ClassInnerStuffCache;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.infos.MethodCandidateInfo;
@@ -68,19 +65,15 @@ import com.intellij.psi.util.ParameterizedCachedValueProvider;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.ui.IconDeferrer;
-import com.intellij.ui.RowIcon;
-import com.intellij.util.BitUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.NullableFunction;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.SmartList;
+import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
-import consulo.psi.PsiPackage;
 
 /**
  * @author ik
@@ -90,8 +83,8 @@ public class PsiClassImplUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.PsiClassImplUtil");
 	private static final Key<ParameterizedCachedValue<Map<GlobalSearchScope, MembersMap>, PsiClass>> MAP_IN_CLASS_KEY = Key.create("MAP_KEY");
-	private static final String VALUES_METHOD = "values";
-	private static final String VALUE_OF_METHOD = "valueOf";
+
+	private static boolean JAVA_CORRECT_CLASS_TYPE_BY_PLACE_RESOLVE_SCOPE = SystemProperties.getBooleanProperty("java.correct.class.type.by.place.resolve.scope", true);
 
 	private PsiClassImplUtil()
 	{
@@ -259,7 +252,9 @@ public class PsiClassImplUtil
 
 	public enum MemberType
 	{
-		CLASS, FIELD, METHOD
+		CLASS,
+		FIELD,
+		METHOD
 	}
 
 	private static Map<String, PsiMember[]> getMap(@NotNull PsiClass aClass, @NotNull MemberType type)
@@ -447,9 +442,8 @@ public class PsiClassImplUtil
 				@Override
 				public boolean shouldProcess(DeclarationKind kind)
 				{
-					return key == MemberType.CLASS && kind == DeclarationKind.CLASS ||
-							key == MemberType.FIELD && (kind == DeclarationKind.FIELD || kind == DeclarationKind.ENUM_CONST) ||
-							key == MemberType.METHOD && kind == DeclarationKind.METHOD;
+					return key == MemberType.CLASS && kind == DeclarationKind.CLASS || key == MemberType.FIELD && (kind == DeclarationKind.FIELD || kind == DeclarationKind.ENUM_CONST) || key ==
+							MemberType.METHOD && kind == DeclarationKind.METHOD;
 				}
 			};
 			FilterScopeProcessor<MethodCandidateInfo> processor = new FilterScopeProcessor<MethodCandidateInfo>(filter)
@@ -457,9 +451,7 @@ public class PsiClassImplUtil
 				@Override
 				protected void add(@NotNull PsiElement element, @NotNull PsiSubstitutor substitutor)
 				{
-					if(key == MemberType.CLASS && element instanceof PsiClass ||
-							key == MemberType.METHOD && element instanceof PsiMethod ||
-							key == MemberType.FIELD && element instanceof PsiField)
+					if(key == MemberType.CLASS && element instanceof PsiClass || key == MemberType.METHOD && element instanceof PsiMethod || key == MemberType.FIELD && element instanceof PsiField)
 					{
 						allMembers.add((PsiMember) element);
 						String currentName = ((PsiMember) element).getName();
@@ -905,7 +897,7 @@ public class PsiClassImplUtil
 	@Nullable
 	public static <T extends PsiType> T correctType(@Nullable final T originalType, @NotNull final GlobalSearchScope resolveScope)
 	{
-		if(originalType == null || !Registry.is("java.correct.class.type.by.place.resolve.scope", true))
+		if(originalType == null || !JAVA_CORRECT_CLASS_TYPE_BY_PLACE_RESOLVE_SCOPE)
 		{
 			return originalType;
 		}

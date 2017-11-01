@@ -15,13 +15,23 @@
  */
 package com.intellij.ide.structureView.impl.java;
 
+import static com.intellij.psi.util.PsiFormatUtilBase.SHOW_NAME;
+import static com.intellij.psi.util.PsiFormatUtilBase.SHOW_PARAMETERS;
+import static com.intellij.psi.util.PsiFormatUtilBase.SHOW_TYPE;
+import static com.intellij.psi.util.PsiFormatUtilBase.TYPE_AFTER;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.SuperMethodsSearch;
@@ -29,14 +39,6 @@ import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.util.Function;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-
-import static com.intellij.psi.util.PsiFormatUtilBase.*;
 
 public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> implements SortableTreeElement {
 
@@ -82,7 +84,6 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
 
   @Override
   public String getLocationString() {
-    if (!Registry.is("show.method.base.class.in.java.file.structure")) return null;
     final PsiMethod method = getElement();
     if (myLocation == null) {
       if (isInherited()) {

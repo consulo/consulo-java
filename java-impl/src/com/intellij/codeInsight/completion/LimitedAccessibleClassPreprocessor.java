@@ -19,7 +19,6 @@ import gnu.trove.THashSet;
 
 import java.util.Set;
 
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -36,7 +35,7 @@ class LimitedAccessibleClassPreprocessor implements Processor<PsiClass>
 	private final CompletionParameters myParameters;
 	private final boolean myFilterByScope;
 	private final Consumer<PsiClass> myConsumer;
-	private final int myLimit = Registry.intValue("ide.completion.variant.limit");
+	private final int myLimit = 1000;
 	private int myCount;
 	private final Set<String> myQNames = new THashSet<>();
 	private final boolean myPkgContext;
@@ -79,7 +78,7 @@ class LimitedAccessibleClassPreprocessor implements Processor<PsiClass>
 			{
 				return true;
 			}
-			if(!StringUtil.isCapitalized(psiClass.getName()) && !Registry.is("ide.completion.show.lower.case.classes"))
+			if(!StringUtil.isCapitalized(psiClass.getName()))
 			{
 				return true;
 			}

@@ -49,19 +49,22 @@ import com.intellij.openapi.util.ClassConditionKey;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.util.SystemProperties;
 
 /**
  * @author peter
  */
 public class JavaMethodCallElement extends LookupItem<PsiMethod> implements TypedLookupItem, StaticallyImportable
 {
+	private static final boolean JAVA_COMPLETION_ARGUMENT_LIVE_TEMPLATE = SystemProperties.getBooleanProperty("java.completion.argument.live.template", false);
+	private static final boolean JAVA_COMPLETION_ARGUMENT_LIVE_TEMPLATE_COMPLETION = SystemProperties.getBooleanProperty("java.completion.argument.live.template.completion", false);
+
 	public static final ClassConditionKey<JavaMethodCallElement> CLASS_CONDITION_KEY = ClassConditionKey.create(JavaMethodCallElement.class);
 	@Nullable
 	private final PsiClass myContainingClass;
@@ -266,7 +269,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 				template.addTextSegment(", ");
 			}
 			String name = StringUtil.notNullize(parameters[i].getName());
-			Expression expression = Registry.is("java.completion.argument.live.template.completion", false) ? new AutoPopupCompletion() : new ConstantNode(name);
+			Expression expression = JAVA_COMPLETION_ARGUMENT_LIVE_TEMPLATE_COMPLETION ? new AutoPopupCompletion() : new ConstantNode(name);
 			template.addVariable(name, expression, new ConstantNode(name), true);
 		}
 		boolean finishInsideParens = method.isVarArgs();
@@ -284,7 +287,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 
 	public static boolean startArgumentLiveTemplate(InsertionContext context, PsiMethod method)
 	{
-		if(method.getParameterList().getParametersCount() == 0 || context.getCompletionChar() == Lookup.COMPLETE_STATEMENT_SELECT_CHAR || !Registry.is("java.completion.argument.live.template", false))
+		if(method.getParameterList().getParametersCount() == 0 || context.getCompletionChar() == Lookup.COMPLETE_STATEMENT_SELECT_CHAR || !JAVA_COMPLETION_ARGUMENT_LIVE_TEMPLATE)
 		{
 			return false;
 		}

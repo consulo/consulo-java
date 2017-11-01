@@ -38,7 +38,6 @@ import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -59,7 +58,7 @@ public class ChangedConstantsDependencyProcessor {
   private final CompileContext myContext;
   private final FieldChangeInfo[] myChangedFields;
   private final FieldChangeInfo[] myRemovedFields;
-  private final int MAX_CONSTANT_SEARCHES = Registry.intValue("compiler.max.static.constants.searches");
+  private final int MAX_CONSTANT_SEARCHES = 3000;
 
 
   public ChangedConstantsDependencyProcessor(Project project,

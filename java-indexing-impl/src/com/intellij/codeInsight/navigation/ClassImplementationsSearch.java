@@ -16,10 +16,8 @@
 package com.intellij.codeInsight.navigation;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFunctionalExpression;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.psi.search.SearchScope;
@@ -40,30 +38,14 @@ public class ClassImplementationsSearch implements QueryExecutor<PsiElement, Def
 
 	public static boolean processImplementations(final PsiClass psiClass, final Processor<PsiElement> processor, SearchScope scope)
 	{
-		if(!FunctionalExpressionSearch.search(psiClass, scope).forEach(new Processor<PsiFunctionalExpression>()
+		if(!FunctionalExpressionSearch.search(psiClass, scope).forEach(expression ->
 		{
-			@Override
-			public boolean process(PsiFunctionalExpression expression)
-			{
-				return processor.process(expression);
-			}
+			return processor.process(expression);
 		}))
 		{
 			return false;
 		}
 
-		final boolean showInterfaces = Registry.is("ide.goto.implementation.show.interfaces");
-		return ClassInheritorsSearch.search(psiClass, scope, true).forEach(new PsiElementProcessorAdapter<PsiClass>(new PsiElementProcessor<PsiClass>()
-		{
-			@Override
-			public boolean execute(@NotNull PsiClass element)
-			{
-				if(!showInterfaces && element.isInterface())
-				{
-					return true;
-				}
-				return processor.process(element);
-			}
-		}));
+		return ClassInheritorsSearch.search(psiClass, scope, true).forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiClass>) element -> processor.process(element)));
 	}
 }

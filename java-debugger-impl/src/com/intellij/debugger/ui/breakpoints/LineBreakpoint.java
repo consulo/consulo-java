@@ -50,7 +50,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaFullClassNameIndex;
@@ -487,7 +486,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 			sourceName = getFileName();
 		}
 
-		final boolean printFullTrace = Registry.is("debugger.breakpoint.message.full.trace");
+		final boolean printFullTrace = false;
 
 		StringBuilder builder = new StringBuilder();
 		if(printFullTrace)

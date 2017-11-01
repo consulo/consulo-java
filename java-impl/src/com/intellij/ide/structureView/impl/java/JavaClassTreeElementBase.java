@@ -20,9 +20,14 @@ import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.LocationPresentation;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.ui.UIUtil;
 
@@ -60,7 +65,6 @@ public abstract class JavaClassTreeElementBase<Value extends PsiElement> extends
 
   @Override
   public String getLocationString() {
-    if (!Registry.is("show.method.base.class.in.java.file.structure")) return null;
     if (isInherited()) {
       if (myLocation == null) {
         final Value element = getElement();

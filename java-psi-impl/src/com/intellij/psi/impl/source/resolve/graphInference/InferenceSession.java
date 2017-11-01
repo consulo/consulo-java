@@ -24,8 +24,6 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
@@ -44,6 +42,7 @@ import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.Function;
 import com.intellij.util.Processor;
 import com.intellij.util.Producer;
+import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 
 /**
@@ -51,6 +50,10 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class InferenceSession
 {
+	// JLS 18.5.2: if R \u03B8 is a parameterized type, G<A1, ..., An>, and one of A1, ..., An is a wildcard, then, for fresh inference variables \u03B21, ..., \u03B2n ...
+	// Javac creates fresh variables only for i: Ai is a wildcard
+	private static boolean JAVAC_FRESH_VARIABLES_FOR_CAPTURED_WILDCARDS_ONLY = SystemProperties.getBooleanProperty("javac.fresh.variables.for.captured.wildcards.only", true);
+
 	private static final Logger LOG = Logger.getInstance("#" + InferenceSession.class.getName());
 	private static final Key<PsiType> LOWER_BOUND = Key.create("LowBound");
 	private static final Key<PsiType> UPPER_BOUND = Key.create("UpperBound");
@@ -932,7 +935,7 @@ public class InferenceSession
 
 	private InferenceVariable[] initFreshVariablesForCapturedBounds(PsiTypeParameter[] typeParameters, PsiType[] parameters)
 	{
-		if(Registry.is("javac.fresh.variables.for.captured.wildcards.only", true))
+		if(JAVAC_FRESH_VARIABLES_FOR_CAPTURED_WILDCARDS_ONLY)
 		{
 			final List<PsiTypeParameter> capturedParams = new ArrayList<>();
 

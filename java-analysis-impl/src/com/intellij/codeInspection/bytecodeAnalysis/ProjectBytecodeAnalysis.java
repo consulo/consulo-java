@@ -40,7 +40,6 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.ModificationTracker;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
@@ -69,8 +68,6 @@ public class ProjectBytecodeAnalysis
 {
 	public static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.bytecodeAnalysis");
 	public static final Key<Boolean> INFERRED_ANNOTATION = Key.create("INFERRED_ANNOTATION");
-	public static final String NULLABLE_METHOD = "java.annotations.inference.nullable.method";
-	public static final String NULLABLE_METHOD_TRANSITIVITY = "java.annotations.inference.nullable.method.transitivity";
 	public static final int EQUATIONS_LIMIT = 1000;
 	private final Project myProject;
 	private final boolean nullableMethod;
@@ -84,8 +81,8 @@ public class ProjectBytecodeAnalysis
 	public ProjectBytecodeAnalysis(Project project)
 	{
 		myProject = project;
-		nullableMethod = Registry.is(NULLABLE_METHOD, false);
-		nullableMethodTransitivity = Registry.is(NULLABLE_METHOD_TRANSITIVITY, true);
+		nullableMethod = false;
+		nullableMethodTransitivity = true;
 	}
 
 	@Nullable

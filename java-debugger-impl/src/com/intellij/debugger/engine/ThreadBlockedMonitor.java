@@ -17,11 +17,14 @@ package com.intellij.debugger.engine;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.event.HyperlinkEvent;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.concurrency.JobScheduler;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.engine.events.DebuggerCommandImpl;
 import com.intellij.debugger.engine.jdi.ThreadReferenceProxy;
@@ -32,9 +35,7 @@ import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.util.Alarm;
-import com.intellij.util.SingleAlarm;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -49,20 +50,13 @@ public class ThreadBlockedMonitor
 
 	private final Collection<ThreadReferenceProxy> myWatchedThreads = new HashSet<ThreadReferenceProxy>();
 
-	private final SingleAlarm myAlarm;
+	private ScheduledFuture<?> myTask;
 	private final DebugProcessImpl myProcess;
 
 	public ThreadBlockedMonitor(DebugProcessImpl process, Disposable disposable)
 	{
 		myProcess = process;
-		myAlarm = new SingleAlarm(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				checkBlockingThread();
-			}
-		}, 5000, Alarm.ThreadToUse.POOLED_THREAD, disposable);
+		Disposer.register(disposable, this::cancelTask);
 	}
 
 	public void startWatching(@Nullable ThreadReferenceProxy thread)
@@ -71,7 +65,10 @@ public class ThreadBlockedMonitor
 		if(thread != null)
 		{
 			myWatchedThreads.add(thread);
-			myAlarm.request();
+			if(myTask == null)
+			{
+				myTask = JobScheduler.getScheduler().scheduleWithFixedDelay(this::checkBlockingThread, 5, 5, TimeUnit.SECONDS);
+			}
 		}
 	}
 
@@ -88,14 +85,23 @@ public class ThreadBlockedMonitor
 		}
 		if(myWatchedThreads.isEmpty())
 		{
-			myAlarm.cancel();
+			cancelTask();
+		}
+	}
+
+	private void cancelTask()
+	{
+		if(myTask != null)
+		{
+			myTask.cancel(true);
+			myTask = null;
 		}
 	}
 
 	private static void onThreadBlocked(@NotNull final ThreadReference blockedThread, @NotNull final ThreadReference blockingThread, final DebugProcessImpl process)
 	{
-		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.thread.blocked.by", blockedThread.name(), blockingThread.name()),
-				DebuggerBundle.message("status.thread.blocked.by.resume", blockingThread.name()), NotificationType.INFORMATION, new NotificationListener()
+		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.thread.blocked.by", blockedThread.name(), blockingThread.name()), DebuggerBundle.message("status" + ""
+				+ ".thread" + ".blocked.by.resume", blockingThread.name()), NotificationType.INFORMATION, new NotificationListener()
 		{
 			@Override
 			public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event)
@@ -160,7 +166,6 @@ public class ThreadBlockedMonitor
 				finally
 				{
 					vmProxy.getVirtualMachine().resume();
-					myAlarm.request();
 				}
 			}
 		});

@@ -34,7 +34,6 @@ import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.RecursionManager;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
@@ -301,7 +300,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 	public static void makeFinalIfNeeded(@NotNull InsertionContext context, @NotNull PsiVariable variable)
 	{
 		PsiElement place = context.getFile().findElementAt(context.getTailOffset() - 1);
-		if(!Registry.is("java.completion.make.outer.variables.final") || place == null || PsiUtil.isLanguageLevel8OrHigher(place))
+		if(place == null || PsiUtil.isLanguageLevel8OrHigher(place))
 		{
 			return;
 		}

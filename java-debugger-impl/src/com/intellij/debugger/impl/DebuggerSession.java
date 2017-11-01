@@ -68,7 +68,6 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElementFinder;
 import com.intellij.psi.PsiFile;
@@ -947,7 +946,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 
 	public static boolean enableBreakpointsDuringEvaluation()
 	{
-		return Registry.is("debugger.enable.breakpoints.during.evaluation");
+		return false;
 	}
 
 	public void sessionResumed()

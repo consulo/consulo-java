@@ -26,7 +26,6 @@ import com.intellij.codeInsight.lookup.LookupElementDecorator;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.TypedLookupItem;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -41,6 +40,7 @@ import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 
 /**
@@ -48,6 +48,8 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class JavaConstructorCallElement extends LookupElementDecorator<LookupElement> implements TypedLookupItem
 {
+	private static boolean JAVA_COMPLETION_SHOW_CONSTRUCTORS = SystemProperties.getBooleanProperty("java.completion.show.constructors", false);
+
 	private static final Key<JavaConstructorCallElement> WRAPPING_CONSTRUCTOR_CALL = Key.create("WRAPPING_CONSTRUCTOR_CALL");
 	@NotNull
 	private final PsiMethod myConstructor;
@@ -133,7 +135,7 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
 
 	static List<? extends LookupElement> wrap(@NotNull LookupElement classItem, @NotNull PsiClass psiClass, @NotNull PsiElement position, @NotNull Supplier<PsiClassType> type)
 	{
-		if(Registry.is("java.completion.show.constructors", false) && isConstructorCallPlace(position))
+		if(JAVA_COMPLETION_SHOW_CONSTRUCTORS && isConstructorCallPlace(position))
 		{
 			List<PsiMethod> constructors = ContainerUtil.filter(psiClass.getConstructors(), c -> shouldSuggestConstructor(psiClass, position, c));
 			if(!constructors.isEmpty())

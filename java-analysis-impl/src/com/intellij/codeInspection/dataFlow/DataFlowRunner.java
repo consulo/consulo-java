@@ -40,7 +40,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassInitializer;
 import com.intellij.psi.PsiCodeBlock;
@@ -196,7 +195,7 @@ public class DataFlowRunner
 			MultiMap<BranchingInstruction, DfaMemoryState> incomingStates = MultiMap.createSet();
 
 			// Maximal allowed number of instruction states analyzed by data flow for one method
-			int stateLimit = Registry.intValue("ide.dfa.state.limit", 50000);
+			int stateLimit = 50000;
 			int count = 0;
 			while(!queue.isEmpty())
 			{

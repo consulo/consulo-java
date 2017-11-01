@@ -46,7 +46,6 @@ import com.intellij.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
@@ -60,6 +59,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FList;
 import com.siyeh.ig.numeric.UnnecessaryExplicitNumericCastInspection;
@@ -73,6 +73,9 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection.dataFlow.ControlFlowAnalyzer");
 	public static final String ORG_JETBRAINS_ANNOTATIONS_CONTRACT = Contract.class.getName();
 	static final String METHOD_REFERENCE_QUALIFIER_SYNTHETIC_FIELD = "Method reference qualifier";
+
+	private static final boolean IDEA_DFA_LIVE_VARIABLES_ANALYSIS = SystemProperties.getBooleanProperty("idea.dfa.live.variables.analysis", true);
+
 	private final PsiElement myCodeFragment;
 	private final boolean myIgnoreAssertions;
 	private final boolean myInlining;
@@ -151,7 +154,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor
 
 		addInstruction(new ReturnInstruction(myFactory.controlTransfer(ReturnTransfer.INSTANCE, FList.emptyList()), null));
 
-		if(Registry.is("idea.dfa.live.variables.analysis", true))
+		if(IDEA_DFA_LIVE_VARIABLES_ANALYSIS)
 		{
 			new LiveVariablesAnalyzer(myCurrentFlow, myFactory).flushDeadVariablesOnStatementFinish();
 		}

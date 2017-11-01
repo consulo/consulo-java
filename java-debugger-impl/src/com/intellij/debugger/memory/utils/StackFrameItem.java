@@ -48,7 +48,6 @@ import com.intellij.debugger.ui.tree.render.ClassRenderer;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.ui.ColoredTextContainer;
@@ -263,7 +262,7 @@ public class StackFrameItem
 		public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place)
 		{
 			ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
-			String type = Registry.is("debugger.showTypes") ? classRenderer.renderTypeName(myType) : null;
+			String type = classRenderer.renderTypeName(myType);
 			Icon icon = myVarType == VariableItem.VarType.PARAM ? PlatformIcons.PARAMETER_ICON : AllIcons.Debugger.Value;
 			if(myType != null && myType.startsWith(CommonClassNames.JAVA_LANG_STRING + "@"))
 			{

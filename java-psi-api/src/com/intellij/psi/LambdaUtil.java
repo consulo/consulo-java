@@ -31,7 +31,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.psi.infos.MethodCandidateInfo;
@@ -41,6 +40,7 @@ import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.Producer;
+import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashMap;
 
@@ -50,6 +50,8 @@ import com.intellij.util.containers.HashMap;
  */
 public class LambdaUtil
 {
+	private static final boolean JDK8042508_BUG_FIXED = SystemProperties.getBooleanProperty("JDK8042508.bug.fixed", false);
+
 	public static final RecursionGuard ourParameterGuard = RecursionManager.createGuard("lambdaParameterGuard");
 	public static final ThreadLocal<Map<PsiElement, PsiType>> ourFunctionTypes = new ThreadLocal<Map<PsiElement, PsiType>>();
 	private static final Logger LOG = Logger.getInstance("#" + LambdaUtil.class.getName());
@@ -191,11 +193,8 @@ public class LambdaUtil
 
 	private static boolean isAssignmentContext(PsiElement context)
 	{
-		return context instanceof PsiLambdaExpression ||
-				context instanceof PsiReturnStatement ||
-				context instanceof PsiAssignmentExpression ||
-				context instanceof PsiVariable ||
-				context instanceof PsiArrayInitializerExpression;
+		return context instanceof PsiLambdaExpression || context instanceof PsiReturnStatement || context instanceof PsiAssignmentExpression || context instanceof PsiVariable || context instanceof
+				PsiArrayInitializerExpression;
 	}
 
 	public static boolean isLambdaFullyInferred(PsiLambdaExpression expression, PsiType functionalInterfaceType)
@@ -495,9 +494,7 @@ public class LambdaUtil
 		PsiElement element = expression;
 		while(parent instanceof PsiParenthesizedExpression || parent instanceof PsiConditionalExpression)
 		{
-			if(parent instanceof PsiConditionalExpression &&
-					((PsiConditionalExpression) parent).getThenExpression() != element &&
-					((PsiConditionalExpression) parent).getElseExpression() != element)
+			if(parent instanceof PsiConditionalExpression && ((PsiConditionalExpression) parent).getThenExpression() != element && ((PsiConditionalExpression) parent).getElseExpression() != element)
 			{
 				break;
 			}
@@ -635,9 +632,7 @@ public class LambdaUtil
 		PsiElement expr = functionalExpression;
 		while(parent instanceof PsiParenthesizedExpression || parent instanceof PsiConditionalExpression)
 		{
-			if(parent instanceof PsiConditionalExpression &&
-					((PsiConditionalExpression) parent).getThenExpression() != expr &&
-					((PsiConditionalExpression) parent).getElseExpression() != expr)
+			if(parent instanceof PsiConditionalExpression && ((PsiConditionalExpression) parent).getThenExpression() != expr && ((PsiConditionalExpression) parent).getElseExpression() != expr)
 			{
 				break;
 			}
@@ -729,9 +724,7 @@ public class LambdaUtil
 	@Contract(value = "null -> false", pure = true)
 	public static boolean notInferredType(PsiType typeByExpression)
 	{
-		return typeByExpression instanceof PsiMethodReferenceType ||
-				typeByExpression instanceof PsiLambdaExpressionType ||
-				typeByExpression instanceof PsiLambdaParameterType;
+		return typeByExpression instanceof PsiMethodReferenceType || typeByExpression instanceof PsiLambdaExpressionType || typeByExpression instanceof PsiLambdaParameterType;
 	}
 
 	public static boolean isLambdaReturnExpression(PsiElement element)
@@ -828,12 +821,9 @@ public class LambdaUtil
 	@Contract("null -> false")
 	public static boolean isExpressionStatementExpression(PsiElement body)
 	{
-		return body instanceof PsiAssignmentExpression ||
-				body instanceof PsiPrefixExpression && (((PsiPrefixExpression) body).getOperationTokenType() == JavaTokenType.PLUSPLUS || ((PsiPrefixExpression) body).getOperationTokenType() ==
-						JavaTokenType.MINUSMINUS) ||
-				body instanceof PsiPostfixExpression ||
-				body instanceof PsiCallExpression ||
-				body instanceof PsiReferenceExpression && !body.isPhysical();
+		return body instanceof PsiAssignmentExpression || body instanceof PsiPrefixExpression && (((PsiPrefixExpression) body).getOperationTokenType() == JavaTokenType.PLUSPLUS || (
+				(PsiPrefixExpression) body).getOperationTokenType() == JavaTokenType.MINUSMINUS) || body instanceof PsiPostfixExpression || body instanceof PsiCallExpression || body instanceof
+				PsiReferenceExpression && !body.isPhysical();
 	}
 
 	public static PsiExpression extractSingleExpressionFromBody(PsiElement body)
@@ -878,7 +868,7 @@ public class LambdaUtil
 	// if the type variable is a type parameter of the candidate method.
 	public static boolean isPotentiallyCompatibleWithTypeParameter(PsiFunctionalExpression expression, PsiExpressionList argsList, PsiMethod method)
 	{
-		if(!Registry.is("JDK8042508.bug.fixed", false))
+		if(!JDK8042508_BUG_FIXED)
 		{
 			final PsiCallExpression callExpression = PsiTreeUtil.getParentOfType(argsList, PsiCallExpression.class);
 			if(callExpression == null || callExpression.getTypeArguments().length > 0)

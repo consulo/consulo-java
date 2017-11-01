@@ -32,18 +32,20 @@ import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.refactoring.extractMethodObject.ExtractLightMethodObjectHandler;
+import com.intellij.util.SystemProperties;
 
 // TODO [VISTALL] disabled
 // todo: consider batching compilations in order not to start a separate process for every class that needs to be compiled
 public class CompilingEvaluatorImpl extends CompilingEvaluator
 {
+	private static final boolean DEBUGGER_COMPILING_EVALUATOR = SystemProperties.getBooleanProperty("debugger.compiling.evaluator", false);
+
 	private Collection<ClassObject> myCompiledClasses;
 
 	public CompilingEvaluatorImpl(@NotNull Project project, @NotNull PsiElement context, @NotNull ExtractLightMethodObjectHandler.ExtractedData data)
@@ -161,7 +163,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 	@Nullable
 	public static ExpressionEvaluator create(@NotNull Project project, @Nullable PsiElement psiContext, @NotNull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
 	{
-		if(Registry.is("debugger.compiling.evaluator") && psiContext != null)
+		if(DEBUGGER_COMPILING_EVALUATOR && psiContext != null)
 		{
 			return ApplicationManager.getApplication().runReadAction((ThrowableComputable<ExpressionEvaluator, EvaluateException>) () ->
 			{

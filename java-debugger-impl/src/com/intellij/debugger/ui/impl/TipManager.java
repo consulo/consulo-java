@@ -47,7 +47,6 @@ import com.intellij.openapi.actionSystem.CustomShortcutSet;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Weighted;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.wm.IdeGlassPane;
 import com.intellij.openapi.wm.IdeGlassPaneUtil;
 import com.intellij.util.Alarm;
@@ -243,7 +242,7 @@ public class TipManager implements Disposable, PopupMenuListener
 
 	private void showTooltip(InputEvent e, boolean auto)
 	{
-		if(auto && !Registry.is("debugger.valueTooltipAutoShow"))
+		if(auto && !XDebuggerSettingsManager.getInstance().getDataViewSettings().isValueTooltipAutoShow())
 		{
 			return;
 		}

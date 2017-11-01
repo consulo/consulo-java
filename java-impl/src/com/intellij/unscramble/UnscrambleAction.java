@@ -15,52 +15,65 @@
  */
 package com.intellij.unscramble;
 
-import com.intellij.openapi.actionSystem.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationActivationListener;
 import com.intellij.openapi.application.ex.ApplicationEx;
 import com.intellij.openapi.application.ex.ApplicationManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.openapi.util.registry.RegistryValue;
-import com.intellij.openapi.util.registry.RegistryValueListener;
 import com.intellij.util.messages.MessageBusConnection;
+import consulo.annotations.RequiredDispatchThread;
 
 /**
  * @author Konstantin Bulenkov
  */
-public final class UnscrambleAction extends AnAction implements DumbAware {
-  private static final UnscrambleListener LISTENER = new UnscrambleListener();
-  private static MessageBusConnection ourConnection;
+public final class UnscrambleAction extends AnAction implements DumbAware
+{
+	public static final String KEY = "java.analyze.exceptions.on.the.fly";
 
-  static {
-    final String key = "analyze.exceptions.on.the.fly";
-    final ApplicationEx app = ApplicationManagerEx.getApplicationEx();
-    if (Registry.is(key)) {
-      ourConnection = app.getMessageBus().connect();
-      ourConnection.subscribe(ApplicationActivationListener.TOPIC, LISTENER);
-    }
+	private static final UnscrambleListener LISTENER = new UnscrambleListener();
+	private static MessageBusConnection ourConnection;
 
-    Registry.get(key).addListener(new RegistryValueListener.Adapter() {
-      public void afterValueChanged(RegistryValue value) {
-        if (value.asBoolean()) {
-          ourConnection = app.getMessageBus().connect();
-          ourConnection.subscribe(ApplicationActivationListener.TOPIC, LISTENER);
-        } else {
-          ourConnection.disconnect();
-        }
-      }
-    }, app);
-  }
-  
-  public void actionPerformed(AnActionEvent e) {
-    final Project project = e.getData(CommonDataKeys.PROJECT);
-    new UnscrambleDialog(project).show();
-  }
+	static
+	{
+		updateConnection();
+	}
 
-  public void update(AnActionEvent event) {
-    final Presentation presentation = event.getPresentation();
-    final Project project = event.getData(CommonDataKeys.PROJECT);
-    presentation.setEnabled(project != null);
-  }
+	public static void updateConnection()
+	{
+		final ApplicationEx app = ApplicationManagerEx.getApplicationEx();
+
+		boolean value = PropertiesComponent.getInstance().getBoolean(KEY);
+		if(value)
+		{
+			ourConnection = app.getMessageBus().connect();
+			ourConnection.subscribe(ApplicationActivationListener.TOPIC, LISTENER);
+		}
+		else
+		{
+			ourConnection.disconnect();
+		}
+	}
+
+	@RequiredDispatchThread
+	@Override
+	public void actionPerformed(@NotNull AnActionEvent e)
+	{
+		final Project project = e.getData(CommonDataKeys.PROJECT);
+		new UnscrambleDialog(project).show();
+	}
+
+	@RequiredDispatchThread
+	@Override
+	public void update(@NotNull AnActionEvent event)
+	{
+		final Presentation presentation = event.getPresentation();
+		final Project project = event.getData(CommonDataKeys.PROJECT);
+		presentation.setEnabled(project != null);
+	}
 }

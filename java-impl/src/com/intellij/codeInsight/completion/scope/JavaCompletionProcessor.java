@@ -24,7 +24,6 @@ import com.intellij.codeInspection.SuppressManager;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstanceBase;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
@@ -129,9 +128,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 			myQualifierType = JavaPsiFacade.getElementFactory(element.getProject()).createType(myQualifierClass);
 		}
 
-		myAllowStaticWithInstanceQualifier = !options.filterStaticAfterInstance || SuppressManager.getInstance().isSuppressedFor(element, AccessStaticViaInstanceBase.ACCESS_STATIC_VIA_INSTANCE) ||
-				Registry.is("ide.java.completion.suggest.static.after.instance", false);
-
+		myAllowStaticWithInstanceQualifier = !options.filterStaticAfterInstance || SuppressManager.getInstance().isSuppressedFor(element, AccessStaticViaInstanceBase.ACCESS_STATIC_VIA_INSTANCE);
 	}
 
 	@Override

@@ -26,7 +26,6 @@ import java.util.Set;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.GenericsUtil;
 import com.intellij.psi.PsiClass;
@@ -41,6 +40,7 @@ import com.intellij.psi.impl.source.resolve.graphInference.constraints.TypeEqual
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.Processor;
+import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 
 /**
@@ -48,10 +48,12 @@ import com.intellij.util.containers.ContainerUtil;
  */
 public class InferenceIncorporationPhase
 {
-	private static final Logger LOG = Logger.getInstance("#" + InferenceIncorporationPhase.class.getName());
+	private static final boolean JAVAC_UNCHECKED_SUBTYPING_DURING_INCORPORATION = SystemProperties.getBooleanProperty("javac.unchecked.subtyping.during.incorporation", true);
+
+	private static final Logger LOG = Logger.getInstance(InferenceIncorporationPhase.class);
 	private final InferenceSession mySession;
-	private final List<Pair<InferenceVariable[], PsiClassType>> myCaptures = new ArrayList<Pair<InferenceVariable[], PsiClassType>>();
-	private final Map<InferenceVariable, Map<InferenceBound, Set<PsiType>>> myCurrentBounds = new HashMap<InferenceVariable, Map<InferenceBound, Set<PsiType>>>();
+	private final List<Pair<InferenceVariable[], PsiClassType>> myCaptures = new ArrayList<>();
+	private final Map<InferenceVariable, Map<InferenceBound, Set<PsiType>>> myCurrentBounds = new HashMap<>();
 
 	public InferenceIncorporationPhase(InferenceSession session)
 	{
@@ -389,7 +391,7 @@ public class InferenceIncorporationPhase
 				{
 					continue;
 				}
-				if(Registry.is("javac.unchecked.subtyping.during.incorporation", true) && TypeCompatibilityConstraint.isUncheckedConversion(upperBound, eqBound))
+				if(JAVAC_UNCHECKED_SUBTYPING_DURING_INCORPORATION && TypeCompatibilityConstraint.isUncheckedConversion(upperBound, eqBound))
 				{
 					continue;
 				}
@@ -453,13 +455,13 @@ public class InferenceIncorporationPhase
 		Map<InferenceBound, Set<PsiType>> bounds = myCurrentBounds.get(variable);
 		if(bounds == null)
 		{
-			bounds = new HashMap<InferenceBound, Set<PsiType>>();
+			bounds = new HashMap<>();
 			myCurrentBounds.put(variable, bounds);
 		}
 		Set<PsiType> types = bounds.get(bound);
 		if(types == null)
 		{
-			types = new LinkedHashSet<PsiType>();
+			types = new LinkedHashSet<>();
 			bounds.put(bound, types);
 		}
 		types.add(type);
