@@ -423,6 +423,9 @@
 		<component>
 			<implementation-class>consulo.java.JavaDummyHolderComponent</implementation-class>
 		</component>
+		<component>
+			<implementation-class>consulo.java.unscramble.UnscrambleManager</implementation-class>
+		</component>
 	</application-components>
 
 	<project-components>

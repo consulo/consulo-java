@@ -16,17 +16,12 @@
 package com.intellij.unscramble;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.application.ApplicationActivationListener;
-import com.intellij.openapi.application.ex.ApplicationEx;
-import com.intellij.openapi.application.ex.ApplicationManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.util.messages.MessageBusConnection;
 import consulo.annotations.RequiredDispatchThread;
 
 /**
@@ -34,32 +29,6 @@ import consulo.annotations.RequiredDispatchThread;
  */
 public final class UnscrambleAction extends AnAction implements DumbAware
 {
-	public static final String KEY = "java.analyze.exceptions.on.the.fly";
-
-	private static final UnscrambleListener LISTENER = new UnscrambleListener();
-	private static MessageBusConnection ourConnection;
-
-	static
-	{
-		updateConnection();
-	}
-
-	public static void updateConnection()
-	{
-		final ApplicationEx app = ApplicationManagerEx.getApplicationEx();
-
-		boolean value = PropertiesComponent.getInstance().getBoolean(KEY);
-		if(value)
-		{
-			ourConnection = app.getMessageBus().connect();
-			ourConnection.subscribe(ApplicationActivationListener.TOPIC, LISTENER);
-		}
-		else
-		{
-			ourConnection.disconnect();
-		}
-	}
-
 	@RequiredDispatchThread
 	@Override
 	public void actionPerformed(@NotNull AnActionEvent e)

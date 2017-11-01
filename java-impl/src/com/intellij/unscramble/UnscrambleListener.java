@@ -27,7 +27,7 @@ import com.intellij.util.Alarm;
 /**
  * @author Konstantin Bulenkov
  */
-public class UnscrambleListener extends ApplicationActivationListener.Adapter {
+public class UnscrambleListener implements ApplicationActivationListener {
   private static final int MAX_STACKTRACE_SIZE = 100 * 1024;
   private String stacktrace = null;
 

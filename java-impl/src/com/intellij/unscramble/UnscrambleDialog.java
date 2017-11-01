@@ -60,6 +60,7 @@ import com.intellij.ui.TextFieldWithHistory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharArrayUtil;
+import consulo.java.unscramble.UnscrambleManager;
 
 /**
  * @author cdr
@@ -99,12 +100,8 @@ public class UnscrambleDialog extends DialogWrapper
 			GuiUtils.enableChildren(myLogFileChooserPanel, unscrambleSupport != null);
 		});
 		myUseUnscrambler.addActionListener(e -> useUnscramblerChanged());
-		myOnTheFly.setSelected(PropertiesComponent.getInstance().getBoolean(UnscrambleAction.KEY, false));
-		myOnTheFly.addActionListener(e ->
-		{
-			PropertiesComponent.getInstance().setValue(UnscrambleAction.KEY, myOnTheFly.isSelected(), true);
-			UnscrambleAction.updateConnection();
-		});
+		myOnTheFly.setSelected(UnscrambleManager.getInstance().isEnabled());
+		myOnTheFly.addActionListener(e -> UnscrambleManager.getInstance().setEnabled(myOnTheFly.isSelected()));
 		createLogFileChooser();
 		createEditor();
 		reset();
@@ -497,7 +494,8 @@ public class UnscrambleDialog extends DialogWrapper
 			message = IdeBundle.message("unscramble.unscrambled.deadlock.tab");
 			icon = AllIcons.Debugger.KillProcess;
 		}
-		return AnalyzeStacktraceUtil.addConsole(project, threadDump.size() > 1 ? (AnalyzeStacktraceUtil.ConsoleFactory) (consoleView, toolbarActions) -> new ThreadDumpPanel(project, consoleView, toolbarActions, threadDump) : null, message, unscrambledTrace, icon);
+		return AnalyzeStacktraceUtil.addConsole(project, threadDump.size() > 1 ? (AnalyzeStacktraceUtil.ConsoleFactory) (consoleView, toolbarActions) -> new ThreadDumpPanel(project, consoleView,
+				toolbarActions, threadDump) : null, message, unscrambledTrace, icon);
 	}
 
 	@Override
