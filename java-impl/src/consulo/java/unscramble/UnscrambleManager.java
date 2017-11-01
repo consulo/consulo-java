@@ -62,7 +62,7 @@ public class UnscrambleManager
 		updateConnection();
 	}
 
-	public void updateConnection()
+	private void updateConnection()
 	{
 		final ApplicationEx app = ApplicationManagerEx.getApplicationEx();
 
