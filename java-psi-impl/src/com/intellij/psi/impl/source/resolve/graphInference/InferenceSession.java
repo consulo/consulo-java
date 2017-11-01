@@ -24,6 +24,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
@@ -1620,22 +1621,8 @@ public class InferenceSession
 	public void registerIncompatibleErrorMessage(Collection<InferenceVariable> variables, String incompatibleTypesMessage)
 	{
 		variables = new ArrayList<>(variables);
-		Collections.sort((ArrayList<InferenceVariable>) variables, new Comparator<InferenceVariable>()
-		{
-			@Override
-			public int compare(InferenceVariable v1, InferenceVariable v2)
-			{
-				return Comparing.compare(v1.getName(), v2.getName());
-			}
-		});
-		final String variablesEnumeration = StringUtil.join(variables, new Function<InferenceVariable, String>()
-		{
-			@Override
-			public String fun(InferenceVariable variable)
-			{
-				return variable.getParameter().getName();
-			}
-		}, ", ");
+		Collections.sort((ArrayList<InferenceVariable>) variables, (v1, v2) -> Comparing.compare(v1.getName(), v2.getName()));
+		final String variablesEnumeration = StringUtil.join(variables, variable -> variable.getParameter().getName(), ", ");
 		registerIncompatibleErrorMessage("no instance(s) of type variable(s) " + variablesEnumeration + " exist so that " + incompatibleTypesMessage);
 	}
 
