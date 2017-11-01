@@ -48,7 +48,6 @@ import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.packageDependencies.DependencyRule;
 import com.intellij.packageDependencies.DependencyValidationManager;
@@ -60,6 +59,7 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.HashSet;
 import consulo.java.JavaQuickFixBundle;
+import consulo.ui.impl.ModalityPerProjectEAPDescriptor;
 
 /**
  * @author peter
@@ -413,7 +413,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 
 		boolean canImportHere = true;
 
-		boolean isInModlessContext = Registry.is("ide.perProjectModality") ? !LaterInvocator.isInModalContextForProject(editor.getProject()) : !LaterInvocator.isInModalContext();
+		boolean isInModlessContext = ModalityPerProjectEAPDescriptor.is() ? !LaterInvocator.isInModalContextForProject(editor.getProject()) : !LaterInvocator.isInModalContext();
 
 		if(classes.length == 1 && (canImportHere = canImportHere(allowCaretNearRef, editor, psiFile, classes[0].getName())) && isAddUnambiguousImportsOnTheFlyEnabled(psiFile) && (ApplicationManager
 				.getApplication().isUnitTestMode() || DaemonListeners.canChangeFileSilently(psiFile)) && isInModlessContext && !autoImportWillInsertUnexpectedCharacters(classes[0]))
