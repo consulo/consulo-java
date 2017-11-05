@@ -14,13 +14,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.manifest.editor.completionProviders.HeaderKeyCompletionProvider;
-import consulo.java.manifest.editor.completionProviders.HeaderValueCompletionProvider;
-import consulo.java.manifest.editor.models.ClauseTableModel;
-import consulo.java.manifest.editor.models.FileTableModel;
-import consulo.java.manifest.editor.models.HeaderTableModel;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import consulo.java.manifest.lang.headerparser.HeaderUtil;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
@@ -54,6 +48,12 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.AbstractTableCellEditor;
 import com.intellij.util.ui.UIUtil;
+import consulo.java.manifest.editor.completionProviders.HeaderKeyCompletionProvider;
+import consulo.java.manifest.editor.completionProviders.HeaderValueCompletionProvider;
+import consulo.java.manifest.editor.models.ClauseTableModel;
+import consulo.java.manifest.editor.models.FileTableModel;
+import consulo.java.manifest.editor.models.HeaderTableModel;
+import consulo.java.manifest.lang.headerparser.HeaderUtil;
 
 /**
  * @author VISTALL
@@ -419,7 +419,7 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor
 
 	@Nullable
 	@Override
-	public VirtualFile getVirtualFile()
+	public VirtualFile getFile()
 	{
 		return myVirtualFile;
 	}
