@@ -22,6 +22,7 @@ package com.intellij.compiler.cache;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.org.objectweb.asm.Opcodes;
 import com.intellij.compiler.classParsing.AnnotationConstantValue;
 import com.intellij.compiler.classParsing.AnnotationNameValuePair;
 import com.intellij.compiler.classParsing.ConstantValue;
@@ -204,7 +205,7 @@ public class JavaMakeUtil extends MakeUtil
 
 	public static boolean isInterface(int flags)
 	{
-		return (ClsUtil.ACC_INTERFACE & flags) != 0;
+		return (Opcodes.ACC_INTERFACE & flags) != 0;
 	}
 
 	public static int getAnnotationTargets(final Cache cache, final int annotationQName, final SymbolTable symbolTable) throws CacheCorruptedException
