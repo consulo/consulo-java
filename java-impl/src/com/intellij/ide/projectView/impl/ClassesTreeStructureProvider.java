@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jetbrains.annotations.Nullable;
-import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.SelectableTreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
@@ -55,7 +54,6 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 			Object o = child.getValue();
 			if(o instanceof PsiClassOwner/* && !(o instanceof JspFile)*/)
 			{
-				final ViewSettings settings1 = ((ProjectViewNode) parent).getSettings();
 				final PsiClassOwner classOwner = (PsiClassOwner) o;
 				final VirtualFile file = classOwner.getVirtualFile();
 
@@ -81,13 +79,13 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 				if(fileInRoots(file))
 				{
 					PsiClass[] classes = classOwner.getClasses();
-					if(classes.length == 1 && !(classes[0] instanceof SyntheticElement) && (file == null || file.getNameWithoutExtension().equals(classes[0].getName())))
+					if(classes.length == 1 && !(classes[0] instanceof SyntheticElement) && file.getNameWithoutExtension().equals(classes[0].getName()))
 					{
-						result.add(new ClassTreeNode(myProject, classes[0], settings1));
+						result.add(new ClassTreeNode(myProject, classes[0], settings));
 					}
 					else
 					{
-						result.add(new PsiClassOwnerTreeNode(classOwner, settings1));
+						result.add(new PsiClassOwnerTreeNode(classOwner, settings));
 					}
 					continue;
 				}
