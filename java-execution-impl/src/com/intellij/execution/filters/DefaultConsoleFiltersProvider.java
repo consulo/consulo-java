@@ -20,20 +20,34 @@
  */
 package com.intellij.execution.filters;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
-public class DefaultConsoleFiltersProvider implements ConsoleFilterProviderEx {
-  public Filter[] getDefaultFilters(@NotNull Project project) {
-    return getDefaultFilters(project, GlobalSearchScope.allScope(project));
-  }
+import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.search.GlobalSearchScope;
+import consulo.java.module.extension.JavaModuleExtension;
+import consulo.module.extension.ModuleExtensionHelper;
 
-  public Filter[] getDefaultFilters(@NotNull Project project, @NotNull GlobalSearchScope scope) {
-    List<Filter> filters = ExceptionFilters.getFilters(scope);
-    filters.add(new YourkitFilter(project));
-    return filters.toArray(new Filter[filters.size()]);
-  }
+public class DefaultConsoleFiltersProvider implements ConsoleFilterProviderEx
+{
+	@NotNull
+	@Override
+	public Filter[] getDefaultFilters(@NotNull Project project)
+	{
+		return getDefaultFilters(project, GlobalSearchScope.allScope(project));
+	}
+
+	@Override
+	@NotNull
+	public Filter[] getDefaultFilters(@NotNull Project project, @NotNull GlobalSearchScope scope)
+	{
+		if(!ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class))
+		{
+			return Filter.EMPTY_ARRAY;
+		}
+
+		List<Filter> filters = ExceptionFilters.getFilters(scope);
+		filters.add(new YourkitFilter(project));
+		return filters.toArray(new Filter[filters.size()]);
+	}
 }
