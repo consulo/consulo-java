@@ -23,8 +23,6 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.concurrency.AsyncPromise;
-import org.jetbrains.concurrency.Promise;
 import com.intellij.debugger.DebuggerBundle;
 import com.intellij.debugger.SourcePosition;
 import com.intellij.debugger.actions.JavaReferringObjectsValue;
@@ -63,6 +61,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.CommonClassNames;
 import com.intellij.psi.PsiElement;
@@ -82,7 +81,6 @@ import com.intellij.xdebugger.impl.frame.XValueWithInlinePresentation;
 import com.intellij.xdebugger.impl.ui.XValueTextProvider;
 import com.intellij.xdebugger.impl.ui.tree.XValueExtendedPresentation;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
-import consulo.concurrency.Promises;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
@@ -691,15 +689,15 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
 	@NotNull
 	@Override
-	public Promise<XExpression> calculateEvaluationExpression()
+	public AsyncResult<XExpression> calculateEvaluationExpression()
 	{
 		if(evaluationExpression != null)
 		{
-			return Promises.resolve(evaluationExpression);
+			return AsyncResult.done(evaluationExpression);
 		}
 		else
 		{
-			final AsyncPromise<XExpression> res = new AsyncPromise<>();
+			final AsyncResult<XExpression> res = new AsyncResult<>();
 			myEvaluationContext.getManagerThread().schedule(new SuspendContextCommandImpl(myEvaluationContext.getSuspendContext())
 			{
 				@Override
@@ -738,7 +736,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 						}
 						return null;
 					});
-					res.setResult(evaluationExpression);
+					res.setDone(evaluationExpression);
 				}
 			});
 			return res;
