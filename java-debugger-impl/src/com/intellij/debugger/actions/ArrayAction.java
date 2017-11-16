@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.concurrency.Promise;
 import com.intellij.debugger.engine.DebugProcessImpl;
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.debugger.engine.SuspendContextImpl;
@@ -37,15 +36,17 @@ import com.intellij.debugger.ui.tree.render.Renderer;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.xdebugger.frame.XValue;
 import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
 import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
-import consulo.concurrency.Promises;
+import consulo.annotations.RequiredDispatchThread;
 
 public abstract class ArrayAction extends DebuggerAction
 {
+	@RequiredDispatchThread
 	@Override
-	public void actionPerformed(AnActionEvent e)
+	public void actionPerformed(@NotNull AnActionEvent e)
 	{
 		DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
 
@@ -73,14 +74,15 @@ public abstract class ArrayAction extends DebuggerAction
 		//if (index > 0) {
 		//  title = title + " " + label.substring(index);
 		//}
-		createNewRenderer(node, renderer, debuggerContext, node.getName()).done(newRenderer -> setArrayRenderer(newRenderer, node, debuggerContext));
+		createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(newRenderer, node, debuggerContext));
 	}
 
 	@NotNull
-	protected abstract Promise<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title);
+	protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title);
 
+	@RequiredDispatchThread
 	@Override
-	public void update(AnActionEvent e)
+	public void update(@NotNull AnActionEvent e)
 	{
 		boolean enable = false;
 		List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
@@ -203,15 +205,15 @@ public abstract class ArrayAction extends DebuggerAction
 	{
 		@NotNull
 		@Override
-		protected Promise<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title)
+		protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title)
 		{
 			ArrayRenderer clonedRenderer = original.clone();
 			clonedRenderer.setForced(true);
 			if(ShowSettingsUtil.getInstance().editConfigurable(debuggerContext.getProject(), new NamedArrayConfigurable(title, clonedRenderer)))
 			{
-				return Promises.resolve(clonedRenderer);
+				return AsyncResult.done(clonedRenderer);
 			}
-			return Promises.rejectedPromise();
+			return AsyncResult.rejected();
 		}
 	}
 
@@ -219,10 +221,10 @@ public abstract class ArrayAction extends DebuggerAction
 	{
 		@NotNull
 		@Override
-		protected Promise<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title)
+		protected AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @NotNull DebuggerContextImpl debuggerContext, String title)
 		{
 			//TODO [VISTALL] ArrayFilterInplaceEditor.editParent(node);
-			return Promises.rejectedPromise();
+			return AsyncResult.rejected();
 		}
 	}
 }

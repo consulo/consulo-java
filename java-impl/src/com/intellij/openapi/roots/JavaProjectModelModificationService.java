@@ -19,18 +19,18 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.concurrency.Promise;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
  * Provides methods to perform high-level modifications of project configuration accordingly with dependency management system used in the
  * project. E.g. if the project is imported from Maven the methods will modify pom.xml files and invoke reimporting to update IDEA's
  * project model. Since importing the changes to IDEA's project model may take a while the method work asynchronously and returns
- * {@link Promise} objects which may be used to be notified when the project configuration is finally updated.
+ * {@link AsyncResult} objects which may be used to be notified when the project configuration is finally updated.
  *
  * @author nik
  * @see JavaProjectModelModifier
@@ -42,26 +42,26 @@ public abstract class JavaProjectModelModificationService
 		return ServiceManager.getService(project, JavaProjectModelModificationService.class);
 	}
 
-	public Promise<Void> addDependency(@NotNull Module from, @NotNull Module to)
+	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Module to)
 	{
 		return addDependency(from, to, DependencyScope.COMPILE);
 	}
 
-	public abstract Promise<Void> addDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope);
 
-	public Promise<Void> addDependency(@NotNull Module from, @NotNull ExternalLibraryDescriptor libraryDescriptor)
+	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull ExternalLibraryDescriptor libraryDescriptor)
 	{
 		return addDependency(from, libraryDescriptor, DependencyScope.COMPILE);
 	}
 
-	public Promise<Void> addDependency(@NotNull Module from, @NotNull ExternalLibraryDescriptor descriptor, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull ExternalLibraryDescriptor descriptor, @NotNull DependencyScope scope)
 	{
 		return addDependency(Collections.singletonList(from), descriptor, scope);
 	}
 
-	public abstract Promise<Void> addDependency(@NotNull Collection<Module> from, @NotNull ExternalLibraryDescriptor libraryDescriptor, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addDependency(@NotNull Collection<Module> from, @NotNull ExternalLibraryDescriptor libraryDescriptor, @NotNull DependencyScope scope);
 
-	public abstract Promise<Void> addDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope);
 
-	public abstract Promise<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel languageLevel);
+	public abstract AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel languageLevel);
 }

@@ -20,14 +20,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.concurrency.Promise;
 import com.intellij.codeInsight.daemon.impl.quickfix.LocateLibraryDialog;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.roots.DependencyScope;
@@ -37,16 +35,13 @@ import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.roots.libraries.LibraryUtil;
-import com.intellij.openapi.util.EmptyRunnable;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotations.RequiredReadAction;
-import consulo.concurrency.Promises;
-import consulo.java.module.extension.JavaModuleExtension;
 import consulo.java.module.extension.JavaMutableModuleExtension;
 
 /**
@@ -63,14 +58,14 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 	}
 
 	@Override
-	public Promise<Void> addModuleDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addModuleDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope)
 	{
 		ModuleRootModificationUtil.addDependency(from, to, scope, false);
-		return Promises.resolvedPromise();
+		return AsyncResult.done(null);
 	}
 
 	@Override
-	public Promise<Void> addExternalLibraryDependency(@NotNull final Collection<Module> modules, @NotNull final ExternalLibraryDescriptor descriptor, @NotNull final DependencyScope scope)
+	public AsyncResult<Void> addExternalLibraryDependency(@NotNull final Collection<Module> modules, @NotNull final ExternalLibraryDescriptor descriptor, @NotNull final DependencyScope scope)
 	{
 		List<String> defaultRoots = descriptor.getLibraryClassesRoots();
 		Module firstModule = ContainerUtil.getFirstItem(modules);
@@ -106,19 +101,19 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 				}.execute();
 			}
 		}
-		return Promises.resolvedPromise();
+		return AsyncResult.done(null);
 	}
 
 	@Override
-	public Promise<Void> addLibraryDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addLibraryDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope)
 	{
 		OrderEntryUtil.addLibraryToRoots(from, library);
-		return Promises.resolvedPromise();
+		return AsyncResult.done(null);
 	}
 
 	@Override
 	@RequiredReadAction
-	public Promise<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel level)
+	public AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel level)
 	{
 		if(JavaSdkUtil.isLanguageLevelAcceptable(myProject, module, level))
 		{
@@ -126,6 +121,6 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier
 			rootModel.getExtension(JavaMutableModuleExtension.class).getInheritableLanguageLevel().set(null, level);
 			rootModel.commit();
 		}
-		return Promises.resolvedPromise();
+		return AsyncResult.done(null);
 	}
 }

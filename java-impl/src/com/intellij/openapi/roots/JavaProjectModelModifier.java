@@ -19,10 +19,10 @@ import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.concurrency.Promise;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.pom.java.LanguageLevel;
 
 /**
@@ -40,47 +40,47 @@ public abstract class JavaProjectModelModifier
 	/**
 	 * Implementation of this method should add dependency from module {@code from} to module {@code to} with scope {@code scope} accordingly
 	 * to this dependencies management system. If it takes some time to propagate changes in the external project configuration to IDEA's
-	 * project model the method may schedule this work for asynchronous execution and return {@link Promise} instance which will be fulfilled
+	 * project model the method may schedule this work for asynchronous execution and return {@link AsyncResult} instance which will be fulfilled
 	 * when the work is done.
 	 *
-	 * @return {@link Promise} instance if dependencies between these modules can be handled by this dependencies management system or
+	 * @return {@link AsyncResult} instance if dependencies between these modules can be handled by this dependencies management system or
 	 * {@code null} otherwise
 	 */
 	@Nullable
-	public abstract Promise<Void> addModuleDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addModuleDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope);
 
 	/**
 	 * Implementation of this method should add dependency from modules {@code modules} to an external library with scope {@code scope} accordingly
 	 * to this dependencies management system. If it takes some time to propagate changes in the external project configuration to IDEA's
-	 * project model the method may schedule this work for asynchronous execution and return {@link Promise} instance which will be fulfilled
+	 * project model the method may schedule this work for asynchronous execution and return {@link AsyncResult} instance which will be fulfilled
 	 * when the work is done.
 	 *
-	 * @return {@link Promise} instance if dependencies of these modules can be handled by this dependencies management system or
+	 * @return {@link AsyncResult} instance if dependencies of these modules can be handled by this dependencies management system or
 	 * {@code null} otherwise
 	 */
 	@Nullable
-	public abstract Promise<Void> addExternalLibraryDependency(@NotNull Collection<Module> modules, @NotNull ExternalLibraryDescriptor descriptor, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addExternalLibraryDependency(@NotNull Collection<Module> modules, @NotNull ExternalLibraryDescriptor descriptor, @NotNull DependencyScope scope);
 
 	/**
 	 * Implementation of this method should add dependency from module {@code from} to {@code library} with scope {@code scope} accordingly
 	 * to this dependencies management system. If it takes some time to propagate changes in the external project configuration to IDEA's
-	 * project model the method may schedule this work for asynchronous execution and return {@link Promise} instance which will be fulfilled
+	 * project model the method may schedule this work for asynchronous execution and return {@link AsyncResult} instance which will be fulfilled
 	 * when the work is done.
 	 *
-	 * @return {@link Promise} instance if dependencies between these modules can be handled by this dependencies management system or
+	 * @return {@link AsyncResult} instance if dependencies between these modules can be handled by this dependencies management system or
 	 * {@code null} otherwise
 	 */
 	@Nullable
-	public abstract Promise<Void> addLibraryDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope);
+	public abstract AsyncResult<Void> addLibraryDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope);
 
 	/**
 	 * Implementation of this method should set language level for module {@code module} to the specified value accordingly
 	 * to this dependencies management system. If it takes some time to propagate changes in the external project configuration to IDEA's
-	 * project model the method may schedule this work for asynchronous execution and return {@link Promise} instance which will be fulfilled
+	 * project model the method may schedule this work for asynchronous execution and return {@link AsyncResult} instance which will be fulfilled
 	 * when the work is done.
 	 *
-	 * @return {@link Promise} instance if language level can be set by this dependencies management system or {@code null} otherwise
+	 * @return {@link AsyncResult} instance if language level can be set by this dependencies management system or {@code null} otherwise
 	 */
 	@Nullable
-	public abstract Promise<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel level);
+	public abstract AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel level);
 }

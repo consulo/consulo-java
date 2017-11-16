@@ -18,7 +18,6 @@ package com.intellij.openapi.roots.impl;
 import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.concurrency.Promise;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.DependencyScope;
@@ -26,8 +25,8 @@ import com.intellij.openapi.roots.ExternalLibraryDescriptor;
 import com.intellij.openapi.roots.JavaProjectModelModificationService;
 import com.intellij.openapi.roots.JavaProjectModelModifier;
 import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.pom.java.LanguageLevel;
-import consulo.concurrency.Promises;
 
 /**
  * @author nik
@@ -42,59 +41,59 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
 	}
 
 	@Override
-	public Promise<Void> addDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Module to, @NotNull DependencyScope scope)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
-			Promise<Void> promise = modifier.addModuleDependency(from, to, scope);
-			if(promise != null)
+			AsyncResult<Void> asyncResult = modifier.addModuleDependency(from, to, scope);
+			if(asyncResult != null)
 			{
-				return promise;
+				return asyncResult;
 			}
 		}
-		return Promises.rejectedPromise();
+		return AsyncResult.rejected();
 	}
 
 	@Override
-	public Promise<Void> addDependency(@NotNull Collection<Module> from, @NotNull ExternalLibraryDescriptor libraryDescriptor, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@NotNull Collection<Module> from, @NotNull ExternalLibraryDescriptor libraryDescriptor, @NotNull DependencyScope scope)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
-			Promise<Void> promise = modifier.addExternalLibraryDependency(from, libraryDescriptor, scope);
-			if(promise != null)
+			AsyncResult<Void> asyncResult = modifier.addExternalLibraryDependency(from, libraryDescriptor, scope);
+			if(asyncResult != null)
 			{
-				return promise;
+				return asyncResult;
 			}
 		}
-		return Promises.rejectedPromise();
+		return AsyncResult.rejected();
 	}
 
 	@Override
-	public Promise<Void> addDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope)
+	public AsyncResult<Void> addDependency(@NotNull Module from, @NotNull Library library, @NotNull DependencyScope scope)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
-			Promise<Void> promise = modifier.addLibraryDependency(from, library, scope);
-			if(promise != null)
+			AsyncResult<Void> asyncResult = modifier.addLibraryDependency(from, library, scope);
+			if(asyncResult != null)
 			{
-				return promise;
+				return asyncResult;
 			}
 		}
-		return Promises.rejectedPromise();
+		return AsyncResult.rejected();
 	}
 
 	@Override
-	public Promise<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel languageLevel)
+	public AsyncResult<Void> changeLanguageLevel(@NotNull Module module, @NotNull LanguageLevel languageLevel)
 	{
 		for(JavaProjectModelModifier modifier : getModelModifiers())
 		{
-			Promise<Void> promise = modifier.changeLanguageLevel(module, languageLevel);
-			if(promise != null)
+			AsyncResult<Void> asyncResult = modifier.changeLanguageLevel(module, languageLevel);
+			if(asyncResult != null)
 			{
-				return promise;
+				return asyncResult;
 			}
 		}
-		return Promises.rejectedPromise();
+		return AsyncResult.rejected();
 	}
 
 	@NotNull
