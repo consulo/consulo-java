@@ -19,17 +19,9 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
-@State(
-		name = "ThreadsViewSettings",
-		storages = {
-				@Storage(
-						file = StoragePathMacros.APP_CONFIG + "/debugger.threadsview.xml"
-				)
-		}
-)
+@State(name = "ThreadsViewSettings", storages = @Storage("debugger.threadsview.xml"))
 public class ThreadsViewSettings implements PersistentStateComponent<ThreadsViewSettings>
 {
 	public boolean SHOW_THREAD_GROUPS = false;

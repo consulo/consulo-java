@@ -15,28 +15,37 @@
  */
 package com.intellij.debugger.actions;
 
-import com.intellij.debugger.settings.ThreadsViewConfigurable;
-import com.intellij.debugger.settings.ThreadsViewSettings;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.debugger.DebuggerBundle;
 import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.options.ex.SingleConfigurableEditor;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
+import consulo.annotations.RequiredDispatchThread;
+import consulo.java.debugger.settings.ThreadsViewConfigurable;
 
 /**
  * User: lex
  * Date: Sep 26, 2003
  * Time: 4:40:12 PM
  */
-public class CustomizeThreadsViewAction extends DebuggerAction {
-  public void actionPerformed(AnActionEvent e) {
-    Project project = e.getData(CommonDataKeys.PROJECT);
-    final SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new ThreadsViewConfigurable(ThreadsViewSettings.getInstance()));
-    editor.show();
-  }
+public class CustomizeThreadsViewAction extends DebuggerAction
+{
+	@RequiredDispatchThread
+	@Override
+	public void actionPerformed(@NotNull AnActionEvent e)
+	{
+		Project project = e.getData(CommonDataKeys.PROJECT);
 
-  public void update(AnActionEvent e) {
-    e.getPresentation().setVisible(true);
-    e.getPresentation().setText(ActionsBundle.actionText(DebuggerActions.CUSTOMIZE_THREADS_VIEW));
-  }
+		ShowSettingsUtil.getInstance().editConfigurable(DebuggerBundle.message("threads.view.configurable.display.name"), project, new ThreadsViewConfigurable());
+	}
+
+	@RequiredDispatchThread
+	@Override
+	public void update(@NotNull AnActionEvent e)
+	{
+		e.getPresentation().setVisible(true);
+		e.getPresentation().setText(ActionsBundle.actionText(DebuggerActions.CUSTOMIZE_THREADS_VIEW));
+	}
 }
