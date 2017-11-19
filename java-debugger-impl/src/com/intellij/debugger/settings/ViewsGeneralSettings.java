@@ -15,11 +15,15 @@
  */
 package com.intellij.debugger.settings;
 
-import com.intellij.openapi.components.*;
+import org.jdom.Element;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import org.jdom.Element;
 
 @State(
   name="ViewsSettings",
@@ -32,7 +36,6 @@ public class ViewsGeneralSettings implements PersistentStateComponent<Element> {
   public boolean SHOW_OBJECTID = true;
   public boolean HIDE_NULL_ARRAY_ELEMENTS = true;
   public boolean AUTOSCROLL_TO_NEW_LOCALS = true;
-  public boolean ENABLE_AUTO_EXPRESSIONS = true;
 
   public ViewsGeneralSettings() {
   }
