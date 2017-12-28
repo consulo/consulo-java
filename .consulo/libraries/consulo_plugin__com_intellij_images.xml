@@ -1,7 +1,0 @@
-<component name="libraryTable">
-  <library name="consulo-plugin: com.intellij.images">
-    <binaries>
-      <root url="jar://$PROJECT_DIR$/dep/com.intellij.images/lib/com.intellij.images-2-SNAPSHOT.jar!/" />
-    </binaries>
-  </library>
-</component>
