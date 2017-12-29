@@ -15,12 +15,12 @@
  */
 package com.intellij.psi.search.searches;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.Query;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max

@@ -56,6 +56,7 @@
 						<dependency>com.intellij.xml</dependency>
 						<dependency>com.intellij.images</dependency>
 						<dependency>com.intellij.properties</dependency>
+						<dependency>consulo.javascript</dependency>
 					</dependencies>
 					<packaging>
 						<skip>${dev.mode}</skip>
@@ -168,6 +169,26 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-java.spellchecker</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.intelliLang</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-jvm.bytecode.viewer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-guava.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-gson.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

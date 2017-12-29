@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   - Copyright 2013-2017 consulo.io
   -
@@ -14,13 +15,14 @@
   - See the License for the specific language governing permissions and
   - limitations under the License.
   -->
+
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>consulo</groupId>
-		<artifactId>arch.managment</artifactId>
+		<artifactId>arch.ide-provided</artifactId>
 		<version>2-SNAPSHOT</version>
 		<relativePath/>
 	</parent>
@@ -37,37 +39,15 @@
 	</repositories>
 
 	<groupId>consulo.plugin</groupId>
-	<artifactId>consulo.java.parent</artifactId>
+	<artifactId>consulo.java-guava.impl</artifactId>
 	<version>2-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
-	<modules>
-		<module>java-psi-api</module>
-		<module>java-indexing-api</module>
-		<module>java-analysis-api</module>
-		<module>java-compiler-api</module>
-		<module>java-execution-api</module>
-		<module>java-debugger-api</module>
-
-		<module>java-psi-impl</module>
-		<module>java-debugger-impl</module>
-		<module>java-analysis-impl</module>
-		<module>java-indexing-impl</module>
-		<module>java-execution-impl</module>
-		<module>java-compiler-impl</module>
-		<module>java-coverage-impl</module>
-		<module>java-manifest</module>
-		<module>java-coverage-impl/coverage_rt</module>
-		<module>java-spellchecker</module>
-		<module>jvm-bytecode-viewer</module>
-		<module>java-intellilang</module>
-		<module>java-impl</module>
-
-		<module>jdk-annotations</module>
-
-		<module>java-rt</module>
-
-		<module>extract/guava-impl</module>
-		<module>extract/gson-impl</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.psi.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>
