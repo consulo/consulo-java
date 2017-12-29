@@ -1,13 +1,18 @@
 package com.intellij.refactoring.inline;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author yole
@@ -294,8 +299,8 @@ public class InlineParameterTest extends LightRefactoringTestCase {
   }
 
   private static void performAction() {
-    final PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase
-      .REFERENCED_ELEMENT_ACCEPTED | TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    final PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx
+			.REFERENCED_ELEMENT_ACCEPTED, TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     new InlineParameterHandler().inlineElement(getProject(), myEditor, element);
   }
 }

@@ -15,6 +15,12 @@
  */
 package com.intellij.psi.impl.cache.impl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.ide.todo.TodoConfiguration;
@@ -37,10 +43,6 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.indexing.FileBasedIndex;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
 
 public class IdCacheTest extends CodeInsightTestCase{
 
@@ -65,12 +67,12 @@ public class IdCacheTest extends CodeInsightTestCase{
   }
 
   public void testBuildCache() throws Exception {
-    checkCache(CacheManager.SERVICE.getInstance(myProject), TodoCacheManager.SERVICE.getInstance(myProject));
+    checkCache(CacheManager.getInstance(myProject), TodoCacheManager.getInstance(myProject));
   }
 
   public void testLoadCacheNoTodo() throws Exception {
 
-    final CacheManager cache = CacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache = CacheManager.getInstance(myProject);
 
     checkResult(new String[]{"1.java", "2.java"}, convert(cache.getFilesWithWord("b", UsageSearchContext.ANY, GlobalSearchScope.projectScope(myProject), false)));
   }
@@ -78,7 +80,7 @@ public class IdCacheTest extends CodeInsightTestCase{
   public void testUpdateCache1() throws Exception {
     myRootDir.createChildData(null, "4.java");
     Thread.sleep(1000);
-    checkCache(CacheManager.SERVICE.getInstance(myProject), TodoCacheManager.SERVICE.getInstance(myProject));
+    checkCache(CacheManager.getInstance(myProject), TodoCacheManager.getInstance(myProject));
   }
 
   public void testUpdateCache2() throws Exception {
@@ -88,8 +90,8 @@ public class IdCacheTest extends CodeInsightTestCase{
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
     FileDocumentManager.getInstance().saveAllDocuments();
 
-    final CacheManager cache = CacheManager.SERVICE.getInstance(myProject);
-    final TodoCacheManager todocache = TodoCacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache = CacheManager.getInstance(myProject);
+    final TodoCacheManager todocache = TodoCacheManager.getInstance(myProject);
     final GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);
     checkResult(new String[] {"1.java"}, convert(cache.getFilesWithWord("xxx", UsageSearchContext.ANY, scope, false)));
     checkResult(new String[]{}, convert(cache.getFilesWithWord("a", UsageSearchContext.ANY, scope, false)));
@@ -108,8 +110,8 @@ public class IdCacheTest extends CodeInsightTestCase{
     VirtualFile child = myRootDir.findChild("1.java");
     child.delete(null);
 
-    final CacheManager cache2 = CacheManager.SERVICE.getInstance(myProject);
-    final TodoCacheManager todocache2 = TodoCacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache2 = CacheManager.getInstance(myProject);
+    final TodoCacheManager todocache2 = TodoCacheManager.getInstance(myProject);
     final GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);
     checkResult(ArrayUtil.EMPTY_STRING_ARRAY, convert(cache2.getFilesWithWord("xxx", UsageSearchContext.ANY, scope, false)));
     checkResult(ArrayUtil.EMPTY_STRING_ARRAY, convert(cache2.getFilesWithWord("a", UsageSearchContext.ANY, scope, false)));
@@ -126,7 +128,7 @@ public class IdCacheTest extends CodeInsightTestCase{
   public void testUpdateCacheNoTodo() throws Exception {
     myRootDir.createChildData(null, "4.java");
     final GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);
-    final CacheManager cache = CacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache = CacheManager.getInstance(myProject);
     checkResult(new String[]{"1.java", "2.java"}, convert(cache.getFilesWithWord("b", UsageSearchContext.ANY, scope, false)));
   }
 
@@ -136,7 +138,7 @@ public class IdCacheTest extends CodeInsightTestCase{
     TodoConfiguration.getInstance().setTodoPatterns(new TodoPattern[]{pattern});
 
     try{
-      final TodoCacheManager todocache = TodoCacheManager.SERVICE.getInstance(myProject);
+      final TodoCacheManager todocache = TodoCacheManager.getInstance(myProject);
       checkResult(new String[]{"2.java"}, convert(todocache.getFilesWithTodoItems()));
       assertEquals(0, todocache.getTodoCount(myRootDir.findChild("1.java"), TodoIndexPatternProvider.getInstance()));
       assertEquals(1, todocache.getTodoCount(myRootDir.findChild("2.java"), TodoIndexPatternProvider.getInstance()));
@@ -148,8 +150,8 @@ public class IdCacheTest extends CodeInsightTestCase{
   }
 
   public void testFileModification() throws Exception {
-    final CacheManager cache = CacheManager.SERVICE.getInstance(myProject);
-    final TodoCacheManager todocache = TodoCacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache = CacheManager.getInstance(myProject);
+    final TodoCacheManager todocache = TodoCacheManager.getInstance(myProject);
     checkCache(cache, todocache);
 
     VirtualFile child = myRootDir.findChild("1.java");
@@ -174,8 +176,8 @@ public class IdCacheTest extends CodeInsightTestCase{
   }
 
   public void testFileDeletion() throws Exception {
-    final CacheManager cache = CacheManager.SERVICE.getInstance(myProject);
-    final TodoCacheManager todocache = TodoCacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache = CacheManager.getInstance(myProject);
+    final TodoCacheManager todocache = TodoCacheManager.getInstance(myProject);
     checkCache(cache, todocache);
 
     VirtualFile child = myRootDir.findChild("1.java");
@@ -195,8 +197,8 @@ public class IdCacheTest extends CodeInsightTestCase{
   }
 
   public void testFileCreation() throws Exception {
-    final CacheManager cache = CacheManager.SERVICE.getInstance(myProject);
-    final TodoCacheManager todocache = TodoCacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache = CacheManager.getInstance(myProject);
+    final TodoCacheManager todocache = TodoCacheManager.getInstance(myProject);
     checkCache(cache, todocache);
 
     VirtualFile child = myRootDir.createChildData(null, "4.java");
@@ -219,7 +221,7 @@ public class IdCacheTest extends CodeInsightTestCase{
   }
 
   public void testCrash() throws Exception {
-    final CacheManager cache = CacheManager.SERVICE.getInstance(myProject);
+    final CacheManager cache = CacheManager.getInstance(myProject);
     cache.getFilesWithWord("xxx", UsageSearchContext.ANY, GlobalSearchScope.projectScope(myProject), false);
     System.gc();
   }

@@ -15,14 +15,30 @@
  */
 package com.intellij.codeInsight.slice;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import gnu.trove.THashMap;
+import gnu.trove.TIntObjectHashMap;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.LogicalPosition;
+import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.text.StringUtil;
@@ -31,14 +47,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.slicer.SliceAnalysisParams;
 import com.intellij.slicer.SliceHandler;
-import com.intellij.slicer.SliceManager;
 import com.intellij.slicer.SliceUsage;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.containers.IntArrayList;
-import gnu.trove.THashMap;
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.*;
 
 /**
  * @author cdr
@@ -59,7 +70,7 @@ public class SliceBackwardTest extends DaemonAnalyzerTestCase {
     params.scope = new AnalysisScope(getProject());
     params.dataFlowToThis = true;
 
-    SliceUsage usage = SliceManager.createRootUsage(element, params);
+    SliceUsage usage = SliceUsage.createRootUsage(element, params);
     checkUsages(usage, true, myFlownOffsets);
   }
 

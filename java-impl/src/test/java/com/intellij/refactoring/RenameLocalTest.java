@@ -1,7 +1,12 @@
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.lang.java.JavaRefactoringSupportProvider;
@@ -13,9 +18,9 @@ import com.intellij.refactoring.rename.RenameProcessor;
 import com.intellij.refactoring.rename.RenameWrongRefHandler;
 import com.intellij.refactoring.rename.inplace.VariableInplaceRenameHandler;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashSet;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author ven
@@ -59,8 +64,8 @@ public class RenameLocalTest extends LightRefactoringTestCase {
 
   public void testRenameParamUniqueName() throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
-    PsiElement element = TargetElementUtilBase
-      .findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    PsiElement element = TargetElementUtil
+      .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED,TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
     final HashSet<String> result = new HashSet<String>();
     new JavaNameSuggestionProvider().getSuggestedNames(element, getFile(), result);
@@ -69,8 +74,8 @@ public class RenameLocalTest extends LightRefactoringTestCase {
 
   private void doTest(final String newName) throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
-    PsiElement element = TargetElementUtilBase
-      .findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    PsiElement element = TargetElementUtil
+      .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED , TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
     new RenameProcessor(getProject(), element, newName, true, true).run();
     checkResultByFile(BASE_PATH + getTestName(false) + "_after.java");
@@ -123,7 +128,7 @@ public class RenameLocalTest extends LightRefactoringTestCase {
   private void doTestInplaceRename(final String newName) throws Exception {
     configureByFile(BASE_PATH + "/" + getTestName(false) + ".java");
 
-    final PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    final PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
     assertTrue("In-place rename not allowed for " + element,
                JavaRefactoringSupportProvider.mayRenameInplace(element, null));

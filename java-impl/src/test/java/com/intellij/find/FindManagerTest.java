@@ -15,18 +15,32 @@
  */
 package com.intellij.find;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.find.impl.FindInProjectUtil;
 import com.intellij.find.replaceInProject.ReplaceInProjectManager;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
-import com.intellij.openapi.fileTypes.FileTypes;
+import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
@@ -37,16 +51,11 @@ import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usages.FindUsagesProcessPresentation;
 import com.intellij.usages.Usage;
+import com.intellij.usages.UsageViewPresentation;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.WaitFor;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /*
  * @author: MYakovlev
@@ -144,7 +153,7 @@ public class FindManagerTest extends DaemonAnalyzerTestCase {
 
   public void testFindUsages() throws Exception{
     initProject("findManager", "src", "src1");
-    final String projectDir = (PathManagerEx.getTestDataPath() + "/find/findManager").replace('/', File.separatorChar);
+    final String projectDir = ("/find/findManager").replace('/', File.separatorChar);
 
     FindModel findModel = new FindModel();
     findModel.setStringToFind("done");
@@ -183,7 +192,7 @@ public class FindManagerTest extends DaemonAnalyzerTestCase {
     PsiDirectory psiDirectory = FindInProjectUtil.getPsiDirectory(findModel, myProject);
     List<UsageInfo> result = new ArrayList<UsageInfo>();
     final CommonProcessors.CollectProcessor<UsageInfo> collector = new CommonProcessors.CollectProcessor<UsageInfo>(result);
-    FindInProjectUtil.findUsages(findModel, psiDirectory, myProject, true, collector, new FindUsagesProcessPresentation());
+    FindInProjectUtil.findUsages(findModel, psiDirectory, myProject, collector, new FindUsagesProcessPresentation(new UsageViewPresentation()));
     return result;
   }
 
@@ -262,7 +271,7 @@ public class FindManagerTest extends DaemonAnalyzerTestCase {
     findManager.getFindInFileModel().copyFrom(findModel);
 
     String text = "bughere\n" + "bughere";
-    configureByText(FileTypes.PLAIN_TEXT, text);
+    configureByText(PlainTextFileType.INSTANCE, text);
     boolean succ = FindUtil.replace(getProject(), getEditor(), 0, findModel);
     assertTrue(succ);
 
@@ -286,7 +295,7 @@ public class FindManagerTest extends DaemonAnalyzerTestCase {
     findManager.getFindInFileModel().copyFrom(findModel);
 
     String text = "bughere\n" + "bughere";
-    configureByText(FileTypes.PLAIN_TEXT, text);
+    configureByText(PlainTextFileType.INSTANCE, text);
     boolean succ = FindUtil.replace(getProject(), getEditor(), 0, findModel);
     assertTrue(succ);
 
@@ -311,7 +320,7 @@ public class FindManagerTest extends DaemonAnalyzerTestCase {
     findManager.getFindInFileModel().copyFrom(findModel);
 
     String text = "xxx";
-    configureByText(FileTypes.PLAIN_TEXT, text);
+    configureByText(PlainTextFileType.INSTANCE, text);
     boolean succ = FindUtil.replace(getProject(), getEditor(), 0, findModel);
     assertTrue(succ);
 
@@ -365,7 +374,7 @@ public class FindManagerTest extends DaemonAnalyzerTestCase {
     findManager.getFindInFileModel().copyFrom(findModel);
 
     String text = StringUtil.repeat(toFind + "\n",6);
-    configureByText(FileTypes.PLAIN_TEXT, text);
+    configureByText(PlainTextFileType.INSTANCE, text);
 
     List<Usage> usages = FindUtil.findAll(getProject(), myEditor, findModel);
     for (Usage usage : usages) {

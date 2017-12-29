@@ -15,26 +15,36 @@
  */
 package com.intellij.testFramework.fixtures;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
-import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.testFramework.TestModuleDescriptor;
+import com.intellij.util.Consumer;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
 
 /**
-* @author peter
-*/
-public class DefaultLightProjectDescriptor implements LightProjectDescriptor {
+ * @author peter
+ */
+public class DefaultLightProjectDescriptor implements TestModuleDescriptor
+{
+	public Sdk getSdk()
+	{
+		return IdeaTestUtil.getMockJdk17();
+	}
 
-  public Sdk getSdk() {
-    return IdeaTestUtil.getMockJdk17();
-  }
+	@Override
+	public void configureSdk(@NotNull Consumer<Sdk> consumer)
+	{
+		consumer.consume(getSdk());
+	}
 
-  @Override
-  public void configureModule(Module module, ModifiableRootModel model, ContentEntry contentEntry) {
-    model.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class).getInheritableLanguageLevel().set(null, LanguageLevel.HIGHEST);
-  }
+	@Override
+	public void configureModule(Module module, ModifiableRootModel model, ContentEntry contentEntry)
+	{
+		model.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class).getInheritableLanguageLevel().set(null, LanguageLevel.HIGHEST);
+	}
 }

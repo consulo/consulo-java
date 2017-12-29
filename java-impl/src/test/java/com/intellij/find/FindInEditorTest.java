@@ -15,13 +15,13 @@
  */
 package com.intellij.find;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import com.intellij.find.impl.livePreview.LivePreview;
 import com.intellij.find.impl.livePreview.LivePreviewController;
 import com.intellij.find.impl.livePreview.SearchResults;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 public class FindInEditorTest extends LightCodeInsightTestCase {
 
@@ -43,7 +43,7 @@ public class FindInEditorTest extends LightCodeInsightTestCase {
 
   private void initFind() {
     mySearchResults = new SearchResults(getEditor(), getProject());
-    myLivePreviewController = new LivePreviewController(mySearchResults, null);
+    myLivePreviewController = new LivePreviewController(mySearchResults, null, myTestRootDisposable);
     myFindModel.addObserver(new FindModel.FindModelObserver() {
       @Override
       public void findModelChanged(FindModel findModel) {

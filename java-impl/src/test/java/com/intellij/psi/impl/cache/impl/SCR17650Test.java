@@ -1,7 +1,11 @@
 package com.intellij.psi.impl.cache.impl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -10,17 +14,12 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import consulo.lombok.annotations.Logger;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author max
  */
-@Logger
 public class SCR17650Test extends PsiTestCase {
-  private static final String TEST_ROOT = PathManagerEx.getTestDataPath() + "/psi/repositoryUse/cls";
+  private static final String TEST_ROOT = "/psi/repositoryUse/cls";
 
   private VirtualFile myDir;
 
@@ -28,7 +27,7 @@ public class SCR17650Test extends PsiTestCase {
   protected void setUp() throws Exception {
     super.setUp();
 
-    final File root = FileUtil.createTempFile(getName(), "");
+    final File root = FileUtil.createTempFile(getTestName(true), "");
     root.delete();
     root.mkdir();
     myFilesToDelete.add(root);

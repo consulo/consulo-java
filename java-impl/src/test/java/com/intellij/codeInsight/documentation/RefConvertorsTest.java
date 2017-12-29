@@ -15,13 +15,8 @@
  */
 package com.intellij.codeInsight.documentation;
 
-import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.javadoc.JavaDocExternalFilter;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.io.FileUtilRt;
-import com.intellij.openapi.vfs.JarFileSystem;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.testFramework.LightCodeInsightTestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -29,6 +24,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
+
+import com.intellij.JavaTestUtil;
+import com.intellij.codeInsight.javadoc.JavaDocExternalFilter;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.io.FileUtilRt;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.testFramework.LightCodeInsightTestCase;
 
 /**
  * @author Denis Zhdanov
@@ -42,7 +44,7 @@ public class RefConvertorsTest extends LightCodeInsightTestCase {
   protected void setUp() throws Exception {
     super.setUp();
     String tempDirectory = FileUtilRt.getTempDirectory();
-    myExtractedImagesDir = new File(tempDirectory, AbstractExternalFilter.QUICK_DOC_DIR_NAME);
+    myExtractedImagesDir = new File(tempDirectory, "quick_doc_dir");
   }
 
   @Override
@@ -90,8 +92,8 @@ public class RefConvertorsTest extends LightCodeInsightTestCase {
       extractedImgFile.getAbsolutePath());
     
     JavaDocExternalFilter filter = new JavaDocExternalFilter(getProject());
-    String textAfter = filter.correctRefs(
-      String.format("%s%s!/org/bouncycastle/asn1/BERSequenceParser.html", JarFileSystem.PROTOCOL_PREFIX, imgJar.getAbsolutePath()),
+    CharSequence textAfter = filter.correctRefs(
+      String.format("%s%s!/org/bouncycastle/asn1/BERSequenceParser.html", "jar://", imgJar.getAbsolutePath()),
       textBefore
     );
     assertEquals(expectedTextAfter, textAfter);

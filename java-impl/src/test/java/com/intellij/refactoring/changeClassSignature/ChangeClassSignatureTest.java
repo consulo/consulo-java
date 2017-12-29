@@ -1,13 +1,17 @@
 package com.intellij.refactoring.changeClassSignature;
 
+import static org.junit.Assert.assertTrue;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author dsl
@@ -135,7 +139,7 @@ public class ChangeClassSignatureTest extends LightRefactoringTestCase {
   private void doTest(GenParams gen, @NonNls String filePathBefore, @NonNls String filePathAfter) throws Exception {
     final String filePath = DATA_PATH + filePathBefore;
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtilBase.findTargetElement(getEditor(), TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on class name", targetElement instanceof PsiClass);
     PsiClass aClass = (PsiClass)targetElement;
     new ChangeClassSignatureProcessor(getProject(), aClass, gen.gen(aClass)).run();

@@ -1,16 +1,23 @@
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.HashMap;
+
+import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.RenameProcessor;
 import com.intellij.refactoring.rename.RenameUtil;
 import com.intellij.refactoring.util.MoveRenameUsageInfo;
 import com.intellij.usageView.UsageInfo;
-import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
-
-import java.util.HashMap;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author sashache
@@ -193,8 +200,8 @@ public class RenameCollisionsTest extends LightRefactoringTestCase {
 
   private void doTest(final String newName) throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
-    PsiElement element = TargetElementUtilBase
-        .findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    PsiElement element = TargetElementUtil
+        .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
     new RenameProcessor(getProject(), element, newName, true, true).run();
     checkResultByFile(BASE_PATH + getTestName(false) + ".java.after");
@@ -202,8 +209,8 @@ public class RenameCollisionsTest extends LightRefactoringTestCase {
 
   public void testAllUsagesInCode() throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
-    PsiElement element = TargetElementUtilBase
-        .findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    PsiElement element = TargetElementUtil
+        .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
     final UsageInfo[] usageInfos = RenameUtil.findUsages(element, "newName", true, true, new HashMap<PsiElement, String>());
     assertSize(1, usageInfos);

@@ -2,14 +2,13 @@ package com.intellij.codeInspection;
 
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.InspectionTestCase;
 
 public class RedundantCast15Test extends InspectionTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+    //LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
   }
 
   private void doTest() throws Exception {

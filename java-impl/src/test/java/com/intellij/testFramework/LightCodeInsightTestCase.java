@@ -32,7 +32,7 @@ public abstract class LightCodeInsightTestCase extends LightPlatformCodeInsightT
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    myOldLanguageLevel = LanguageLevelProjectExtension.getInstance(getProject()).getLanguageLevel();
+    myOldLanguageLevel = LanguageLevel.JDK_1_5; //TODO LanguageLevelProjectExtension.getInstance(getProject()).getLanguageLevel();
     setLanguageLevel(getLanguageLevel());
   }
 
@@ -47,7 +47,7 @@ public abstract class LightCodeInsightTestCase extends LightPlatformCodeInsightT
   }
 
   protected static void setLanguageLevel(final LanguageLevel level) {
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(level);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(level);
   }
 
   protected Sdk getProjectJDK() {

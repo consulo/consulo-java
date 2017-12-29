@@ -15,13 +15,17 @@
  */
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.inplace.MemberInplaceRenameHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
-import org.jetbrains.annotations.NotNull;
+import consulo.codeInsight.TargetElementUtil;
 
 /**
  * User: anna
@@ -87,7 +91,7 @@ public class RenameMembersInplaceTest extends LightCodeInsightTestCase {
   private void doTestInplaceRename(final String newName) throws Exception {
     configureByFile(BASE_PATH + "/" + getTestName(false) + ".java");
 
-    final PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.getInstance().getAllAccepted());
+    final PsiElement element = TargetElementUtil.findTargetElement(myEditor, TargetElementUtil.getAllAccepted());
     assertNotNull(element);
 
     CodeInsightTestUtil.doInlineRename(new MemberInplaceRenameHandler(), newName, getEditor(), element);

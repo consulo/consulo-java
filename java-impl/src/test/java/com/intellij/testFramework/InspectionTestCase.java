@@ -15,15 +15,28 @@
  */
 package com.intellij.testFramework;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.GlobalInspectionTool;
+import com.intellij.codeInspection.InspectionEP;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationPresentation;
-import com.intellij.codeInspection.ex.*;
+import com.intellij.codeInspection.ex.GlobalInspectionContextImpl;
+import com.intellij.codeInspection.ex.GlobalInspectionToolWrapper;
+import com.intellij.codeInspection.ex.InspectionManagerEx;
+import com.intellij.codeInspection.ex.InspectionToolWrapper;
+import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.codeInspection.reference.EntryPoint;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.Extensions;
@@ -31,18 +44,12 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ArrayUtil;
 import consulo.java.codeInspection.JavaExtensionPoints;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 /**
  * @author max
@@ -175,7 +182,7 @@ public abstract class InspectionTestCase extends PsiTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_TOOL);
+    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
     myUnusedCodeExtension = new EntryPoint() {
       @NotNull
       @Override
@@ -219,7 +226,7 @@ public abstract class InspectionTestCase extends PsiTestCase {
 
   @Override
   protected void tearDown() throws Exception {
-    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_TOOL);
+    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
     point.unregisterExtension(myUnusedCodeExtension);
     myUnusedCodeExtension = null;
     ext_src = null;
@@ -232,13 +239,13 @@ public abstract class InspectionTestCase extends PsiTestCase {
 
   protected Sdk getTestProjectSdk() {
     Sdk sdk = IdeaTestUtil.getMockJdk17();
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
     return sdk;
   }
 
   @Override
   @NonNls
   protected String getTestDataPath() {
-    return PathManagerEx.getTestDataPath() + "/inspection/";
+    return "/inspection/";
   }
 }

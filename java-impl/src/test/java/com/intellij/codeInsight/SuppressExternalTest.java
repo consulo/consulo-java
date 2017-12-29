@@ -4,10 +4,14 @@
  */
 package com.intellij.codeInsight;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.sillyAssignment.SillyAssignmentInspection;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -16,10 +20,11 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
-import com.intellij.testFramework.fixtures.*;
-
-import java.io.File;
-import java.io.IOException;
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
+import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
+import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
+import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
+import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 
 public class SuppressExternalTest extends UsefulTestCase {
   protected CodeInsightTestFixture myFixture;
@@ -30,9 +35,9 @@ public class SuppressExternalTest extends UsefulTestCase {
   public void setUp() throws Exception {
     super.setUp();
     final IdeaTestFixtureFactory fixtureFactory = IdeaTestFixtureFactory.getFixtureFactory();
-    final TestFixtureBuilder<IdeaProjectTestFixture> testFixtureBuilder = fixtureFactory.createFixtureBuilder(getName());
+    final TestFixtureBuilder<IdeaProjectTestFixture> testFixtureBuilder = fixtureFactory.createFixtureBuilder(getTestName(false));
     myFixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(testFixtureBuilder.getFixture());
-    myFixture.setTestDataPath(PathManagerEx.getTestDataPath() + "/codeInsight/externalAnnotations");
+    myFixture.setTestDataPath("/codeInsight/externalAnnotations");
     final JavaModuleFixtureBuilder builder = testFixtureBuilder.addModule(JavaModuleFixtureBuilder.class);
     new File(myFixture.getTempDirPath() + "/src/").mkdir();
     builder.addContentRoot(myFixture.getTempDirPath()).addSourceRoot("src");
@@ -43,8 +48,8 @@ public class SuppressExternalTest extends UsefulTestCase {
     addAnnotationsModuleRoot();
 
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(myFixture.getProject());
-    myLanguageLevel = LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
-    LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+    myLanguageLevel = LanguageLevel.HIGHEST; // LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
+    //LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
   }
 
   private void addAnnotationsModuleRoot() throws IOException {
@@ -64,7 +69,7 @@ public class SuppressExternalTest extends UsefulTestCase {
 
   @Override
   public void tearDown() throws Exception {
-    LanguageLevelProjectExtension.getInstance(myFixture.getProject()).setLanguageLevel(myLanguageLevel);
+    //LanguageLevelProjectExtension.getInstance(myFixture.getProject()).setLanguageLevel(myLanguageLevel);
     myFixture.tearDown();
     myFixture = null;
     super.tearDown();

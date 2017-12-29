@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.pom.java.LanguageLevel;
@@ -24,7 +25,6 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.EditorActionTestCase;
 import com.intellij.testFramework.TestDataPath;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author max
@@ -163,7 +163,7 @@ public class CompleteStatementTest extends EditorActionTestCase {
 
   public void testSCR36110() throws Exception {
     JavaPsiFacade facade = JavaPsiFacade.getInstance(getProject());
-    LanguageLevel old = LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
+    LanguageLevel old = LanguageLevel.HIGHEST;// LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
     doTest();
   }
 

@@ -15,6 +15,10 @@
  */
 package com.intellij.codeInsight;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,7 +40,6 @@ import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.command.undo.UndoManager;
@@ -58,9 +61,9 @@ import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ContentFolderType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -79,6 +82,8 @@ import com.intellij.testFramework.VfsTestUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.roots.impl.TestContentFolderTypeProvider;
 
 /**
  * @author Mike
@@ -203,7 +208,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	@Override
 	protected String getTestDataPath()
 	{
-		return PathManagerEx.getTestDataPath();
+		return "/";
 	}
 
 	protected void configureByFile(final VirtualFile vFile) throws IOException
@@ -310,7 +315,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 						if(isAddDirToSource())
 						{
 							sourceRootAdded = true;
-							contentEntry.addFolder(toDir, isAddDirToTests() ? ContentFolderType.TEST : ContentFolderType.PRODUCTION);
+							contentEntry.addFolder(toDir, isAddDirToTests() ? TestContentFolderTypeProvider.getInstance() : ProductionContentFolderTypeProvider.getInstance());
 						}
 					}
 					doCommitModel(rootModel);
@@ -590,7 +595,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 				getProject().getComponent(PostprocessReformattingAspect.class).doPostponedFormatting();
 				if(stripTrailingSpaces)
 				{
-					((DocumentImpl) myEditor.getDocument()).stripTrailingSpaces();
+					((DocumentImpl) myEditor.getDocument()).stripTrailingSpaces(myProject);
 				}
 
 				PsiDocumentManager.getInstance(myProject).commitAllDocuments();
@@ -638,7 +643,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 				if(stripTrailingSpaces)
 				{
 					Document document1 = EditorFactory.getInstance().createDocument(newFileText);
-					((DocumentImpl) document1).stripTrailingSpaces();
+					((DocumentImpl) document1).stripTrailingSpaces(myProject);
 					newFileText1 = document1.getText();
 				}
 
@@ -728,9 +733,9 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	}
 
 	@Override
-	public Object getData(String dataId)
+	public Object getData(Key<?> dataId)
 	{
-		return PlatformDataKeys.EDITOR.is(dataId) ? myEditor : super.getData(dataId);
+		return PlatformDataKeys.EDITOR == dataId ? myEditor : super.getData(dataId);
 	}
 
 	protected VirtualFile getVirtualFile(@NonNls String filePath)

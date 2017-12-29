@@ -15,15 +15,17 @@
  */
 package com.intellij.codeInsight.completion;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.io.IOException;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.TestDataPath;
-
-import java.io.IOException;
 
 @TestDataPath("$CONTENT_ROOT/testData")
 public class ClassNameCompletionTest extends LightFixtureCompletionTestCase {
@@ -31,7 +33,7 @@ public class ClassNameCompletionTest extends LightFixtureCompletionTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
+   // LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
   }
 
   @Override

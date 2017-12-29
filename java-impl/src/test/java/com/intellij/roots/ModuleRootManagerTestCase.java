@@ -1,5 +1,9 @@
 package com.intellij.roots;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -8,17 +12,16 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
 import com.intellij.testFramework.ModuleTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.PathsList;
-
-import java.io.IOException;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
  * @author nik
  */
-public abstract class ModuleRootManagerTestCase extends ModuleTestCase {
+public abstract class ModuleRootManagerTestCase extends ModuleTestCase
+{
   protected static void assertRoots(PathsList pathsList, VirtualFile... files) {
     assertOrderedEquals(pathsList.getRootDirs(), files);
   }

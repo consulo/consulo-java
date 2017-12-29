@@ -1,14 +1,20 @@
 package com.intellij.refactoring.convertToInstanceMethod;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.util.VisibilityUtil;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author dsl
@@ -52,7 +58,7 @@ public class ConvertToInstanceMethodTest extends LightRefactoringTestCase {
   private void doTest(final int targetParameter, final String visibility) throws Exception {
     final String filePath = "/refactoring/convertToInstanceMethod/" + getTestName(false) + ".java";
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtilBase.findTargetElement(getEditor(), TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
     PsiMethod method = (PsiMethod) targetElement;
     new ConvertToInstanceMethodProcessor(getProject(),

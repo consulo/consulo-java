@@ -1,11 +1,15 @@
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertTrue;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.refactoring.invertBoolean.InvertBooleanProcessor;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author ven
@@ -33,7 +37,7 @@ public class InvertBooleanTest extends LightRefactoringTestCase {
 
   private void doTest() throws Exception {
     configureByFile(TEST_ROOT + getTestName(true) + ".java");
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiNamedElement);
 
     final PsiNamedElement namedElement = (PsiNamedElement)element;

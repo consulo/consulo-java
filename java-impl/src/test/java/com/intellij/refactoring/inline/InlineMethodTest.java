@@ -15,8 +15,14 @@
  */
 package com.intellij.refactoring.inline;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -26,8 +32,9 @@ import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.refactoring.MockInlineMethodOptions;
 import com.intellij.refactoring.util.InlineUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 public class InlineMethodTest extends LightRefactoringTestCase {
   @NotNull
@@ -287,8 +294,8 @@ public class InlineMethodTest extends LightRefactoringTestCase {
   }
 
   private void performAction(final InlineOptions options, final boolean nonCode) {
-    PsiElement element = TargetElementUtilBase
-      .findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    PsiElement element = TargetElementUtil
+      .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     final PsiReference ref = myFile.findReferenceAt(myEditor.getCaretModel().getOffset());
     PsiReferenceExpression refExpr = ref instanceof PsiReferenceExpression ? (PsiReferenceExpression)ref : null;
     assertTrue(element instanceof PsiMethod);

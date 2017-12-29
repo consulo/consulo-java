@@ -15,12 +15,20 @@
  */
 package com.intellij.psi.search;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.find.findUsages.JavaFindUsagesHandler;
 import com.intellij.find.findUsages.JavaFindUsagesHandlerFactory;
+import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.module.ModifiableModuleModel;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.util.TextRange;
@@ -36,11 +44,6 @@ import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.IntArrayList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class FindUsagesTest extends PsiTestCase{
 
@@ -124,7 +127,7 @@ public class FindUsagesTest extends PsiTestCase{
     PsiClass aClass = myJavaFacade.findClass("com.Foo", GlobalSearchScope.allScope(myProject));
     doTest(aClass, new String[]{"Test.xml"}, new int[]{32}, new int[]{35});
 
-    final PsiFile nonCodeUsage = PsiFileFactory.getInstance(myProject).createFileFromText("a.xml", StdFileTypes.XML, "<root action='com.Foo'/>", 0, true);
+    final PsiFile nonCodeUsage = PsiFileFactory.getInstance(myProject).createFileFromText("a.xml", XmlFileType.INSTANCE, "<root action='com.Foo'/>", 0, true);
     assertTrue(new UsageInfo(nonCodeUsage, 14, 21, true).getNavigationOffset() > 0);
   }
 

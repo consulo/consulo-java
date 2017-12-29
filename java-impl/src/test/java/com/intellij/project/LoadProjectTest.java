@@ -15,8 +15,11 @@
  */
 package com.intellij.project;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.picocontainer.MutablePicoContainer;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -34,12 +37,11 @@ import com.intellij.testFramework.LeakHunter;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.Processor;
-import org.picocontainer.MutablePicoContainer;
 
 public class LoadProjectTest extends PlatformTestCase {
   @Override
   protected void setUpProject() throws Exception {
-    String projectPath = PathManagerEx.getTestDataPath() + "/model/model.ipr";
+    String projectPath = "/model/model.ipr";
     myProject = ProjectManager.getInstance().loadAndOpenProject(projectPath);
     MutablePicoContainer container = (MutablePicoContainer)getProject().getPicoContainer();
     container.unregisterComponent(FileEditorManager.class.getName());

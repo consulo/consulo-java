@@ -15,47 +15,48 @@
  */
 package com.intellij.openapi.editor.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+import java.io.IOException;
+
 import com.intellij.codeInsight.folding.CodeFoldingManager;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.FoldRegion;
 import com.intellij.testFramework.TestFileType;
 
-import java.io.IOException;
-
 /**
  * @author Denis Zhdanov
  * @since 11/18/10 7:42 PM
  */
-public class FoldingProcessingOnDocumentModificationTest extends AbstractEditorProcessingOnDocumentModificationTest {
-  
-  public void testUnexpectedClassLevelJavadocExpandingOnClassSignatureChange() throws IOException {
-    // Inspired by IDEA-61275
+public class FoldingProcessingOnDocumentModificationTest extends AbstractEditorTest
+{
 
-    String text =
-      "/**\n" +
-      " * This is a test comment\n" +
-      " */\n" +
-      "public <caret>class Test {\n" +
-      "}";
-    init(text, TestFileType.JAVA);
+	public void testUnexpectedClassLevelJavadocExpandingOnClassSignatureChange() throws IOException
+	{
+		// Inspired by IDEA-61275
 
-    CaretModel caretModel = myEditor.getCaretModel();
-    int caretOffset = caretModel.getOffset();
-    
-    assertEquals(caretOffset, caretModel.getOffset());
+		String text = "/**\n" + " * This is a test comment\n" + " */\n" + "public <caret>class Test {\n" + "}";
+		init(text, TestFileType.JAVA);
 
-    updateFoldRegions();
-    toggleFoldRegionState(getFoldRegion(0), false);
-    type('a');
-    updateFoldRegions();
+		CaretModel caretModel = myEditor.getCaretModel();
+		int caretOffset = caretModel.getOffset();
 
-    assertEquals(caretOffset + 1, caretModel.getOffset());
-    assertEquals(1, myEditor.getFoldingModel().getAllFoldRegions().length);
-    FoldRegion foldRegion = getFoldRegion(0);
-    assertFalse(foldRegion.isExpanded());
-  }
-  
-  private static void updateFoldRegions() {
-    CodeFoldingManager.getInstance(getProject()).updateFoldRegions(myEditor);
-  }
+		assertEquals(caretOffset, caretModel.getOffset());
+
+		updateFoldRegions();
+		toggleFoldRegionState(getFoldRegion(0), false);
+		type('a');
+		updateFoldRegions();
+
+		assertEquals(caretOffset + 1, caretModel.getOffset());
+		assertEquals(1, myEditor.getFoldingModel().getAllFoldRegions().length);
+		FoldRegion foldRegion = getFoldRegion(0);
+		assertFalse(foldRegion.isExpanded());
+	}
+
+	private static void updateFoldRegions()
+	{
+		CodeFoldingManager.getInstance(getProject()).updateFoldRegions(myEditor);
+	}
 }

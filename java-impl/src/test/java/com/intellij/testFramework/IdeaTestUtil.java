@@ -15,6 +15,10 @@
  */
 package com.intellij.testFramework;
 
+import java.io.File;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
@@ -28,14 +32,10 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
 import com.intellij.pom.java.LanguageLevel;
 import consulo.java.module.extension.JavaModuleExtensionImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
-
-import java.io.File;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 public class IdeaTestUtil extends PlatformTestUtil {
   public static void main(String[] args) {

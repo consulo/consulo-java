@@ -15,17 +15,22 @@
  */
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.makeStatic.MakeMethodStaticProcessor;
 import com.intellij.refactoring.makeStatic.MakeStaticUtil;
 import com.intellij.refactoring.makeStatic.Settings;
 import com.intellij.refactoring.util.VariableData;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 public class MakeMethodStaticTest extends LightRefactoringTestCase {
   @NotNull
@@ -180,7 +185,7 @@ public class MakeMethodStaticTest extends LightRefactoringTestCase {
 
   public void testInnerStaticClassUsed() throws Exception {
     configureByFile("/refactoring/makeMethodStatic/beforeInnerStaticClassUsed.java");
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiMethod);
     assertFalse(MakeStaticUtil.isParameterNeeded((PsiMethod)element));
   }
@@ -204,7 +209,7 @@ public class MakeMethodStaticTest extends LightRefactoringTestCase {
   }
 
   private static void perform(boolean addClassParameter) {
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiMethod);
     PsiMethod method = (PsiMethod) element;
 
@@ -215,7 +220,7 @@ public class MakeMethodStaticTest extends LightRefactoringTestCase {
   }
 
   private static void performWithFields() {
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiMethod);
     PsiMethod method = (PsiMethod) element;
     final ArrayList<VariableData> parametersForFields = new ArrayList<VariableData>();

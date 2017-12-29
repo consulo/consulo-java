@@ -1,19 +1,23 @@
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
-import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 public class SafeDeleteTest extends MultiFileTestCase {
   private VirtualFile myRootBefore;
@@ -140,17 +144,17 @@ public class SafeDeleteTest extends MultiFileTestCase {
   }
 
   public void testLastResourceVariable() throws Exception {
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
     doSingleFileTest();
   }
 
   public void testLastTypeParam() throws Exception {
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
     doSingleFileTest();
   }
 
   public void testTypeParamFromDiamond() throws Exception {
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
     doSingleFileTest();
   }
 
@@ -185,8 +189,8 @@ public class SafeDeleteTest extends MultiFileTestCase {
   }
 
   private void performAction() {
-    final PsiElement psiElement = TargetElementUtilBase
-      .findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    final PsiElement psiElement = TargetElementUtil
+      .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull("No element found in text:\n" + getFile().getText(), psiElement);
     SafeDeleteHandler.invoke(getProject(), new PsiElement[]{psiElement}, true);
   }

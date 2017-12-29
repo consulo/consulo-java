@@ -1,7 +1,11 @@
 package com.intellij.refactoring.inline;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
@@ -11,7 +15,9 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author ven
@@ -244,15 +250,15 @@ public class InlineLocalTest extends LightCodeInsightTestCase {
   }
 
   public static void performInline(Project project, Editor editor) {
-    PsiElement element = TargetElementUtilBase
-      .findTargetElement(editor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+    PsiElement element = TargetElementUtil
+      .findTargetElement(editor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertTrue(element instanceof PsiLocalVariable);
 
     InlineLocalHandler.invoke(project, editor, (PsiLocalVariable)element, null);
   }
 
   public static void performDefInline(Project project, Editor editor) {
-    PsiReference reference = TargetElementUtilBase.findReference(editor);
+    PsiReference reference = TargetElementUtil.findReference(editor);
     assertTrue(reference instanceof PsiReferenceExpression);
     final PsiElement local = reference.resolve();
     assertTrue(local instanceof PsiLocalVariable);

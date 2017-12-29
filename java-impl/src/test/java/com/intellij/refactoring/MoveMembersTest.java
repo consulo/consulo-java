@@ -1,9 +1,16 @@
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMember;
@@ -12,9 +19,6 @@ import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.move.moveMembers.MockMoveMembersOptions;
 import com.intellij.refactoring.move.moveMembers.MoveMembersProcessor;
 import com.intellij.util.VisibilityUtil;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
 public class MoveMembersTest extends MultiFileTestCase {
   @Override
@@ -129,7 +133,7 @@ public class MoveMembersTest extends MultiFileTestCase {
   }
 
   public void testStaticToInterface() throws Exception {
-    final LanguageLevelProjectExtension levelProjectExtension = LanguageLevelProjectExtension.getInstance(getProject());
+    /*final LanguageLevelProjectExtension levelProjectExtension = LanguageLevelProjectExtension.getInstance(getProject());
     final LanguageLevel level = levelProjectExtension.getLanguageLevel();
     try {
       levelProjectExtension.setLanguageLevel(LanguageLevel.JDK_1_8);
@@ -137,7 +141,7 @@ public class MoveMembersTest extends MultiFileTestCase {
     }
     finally {
       levelProjectExtension.setLanguageLevel(level);
-    }
+    }  */
   }
   
   public void testEscalateVisibility1() throws Exception {

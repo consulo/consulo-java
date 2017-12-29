@@ -128,7 +128,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 		private static final boolean CHECK_ELEMENT_LEVEL = ApplicationManager.getApplication().isUnitTestMode() || SandboxUtil.isInsideSandbox();
 	}
 
-	protected HighlightVisitorImpl(@NotNull PsiResolveHelper resolveHelper)
+	public HighlightVisitorImpl(@NotNull PsiResolveHelper resolveHelper)
 	{
 		myResolveHelper = resolveHelper;
 	}

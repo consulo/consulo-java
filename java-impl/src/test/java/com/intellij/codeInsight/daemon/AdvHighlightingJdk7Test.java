@@ -15,14 +15,13 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.defUse.DefUseInspection;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class intended for "heavily-loaded" tests only, e.g. those need to setup separate project directory structure to run.
@@ -33,7 +32,7 @@ public class AdvHighlightingJdk7Test extends DaemonAnalyzerTestCase {
 
   @Override
   protected Sdk getTestProjectJdk() {
-    LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_7);
+    // LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_7);
     return IdeaTestUtil.getMockJdk17();
   }
 

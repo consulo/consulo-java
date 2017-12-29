@@ -17,14 +17,14 @@ public abstract class Resolve15TestCase extends ResolveTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    myOldLanguageLevel = LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).getLanguageLevel();
-    LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+    myOldLanguageLevel = LanguageLevel.JDK_1_5;//LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).getLanguageLevel();
+    //LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
     IdeaTestUtil.setTestVersion(JavaSdkVersion.JDK_1_5, getModule(), getTestRootDisposable());
   }
 
   @Override
   protected void tearDown() throws Exception {
-    LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(myOldLanguageLevel);
+   // LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(myOldLanguageLevel);
     super.tearDown();
   }
 }

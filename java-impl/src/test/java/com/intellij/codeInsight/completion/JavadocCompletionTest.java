@@ -1,9 +1,17 @@
 package com.intellij.codeInsight.completion;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceBase;
@@ -14,10 +22,6 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 /**

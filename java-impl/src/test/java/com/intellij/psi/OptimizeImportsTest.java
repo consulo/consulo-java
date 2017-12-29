@@ -15,68 +15,126 @@
  */
 package com.intellij.psi;
 
+import static org.junit.Assert.assertEquals;
+
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.command.CommandProcessor;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.testFramework.PsiTestCase;
-import consulo.lombok.annotations.Logger;
 
-@Logger
-public class OptimizeImportsTest extends PsiTestCase{
-  private static final String BASE_PATH = PathManagerEx.getTestDataPath() + "/psi/optimizeImports";
+public class OptimizeImportsTest extends PsiTestCase
+{
+	private static final Logger LOGGER = Logger.getInstance(OptimizeImportsTest.class);
 
-  @Override
-  protected String getTestDataPath() {
-    return BASE_PATH;
-  }
+	private static final String BASE_PATH = "/psi/optimizeImports";
 
-  public void testSCR6138() throws Exception { doTest(); }
-  public void testSCR18364() throws Exception { doTest(); }
-  public void testStaticImports1() throws Exception { doTest(); }
-  public void testStaticImportsToOptimize() throws Exception { doTest(); }
-  public void testStaticImportsToOptimizeMixed() throws Exception { doTest(); }
-  public void testStaticImportsToOptimize2() throws Exception { doTest(); }
-  public void testEmptyImportList() throws Exception { doTest(); }
-  public void testIDEADEV10716() throws Exception { doTest(); }
-  public void testUnresolvedImports() throws Exception { doTest(); }
-  public void testUnresolvedImports2() throws Exception { doTest(); }
-  public void testNewImportListIsEmptyAndCommentPreserved() throws Exception { doTest(); }
-  public void testNewImportListIsEmptyAndJavaDocWithInvalidCodePreserved() throws Exception { doTest(); }
+	@Override
+	protected String getTestDataPath()
+	{
+		return BASE_PATH;
+	}
 
-  private void doTest() throws Exception {
-    final String extension = ".java";
-    doTest(extension);
-  }
+	public void testSCR6138() throws Exception
+	{
+		doTest();
+	}
 
-  private void doTest(final String extension) throws Exception {
-    CommandProcessor.getInstance().executeCommand(
-      getProject(), new Runnable() {
-      @Override
-      public void run() {
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          @Override
-          public void run() {
-            String fileName = getTestName(false) + extension;
-            try {
-              String text = loadFile(fileName);
-              PsiFile file = createFile(fileName, text);
+	public void testSCR18364() throws Exception
+	{
+		doTest();
+	}
 
-              JavaCodeStyleManager.getInstance(myProject).optimizeImports(file);
-              PostprocessReformattingAspect.getInstance(getProject()).doPostponedFormatting();
-              PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
-              String textAfter = loadFile(getTestName(false) + "_after" + extension);
-              String fileText = file.getText();
-              assertEquals(textAfter, fileText);
-            }
-            catch (Exception e) {
-              LOGGER.error(e);
-            }
-          }
-        });
-      }
-    }, "", "");
+	public void testStaticImports1() throws Exception
+	{
+		doTest();
+	}
 
-  }
+	public void testStaticImportsToOptimize() throws Exception
+	{
+		doTest();
+	}
+
+	public void testStaticImportsToOptimizeMixed() throws Exception
+	{
+		doTest();
+	}
+
+	public void testStaticImportsToOptimize2() throws Exception
+	{
+		doTest();
+	}
+
+	public void testEmptyImportList() throws Exception
+	{
+		doTest();
+	}
+
+	public void testIDEADEV10716() throws Exception
+	{
+		doTest();
+	}
+
+	public void testUnresolvedImports() throws Exception
+	{
+		doTest();
+	}
+
+	public void testUnresolvedImports2() throws Exception
+	{
+		doTest();
+	}
+
+	public void testNewImportListIsEmptyAndCommentPreserved() throws Exception
+	{
+		doTest();
+	}
+
+	public void testNewImportListIsEmptyAndJavaDocWithInvalidCodePreserved() throws Exception
+	{
+		doTest();
+	}
+
+	private void doTest() throws Exception
+	{
+		final String extension = ".java";
+		doTest(extension);
+	}
+
+	private void doTest(final String extension) throws Exception
+	{
+		CommandProcessor.getInstance().executeCommand(getProject(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				ApplicationManager.getApplication().runWriteAction(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						String fileName = getTestName(false) + extension;
+						try
+						{
+							String text = loadFile(fileName);
+							PsiFile file = createFile(fileName, text);
+
+							JavaCodeStyleManager.getInstance(myProject).optimizeImports(file);
+							PostprocessReformattingAspect.getInstance(getProject()).doPostponedFormatting();
+							PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
+							String textAfter = loadFile(getTestName(false) + "_after" + extension);
+							String fileText = file.getText();
+							assertEquals(textAfter, fileText);
+						}
+						catch(Exception e)
+						{
+							LOGGER.error(e);
+						}
+					}
+				});
+			}
+		}, "", "");
+
+	}
 }

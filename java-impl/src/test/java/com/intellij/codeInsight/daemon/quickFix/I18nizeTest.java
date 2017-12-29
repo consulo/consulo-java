@@ -1,5 +1,12 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.util.Collections;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.i18n.I18nQuickFixHandler;
 import com.intellij.codeInspection.i18n.I18nizeAction;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
@@ -7,15 +14,10 @@ import com.intellij.ide.DataManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
-import java.util.Collections;
 
 
 public class I18nizeTest extends LightCodeInsightTestCase {
@@ -31,7 +33,7 @@ public class I18nizeTest extends LightCodeInsightTestCase {
     AnActionEvent event = new AnActionEvent(null, dataContext, "place", action.getTemplatePresentation(), null, 0);
     action.update(event);
     @NonNls String afterFile = getBasePath() + "/after" + getTestName(false) + "." + ext;
-    boolean afterFileExists = new File(PathManagerEx.getTestDataPath() + afterFile).exists();
+    boolean afterFileExists = new File(afterFile).exists();
     I18nQuickFixHandler handler = action.getHandler(event);
     try {
       if (handler != null) {

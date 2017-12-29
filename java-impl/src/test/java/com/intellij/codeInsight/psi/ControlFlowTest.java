@@ -1,6 +1,14 @@
 package com.intellij.codeInsight.psi;
 
-import com.intellij.openapi.application.ex.PathManagerEx;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -8,16 +16,15 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.controlFlow.*;
+import com.intellij.psi.controlFlow.ControlFlow;
+import com.intellij.psi.controlFlow.ControlFlowFactory;
+import com.intellij.psi.controlFlow.ControlFlowPolicy;
+import com.intellij.psi.controlFlow.ControlFlowUtil;
+import com.intellij.psi.controlFlow.LocalsControlFlowPolicy;
+import com.intellij.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.containers.IntArrayList;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author cdr
@@ -58,7 +65,7 @@ public class ControlFlowTest extends LightCodeInsightTestCase {
   }
 
   private static void doAllTests() throws Exception {
-    final String testDirPath = PathManagerEx.getTestDataPath().replace(File.separatorChar, '/') + BASE_PATH;
+    final String testDirPath = BASE_PATH;
     File testDir = new File(testDirPath);
     final File[] files = testDir.listFiles(new FilenameFilter() {
       @Override

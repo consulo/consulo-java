@@ -1,12 +1,12 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.AnnotateMethodFix;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.nullable.NullableStuffInspection;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class AnnotateMethodTest extends LightQuickFix15TestCase {
   private boolean myMustBeAvailableAfterInvoke;
@@ -20,10 +20,10 @@ public class AnnotateMethodTest extends LightQuickFix15TestCase {
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new NullableStuffInspection(){
-      @Override
+     // @Override
       protected AnnotateMethodFix createAnnotateMethodFix(String defaultNotNull, String[] annotationsToRemove) {
         return new AnnotateMethodFix(defaultNotNull, annotationsToRemove){
-          @Override
+         // @Override
           public int shouldAnnotateBaseMethod(final PsiMethod method, final PsiMethod superMethod, final Project project) {
             @NonNls String name = method.getName();
             int ret = name.startsWith("annotateBase") ? 0  // yes, annotate all

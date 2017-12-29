@@ -15,16 +15,16 @@
  */
 package com.intellij.testFramework;
 
-import com.intellij.ide.highlighter.ProjectFileType;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
 
 @SuppressWarnings({"HardCodedStringLiteral", "ConstantConditions", "JUnitTestCaseInProductSource"})
 @NonNls public abstract class TestSourceBasedTestCase extends IdeaTestCase {
@@ -53,7 +53,7 @@ import java.io.File;
   }
 
   protected String getTestDataPath() {
-    return PathManagerEx.getTestDataPath(getClass());
+    return "/";
   }
 
   protected abstract String getTestPath();
@@ -95,6 +95,6 @@ import java.io.File;
   
   protected String getRootFiles() {
     return " " + myModule.getModuleDir().getName() + "\n" +
-           " " + myProject.getName() + ProjectFileType.DOT_DEFAULT_EXTENSION + "\n";
+           " " + myProject.getName() + " "+ "\n";
   }
 }

@@ -1,8 +1,19 @@
 package com.intellij.psi.impl.cache.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.ContentEntry;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -13,15 +24,11 @@ import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.java.module.extension.JavaModuleExtensionImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
-import consulo.lombok.annotations.Logger;
-
-import java.io.File;
-import java.io.IOException;
+import consulo.roots.ContentFolderScopes;
 
 /**
  * @author max
  */
-@Logger
 public class SCR14423Test extends PsiTestCase {
   private VirtualFile myPrjDir1;
   private VirtualFile mySrcDir1;
@@ -31,7 +38,7 @@ public class SCR14423Test extends PsiTestCase {
   protected void setUp() throws Exception {
     super.setUp();
 
-    final File root = FileUtil.createTempFile(getName(), "");
+    final File root = FileUtil.createTempFile(getTestName(false), "");
     root.delete();
     root.mkdir();
     myFilesToDelete.add(root);
@@ -77,7 +84,7 @@ public class SCR14423Test extends PsiTestCase {
 
         ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
         final ContentEntry content = rootModel.getContentEntries()[0];
-        content.removeFolder(content.getFolders(ContentFolderType.EXCLUDED)[0]);
+        content.removeFolder(content.getFolders(ContentFolderScopes.excluded())[0]);
         rootModel.commit();
 
         psiClass = myJavaFacade.findClass("p.A", GlobalSearchScope.allScope(myProject));
@@ -100,7 +107,7 @@ public class SCR14423Test extends PsiTestCase {
 
         ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
         final ContentEntry content = rootModel.getContentEntries()[0];
-        content.removeFolder(content.getFolders(ContentFolderType.EXCLUDED)[0]);
+        content.removeFolder(content.getFolders(ContentFolderScopes.excluded())[0]);
         rootModel.commit();
 
         psiClass = myJavaFacade.findClass("p.A");

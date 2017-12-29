@@ -15,9 +15,21 @@
  */
 package com.intellij.testFramework;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
@@ -32,17 +44,13 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.util.IncorrectOperationException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * @author Mike
@@ -177,7 +185,7 @@ public abstract class PsiTestCase extends ModuleTestCase {
     final String actualText = myFile.getText();
 
     if (!textExpected.equals(actualText)) {
-      System.out.println("Text mismatch: " + getName() + "(" + getClass().getName() + ")");
+      System.out.println("Text mismatch: " + getTestName(false) + "(" + getClass().getName() + ")");
       System.out.println("Text expected:");
       printText(textExpected);
       System.out.println("Text found:");

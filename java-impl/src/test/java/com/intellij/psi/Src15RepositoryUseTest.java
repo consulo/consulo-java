@@ -15,10 +15,20 @@
  */
 package com.intellij.psi;
 
-import com.intellij.openapi.application.ex.PathManagerEx;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileFilter;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.AnnotatedMembersSearch;
 import com.intellij.psi.search.searches.AnnotatedPackagesSearch;
@@ -28,13 +38,6 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author dsl
@@ -45,15 +48,15 @@ public class Src15RepositoryUseTest extends PsiTestCase {
   protected void setUp() throws Exception {
     super.setUp();
 
-    LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
-    String root = PathManagerEx.getTestDataPath() + "/psi/repositoryUse/src15";
+    //LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
+    String root = "/psi/repositoryUse/src15";
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17("mock 1.5"));
     PsiTestUtil.createTestProjectStructure(myProject, myModule, root, myFilesToDelete);
   }
 
   @Override
   protected void tearDown() throws Exception {
-    LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
+    //LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
     super.tearDown();
   }
 
@@ -297,7 +300,7 @@ public class Src15RepositoryUseTest extends PsiTestCase {
       public boolean accept(final VirtualFile file) {
         return !"package-info.java".equals(file.getName());
       }
-    });
+    }, null);
 
     final PsiClass annotationTypeClass = findClass("annotations.AnnotationType");
     assertTrue(annotationTypeClass.isAnnotationType());
@@ -319,11 +322,11 @@ public class Src15RepositoryUseTest extends PsiTestCase {
   }
 
   private void setupLoadingFilter() {
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL, null);
   }
 
   private void tearDownLoadingFilter() {
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
   }
 
   @NotNull

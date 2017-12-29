@@ -20,23 +20,27 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInsight.daemon.impl.DefaultHighlightVisitorBasedInspection;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase {
   public void testAnnotator() throws Exception {
@@ -69,7 +73,7 @@ public class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase {
       if (element instanceof PsiMethod) {
         Annotation annotation = holder.createErrorAnnotation(((PsiMethod)element).getNameIdentifier(), null);
         annotation.registerUniversalFix(new MyFix(), null, null);
-        annotation.setTextAttributes(CodeInsightColors.DOC_COMMENT_TAG_VALUE);
+        annotation.setTextAttributes(DefaultLanguageHighlighterColors.DOC_COMMENT_TAG_VALUE);
       }
     }
 

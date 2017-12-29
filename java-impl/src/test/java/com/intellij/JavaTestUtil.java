@@ -15,17 +15,16 @@
  */
 package com.intellij;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.java.module.extension.JavaModuleExtensionImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yole
@@ -34,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 public class JavaTestUtil {
 
   public static String getJavaTestDataPath() {
-    return PathManagerEx.getTestDataPath();
+    return "";
   }
 
   public static String getRelativeJavaTestDataPath() {
@@ -49,7 +48,7 @@ public class JavaTestUtil {
   public static Sdk getTestJdk() {
     SdkTable sdkTable = SdkTable.getInstance();
     for (Sdk sdk : sdkTable.getAllSdks()) {
-      if (sdk.isBundled() && sdk.getSdkType() instanceof JavaSdk) {
+      if (sdk.isPredefined() && sdk.getSdkType() instanceof JavaSdk) {
         return sdk;
       }
     }

@@ -15,8 +15,18 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
@@ -34,6 +44,7 @@ import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
+import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.Extensions;
@@ -47,12 +58,7 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.psi.xml.XmlToken;
 import com.intellij.psi.xml.XmlTokenType;
 import com.intellij.testFramework.IdeaTestUtil;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.util.List;
+import consulo.java.codeInspection.JavaExtensionPoints;
 
 /**
  * This class is for "lightweight" tests only, i.e. those which can run inside default light project set up
@@ -217,7 +223,7 @@ public class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
   }
 
   public void testUnusedNonPrivateMembers2() {
-    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_TOOL);
+    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
     EntryPoint extension = new EntryPoint() {
       @NotNull
       @Override
@@ -289,7 +295,7 @@ public class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
   }
 
   public void testNamesHighlighting() {
-    LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+    //LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
     doTestFile(BASE_PATH + "/" + getTestName(false) + ".java").checkSymbolNames().test();
   }
 
@@ -319,7 +325,7 @@ public class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
 
   public void testInjectedAnnotator() {
     Annotator annotator = new MyAnnotator();
-    Language xml = StdFileTypes.XML.getLanguage();
+    Language xml = XMLLanguage.INSTANCE;
     LanguageAnnotators.INSTANCE.addExplicitExtension(xml, annotator);
     try {
       List<Annotator> list = LanguageAnnotators.INSTANCE.allForLanguage(xml);

@@ -15,10 +15,11 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import static org.junit.Assert.assertEquals;
+
 import com.intellij.analysis.PackagesScopesProvider;
 import com.intellij.application.options.colors.ScopeAttributesUtil;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -56,7 +57,7 @@ public class AdvHighlightingTest extends DaemonAnalyzerTestCase {
 
   @Override
   protected Sdk getTestProjectJdk() {
-    LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_4);
+    //LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_4);
     return IdeaTestUtil.getMockJdk14();
   }
 
@@ -236,7 +237,7 @@ public class AdvHighlightingTest extends DaemonAnalyzerTestCase {
   }
 
   public void testMultiJDKConflict() throws Exception {
-    String path = PathManagerEx.getTestDataPath() + BASE_PATH + "/" + getTestName(true);
+    String path = BASE_PATH + "/" + getTestName(true);
     VirtualFile root = LocalFileSystem.getInstance().findFileByIoFile(new File(path));
     assert root != null : path;
     loadAllModulesUnder(root);
@@ -254,7 +255,7 @@ public class AdvHighlightingTest extends DaemonAnalyzerTestCase {
   }
 
   public void testSameFQNClasses() throws Exception {
-    String path = PathManagerEx.getTestDataPath() + BASE_PATH + "/" + getTestName(true);
+    String path = BASE_PATH + "/" + getTestName(true);
     VirtualFile root = LocalFileSystem.getInstance().findFileByIoFile(new File(path));
     assert root != null : path;
     loadAllModulesUnder(root);
@@ -265,7 +266,7 @@ public class AdvHighlightingTest extends DaemonAnalyzerTestCase {
   }
 
   public void testSameClassesInSourceAndLib() throws Exception {
-    String path = PathManagerEx.getTestDataPath() + BASE_PATH + "/" + getTestName(true);
+    String path = BASE_PATH + "/" + getTestName(true);
     VirtualFile root = LocalFileSystem.getInstance().findFileByIoFile(new File(path));
     assert root != null : path;
     loadAllModulesUnder(root);
@@ -285,7 +286,7 @@ public class AdvHighlightingTest extends DaemonAnalyzerTestCase {
   }
 
   public void testNotAKeywords() throws Exception {
-    LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_4);
+    //LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_4);
     doTest(BASE_PATH + "/notAKeywords/Test.java", BASE_PATH + "/notAKeywords", false, false);
   }
 

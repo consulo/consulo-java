@@ -15,13 +15,17 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.concurrency.JobSchedulerImpl;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.extensions.ExtensionPoint;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Disposer;
@@ -30,9 +34,6 @@ import com.intellij.psi.impl.source.tree.injected.JavaConcatenationInjectorManag
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ThrowableRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LightAdvHighlightingPerformanceTest extends LightDaemonAnalyzerTestCase {
   private final Disposable my = Disposer.newDisposable();
@@ -46,7 +47,6 @@ public class LightAdvHighlightingPerformanceTest extends LightDaemonAnalyzerTest
     Disposer.register(my, BlockExtensions.create(Extensions.getArea(getProject()).getExtensionPoint(MultiHostInjector.EP_NAME)));
 
     IntentionManager.getInstance().getAvailableIntentionActions();  // hack to avoid slowdowns in PyExtensionFactory
-    PathManagerEx.getTestDataPath(); // to cache stuff
   }
 
   @Override

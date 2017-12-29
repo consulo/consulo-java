@@ -15,7 +15,10 @@
  */
 package com.intellij.projectView;
 
-import com.intellij.ide.actions.ViewStructureAction;
+import static org.junit.Assert.assertNotNull;
+
+import javax.swing.ListModel;
+
 import com.intellij.ide.commander.CommanderPanel;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewModel;
@@ -31,44 +34,48 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaPackage;
 
-import javax.swing.*;
+public class FileStructureDialogTest extends BaseProjectViewTestCase
+{
+	public void testFileStructureForClass()
+	{
+		final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(getPackageDirectory());
+		assertNotNull(aPackage);
+		final PsiClass psiClass = aPackage.getClasses()[0];
+		final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
+		assertNotNull(virtualFile);
+		final StructureViewBuilder structureViewBuilder = StructureViewBuilder.PROVIDER.getStructureViewBuilder(virtualFile.getFileType(), virtualFile, myProject);
+		assertNotNull(structureViewBuilder);
+		final StructureViewModel structureViewModel = ((TreeBasedStructureViewBuilder) structureViewBuilder).createStructureViewModel(null);
 
-public class FileStructureDialogTest extends BaseProjectViewTestCase {
-  public void testFileStructureForClass() throws Exception {
-    final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(getPackageDirectory());
-    assertNotNull(aPackage);
-    final PsiClass psiClass = aPackage.getClasses()[0];
-    final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
-    assertNotNull(virtualFile);
-    final StructureViewBuilder structureViewBuilder =
-      StructureViewBuilder.PROVIDER.getStructureViewBuilder(virtualFile.getFileType(), virtualFile, myProject);
-    assertNotNull(structureViewBuilder);
-    final StructureViewModel structureViewModel = ((TreeBasedStructureViewBuilder)structureViewBuilder).createStructureViewModel();
+		final EditorFactory factory = EditorFactory.getInstance();
+		assertNotNull(factory);
+		final Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
+		assertNotNull(document);
 
-    final EditorFactory factory = EditorFactory.getInstance();
-    assertNotNull(factory);
-    final Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
-    assertNotNull(document);
-
-    final Editor editor = factory.createEditor(document);
-    try {
-      final FileStructureDialog dialog =
-        ViewStructureAction.createStructureViewBasedDialog(structureViewModel, editor, myProject, psiClass, new Disposable() {
-          @Override
-          public void dispose() {
-            structureViewModel.dispose();
-          }
-        });
-      try {
-        final CommanderPanel panel = dialog.getPanel();
-        assertListsEqual((ListModel)panel.getModel(), "Inner1\n" + "Inner2\n" + "__method(): void\n" + "_myField1: int\n" + "_myField2: String\n");
-      }
-      finally {
-        dialog.close(0);
-      }
-    }
-    finally {
-      factory.releaseEditor(editor);
-    }
-  }
+		final Editor editor = factory.createEditor(document, myProject);
+		try
+		{
+			final FileStructureDialog dialog = new FileStructureDialog(structureViewModel, editor, myProject, psiClass, new Disposable()
+			{
+				@Override
+				public void dispose()
+				{
+					structureViewModel.dispose();
+				}
+			}, true);
+			try
+			{
+				final CommanderPanel panel = dialog.getPanel();
+				assertListsEqual((ListModel) panel.getModel(), "Inner1\n" + "Inner2\n" + "__method(): void\n" + "_myField1: int\n" + "_myField2: String\n");
+			}
+			finally
+			{
+				dialog.close(0);
+			}
+		}
+		finally
+		{
+			factory.releaseEditor(editor);
+		}
+	}
 }

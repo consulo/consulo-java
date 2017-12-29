@@ -1,6 +1,15 @@
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeInsight.TargetElementUtilBase;
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.junit.Assert;
 import com.intellij.codeInsight.hint.ImplementationViewComponent;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -8,9 +17,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import org.junit.Assert;
-
-import java.util.*;
+import consulo.codeInsight.TargetElementUtil;
 
 /**
  * User: anna
@@ -41,7 +48,7 @@ public class ImplementationsViewTest extends LightCodeInsightFixtureTestCase {
     myFixture.completeBasic();
 
     PsiElement element =
-      TargetElementUtilBase.findTargetElement(myFixture.getEditor(), TargetElementUtilBase.getInstance().getAllAccepted());
+      TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert element != null;
     final String newText = ImplementationViewComponent.getNewText(element);
@@ -69,7 +76,7 @@ public class ImplementationsViewTest extends LightCodeInsightFixtureTestCase {
                                         "    }\n" +
                                         "}");
     PsiElement element =
-      TargetElementUtilBase.findTargetElement(myFixture.getEditor(), TargetElementUtilBase.getInstance().getAllAccepted());
+			TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert element != null;
     final String newText = ImplementationViewComponent.getNewText(element);
@@ -104,7 +111,7 @@ public class ImplementationsViewTest extends LightCodeInsightFixtureTestCase {
                                         "    \n" +
                                         "}");
     PsiClass psiClass =
-      (PsiClass)TargetElementUtilBase.findTargetElement(myFixture.getEditor(), TargetElementUtilBase.getInstance().getAllAccepted());
+      (PsiClass)TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert psiClass != null;
     final Collection<PsiClass> classes = ClassInheritorsSearch.search(psiClass).findAll();
@@ -147,7 +154,7 @@ public class ImplementationsViewTest extends LightCodeInsightFixtureTestCase {
                                           "    \n" +
                                           "}");
       PsiMethod psiMethod =
-        (PsiMethod)TargetElementUtilBase.findTargetElement(myFixture.getEditor(), TargetElementUtilBase.getInstance().getAllAccepted());
+        (PsiMethod)TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert psiMethod != null;
     final Collection<PsiMethod> methods = OverridingMethodsSearch.search(psiMethod).findAll();

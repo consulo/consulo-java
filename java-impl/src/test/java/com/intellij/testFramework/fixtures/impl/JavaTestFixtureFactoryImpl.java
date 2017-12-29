@@ -15,9 +15,16 @@
  */
 package com.intellij.testFramework.fixtures.impl;
 
-import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
-import com.intellij.testFramework.fixtures.*;
+import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
+import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
+import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
+import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
+import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.ModuleFixture;
+import com.intellij.testFramework.fixtures.TempDirTestFixture;
+import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 
 /**
  * @author yole
@@ -53,5 +60,5 @@ public class JavaTestFixtureFactoryImpl extends JavaTestFixtureFactory {
     }
   }
 
-  private static final LightProjectDescriptor ourJavaProjectDescriptor = LightCodeInsightFixtureTestCase.JAVA_1_6;
+  private static final TestModuleDescriptor ourJavaProjectDescriptor = LightCodeInsightFixtureTestCase.JAVA_1_6;
 }

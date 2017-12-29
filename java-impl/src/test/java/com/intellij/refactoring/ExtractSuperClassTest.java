@@ -15,17 +15,32 @@
  */
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.util.Arrays;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiJavaPackage;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.extractSuperclass.ExtractSuperClassProcessor;
 import com.intellij.refactoring.memberPullUp.PullUpConflictsUtil;
-import com.intellij.refactoring.memberPullUp.PullUpHelper;
+import com.intellij.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.classMembers.InterfaceContainmentVerifier;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
@@ -33,10 +48,6 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
-import java.util.Arrays;
 
 /**
  * @author yole
@@ -121,7 +132,7 @@ public class ExtractSuperClassTest extends RefactoringTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+    //LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
   }
 
   @NonNls
@@ -177,7 +188,7 @@ public class ExtractSuperClassTest extends RefactoringTestCase {
       PullUpConflictsUtil.checkConflicts(members, psiClass, superClass, targetPackage, targetDirectory, new InterfaceContainmentVerifier() {
         @Override
         public boolean checkedInterfacesContain(PsiMethod psiMethod) {
-          return PullUpHelper.checkedInterfacesContain(Arrays.asList(members), psiMethod);
+          return PullUpProcessor.checkedInterfacesContain(Arrays.asList(members), psiMethod);
         }
       }, false);
     if (conflicts != null) {

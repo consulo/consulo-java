@@ -15,13 +15,11 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.pom.java.LanguageLevel;
-
 public class WrapExpressionFixTest extends LightQuickFixTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_6);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_6);
   }
 
   public void test() throws Exception {

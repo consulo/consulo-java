@@ -15,8 +15,11 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
@@ -29,7 +32,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
  * @author dsl
  */
 public class ShortenClassReferencesTest extends LightCodeInsightFixtureTestCase {
-  private static final String BASE_PATH = PathManagerEx.getTestDataPath() + "/psi/shortenClassRefs";
+  private static final String BASE_PATH = "/psi/shortenClassRefs";
 
   @Override
   protected String getTestDataPath() {

@@ -15,21 +15,23 @@
  */
 package com.intellij.psi;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.security.SecureRandom;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.lang.FileASTNode;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.impl.source.JavaLightStubBuilder;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.testFramework.LightIdeaTestCase;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.util.ThrowableRunnable;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.security.SecureRandom;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class JavaStubBuilderTest extends LightIdeaTestCase {
@@ -39,7 +41,7 @@ public class JavaStubBuilderTest extends LightIdeaTestCase {
   public void setUp() throws Exception {
     super.setUp();
     doTest("@interface A { int i() default 42; }\n class C { void m(int p) throws E { } }", null);  // warm up
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.HIGHEST);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.HIGHEST);
   }
 
   public void testEmpty() {
@@ -487,7 +489,7 @@ public class JavaStubBuilderTest extends LightIdeaTestCase {
   }
 
   public void testPerformance() throws Exception {
-    final String path = PathManagerEx.getTestDataPath() + "/psi/stub/StubPerformanceTest.java";
+    final String path = "/psi/stub/StubPerformanceTest.java";
     String text = FileUtil.loadFile(new File(path));
     final PsiJavaFile file = (PsiJavaFile)createLightFile("test.java", text);
 

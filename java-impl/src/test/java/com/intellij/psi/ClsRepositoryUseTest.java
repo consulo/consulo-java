@@ -15,9 +15,19 @@
  */
 package com.intellij.psi;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -36,13 +46,11 @@ import com.intellij.testFramework.PsiTestUtil;
 import consulo.java.module.extension.JavaModuleExtensionImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
 
-import java.io.File;
-
 @PlatformTestCase.WrapInCommand
 public class ClsRepositoryUseTest extends PsiTestCase {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.ClsRepositoryUseTest");
 
-  private static final String TEST_ROOT = PathManagerEx.getTestDataPath() + "/psi/repositoryUse/cls";
+  private static final String TEST_ROOT = "/psi/repositoryUse/cls";
   private GlobalSearchScope RESOLVE_SCOPE;
 
   @Override
@@ -82,7 +90,7 @@ public class ClsRepositoryUseTest extends PsiTestCase {
     //noinspection ResultOfMethodCallIgnored
     com.mkdir();
 
-    File dataPath = new File(PathManagerEx.getTestDataPath() + "/psi/cls");
+    File dataPath = new File("/psi/cls");
 
     final File target = new File(com, "TestClass.class");
     FileUtil.copy(new File(dataPath, "1/TestClass.class"), target);
@@ -235,13 +243,13 @@ public class ClsRepositoryUseTest extends PsiTestCase {
   }
 
   public void testFindClass() {
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL, null);
 
     PsiClass aClass = myJavaFacade.findClass("pack.MyClass", GlobalSearchScope.allScope(myProject));
     assertNotNull(aClass);
     checkValid(aClass);
 
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
   }
 
   public void testIsInterface() {

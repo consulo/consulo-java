@@ -15,6 +15,8 @@
  */
 package com.intellij.codeInsight;
 
+import static org.junit.Assert.*;
+
 import com.intellij.lang.java.JavaDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -31,7 +33,7 @@ public class ExternalJavadocUrlsTest extends LightCodeInsightFixtureTestCase {
     final PsiElement elementAtCaret = myFixture.getElementAtCaret();
     final PsiMethod member = PsiTreeUtil.getParentOfType(elementAtCaret, PsiMethod.class, false);
     assertNotNull(member);
-    final String signature = JavaDocumentationProvider.formatMethodSignature(member);
+    final String signature = JavaDocumentationProvider.formatMethodSignature(member, true, false);
     assertNotNull(signature);
     assertEquals("found:" + signature, expectedSignature[0], signature);
   }

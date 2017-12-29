@@ -16,16 +16,18 @@
  */
 package com.intellij.testFramework;
 
-import com.intellij.openapi.application.ex.PathManagerEx;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiReference;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
 
 public abstract class ResolveTestCase extends PsiTestCase {
   @NonNls protected static final String MARKER = "<ref>";
@@ -65,6 +67,6 @@ public abstract class ResolveTestCase extends PsiTestCase {
 
   @Override
   protected String getTestDataPath() {
-    return PathManagerEx.getTestDataPath() + "/psi/resolve/";
+    return "/psi/resolve/";
   }
 }

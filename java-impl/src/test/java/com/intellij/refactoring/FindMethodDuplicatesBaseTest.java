@@ -4,15 +4,20 @@
  */
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMember;
 import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class FindMethodDuplicatesBaseTest extends LightCodeInsightTestCase {
   @NotNull
@@ -28,7 +33,7 @@ public abstract class FindMethodDuplicatesBaseTest extends LightCodeInsightTestC
   protected void doTest(final boolean shouldSucceed) throws Exception {
     final String filePath = getTestFilePath();
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtilBase.findTargetElement(getEditor(), TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on method name", targetElement instanceof PsiMember);
     final PsiMember psiMethod = (PsiMember)targetElement;
 

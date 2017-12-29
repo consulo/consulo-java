@@ -15,18 +15,27 @@
  */
 package com.intellij.refactoring;
 
-import com.intellij.codeInsight.TargetElementUtilBase;
-import com.intellij.psi.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMember;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.memberPushDown.PushDownProcessor;
 import com.intellij.refactoring.util.DocCommentPolicy;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.refactoring.util.classMembers.MemberInfoStorage;
 import com.intellij.usageView.UsageInfo;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
-
-import java.util.ArrayList;
-import java.util.List;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author anna
@@ -61,7 +70,7 @@ public class PushDownTest extends LightRefactoringTestCase {
   private void doTest(final boolean failure) {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
 
-    final PsiElement targetElement = TargetElementUtilBase.findTargetElement(getEditor(), TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on member name", targetElement instanceof PsiMember);
 
     final PsiMember psiMember = (PsiMember)targetElement;

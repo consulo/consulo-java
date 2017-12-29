@@ -1,5 +1,10 @@
 package com.intellij.projectView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.TreeStructureProvider;
@@ -9,11 +14,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Queryable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 class ClassNameConvertor implements TreeStructureProvider {
 
@@ -66,10 +66,5 @@ class ClassNameConvertor implements TreeStructureProvider {
       }
     }
     return result;
-  }
-
-  @Override
-  public Object getData(Collection<AbstractTreeNode> selected, String dataName) {
-    return null;
   }
 }

@@ -1,7 +1,10 @@
 package com.intellij.psi;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -9,14 +12,12 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 
-import java.io.File;
-
 /**
  *  @author dsl
  */
 public class SCR17094Test extends PsiTestCase {
   protected void setUpClasses(final String s) throws Exception {
-    final String testRoot = PathManagerEx.getTestDataPath() + "/psi/repositoryUse/scr17094";
+    final String testRoot = "/psi/repositoryUse/scr17094";
     VirtualFile classesRoot  = ApplicationManager.getApplication().runWriteAction(new Computable<VirtualFile>() {
       @Override
       public VirtualFile compute() {

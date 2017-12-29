@@ -15,6 +15,13 @@
  */
 package com.intellij.codeInsight.slice;
 
+import static org.junit.Assert.assertNotNull;
+
+import gnu.trove.TIntObjectHashMap;
+
+import java.util.Collection;
+import java.util.Map;
+
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -23,13 +30,8 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.slicer.SliceAnalysisParams;
 import com.intellij.slicer.SliceForwardHandler;
-import com.intellij.slicer.SliceManager;
 import com.intellij.slicer.SliceUsage;
 import com.intellij.util.containers.IntArrayList;
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author cdr
@@ -49,7 +51,7 @@ public class SliceForwardTest extends DaemonAnalyzerTestCase {
     SliceAnalysisParams params = new SliceAnalysisParams();
     params.scope = new AnalysisScope(getProject());
     params.dataFlowToThis = false;
-    SliceUsage usage = SliceManager.createRootUsage(element, params);
+    SliceUsage usage = SliceUsage.createRootUsage(element, params);
     SliceBackwardTest.checkUsages(usage, false, myFlownOffsets);
   }
 

@@ -1,21 +1,24 @@
 package com.intellij.psi;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.impl.compiled.DefaultClsStubBuilderFactory;
+import com.intellij.psi.impl.compiled.ClsFileImpl;
 import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.testFramework.LightIdeaTestCase;
 import com.intellij.util.cls.ClsFormatException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * @author max
@@ -81,7 +84,7 @@ public class ClsBuilderTest extends LightIdeaTestCase {
   }
 
   private static void doTest(VirtualFile vFile, String goldFile) throws ClsFormatException, IOException {
-    final PsiFileStub stub = (new DefaultClsStubBuilderFactory()).buildFileStub(vFile, vFile.contentsToByteArray());
+    final PsiFileStub stub = ClsFileImpl.buildFileStub(vFile, vFile.contentsToByteArray());
     assert stub != null : vFile;
     final String butWas = ((StubBase)stub).printTree();
 

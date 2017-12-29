@@ -857,7 +857,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 		return signatures;
 	}
 
-	private static String formatMethodSignature(PsiMethod method, boolean raw, boolean java8Format)
+	public static String formatMethodSignature(PsiMethod method, boolean raw, boolean java8Format)
 	{
 		int options = PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS;
 		int parameterOptions = PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_FQ_CLASS_NAMES;

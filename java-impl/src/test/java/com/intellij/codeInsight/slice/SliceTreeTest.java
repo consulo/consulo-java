@@ -1,22 +1,35 @@
 package com.intellij.codeInsight.slice;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.impl.ToolWindowHeadlessManagerImpl;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiLiteral;
+import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.slicer.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-
-import java.util.*;
 
 /**
  * @author cdr
@@ -34,10 +47,10 @@ public class SliceTreeTest extends LightDaemonAnalyzerTestCase {
     params.scope = new AnalysisScope(getProject());
     params.dataFlowToThis = true;
 
-    SliceUsage usage = SliceManager.createRootUsage(element, params);
+    SliceUsage usage = SliceUsage.createRootUsage(element, params);
 
 
-    SlicePanel panel = new SlicePanel(getProject(), true, new SliceRootNode(getProject(), new DuplicateMap(), usage), false, ToolWindowHeadlessManagerImpl.HEADLESS_WINDOW) {
+    SlicePanel panel = new SlicePanel(getProject(), true, new SliceRootNode(getProject(), new DuplicateMap(), usage), false, new ToolWindowHeadlessManagerImpl.MockToolWindow(getProject())) {
       @Override
       protected void close() {
       }

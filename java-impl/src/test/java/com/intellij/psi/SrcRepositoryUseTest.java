@@ -15,20 +15,30 @@
  */
 package com.intellij.psi;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.projectRoots.impl.ProjectRootUtil;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.ContentEntry;
+import com.intellij.openapi.roots.ContentFolder;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileFilter;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.impl.source.PsiFileImpl;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -40,9 +50,8 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-
-import java.io.File;
-import java.io.IOException;
+import consulo.roots.ContentFolderScopes;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 @SuppressWarnings("ConstantConditions")
 @PlatformTestCase.WrapInCommand
@@ -54,8 +63,8 @@ public class SrcRepositoryUseTest extends PsiTestCase{
   protected void setUp() throws Exception {
     super.setUp();
 
-    LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
-    String root = PathManagerEx.getTestDataPath() + "/psi/repositoryUse/src";
+    //LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
+    String root = "/psi/repositoryUse/src";
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
     PsiTestUtil.createTestProjectStructure(myProject, myModule, root, myFilesToDelete);
   }
@@ -583,11 +592,11 @@ public class SrcRepositoryUseTest extends PsiTestCase{
   }
 
   private void teardownLoadingFilter() {
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
   }
 
   private void setupLoadingFilter() {
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL, null);
   }
 
   public void testAnonymousClass2() throws Exception {
@@ -723,13 +732,13 @@ public class SrcRepositoryUseTest extends PsiTestCase{
             final ContentEntry[] content = rootModel.getContentEntries();
             boolean contentToChangeFound = false;
             for (ContentEntry contentEntry : content) {
-              final ContentFolder[] sourceFolders = contentEntry.getFolders(ContentFolderType.PRODUCTION);
+              final ContentFolder[] sourceFolders = contentEntry.getFolders(ContentFolderScopes.of(ProductionContentFolderTypeProvider.getInstance()));
               for (ContentFolder sourceFolder : sourceFolders) {
                 contentEntry.removeFolder(sourceFolder);
               }
               final VirtualFile contentRoot = contentEntry.getFile();
               if (contentRoot != null && VfsUtilCore.isAncestor(contentRoot, newSourceRoot, false)) {
-                contentEntry.addFolder(newSourceRoot, ContentFolderType.PRODUCTION);
+                contentEntry.addFolder(newSourceRoot, ProductionContentFolderTypeProvider.getInstance());
                 contentToChangeFound = true;
               }
             }

@@ -15,6 +15,9 @@
  */
 package com.intellij.psi;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -24,12 +27,10 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.IncorrectOperationException;
-import consulo.lombok.annotations.Logger;
 
 /**
  * @author ven
  */
-@Logger
 public class ModifyAnnotationsTest extends PsiTestCase {
   @Override
   protected void setUp() throws Exception {
@@ -42,7 +43,7 @@ public class ModifyAnnotationsTest extends PsiTestCase {
 
   public void testReplaceAnnotation() throws Exception {
     //be sure not to load tree
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.ALL, null);
     PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.allScope(myProject));
     assertNotNull(aClass);
     final PsiAnnotation[] annotations = aClass.getModifierList().getAnnotations();
@@ -50,7 +51,7 @@ public class ModifyAnnotationsTest extends PsiTestCase {
     assertEquals("A", annotations[0].getNameReferenceElement().getReferenceName());
     final PsiAnnotation newAnnotation = myJavaFacade.getElementFactory().createAnnotationFromText("@B", null);
     //here the tree is going to be loaded
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
     CommandProcessor.getInstance().executeCommand(myProject, new Runnable() {
       @Override
       public void run() {

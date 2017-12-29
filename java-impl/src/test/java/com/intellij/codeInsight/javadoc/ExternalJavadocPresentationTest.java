@@ -15,69 +15,80 @@
  */
 package com.intellij.codeInsight.javadoc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 
 /**
  * User: anna
  * Date: 12/7/11
  */
-public class ExternalJavadocPresentationTest extends LightCodeInsightTestCase {
-  private static final String TEST_ROOT = "/codeInsight/externalJavadoc/";
+public class ExternalJavadocPresentationTest extends LightCodeInsightTestCase
+{
+	private static final String TEST_ROOT = "/codeInsight/externalJavadoc/";
 
-  @NotNull
-  @Override
-  protected String getTestDataPath() {
-    return JavaTestUtil.getJavaTestDataPath();
-  }
+	@NotNull
+	@Override
+	protected String getTestDataPath()
+	{
+		return JavaTestUtil.getJavaTestDataPath();
+	}
 
-  public void testStringClass() throws Exception {
-    doTest("", "String/7/page.html", "String/7/expected.html");
-    doTest("", "String/6/page.html", "String/6/expected.html");
-  }
+	public void testStringClass() throws Exception
+	{
+		doTest("", "String/7/page.html", "String/7/expected.html");
+		doTest("", "String/6/page.html", "String/6/expected.html");
+	}
 
-  public void testToLowerCase() throws Exception {
-      doTest("lang/String.html#toLowerCase()", "String/7/page.html", "String/7/expectedToLowerCase.html");
-      doTest("lang/String.html#toLowerCase()", "String/6/page.html", "String/6/expectedToLowerCase.html");
-  }
-  
-  public void testPackageSummary() throws Exception {
-    doTest("java/lang/package-summary.html", "packageSummary/util/page.html", "packageSummary/util/expected.html");
-  }
+	public void testToLowerCase() throws Exception
+	{
+		doTest("lang/String.html#toLowerCase()", "String/7/page.html", "String/7/expectedToLowerCase.html");
+		doTest("lang/String.html#toLowerCase()", "String/6/page.html", "String/6/expectedToLowerCase.html");
+	}
 
-  private void doTest(@NonNls String url, @NonNls String pageText, @NonNls String expected) throws Exception {
-    final String basePath = getTestDataPath() + TEST_ROOT;
-    final VirtualFile pageTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + pageText);
-    assertNotNull(pageTextFile);
+	public void testPackageSummary() throws Exception
+	{
+		doTest("java/lang/package-summary.html", "packageSummary/util/page.html", "packageSummary/util/expected.html");
+	}
 
-    final VirtualFile expectedTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + expected);
-    assertNotNull(expectedTextFile);
+	private void doTest(@NonNls String url, @NonNls String pageText, @NonNls String expected) throws Exception
+	{
+		final String basePath = getTestDataPath() + TEST_ROOT;
+		final VirtualFile pageTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + pageText);
+		assertNotNull(pageTextFile);
 
+		final VirtualFile expectedTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + expected);
+		assertNotNull(expectedTextFile);
 
-    class JavadocExternalTestFilter extends JavaDocExternalFilter {
+		class JavadocExternalTestFilter extends JavaDocExternalFilter
+		{
 
-      public JavadocExternalTestFilter(Project project) {
-        super(project);
-      }
+			public JavadocExternalTestFilter(Project project)
+			{
+				super(project);
+			}
 
-      @Override
-      public void doBuildFromStream(String surl, Reader input, StringBuffer data, boolean search4Encoding) throws IOException {
-        super.doBuildFromStream(surl, input, data, search4Encoding);
-      }
-    }
-    JavadocExternalTestFilter filter = new JavadocExternalTestFilter(getProject());
-    final StringBuffer extractedData = new StringBuffer();
-    filter.doBuildFromStream(url, new StringReader(LoadTextUtil.loadText(pageTextFile).toString()), extractedData, false);
-    assertEquals(LoadTextUtil.loadText(expectedTextFile).toString(), extractedData.toString());
-  }
+			@Override
+			public void doBuildFromStream(String url, Reader input, StringBuilder data, boolean searchForEncoding, boolean matchStart) throws IOException
+			{
+				super.doBuildFromStream(url, input, data, searchForEncoding, matchStart);
+			}
+		}
+		JavadocExternalTestFilter filter = new JavadocExternalTestFilter(getProject());
+		final StringBuilder extractedData = new StringBuilder();
+		filter.doBuildFromStream(url, new StringReader(LoadTextUtil.loadText(pageTextFile).toString()), extractedData, false, false);
+		assertEquals(LoadTextUtil.loadText(expectedTextFile).toString(), extractedData.toString());
+	}
 }

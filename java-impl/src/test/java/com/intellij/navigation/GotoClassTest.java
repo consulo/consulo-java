@@ -1,5 +1,8 @@
 package com.intellij.navigation;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditor;

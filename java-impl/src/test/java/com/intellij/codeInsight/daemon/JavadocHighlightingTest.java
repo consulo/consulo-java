@@ -1,11 +1,11 @@
 package com.intellij.codeInsight.daemon;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NotNull;
 
 
 public class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {
@@ -100,7 +100,7 @@ public class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {
   public void testMissingReturnDescription() throws Exception { doTest(); }
 
   private void doTestWithLangLevel(final LanguageLevel langLevel) throws Exception {
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(langLevel);
+    //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(langLevel);
     doTest();
   }
 

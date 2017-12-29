@@ -1,15 +1,23 @@
 package com.intellij.roots;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.ContentEntry;
+import com.intellij.openapi.roots.ContentFolder;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.IdeaTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-
-import java.io.File;
-import java.io.IOException;
+import consulo.roots.impl.ExcludedContentFolderTypeProvider;
+import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 public class ManagingContentRootFoldersTest extends IdeaTestCase {
   private VirtualFile root;
@@ -59,7 +67,7 @@ public class ManagingContentRootFoldersTest extends IdeaTestCase {
     VirtualFile dir = root.createChildDirectory(null, "src");
     String url = dir.getUrl();
 
-    ContentFolder f = entry.addFolder(dir, ContentFolderType.PRODUCTION);
+    ContentFolder f = entry.addFolder(dir, ProductionContentFolderTypeProvider.getInstance());
     assertEquals(dir, f.getFile());
     assertEquals(url, f.getUrl());
 
@@ -78,7 +86,7 @@ public class ManagingContentRootFoldersTest extends IdeaTestCase {
     String url = dir.getUrl();
     dir.delete(null);
 
-    ContentFolder f = entry.addFolder(url, ContentFolderType.PRODUCTION);
+    ContentFolder f = entry.addFolder(url, ProductionContentFolderTypeProvider.getInstance());
     assertNull(f.getFile());
     assertEquals(url, f.getUrl());
 
@@ -91,7 +99,7 @@ public class ManagingContentRootFoldersTest extends IdeaTestCase {
     VirtualFile dir = root.createChildDirectory(null, "src");
     String url = dir.getUrl();
 
-    ContentFolder f = entry.addFolder(url, ContentFolderType.PRODUCTION);
+    ContentFolder f = entry.addFolder(url, ProductionContentFolderTypeProvider.getInstance());
     assertEquals(dir, f.getFile());
     assertEquals(url, f.getUrl());
   }
@@ -100,7 +108,7 @@ public class ManagingContentRootFoldersTest extends IdeaTestCase {
     VirtualFile dir = root.createChildDirectory(null, "src");
     String url = dir.getUrl();
 
-    ContentFolder f = entry.addFolder(dir, ContentFolderType.EXCLUDED);
+    ContentFolder f = entry.addFolder(dir, ExcludedContentFolderTypeProvider.getInstance());
     assertEquals(dir, f.getFile());
     assertEquals(url, f.getUrl());
 
@@ -118,7 +126,7 @@ public class ManagingContentRootFoldersTest extends IdeaTestCase {
     String url = dir.getUrl();
     dir.delete(null);
 
-    ContentFolder f = entry.addFolder(url, ContentFolderType.EXCLUDED);
+    ContentFolder f = entry.addFolder(url, ExcludedContentFolderTypeProvider.getInstance());
     assertNull(f.getFile());
     assertEquals(url, f.getUrl());
 
@@ -131,7 +139,7 @@ public class ManagingContentRootFoldersTest extends IdeaTestCase {
     VirtualFile dir = root.createChildDirectory(null, "src");
     String url = dir.getUrl();
 
-    ContentFolder f = entry.addFolder(url, ContentFolderType.EXCLUDED);
+    ContentFolder f = entry.addFolder(url, ExcludedContentFolderTypeProvider.getInstance());
     assertEquals(dir, f.getFile());
     assertEquals(url, f.getUrl());
   }

@@ -3,8 +3,12 @@
  */
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
@@ -13,9 +17,9 @@ import com.intellij.refactoring.makeStatic.MakeClassStaticProcessor;
 import com.intellij.refactoring.makeStatic.MakeStaticUtil;
 import com.intellij.refactoring.makeStatic.Settings;
 import com.intellij.refactoring.util.VariableData;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 public class MakeClassStaticTest extends LightRefactoringTestCase {
   private static final String TEST_ROOT = "/refactoring/makeClassStatic/";
@@ -65,7 +69,7 @@ public class MakeClassStaticTest extends LightRefactoringTestCase {
 
   private void perform() throws Exception {
     configureByFile(TEST_ROOT + getTestName(false) + ".java");
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiClass);
     PsiClass aClass = (PsiClass)element;
 
@@ -80,7 +84,7 @@ public class MakeClassStaticTest extends LightRefactoringTestCase {
 
   private void performWithFields() throws Exception {
     configureByFile(TEST_ROOT + getTestName(false) + ".java");
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiClass);
     PsiClass aClass = (PsiClass)element;
     final ArrayList<VariableData> parametersForFields = new ArrayList<VariableData>();

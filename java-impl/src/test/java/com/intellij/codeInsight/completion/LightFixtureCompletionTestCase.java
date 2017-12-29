@@ -1,16 +1,17 @@
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.lookup.Lookup;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupEvent;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author peter
@@ -20,7 +21,7 @@ public abstract class LightFixtureCompletionTestCase extends LightCodeInsightFix
 
   @NotNull
   @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
+  protected TestModuleDescriptor getProjectDescriptor() {
     return JAVA_1_6;
   }
 

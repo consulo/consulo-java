@@ -15,6 +15,14 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import gnu.trove.TIntArrayList;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerImpl;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -34,13 +42,6 @@ import com.intellij.testFramework.HighlightTestInfo;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ArrayUtil;
-import gnu.trove.TIntArrayList;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.List;
 
 public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCase {
   private final FileTreeAccessFilter myJavaFilesFilter = new FileTreeAccessFilter();
@@ -104,7 +105,7 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
   }
 
   protected void doTestConfiguredFile(boolean checkWarnings, boolean checkWeakWarnings, boolean checkInfos, @Nullable String filePath) {
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
 
     ExpectedHighlightingData data = new ExpectedHighlightingData(getEditor().getDocument(), checkWarnings, checkWeakWarnings, checkInfos);
     checkHighlighting(data, composeLocalPath(filePath));
@@ -121,11 +122,11 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
     PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
     getFile().getText(); //to load text
     myJavaFilesFilter.allowTreeAccessForFile(getVFile());
-    getJavaFacade().setAssertOnFileLoadingFilter(myJavaFilesFilter); // check repository work
+    getJavaFacade().setAssertOnFileLoadingFilter(myJavaFilesFilter, null); // check repository work
 
     Collection<HighlightInfo> infos = doHighlighting();
 
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE);
+    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
 
     data.checkResult(infos, getEditor().getDocument().getText(), filePath);
   }

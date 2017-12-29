@@ -15,13 +15,15 @@
  */
 package com.intellij.codeInsight;
 
+import static org.junit.Assert.fail;
+
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.inferNullity.NullityInferrer;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
  * User: anna

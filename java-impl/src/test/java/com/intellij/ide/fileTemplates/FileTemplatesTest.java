@@ -1,7 +1,19 @@
 package com.intellij.ide.fileTemplates;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
+
 import com.intellij.ide.fileTemplates.impl.CustomFileTemplate;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -15,14 +27,10 @@ import com.intellij.testFramework.IdeaTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.properties.EncodingAwareProperties;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.*;
-
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class FileTemplatesTest extends IdeaTestCase {
   public void testAllTemplates() throws Exception {
-    final File testsDir = new File(PathManagerEx.getTestDataPath()+"/ide/fileTemplates");
+    final File testsDir = new File("/ide/fileTemplates");
 
     final String includeTemplateName = "include1.inc";
     final String includeTemplateExtension = "txt";
@@ -78,7 +86,7 @@ public class FileTemplatesTest extends IdeaTestCase {
     final String result = FileTemplateUtil.mergeTemplate(properties, inputString, false);
     assertEquals(expected, result);
 
-    List attrs = Arrays.asList(FileTemplateUtil.calculateAttributes(inputString, new Properties(), false));
+    List attrs = Arrays.asList(FileTemplateUtil.calculateAttributes(inputString, new HashMap<>(), false, null));
     assertTrue(properties.size() <= attrs.size());
     Enumeration e = properties.propertyNames();
     while (e.hasMoreElements()) {
@@ -94,7 +102,7 @@ public class FileTemplatesTest extends IdeaTestCase {
 
   public void testDefaultPackage() throws Exception {
     String name = "myclass";
-    FileTemplate template = FileTemplateManager.getDefaultInstance().addInternal(name/*+"ForTest"*/, "java");
+    FileTemplate template = FileTemplateManager.getDefaultInstance().addTemplate(name/*+"ForTest"*/, "java");
     try {
       template.setText("package ${PACKAGE_NAME}; public class ${NAME} {}");
 

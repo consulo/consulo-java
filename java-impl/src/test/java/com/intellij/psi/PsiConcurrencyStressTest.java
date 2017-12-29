@@ -19,25 +19,28 @@
  */
 package com.intellij.psi;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import com.intellij.codeInsight.daemon.impl.HighlightInfoFilter;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightVisitorImpl;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
-import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.Timings;
 import com.intellij.util.IncorrectOperationException;
-
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class PsiConcurrencyStressTest extends PsiTestCase {
   private static final boolean SKIP = "true".equalsIgnoreCase(System.getProperty("skip.psi.concurrency.test"));
@@ -53,8 +56,8 @@ public class PsiConcurrencyStressTest extends PsiTestCase {
   protected void setUp() throws Exception {
     super.setUp();
 
-    LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
-    String root = PathManagerEx.getTestDataPath() + "/psi/repositoryUse/src";
+    //LanguageLevelProjectExtension.getInstance(myProject).setLanguageLevel(LanguageLevel.JDK_1_5);
+    String root = "/psi/repositoryUse/src";
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
     PsiTestUtil.createTestProjectStructure(myProject, myModule, root, myFilesToDelete);
   }

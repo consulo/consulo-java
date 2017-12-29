@@ -4,14 +4,18 @@
  */
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertTrue;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectHandler;
 import com.intellij.refactoring.extractMethodObject.ExtractMethodObjectProcessor;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 public class ExtractMethodObjectTest extends LightRefactoringTestCase {
   @NotNull
@@ -27,7 +31,7 @@ public class ExtractMethodObjectTest extends LightRefactoringTestCase {
   private void doTest(final boolean createInnerClass) throws Exception {
     final String testName = getTestName(false);
     configureByFile("/refactoring/extractMethodObject/" + testName + ".java");
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiMethod);
     final PsiMethod method = (PsiMethod) element;
 

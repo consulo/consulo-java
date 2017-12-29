@@ -18,172 +18,209 @@ package com.intellij.codeInspection;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.codeInspection.ex.EntryPointsManagerImpl;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**
  * @author max
  */
-public class UnusedDeclarationTest extends InspectionTestCase {
-  private UnusedDeclarationInspection myTool;
+public class UnusedDeclarationTest extends InspectionTestCase
+{
+	private UnusedDeclarationInspection myTool;
 
-  @Override
-  protected String getTestDataPath() {
-    return JavaTestUtil.getJavaTestDataPath() + "/inspection";
-  }
+	@Override
+	protected String getTestDataPath()
+	{
+		return JavaTestUtil.getJavaTestDataPath() + "/inspection";
+	}
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    myTool = new UnusedDeclarationInspection();
-  }
+	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+		myTool = new UnusedDeclarationInspection();
+	}
 
-  private void doTest() {
-    doTest("deadCode/" + getTestName(true), myTool);
-  }
+	private void doTest()
+	{
+		doTest("deadCode/" + getTestName(true), myTool);
+	}
 
-  public void testSCR6067() {
-    myTool.ADD_NONJAVA_TO_ENTRIES = false;
-    doTest();
-  }
+	public void testSCR6067()
+	{
+		myTool.ADD_NONJAVA_TO_ENTRIES = false;
+		doTest();
+	}
 
-  public void testSingleton() {
-    myTool.ADD_NONJAVA_TO_ENTRIES = false;
-    doTest();
-  }
+	public void testSingleton()
+	{
+		myTool.ADD_NONJAVA_TO_ENTRIES = false;
+		doTest();
+	}
 
-  public void testSCR9690() {
-    myTool.ADD_NONJAVA_TO_ENTRIES = false;
-    doTest();
-  }
+	public void testSCR9690()
+	{
+		myTool.ADD_NONJAVA_TO_ENTRIES = false;
+		doTest();
+	}
 
-  public void testFormUsage() {
-    myTool.ADD_NONJAVA_TO_ENTRIES = false;
-    doTest();
-  }
+	public void testFormUsage()
+	{
+		myTool.ADD_NONJAVA_TO_ENTRIES = false;
+		doTest();
+	}
 
-  public void testSerializable() {
-    doTest();
-  }
+	public void testSerializable()
+	{
+		doTest();
+	}
 
-  public void testPackageLocal() {
-    doTest();
-  }
+	public void testPackageLocal()
+	{
+		doTest();
+	}
 
-  public void testReachableFromMain() {
-    myTool.ADD_MAINS_TO_ENTRIES = true;
-    doTest();
-  }
+	public void testReachableFromMain()
+	{
+		myTool.ADD_MAINS_TO_ENTRIES = true;
+		doTest();
+	}
 
-  public void testMutableCalls() {
-    doTest();
-  }
+	public void testMutableCalls()
+	{
+		doTest();
+	}
 
-  public void testStaticMethods() {
-    doTest();
-  }
+	public void testStaticMethods()
+	{
+		doTest();
+	}
 
-  public void testSuppress() {
-    LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
-    doTest();
-  }
+	public void testSuppress()
+	{
+		// LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+		doTest();
+	}
 
-  public void testSuppress1() {
-    LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
-    doTest();
-  }
+	public void testSuppress1()
+	{
+		// LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+		doTest();
+	}
 
-  public void testSuppress2() {
-    LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
-    doTest();
-  }
+	public void testSuppress2()
+	{
+		// LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+		doTest();
+	}
 
-  public void testChainOfSuppressions() {
-    LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
-    doTest();
-  }
+	public void testChainOfSuppressions()
+	{
+		// LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+		doTest();
+	}
 
-  public void testReachableFromXml() {
-    doTest();
-  }
+	public void testReachableFromXml()
+	{
+		doTest();
+	}
 
-  public void testChainOfCalls() {
-    doTest();
-  }
+	public void testChainOfCalls()
+	{
+		doTest();
+	}
 
-  public void testReachableFromFieldInitializer() {
-    doTest();
-  }
+	public void testReachableFromFieldInitializer()
+	{
+		doTest();
+	}
 
-  public void testReachableFromFieldArrayInitializer() {
-    doTest();
-  }
+	public void testReachableFromFieldArrayInitializer()
+	{
+		doTest();
+	}
 
-  public void testConstructorReachableFromFieldInitializer() {
-    doTest();
-  }
+	public void testConstructorReachableFromFieldInitializer()
+	{
+		doTest();
+	}
 
-  public void testAdditionalAnnotations() {
-    final String testAnnotation = "Annotated";
-    EntryPointsManagerImpl.getInstance(getProject()).ADDITIONAL_ANNOTATIONS.add(testAnnotation);
-    try {
-      doTest();
-    }
-    finally {
-      EntryPointsManagerImpl.getInstance(getProject()).ADDITIONAL_ANNOTATIONS.remove(testAnnotation);
-    }
-  }
+	public void testAdditionalAnnotations()
+	{
+		final String testAnnotation = "Annotated";
+		EntryPointsManagerImpl.getInstance(getProject()).ADDITIONAL_ANNOTATIONS.add(testAnnotation);
+		try
+		{
+			doTest();
+		}
+		finally
+		{
+			EntryPointsManagerImpl.getInstance(getProject()).ADDITIONAL_ANNOTATIONS.remove(testAnnotation);
+		}
+	}
 
-  public void testAnnotationInterface() {
-    LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
-    doTest();
-  }
+	public void testAnnotationInterface()
+	{
+		//LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
+		doTest();
+	}
 
-  public void testJunitEntryPoint() {
-    doTest();
-  }
+	public void testJunitEntryPoint()
+	{
+		doTest();
+	}
 
-  public void testJunitAbstractClassWithInheritor() {
-    doTest();
-  }
+	public void testJunitAbstractClassWithInheritor()
+	{
+		doTest();
+	}
 
-  public void testJunitAbstractClassWithoutInheritor() {
-    doTest();
-  }
-  
-  public void testJunitEntryPointCustomRunWith() {
-    doTest();
-  }
+	public void testJunitAbstractClassWithoutInheritor()
+	{
+		doTest();
+	}
 
-  public void testConstructorCalls() {
-    doTest();
-  }
+	public void testJunitEntryPointCustomRunWith()
+	{
+		doTest();
+	}
 
-  public void testConstructorCalls1() {
-    doTest();
-  }
+	public void testConstructorCalls()
+	{
+		doTest();
+	}
 
-  public void testNonJavaReferences() {
-    doTest();
-  }
+	public void testConstructorCalls1()
+	{
+		doTest();
+	}
 
-  public void testEnumInstantiation() {
-    doTest();
-  }
+	public void testNonJavaReferences()
+	{
+		doTest();
+	}
 
-  public void testEnumValues() {
-    doTest();
-  }
+	public void testEnumInstantiation()
+	{
+		doTest();
+	}
 
-  public void testUsagesInAnonymous() {
-    doTest();
-  }
+	public void testEnumValues()
+	{
+		doTest();
+	}
 
-  public void testAbstractClassWithSerializableSubclasses() {
-    doTest();
-  }
+	public void testUsagesInAnonymous()
+	{
+		doTest();
+	}
 
-  public void testClassLiteralRef() {
-    doTest();
-  }
+	public void testAbstractClassWithSerializableSubclasses()
+	{
+		doTest();
+	}
+
+	public void testClassLiteralRef()
+	{
+		doTest();
+	}
 }

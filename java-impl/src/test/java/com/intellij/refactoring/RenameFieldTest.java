@@ -24,79 +24,96 @@
  */
 package com.intellij.refactoring;
 
+import static org.junit.Assert.assertFalse;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.refactoring.rename.RenameProcessor;
 import com.intellij.refactoring.rename.RenameWrongRefHandler;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
-public class RenameFieldTest extends LightRefactoringTestCase {
-  @NotNull
-  @Override
-  protected String getTestDataPath() {
-    return JavaTestUtil.getJavaTestDataPath();
-  }
+public class RenameFieldTest extends LightRefactoringTestCase
+{
+	@NotNull
+	@Override
+	protected String getTestDataPath()
+	{
+		return JavaTestUtil.getJavaTestDataPath();
+	}
 
-  protected void doTest(@NonNls String newName, @NonNls String ext) throws Exception {
-    String suffix = getTestName(false);
-    configureByFile("/refactoring/renameField/before" + suffix + "." + ext);
-    perform(newName);
-    checkResultByFile("/refactoring/renameField/after" + suffix + "." + ext);
-  }
+	protected void doTest(@NonNls String newName, @NonNls String ext) throws Exception
+	{
+		String suffix = getTestName(false);
+		configureByFile("/refactoring/renameField/before" + suffix + "." + ext);
+		perform(newName);
+		checkResultByFile("/refactoring/renameField/after" + suffix + "." + ext);
+	}
 
-  public void testSimpleFieldRenaming() throws Exception {
-    doTest("myNewField", "java");
-  }
+	public void testSimpleFieldRenaming() throws Exception
+	{
+		doTest("myNewField", "java");
+	}
 
-  public void testCollisionsInMethod() throws Exception {
-    doTest("newFieldName", "java");
-  }
+	public void testCollisionsInMethod() throws Exception
+	{
+		doTest("newFieldName", "java");
+	}
 
-  public void testCollisionsInMethodOfSubClass() throws Exception {
-    doTest("newFieldName", "java");
-  }
+	public void testCollisionsInMethodOfSubClass() throws Exception
+	{
+		doTest("newFieldName", "java");
+	}
 
-  public void testCollisionsRenamingFieldWithSetter() throws Exception {
-    doTest("utm", "java");
-  }
+	public void testCollisionsRenamingFieldWithSetter() throws Exception
+	{
+		doTest("utm", "java");
+	}
 
-  public void testHidesOuter() throws Exception {
-    doTest("x", "java");
-  }
+	public void testHidesOuter() throws Exception
+	{
+		doTest("x", "java");
+	}
 
-  public void testEnumConstantWithConstructor() throws Exception {
-    doTest("newName", "java");
-  }
+	public void testEnumConstantWithConstructor() throws Exception
+	{
+		doTest("newName", "java");
+	}
 
-  public void testEnumConstantWithInitializer() throws Exception {  // IDEADEV-28840
-    doTest("AAA", "java");
-  }
+	public void testEnumConstantWithInitializer() throws Exception
+	{  // IDEADEV-28840
+		doTest("AAA", "java");
+	}
 
-  public void testNonNormalizedFields() throws Exception { // IDEADEV-34344
-    doTest("newField", "java");
-  }
+	public void testNonNormalizedFields() throws Exception
+	{ // IDEADEV-34344
+		doTest("newField", "java");
+	}
 
-  public void testRenameWrongRefDisabled() {
-    String suffix = getTestName(false);
-    configureByFile("/refactoring/renameField/before" + suffix + ".java");
-    assertFalse(RenameWrongRefHandler.isAvailable(getProject(), getEditor(), getFile()));
-  }
+	public void testRenameWrongRefDisabled()
+	{
+		String suffix = getTestName(false);
+		configureByFile("/refactoring/renameField/before" + suffix + ".java");
+		assertFalse(RenameWrongRefHandler.isAvailable(getProject(), getEditor(), getFile()));
+	}
 
-  public void testFieldInColumns() throws Exception {
-    // Assuming that test infrastructure setups temp settings (CodeStyleSettingsManager.setTemporarySettings()) and we don't
-    // need to perform explicit clean-up at the test level.
-    CodeStyleSettingsManager.getSettings(getProject()).getCommonSettings(JavaLanguage.INSTANCE).ALIGN_GROUP_FIELD_DECLARATIONS = true;
-    doTest("jj", "java");
-  }
-  
-  protected static void perform(String newName) {
-    PsiElement element = TargetElementUtilBase.findTargetElement(myEditor, TargetElementUtilBase
-      .ELEMENT_NAME_ACCEPTED | TargetElementUtilBase.REFERENCED_ELEMENT_ACCEPTED);
+	public void testFieldInColumns() throws Exception
+	{
+		// Assuming that test infrastructure setups temp settings (CodeStyleSettingsManager.setTemporarySettings()) and we don't
+		// need to perform explicit clean-up at the test level.
+		CodeStyleSettingsManager.getSettings(getProject()).getCommonSettings(JavaLanguage.INSTANCE).ALIGN_GROUP_FIELD_DECLARATIONS = true;
+		doTest("jj", "java");
+	}
 
-    new RenameProcessor(getProject(), element, newName, false, false).run();
-  }
+	protected static void perform(String newName)
+	{
+		PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
+
+		new RenameProcessor(getProject(), element, newName, false, false).run();
+	}
 }

@@ -1,7 +1,11 @@
 package com.intellij.refactoring.moveMethod;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiVariable;
@@ -10,7 +14,9 @@ import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodHandler;
 import com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodProcessor;
 import com.intellij.util.VisibilityUtil;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.util.containers.ContainerUtil;
+import consulo.codeInsight.TargetElementUtil;
+import consulo.codeInsight.TargetElementUtilEx;
 
 /**
  * @author ven
@@ -100,7 +106,7 @@ public class MoveInstanceMethodTest extends LightRefactoringTestCase {
   private void doTest(boolean isTargetParameter, final int targetIndex, final String newVisibility) throws Exception {
     final String filePath = "/refactoring/moveInstanceMethod/" + getTestName(false) + ".java";
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtilBase.findTargetElement(getEditor(), TargetElementUtilBase.ELEMENT_NAME_ACCEPTED);
+    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
     PsiMethod method = (PsiMethod) targetElement;
     final PsiVariable targetVariable = isTargetParameter ? method.getParameterList().getParameters()[targetIndex] :

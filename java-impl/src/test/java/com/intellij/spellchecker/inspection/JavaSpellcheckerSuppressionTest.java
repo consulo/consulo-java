@@ -15,22 +15,33 @@
  */
 package com.intellij.spellchecker.inspection;
 
-import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
-import com.intellij.openapi.application.PluginPathManager;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 
-public class JavaSpellcheckerSuppressionTest extends LightQuickFixTestCase {
-  @NotNull
-  @Override
-  protected String getTestDataPath() {
-    return PluginPathManager.getPluginHomePath("java-i18n") + "/testData/suppression";
-  }
+public class JavaSpellcheckerSuppressionTest extends LightQuickFixTestCase
+{
+	@NotNull
+	@Override
+	protected String getTestDataPath()
+	{
+		return "/testData/suppression";
+	}
 
-  public void testClassName() { doTest(); }
-  public void testStringLiteral() { doTest(); }
+	public void testClassName()
+	{
+		doTest();
+	}
 
-  private void doTest() {
-    enableInspectionTools(SpellcheckerInspectionTestCase.getInspectionTools());
-    doSingleTest(getTestName(false) + ".java");
-  }
+	public void testStringLiteral()
+	{
+		doTest();
+	}
+
+	private void doTest()
+	{
+		//TODO [VISTALL] enableInspectionTools(SpellcheckerInspectionTestCase.getInspectionTools());
+		doSingleTest(getTestName(false) + ".java");
+
+		throw new UnsupportedOperationException();
+	}
 }

@@ -16,11 +16,23 @@
 
 package com.intellij.testFramework.fixtures.impl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.impl.SdkImpl;
-import com.intellij.openapi.roots.*;
+import com.intellij.openapi.roots.LibraryOrderEntry;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.OrderEntry;
+import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.util.SystemInfo;
@@ -34,25 +46,18 @@ import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.ModuleFixture;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.util.ArrayUtil;
+import consulo.bundle.SdkPointerManager;
 import consulo.java.module.extension.JavaModuleExtensionImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
-import org.consulo.sdk.SdkPointerManager;
-import org.consulo.util.pointers.NamedPointer;
-import org.consulo.util.pointers.NamedPointerImpl;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import consulo.util.pointers.NamedPointer;
+import consulo.util.pointers.NamedPointerImpl;
 
 /**
  * @author mike
  */
 abstract class JavaModuleFixtureBuilderImpl<T extends ModuleFixture> extends ModuleFixtureBuilderImpl<T> implements JavaModuleFixtureBuilder<T> {
-  private static class MockWrappedSdkPointerManager implements SdkPointerManager {
+  private static class MockWrappedSdkPointerManager implements SdkPointerManager
+  {
     private Sdk mySdk;
 
     private MockWrappedSdkPointerManager(Sdk sdk) {

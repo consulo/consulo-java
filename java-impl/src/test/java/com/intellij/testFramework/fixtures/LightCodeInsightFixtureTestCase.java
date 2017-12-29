@@ -15,6 +15,10 @@
  */
 package com.intellij.testFramework.fixtures;
 
+import java.io.File;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
@@ -22,28 +26,28 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.PsiManager;
 import com.intellij.testFramework.PlatformTestUtil;
+import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 /**
  * @author peter
  */
-public abstract class LightCodeInsightFixtureTestCase extends UsefulTestCase{
-  public static final LightProjectDescriptor JAVA_1_6 = new DefaultLightProjectDescriptor() {
+public abstract class LightCodeInsightFixtureTestCase extends UsefulTestCase {
+  public static final TestModuleDescriptor JAVA_1_6 = new DefaultLightProjectDescriptor() {
     @Override
     public void configureModule(Module module, ModifiableRootModel model, ContentEntry contentEntry) {
       model.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class).getInheritableLanguageLevel().set(null, LanguageLevel.JDK_1_6);
     }
   };
-  public static final LightProjectDescriptor JAVA_LATEST = new DefaultLightProjectDescriptor();
+  public static final TestModuleDescriptor JAVA_LATEST = new DefaultLightProjectDescriptor();
 
 
   protected JavaCodeInsightTestFixture myFixture;
@@ -75,7 +79,7 @@ public abstract class LightCodeInsightFixtureTestCase extends UsefulTestCase{
   }
 
   @NotNull
-  protected LightProjectDescriptor getProjectDescriptor() {
+  protected TestModuleDescriptor getProjectDescriptor() {
     return JAVA_LATEST;
   }
 

@@ -15,6 +15,9 @@
  */
 package com.intellij.testFramework.fixtures;
 
+import java.io.File;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -23,9 +26,6 @@ import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
 
 /**
  * @author peter
@@ -38,7 +38,7 @@ public abstract class JavaCodeInsightFixtureTestCase extends UsefulTestCase{
   protected void setUp() throws Exception {
     super.setUp();
 
-    final TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder = IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder(getName());
+    final TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder = IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder(getTestName(false));
     myFixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(projectBuilder.getFixture());
     final JavaModuleFixtureBuilder moduleFixtureBuilder = projectBuilder.addModule(JavaModuleFixtureBuilder.class);
     moduleFixtureBuilder.addSourceContentRoot(myFixture.getTempDirPath());

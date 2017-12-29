@@ -1,7 +1,6 @@
 package com.intellij.codeInspection;
 
 import com.intellij.codeInspection.redundantCast.RedundantCastInspection;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.InspectionTestCase;
 
 public class RedundantCastTest extends InspectionTestCase {
@@ -9,7 +8,7 @@ public class RedundantCastTest extends InspectionTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_3);
+   // LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_3);
   }
 
   private void doTest() throws Exception {

@@ -1,5 +1,8 @@
 package com.intellij.codeInsight.completion;
 
+import static org.junit.Assert.assertEquals;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -11,7 +14,6 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.TestDataPath;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -335,10 +337,10 @@ public class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testAfterNew15() throws Exception {
-    final LanguageLevelProjectExtension ll = LanguageLevelProjectExtension.getInstance(getProject());
+   /* final LanguageLevelProjectExtension ll = LanguageLevelProjectExtension.getInstance(getProject());
     final LanguageLevel old = ll.getLanguageLevel();
     ll.setLanguageLevel(LanguageLevel.JDK_1_5);
-
+	     */
     try {
       final String path = BASE_PATH;
       configureByFile(path + "/AfterNew15.java");
@@ -347,7 +349,7 @@ public class CompletionStyleTest extends LightCodeInsightTestCase{
       checkResultByFile(path + "/AfterNew15-out.java");
     }
     finally {
-      ll.setLanguageLevel(old);
+     // ll.setLanguageLevel(old);
     }
   }
 

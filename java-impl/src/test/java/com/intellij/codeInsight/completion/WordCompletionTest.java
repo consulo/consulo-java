@@ -1,11 +1,16 @@
 package com.intellij.codeInsight.completion;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.*;
+import com.intellij.lang.java.JavaLanguage;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceRegistrarImpl;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Maxim.Mossienko

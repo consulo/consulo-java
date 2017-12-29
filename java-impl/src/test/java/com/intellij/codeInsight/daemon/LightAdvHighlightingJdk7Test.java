@@ -15,8 +15,14 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import consulo.java.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
@@ -33,11 +39,7 @@ import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.IdeaTestUtil;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import consulo.java.codeInspection.JavaExtensionPoints;
 
 /**
  * This class is for "lightweight" tests only, i.e. those which can run inside default light project set up
@@ -106,7 +108,7 @@ public class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTestCase {
   }
 
   public void testDynamicallyAddIgnoredAnnotations() throws Exception {
-    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_TOOL);
+    ExtensionPoint<EntryPoint> point = Extensions.getRootArea().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME.getName());
     EntryPoint extension = new EntryPoint() {
       @NotNull @Override public String getDisplayName() { return "duh"; }
       @Override public boolean isEntryPoint(RefElement refElement, PsiElement psiElement) { return false; }

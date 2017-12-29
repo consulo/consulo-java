@@ -15,6 +15,10 @@
  */
 package com.intellij.codeInsight.daemon;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.codeInspection.unusedImport.UnusedImportLocalInspection;
@@ -25,8 +29,6 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 public class GenericsHighlightingTest extends LightDaemonAnalyzerTestCase {
   @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/genericsHighlighting";
@@ -43,7 +45,7 @@ public class GenericsHighlightingTest extends LightDaemonAnalyzerTestCase {
   }
 
   private void doTest(@NotNull LanguageLevel languageLevel, @NotNull JavaSdkVersion sdkVersion, boolean checkWarnings) {
-    LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(languageLevel);
+    //LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(languageLevel);
     IdeaTestUtil.setTestVersion(sdkVersion, getModule(), myTestRootDisposable);
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, false);
   }

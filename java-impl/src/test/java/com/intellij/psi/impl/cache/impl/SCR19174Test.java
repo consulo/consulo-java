@@ -1,5 +1,8 @@
 package com.intellij.psi.impl.cache.impl;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.util.io.FileUtil;
@@ -9,15 +12,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import consulo.lombok.annotations.Logger;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author max
  */
-@Logger
 public class SCR19174Test extends PsiTestCase {
   private VirtualFile myDir;
   private VirtualFile myVFile;
@@ -26,7 +24,7 @@ public class SCR19174Test extends PsiTestCase {
   protected void setUp() throws Exception {
     super.setUp();
 
-    final File root = FileUtil.createTempFile(getName(), "");
+    final File root = FileUtil.createTempFile(getTestName(false), "");
     root.delete();
     root.mkdir();
     myFilesToDelete.add(root);
