@@ -33,7 +33,7 @@ public class IDEACoverageRunner extends JavaCoverageRunner
 			final boolean isSampling)
 	{
 		StringBuilder argument = new StringBuilder("-javaagent:");
-		File agentFile = new File(PluginManager.getPluginPath(IDEACoverageRunner.class), "coverage-lib/consulo/coverage-agent-all.jar");
+		File agentFile = new File(PluginManager.getPluginPath(IDEACoverageRunner.class), "coverage/consulo/agent.jar");
 
 		final String parentPath = handleSpacesInPath(agentFile);
 		argument.append(parentPath).append(File.separator).append(agentFile.getName());

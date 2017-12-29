@@ -153,7 +153,7 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner
 	public void appendCoverageArgument(final String sessionDataFilePath, final String[] patterns, final SimpleJavaParameters javaParameters,
 			final boolean collectLineInfo, final boolean isSampling)
 	{
-		final File agentFile = new File(PluginManager.getPluginPath(JaCoCoCoverageRunner.class), "coverage-lib/jacoco/jacocoagent.jar");
+		final File agentFile = new File(PluginManager.getPluginPath(JaCoCoCoverageRunner.class), "coverage/jacoco/jacocoagent.jar");
 
 		StringBuilder argument = new StringBuilder("-javaagent:");
 		final String parentPath = handleSpacesInPath(agentFile);

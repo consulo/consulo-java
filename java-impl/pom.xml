@@ -65,6 +65,10 @@
 								<artifact>${project.groupId}:consulo.java-jdk.annotations</artifact>
 								<path>jdk-annotations.jar</path>
 							</copy>
+							<copy>
+								<artifact>consulo.internal:java.coverage.agent</artifact>
+								<path>coverage/consulo/agent.jar</path>
+							</copy>
 						</copies>
 					</packaging>
 				</configuration>
@@ -233,6 +237,12 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-jdk.annotations</artifactId>
 			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>consulo.internal</groupId>
+			<artifactId>java.coverage.agent</artifactId>
+			<version>1.0</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
