@@ -15,6 +15,9 @@
  */
 package com.intellij.spellchecker;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.TextRange;
@@ -28,9 +31,6 @@ import com.intellij.psi.util.PsiUtil;
 import com.intellij.spellchecker.inspections.IdentifierSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

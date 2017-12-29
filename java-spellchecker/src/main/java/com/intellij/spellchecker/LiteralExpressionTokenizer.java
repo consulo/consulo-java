@@ -15,6 +15,9 @@
  */
 package com.intellij.spellchecker;
 
+import java.util.Collections;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiLiteralExpression;
@@ -25,9 +28,6 @@ import com.intellij.spellchecker.inspections.PlainTextSplitter;
 import com.intellij.spellchecker.tokenizer.EscapeSequenceTokenizer;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
 
 /**
  * Created by IntelliJ IDEA.

@@ -15,11 +15,11 @@
  */
 package com.intellij.spellchecker;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by IntelliJ IDEA.

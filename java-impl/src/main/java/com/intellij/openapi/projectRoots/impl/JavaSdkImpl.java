@@ -34,10 +34,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.ide.highlighter.JarArchiveFileType;
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
-import com.intellij.ide.plugins.cl.PluginClassLoader;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.ProjectBundle;
@@ -452,18 +449,22 @@ public class JavaSdkImpl extends JavaSdk
 
 	public static boolean attachJdkAnnotations(@NotNull SdkModificator modificator)
 	{
-		IdeaPluginDescriptor plugin = PluginManager.getPlugin(((PluginClassLoader) JavaSdkImpl.class.getClassLoader()).getPluginId());
-		assert plugin != null;
+		File pluginPath = PluginManager.getPluginPath(JavaSdkImpl.class);
 
-		File javaPluginPath = plugin.getPath();
+		File file = new File(pluginPath, "jdk-annotations.jar");
 
-		String absolutePath = new File(javaPluginPath, "lib/jdk-annotations.jar").getAbsolutePath();
+		VirtualFile localFile = LocalFileSystem.getInstance().findFileByIoFile(file);
 
-		VirtualFile jarFile = JarArchiveFileType.INSTANCE.getFileSystem().findLocalVirtualFileByPath(absolutePath);
+		if(localFile == null)
+		{
+			LOG.error("jdk annotations not found in: " + file);
+			return false;
+		}
 
+		VirtualFile jarFile = ArchiveVfsUtil.getArchiveRootForLocalFile(localFile);
 		if(jarFile == null)
 		{
-			LOG.error("jdk annotations not found in: " + absolutePath);
+			LOG.error("jdk annotations is not archive: " + file);
 			return false;
 		}
 

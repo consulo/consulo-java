@@ -15,6 +15,9 @@
  */
 package com.intellij.spellchecker;
 
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
@@ -22,9 +25,6 @@ import com.intellij.spellchecker.inspections.CommentSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.

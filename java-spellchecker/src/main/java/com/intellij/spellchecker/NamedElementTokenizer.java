@@ -15,13 +15,13 @@
  */
 package com.intellij.spellchecker;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiTypeElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by IntelliJ IDEA.

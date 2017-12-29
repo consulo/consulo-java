@@ -79,8 +79,7 @@ import com.intellij.util.text.StringSearcher;
 
 public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.codeInspection" +
-			".DuplicateStringLiteralInspection");
+	private static final Logger LOG = Logger.getInstance(DuplicateStringLiteralInspection.class);
 	@SuppressWarnings({"WeakerAccess"})
 	public int MIN_STRING_LENGTH = 5;
 	@SuppressWarnings({"WeakerAccess"})

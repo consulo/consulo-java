@@ -55,10 +55,17 @@
 						<dependency>com.intellij.regexp</dependency>
 						<dependency>com.intellij.xml</dependency>
 						<dependency>com.intellij.images</dependency>
+						<dependency>com.intellij.properties</dependency>
 					</dependencies>
 					<packaging>
 						<skip>${dev.mode}</skip>
 						<version>${build.number}</version>
+						<copies>
+							<copy>
+								<artifact>${project.groupId}:consulo.java-jdk.annotations</artifact>
+								<path>jdk-annotations.jar</path>
+							</copy>
+						</copies>
 					</packaging>
 				</configuration>
 				<executions>
@@ -154,6 +161,11 @@
 			<artifactId>consulo.java-java.coverage.rt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.spellchecker</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>consulo.internal</groupId>
@@ -190,11 +202,6 @@
 			<artifactId>org.jacoco.core</artifactId>
 			<version>0.7.9</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>org.jacoco.agent</artifactId>
-			<version>0.7.9</version>
-		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -207,6 +214,26 @@
 			<artifactId>com.intellij.regexp</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>com.intellij.properties</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--FIXME just dependencies for copy action-->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>org.jacoco.agent</artifactId>
+			<version>0.7.9</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-jdk.annotations</artifactId>
+			<version>${project.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 </project>

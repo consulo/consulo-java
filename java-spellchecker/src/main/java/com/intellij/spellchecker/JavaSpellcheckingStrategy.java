@@ -15,6 +15,7 @@
  */
 package com.intellij.spellchecker;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.BatchSuppressManager;
 import com.intellij.codeInspection.SuppressManager;
@@ -26,7 +27,6 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.spellchecker.tokenizer.SuppressibleSpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author shkate@jetbrains.com

@@ -15,11 +15,11 @@
  */
 package com.intellij.spellchecker;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.spellchecker.inspections.IdentifierSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yole
