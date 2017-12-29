@@ -20,7 +20,7 @@
 
 	<parent>
 		<groupId>consulo</groupId>
-		<artifactId>arch.managment</artifactId>
+		<artifactId>arch.ide-provided</artifactId>
 		<version>2-SNAPSHOT</version>
 		<relativePath/>
 	</parent>
@@ -37,29 +37,15 @@
 	</repositories>
 
 	<groupId>consulo.plugin</groupId>
-	<artifactId>consulo.java.parent</artifactId>
+	<artifactId>consulo.java-java.indexing.api</artifactId>
 	<version>2-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
-	<modules>
-		<module>java-psi-api</module>
-		<module>java-indexing-api</module>
-		<module>java-analysis-api</module>
-		<module>java-compiler-api</module>
-		<module>java-execution-api</module>
-		<module>java-debugger-api</module>
-
-		<module>java-psi-impl</module>
-		<module>java-debugger-impl</module>
-		<module>java-analysis-impl</module>
-		<module>java-indexing-impl</module>
-		<module>java-execution-impl</module>
-		<module>java-compiler-impl</module>
-		<module>java-coverage-impl</module>
-		<module>java-manifest</module>
-		<module>java-coverage-impl/coverage_rt</module>
-		<module>java-impl</module>
-
-		<module>java-rt</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.psi.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>
