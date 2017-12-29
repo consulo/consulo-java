@@ -247,13 +247,14 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!--FIXME just dependencies for copy action-->
 		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>org.jacoco.agent</artifactId>
-			<version>0.7.9</version>
-			<scope>runtime</scope>
+			<groupId>consulo</groupId>
+			<artifactId>consulo-lang-impl-testing</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
+
+		<!--FIXME just dependencies for copy action-->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-jdk.annotations</artifactId>
