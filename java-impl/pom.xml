@@ -178,6 +178,11 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.compiler.artifact.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-jvm.bytecode.viewer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
