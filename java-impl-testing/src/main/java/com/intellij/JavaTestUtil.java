@@ -24,7 +24,7 @@ import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.util.text.StringUtil;
-import consulo.java.module.extension.JavaModuleExtensionImpl;
+import consulo.java.module.extension.JavaModuleExtension;
 
 /**
  * @author yole
@@ -57,6 +57,6 @@ public class JavaTestUtil {
 
   @Nullable
   public static Sdk getSdk(@NotNull Module module) {
-    return ModuleUtilCore.getSdk(module, JavaModuleExtensionImpl.class);
+    return ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
   }
 }
