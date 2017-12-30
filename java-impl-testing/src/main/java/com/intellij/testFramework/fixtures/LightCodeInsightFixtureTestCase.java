@@ -35,7 +35,7 @@ import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
-import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.module.extension.JavaMutableModuleExtension;
 
 /**
  * @author peter
@@ -44,7 +44,7 @@ public abstract class LightCodeInsightFixtureTestCase extends UsefulTestCase {
   public static final TestModuleDescriptor JAVA_1_6 = new DefaultLightProjectDescriptor() {
     @Override
     public void configureModule(Module module, ModifiableRootModel model, ContentEntry contentEntry) {
-      model.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class).getInheritableLanguageLevel().set(null, LanguageLevel.JDK_1_6);
+      model.getExtensionWithoutCheck(JavaMutableModuleExtension.class).getInheritableLanguageLevel().set(null, LanguageLevel.JDK_1_6);
     }
   };
   public static final TestModuleDescriptor JAVA_LATEST = new DefaultLightProjectDescriptor();

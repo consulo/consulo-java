@@ -47,8 +47,7 @@ import com.intellij.testFramework.fixtures.ModuleFixture;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.util.ArrayUtil;
 import consulo.bundle.SdkPointerManager;
-import consulo.java.module.extension.JavaModuleExtensionImpl;
-import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.module.extension.JavaMutableModuleExtension;
 import consulo.util.pointers.NamedPointer;
 import consulo.util.pointers.NamedPointerImpl;
 
@@ -175,7 +174,7 @@ abstract class JavaModuleFixtureBuilderImpl<T extends ModuleFixture> extends Mod
       jdk = IdeaTestUtil.getMockJdk17();
     }
 
-    JavaMutableModuleExtensionImpl moduleExtension = (JavaMutableModuleExtensionImpl)model.getExtensionWithoutCheck(JavaModuleExtensionImpl.class);
+    JavaMutableModuleExtension moduleExtension = model.getExtensionWithoutCheck(JavaMutableModuleExtension.class);
     assert moduleExtension != null;
     moduleExtension.setEnabled(true);
     /*if (jdk != null) {

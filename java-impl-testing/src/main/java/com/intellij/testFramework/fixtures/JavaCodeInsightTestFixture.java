@@ -15,11 +15,11 @@
  */
 package com.intellij.testFramework.fixtures;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.impl.JavaPsiFacadeEx;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yole

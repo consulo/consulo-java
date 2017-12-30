@@ -30,7 +30,7 @@ import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 /**
  * @author peter
  */
-public abstract class JavaCodeInsightFixtureTestCase extends UsefulTestCase{
+public abstract class JavaCodeInsightFixtureTestCase extends UsefulTestCase {
   protected JavaCodeInsightTestFixture myFixture;
   protected Module myModule;
 

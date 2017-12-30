@@ -24,7 +24,7 @@ import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.util.Consumer;
-import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.module.extension.JavaMutableModuleExtension;
 
 /**
  * @author peter
@@ -45,6 +45,6 @@ public class DefaultLightProjectDescriptor implements TestModuleDescriptor
 	@Override
 	public void configureModule(Module module, ModifiableRootModel model, ContentEntry contentEntry)
 	{
-		model.getExtensionWithoutCheck(JavaMutableModuleExtensionImpl.class).getInheritableLanguageLevel().set(null, LanguageLevel.HIGHEST);
+		model.getExtensionWithoutCheck(JavaMutableModuleExtension.class).getInheritableLanguageLevel().set(null, LanguageLevel.HIGHEST);
 	}
 }

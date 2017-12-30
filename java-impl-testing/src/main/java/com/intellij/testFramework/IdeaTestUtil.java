@@ -33,8 +33,8 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.java.LanguageLevel;
-import consulo.java.module.extension.JavaModuleExtensionImpl;
-import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.module.extension.JavaMutableModuleExtension;
 import consulo.vfs.util.ArchiveVfsUtil;
 
 public class IdeaTestUtil extends PlatformTestUtil {
@@ -48,7 +48,7 @@ public class IdeaTestUtil extends PlatformTestUtil {
   }
 
   public static void withLevel(final Module module, final LanguageLevel level, final Runnable r) {
-    final LanguageLevel moduleLevel = ModuleUtilCore.getExtension(module, JavaModuleExtensionImpl.class).getLanguageLevel();
+    final LanguageLevel moduleLevel = ModuleUtilCore.getExtension(module, JavaModuleExtension.class).getLanguageLevel();
     try {
       setModuleLanguageLevel(module, level);
       r.run();
@@ -60,7 +60,7 @@ public class IdeaTestUtil extends PlatformTestUtil {
 
   public static void setModuleLanguageLevel(Module module, final LanguageLevel level) {
     ModifiableRootModel modifiableModel = ModuleRootManager.getInstance(module).getModifiableModel();
-    modifiableModel.getExtension(JavaMutableModuleExtensionImpl.class).getInheritableLanguageLevel().set(null, level);
+    modifiableModel.getExtension(JavaMutableModuleExtension.class).getInheritableLanguageLevel().set(null, level);
     modifiableModel.commit();
   }
 
