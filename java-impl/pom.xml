@@ -253,14 +253,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>consulo</groupId>
-			<artifactId>consulo-lang-impl-testing</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.impl.testing</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-java.impl.testing</artifactId>
+			<groupId>consulo</groupId>
+			<artifactId>consulo-lang-impl-testing</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
