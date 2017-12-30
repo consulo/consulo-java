@@ -15,10 +15,14 @@
  */
 package com.intellij.codeInsight;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.*;
-import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NonNls;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.LogicalPosition;
+import com.intellij.openapi.editor.RangeMarker;
+import com.intellij.openapi.util.text.StringUtil;
 
 /**
  * @author cdr

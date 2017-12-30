@@ -15,11 +15,6 @@
  */
 package com.intellij.testFramework;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -28,6 +23,7 @@ import java.util.StringTokenizer;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+import org.junit.Assert;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -102,9 +98,9 @@ public abstract class PsiTestCase extends ModuleTestCase {
 
         final VirtualFile vFile = vDir.createChildData(vDir, fileName);
         VfsUtil.saveText(vFile, text);
-        assertNotNull(vFile);
+        Assert.assertNotNull(vFile);
         final PsiFile file = myPsiManager.findFile(vFile);
-        assertNotNull(file);
+        Assert.assertNotNull(file);
         result.setResult(file);
       }
     }.execute().getResultObject();
@@ -116,13 +112,13 @@ public abstract class PsiTestCase extends ModuleTestCase {
 
   protected PsiElement configureByFileWithMarker(String filePath, String marker) throws Exception{
     final VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(filePath.replace(File.separatorChar, '/'));
-    assertNotNull("file " + filePath + " not found", vFile);
+    Assert.assertNotNull("file " + filePath + " not found", vFile);
 
     String fileText = VfsUtil.loadText(vFile);
     fileText = StringUtil.convertLineSeparators(fileText);
 
     int offset = fileText.indexOf(marker);
-    assertTrue(offset >= 0);
+    Assert.assertTrue(offset >= 0);
     fileText = fileText.substring(0, offset) + fileText.substring(offset + marker.length());
 
     myFile = createFile(vFile.getName(), fileText);
@@ -191,7 +187,7 @@ public abstract class PsiTestCase extends ModuleTestCase {
       System.out.println("Text found:");
       printText(actualText);
 
-      fail("text");
+      Assert.fail("text");
     }
 
 //    assertEquals(myTestDataAfter.getText(), myFile.getText());
@@ -226,7 +222,7 @@ public abstract class PsiTestCase extends ModuleTestCase {
   }
 
   protected static void addLibraryToRoots(final Module module, final VirtualFile root, final OrderRootType rootType) {
-    assertEquals(OrderRootType.CLASSES, rootType);
+    Assert.assertEquals(OrderRootType.CLASSES, rootType);
     ModuleRootModificationUtil.addModuleLibrary(module, root.getUrl());
   }
 

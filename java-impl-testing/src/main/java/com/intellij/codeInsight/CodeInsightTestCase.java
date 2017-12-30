@@ -15,10 +15,6 @@
  */
 package com.intellij.codeInsight;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,6 +25,7 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.junit.Assert;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandler;
 import com.intellij.ide.DataManager;
 import com.intellij.injected.editor.EditorWindow;
@@ -75,6 +72,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
+import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestData;
 import com.intellij.testFramework.PsiTestUtil;
@@ -200,7 +198,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 
 		configureByExistingFile(vFile);
 
-		assertEquals(fileType, myFile.getVirtualFile().getFileType());
+		Assert.assertEquals(fileType, myFile.getVirtualFile().getFileType());
 		return myFile;
 	}
 
@@ -262,7 +260,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		myEditor = null;
 
 		final File toDirIO = createTempDirectory();
-		final VirtualFile toDir = getVirtualFile(toDirIO);
+		final VirtualFile toDir = PlatformTestCase.getVirtualFile(toDirIO);
 
 		ApplicationManager.getApplication().runWriteAction(new Runnable()
 		{
@@ -285,7 +283,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 					{
 						final File projectRoot = rawProjectRoot.getCanonicalFile();
 						FileUtil.copyDir(projectRoot, toDirIO);
-						VirtualFile fromDir = getVirtualFile(projectRoot);
+						VirtualFile fromDir = PlatformTestCase.getVirtualFile(projectRoot);
 						editorInfos = copyFilesFillingEditorInfos(fromDir, toDir, ContainerUtil.map2Array(reversed, String.class, new Function<VirtualFile, String>()
 						{
 							@Override
@@ -702,11 +700,11 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 
 		if(data.getColumnNumber() >= 0)
 		{
-			assertEquals(dataName + ":caretColumn", data.getColumnNumber(), myEditor.getCaretModel().getLogicalPosition().column + 1);
+			Assert.assertEquals(dataName + ":caretColumn", data.getColumnNumber(), myEditor.getCaretModel().getLogicalPosition().column + 1);
 		}
 		if(data.getLineNumber() >= 0)
 		{
-			assertEquals(dataName + ":caretLine", data.getLineNumber(), myEditor.getCaretModel().getLogicalPosition().line + 1);
+			Assert.assertEquals(dataName + ":caretLine", data.getLineNumber(), myEditor.getCaretModel().getLogicalPosition().line + 1);
 		}
 
 		int selectionStart = myEditor.getSelectionModel().getSelectionStart();
@@ -716,19 +714,19 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 
 		if(data.getSelectionStartColumnNumber() >= 0)
 		{
-			assertEquals(dataName + ":selectionStartColumn", data.getSelectionStartColumnNumber(), startPosition.column + 1);
+			Assert.assertEquals(dataName + ":selectionStartColumn", data.getSelectionStartColumnNumber(), startPosition.column + 1);
 		}
 		if(data.getSelectionStartLineNumber() >= 0)
 		{
-			assertEquals(dataName + ":selectionStartLine", data.getSelectionStartLineNumber(), startPosition.line + 1);
+			Assert.assertEquals(dataName + ":selectionStartLine", data.getSelectionStartLineNumber(), startPosition.line + 1);
 		}
 		if(data.getSelectionEndColumnNumber() >= 0)
 		{
-			assertEquals(dataName + ":selectionEndColumn", data.getSelectionEndColumnNumber(), endPosition.column + 1);
+			Assert.assertEquals(dataName + ":selectionEndColumn", data.getSelectionEndColumnNumber(), endPosition.column + 1);
 		}
 		if(data.getSelectionEndLineNumber() >= 0)
 		{
-			assertEquals(dataName + ":selectionEndLine", data.getSelectionEndLineNumber(), endPosition.line + 1);
+			Assert.assertEquals(dataName + ":selectionEndLine", data.getSelectionEndLineNumber(), endPosition.line + 1);
 		}
 	}
 

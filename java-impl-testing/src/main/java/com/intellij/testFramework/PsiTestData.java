@@ -15,16 +15,16 @@
  */
 package com.intellij.testFramework;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.jdom.Element;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import org.jdom.Element;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author Mike

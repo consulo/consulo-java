@@ -15,6 +15,9 @@
  */
 package com.intellij.refactoring;
 
+import java.io.File;
+
+import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -22,11 +25,9 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
+import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.File;
 
 /**
  * @author dsl
@@ -46,7 +47,7 @@ public abstract class MultiFileTestCase extends CodeInsightTestCase {
     String path = getTestDataPath() + getTestRoot() + testName;
 
     String pathBefore = path + "/before";
-    final VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, pathBefore, myFilesToDelete, false);
+    final VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, pathBefore, PlatformTestCase.myFilesToDelete, false);
     prepareProject(rootDir);
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
