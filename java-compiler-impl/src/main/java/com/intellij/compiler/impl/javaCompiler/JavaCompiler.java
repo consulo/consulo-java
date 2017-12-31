@@ -19,7 +19,8 @@ package com.intellij.compiler.impl.javaCompiler;
 import gnu.trove.THashMap;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -40,12 +41,16 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
 import consulo.java.module.extension.JavaModuleExtension;
+import consulo.roots.ContentFolderTypeProvider;
+import consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
+import consulo.roots.impl.TestResourceContentFolderTypeProvider;
 
 /*
  * @author: Eugene Zhuravlev
@@ -101,7 +106,7 @@ public class JavaCompiler implements TranslatingCompiler
 		context.putUserData(ourOutputFileParseInfo, parsingInfo);
 
 		final BackendCompiler backEndCompiler = getBackEndCompiler();
-		final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files), (CompileContextEx) context, backEndCompiler, sink);
+		final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(this, moduleChunk, myProject, filterResourceFiles(context, files), (CompileContextEx) context, backEndCompiler, sink);
 		try
 		{
 			if(CompileDriver.ourDebugMode)
@@ -128,6 +133,24 @@ public class JavaCompiler implements TranslatingCompiler
 			LOGGER.info(e);
 			context.requestRebuildNextTime(e.getMessage());
 		}
+	}
+
+	@NotNull
+	private static List<VirtualFile> filterResourceFiles(CompileContext compileContext, VirtualFile[] virtualFiles)
+	{
+		ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(compileContext.getProject());
+
+		List<VirtualFile> list = new ArrayList<>(virtualFiles.length);
+		for(VirtualFile file : virtualFiles)
+		{
+			ContentFolderTypeProvider provider = fileIndex.getContentFolderTypeForFile(file);
+			if(provider == ProductionResourceContentFolderTypeProvider.getInstance() || provider == TestResourceContentFolderTypeProvider.getInstance())
+			{
+				continue;
+			}
+			list.add(file);
+		}
+		return list;
 	}
 
 	@NotNull

@@ -1,6 +1,5 @@
 package consulo.java.util;
 
-import consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -15,6 +14,10 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.PsiFile;
+import consulo.java.module.extension.JavaModuleExtension;
+import consulo.roots.ContentFolderTypeProvider;
+import consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
+import consulo.roots.impl.TestResourceContentFolderTypeProvider;
 
 /**
  * @author VISTALL
@@ -54,6 +57,10 @@ public class JavaProjectRootsUtil extends ProjectRootsUtil
 		}
 
 		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+		if(isInsideResourceRoot(file, fileIndex))
+		{
+			return false;
+		}
 		return fileIndex.isInSource(file) || withLibrary && fileIndex.isInLibraryClasses(file);
 	}
 
@@ -73,18 +80,23 @@ public class JavaProjectRootsUtil extends ProjectRootsUtil
 			return false;
 		}
 
-		Module module = ModuleUtilCore.findModuleForPsiElement(psiFile);
-		if(module == null)
-		{
-			return false;
-		}
+		ProjectFileIndex fileIndex = ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex();
 
-		ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-		if(moduleRootManager.getExtension(JavaModuleExtension.class) == null)
+		if(fileIndex.isInSource(file) && !fileIndex.isInLibraryClasses(file))
 		{
-			return true;
+			if(isInsideResourceRoot(file, fileIndex))
+			{
+				return true;
+			}
+
+			return ModuleUtilCore.getExtension(psiFile, JavaModuleExtension.class) == null;
 		}
-		final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex();
-		return !projectFileIndex.isInSource(file) && !projectFileIndex.isInLibraryClasses(file);
+		return false;
+	}
+
+	private static boolean isInsideResourceRoot(VirtualFile file, ProjectFileIndex fileIndex)
+	{
+		ContentFolderTypeProvider provider = fileIndex.getContentFolderTypeForFile(file);
+		return provider == ProductionResourceContentFolderTypeProvider.getInstance() || provider == TestResourceContentFolderTypeProvider.getInstance();
 	}
 }
