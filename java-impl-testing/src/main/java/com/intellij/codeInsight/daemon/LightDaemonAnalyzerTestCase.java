@@ -40,6 +40,9 @@ import com.intellij.testFramework.ExpectedHighlightingData;
 import com.intellij.testFramework.FileTreeAccessFilter;
 import com.intellij.testFramework.HighlightTestInfo;
 import com.intellij.testFramework.LightCodeInsightTestCase;
+import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
+import com.intellij.testFramework.LightPlatformTestCase;
+import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.ArrayUtil;
 
@@ -49,20 +52,20 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    ((DaemonCodeAnalyzerImpl)DaemonCodeAnalyzer.getInstance(getProject())).prepareForTest();
+    ((DaemonCodeAnalyzerImpl)DaemonCodeAnalyzer.getInstance(LightPlatformTestCase.getProject())).prepareForTest();
     DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(false);
   }
 
   @Override
   protected void tearDown() throws Exception {
-    ((DaemonCodeAnalyzerImpl)DaemonCodeAnalyzer.getInstance(getProject())).cleanupAfterTest();
+    ((DaemonCodeAnalyzerImpl)DaemonCodeAnalyzer.getInstance(LightPlatformTestCase.getProject())).cleanupAfterTest();
     super.tearDown();
   }
 
   @Override
   protected void runTest() throws Throwable {
     final Throwable[] throwable = {null};
-    CommandProcessor.getInstance().executeCommand(getProject(), new Runnable() {
+    CommandProcessor.getInstance().executeCommand(LightPlatformTestCase.getProject(), new Runnable() {
       @Override
       public void run() {
         try {
@@ -84,7 +87,7 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
   }
 
   protected void doTestNewInference(@NonNls String filePath, boolean checkWarnings, boolean checkInfos) {
-    final PsiResolveHelperImpl helper = (PsiResolveHelperImpl)JavaPsiFacade.getInstance(getProject()).getResolveHelper();
+    final PsiResolveHelperImpl helper = (PsiResolveHelperImpl)JavaPsiFacade.getInstance(LightPlatformTestCase.getProject()).getResolveHelper();
     //helper.setTestHelper(new PsiGraphInferenceHelper(getPsiManager()));
     try {
       configureByFile(filePath);
@@ -105,9 +108,9 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
   }
 
   protected void doTestConfiguredFile(boolean checkWarnings, boolean checkWeakWarnings, boolean checkInfos, @Nullable String filePath) {
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
+    LightCodeInsightTestCase.getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
 
-    ExpectedHighlightingData data = new ExpectedHighlightingData(getEditor().getDocument(), checkWarnings, checkWeakWarnings, checkInfos);
+    ExpectedHighlightingData data = new ExpectedHighlightingData(LightPlatformCodeInsightTestCase.getEditor().getDocument(), checkWarnings, checkWeakWarnings, checkInfos);
     checkHighlighting(data, composeLocalPath(filePath));
   }
 
@@ -119,25 +122,26 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
   private void checkHighlighting(ExpectedHighlightingData data, String filePath) {
     data.init();
 
-    PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
-    getFile().getText(); //to load text
-    myJavaFilesFilter.allowTreeAccessForFile(getVFile());
-    getJavaFacade().setAssertOnFileLoadingFilter(myJavaFilesFilter, null); // check repository work
+    PsiDocumentManager.getInstance(LightPlatformTestCase.getProject()).commitAllDocuments();
+    LightPlatformCodeInsightTestCase.getFile().getText(); //to load text
+    myJavaFilesFilter.allowTreeAccessForFile(LightPlatformCodeInsightTestCase.getVFile());
+    LightCodeInsightTestCase.getJavaFacade().setAssertOnFileLoadingFilter(myJavaFilesFilter, null); // check repository work
 
     Collection<HighlightInfo> infos = doHighlighting();
 
-    getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
+    LightCodeInsightTestCase.getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
 
-    data.checkResult(infos, getEditor().getDocument().getText(), filePath);
+    data.checkResult(infos, LightPlatformCodeInsightTestCase.getEditor().getDocument().getText(), filePath);
   }
 
   protected HighlightTestInfo doTestFile(@NonNls @NotNull String filePath) {
     return new HighlightTestInfo(getTestRootDisposable(), filePath) {
       @Override
       public HighlightTestInfo doTest() {
-        String path = assertOneElement(filePaths);
+        String path = UsefulTestCase.assertOneElement(filePaths);
         configureByFile(path);
-        ExpectedHighlightingData data = new ExpectedHighlightingData(myEditor.getDocument(), checkWarnings, checkWeakWarnings, checkInfos, myFile);
+        ExpectedHighlightingData data = new ExpectedHighlightingData(LightPlatformCodeInsightTestCase.myEditor.getDocument(), checkWarnings, checkWeakWarnings, checkInfos,
+				LightPlatformCodeInsightTestCase.myFile);
         if (checkSymbolNames) data.checkSymbolNames();
 
         checkHighlighting(data, composeLocalPath(path));
@@ -153,7 +157,7 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
 
   @NotNull
   protected List<HighlightInfo> doHighlighting() {
-    PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
+    PsiDocumentManager.getInstance(LightPlatformTestCase.getProject()).commitAllDocuments();
 
     TIntArrayList toIgnoreList = new TIntArrayList();
     if (!doFolding()) {
@@ -163,8 +167,8 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
       toIgnoreList.add(Pass.LOCAL_INSPECTIONS);
     }
     int[] toIgnore = toIgnoreList.isEmpty() ? ArrayUtil.EMPTY_INT_ARRAY : toIgnoreList.toNativeArray();
-    Editor editor = getEditor();
-    PsiFile file = getFile();
+    Editor editor = LightPlatformCodeInsightTestCase.getEditor();
+    PsiFile file = LightPlatformCodeInsightTestCase.getFile();
     if (editor instanceof EditorWindow) {
       editor = ((EditorWindow)editor).getDelegate();
       file = InjectedLanguageManager.getInstance(file.getProject()).getTopLevelFile(file);

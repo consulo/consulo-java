@@ -15,8 +15,6 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import static org.junit.Assert.*;
-
 import gnu.trove.THashMap;
 import gnu.trove.TIntArrayList;
 
@@ -33,6 +31,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.CodeInsightTestCase;
@@ -268,7 +267,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 				try
 				{
 					final Object tool = aClass.newInstance();
-					assertTrue(tool instanceof LocalInspectionTool);
+					Assert.assertTrue(tool instanceof LocalInspectionTool);
 					result.add((LocalInspectionTool) tool);
 				}
 				catch(Exception e)
@@ -497,8 +496,8 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 	{
 		IntentionAction intentionAction = findIntentionAction(infos, intentionActionName, editor, file);
 
-		assertNotNull(intentionActionName, intentionAction);
-		assertTrue(ShowIntentionActionsHandler.chooseActionAndInvoke(file, editor, intentionAction, intentionActionName));
+		Assert.assertNotNull(intentionActionName, intentionAction);
+		Assert.assertTrue(ShowIntentionActionsHandler.chooseActionAndInvoke(file, editor, intentionAction, intentionActionName));
 	}
 
 	protected static IntentionAction findIntentionAction(@NotNull Collection<HighlightInfo> infos, @NotNull String intentionActionName, @NotNull Editor editor, @NotNull PsiFile file)
@@ -551,7 +550,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 				final PsiFileFactory factory = PsiFileFactory.getInstance(getProject());
 				final PsiJavaFile javaFile = (PsiJavaFile) factory.createFileFromText("a.java", JavaFileType.INSTANCE, text);
 				final String qname = javaFile.getClasses()[0].getQualifiedName();
-				assertNotNull(qname);
+				Assert.assertNotNull(qname);
 				final VirtualFile[] files = ModuleRootManager.getInstance(module).getSourceRoots();
 				File dir;
 				if(files.length > 0)
@@ -568,10 +567,10 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 				File file = new File(dir, qname.replace('.', '/') + ".java");
 				FileUtil.createIfDoesntExist(file);
 				VirtualFile vFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(file.getCanonicalPath().replace(File.separatorChar, '/'));
-				assertNotNull(vFile);
+				Assert.assertNotNull(vFile);
 				VfsUtil.saveText(vFile, text);
 				PsiJavaFile psiFile = (PsiJavaFile) myPsiManager.findFile(vFile);
-				assertNotNull(psiFile);
+				Assert.assertNotNull(psiFile);
 				PsiClass psiClass = psiFile.getClasses()[0];
 				result.setResult(psiClass);
 

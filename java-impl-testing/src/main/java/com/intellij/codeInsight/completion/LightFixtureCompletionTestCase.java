@@ -1,10 +1,9 @@
 package com.intellij.codeInsight.completion;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupEvent;
 import com.intellij.codeInsight.lookup.LookupManager;
@@ -69,7 +68,7 @@ public abstract class LightFixtureCompletionTestCase extends LightCodeInsightFix
 
   protected void assertFirstStringItems(String... items) {
     List<String> strings = myFixture.getLookupElementStrings();
-    assertNotNull(strings);
+    Assert.assertNotNull(strings);
     assertOrderedEquals(strings.subList(0, Math.min(items.length, strings.size())), items);
   }
   protected void assertStringItems(String... items) {

@@ -15,13 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
+import java.util.List;
+
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiFile;
-
-import java.util.List;
 
 /**
  * @author Maxim.Mossienko

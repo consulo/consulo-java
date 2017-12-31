@@ -15,6 +15,20 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
+import static com.intellij.util.ObjectUtils.notNull;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.intellij.lang.annotations.RegExp;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -36,20 +50,6 @@ import com.intellij.testFramework.LightPlatformTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ui.UIUtil;
-import org.intellij.lang.annotations.RegExp;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.intellij.util.ObjectUtils.notNull;
 
 public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase {
   @NonNls private static final String BEFORE_PREFIX = "before";
@@ -114,7 +114,7 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
   }
 
   public static Pair<String, Boolean> parseActionHint(final PsiFile file, String contents, @NonNls @RegExp String actionPattern) {
-    PsiFile hostFile = InjectedLanguageManager.getInstance(getProject()).getTopLevelFile(file);
+    PsiFile hostFile = InjectedLanguageManager.getInstance(LightPlatformTestCase.getProject()).getTopLevelFile(file);
 
     final Commenter commenter = LanguageCommenters.INSTANCE.forLanguage(hostFile.getLanguage());
     String comment = commenter.getLineCommentPrefix();
@@ -181,7 +181,7 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
   }
 
   protected static void invoke(IntentionAction action) throws IncorrectOperationException {
-    ShowIntentionActionsHandler.chooseActionAndInvoke(getFile(), getEditor(), action, action.getText());
+    ShowIntentionActionsHandler.chooseActionAndInvoke(LightPlatformCodeInsightTestCase.getFile(), LightPlatformCodeInsightTestCase.getEditor(), action, action.getText());
   }
 
   protected IntentionAction findActionWithText(final String text) {
@@ -314,7 +314,7 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
 
   protected List<IntentionAction> getAvailableActions() {
     doHighlighting();
-    return getAvailableActions(getEditor(), getFile());
+    return getAvailableActions(LightPlatformCodeInsightTestCase.getEditor(), LightPlatformCodeInsightTestCase.getFile());
   }
 
   public static List<IntentionAction> getAvailableActions(@NotNull Editor editor, @NotNull PsiFile file) {
