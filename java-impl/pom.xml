@@ -63,11 +63,11 @@
 						<version>${build.number}</version>
 						<copies>
 							<copy>
-								<artifact>${project.groupId}:consulo.java-jdk.annotations</artifact>
+								<artifact>${project.groupId}:consulo.java-jdk.annotations:${project.version}</artifact>
 								<path>jdk-annotations.jar</path>
 							</copy>
 							<copy>
-								<artifact>consulo.internal:java.coverage.agent</artifact>
+								<artifact>consulo.internal:java.coverage.agent:1.0</artifact>
 								<path>coverage/consulo/agent.jar</path>
 							</copy>
 						</copies>
@@ -269,20 +269,6 @@
 			<artifactId>com.intellij.spellchecker</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>
-
-		<!--FIXME just dependencies for copy action-->
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>consulo.java-jdk.annotations</artifactId>
-			<version>${project.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>consulo.internal</groupId>
-			<artifactId>java.coverage.agent</artifactId>
-			<version>1.0</version>
-			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 </project>
