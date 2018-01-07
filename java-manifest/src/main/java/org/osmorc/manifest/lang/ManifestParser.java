@@ -31,9 +31,9 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import consulo.application.ApplicationProperties;
 import consulo.java.manifest.lang.headerparser.HeaderUtil;
 import consulo.lang.LanguageVersion;
-import consulo.util.SandboxUtil;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -50,7 +50,7 @@ public class ManifestParser implements PsiParser {
 
   @NotNull
   public ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder, @NotNull LanguageVersion languageVersion) {
-    builder.setDebugMode(SandboxUtil.isInsideSandbox());
+    builder.setDebugMode(ApplicationProperties.isInSandbox());
     final PsiBuilder.Marker rootMarker = builder.mark();
 
     while (!builder.eof()) {

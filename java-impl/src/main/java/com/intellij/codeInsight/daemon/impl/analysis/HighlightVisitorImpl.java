@@ -72,6 +72,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.MostlySingularMultiMap;
+import consulo.application.ApplicationProperties;
 import consulo.psi.PsiPackage;
 import consulo.util.SandboxUtil;
 
@@ -125,7 +126,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
 	private static class Holder
 	{
-		private static final boolean CHECK_ELEMENT_LEVEL = ApplicationManager.getApplication().isUnitTestMode() || SandboxUtil.isInsideSandbox();
+		private static final boolean CHECK_ELEMENT_LEVEL = ApplicationManager.getApplication().isUnitTestMode() || ApplicationProperties.isInSandbox();
 	}
 
 	public HighlightVisitorImpl(@NotNull PsiResolveHelper resolveHelper)
