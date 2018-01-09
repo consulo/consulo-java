@@ -30,6 +30,7 @@ import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.util.PathUtil;
 import com.intellij.util.PathsList;
+import consulo.annotations.DeprecationInfo;
 import consulo.java.module.extension.JavaModuleExtension;
 
 public class JavaSdkUtil
@@ -39,14 +40,14 @@ public class JavaSdkUtil
 
 	public static void addRtJar(PathsList pathsList)
 	{
-		final String ideaRtJarPath = getIdeaRtJarPath();
+		final String javaRtJarPath = getJavaRtJarPath();
 		if(Boolean.getBoolean(IDEA_PREPEND_RTJAR))
 		{
-			pathsList.addFirst(ideaRtJarPath);
+			pathsList.addFirst(javaRtJarPath);
 		}
 		else
 		{
-			pathsList.addTail(ideaRtJarPath);
+			pathsList.addTail(javaRtJarPath);
 		}
 	}
 
@@ -74,7 +75,16 @@ public class JavaSdkUtil
 		}
 	}
 
+	@NotNull
+	@Deprecated
+	@DeprecationInfo("Use #getJavaRtJarPath()")
 	public static String getIdeaRtJarPath()
+	{
+		return getJavaRtJarPath();
+	}
+
+	@NotNull
+	public static String getJavaRtJarPath()
 	{
 		try
 		{

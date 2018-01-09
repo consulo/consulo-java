@@ -53,7 +53,6 @@ import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.CustomShortcutSet;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
@@ -65,6 +64,7 @@ import com.intellij.unscramble.ThreadDumpConsoleFactory;
 import com.intellij.unscramble.ThreadDumpParser;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.util.text.DateFormatUtil;
+import consulo.annotations.RequiredDispatchThread;
 
 /**
  * @author spleaner
@@ -79,20 +79,16 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 	@Override
 	public boolean canRun(@NotNull final String executorId, @NotNull final RunProfile profile)
 	{
-		return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) &&
-				profile instanceof ModuleRunProfile &&
-				!(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
+		return executorId.equals(DefaultRunExecutor.EXECUTOR_ID) && profile instanceof ModuleRunProfile && !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction);
 	}
 
 	@Override
-	public void patch(JavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile,
-			final boolean beforeExecution) throws ExecutionException
+	public void patch(JavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException
 	{
 		runCustomPatchers(javaParameters, DefaultRunExecutor.getRunExecutorInstance(), runProfile);
 	}
 
-	@Override
-	protected RunContentDescriptor doExecute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env) throws ExecutionException
+	protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException
 	{
 		FileDocumentManager.getInstance().saveAllDocuments();
 
@@ -102,12 +98,30 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 		{
 			final JavaParameters parameters = ((JavaCommandLine) state).getJavaParameters();
 			patch(parameters, env.getRunnerSettings(), env.getRunProfile(), true);
-			final ProcessProxy proxy = ProcessProxyFactory.getInstance().createCommandLineProxy((JavaCommandLine) state);
+
+			ProcessProxy proxy = ProcessProxyFactory.getInstance().createCommandLineProxy((JavaCommandLine) state);
 			executionResult = state.execute(env.getExecutor(), this);
-			if(proxy != null && executionResult != null)
+			if(proxy != null)
 			{
-				proxy.attach(executionResult.getProcessHandler());
+				ProcessHandler handler = executionResult != null ? executionResult.getProcessHandler() : null;
+				if(handler != null)
+				{
+					proxy.attach(handler);
+					handler.addProcessListener(new ProcessAdapter()
+					{
+						@Override
+						public void processTerminated(@NotNull ProcessEvent event)
+						{
+							proxy.destroy();
+						}
+					});
+				}
+				else
+				{
+					proxy.destroy();
+				}
 			}
+
 			if(state instanceof JavaCommandLineState && !((JavaCommandLineState) state).shouldAddJavaProgramRunnerActions())
 			{
 				shouldAddDefaultActions = false;
@@ -128,23 +142,13 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 		final RunContentBuilder contentBuilder = new RunContentBuilder(executionResult, env);
 		if(shouldAddDefaultActions)
 		{
-			addDefaultActions(contentBuilder);
+			addDefaultActions(contentBuilder, executionResult);
 		}
 		return contentBuilder.showRunContent(env.getContentToReuse());
 	}
 
-	@Deprecated
-	/**
-	 * @deprecated to remove in IDEA 14
-	 */
-	protected AnAction[] createActions(@SuppressWarnings("UnusedParameters") final ExecutionResult executionResult)
+	private static void addDefaultActions(@NotNull RunContentBuilder contentBuilder, @NotNull ExecutionResult executionResult)
 	{
-		return AnAction.EMPTY_ARRAY;
-	}
-
-	protected static void addDefaultActions(final RunContentBuilder contentBuilder)
-	{
-		final ExecutionResult executionResult = contentBuilder.getExecutionResult();
 		final ExecutionConsole executionConsole = executionResult.getExecutionConsole();
 		final JComponent consoleComponent = executionConsole != null ? executionConsole.getComponent() : null;
 		final ControlBreakAction controlBreakAction = new ControlBreakAction(executionResult.getProcessHandler());
@@ -156,7 +160,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 			processHandler.addProcessListener(new ProcessAdapter()
 			{
 				@Override
-				public void processTerminated(final ProcessEvent event)
+				public void processTerminated(@NotNull final ProcessEvent event)
 				{
 					processHandler.removeProcessListener(this);
 					controlBreakAction.unregisterCustomShortcutSet(consoleComponent);
@@ -168,37 +172,51 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 	}
 
 
-	private abstract static class LauncherBasedAction extends AnAction
+	private abstract static class ProxyBasedAction extends AnAction
 	{
 		protected final ProcessHandler myProcessHandler;
 
-		protected LauncherBasedAction(String text, String description, Icon icon, ProcessHandler processHandler)
+		protected ProxyBasedAction(String text, String description, Icon icon, ProcessHandler processHandler)
 		{
 			super(text, description, icon);
 			myProcessHandler = processHandler;
 		}
 
+		@RequiredDispatchThread
 		@Override
-		public void update(@NotNull final AnActionEvent event)
+		public final void update(@NotNull AnActionEvent event)
 		{
-			final Presentation presentation = event.getPresentation();
-			if(!isVisible())
+			ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
+			boolean available = proxy != null && available(proxy);
+			Presentation presentation = event.getPresentation();
+			if(!available)
 			{
-				presentation.setVisible(false);
-				presentation.setEnabled(false);
-				return;
+				presentation.setEnabledAndVisible(false);
 			}
-			presentation.setVisible(true);
-			presentation.setEnabled(!myProcessHandler.isProcessTerminated());
+			else
+			{
+				presentation.setVisible(true);
+				presentation.setEnabled(!myProcessHandler.isProcessTerminated());
+			}
 		}
 
-		protected boolean isVisible()
+		@RequiredDispatchThread
+		@Override
+		public final void actionPerformed(@NotNull AnActionEvent e)
 		{
-			return ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler) != null;
+			ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
+			if(proxy != null)
+			{
+				perform(e, proxy);
+			}
 		}
+
+		protected abstract boolean available(ProcessProxy proxy);
+
+		protected abstract void perform(AnActionEvent e, ProcessProxy proxy);
 	}
 
-	protected static class ControlBreakAction extends LauncherBasedAction
+	protected static class ControlBreakAction extends ProxyBasedAction
 	{
 		public ControlBreakAction(final ProcessHandler processHandler)
 		{
@@ -207,26 +225,22 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 		}
 
 		@Override
-		protected boolean isVisible()
+		protected boolean available(ProcessProxy proxy)
 		{
-			return super.isVisible() && ProcessProxyFactory.getInstance().isBreakGenLibraryAvailable();
+			return proxy.canSendBreak();
 		}
 
 		@Override
-		public void actionPerformed(@NotNull final AnActionEvent e)
+		protected void perform(AnActionEvent e, ProcessProxy proxy)
 		{
-			ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
-			if(proxy != null)
+			boolean wise = Boolean.getBoolean(ourWiseThreadDumpProperty);
+			WiseDumpThreadsListener wiseListener = wise ? new WiseDumpThreadsListener(e.getProject(), myProcessHandler) : null;
+
+			proxy.sendBreak();
+
+			if(wiseListener != null)
 			{
-				final WiseDumpThreadsListener wiseListener = Boolean.TRUE.equals(Boolean.getBoolean(ourWiseThreadDumpProperty)) ? new
-						WiseDumpThreadsListener(e.getData(CommonDataKeys.PROJECT), myProcessHandler) : null;
-
-				proxy.sendBreak();
-
-				if(wiseListener != null)
-				{
-					wiseListener.after();
-				}
+				wiseListener.after();
 			}
 		}
 	}
@@ -253,44 +267,39 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 				myProcessHandler.removeProcessListener(myListener);
 				return;
 			}
-			ApplicationManager.getApplication().executeOnPooledThread(new Runnable()
+			ApplicationManager.getApplication().executeOnPooledThread((Runnable) () ->
 			{
-				@Override
-				public void run()
+				if(myProcessHandler.isProcessTerminated() || myProcessHandler.isProcessTerminating())
 				{
-					if(myProcessHandler.isProcessTerminated() || myProcessHandler.isProcessTerminating())
-					{
-						return;
-					}
-					List<ThreadState> threadStates = null;
-					final long start = System.currentTimeMillis();
-					while((System.currentTimeMillis() - start) < 1000)
-					{
-						final String stdout = myListener.getOutput().getStdout();
-						threadStates = ThreadDumpParser.parse(stdout);
-						if(threadStates == null || threadStates.isEmpty())
-						{
-							try
-							{
-								//noinspection BusyWait
-								Thread.sleep(50);
-							}
-							catch(InterruptedException ignored)
-							{
-								//
-							}
-							threadStates = null;
-							continue;
-						}
-						break;
-					}
-					myProcessHandler.removeProcessListener(myListener);
-					if(threadStates != null && !threadStates.isEmpty())
-					{
-						showThreadDump(myListener.getOutput().getStdout(), threadStates);
-					}
+					return;
 				}
-
+				List<ThreadState> threadStates = null;
+				final long start = System.currentTimeMillis();
+				while((System.currentTimeMillis() - start) < 1000)
+				{
+					final String stdout = myListener.getOutput().getStdout();
+					threadStates = ThreadDumpParser.parse(stdout);
+					if(threadStates == null || threadStates.isEmpty())
+					{
+						try
+						{
+							//noinspection BusyWait
+							Thread.sleep(50);
+						}
+						catch(InterruptedException ignored)
+						{
+							//
+						}
+						threadStates = null;
+						continue;
+					}
+					break;
+				}
+				myProcessHandler.removeProcessListener(myListener);
+				if(threadStates != null && !threadStates.isEmpty())
+				{
+					showThreadDump(myListener.getOutput().getStdout(), threadStates);
+				}
 			});
 		}
 
@@ -301,14 +310,14 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 				@Override
 				public void run()
 				{
-					AnalyzeStacktraceUtil.addConsole(myProject, threadStates.size() > 1 ? new ThreadDumpConsoleFactory(myProject,
-							threadStates) : null, "<Stacktrace> " + DateFormatUtil.formatDateTime(System.currentTimeMillis()), out);
+					AnalyzeStacktraceUtil.addConsole(myProject, threadStates.size() > 1 ? new ThreadDumpConsoleFactory(myProject, threadStates) : null, "<Stacktrace> " + DateFormatUtil
+							.formatDateTime(System.currentTimeMillis()), out);
 				}
 			}, ModalityState.NON_MODAL);
 		}
 	}
 
-	protected static class SoftExitAction extends LauncherBasedAction
+	protected static class SoftExitAction extends ProxyBasedAction
 	{
 		public SoftExitAction(final ProcessHandler processHandler)
 		{
@@ -316,13 +325,15 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 		}
 
 		@Override
-		public void actionPerformed(@NotNull final AnActionEvent e)
+		protected boolean available(ProcessProxy proxy)
 		{
-			ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);
-			if(proxy != null)
-			{
-				proxy.sendStop();
-			}
+			return proxy.canSendStop();
+		}
+
+		@Override
+		protected void perform(AnActionEvent e, ProcessProxy proxy)
+		{
+			proxy.sendStop();
 		}
 	}
 

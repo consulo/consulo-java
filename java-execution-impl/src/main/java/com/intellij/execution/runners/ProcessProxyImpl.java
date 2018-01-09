@@ -1,119 +1,190 @@
-/*
- * Copyright 2000-2011 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.execution.runners;
 
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.util.Key;
-import org.jetbrains.annotations.NonNls;
-
-import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.net.StandardSocketOptions;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousChannelGroup;
+import java.nio.channels.AsynchronousServerSocketChannel;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
+import java.util.concurrent.TimeUnit;
+
+import org.jetbrains.annotations.NotNull;
+import com.intellij.execution.process.BaseOSProcessHandler;
+import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.UnixProcessManager;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.SystemInfo;
+import com.intellij.util.ThrowableRunnable;
+import consulo.execution.process.OSProcessUtil;
+import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author ven
  */
-class ProcessProxyImpl implements ProcessProxy {
-  public static final Key<ProcessProxyImpl> KEY = Key.create("ProcessProxyImpl");
+class ProcessProxyImpl implements ProcessProxy
+{
+	static final Key<ProcessProxyImpl> KEY = Key.create("ProcessProxyImpl");
 
-  @NonNls public static final String PROPERTY_BINPATH = "idea.launcher.bin.path";
-  @NonNls public static final String PROPERTY_PORT_NUMBER = "idea.launcher.port";
-  @NonNls public static final String LAUNCH_MAIN_CLASS = "com.intellij.rt.execution.application.AppMain";
+	private final AsynchronousChannelGroup myGroup;
+	private final int myPort;
 
-  @NonNls protected static final String LOCALHOST = "localhost";
-  @NonNls private static final String DONT_USE_LAUNCHER_PROPERTY = "idea.no.launcher";
-  private static final int SOCKET_NUMBER_START = 7532;
-  private static final int SOCKET_NUMBER = 100;
-  private static final boolean[] ourUsedSockets = new boolean[SOCKET_NUMBER];
+	private final Object myLock = new Object();
+	private AsynchronousSocketChannel myConnection;
+	private int myPid;
 
-  private final int myPortNumber;
-  private PrintWriter myWriter;
-  private Socket mySocket;
+	ProcessProxyImpl(String mainClass) throws IOException
+	{
+		myGroup = AsynchronousChannelGroup.withFixedThreadPool(1, r -> new Thread(r, "Process Proxy: " + mainClass));
+		AsynchronousServerSocketChannel channel = AsynchronousServerSocketChannel.open(myGroup).bind(new InetSocketAddress("127.0.0.1", 0)).setOption(StandardSocketOptions.SO_REUSEADDR, true);
+		myPort = ((InetSocketAddress) channel.getLocalAddress()).getPort();
 
-  public static class NoMoreSocketsException extends Exception {
-  }
+		channel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Void>()
+		{
+			@Override
+			public void completed(AsynchronousSocketChannel channel, Void attachment)
+			{
+				synchronized(myLock)
+				{
+					myConnection = channel;
+				}
+			}
 
-  public ProcessProxyImpl() throws NoMoreSocketsException {
-    myPortNumber = findFreePort();
-    if (myPortNumber == -1) throw new NoMoreSocketsException();
-  }
+			@Override
+			public void failed(Throwable t, Void attachment)
+			{
+			}
+		});
+	}
 
-  private static int findFreePort() {
-    synchronized (ourUsedSockets) {
-      for (int j = 0; j < SOCKET_NUMBER; j++) {
-        if (ourUsedSockets[j]) continue;
-        try {
-          ServerSocket s = new ServerSocket(j + SOCKET_NUMBER_START);
-          s.close();
-          ourUsedSockets[j] = true;
-          return j + SOCKET_NUMBER_START;
-        }
-        catch (IOException ignore) { }
-      }
-    }
-    return -1;
-  }
+	int getPortNumber()
+	{
+		return myPort;
+	}
 
-  public int getPortNumber() {
-    return myPortNumber;
-  }
+	@Override
+	public void attach(@NotNull ProcessHandler processHandler)
+	{
+		processHandler.putUserData(KEY, this);
+		execute(() ->
+		{
+			int pid = -1;
+			if(SystemInfo.isUnix && processHandler instanceof BaseOSProcessHandler)
+			{
+				pid = OSProcessUtil.getProcessID(((BaseOSProcessHandler) processHandler).getProcess());
+			}
+			synchronized(myLock)
+			{
+				myPid = pid;
+			}
+		});
+	}
 
-  @SuppressWarnings("FinalizeDeclaration")
-  protected synchronized void finalize() throws Throwable {
-    if (myWriter != null) {
-      myWriter.close();
-    }
-    ourUsedSockets[myPortNumber - SOCKET_NUMBER_START] = false;
-    super.finalize();
-  }
+	private void writeLine(String s)
+	{
+		execute(() ->
+		{
+			ByteBuffer out = ByteBuffer.wrap((s + '\n').getBytes("US-ASCII"));
+			synchronized(myLock)
+			{
+				myConnection.write(out);
+			}
+		});
+	}
 
-  public void attach(final ProcessHandler processHandler) {
-    processHandler.putUserData(KEY, this);
-  }
+	@Override
+	public boolean canSendBreak()
+	{
+		if(SystemInfo.isWindows)
+		{
+			synchronized(myLock)
+			{
+				if(myConnection == null)
+				{
+					return false;
+				}
+			}
+			return new File(PluginManager.getPluginPath(JavaClassNames.class), "breakgen/breakgen.dll").exists();
+		}
 
-  @SuppressWarnings({"SocketOpenedButNotSafelyClosed", "IOResourceOpenedButNotSafelyClosed"})
-  private synchronized void writeLine(@NonNls final String s) {
-    if (myWriter == null) {
-      try {
-        if (mySocket == null) {
-          mySocket = new Socket(InetAddress.getByName(LOCALHOST), myPortNumber);
-        }
-        myWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mySocket.getOutputStream())));
-      }
-      catch (IOException e) {
-        return;
-      }
-    }
-    myWriter.println(s);
-    myWriter.flush();
-  }
+		if(SystemInfo.isUnix)
+		{
+			synchronized(myLock)
+			{
+				return myPid > 0;
+			}
+		}
 
-  public void sendBreak() {
-    writeLine("BREAK");
-  }
+		return false;
+	}
 
-  public void sendStop() {
-    writeLine("STOP");
-  }
+	@Override
+	public boolean canSendStop()
+	{
+		synchronized(myLock)
+		{
+			return myConnection != null;
+		}
+	}
 
-  public static boolean useLauncher() {
-    return !Boolean.valueOf(System.getProperty(DONT_USE_LAUNCHER_PROPERTY));
-  }
+	@Override
+	public void sendBreak()
+	{
+		if(SystemInfo.isWindows)
+		{
+			writeLine("BREAK");
+		}
+		else if(SystemInfo.isUnix)
+		{
+			int pid;
+			synchronized(myLock)
+			{
+				pid = myPid;
+			}
+			UnixProcessManager.sendSignal(pid, 3);  // SIGQUIT
+		}
+	}
+
+	@Override
+	public void sendStop()
+	{
+		writeLine("STOP");
+	}
+
+	@Override
+	public void destroy()
+	{
+		execute(() ->
+		{
+			synchronized(myLock)
+			{
+				if(myConnection != null)
+				{
+					myConnection.close();
+				}
+			}
+		});
+		execute(() ->
+		{
+			myGroup.shutdownNow();
+			myGroup.awaitTermination(1, TimeUnit.SECONDS);
+		});
+	}
+
+	private static void execute(ThrowableRunnable<Exception> block)
+	{
+		try
+		{
+			block.run();
+		}
+		catch(Exception e)
+		{
+			Logger.getInstance(ProcessProxy.class).warn(e);
+		}
+	}
 }

@@ -187,4 +187,10 @@ public class JavaParameters extends SimpleJavaParameters
 			pathsList.add(virtualFile);
 		}
 	}
+
+	@Nullable
+	public String getModuleName()
+	{
+		return null; //FIXME [VISTALL] for now it's null
+	}
 }

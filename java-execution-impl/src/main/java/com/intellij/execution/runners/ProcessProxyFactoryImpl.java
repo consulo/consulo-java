@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,55 +15,76 @@
  */
 package com.intellij.execution.runners;
 
+import java.io.File;
+
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.ProcessHandler;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.util.SystemInfo;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.rt.execution.application.AppMainV2;
+import consulo.java.module.util.JavaClassNames;
+import consulo.platform.Platform;
 
-import java.io.File;
+public class ProcessProxyFactoryImpl extends ProcessProxyFactory
+{
+	private static final boolean ourMayUseLauncher = !Boolean.valueOf(Platform.current().getRuntimeProperty("idea.no.launcher"));
 
-public class ProcessProxyFactoryImpl extends ProcessProxyFactory {
-  public ProcessProxy createCommandLineProxy(final JavaCommandLine javaCmdLine) throws ExecutionException {
-    ProcessProxyImpl proxy = null;
-    if (ProcessProxyImpl.useLauncher()) {
-      try {
-        proxy = new ProcessProxyImpl();
-        final JavaParameters javaParameters = javaCmdLine.getJavaParameters();
-        JavaSdkUtil.addRtJar(javaParameters.getClassPath());
-        final ParametersList vmParametersList = javaParameters.getVMParametersList();
-        vmParametersList.defineProperty(ProcessProxyImpl.PROPERTY_PORT_NUMBER, String.valueOf(proxy.getPortNumber()));
-        vmParametersList.defineProperty(ProcessProxyImpl.PROPERTY_BINPATH, PathManager.getBinPath());
-        javaParameters.getProgramParametersList().prepend(javaParameters.getMainClass());
-        javaParameters.setMainClass(ProcessProxyImpl.LAUNCH_MAIN_CLASS);
-      }
-      catch (ProcessProxyImpl.NoMoreSocketsException e) {
-        proxy = null;
-      }
-    }
-    return proxy;
-  }
+	@Override
+	public ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException
+	{
+		JavaParameters javaParameters = javaCmdLine.getJavaParameters();
+		String mainClass = javaParameters.getMainClass();
 
-  public ProcessProxy getAttachedProxy(final ProcessHandler processHandler) {
-    return processHandler != null ? processHandler.getUserData(ProcessProxyImpl.KEY) : null;
-  }
+		if(ourMayUseLauncher && mainClass != null)
+		{
+			String rtJarPath = JavaSdkUtil.getJavaRtJarPath();
+			boolean runtimeJarFile = new File(rtJarPath).isFile();
 
-  @Override
-  public boolean isBreakGenLibraryAvailable() {
-    @NonNls final String libName;
-    if (SystemInfo.isWindows) {
-      libName = "breakgen.dll";
-    }
-    else if (SystemInfo.isMac) {
-      libName = "libbreakgen.jnilib";
-    }
-    else {
-      libName = "libbreakgen.so";
-    }
-    return new File(PathManager.getBinPath() + File.separator + libName).exists();
-  }
+			if(runtimeJarFile || javaParameters.getModuleName() == null)
+			{
+				try
+				{
+					ProcessProxyImpl proxy = new ProcessProxyImpl(StringUtil.getShortName(mainClass));
+					String port = String.valueOf(proxy.getPortNumber());
+					String binPath = new File(PluginManager.getPluginPath(JavaClassNames.class), "breakgen").getPath();
+
+					if(runtimeJarFile && JavaSdkUtil.isJdkAtLeast(javaParameters.getJdk(), JavaSdkVersion.JDK_1_5))
+					{
+						javaParameters.getVMParametersList().add("-javaagent:" + rtJarPath + '=' + port + ':' + binPath);
+					}
+					else
+					{
+						JavaSdkUtil.addRtJar(javaParameters.getClassPath());
+
+						ParametersList vmParametersList = javaParameters.getVMParametersList();
+						vmParametersList.defineProperty(AppMainV2.LAUNCHER_PORT_NUMBER, port);
+						vmParametersList.defineProperty(AppMainV2.LAUNCHER_BIN_PATH, binPath);
+
+						javaParameters.getProgramParametersList().prepend(mainClass);
+						javaParameters.setMainClass(AppMainV2.class.getName());
+					}
+
+					return proxy;
+				}
+				catch(Exception e)
+				{
+					Logger.getInstance(ProcessProxy.class).warn(e);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public ProcessProxy getAttachedProxy(ProcessHandler processHandler)
+	{
+		return ProcessProxyImpl.KEY.get(processHandler);
+	}
 }

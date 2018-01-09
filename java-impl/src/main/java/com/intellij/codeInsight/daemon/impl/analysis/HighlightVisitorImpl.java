@@ -74,7 +74,6 @@ import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.MostlySingularMultiMap;
 import consulo.application.ApplicationProperties;
 import consulo.psi.PsiPackage;
-import consulo.util.SandboxUtil;
 
 public class HighlightVisitorImpl extends JavaElementVisitor implements HighlightVisitor
 {

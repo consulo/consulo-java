@@ -15,22 +15,28 @@
  */
 package com.intellij.execution.runners;
 
-import org.jetbrains.annotations.Nullable;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.JavaCommandLine;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.components.ServiceManager;
 
-public abstract class ProcessProxyFactory
+public interface ProcessProxy
 {
-	public static ProcessProxyFactory getInstance()
+	void attach(@NotNull ProcessHandler processHandler);
+
+	default boolean canSendBreak()
 	{
-		return ServiceManager.getService(ProcessProxyFactory.class);
+		return true;
 	}
 
-	@Nullable
-	public abstract ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException;
+	default boolean canSendStop()
+	{
+		return true;
+	}
 
-	@Nullable
-	public abstract ProcessProxy getAttachedProxy(ProcessHandler processHandler);
+	void sendBreak();
+
+	void sendStop();
+
+	default void destroy()
+	{
+	}
 }
