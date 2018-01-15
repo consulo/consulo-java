@@ -122,12 +122,6 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
 	}
 
 	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
-
-	@Override
 	protected final PsiClass doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException
 	{
 		return JavaDirectoryService.getInstance().createClass(dir, className, templateName, true);
