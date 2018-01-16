@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.execution.configurations.SimpleJavaParameters;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * @author Roman.Chernyatchik
@@ -32,7 +32,7 @@ public abstract class JavaCoverageRunner extends CoverageRunner
 
 	public abstract void appendCoverageArgument(final String sessionDataFilePath,
 			@Nullable final String[] patterns,
-			final SimpleJavaParameters parameters,
+			final OwnJavaParameters parameters,
 			final boolean collectLineInfo,
 			final boolean isSampling);
 

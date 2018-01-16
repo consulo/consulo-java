@@ -22,7 +22,6 @@ import java.util.Map;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
@@ -44,10 +43,11 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
+import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
-public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements
-		CommonJavaRunConfigurationParameters, SingleClassConfiguration, RefactoringListenerProvider,
-		GenericDebugRunnerConfiguration
+public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters, SingleClassConfiguration,
+		RefactoringListenerProvider, GenericDebugRunnerConfiguration
 {
 
 	public String MAIN_CLASS_NAME;
@@ -62,9 +62,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	private Map<String, String> myEnvs = new LinkedHashMap<String, String>();
 	public boolean PASS_PARENT_ENVS = true;
 
-	public ApplicationConfiguration(final String name,
-			final Project project,
-			ConfigurationType applicationConfigurationType)
+	public ApplicationConfiguration(final String name, final Project project, ConfigurationType applicationConfigurationType)
 	{
 		this(name, project, applicationConfigurationType.getConfigurationFactories()[0]);
 	}
@@ -84,13 +82,11 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	public RunProfileState getState(@NotNull final Executor executor,
-			@NotNull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
 	{
 		final JavaCommandLineState state = new JavaApplicationCommandLineState(this, env);
 		JavaRunConfigurationModule module = getConfigurationModule();
-		state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(),
-				module.getSearchScope()));
+		state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
 		return state;
 	}
 
@@ -99,19 +95,16 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
 		SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<ApplicationConfiguration>();
-		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"),
-				new ApplicationConfigurable(getProject()));
+		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new ApplicationConfigurable(getProject()));
 		JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<ApplicationConfiguration>
-				());
+		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<ApplicationConfiguration>());
 		return group;
 	}
 
 	@Override
 	public RefactoringElementListener getRefactoringElementListener(final PsiElement element)
 	{
-		final RefactoringElementListener listener = RefactoringListeners.getClassOrPackageListener(element,
-				new RefactoringListeners.SingleClassConfigurationAccessor(this));
+		final RefactoringElementListener listener = RefactoringListeners.getClassOrPackageListener(element, new RefactoringListeners.SingleClassConfigurationAccessor(this));
 		return RunConfigurationExtension.wrapRefactoringElementListener(element, this, listener);
 	}
 
@@ -148,12 +141,10 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	{
 		JavaParametersUtil.checkAlternativeJRE(this);
 		final JavaRunConfigurationModule configurationModule = getConfigurationModule();
-		final PsiClass psiClass = configurationModule.checkModuleAndClassName(MAIN_CLASS_NAME,
-				ExecutionBundle.message("no.main.class.specified" + ".error.text"));
+		final PsiClass psiClass = configurationModule.checkModuleAndClassName(MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified" + ".error.text"));
 		if(!PsiMethodUtil.hasMainMethod(psiClass))
 		{
-			throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error" +
-					".message", MAIN_CLASS_NAME));
+			throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error" + ".message", MAIN_CLASS_NAME));
 		}
 		ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), configurationModule.getModule());
 		JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
@@ -293,8 +284,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 		PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
 	}
 
-	public static class JavaApplicationCommandLineState<T extends ApplicationConfiguration> extends
-			BaseJavaApplicationCommandLineState<T>
+	public static class JavaApplicationCommandLineState<T extends ApplicationConfiguration> extends BaseJavaApplicationCommandLineState<T>
 	{
 		public JavaApplicationCommandLineState(@NotNull final T configuration, final ExecutionEnvironment environment)
 		{
@@ -302,15 +292,13 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 		}
 
 		@Override
-		protected JavaParameters createJavaParameters() throws ExecutionException
+		protected OwnJavaParameters createJavaParameters() throws ExecutionException
 		{
-			final JavaParameters params = new JavaParameters();
+			final OwnJavaParameters params = new OwnJavaParameters();
 			final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
 
-			final int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME,
-					false);
-			final String jreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH
-					: null;
+			final int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME, false);
+			final String jreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
 			JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
 			params.setMainClass(myConfiguration.MAIN_CLASS_NAME);
 			setupJavaParameters(params);

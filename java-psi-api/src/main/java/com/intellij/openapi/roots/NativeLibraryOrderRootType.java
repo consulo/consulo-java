@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.execution;
-
-import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
-import consulo.java.execution.configurations.OwnJavaParameters;
+package com.intellij.openapi.roots;
 
 /**
- * User: anna
- * Date: Mar 4, 2005
+ * @author nik
  */
-public interface JavaTestPatcher
+public class NativeLibraryOrderRootType extends OrderRootType
 {
-	ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create("consulo.java.testPatcher");
+	public static OrderRootType getInstance()
+	{
+		return getOrderRootType(NativeLibraryOrderRootType.class);
+	}
 
-	void patchJavaParameters(@NotNull Module module, @NotNull OwnJavaParameters javaParameters);
+	public NativeLibraryOrderRootType()
+	{
+		super("javaNative");
+	}
 }

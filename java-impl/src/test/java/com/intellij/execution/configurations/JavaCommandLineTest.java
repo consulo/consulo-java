@@ -15,86 +15,104 @@
  */
 package com.intellij.execution.configurations;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.junit.Assert;
 import com.intellij.JavaTestUtil;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.process.DefaultJavaProcessHandler;
+import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.testFramework.LightIdeaTestCase;
-import junit.framework.Assert;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
-public class JavaCommandLineTest extends LightIdeaTestCase {
-  public void testJdk() {
-    try {
-      CommandLineBuilder.createFromJavaParameters(new JavaParameters());
-      fail("CantRunException (main class is not specified) expected");
-    }
-    catch (CantRunException e) {
-      Assert.assertEquals(ExecutionBundle.message("run.configuration.error.no.jdk.specified"), e.getMessage());
-    }
-  }
+public class JavaCommandLineTest extends LightIdeaTestCase
+{
+	public void testJdk()
+	{
+		try
+		{
+			new OwnJavaParameters().toCommandLine();
+			fail("CantRunException (main class is not specified) expected");
+		}
+		catch(CantRunException e)
+		{
+			Assert.assertEquals(ExecutionBundle.message("run.configuration.error.no.jdk.specified"), e.getMessage());
+		}
+	}
 
-  public void testMainClass() {
-    try {
-      JavaParameters javaParameters = new JavaParameters();
-      javaParameters.setJdk(getProjectJDK());
-      CommandLineBuilder.createFromJavaParameters(javaParameters);
-      fail("CantRunException (main class is not specified) expected");
-    }
-    catch (CantRunException e) {
-      assertEquals(ExecutionBundle.message("main.class.is.not.specified.error.message"), e.getMessage());
-    }
-  }
+	public void testMainClass()
+	{
+		try
+		{
+			OwnJavaParameters javaParameters = new OwnJavaParameters();
+			javaParameters.setJdk(getProjectJDK());
+			javaParameters.toCommandLine();
+			fail("CantRunException (main class is not specified) expected");
+		}
+		catch(CantRunException e)
+		{
+			assertEquals(ExecutionBundle.message("main.class.is.not.specified.error.message"), e.getMessage());
+		}
+	}
 
-  public void testClasspath() throws CantRunException {
-    JavaParameters javaParameters;
-    String commandLineString;
+	public void testClasspath() throws CantRunException
+	{
+		OwnJavaParameters javaParameters;
+		String commandLineString;
 
-    javaParameters = new JavaParameters();
-    final Sdk internalJdk = JavaTestUtil.getTestJdk();
-    javaParameters.setJdk(internalJdk);
-    javaParameters.setMainClass("Main");
-    commandLineString = CommandLineBuilder.createFromJavaParameters(javaParameters).getCommandLineString();
-    assertTrue(containsClassPath(commandLineString));
+		javaParameters = new OwnJavaParameters();
+		final Sdk internalJdk = JavaTestUtil.getTestJdk();
+		javaParameters.setJdk(internalJdk);
+		javaParameters.setMainClass("Main");
+		commandLineString =javaParameters.toCommandLine().getCommandLineString();
+		assertTrue(containsClassPath(commandLineString));
 
-    javaParameters = new JavaParameters();
-    javaParameters.setJdk(internalJdk);
-    javaParameters.setMainClass("Main");
-    javaParameters.getVMParametersList().add("-cp");
-    javaParameters.getVMParametersList().add("..");
-    commandLineString = CommandLineBuilder.createFromJavaParameters(javaParameters).getCommandLineString();
-    commandLineString = removeClassPath(commandLineString, "-cp ..");
-    assertTrue(!containsClassPath(commandLineString));
+		javaParameters = new OwnJavaParameters();
+		javaParameters.setJdk(internalJdk);
+		javaParameters.setMainClass("Main");
+		javaParameters.getVMParametersList().add("-cp");
+		javaParameters.getVMParametersList().add("..");
+		commandLineString = javaParameters.toCommandLine().getCommandLineString();
+		commandLineString = removeClassPath(commandLineString, "-cp ..");
+		assertTrue(!containsClassPath(commandLineString));
 
-    javaParameters = new JavaParameters();
-    javaParameters.setJdk(internalJdk);
-    javaParameters.setMainClass("Main");
-    javaParameters.getVMParametersList().add("-classpath");
-    javaParameters.getVMParametersList().add("..");
-    commandLineString = CommandLineBuilder.createFromJavaParameters(javaParameters).getCommandLineString();
-    commandLineString = removeClassPath(commandLineString, "-classpath ..");
-    assertTrue(!containsClassPath(commandLineString));
-  }
+		javaParameters = new OwnJavaParameters();
+		javaParameters.setJdk(internalJdk);
+		javaParameters.setMainClass("Main");
+		javaParameters.getVMParametersList().add("-classpath");
+		javaParameters.getVMParametersList().add("..");
+		commandLineString = javaParameters.toCommandLine().getCommandLineString();
+		commandLineString = removeClassPath(commandLineString, "-classpath ..");
+		assertTrue(!containsClassPath(commandLineString));
+	}
 
-  private static boolean containsClassPath(String commandLineString) {
-    return commandLineString.contains("-cp") || commandLineString.contains("-classpath");
-  }
+	private static boolean containsClassPath(String commandLineString)
+	{
+		return commandLineString.contains("-cp") || commandLineString.contains("-classpath");
+	}
 
-  private static String removeClassPath(String commandLineString, String pathString) {
-    int i = commandLineString.indexOf(pathString);
-    commandLineString = commandLineString.substring(0, i) + commandLineString.substring(i + pathString.length());
-    return commandLineString;
-  }
+	private static String removeClassPath(String commandLineString, String pathString)
+	{
+		int i = commandLineString.indexOf(pathString);
+		commandLineString = commandLineString.substring(0, i) + commandLineString.substring(i + pathString.length());
+		return commandLineString;
+	}
 
-  public void testCreateProcess() {
-    try {
-      new DefaultJavaProcessHandler(new GeneralCommandLine());
-      fail("ExecutionException (executable is not specified) expected");
-    }
-    catch (ExecutionException e) {
-      assertEquals(IdeBundle.message("run.configuration.error.executable.not.specified"), e.getMessage());
-    }
-  }
+	public void testCreateProcess()
+	{
+		try
+		{
+			new OSProcessHandler(new GeneralCommandLine());
+			fail("ExecutionException (executable is not specified) expected");
+		}
+		catch(ExecutionException e)
+		{
+			assertEquals(IdeBundle.message("run.configuration.error.executable.not.specified"), e.getMessage());
+		}
+	}
 }

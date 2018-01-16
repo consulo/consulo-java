@@ -82,6 +82,7 @@ import com.intellij.util.EventDispatcher;
 import com.intellij.util.Function;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 @State(name = "DebuggerManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 public class DebuggerManagerImpl extends DebuggerManagerEx implements PersistentStateComponent<Element>
@@ -454,7 +455,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	}
 
 	/* Remoting */
-	private static void checkTargetJPDAInstalled(JavaParameters parameters) throws ExecutionException
+	private static void checkTargetJPDAInstalled(OwnJavaParameters parameters) throws ExecutionException
 	{
 		final Sdk jdk = parameters.getJdk();
 		if(jdk == null)
@@ -522,7 +523,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 	}
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
-	public static RemoteConnection createDebugParameters(final JavaParameters parameters,
+	public static RemoteConnection createDebugParameters(final OwnJavaParameters parameters,
 			final boolean debuggerInServerMode,
 			int transport,
 			final String debugPort,
@@ -671,7 +672,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
 		return !(version.startsWith("1.4") || version.startsWith("1.3") || version.startsWith("1.2") || version.startsWith("1.1") || version.startsWith("1.0"));
 	}
 
-	public static RemoteConnection createDebugParameters(final JavaParameters parameters, GenericDebuggerRunnerSettings settings, boolean checkValidity) throws ExecutionException
+	public static RemoteConnection createDebugParameters(final OwnJavaParameters parameters, GenericDebuggerRunnerSettings settings, boolean checkValidity) throws ExecutionException
 	{
 		return createDebugParameters(parameters, settings.LOCAL, settings.getTransport(), settings.getDebugPort(), checkValidity);
 	}

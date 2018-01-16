@@ -20,7 +20,6 @@ import com.intellij.coverage.listeners.CoverageListener;
 import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.Location;
 import com.intellij.execution.RunConfigurationExtension;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
@@ -48,6 +47,7 @@ import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.refactoring.listeners.RefactoringElementListenerComposite;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.ArrayUtil;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * Registers "Coverage" tab in Java run configurations
@@ -72,7 +72,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     return "coverage";
   }
 
-  public void updateJavaParameters(RunConfigurationBase configuration, JavaParameters params, RunnerSettings runnerSettings) {
+  public void updateJavaParameters(RunConfigurationBase configuration, OwnJavaParameters params, RunnerSettings runnerSettings) {
     if (!isApplicableFor(configuration)) {
       return;
     }

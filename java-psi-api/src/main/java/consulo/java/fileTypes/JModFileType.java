@@ -17,7 +17,9 @@
 package consulo.java.fileTypes;
 
 import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.vfs.VirtualFile;
 import consulo.fileTypes.ArchiveFileType;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
  * @author VISTALL
@@ -46,5 +48,21 @@ public class JModFileType extends ArchiveFileType
 	public String getProtocol()
 	{
 		return "jar";
+	}
+
+	public static boolean isRoot(@NotNull VirtualFile file)
+	{
+		if(file.getParent() == null)
+		{
+			VirtualFile archiveFile = ArchiveVfsUtil.getVirtualFileForArchive(file);
+			return archiveFile != null && archiveFile.getFileType() == JModFileType.INSTANCE;
+		}
+		return false;
+	}
+
+	public static boolean isModuleRoot(@NotNull VirtualFile file)
+	{
+		VirtualFile parent = file.getParent();
+		return parent != null && isRoot(parent);
 	}
 }

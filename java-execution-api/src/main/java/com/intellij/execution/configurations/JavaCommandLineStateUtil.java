@@ -15,32 +15,32 @@
  */
 package com.intellij.execution.configurations;
 
+import org.jetbrains.annotations.NotNull;
+import com.intellij.execution.ExecutionException;
 import com.intellij.execution.process.ColoredProcessHandler;
-import com.intellij.execution.process.DefaultJavaProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessTerminatedListener;
-import com.intellij.execution.ExecutionException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author spleaner
  */
-public class JavaCommandLineStateUtil {
-  private JavaCommandLineStateUtil() {
-  }
+public class JavaCommandLineStateUtil
+{
+	private JavaCommandLineStateUtil()
+	{
+	}
 
-  @NotNull
-  public static OSProcessHandler startProcess(@NotNull final GeneralCommandLine commandLine) throws ExecutionException {
-    return startProcess(commandLine, false);
-  }
-  
-  @NotNull
-  public static OSProcessHandler startProcess(@NotNull final GeneralCommandLine commandLine,
-                                              final boolean ansiColoring) throws ExecutionException {
+	@NotNull
+	public static OSProcessHandler startProcess(@NotNull final GeneralCommandLine commandLine) throws ExecutionException
+	{
+		return startProcess(commandLine, false);
+	}
 
-    final OSProcessHandler processHandler = ansiColoring ? new ColoredProcessHandler(commandLine)
-                                                         : new DefaultJavaProcessHandler(commandLine);
-    ProcessTerminatedListener.attach(processHandler);
-    return processHandler;
-  }
+	@NotNull
+	public static OSProcessHandler startProcess(@NotNull final GeneralCommandLine commandLine, final boolean ansiColoring) throws ExecutionException
+	{
+		OSProcessHandler processHandler = ansiColoring ? new ColoredProcessHandler(commandLine) : new OSProcessHandler(commandLine);
+		ProcessTerminatedListener.attach(processHandler);
+		return processHandler;
+	}
 }

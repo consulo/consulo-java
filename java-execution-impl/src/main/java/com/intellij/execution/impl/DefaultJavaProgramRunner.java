@@ -31,7 +31,6 @@ import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.RunnerRegistry;
 import com.intellij.execution.configurations.JavaCommandLine;
 import com.intellij.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ModuleRunProfile;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
@@ -65,6 +64,7 @@ import com.intellij.unscramble.ThreadDumpParser;
 import com.intellij.unscramble.ThreadState;
 import com.intellij.util.text.DateFormatUtil;
 import consulo.annotations.RequiredDispatchThread;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * @author spleaner
@@ -83,7 +83,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 	}
 
 	@Override
-	public void patch(JavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException
+	public void patch(OwnJavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException
 	{
 		runCustomPatchers(javaParameters, DefaultRunExecutor.getRunExecutorInstance(), runProfile);
 	}
@@ -96,7 +96,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner
 		boolean shouldAddDefaultActions = true;
 		if(state instanceof JavaCommandLine)
 		{
-			final JavaParameters parameters = ((JavaCommandLine) state).getJavaParameters();
+			final OwnJavaParameters parameters = ((JavaCommandLine) state).getJavaParameters();
 			patch(parameters, env.getRunnerSettings(), env.getRunProfile(), true);
 
 			ProcessProxy proxy = ProcessProxyFactory.getInstance().createCommandLineProxy((JavaCommandLine) state);

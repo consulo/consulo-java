@@ -16,7 +16,9 @@
 package com.intellij.execution.configurations;
 
 import com.intellij.execution.ExecutionException;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
-public interface JavaCommandLine extends RunProfileState {
-  JavaParameters getJavaParameters() throws ExecutionException;
+public interface JavaCommandLine extends RunProfileState
+{
+	OwnJavaParameters getJavaParameters() throws ExecutionException;
 }

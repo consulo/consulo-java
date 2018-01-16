@@ -47,7 +47,6 @@ import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JdkUtil;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
@@ -58,6 +57,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
+import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.java.projectRoots.OwnJdkUtil;
 
 public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements SingleClassConfiguration,
 		RefactoringListenerProvider, GenericDebugRunnerConfiguration
@@ -101,13 +102,13 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 			private AppletHtmlFile myHtmlURL = null;
 
 			@Override
-			protected JavaParameters createJavaParameters() throws ExecutionException
+			protected OwnJavaParameters createJavaParameters() throws ExecutionException
 			{
-				final JavaParameters params = new JavaParameters();
+				final OwnJavaParameters params = new OwnJavaParameters();
 				myHtmlURL = getHtmlURL();
 				if(myHtmlURL != null)
 				{
-					final int classPathType = myHtmlURL.isHttp() ? JavaParameters.JDK_ONLY : JavaParameters.JDK_AND_CLASSES;
+					final int classPathType = myHtmlURL.isHttp() ? OwnJavaParameters.JDK_ONLY : OwnJavaParameters.JDK_AND_CLASSES;
 					final RunConfigurationModule runConfigurationModule = getConfigurationModule();
 					JavaParametersUtil.configureModule(runConfigurationModule, params, classPathType,
 							ALTERNATIVE_JRE_PATH_ENABLED ? ALTERNATIVE_JRE_PATH : null);
@@ -307,7 +308,7 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 		{
 			if(ALTERNATIVE_JRE_PATH == null ||
 					ALTERNATIVE_JRE_PATH.length() == 0 ||
-					!JdkUtil.checkForJre(ALTERNATIVE_JRE_PATH))
+					!OwnJdkUtil.checkForJre(ALTERNATIVE_JRE_PATH))
 			{
 				throw new RuntimeConfigurationWarning(ExecutionBundle.message("jre.not.valid.error.message", ALTERNATIVE_JRE_PATH));
 			}

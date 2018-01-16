@@ -19,7 +19,6 @@ import java.io.File;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLine;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.ide.plugins.PluginManager;
@@ -28,6 +27,7 @@ import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.rt.execution.application.AppMainV2;
+import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.module.util.JavaClassNames;
 import consulo.platform.Platform;
 
@@ -38,7 +38,7 @@ public class ProcessProxyFactoryImpl extends ProcessProxyFactory
 	@Override
 	public ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException
 	{
-		JavaParameters javaParameters = javaCmdLine.getJavaParameters();
+		OwnJavaParameters javaParameters = javaCmdLine.getJavaParameters();
 		String mainClass = javaParameters.getMainClass();
 
 		if(ourMayUseLauncher && mainClass != null)

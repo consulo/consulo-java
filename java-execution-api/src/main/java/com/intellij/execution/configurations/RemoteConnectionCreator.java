@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.execution;
+package com.intellij.execution.configurations;
 
-import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
-import consulo.java.execution.configurations.OwnJavaParameters;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.execution.runners.ExecutionEnvironment;
 
-/**
- * User: anna
- * Date: Mar 4, 2005
- */
-public interface JavaTestPatcher
+public interface RemoteConnectionCreator
 {
-	ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create("consulo.java.testPatcher");
+	@Nullable
+	RemoteConnection createRemoteConnection(ExecutionEnvironment environment);
 
-	void patchJavaParameters(@NotNull Module module, @NotNull OwnJavaParameters javaParameters);
+	boolean isPollConnection();
 }

@@ -16,26 +16,26 @@
 
 package com.intellij.execution.configurations.coverage;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.coverage.CoverageRunner;
 import com.intellij.coverage.IDEACoverageRunner;
 import com.intellij.coverage.JavaCoverageEngine;
 import com.intellij.coverage.JavaCoverageRunner;
 import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.SimpleJavaParameters;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.ui.classFilter.ClassFilter;
 import com.intellij.util.ArrayUtil;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * Base class for java run configurations with enabled code coverage
@@ -71,7 +71,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     return null;
   }
 
-  public void appendCoverageArgument(final SimpleJavaParameters javaParameters) {
+  public void appendCoverageArgument(final OwnJavaParameters javaParameters) {
     final CoverageRunner runner = getCoverageRunner();
     try {
       if (runner != null && runner instanceof JavaCoverageRunner) {

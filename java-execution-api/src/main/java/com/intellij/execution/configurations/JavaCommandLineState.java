@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,40 +19,58 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
+public abstract class JavaCommandLineState extends CommandLineState implements JavaCommandLine
+{
+	private OwnJavaParameters myParams;
 
-public abstract class JavaCommandLineState extends CommandLineState implements JavaCommandLine{
-  private JavaParameters myParams;
-  
-  protected JavaCommandLineState(@NotNull final ExecutionEnvironment environment) {
-    super(environment);
-  }
+	protected JavaCommandLineState(@NotNull ExecutionEnvironment environment)
+	{
+		super(environment);
+	}
 
-  public JavaParameters getJavaParameters() throws ExecutionException {
-    if (myParams == null) {
-      myParams = createJavaParameters();
-    }
-    return myParams;
-  }
+	@Override
+	public OwnJavaParameters getJavaParameters() throws ExecutionException
+	{
+		if(myParams == null)
+		{
+			myParams = createJavaParameters();
+		}
+		return myParams;
+	}
 
-  @NotNull
-  protected OSProcessHandler startProcess() throws ExecutionException {
-    return JavaCommandLineStateUtil.startProcess(createCommandLine(), ansiColoringEnabled());
-  }
+	public void clear()
+	{
+		myParams = null;
+	}
 
-  protected boolean ansiColoringEnabled() {
-    return false;
-  }
+	@Override
+	@NotNull
+	protected OSProcessHandler startProcess() throws ExecutionException
+	{
+		return JavaCommandLineStateUtil.startProcess(createCommandLine(), ansiColoringEnabled());
+	}
 
-  protected abstract JavaParameters createJavaParameters() throws ExecutionException;
+	protected boolean ansiColoringEnabled()
+	{
+		return true;
+	}
 
-  protected GeneralCommandLine createCommandLine() throws ExecutionException {
-    return CommandLineBuilder.createFromJavaParameters(getJavaParameters(), DataManager.getInstance().getDataContext().getData(CommonDataKeys.PROJECT), true);
-  }
+	protected abstract OwnJavaParameters createJavaParameters() throws ExecutionException;
 
-  public boolean shouldAddJavaProgramRunnerActions() {
-    return true;
-  }
+	protected GeneralCommandLine createCommandLine() throws ExecutionException
+	{
+		OwnJavaParameters javaParameters = getJavaParameters();
+		if(!javaParameters.isDynamicClasspath())
+		{
+			javaParameters.setUseDynamicClasspath(getEnvironment().getProject());
+		}
+		return javaParameters.toCommandLine();
+	}
+
+	public boolean shouldAddJavaProgramRunnerActions()
+	{
+		return true;
+	}
 }

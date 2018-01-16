@@ -21,7 +21,6 @@ import org.jacoco.core.data.ISessionInfoVisitor;
 import org.jacoco.core.data.SessionInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.execution.configurations.SimpleJavaParameters;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -33,6 +32,7 @@ import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.ProjectData;
 import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.roots.impl.TestContentFolderTypeProvider;
 
@@ -150,8 +150,7 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner
 
 
 	@Override
-	public void appendCoverageArgument(final String sessionDataFilePath, final String[] patterns, final SimpleJavaParameters javaParameters,
-			final boolean collectLineInfo, final boolean isSampling)
+	public void appendCoverageArgument(final String sessionDataFilePath, final String[] patterns, final OwnJavaParameters javaParameters, final boolean collectLineInfo, final boolean isSampling)
 	{
 		final File agentFile = new File(PluginManager.getPluginPath(JaCoCoCoverageRunner.class), "coverage/jacoco/jacocoagent.jar");
 

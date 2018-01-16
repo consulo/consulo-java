@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.execution.configurations.SimpleJavaParameters;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.rt.coverage.data.ProjectData;
 import com.intellij.rt.coverage.util.ProjectDataLoader;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /*
  * User: anna
@@ -17,7 +17,7 @@ import com.intellij.rt.coverage.util.ProjectDataLoader;
  */
 public class IDEACoverageRunner extends JavaCoverageRunner
 {
-	private static final Logger LOG = Logger.getInstance("#" + IDEACoverageRunner.class.getName());
+	private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class.getName());
 
 	@Override
 	public ProjectData loadCoverageData(@NotNull final File sessionDataFile, @Nullable final CoverageSuite coverageSuite)
@@ -28,7 +28,7 @@ public class IDEACoverageRunner extends JavaCoverageRunner
 	@Override
 	public void appendCoverageArgument(final String sessionDataFilePath,
 			final String[] patterns,
-			final SimpleJavaParameters javaParameters,
+			final OwnJavaParameters javaParameters,
 			final boolean collectLineInfo,
 			final boolean isSampling)
 	{

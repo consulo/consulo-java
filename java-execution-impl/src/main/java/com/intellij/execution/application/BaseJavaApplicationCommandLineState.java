@@ -21,7 +21,6 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.JavaRunConfigurationExtensionManager;
 import com.intellij.execution.RunConfigurationExtension;
 import com.intellij.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.process.KillableColoredProcessHandler;
@@ -30,12 +29,12 @@ import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.openapi.util.SystemInfo;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * @author nik
  */
-public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigurationBase &
-		CommonJavaRunConfigurationParameters> extends JavaCommandLineState
+public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigurationBase & CommonJavaRunConfigurationParameters> extends JavaCommandLineState
 {
 	protected final T myConfiguration;
 
@@ -45,7 +44,7 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
 		myConfiguration = configuration;
 	}
 
-	protected void setupJavaParameters(JavaParameters params) throws ExecutionException
+	protected void setupJavaParameters(OwnJavaParameters params) throws ExecutionException
 	{
 		JavaParametersUtil.configureConfiguration(params, myConfiguration);
 
@@ -71,8 +70,7 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
 		}
 
 		RunnerSettings runnerSettings = getRunnerSettings();
-		JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler,
-				runnerSettings);
+		JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, runnerSettings);
 		return handler;
 	}
 

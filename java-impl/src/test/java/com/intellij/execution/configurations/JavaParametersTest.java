@@ -22,89 +22,86 @@ import com.intellij.openapi.roots.DependencyScope;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.roots.ModuleRootManagerTestCase;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * @author nik
  */
-public class JavaParametersTest extends ModuleRootManagerTestCase {
-  public void testLibrary() throws Exception {
-    ModuleRootModificationUtil.addDependency(myModule, createJDomLibrary());
-    assertClasspath(myModule, JavaParameters.JDK_AND_CLASSES_AND_TESTS,
-                    getRtJar(), getJDomJar());
-    assertClasspath(myModule, JavaParameters.CLASSES_ONLY,
-                    getJDomJar());
-    assertClasspath(myModule, JavaParameters.CLASSES_AND_TESTS,
-                    getJDomJar());
-    assertClasspath(myProject, JavaParameters.JDK_AND_CLASSES_AND_TESTS,
-                    getRtJar(), getJDomJar());
-  }
+public class JavaParametersTest extends ModuleRootManagerTestCase
+{
+	public void testLibrary() throws Exception
+	{
+		ModuleRootModificationUtil.addDependency(myModule, createJDomLibrary());
+		assertClasspath(myModule, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, getRtJar(), getJDomJar());
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_ONLY, getJDomJar());
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_AND_TESTS, getJDomJar());
+		assertClasspath(myProject, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, getRtJar(), getJDomJar());
+	}
 
-  public void testModuleSourcesAndOutput() throws Exception {
-    addSourceRoot(myModule, false);
-    addSourceRoot(myModule, true);
-    final VirtualFile output = setModuleOutput(myModule, false);
-    final VirtualFile testOutput = setModuleOutput(myModule, true);
+	public void testModuleSourcesAndOutput() throws Exception
+	{
+		addSourceRoot(myModule, false);
+		addSourceRoot(myModule, true);
+		final VirtualFile output = setModuleOutput(myModule, false);
+		final VirtualFile testOutput = setModuleOutput(myModule, true);
 
-    assertClasspath(myModule, JavaParameters.CLASSES_ONLY,
-                    output);
-    assertClasspath(myModule, JavaParameters.CLASSES_AND_TESTS,
-                    testOutput, output);
-    assertClasspath(myModule, JavaParameters.JDK_AND_CLASSES_AND_TESTS,
-                    getRtJar(), testOutput, output);
-  }
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_ONLY, output);
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_AND_TESTS, testOutput, output);
+		assertClasspath(myModule, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, getRtJar(), testOutput, output);
+	}
 
-  public void testLibraryScope() throws Exception {
-    ModuleRootModificationUtil.addDependency(myModule, createJDomLibrary(), DependencyScope.RUNTIME, false);
-    ModuleRootModificationUtil.addDependency(myModule, createAsmLibrary(), DependencyScope.TEST, false);
+	public void testLibraryScope() throws Exception
+	{
+		ModuleRootModificationUtil.addDependency(myModule, createJDomLibrary(), DependencyScope.RUNTIME, false);
+		ModuleRootModificationUtil.addDependency(myModule, createAsmLibrary(), DependencyScope.TEST, false);
 
-    assertClasspath(myModule, JavaParameters.CLASSES_AND_TESTS,
-                    getJDomJar(), getAsmJar());
-    assertClasspath(myModule, JavaParameters.CLASSES_ONLY,
-                    getJDomJar());
-  }
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_AND_TESTS, getJDomJar(), getAsmJar());
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_ONLY, getJDomJar());
+	}
 
-  public void testProvidedScope() throws Exception {
-    ModuleRootModificationUtil.addDependency(myModule, createJDomLibrary(), DependencyScope.PROVIDED, false);
+	public void testProvidedScope() throws Exception
+	{
+		ModuleRootModificationUtil.addDependency(myModule, createJDomLibrary(), DependencyScope.PROVIDED, false);
 
-    assertClasspath(myModule, JavaParameters.CLASSES_AND_TESTS, getJDomJar());
-    assertClasspath(myModule, JavaParameters.CLASSES_ONLY);
-  }
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_AND_TESTS, getJDomJar());
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_ONLY);
+	}
 
-  public void testModuleDependency() throws Exception {
-    final Module dep = createModule("dep");
-    final VirtualFile depOutput = setModuleOutput(dep, false);
-    final VirtualFile depTestOutput = setModuleOutput(dep, true);
-    ModuleRootModificationUtil.addDependency(dep, createJDomLibrary());
-    ModuleRootModificationUtil.addDependency(myModule, dep, DependencyScope.COMPILE, false);
+	public void testModuleDependency() throws Exception
+	{
+		final Module dep = createModule("dep");
+		final VirtualFile depOutput = setModuleOutput(dep, false);
+		final VirtualFile depTestOutput = setModuleOutput(dep, true);
+		ModuleRootModificationUtil.addDependency(dep, createJDomLibrary());
+		ModuleRootModificationUtil.addDependency(myModule, dep, DependencyScope.COMPILE, false);
 
-    assertClasspath(myModule, JavaParameters.CLASSES_ONLY,
-                    depOutput, getJDomJar());
-    assertClasspath(myModule, JavaParameters.CLASSES_AND_TESTS,
-                    depTestOutput, depOutput, getJDomJar());
-  }
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_ONLY, depOutput, getJDomJar());
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_AND_TESTS, depTestOutput, depOutput, getJDomJar());
+	}
 
-  public void testModuleDependencyScope() throws Exception {
-    final Module dep = createModule("dep");
-    ModuleRootModificationUtil.addDependency(dep, createJDomLibrary());
-    ModuleRootModificationUtil.addDependency(myModule, dep, DependencyScope.TEST, true);
+	public void testModuleDependencyScope() throws Exception
+	{
+		final Module dep = createModule("dep");
+		ModuleRootModificationUtil.addDependency(dep, createJDomLibrary());
+		ModuleRootModificationUtil.addDependency(myModule, dep, DependencyScope.TEST, true);
 
-    assertClasspath(myModule, JavaParameters.CLASSES_ONLY);
-    assertClasspath(myModule, JavaParameters.CLASSES_AND_TESTS,
-                    getJDomJar());
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_ONLY);
+		assertClasspath(myModule, OwnJavaParameters.CLASSES_AND_TESTS, getJDomJar());
 
-    assertClasspath(myProject, JavaParameters.CLASSES_ONLY,
-                    getJDomJar());
-  }
+		assertClasspath(myProject, OwnJavaParameters.CLASSES_ONLY, getJDomJar());
+	}
 
-  private static void assertClasspath(final Module module, final int type, VirtualFile... roots) throws CantRunException {
-    final JavaParameters javaParameters = new JavaParameters();
-    javaParameters.configureByModule(module, type);
-    assertRoots(javaParameters.getClassPath(), roots);
-  }
+	private static void assertClasspath(final Module module, final int type, VirtualFile... roots) throws CantRunException
+	{
+		final OwnJavaParameters OwnJavaParameters = new OwnJavaParameters();
+		OwnJavaParameters.configureByModule(module, type);
+		assertRoots(OwnJavaParameters.getClassPath(), roots);
+	}
 
-  private void assertClasspath(final Project project, final int type, VirtualFile... roots) throws CantRunException {
-    final JavaParameters javaParameters = new JavaParameters();
-    javaParameters.configureByProject(project, type, getTestProjectJdk());
-    assertRoots(javaParameters.getClassPath(), roots);
-  }
+	private void assertClasspath(final Project project, final int type, VirtualFile... roots) throws CantRunException
+	{
+		final OwnJavaParameters OwnJavaParameters = new OwnJavaParameters();
+		OwnJavaParameters.configureByProject(project, type, getTestProjectJdk());
+		assertRoots(OwnJavaParameters.getClassPath(), roots);
+	}
 }

@@ -23,7 +23,6 @@ import javax.swing.Icon;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
@@ -49,6 +48,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * @author spleaner
@@ -63,7 +63,7 @@ public class JavaExecutionUtil {
   }
 
   public static boolean executeRun(@NotNull final Project project, String contentName, Icon icon, DataContext dataContext, Filter[] filters) throws ExecutionException {
-    final JavaParameters cmdLine = dataContext.getData(JavaParameters.JAVA_PARAMETERS);
+    final OwnJavaParameters cmdLine = dataContext.getData(OwnJavaParameters.JAVA_PARAMETERS);
     final DefaultRunProfile profile = new DefaultRunProfile(project, cmdLine, contentName, icon, filters);
     final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(DefaultRunExecutor.EXECUTOR_ID, profile);
     if (runner != null) {
@@ -103,13 +103,13 @@ public class JavaExecutionUtil {
   }
 
   private static final class DefaultRunProfile implements RunProfile {
-    private final JavaParameters myParameters;
+    private final OwnJavaParameters myParameters;
     private final String myContentName;
     private final Filter[] myFilters;
     private final Project myProject;
     private final Icon myIcon;
 
-    public DefaultRunProfile(final Project project, final JavaParameters parameters, final String contentName, final Icon icon, Filter[] filters) {
+    public DefaultRunProfile(final Project project, final OwnJavaParameters parameters, final String contentName, final Icon icon, Filter[] filters) {
       myProject = project;
       myParameters = parameters;
       myContentName = contentName;
@@ -126,7 +126,7 @@ public class JavaExecutionUtil {
     public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException {
       final JavaCommandLineState state = new JavaCommandLineState(env) {
         @Override
-        protected JavaParameters createJavaParameters() {
+        protected OwnJavaParameters createJavaParameters() {
           return myParameters;
         }
       };

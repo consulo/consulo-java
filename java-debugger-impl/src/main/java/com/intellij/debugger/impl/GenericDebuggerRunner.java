@@ -37,12 +37,10 @@ import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.xdebugger.XDebugProcess;
-import com.intellij.xdebugger.XDebugProcessStarter;
-import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.impl.XDebugSessionImpl;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings>
 {
@@ -71,14 +69,14 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 	{
 		if(state instanceof JavaCommandLine)
 		{
-			final JavaParameters parameters = ((JavaCommandLine) state).getJavaParameters();
+			final OwnJavaParameters parameters = ((JavaCommandLine) state).getJavaParameters();
 			runCustomPatchers(parameters, environment.getExecutor(), environment.getRunProfile());
 			RemoteConnection connection = DebuggerManagerImpl.createDebugParameters(parameters, true, DebuggerSettings.getInstance().DEBUGGER_TRANSPORT, "", false);
 			return attachVirtualMachine(state, environment, connection, true);
 		}
 		if(state instanceof PatchedRunnableState)
 		{
-			final RemoteConnection connection = doPatch(new JavaParameters(), environment.getRunnerSettings());
+			final RemoteConnection connection = doPatch(new OwnJavaParameters(), environment.getRunnerSettings());
 			return attachVirtualMachine(state, environment, connection, true);
 		}
 		if(state instanceof RemoteState)
@@ -113,22 +111,17 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 			debugProcess.putUserData(BatchEvaluator.REMOTE_SESSION_KEY, Boolean.TRUE);
 		}
 
-		return XDebuggerManager.getInstance(env.getProject()).startSession(env, new XDebugProcessStarter()
+		return XDebuggerManager.getInstance(env.getProject()).startSession(env, session ->
 		{
-			@Override
-			@NotNull
-			public XDebugProcess start(@NotNull XDebugSession session)
+			XDebugSessionImpl sessionImpl = (XDebugSessionImpl) session;
+			ExecutionResult executionResult = debugProcess.getExecutionResult();
+			sessionImpl.addExtraActions(executionResult.getActions());
+			if(executionResult instanceof DefaultExecutionResult)
 			{
-				XDebugSessionImpl sessionImpl = (XDebugSessionImpl) session;
-				ExecutionResult executionResult = debugProcess.getExecutionResult();
-				sessionImpl.addExtraActions(executionResult.getActions());
-				if(executionResult instanceof DefaultExecutionResult)
-				{
-					sessionImpl.addRestartActions(((DefaultExecutionResult) executionResult).getRestartActions());
-					sessionImpl.addExtraStopActions(((DefaultExecutionResult) executionResult).getAdditionalStopActions());
-				}
-				return JavaDebugProcess.create(session, debuggerSession);
+				sessionImpl.addRestartActions(((DefaultExecutionResult) executionResult).getRestartActions());
+				sessionImpl.addExtraStopActions(((DefaultExecutionResult) executionResult).getAdditionalStopActions());
 			}
+			return JavaDebugProcess.create(session, debuggerSession);
 		}).getRunContentDescriptor();
 	}
 
@@ -154,13 +147,13 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
 	}
 
 	@Override
-	public void patch(JavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException
+	public void patch(OwnJavaParameters javaParameters, RunnerSettings settings, RunProfile runProfile, final boolean beforeExecution) throws ExecutionException
 	{
 		doPatch(javaParameters, settings);
 		runCustomPatchers(javaParameters, Executor.EP_NAME.findExtension(DefaultDebugExecutor.class), runProfile);
 	}
 
-	private static RemoteConnection doPatch(final JavaParameters javaParameters, final RunnerSettings settings) throws ExecutionException
+	private static RemoteConnection doPatch(final OwnJavaParameters javaParameters, final RunnerSettings settings) throws ExecutionException
 	{
 		final GenericDebuggerRunnerSettings debuggerSettings = ((GenericDebuggerRunnerSettings) settings);
 		if(StringUtil.isEmpty(debuggerSettings.getDebugPort()))

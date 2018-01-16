@@ -4,16 +4,16 @@
  */
 package com.intellij.coverage;
 
-import com.intellij.coverage.info.CoberturaLoaderUtil;
-import com.intellij.execution.configurations.SimpleJavaParameters;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.rt.coverage.data.ProjectData;
+import java.io.File;
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
+import com.intellij.coverage.info.CoberturaLoaderUtil;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.util.SystemInfo;
+import com.intellij.rt.coverage.data.ProjectData;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 public class CoberturaCoverageRunner extends JavaCoverageRunner {
 
@@ -21,7 +21,7 @@ public class CoberturaCoverageRunner extends JavaCoverageRunner {
     return CoberturaLoaderUtil.load(sessionDataFile);
   }
 
-  public void appendCoverageArgument(final String sessionDataFilePath, final String[] patterns, final SimpleJavaParameters javaParameters,
+  public void appendCoverageArgument(final String sessionDataFilePath, final String[] patterns, final OwnJavaParameters javaParameters,
                                      final boolean collectLineInfo, final boolean isSampling) {
     @NonNls StringBuffer argument = new StringBuffer("-javaagent:");
     argument.append(PathManager.getLibPath()).append(File.separator);

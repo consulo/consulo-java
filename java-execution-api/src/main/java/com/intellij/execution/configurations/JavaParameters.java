@@ -33,11 +33,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
+import consulo.annotations.DeprecationInfo;
 import consulo.java.fileTypes.JModFileType;
 import consulo.java.module.extension.JavaModuleExtension;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.vfs.util.ArchiveVfsUtil;
 
+@Deprecated
+@DeprecationInfo("Use OwnJavaParameters")
 public class JavaParameters extends SimpleJavaParameters
 {
 	public static final Key<JavaParameters> JAVA_PARAMETERS = Key.create("javaParameters");
