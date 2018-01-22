@@ -15,6 +15,14 @@
  */
 package com.siyeh.ig.internationalization;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.intention.AddAnnotationFix;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
@@ -32,13 +40,6 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class StringConcatenationInspection extends BaseInspection {
 

@@ -1933,7 +1933,7 @@
 		<inlineActionHandler implementation="com.intellij.refactoring.inline.InlineConstantFieldHandler"/>
 		<inlineActionHandler implementation="com.intellij.refactoring.inline.InlineStaticImportHandler"/>
 
-		<breadcrumbsInfoProvider implementation="com.intellij.lang.java.JavaBreadcrumbsInfoProvider" />
+		<breadcrumbsInfoProvider implementation="com.intellij.lang.java.JavaBreadcrumbsInfoProvider"/>
 		<previewHintProvider implementation="com.intellij.codeInsight.preview.JavaPreviewHintProvider"/>
 		<filePropertyPusher implementation="com.intellij.openapi.roots.impl.JavaLanguageLevelPusher"/>
 
@@ -2063,6 +2063,10 @@
 
 		<projectService serviceInterface="com.intellij.openapi.roots.JavaProjectModelModificationService"
 						serviceImplementation="com.intellij.openapi.roots.impl.JavaProjectModelModificationServiceImpl"/>
+
+		<orderRootType implementation="com.intellij.openapi.roots.NativeLibraryOrderRootType"/>
+		<orderRootTypeEditor key="javaNative"
+							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.NativeLibraryOrderRootTypeUIFactory"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

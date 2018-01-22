@@ -15,7 +15,12 @@
  */
 package com.siyeh.ig.junit;
 
-import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiTypeParameter;
 import com.intellij.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -23,7 +28,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.naming.ConventionInspection;
 import com.siyeh.ig.psiutils.TestUtils;
-import org.jetbrains.annotations.NotNull;
 
 public class JUnitTestClassNamingConventionInspection
   extends ConventionInspection {

@@ -15,6 +15,9 @@
  */
 package com.intellij.codeInsight;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.components.ServiceManager;
@@ -61,15 +64,39 @@ public abstract class TestFrameworks
 	@Nullable
 	public static TestFramework detectFramework(@NotNull final PsiClass psiClass)
 	{
-		return CachedValuesManager.getCachedValue(psiClass, new CachedValueProvider<TestFramework>()
+		return CachedValuesManager.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFramework(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
+	}
+
+	@NotNull
+	public static Set<TestFramework> detectApplicableFrameworks(@NotNull final PsiClass psiClass)
+	{
+		return CachedValuesManager.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFrameworks(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
+	}
+
+	private static Set<TestFramework> computeFrameworks(PsiClass psiClass)
+	{
+		Set<TestFramework> frameworks = new LinkedHashSet<>();
+		for(TestFramework framework : Extensions.getExtensions(TestFramework.EXTENSION_NAME))
 		{
-			@Nullable
-			@Override
-			public Result<TestFramework> compute()
+			if(framework.isTestClass(psiClass))
 			{
-				return Result.create(computeFramework(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+				frameworks.add(framework);
 			}
-		});
+		}
+
+		for(TestFramework framework : Extensions.getExtensions(TestFramework.EXTENSION_NAME))
+		{
+			if(frameworks.contains(framework))
+			{
+				continue;
+			}
+
+			if(framework.findSetUpMethod(psiClass) != null || framework.findTearDownMethod(psiClass) != null)
+			{
+				frameworks.add(framework);
+			}
+		}
+		return frameworks;
 	}
 
 	@Nullable

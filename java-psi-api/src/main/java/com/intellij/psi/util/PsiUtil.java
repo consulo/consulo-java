@@ -63,13 +63,17 @@ import consulo.vfs.ArchiveFileSystem;
 
 public final class PsiUtil extends PsiUtilCore
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.util.PsiUtil");
+	private static final Logger LOG = Logger.getInstance(PsiUtil.class);
 
 	public static final int ACCESS_LEVEL_PUBLIC = 4;
 	public static final int ACCESS_LEVEL_PROTECTED = 3;
 	public static final int ACCESS_LEVEL_PACKAGE_LOCAL = 2;
 	public static final int ACCESS_LEVEL_PRIVATE = 1;
 	public static final Key<Boolean> VALID_VOID_TYPE_IN_CODE_FRAGMENT = Key.create("VALID_VOID_TYPE_IN_CODE_FRAGMENT");
+
+
+	private static final Set<String> IGNORED_NAMES = ContainerUtil.newTroveSet("ignore", "ignore1", "ignore2", "ignore3", "ignore4", "ignore5", "ignored", "ignored1", "ignored2", "ignored3",
+			"ignored4", "ignored5");
 
 	private PsiUtil()
 	{
@@ -1520,7 +1524,37 @@ public final class PsiUtil extends PsiUtilCore
 
 	public static boolean isIgnoredName(@Nullable final String name)
 	{
-		return "ignore".equals(name) || "ignored".equals(name);
+		return name != null && IGNORED_NAMES.contains(name);
+	}
+
+	@Nullable
+	public static PsiMethod[] getResourceCloserMethodsForType(@NotNull final PsiClassType resourceType)
+	{
+		final PsiClass resourceClass = resourceType.resolve();
+		if(resourceClass == null)
+		{
+			return null;
+		}
+
+		final Project project = resourceClass.getProject();
+		final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+		final PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+		if(autoCloseable == null)
+		{
+			return null;
+		}
+
+		if(JavaClassSupers.getInstance().getSuperClassSubstitutor(autoCloseable, resourceClass, resourceType.getResolveScope(), PsiSubstitutor.EMPTY) == null)
+		{
+			return null;
+		}
+
+		final PsiMethod[] closes = autoCloseable.findMethodsByName("close", false);
+		if(closes.length == 1)
+		{
+			return resourceClass.findMethodsBySignature(closes[0], true);
+		}
+		return null;
 	}
 
 	@Nullable

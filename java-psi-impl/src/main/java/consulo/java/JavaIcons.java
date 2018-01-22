@@ -23,6 +23,7 @@ public interface JavaIcons
 	{
 		SwingImageRef JavaModule = IconLoader.getIcon("/icons/nodes/javaModule.png");  // 16x16
 		SwingImageRef JavaModuleRoot = IconLoader.getIcon("/icons/nodes/javaModuleRoot.png");  // 16x16
+		SwingImageRef NativeLibrariesFolder = IconLoader.getIcon("/icons/nodes/nativeLibrariesFolder.png");  // 16x16
 	}
 
 	SwingImageRef Java = IconLoader.getIcon("/icons/java.png");  // 16x16

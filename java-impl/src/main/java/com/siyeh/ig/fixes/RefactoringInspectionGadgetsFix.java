@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 Dave Griffith, Bas Leijdekkers
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.siyeh.ig.junit;
+package com.siyeh.ig.fixes;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.RefactoringQuickFix;
+import com.intellij.openapi.project.Project;
 import com.siyeh.ig.InspectionGadgetsFix;
 
-public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspection extends BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase
+/**
+ * @author Bas Leijdekkers
+ */
+public abstract class RefactoringInspectionGadgetsFix extends InspectionGadgetsFix implements RefactoringQuickFix
 {
 
 	@Override
-	protected InspectionGadgetsFix buildFix(Object... infos)
+	protected void doFix(Project project, ProblemDescriptor descriptor)
 	{
-		final PsiMethod method = (PsiMethod) infos[0];
-		String targetModifier = isJunit4Annotation((String) infos[1]) ? PsiModifier.PUBLIC : PsiModifier.PACKAGE_LOCAL;
-		return new MakePublicStaticVoidFix(method, true, targetModifier);
+		doFix(descriptor.getPsiElement());
 	}
 }

@@ -117,7 +117,7 @@ public abstract class PsiDiamondType extends PsiType
 			}
 		};
 
-		private final List<PsiType> myInferredTypes = new ArrayList<PsiType>();
+		private final List<PsiType> myInferredTypes = new ArrayList<>();
 		private String myErrorMessage;
 		private String myNewExpressionPresentableText;
 
@@ -230,6 +230,21 @@ public abstract class PsiDiamondType extends PsiType
 			}
 		}
 		return null;
+	}
+
+	public static JavaResolveResult getDiamondsAwareResolveResult(PsiCall expression)
+	{
+		if(expression instanceof PsiNewExpression)
+		{
+			PsiDiamondType diamondType = getDiamondType((PsiNewExpression) expression);
+			if(diamondType != null)
+			{
+				JavaResolveResult factory = diamondType.getStaticFactory();
+				return factory != null ? factory : JavaResolveResult.EMPTY;
+			}
+		}
+
+		return expression.resolveMethodGenerics();
 	}
 
 	@Nullable

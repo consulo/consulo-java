@@ -74,6 +74,11 @@ public interface TestFramework
 	 */
 	boolean isTestMethod(PsiElement element);
 
+	default boolean isTestMethod(PsiElement element, boolean checkAbstract)
+	{
+		return isTestMethod(element);
+	}
+
 	@NotNull
 	Language getLanguage();
 }

@@ -15,6 +15,15 @@
  */
 package com.siyeh.ig.errorhandling;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JComponent;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.openapi.editor.Document;
@@ -32,10 +41,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExceptionUtils;
 import com.siyeh.ig.psiutils.TestUtils;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.util.*;
 
 public class TooBroadCatchInspection extends BaseInspection {
 
