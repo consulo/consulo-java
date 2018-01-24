@@ -447,6 +447,10 @@
 		</component>
 
 		<component>
+			<implementation-class>com.intellij.execution.testDiscovery.TestDiscoveryIndex</implementation-class>
+		</component>
+
+		<component>
 			<implementation-class>com.intellij.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory</implementation-class>
 			<skipForDefaultProject/>
 		</component>
