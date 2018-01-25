@@ -17,6 +17,7 @@ package com.intellij.testIntegration;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
@@ -165,6 +166,19 @@ public abstract class JavaTestFramework implements TestFramework
 
 	public void setupLibrary(Module module)
 	{
+		/*ExternalLibraryDescriptor descriptor = getFrameworkLibraryDescriptor();
+		if(descriptor != null)
+		{
+			JavaProjectModelModificationService.getInstance(module.getProject()).addDependency(module, descriptor, DependencyScope.TEST);
+		}
+		else
+		{
+			String path = getLibraryPath();
+			if(path != null)
+			{
+				OrderEntryFix.addJarsToRoots(Collections.singletonList(path), null, module, null);
+			}
+		}  */
 	}
 
 	public boolean isSingleConfig()
@@ -172,8 +186,32 @@ public abstract class JavaTestFramework implements TestFramework
 		return false;
 	}
 
+	/**
+	 * @return true for junit 3 classes with suite method and for junit 4 tests with @Suite annotation
+	 */
+	public boolean isSuiteClass(PsiClass psiClass)
+	{
+		return false;
+	}
+
 	public boolean isTestMethod(PsiMethod method, PsiClass myClass)
 	{
 		return isTestMethod(method);
+	}
+
+	public boolean acceptNestedClasses()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isTestMethod(PsiElement element)
+	{
+		return isTestMethod(element, true);
+	}
+
+	public boolean isMyConfigurationType(ConfigurationType type)
+	{
+		return false;
 	}
 }
