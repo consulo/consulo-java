@@ -15,6 +15,7 @@
  */
 package com.intellij.execution.junit2.info;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.Location;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -22,37 +23,57 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
-import org.jetbrains.annotations.NotNull;
+import consulo.annotations.Exported;
 
-/**
- * User: anna
- * Date: 2/20/12
- */
-public class LocationUtil {
-  public static boolean isJarAttached(@NotNull Location location, @NotNull final PsiJavaPackage aPackage, final String fqn) {
-    return isJarAttached(location, fqn, aPackage.getDirectories());
-  }
+@Exported
+public class LocationUtil
+{
+	public static boolean isJarAttached(@NotNull Location location, @NotNull final PsiJavaPackage aPackage, final String... fqn)
+	{
+		return isJarAttached(location, aPackage.getDirectories(), fqn);
+	}
 
-  public static boolean isJarAttached(@NotNull Location location,
-                                      final String fqn,
-                                      final PsiDirectory[] directories) {
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(location.getProject());
-    boolean testngJarFound = false;
-    final Module locationModule = location.getModule();
-    if (locationModule != null) {
-      testngJarFound = facade.findClass(fqn, GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(locationModule, true)) != null;
-    }
-    else {
-      for (PsiDirectory directory : directories) {
-        final Module module = ModuleUtilCore.findModuleForFile(directory.getVirtualFile(), location.getProject());
-        if (module != null) {
-          if (facade.findClass(fqn, GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, true)) != null) {
-            testngJarFound = true;
-            break;
-          }
-        }
-      }
-    }
-    return testngJarFound;
-  }
+	/**
+	 * @see #isJarAttached(Location, PsiDirectory[], String...) or {@link #isJarAttached(Location, PsiJavaPackage, String...)}
+	 */
+	@Deprecated
+	public static boolean isJarAttached(@NotNull Location location, String fqn, PsiDirectory[] directories)
+	{
+		return isJarAttached(location, directories, fqn);
+	}
+
+	public static boolean isJarAttached(@NotNull Location location, final PsiDirectory[] directories, final String... fqns)
+	{
+		final JavaPsiFacade facade = JavaPsiFacade.getInstance(location.getProject());
+		final Module locationModule = location.getModule();
+		if(locationModule != null)
+		{
+			for(String fqn : fqns)
+			{
+				if(facade.findClass(fqn, GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(locationModule, true)) != null)
+				{
+					return true;
+				}
+			}
+		}
+		else
+		{
+			for(PsiDirectory directory : directories)
+			{
+				final Module module = ModuleUtilCore.findModuleForFile(directory.getVirtualFile(), location.getProject());
+				if(module != null)
+				{
+					GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, true);
+					for(String fqn : fqns)
+					{
+						if(facade.findClass(fqn, scope) != null)
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
