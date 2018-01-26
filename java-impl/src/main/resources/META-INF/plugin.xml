@@ -473,6 +473,7 @@
 		<extensionPoint name="directClassInheritorsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="functionalExpressionSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="methodReferencesSearch" interface="com.intellij.util.QueryExecutor"/>
+		<extensionPoint name="classesWithAnnotatedMembersSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="overridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="superMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="allClassesSearch" interface="com.intellij.util.QueryExecutor"/>
@@ -692,6 +693,7 @@
 		<overridingMethodsSearch implementation="com.intellij.psi.impl.search.JavaOverridingMethodsSearcher"/>
 		<allOverridingMethodsSearch implementation="com.intellij.psi.impl.search.JavaAllOverridingMethodsSearcher"/>
 		<methodReferencesSearch implementation="com.intellij.psi.impl.search.MethodUsagesSearcher"/>
+		<classesWithAnnotatedMembersSearch implementation="com.intellij.psi.impl.search.ClassesWithAnnotatedMembersSearcher"/>
 		<deepestSuperMethodsSearch implementation="com.intellij.psi.impl.search.MethodDeepestSuperSearcher"/>
 		<functionalExpressionSearch implementation="com.intellij.psi.impl.search.JavaFunctionalExpressionSearcher"/>
 
@@ -835,7 +837,7 @@
 		<referencesSearch implementation="com.intellij.psi.impl.search.ConstructorReferencesSearcher"/>
 		<referencesSearch implementation="com.intellij.psi.impl.search.SimpleAccessorReferenceSearcher"/>
 		<referencesSearch implementation="com.intellij.psi.impl.search.VariableInIncompleteCodeSearcher"/>
-
+		<referencesSearch implementation="com.intellij.psi.impl.search.SPIReferencesSearcher"/>
 
 		<definitionsScopedSearch implementation="com.intellij.codeInsight.navigation.MethodImplementationsSearch"/>
 		<definitionsScopedSearch implementation="com.intellij.codeInsight.navigation.ClassImplementationsSearch"/>
