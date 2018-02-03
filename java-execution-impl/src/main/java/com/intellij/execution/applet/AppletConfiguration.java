@@ -232,8 +232,8 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	@Override
 	public void readExternal(final Element parentNode) throws InvalidDataException
 	{
+		super.readExternal(parentNode);
 		DefaultJDOMExternalizer.readExternal(this, parentNode);
-		readModule(parentNode);
 		final ArrayList<AppletParameter> parameters = new ArrayList<AppletParameter>();
 		for(Iterator iterator = parentNode.getChildren(PARAMETER_ELEMENT_NAME).iterator(); iterator.hasNext(); )
 		{
@@ -248,7 +248,7 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	@Override
 	public void writeExternal(final Element parentNode) throws WriteExternalException
 	{
-		writeModule(parentNode);
+		super.writeExternal(parentNode);
 		DefaultJDOMExternalizer.writeExternal(this, parentNode);
 		if(myAppletParameters != null)
 		{
