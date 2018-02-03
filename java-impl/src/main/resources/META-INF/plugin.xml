@@ -2005,6 +2005,9 @@
 		<projectService serviceInterface="com.intellij.psi.impl.file.impl.JavaFileManager"
 						serviceImplementation="com.intellij.psi.impl.file.impl.JavaFileManagerImpl"/>
 
+		<projectService serviceInterface="com.intellij.execution.testDiscovery.JavaAutoRunManager"
+						serviceImplementation="com.intellij.execution.testDiscovery.JavaAutoRunManager"/>
+
 		<applicationService serviceInterface="com.intellij.psi.impl.file.PsiPackageImplementationHelper"
 							serviceImplementation="com.intellij.psi.impl.file.PsiPackageImplementationHelperImpl"/>
 		<sdkType implementation="com.intellij.openapi.projectRoots.impl.JavaSdkImpl"/>
