@@ -22,7 +22,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NotNull;
-import com.com.intellij.execution.ui.DefaultJreSelector;
 import com.intellij.application.options.ModuleDescriptionsComboBox;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.JavaExecutionUtil;
@@ -31,6 +30,7 @@ import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.execution.ui.ClassBrowser;
 import com.intellij.execution.ui.CommonJavaParametersPanel;
 import com.intellij.execution.ui.ConfigurationModuleSelector;
+import com.intellij.execution.ui.DefaultJreSelector;
 import com.intellij.execution.ui.JrePathEditor;
 import com.intellij.execution.ui.ShortenCommandLineModeCombo;
 import com.intellij.execution.util.JreVersionDetector;

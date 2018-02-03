@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.com.intellij.execution.ui;
+package com.intellij.execution.ui;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -23,13 +23,13 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.BundleBase;
 import com.intellij.application.options.ModuleDescriptionsComboBox;
+import com.intellij.application.options.ModulesComboBox;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ui.configuration.ModulesCombobox;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Pair;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
@@ -124,9 +124,9 @@ public abstract class DefaultJreSelector
 	}
 
 	@NotNull
-	public static DefaultJreSelector fromModuleDependencies(ModulesCombobox modulesCombobox, boolean productionOnly)
+	public static DefaultJreSelector fromModuleDependencies(ModulesComboBox modulesCombobox, boolean productionOnly)
 	{
-		return new SdkFromModuleDependencies<>(modulesCombobox, ModulesCombobox::getSelectedModule, () -> productionOnly);
+		return new SdkFromModuleDependencies<>(modulesCombobox, ModulesComboBox::getSelectedModule, () -> productionOnly);
 	}
 
 	@NotNull
@@ -136,9 +136,9 @@ public abstract class DefaultJreSelector
 	}
 
 	@NotNull
-	public static DefaultJreSelector fromSourceRootsDependencies(ModulesCombobox modulesCombobox, EditorTextFieldWithBrowseButton classSelector)
+	public static DefaultJreSelector fromSourceRootsDependencies(ModulesComboBox modulesCombobox, EditorTextFieldWithBrowseButton classSelector)
 	{
-		return new SdkFromSourceRootDependencies<>(modulesCombobox, ModulesCombobox::getSelectedModule, classSelector);
+		return new SdkFromSourceRootDependencies<>(modulesCombobox, ModulesComboBox::getSelectedModule, classSelector);
 	}
 
 	@NotNull

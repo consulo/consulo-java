@@ -29,7 +29,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.com.intellij.execution.ui.DefaultJreSelector;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.BrowseFilesListener;

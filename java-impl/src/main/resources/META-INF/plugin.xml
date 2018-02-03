@@ -1065,6 +1065,7 @@
 		<editorNotificationProvider implementation="com.intellij.debugger.ui.AlternativeSourceNotificationProvider"/>
 
 		<programRunner id="defaultRunRunner" implementation="com.intellij.execution.impl.DefaultJavaProgramRunner"/>
+		<programRunner implementation="com.intellij.execution.jar.JarApplicationDebuggerRunner"/>
 
 
 		<globalInspection groupPath="Java" language="JAVA" shortName="unused" displayName="Unused declaration" groupBundle="messages.InspectionsBundle"
@@ -1753,14 +1754,17 @@
 		<favoriteNodeProvider implementation="com.intellij.ide.favoritesTreeView.PsiPackageFavoriteNodeProvider"/>
 		<favoriteNodeProvider implementation="com.intellij.ide.favoritesTreeView.UsageFavoriteNodeProvider"/>
 		<configurationType implementation="com.intellij.execution.applet.AppletConfigurationType"/>
+		<configurationType implementation="com.intellij.execution.jar.JarApplicationConfigurationType"/>
+
 		<configurationProducer implementation="com.intellij.execution.applet.AppletConfigurationProducer"/>
+		<runConfigurationProducer implementation="com.intellij.execution.jar.JarApplicationConfigurationProducer"/>
 
 		<configurationType implementation="com.intellij.execution.remote.RemoteConfigurationType"/>
 		<runLineMarkerContributor language="JAVA" implementationClass="com.intellij.execution.application.ApplicationRunLineMarkerProvider"/>
 
-		<!--TODO [VISTALL] core depend?? <applicationService serviceInterface="com.intellij.packageDependencies.DependenciesVisitorFactory"
+		<!--TODO [VISTALL] core depend - we can't override services
+		<applicationService serviceInterface="com.intellij.packageDependencies.DependenciesVisitorFactory"
 							 serviceImplementation="com.intellij.packageDependencies.JavaDependenciesVisitorFactory"/> -->
-
 
 		<internalFileTemplate name="Java Class"/>
 		<internalFileTemplate name="Java Interface"/>
