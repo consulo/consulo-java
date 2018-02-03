@@ -21,6 +21,8 @@ import com.intellij.execution.configurations.ModuleRunProfile;
 /**
  * @author VISTALL
  * @since 10.01.15
+ *
+ * Marker for {@link com.intellij.debugger.impl.GenericDebuggerRunner}
  */
 public interface GenericDebugRunnerConfiguration extends ModuleRunProfile
 {

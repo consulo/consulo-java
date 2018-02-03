@@ -15,10 +15,19 @@
  */
 package com.intellij.execution.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
+
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.ide.util.BrowseFilesListener;
-import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.util.io.FileUtil;
@@ -28,16 +37,11 @@ import com.intellij.ui.InsertPathAction;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.TextFieldWithHistory;
 import com.intellij.ui.components.JBCheckBox;
-import net.miginfocom.swing.MigLayout;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * User: anna
- * Date: Jun 21, 2005
+ *
+ * @deprecated use {@link JrePathEditor} instead
  */
 public class AlternativeJREPanel extends JPanel implements PanelWithAnchor {
   private final ComponentWithBrowseButton<TextFieldWithHistory> myPathField;

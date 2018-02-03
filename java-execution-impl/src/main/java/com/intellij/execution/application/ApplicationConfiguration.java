@@ -1,17 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 package com.intellij.execution.application;
 
@@ -22,34 +10,41 @@ import java.util.Map;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
+import com.intellij.debugger.settings.DebuggerSettings;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
 import com.intellij.execution.configurations.*;
+import com.intellij.execution.filters.ArgumentFileFilter;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.junit.RefactoringListeners;
+import com.intellij.execution.process.KillableProcessHandler;
+import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.execution.util.ProgramParametersUtil;
-import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaModule;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
+import com.intellij.util.PathsList;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.java.projectRoots.OwnJdkUtil;
 
-public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters, SingleClassConfiguration,
-		RefactoringListenerProvider, GenericDebugRunnerConfiguration
+public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters, ConfigurationWithCommandLineShortener,
+		SingleClassConfiguration, RefactoringListenerProvider, GenericDebugRunnerConfiguration
 {
-
 	public String MAIN_CLASS_NAME;
 	public String VM_PARAMETERS;
 	public String PROGRAM_PARAMETERS;
@@ -57,12 +52,15 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	public boolean ALTERNATIVE_JRE_PATH_ENABLED;
 	public String ALTERNATIVE_JRE_PATH;
 	public boolean ENABLE_SWING_INSPECTOR;
+	public boolean INCLUDE_PROVIDED_SCOPE = false;
+
+	private ShortenCommandLine myShortenCommandLine = null;
 
 	public String ENV_VARIABLES;
-	private Map<String, String> myEnvs = new LinkedHashMap<String, String>();
+	private final Map<String, String> myEnvs = new LinkedHashMap<>();
 	public boolean PASS_PARENT_ENVS = true;
 
-	public ApplicationConfiguration(final String name, final Project project, ConfigurationType applicationConfigurationType)
+	public ApplicationConfiguration(final String name, final Project project, ApplicationConfigurationType applicationConfigurationType)
 	{
 		this(name, project, applicationConfigurationType.getConfigurationFactories()[0]);
 	}
@@ -84,27 +82,28 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	@Override
 	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
 	{
-		final JavaCommandLineState state = new JavaApplicationCommandLineState(this, env);
+		final JavaCommandLineState state = new JavaApplicationCommandLineState<>(this, env);
 		JavaRunConfigurationModule module = getConfigurationModule();
 		state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
 		return state;
 	}
 
-	@NotNull
 	@Override
+	@NotNull
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
-		SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<ApplicationConfiguration>();
+		SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<>();
 		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new ApplicationConfigurable(getProject()));
 		JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<ApplicationConfiguration>());
+		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
 		return group;
 	}
 
 	@Override
 	public RefactoringElementListener getRefactoringElementListener(final PsiElement element)
 	{
-		final RefactoringElementListener listener = RefactoringListeners.getClassOrPackageListener(element, new RefactoringListeners.SingleClassConfigurationAccessor(this));
+		final RefactoringElementListener listener = RefactoringListeners.
+				getClassOrPackageListener(element, new RefactoringListeners.SingleClassConfigurationAccessor(this));
 		return RunConfigurationExtension.wrapRefactoringElementListener(element, this, listener);
 	}
 
@@ -116,11 +115,22 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
+	@Nullable
 	public String suggestedName()
+	{
+		if(MAIN_CLASS_NAME == null)
+		{
+			return null;
+		}
+		return JavaExecutionUtil.getPresentableClassName(MAIN_CLASS_NAME);
+	}
+
+	@Override
+	public String getActionName()
 	{
 		if(MAIN_CLASS_NAME == null || MAIN_CLASS_NAME.length() == 0)
 		{
-			return getName();
+			return null;
 		}
 		return ProgramRunnerUtil.shortenName(JavaExecutionUtil.getShortClassName(MAIN_CLASS_NAME), 6) + ".main()";
 	}
@@ -128,12 +138,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	@Override
 	public void setMainClassName(final String qualifiedName)
 	{
-		final boolean generatedName = isGeneratedName();
 		MAIN_CLASS_NAME = qualifiedName;
-		if(generatedName)
-		{
-			setGeneratedName();
-		}
 	}
 
 	@Override
@@ -141,10 +146,10 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	{
 		JavaParametersUtil.checkAlternativeJRE(this);
 		final JavaRunConfigurationModule configurationModule = getConfigurationModule();
-		final PsiClass psiClass = configurationModule.checkModuleAndClassName(MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified" + ".error.text"));
+		final PsiClass psiClass = configurationModule.checkModuleAndClassName(MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified.error.text"));
 		if(!PsiMethodUtil.hasMainMethod(psiClass))
 		{
-			throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error" + ".message", MAIN_CLASS_NAME));
+			throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", MAIN_CLASS_NAME));
 		}
 		ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), configurationModule.getModule());
 		JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
@@ -235,9 +240,10 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	@Override
 	public void setAlternativeJrePathEnabled(boolean enabled)
 	{
-		this.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
+		ALTERNATIVE_JRE_PATH_ENABLED = enabled;
 	}
 
+	@Nullable
 	@Override
 	public String getAlternativeJrePath()
 	{
@@ -247,7 +253,17 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	@Override
 	public void setAlternativeJrePath(String path)
 	{
-		this.ALTERNATIVE_JRE_PATH = path;
+		ALTERNATIVE_JRE_PATH = path;
+	}
+
+	public boolean isProvidedScopeIncluded()
+	{
+		return INCLUDE_PROVIDED_SCOPE;
+	}
+
+	public void setIncludeProvidedScope(boolean value)
+	{
+		INCLUDE_PROVIDED_SCOPE = value;
 	}
 
 	@Override
@@ -257,31 +273,41 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 	}
 
 	@Override
-	protected ModuleBasedConfiguration createInstance()
+	public void readExternal(@NotNull final Element element)
 	{
-		return new ApplicationConfiguration(getName(), getProject(), ApplicationConfigurationType.getInstance());
-	}
-
-	@Override
-	public void readExternal(final Element element) throws InvalidDataException
-	{
-		PathMacroManager.getInstance(getProject()).expandPaths(element);
 		super.readExternal(element);
 		JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
 		DefaultJDOMExternalizer.readExternal(this, element);
-		readModule(element);
 		EnvironmentVariablesComponent.readExternal(element, getEnvs());
+		setShortenCommandLine(ShortenCommandLine.readShortenClasspathMethod(element));
 	}
 
 	@Override
-	public void writeExternal(final Element element) throws WriteExternalException
+	public void writeExternal(@NotNull Element element)
 	{
 		super.writeExternal(element);
+
 		JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
 		DefaultJDOMExternalizer.writeExternal(this, element);
-		writeModule(element);
-		EnvironmentVariablesComponent.writeExternal(element, getEnvs());
-		PathMacroManager.getInstance(getProject()).collapsePathsRecursively(element);
+
+		Map<String, String> envs = getEnvs();
+
+		EnvironmentVariablesComponent.writeExternal(element, envs);
+
+		ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
+	}
+
+	@Nullable
+	@Override
+	public ShortenCommandLine getShortenCommandLine()
+	{
+		return myShortenCommandLine;
+	}
+
+	@Override
+	public void setShortenCommandLine(ShortenCommandLine mode)
+	{
+		myShortenCommandLine = mode;
 	}
 
 	public static class JavaApplicationCommandLineState<T extends ApplicationConfiguration> extends BaseJavaApplicationCommandLineState<T>
@@ -295,15 +321,71 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 		protected OwnJavaParameters createJavaParameters() throws ExecutionException
 		{
 			final OwnJavaParameters params = new OwnJavaParameters();
-			final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
+			T configuration = getConfiguration();
+			params.setShortenCommandLine(configuration.getShortenCommandLine(), configuration.getProject());
 
-			final int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME, false);
+			final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
 			final String jreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
-			JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
+			if(module.getModule() != null)
+			{
+				DumbService.getInstance(module.getProject()).runWithAlternativeResolveEnabled(() ->
+				{
+					int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME, false, myConfiguration.isProvidedScopeIncluded());
+					JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
+				});
+			}
+			else
+			{
+				JavaParametersUtil.configureProject(module.getProject(), params, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, jreHome);
+			}
+
 			params.setMainClass(myConfiguration.MAIN_CLASS_NAME);
+
 			setupJavaParameters(params);
 
+			setupModulePath(params, module);
+
 			return params;
+		}
+
+		@Override
+		protected GeneralCommandLine createCommandLine() throws ExecutionException
+		{
+			GeneralCommandLine line = super.createCommandLine();
+			Map<String, String> content = line.getUserData(OwnJdkUtil.COMMAND_LINE_CONTENT);
+			if(content != null)
+			{
+				content.forEach((key, value) -> addConsoleFilters(new ArgumentFileFilter(key, value)));
+			}
+			return line;
+		}
+
+		@NotNull
+		@Override
+		protected OSProcessHandler startProcess() throws ExecutionException
+		{
+			OSProcessHandler processHandler = super.startProcess();
+			if(processHandler instanceof KillableProcessHandler && DebuggerSettings.getInstance().KILL_PROCESS_IMMEDIATELY)
+			{
+				((KillableProcessHandler) processHandler).setShouldKillProcessSoftly(false);
+			}
+			return processHandler;
+		}
+
+		private static void setupModulePath(OwnJavaParameters params, JavaRunConfigurationModule module)
+		{
+			if(JavaSdkUtil.isJdkAtLeast(params.getJdk(), JavaSdkVersion.JDK_1_9))
+			{
+				PsiJavaModule mainModule = DumbService.getInstance(module.getProject()).computeWithAlternativeResolveEnabled(() -> JavaModuleGraphUtil.findDescriptorByElement(module.findClass(params
+						.getMainClass())));
+				if(mainModule != null)
+				{
+					params.setModuleName(mainModule.getName());
+					PathsList classPath = params.getClassPath(), modulePath = params.getModulePath();
+					modulePath.addAll(classPath.getPathList());
+					classPath.clear();
+				}
+			}
 		}
 	}
 }

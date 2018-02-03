@@ -15,119 +15,190 @@
  */
 package com.intellij.execution.ui;
 
-import com.intellij.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.ui.ComboboxSpeedSearch;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.ui.SortedComboBoxModel;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
-public class ConfigurationModuleSelector {
+import javax.swing.JComboBox;
 
-  private final String myNoModule;
-  private final Project myProject;
-  private final JComboBox myModulesList;
-  private final SortedComboBoxModel<Object> myModules = new SortedComboBoxModel<Object>(new Comparator<Object>() {
-    public int compare(final Object module, final Object module1) {
-      if (module instanceof Module && module1 instanceof Module){
-        return ((Module)module).getName().compareToIgnoreCase(((Module)module1).getName());
-      }
-      return -1;
-    }
-  });
+import org.jetbrains.annotations.Nullable;
+import com.intellij.application.options.ModuleDescriptionsComboBox;
+import com.intellij.application.options.ModuleListCellRenderer;
+import com.intellij.application.options.ModulesComboBox;
+import com.intellij.execution.configurations.JavaRunConfigurationModule;
+import com.intellij.execution.configurations.ModuleBasedConfiguration;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ui.configuration.ModulesAlphaComparator;
+import com.intellij.psi.PsiClass;
+import com.intellij.ui.ComboboxSpeedSearch;
+import com.intellij.ui.SortedComboBoxModel;
+import consulo.java.module.extension.JavaModuleExtension;
 
-  public ConfigurationModuleSelector(final Project project, final JComboBox modulesList) {
-    this(project, modulesList, "<no module>");
-  }
+public class ConfigurationModuleSelector
+{
+	public static final String NO_MODULE_TEXT = "<no module>";
+	private final Project myProject;
+	/**
+	 * this field is {@code null} if and only if {@link #myModulesList} is not null
+	 */
+	private final ModuleDescriptionsComboBox myModulesDescriptionsComboBox;
+	/**
+	 * this field is {@code null} if and only if {@link #myModulesDescriptionsComboBox} is not null
+	 */
+	private final JComboBox<Module> myModulesList;
 
-  public ConfigurationModuleSelector(final Project project, final JComboBox modulesList, String noModule) {
-    myNoModule = noModule;
-    myProject = project;
-    myModulesList = modulesList;
-    new ComboboxSpeedSearch(modulesList){
-      protected String getElementText(Object element) {
-        if (element instanceof Module){
-          return ((Module)element).getName();
-        } else if (element == null) {
-          return myNoModule;
-        }
-        return super.getElementText(element);
-      }
-    };
-    myModulesList.setModel(myModules);
-    myModulesList.setRenderer(new ListCellRendererWrapper() {
-      @Override
-      public void customize(final JList list, final Object value, final int index, final boolean selected, final boolean hasFocus) {
-        if (value instanceof Module) {
-          final Module module = (Module)value;
-          setIcon(AllIcons.Nodes.Module);
-          setText(module.getName());
-        }
-        else if (value == null) {
-          setText(myNoModule);
-        }
-      }
-    });
-  }
+	/**
+	 * @deprecated use {@link #ConfigurationModuleSelector(Project, ModulesComboBox)} instead
+	 */
+	public ConfigurationModuleSelector(final Project project, final JComboBox<Module> modulesList)
+	{
+		this(project, modulesList, NO_MODULE_TEXT);
+	}
 
-  public void applyTo(final ModuleBasedConfiguration configurationModule) {
-    configurationModule.setModule((Module)myModulesList.getSelectedItem());
-  }
+	public ConfigurationModuleSelector(Project project, ModulesComboBox modulesComboBox)
+	{
+		this(project, modulesComboBox, NO_MODULE_TEXT);
+	}
 
-  public void reset(final ModuleBasedConfiguration configuration) {
-    final Module[] modules = ModuleManager.getInstance(getProject()).getModules();
-    final List<Module> list = new ArrayList<Module>();
-    for (final Module module : modules) {
-      if (isModuleAccepted(module)) list.add(module);
-    }
-    setModules(list);
-    myModules.setSelectedItem(configuration.getConfigurationModule().getModule());
-  }
+	public ConfigurationModuleSelector(Project project, ModuleDescriptionsComboBox modulesDescriptionsComboBox)
+	{
+		this(project, modulesDescriptionsComboBox, NO_MODULE_TEXT);
+	}
 
-  public boolean isModuleAccepted(final Module module) {
-    return true;
-  }
+	public ConfigurationModuleSelector(Project project, ModuleDescriptionsComboBox modulesDescriptionsComboBox, String emptySelectionText)
+	{
+		myProject = project;
+		myModulesDescriptionsComboBox = modulesDescriptionsComboBox;
+		myModulesList = null;
+		modulesDescriptionsComboBox.allowEmptySelection(emptySelectionText);
+	}
 
-  public Project getProject() {
-    return myProject;
-  }
+	public ConfigurationModuleSelector(Project project, ModulesComboBox modulesComboBox, String noModule)
+	{
+		myProject = project;
+		myModulesList = modulesComboBox;
+		myModulesDescriptionsComboBox = null;
+		modulesComboBox.allowEmptySelection(noModule);
+	}
 
-  public JavaRunConfigurationModule getConfigurationModule() {
-    final JavaRunConfigurationModule configurationModule = new JavaRunConfigurationModule(getProject(), false);
-    configurationModule.setModule((Module)myModules.getSelectedItem());
-    return configurationModule;
-  }
+	/**
+	 * @deprecated use {@link #ConfigurationModuleSelector(Project, ModulesComboBox, String)} instead
+	 */
+	public ConfigurationModuleSelector(final Project project, final JComboBox<Module> modulesList, final String noModule)
+	{
+		myProject = project;
+		myModulesList = modulesList;
+		myModulesDescriptionsComboBox = null;
+		new ComboboxSpeedSearch(modulesList)
+		{
+			protected String getElementText(Object element)
+			{
+				if(element instanceof Module)
+				{
+					return ((Module) element).getName();
+				}
+				else if(element == null)
+				{
+					return noModule;
+				}
+				return super.getElementText(element);
+			}
+		};
+		myModulesList.setModel(new SortedComboBoxModel<>(ModulesAlphaComparator.INSTANCE));
+		myModulesList.setRenderer(new ModuleListCellRenderer(noModule));
+	}
 
-  private void setModules(final Collection<Module> modules) {
-    myModules.clear();
-    myModules.add(null);
-    for (Module module : modules) {
-      myModules.add(module);
-    }
-  }
+	public void applyTo(final ModuleBasedConfiguration configurationModule)
+	{
+		if(myModulesList != null)
+		{
+			configurationModule.setModule((Module) myModulesList.getSelectedItem());
+		}
+		else
+		{
+			configurationModule.setModuleName(myModulesDescriptionsComboBox.getSelectedModuleName());
+		}
+	}
 
-  public Module getModule() {
-    return (Module)myModules.getSelectedItem();
-  }
+	public void reset(final ModuleBasedConfiguration configuration)
+	{
+		reset();
+		if(myModulesList != null)
+		{
+			myModulesList.setSelectedItem(configuration.getConfigurationModule().getModule());
+		}
+		else
+		{
+			myModulesDescriptionsComboBox.setSelectedModule(myProject, configuration.getConfigurationModule().getModuleName());
+		}
+	}
 
-  @Nullable
-  public PsiClass findClass(final String className) {
-    return getConfigurationModule().findClass(className);
-  }
+	public void reset()
+	{
+		final Module[] modules = ModuleManager.getInstance(getProject()).getModules();
+		final List<Module> list = new ArrayList<>();
+		for(final Module module : modules)
+		{
+			if(isModuleAccepted(module))
+			{
+				list.add(module);
+			}
+		}
+		setModules(list);
+	}
 
-  public String getModuleName() {
-    final Module module = (Module)myModules.getSelectedItem();
-    return module == null ? "" : module.getName();
-  }
+	public boolean isModuleAccepted(final Module module)
+	{
+		return ModuleUtilCore.getExtension(module, JavaModuleExtension.class) != null;
+	}
+
+	public Project getProject()
+	{
+		return myProject;
+	}
+
+	public JavaRunConfigurationModule getConfigurationModule()
+	{
+		final JavaRunConfigurationModule configurationModule = new JavaRunConfigurationModule(getProject(), false);
+		configurationModule.setModule(getModule());
+		return configurationModule;
+	}
+
+	private void setModules(final Collection<Module> modules)
+	{
+		if(myModulesDescriptionsComboBox != null)
+		{
+			myModulesDescriptionsComboBox.setModules(modules);
+		}
+		else if(myModulesList instanceof ModulesComboBox)
+		{
+			((ModulesComboBox) myModulesList).setModules(modules);
+		}
+		else
+		{
+			SortedComboBoxModel<Module> model = (SortedComboBoxModel<Module>) myModulesList.getModel();
+			model.setAll(modules);
+			model.add(null);
+		}
+	}
+
+	public Module getModule()
+	{
+		return myModulesDescriptionsComboBox != null ? myModulesDescriptionsComboBox.getSelectedModule() : (Module) myModulesList.getSelectedItem();
+	}
+
+	@Nullable
+	public PsiClass findClass(final String className)
+	{
+		return getConfigurationModule().findClass(className);
+	}
+
+	public String getModuleName()
+	{
+		final Module module = getModule();
+		return module == null ? "" : module.getName();
+	}
 }
