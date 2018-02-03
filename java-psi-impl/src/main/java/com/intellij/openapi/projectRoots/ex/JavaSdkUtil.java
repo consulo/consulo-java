@@ -51,6 +51,8 @@ public class JavaSdkUtil
 		}
 	}
 
+	@Deprecated
+	@DeprecationInfo("Moved to junit plugin")
 	public static String getJunit4JarPath()
 	{
 		try
@@ -63,6 +65,8 @@ public class JavaSdkUtil
 		}
 	}
 
+	@Deprecated
+	@DeprecationInfo("Moved to junit plugin")
 	public static String getJunit3JarPath()
 	{
 		try
