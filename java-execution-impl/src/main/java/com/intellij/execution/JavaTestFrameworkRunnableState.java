@@ -427,15 +427,15 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 	{
 		configureRTClasspath(javaParameters);
 		RunConfigurationModule module = getConfiguration().getConfigurationModule();
-		final String jreHome = getConfiguration().isAlternativeJrePathEnabled() ? getConfiguration().getAlternativeJrePath() : null;
+		final String alternativeJreName = getConfiguration().isAlternativeJrePathEnabled() ? getConfiguration().getAlternativeJrePath() : null;
 		final int pathType = OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS;
 		if(configureByModule(module.getModule()))
 		{
-			JavaParametersUtil.configureModule(module, javaParameters, pathType, jreHome);
+			JavaParametersUtil.configureModule(module, javaParameters, pathType, alternativeJreName);
 		}
 		else
 		{
-			JavaParametersUtil.configureProject(getConfiguration().getProject(), javaParameters, pathType, jreHome);
+			JavaParametersUtil.configureProject(getConfiguration().getProject(), javaParameters, pathType, alternativeJreName);
 		}
 	}
 

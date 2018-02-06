@@ -755,6 +755,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 			DebuggerInvocationUtil.swingInvokeLater(myProject, () -> Messages.showMessageDialog(myProject, DebuggerBundle.message("warning.jdk140.unstable"), DebuggerBundle.message("title.jdk140" +
 					".unstable"), Messages.getWarningIcon()));
 		}
+
 		if(getSession().getAlternativeJre() == null)
 		{
 			Sdk runjre = getSession().getRunJre();

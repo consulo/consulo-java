@@ -60,8 +60,7 @@ import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.projectRoots.OwnJdkUtil;
 
-public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements SingleClassConfiguration,
-		RefactoringListenerProvider, GenericDebugRunnerConfiguration
+public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements SingleClassConfiguration, RefactoringListenerProvider, GenericDebugRunnerConfiguration
 {
 	public String MAIN_CLASS_NAME;
 	public String HTML_FILE_NAME;
@@ -110,8 +109,7 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 				{
 					final int classPathType = myHtmlURL.isHttp() ? OwnJavaParameters.JDK_ONLY : OwnJavaParameters.JDK_AND_CLASSES;
 					final RunConfigurationModule runConfigurationModule = getConfigurationModule();
-					JavaParametersUtil.configureModule(runConfigurationModule, params, classPathType,
-							ALTERNATIVE_JRE_PATH_ENABLED ? ALTERNATIVE_JRE_PATH : null);
+					JavaParametersUtil.configureModule(runConfigurationModule, params, classPathType, ALTERNATIVE_JRE_PATH_ENABLED ? ALTERNATIVE_JRE_PATH : null);
 					final String policyFileParameter = getPolicyFileParameter();
 					if(policyFileParameter != null)
 					{
@@ -306,9 +304,7 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	{
 		if(ALTERNATIVE_JRE_PATH_ENABLED)
 		{
-			if(ALTERNATIVE_JRE_PATH == null ||
-					ALTERNATIVE_JRE_PATH.length() == 0 ||
-					!OwnJdkUtil.checkForJre(ALTERNATIVE_JRE_PATH))
+			if(ALTERNATIVE_JRE_PATH == null || ALTERNATIVE_JRE_PATH.length() == 0 || !OwnJdkUtil.checkForJre(ALTERNATIVE_JRE_PATH))
 			{
 				throw new RuntimeConfigurationWarning(ExecutionBundle.message("jre.not.valid.error.message", ALTERNATIVE_JRE_PATH));
 			}
@@ -394,16 +390,8 @@ public class AppletConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 		@NonNls final FileWriter writer = new FileWriter(tempFile);
 		try
 		{
-			writer.write("<html>\n" +
-					"<head>\n" +
-					"<title>" + MAIN_CLASS_NAME + "</title>\n" +
-					"</head>\n" +
-					"<applet codebase=\".\"\n" +
-					"code=\"" + MAIN_CLASS_NAME + "\"\n" +
-					"name=\"" + MAIN_CLASS_NAME + "\"\n" +
-					"width=" + WIDTH + "\n" +
-					"height=" + HEIGHT + "\n" +
-					"align=top>\n");
+			writer.write("<html>\n" + "<head>\n" + "<title>" + MAIN_CLASS_NAME + "</title>\n" + "</head>\n" + "<applet codebase=\".\"\n" + "code=\"" + MAIN_CLASS_NAME + "\"\n" + "name=\"" +
+					MAIN_CLASS_NAME + "\"\n" + "width=" + WIDTH + "\n" + "height=" + HEIGHT + "\n" + "align=top>\n");
 			final AppletParameter[] appletParameters = getAppletParameters();
 			if(appletParameters != null)
 			{

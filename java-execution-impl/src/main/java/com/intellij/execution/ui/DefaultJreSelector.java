@@ -34,12 +34,15 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Pair;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.util.ObjectUtil;
+import consulo.annotations.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.module.extension.JavaModuleExtension;
 
 /**
  * from kotlin
  */
+@Deprecated
+@DeprecationInfo("From IDEA merge - unused")
 public abstract class DefaultJreSelector
 {
 	private static class SdkFromModuleDependencies<T extends ComboBox<?>> extends DefaultJreSelector

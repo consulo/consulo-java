@@ -325,18 +325,18 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 			params.setShortenCommandLine(configuration.getShortenCommandLine(), configuration.getProject());
 
 			final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
-			final String jreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
+			final String alternativeJreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
 			if(module.getModule() != null)
 			{
 				DumbService.getInstance(module.getProject()).runWithAlternativeResolveEnabled(() ->
 				{
 					int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME, false, myConfiguration.isProvidedScopeIncluded());
-					JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
+					JavaParametersUtil.configureModule(module, params, classPathType, alternativeJreHome);
 				});
 			}
 			else
 			{
-				JavaParametersUtil.configureProject(module.getProject(), params, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, jreHome);
+				JavaParametersUtil.configureProject(module.getProject(), params, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, alternativeJreHome);
 			}
 
 			params.setMainClass(myConfiguration.MAIN_CLASS_NAME);

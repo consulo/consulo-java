@@ -80,7 +80,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters
 	public static final int CLASSES_AND_TESTS = CLASSES_ONLY | TESTS_ONLY;
 	public static final int JDK_AND_CLASSES_AND_PROVIDED = JDK_ONLY | CLASSES_ONLY | INCLUDE_PROVIDED;
 
-	public void configureByModule(final Module module, @MagicConstant(valuesFromClass = OwnJavaParameters.class) final int classPathType, final Sdk jdk) throws CantRunException
+	public void configureByModule(final Module module, @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType, @Nullable Sdk jdk) throws CantRunException
 	{
 		if((classPathType & JDK_ONLY) != 0)
 		{
