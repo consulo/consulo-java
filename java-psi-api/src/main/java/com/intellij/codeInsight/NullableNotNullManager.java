@@ -41,20 +41,20 @@ public abstract class NullableNotNullManager
 	protected static final Logger LOG = Logger.getInstance(NullableNotNullManager.class);
 	protected final Project myProject;
 
-	public String myDefaultNullable = AnnotationUtil.NULLABLE;
-	public String myDefaultNotNull = AnnotationUtil.NOT_NULL;
-	public final JDOMExternalizableStringList myNullables = new JDOMExternalizableStringList();
-	public final JDOMExternalizableStringList myNotNulls = new JDOMExternalizableStringList();
-
 	private static final String JAVAX_ANNOTATION_NULLABLE = "javax.annotation.Nullable";
 	protected static final String JAVAX_ANNOTATION_NONNULL = "javax.annotation.Nonnull";
 
+	public String myDefaultNullable = JAVAX_ANNOTATION_NULLABLE;
+	public String myDefaultNotNull = JAVAX_ANNOTATION_NONNULL;
+
+	public final JDOMExternalizableStringList myNullables = new JDOMExternalizableStringList();
+	public final JDOMExternalizableStringList myNotNulls = new JDOMExternalizableStringList();
+
 	static final String[] DEFAULT_NULLABLES = {
-			AnnotationUtil.NULLABLE,
 			JAVAX_ANNOTATION_NULLABLE,
+			AnnotationUtil.NULLABLE,
 			"javax.annotation.CheckForNull",
-			"org.springframework.lang.Nullable",
-			// remove after https://youtrack.jetbrains.com/issue/IDEA-173544 is fixed
+			"org.springframework.lang.Nullable", // remove after https://youtrack.jetbrains.com/issue/IDEA-173544 is fixed
 			"edu.umd.cs.findbugs.annotations.Nullable",
 			"android.support.annotation.Nullable"
 	};

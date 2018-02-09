@@ -41,6 +41,7 @@ import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.util.ArrayUtil;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
 
@@ -81,7 +82,9 @@ public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcess
 
 		ClassWriter writer = new InstrumenterClassWriter(reader, isJdk6 ? ClassWriter.COMPUTE_FRAMES : ClassWriter.COMPUTE_MAXS, classFinder);
 
-		if(NotNullVerifyingInstrumenter.processClassFile(reader, writer))
+		NullableNotNullManager manager = NullableNotNullManager.getInstance(affectedModule.getProject());
+
+		if(NotNullVerifyingInstrumenter.processClassFile(reader, writer, ArrayUtil.toStringArray(manager.getNotNulls())))
 		{
 			return writer.toByteArray();
 		}

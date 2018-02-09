@@ -40,13 +40,18 @@ import com.intellij.util.Processor;
 import com.intellij.util.Processors;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotations.DeprecationInfo;
 
 /**
  * @author max
  */
 public class AnnotationUtil
 {
+	@Deprecated
+	@DeprecationInfo("JB NotNull annotations is not used anymore. Use jsr305 annotations")
 	public static final String NULLABLE = "org.jetbrains.annotations.Nullable";
+	@Deprecated
+	@DeprecationInfo("JB NotNull annotations is not used anymore. Use jsr305 annotations")
 	public static final String NOT_NULL = "org.jetbrains.annotations.NotNull";
 
 	public static final String NON_NLS = "org.jetbrains.annotations.NonNls";
