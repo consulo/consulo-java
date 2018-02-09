@@ -18,16 +18,12 @@ package consulo.java.compiler.bytecodeProcessing.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.org.objectweb.asm.ClassWriter;
 import com.intellij.codeInsight.NullableNotNullManager;
 import com.intellij.compiler.cache.Cache;
 import com.intellij.compiler.cache.JavaDependencyCache;
-import com.intellij.compiler.cache.SymbolTable;
-import com.intellij.compiler.classParsing.AnnotationConstantValue;
-import com.intellij.compiler.classParsing.MethodInfo;
 import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.instrumentation.FailSafeClassReader;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
@@ -36,7 +32,6 @@ import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -68,9 +63,7 @@ public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcess
 
 		boolean addNotNullAssertions = JavaCompilerConfiguration.getInstance(affectedModule.getProject()).isAddNotNullAssertions();
 
-		boolean haveToInstrument = addNotNullAssertions && hasNotNullAnnotations(newClassesCache, dependencyCache.getSymbolTable(), classId, affectedModule.getProject());
-
-		if(!haveToInstrument)
+		if(!addNotNullAssertions)
 		{
 			return null;
 		}
@@ -90,33 +83,5 @@ public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcess
 		}
 
 		return null;
-	}
-
-	private static boolean hasNotNullAnnotations(final Cache cache, final SymbolTable symbolTable, final int className, Project project) throws CacheCorruptedException
-	{
-		final NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
-		final List<String> notNulls = manager.getNotNulls();
-		for(MethodInfo methodId : cache.getMethods(className))
-		{
-			for(AnnotationConstantValue annotation : methodId.getRuntimeInvisibleAnnotations())
-			{
-				if(notNulls.contains(symbolTable.getSymbol(annotation.getAnnotationQName())))
-				{
-					return true;
-				}
-			}
-			final AnnotationConstantValue[][] paramAnnotations = methodId.getRuntimeInvisibleParameterAnnotations();
-			for(AnnotationConstantValue[] _singleParamAnnotations : paramAnnotations)
-			{
-				for(AnnotationConstantValue annotation : _singleParamAnnotations)
-				{
-					if(notNulls.contains(symbolTable.getSymbol(annotation.getAnnotationQName())))
-					{
-						return true;
-					}
-				}
-			}
-		}
-		return false;
 	}
 }
