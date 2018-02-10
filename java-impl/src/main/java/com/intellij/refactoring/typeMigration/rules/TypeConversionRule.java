@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,21 +27,23 @@ import com.intellij.refactoring.typeMigration.TypeMigrationLabeler;
 
 /**
  * @author anna
- * Date: 08-Aug-2008
  */
-public abstract class TypeConversionRule {
-  public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create("consulo.java.conversion.rule");
-  @Nullable
-  public abstract TypeConversionDescriptorBase findConversion(final PsiType from,
-                                                              final PsiType to,
-                                                              final PsiMember member,
-                                                              final PsiExpression context,
-                                                              final TypeMigrationLabeler labeler);
+public abstract class TypeConversionRule
+{
+	public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create("com.intellij.conversion.rule");
+
+	@Nullable
+	public abstract TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context, final TypeMigrationLabeler labeler);
 
 
-  @Nullable
-  public Pair<PsiType, PsiType> bindTypeParameters(PsiType from, PsiType to, final PsiMethod method, final PsiExpression context,
-                                                   final TypeMigrationLabeler labeler) {
-    return null;
-  }
+	@Nullable
+	public Pair<PsiType, PsiType> bindTypeParameters(PsiType from, PsiType to, final PsiMethod method, final PsiExpression context, final TypeMigrationLabeler labeler)
+	{
+		return null;
+	}
+
+	public boolean shouldConvertNullInitializer(PsiType from, PsiType to, PsiExpression context)
+	{
+		return false;
+	}
 }

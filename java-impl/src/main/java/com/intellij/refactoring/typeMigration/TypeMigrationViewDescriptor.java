@@ -15,35 +15,43 @@
  */
 package com.intellij.refactoring.typeMigration;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
 
-class TypeMigrationViewDescriptor implements UsageViewDescriptor {
+class TypeMigrationViewDescriptor implements UsageViewDescriptor
+{
+	private final PsiElement myElement;
 
-  private final PsiElement myElement;
+	public TypeMigrationViewDescriptor(PsiElement elements)
+	{
+		myElement = elements;
+	}
 
-  public TypeMigrationViewDescriptor(PsiElement elements) {
-    myElement = elements;
-  }
+	@Override
+	@NotNull
+	public PsiElement[] getElements()
+	{
+		return new PsiElement[]{myElement};
+	}
 
-  @NotNull
-  public PsiElement[] getElements() {
-    return new PsiElement[]{myElement};
-  }
+	@Override
+	public String getProcessedElementsHeader()
+	{
+		return "Root for type migration";
+	}
 
-  public String getProcessedElementsHeader() {
-    return "Root for type migration";
-  }
+	@Override
+	public String getCodeReferencesText(int usagesCount, int filesCount)
+	{
+		return RefactoringBundle.message("occurences.to.be.migrated", UsageViewBundle.getReferencesString(usagesCount, filesCount));
+	}
 
-  public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("occurences.to.be.migrated", UsageViewBundle.getReferencesString(usagesCount, filesCount));
-  }
-
-  public String getCommentReferencesText(int usagesCount, int filesCount) {
-    return null;
-  }
-
+	@Override
+	public String getCommentReferencesText(int usagesCount, int filesCount)
+	{
+		return null;
+	}
 }

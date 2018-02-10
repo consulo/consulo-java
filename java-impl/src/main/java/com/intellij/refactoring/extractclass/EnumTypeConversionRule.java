@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-/*
- * User: anna
- * Date: 07-Jun-2010
- */
 package com.intellij.refactoring.extractclass;
 
-import com.intellij.psi.*;
+import java.util.List;
+
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.search.PsiSearchScopeUtil;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -30,52 +36,53 @@ import com.intellij.refactoring.typeMigration.TypeConversionDescriptorBase;
 import com.intellij.refactoring.typeMigration.TypeMigrationLabeler;
 import com.intellij.refactoring.typeMigration.rules.TypeConversionRule;
 
-import java.util.List;
+public class EnumTypeConversionRule extends TypeConversionRule
+{
+	private final List<PsiField> myEnumConstants;
 
-public class EnumTypeConversionRule extends TypeConversionRule {
-  private final List<PsiField> myEnumConstants;
+	public EnumTypeConversionRule(List<PsiField> enumConstants)
+	{
+		myEnumConstants = enumConstants;
+	}
 
-  public EnumTypeConversionRule(List<PsiField> enumConstants) {
-    myEnumConstants = enumConstants;
-  }
-
-  @Override
-  public TypeConversionDescriptorBase findConversion(PsiType from,
-                                                     PsiType to,
-                                                     PsiMember member,
-                                                     PsiExpression context,
-                                                     TypeMigrationLabeler labeler) {
-    final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(context, PsiMethodCallExpression.class, false);
-    if (callExpression != null) {
-      final PsiMethod resolved = callExpression.resolveMethod();
-      if (resolved != null) {
-        final SearchScope searchScope = labeler.getRules().getSearchScope();
-        if (!PsiSearchScopeUtil.isInScope(searchScope, resolved)) {
-          return null;
-        }
-      }
-    }
-    final PsiField field = PsiTreeUtil.getParentOfType(context, PsiField.class);
-    if (field != null &&
-        !myEnumConstants.contains(field) &&
-        field.hasModifierProperty(PsiModifier.STATIC) &&
-        field.hasModifierProperty(PsiModifier.FINAL) &&
-        field.hasInitializer()) {
-      return null;
-    }
-    final PsiClass toClass = PsiUtil.resolveClassInType(to);
-    if (toClass != null && toClass.isEnum()) {
-      final PsiMethod[] constructors = toClass.getConstructors();
-      if (constructors.length == 1) {
-        final PsiMethod constructor = constructors[0];
-        final PsiParameter[] parameters = constructor.getParameterList().getParameters();
-        if (parameters.length == 1) {
-          if (TypeConversionUtil.isAssignable(parameters[0].getType(), from)) {
-            return new TypeConversionDescriptorBase();
-          }
-        }
-      }
-    }
-    return null;
-  }
+	@Override
+	public TypeConversionDescriptorBase findConversion(PsiType from, PsiType to, PsiMember member, PsiExpression context, TypeMigrationLabeler labeler)
+	{
+		final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(context, PsiMethodCallExpression.class, false);
+		if(callExpression != null)
+		{
+			final PsiMethod resolved = callExpression.resolveMethod();
+			if(resolved != null)
+			{
+				final SearchScope searchScope = labeler.getRules().getSearchScope();
+				if(!PsiSearchScopeUtil.isInScope(searchScope, resolved))
+				{
+					return null;
+				}
+			}
+		}
+		final PsiField field = PsiTreeUtil.getParentOfType(context, PsiField.class);
+		if(field != null && !myEnumConstants.contains(field) && field.hasModifierProperty(PsiModifier.STATIC) && field.hasModifierProperty(PsiModifier.FINAL) && field.hasInitializer())
+		{
+			return null;
+		}
+		final PsiClass toClass = PsiUtil.resolveClassInType(to);
+		if(toClass != null && toClass.isEnum())
+		{
+			final PsiMethod[] constructors = toClass.getConstructors();
+			if(constructors.length == 1)
+			{
+				final PsiMethod constructor = constructors[0];
+				final PsiParameter[] parameters = constructor.getParameterList().getParameters();
+				if(parameters.length == 1)
+				{
+					if(TypeConversionUtil.isAssignable(parameters[0].getType(), from))
+					{
+						return new TypeConversionDescriptorBase();
+					}
+				}
+			}
+		}
+		return null;
+	}
 }

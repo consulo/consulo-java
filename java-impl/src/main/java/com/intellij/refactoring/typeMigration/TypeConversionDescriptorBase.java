@@ -15,28 +15,48 @@
  */
 package com.intellij.refactoring.typeMigration;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiType;
 import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
+import com.intellij.util.IncorrectOperationException;
 
-public class TypeConversionDescriptorBase {
+public class TypeConversionDescriptorBase
+{
+	private TypeMigrationUsageInfo myRoot;
 
-  private TypeMigrationUsageInfo myRoot;
+	public TypeConversionDescriptorBase()
+	{
+	}
 
-  public TypeConversionDescriptorBase() {
-  }
+	public TypeMigrationUsageInfo getRoot()
+	{
+		return myRoot;
+	}
 
-  public TypeMigrationUsageInfo getRoot() {
-    return myRoot;
-  }
+	public void setRoot(final TypeMigrationUsageInfo root)
+	{
+		myRoot = root;
+	}
 
-  public void setRoot(final TypeMigrationUsageInfo root) {
-    myRoot = root;
-  }
+	/**
+	 * @return converted expression type or null if not known
+	 */
+	@Nullable
+	public PsiType conversionType()
+	{
+		return null;
+	}
 
-  public void replace(PsiExpression expression){}
+	public PsiExpression replace(PsiExpression expression, @NotNull TypeEvaluator evaluator) throws IncorrectOperationException
+	{
+		return expression;
+	}
 
-  @Override
-  public String toString() {
-    return "$";
-  }
+	@Override
+	public String toString()
+	{
+		return "$";
+	}
 }

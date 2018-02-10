@@ -537,6 +537,9 @@
 		<extensionPoint name="codeInsight.containerProvider"
 						interface="com.intellij.codeInsight.ContainerProvider"/>
 
+		<extensionPoint name="predefinedMigrationMapProvider"
+						interface="com.intellij.refactoring.migration.PredefinedMigrationProvider"/>
+
 		<extensionPoint name="debugger.codeFragmentFactory"
 						interface="com.intellij.debugger.engine.evaluation.CodeFragmentFactory"/>
 

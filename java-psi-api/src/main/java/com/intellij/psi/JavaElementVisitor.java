@@ -20,7 +20,6 @@ import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.javadoc.PsiDocToken;
 import com.intellij.psi.javadoc.PsiInlineDocTag;
-import consulo.psi.PsiPackage;
 
 public abstract class JavaElementVisitor extends PsiElementVisitor
 {
@@ -274,14 +273,19 @@ public abstract class JavaElementVisitor extends PsiElementVisitor
 		visitExpression(expression);
 	}
 
-	public void visitPostfixExpression(PsiPostfixExpression expression)
+	public void visitUnaryExpression(PsiUnaryExpression expression)
 	{
 		visitExpression(expression);
 	}
 
+	public void visitPostfixExpression(PsiPostfixExpression expression)
+	{
+		visitUnaryExpression(expression);
+	}
+
 	public void visitPrefixExpression(PsiPrefixExpression expression)
 	{
-		visitExpression(expression);
+		visitUnaryExpression(expression);
 	}
 
 	public void visitReferenceElement(PsiJavaCodeReferenceElement reference)

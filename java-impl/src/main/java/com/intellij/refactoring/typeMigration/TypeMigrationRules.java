@@ -1,110 +1,142 @@
-/*
- * Copyright 2000-2011 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2017 JetBrains s.r.o.
+// Use of this source code is governed by the Apache 2.0 license that can be
+// found in the LICENSE file.
 package com.intellij.refactoring.typeMigration;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.impl.LibraryScopeCache;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiEllipsisType;
+import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiMember;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.typeMigration.rules.DisjunctionTypeConversionRule;
 import com.intellij.refactoring.typeMigration.rules.RootTypeConversionRule;
 import com.intellij.refactoring.typeMigration.rules.TypeConversionRule;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.LinkedList;
 
 /**
  * @author db
- * Date: Oct 2, 2004
  */
-public class TypeMigrationRules {
-  private final LinkedList<TypeConversionRule> myConversionRules = new LinkedList<TypeConversionRule>();
+public class TypeMigrationRules
+{
+	private final List<TypeConversionRule> myConversionRules;
+	private final Map<Class, Object> myConversionCustomSettings = new HashMap<>();
+	private final Project myProject;
+	private SearchScope mySearchScope;
 
-  private final PsiType myRootType;
-  private PsiType myMigrationRootType;
-  private SearchScope mySearchScope;
+	public TypeMigrationRules(@NotNull Project project)
+	{
+		myProject = project;
+		final TypeConversionRule[] extensions = Extensions.getExtensions(TypeConversionRule.EP_NAME);
+		myConversionRules = new ArrayList<>(extensions.length + 2);
+		myConversionRules.add(new RootTypeConversionRule());
+		myConversionRules.add(new DisjunctionTypeConversionRule());
+		ContainerUtil.addAll(myConversionRules, extensions);
+		addConversionRuleSettings(new MigrateGetterNameSetting());
+	}
 
-  public TypeMigrationRules(final PsiType root) {
-    myRootType = root;
-    myConversionRules.add(new RootTypeConversionRule());
-    myConversionRules.add(new DisjunctionTypeConversionRule());
-    ContainerUtil.addAll(myConversionRules, Extensions.getExtensions(TypeConversionRule.EP_NAME));
-  }
+	public void addConversionDescriptor(TypeConversionRule rule)
+	{
+		myConversionRules.add(rule);
+	}
 
-  public void setMigrationRootType(PsiType migrationRootType) {
-    myMigrationRootType = migrationRootType;
-  }
+	public void addConversionRuleSettings(Object settings)
+	{
+		myConversionCustomSettings.put(settings.getClass(), settings);
+	}
 
-  public PsiType getRootType() {
-    return myRootType;
-  }
+	public <T> T getConversionSettings(Class<T> aClass)
+	{
+		return (T) myConversionCustomSettings.get(aClass);
+	}
 
-  public PsiType getMigrationRootType() {
-    return myMigrationRootType;
-  }
+	@NonNls
+	@Nullable
+	public TypeConversionDescriptorBase findConversion(final PsiType from,
+			final PsiType to,
+			final PsiMember member,
+			final PsiExpression context,
+			final boolean isCovariantPosition,
+			final TypeMigrationLabeler labeler)
+	{
+		final TypeConversionDescriptorBase conversion = findConversion(from, to, member, context, labeler);
+		if(conversion != null)
+		{
+			return conversion;
+		}
 
-  public void addConversionDescriptor(TypeConversionRule rule) {
-    myConversionRules.add(rule);
-  }
+		if(isCovariantPosition)
+		{
+			if(to instanceof PsiEllipsisType)
+			{
+				if(TypeConversionUtil.isAssignable(((PsiEllipsisType) to).getComponentType(), from))
+				{
+					return new TypeConversionDescriptorBase();
+				}
+			}
+			if(TypeConversionUtil.isAssignable(to, from))
+			{
+				return new TypeConversionDescriptorBase();
+			}
+		}
 
-  @NonNls
-  @Nullable
-  public TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context,
-                                                     final boolean isCovariantPosition, final TypeMigrationLabeler labeler) {
-    final TypeConversionDescriptorBase conversion = findConversion(from, to, member, context, labeler);
-    if (conversion != null) return conversion;
+		return !isCovariantPosition && TypeConversionUtil.isAssignable(from, to) ? new TypeConversionDescriptorBase() : null;
+	}
 
-    if (isCovariantPosition) {
-      if (to instanceof PsiEllipsisType) {
-        if (TypeConversionUtil.isAssignable(((PsiEllipsisType)to).getComponentType(), from)) return new TypeConversionDescriptorBase();
-      }
-      if (TypeConversionUtil.isAssignable(to, from)) return new TypeConversionDescriptorBase();
-    }
+	@Nullable
+	public TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context, final TypeMigrationLabeler labeler)
+	{
+		for(TypeConversionRule descriptor : myConversionRules)
+		{
+			final TypeConversionDescriptorBase conversion = descriptor.findConversion(from, to, member, context, labeler);
+			if(conversion != null)
+			{
+				return conversion;
+			}
+		}
+		return null;
+	}
 
-    return !isCovariantPosition && TypeConversionUtil.isAssignable(from, to) ? new TypeConversionDescriptorBase() : null;
-  }
+	public boolean shouldConvertNull(final PsiType from, final PsiType to, PsiExpression context)
+	{
+		return myConversionRules.stream().anyMatch(rule -> rule.shouldConvertNullInitializer(from, to, context));
+	}
 
-  @Nullable
-  public TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member,
-                                                     final PsiExpression context, final TypeMigrationLabeler labeler) {
-    for (TypeConversionRule descriptor : myConversionRules) {
-      final TypeConversionDescriptorBase conversion = descriptor.findConversion(from, to, member, context, labeler);
-      if (conversion != null) return conversion;
-    }
-    return null;
-  }
+	public void setBoundScope(@NotNull SearchScope searchScope)
+	{
+		mySearchScope = searchScope.intersectWith(GlobalSearchScope.notScope(LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope()));
+	}
 
-  public void setBoundScope(final SearchScope searchScope) {
-    mySearchScope = searchScope;
-  }
+	public SearchScope getSearchScope()
+	{
+		return mySearchScope;
+	}
 
-  public SearchScope getSearchScope() {
-    return mySearchScope;
-  }
-
-  @Nullable
-  public Pair<PsiType, PsiType> bindTypeParameters(final PsiType from, final PsiType to, final PsiMethod method,
-                                                   final PsiExpression context, final TypeMigrationLabeler labeler) {
-    for (TypeConversionRule conversionRule : myConversionRules) {
-      final Pair<PsiType, PsiType> typePair = conversionRule.bindTypeParameters(from, to, method, context, labeler);
-      if (typePair != null) return typePair;
-    }
-    return null;
-  }
+	@Nullable
+	public Pair<PsiType, PsiType> bindTypeParameters(final PsiType from, final PsiType to, final PsiMethod method, final PsiExpression context, final TypeMigrationLabeler labeler)
+	{
+		for(TypeConversionRule conversionRule : myConversionRules)
+		{
+			final Pair<PsiType, PsiType> typePair = conversionRule.bindTypeParameters(from, to, method, context, labeler);
+			if(typePair != null)
+			{
+				return typePair;
+			}
+		}
+		return null;
+	}
 }

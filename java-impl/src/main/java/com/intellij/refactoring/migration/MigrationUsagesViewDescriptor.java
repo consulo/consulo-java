@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,51 +14,58 @@
  * limitations under the License.
  */
 
-/**
- * created at Nov 24, 2001
- * @author Jeka
- */
 package com.intellij.refactoring.migration;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.usageView.UsageViewBundle;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.usageView.UsageViewDescriptor;
 
-class MigrationUsagesViewDescriptor implements UsageViewDescriptor {
-  private final boolean isSearchInComments;
-  private final MigrationMap myMigrationMap;
+class MigrationUsagesViewDescriptor implements UsageViewDescriptor
+{
+	private final boolean isSearchInComments;
+	private final MigrationMap myMigrationMap;
 
-  public MigrationUsagesViewDescriptor(MigrationMap migrationMap, boolean isSearchInComments) {
-    myMigrationMap = migrationMap;
-    this.isSearchInComments = isSearchInComments;
-  }
+	public MigrationUsagesViewDescriptor(MigrationMap migrationMap, boolean isSearchInComments)
+	{
+		myMigrationMap = migrationMap;
+		this.isSearchInComments = isSearchInComments;
+	}
 
-  public MigrationMap getMigrationMap() {
-    return myMigrationMap;
-  }
+	public MigrationMap getMigrationMap()
+	{
+		return myMigrationMap;
+	}
 
-  @NotNull
-  public PsiElement[] getElements() {
-    return PsiElement.EMPTY_ARRAY;
-  }
+	@Override
+	@NotNull
+	public PsiElement[] getElements()
+	{
+		return PsiElement.EMPTY_ARRAY;
+	}
 
-  public String getProcessedElementsHeader() {
-    return null;
-  }
+	@Override
+	public String getProcessedElementsHeader()
+	{
+		return null;
+	}
 
-  public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return RefactoringBundle.message("references.in.code.to.elements.from.migration.map", myMigrationMap.getName(),
-                                     UsageViewBundle.getReferencesString(usagesCount, filesCount));
-  }
+	@Override
+	public String getCodeReferencesText(int usagesCount, int filesCount)
+	{
+		return RefactoringBundle.message("references.in.code.to.elements.from.migration.map", myMigrationMap.getName(), UsageViewBundle.getReferencesString(usagesCount, filesCount));
+	}
 
-  public String getCommentReferencesText(int usagesCount, int filesCount) {
-    return null;
-  }
+	@Override
+	public String getCommentReferencesText(int usagesCount, int filesCount)
+	{
+		return null;
+	}
 
-  public String getInfo() {
-    return RefactoringBundle.message("press.the.do.migrate.button", myMigrationMap.getName());
-  }
+	public String getInfo()
+	{
+		return RefactoringBundle.message("press.the.do.migrate.button", myMigrationMap.getName());
+	}
 
 }

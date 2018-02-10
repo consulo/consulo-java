@@ -1,23 +1,7 @@
-/*
- * Copyright 2000-2010 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2017 JetBrains s.r.o.
+// Use of this source code is governed by the Apache 2.0 license that can be
+// found in the LICENSE file.
 
-/*
- * User: anna
- * Date: 10-Jun-2010
- */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import java.util.ArrayList;
@@ -25,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.java.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -34,11 +17,11 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.util.PsiUtil;
-import com.intellij.refactoring.typeMigration.TypeMigrationLabeler;
 import com.intellij.refactoring.typeMigration.TypeMigrationProcessor;
 import com.intellij.refactoring.typeMigration.TypeMigrationRules;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.JavaQuickFixBundle;
 
 public class VariableTypeFromCallFix implements IntentionAction
 {
@@ -68,23 +51,22 @@ public class VariableTypeFromCallFix implements IntentionAction
 	@Override
 	public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file)
 	{
-		return true;
+		return myExpressionType.isValid() && myVar.isValid();
 	}
 
 	@Override
 	public void invoke(@NotNull final Project project, final Editor editor, PsiFile file) throws IncorrectOperationException
 	{
-		final TypeMigrationRules rules = new TypeMigrationRules(TypeMigrationLabeler.getElementType(myVar));
-		rules.setMigrationRootType(myExpressionType);
+		final TypeMigrationRules rules = new TypeMigrationRules(project);
 		rules.setBoundScope(PsiSearchHelper.SERVICE.getInstance(project).getUseScope(myVar));
 
-		TypeMigrationProcessor.runHighlightingTypeMigration(project, editor, rules, myVar);
+		TypeMigrationProcessor.runHighlightingTypeMigration(project, editor, rules, myVar, myExpressionType);
 	}
 
 	@Override
 	public boolean startInWriteAction()
 	{
-		return true;
+		return false;
 	}
 
 
@@ -95,12 +77,16 @@ public class VariableTypeFromCallFix implements IntentionAction
 		PsiMethod method = (PsiMethod) result.getElement();
 		final PsiSubstitutor substitutor = result.getSubstitutor();
 		PsiExpression[] expressions = list.getExpressions();
-		if(method == null || method.getParameterList().getParametersCount() != expressions.length)
+		if(method == null)
 		{
 			return Collections.emptyList();
 		}
 		final PsiParameter[] parameters = method.getParameterList().getParameters();
-		List<IntentionAction> actions = new ArrayList<IntentionAction>();
+		if(parameters.length != expressions.length)
+		{
+			return Collections.emptyList();
+		}
+		List<IntentionAction> actions = new ArrayList<>();
 		for(int i = 0; i < expressions.length; i++)
 		{
 			final PsiExpression expression = expressions[i];
@@ -155,7 +141,7 @@ public class VariableTypeFromCallFix implements IntentionAction
 		{
 			return Collections.emptyList();
 		}
-		List<IntentionAction> result = new ArrayList<IntentionAction>();
+		List<IntentionAction> result = new ArrayList<>();
 		final PsiManager manager = method.getManager();
 		if(manager.isInProject(method))
 		{

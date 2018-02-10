@@ -15,46 +15,57 @@
  */
 package com.intellij.refactoring.typeMigration.ui;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.intellij.ide.projectView.TreeStructureProvider;
 import com.intellij.ide.util.treeView.AbstractTreeStructureBase;
 import com.intellij.openapi.project.Project;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author anna
- * Date: 11-Apr-2008
  */
-public class TypeMigrationTreeStructure extends AbstractTreeStructureBase {
-  private MigrationRootNode myRoot;
+public class TypeMigrationTreeStructure extends AbstractTreeStructureBase
+{
+	private MigrationRootNode myRoot;
 
-  public TypeMigrationTreeStructure(final Project project) {
-    super(project);
-  }
+	public TypeMigrationTreeStructure(final Project project)
+	{
+		super(project);
+	}
 
-  public void setRoot(final MigrationRootNode root) {
-    myRoot = root;
-  }
+	public void setRoots(final MigrationRootNode root)
+	{
+		myRoot = root;
+	}
 
-  public List<TreeStructureProvider> getProviders() {
-    return Collections.emptyList();
-  }
+	@Override
+	public List<TreeStructureProvider> getProviders()
+	{
+		return Collections.emptyList();
+	}
 
-  public Object getRootElement() {
-    return myRoot;
-  }
+	@Override
+	public Object getRootElement()
+	{
+		return myRoot;
+	}
 
-  public void commit() {
+	@Override
+	public void commit()
+	{
 
-  }
+	}
 
-  public boolean hasSomethingToCommit() {
-    return false;
-  }
+	@Override
+	public boolean hasSomethingToCommit()
+	{
+		return false;
+	}
 
-  @Override
-  public boolean isToBuildChildrenInBackground(final Object element) {
-    return true;
-  }
+	@Override
+	public boolean isToBuildChildrenInBackground(final Object element)
+	{
+		return true;
+	}
 }

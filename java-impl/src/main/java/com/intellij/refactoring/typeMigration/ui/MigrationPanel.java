@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -44,9 +44,11 @@ import com.intellij.CommonBundle;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
+import com.intellij.openapi.application.TransactionGuard;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
@@ -54,11 +56,10 @@ import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiBundle;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMember;
@@ -70,7 +71,6 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.typeMigration.ChangeTypeSignatureHandler;
 import com.intellij.refactoring.typeMigration.TypeMigrationLabeler;
 import com.intellij.refactoring.typeMigration.TypeMigrationProcessor;
 import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
@@ -90,43 +90,38 @@ import com.intellij.usages.TextChunk;
 import com.intellij.usages.UsageInfoToUsageConverter;
 import com.intellij.usages.UsagePresentation;
 import com.intellij.util.EditSourceOnDoubleClickHandler;
-import com.intellij.util.containers.HashSet;
+import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
 
 /**
  * @author anna
- *         Date: 24-Mar-2008
  */
 public class MigrationPanel extends JPanel implements Disposable
 {
-	@NonNls
-	private static final String MIGRATION_USAGES = "migration.usages";
-	private static final Key<TypeMigrationUsageInfo[]> MIGRATION_USAGES_KEYS = Key.create(MIGRATION_USAGES);
+	private static final Key<TypeMigrationUsageInfo[]> MIGRATION_USAGES_KEYS = Key.create("migration.usages");
 
-	private final PsiElement myInitialRoot;
+	private final PsiElement[] myInitialRoots;
 	private final TypeMigrationLabeler myLabeler;
 
 
 	private final MyTree myRootsTree;
-	private static final Logger LOG = Logger.getInstance("#" + MigrationPanel.class.getName());
 	private final Project myProject;
-	private final boolean myPreviewUsages;
 	private Content myContent;
 	private final MigrationUsagesPanel myUsagesPanel;
 	private final MigrationConflictsPanel myConflictsPanel;
 
-	public MigrationPanel(final PsiElement root, TypeMigrationLabeler labeler, final Project project, final boolean previewUsages)
+	public MigrationPanel(final PsiElement[] roots, TypeMigrationLabeler labeler, final Project project, final boolean previewUsages)
 	{
 		super(new BorderLayout());
-		myInitialRoot = root;
+		myInitialRoots = roots;
 		myLabeler = labeler;
 		myProject = project;
-		myPreviewUsages = previewUsages;
 
 		myRootsTree = new MyTree(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		final TypeMigrationTreeBuilder builder = new TypeMigrationTreeBuilder(myRootsTree, project);
-		final MigrationRootNode currentRoot = new MigrationRootNode(project, myLabeler, builder, root, myPreviewUsages);
+
+		final MigrationRootNode currentRoot = new MigrationRootNode(project, myLabeler, roots, previewUsages);
 		builder.setRoot(currentRoot);
 		initTree(myRootsTree);
 		myRootsTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener()
@@ -168,28 +163,19 @@ public class MigrationPanel extends JPanel implements Disposable
 		add(conflictsSplitter, BorderLayout.CENTER);
 		Disposer.register(this, myConflictsPanel);
 
-		builder.addSubtreeToUpdate((DefaultMutableTreeNode) myRootsTree.getModel().getRoot(), new Runnable()
+		builder.addSubtreeToUpdate((DefaultMutableTreeNode) myRootsTree.getModel().getRoot(), () -> SwingUtilities.invokeLater(() ->
 		{
-			public void run()
+			if(builder.isDisposed())
 			{
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						if(builder.isDisposed())
-						{
-							return;
-						}
-						myRootsTree.expandPath(new TreePath(myRootsTree.getModel().getRoot()));
-						final Collection<? extends AbstractTreeNode> children = currentRoot.getChildren();
-						if(!children.isEmpty())
-						{
-							builder.select(children.iterator().next());
-						}
-					}
-				});
+				return;
 			}
-		});
+			myRootsTree.expandPath(new TreePath(myRootsTree.getModel().getRoot()));
+			final Collection<? extends AbstractTreeNode> children = currentRoot.getChildren();
+			if(!children.isEmpty())
+			{
+				builder.select(children.iterator().next());
+			}
+		}));
 
 		Disposer.register(this, builder);
 	}
@@ -199,7 +185,7 @@ public class MigrationPanel extends JPanel implements Disposable
 		myConflictsPanel.setToInitialPosition();
 		myUsagesPanel.setToInitialPosition();
 		final DefaultMutableTreeNode[] migrationNodes = myRootsTree.getSelectedNodes(DefaultMutableTreeNode.class, null);
-		if(migrationNodes == null || migrationNodes.length == 0)
+		if(migrationNodes.length == 0)
 		{
 			return;
 		}
@@ -207,10 +193,10 @@ public class MigrationPanel extends JPanel implements Disposable
 		if(userObject instanceof MigrationNode)
 		{
 			final MigrationNode migrationNode = (MigrationNode) userObject;
-			final UsageInfo[] failedUsages = myLabeler.getFailedUsages();
+			final UsageInfo[] failedUsages = myLabeler.getFailedUsages(migrationNode.getInfo());
 			if(failedUsages.length > 0)
 			{
-				myConflictsPanel.showUsages(new UsageInfoToUsageConverter.TargetElementsDescriptor(new PsiElement[0]), failedUsages);
+				myConflictsPanel.showUsages(PsiElement.EMPTY_ARRAY, failedUsages);
 			}
 			final AbstractTreeNode rootNode = migrationNode.getParent();
 			if(rootNode instanceof MigrationNode)
@@ -223,7 +209,7 @@ public class MigrationPanel extends JPanel implements Disposable
 	private JComponent createToolbar()
 	{
 		final JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gc = new GridBagConstraints(GridBagConstraints.RELATIVE, 0, 1, 1, 0, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 10, 5, 0), 0, 0);
+		GridBagConstraints gc = new GridBagConstraints(GridBagConstraints.RELATIVE, 0, 1, 1, 0, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, JBUI.insets(5, 10, 5, 0), 0, 0);
 		final JButton performButton = new JButton(RefactoringBundle.message("type.migration.migrate.button.text"));
 		performButton.addActionListener(new ActionListener()
 		{
@@ -232,9 +218,9 @@ public class MigrationPanel extends JPanel implements Disposable
 				if(!migrationNode.getInfo().isExcluded() || migrationNode.areChildrenInitialized())
 				{ //do not walk into excluded collapsed nodes: nothing to migrate can be found
 					final Collection<? extends AbstractTreeNode> nodes = migrationNode.getChildren();
-					for(AbstractTreeNode node : nodes)
+					for(final AbstractTreeNode node : nodes)
 					{
-						expandTree((MigrationNode) node);
+						ApplicationManager.getApplication().runReadAction(() -> expandTree((MigrationNode) node));
 					}
 				}
 			}
@@ -247,42 +233,47 @@ public class MigrationPanel extends JPanel implements Disposable
 					final Object userObject = ((DefaultMutableTreeNode) root).getUserObject();
 					if(userObject instanceof MigrationRootNode)
 					{
-						ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable()
+						ProgressManager.getInstance().runProcessWithProgressSynchronously(() ->
 						{
-							public void run()
+							final HashSet<VirtualFile> files = new HashSet<>();
+							final TypeMigrationUsageInfo[] usages = ReadAction.compute(() ->
 							{
+								final Collection<? extends AbstractTreeNode> children = ((MigrationRootNode) userObject).getChildren();
+								for(AbstractTreeNode child : children)
+								{
+									expandTree((MigrationNode) child);
+								}
+								final TypeMigrationUsageInfo[] usages1 = myLabeler.getMigratedUsages();
+								for(TypeMigrationUsageInfo usage : usages1)
+								{
+									if(!usage.isExcluded())
+									{
+										final PsiElement element = usage.getElement();
+										if(element != null)
+										{
+											files.add(element.getContainingFile().getVirtualFile());
+										}
+									}
+								}
+								return usages1;
+							});
+
+
+							ApplicationManager.getApplication().invokeLater(() ->
+							{
+								if(ReadonlyStatusHandler.getInstance(myProject).
+										ensureFilesWritable(VfsUtilCore.toVirtualFileArray(files)).hasReadonlyFiles())
+								{
+									return;
+								}
 								new WriteCommandAction(myProject)
 								{
-									protected void run(Result result) throws Throwable
+									protected void run(@NotNull Result result) throws Throwable
 									{
-										final Collection<? extends AbstractTreeNode> children = ((MigrationRootNode) userObject).getChildren();
-										for(AbstractTreeNode child : children)
-										{
-											expandTree((MigrationNode) child);
-										}
-										final TypeMigrationUsageInfo[] usages = myLabeler.getMigratedUsages();
-										final HashSet<VirtualFile> files = new HashSet<VirtualFile>();
-										for(TypeMigrationUsageInfo usage : usages)
-										{
-											if(!usage.isExcluded())
-											{
-												final PsiElement element = usage.getElement();
-												if(element != null)
-												{
-													files.add(element.getContainingFile().getVirtualFile());
-												}
-											}
-										}
-										if(ReadonlyStatusHandler.getInstance(myProject).
-												ensureFilesWritable(VfsUtil.toVirtualFileArray(files)).hasReadonlyFiles())
-										{
-											return;
-										}
-
-										TypeMigrationProcessor.change(myLabeler, usages);
+										TypeMigrationProcessor.change(usages, myLabeler, myProject);
 									}
 								}.execute();
-							}
+							}, myProject.getDisposed());
 						}, "Type Migration", false, myProject);
 					}
 				}
@@ -305,13 +296,12 @@ public class MigrationPanel extends JPanel implements Disposable
 		{
 			public void actionPerformed(final ActionEvent e)
 			{
-				UsageViewManager.getInstance(myProject).closeContent(myContent);
-				SwingUtilities.invokeLater(new Runnable()
+				TransactionGuard.getInstance().submitTransactionAndWait(() ->
 				{
-					public void run()
-					{
-						ChangeTypeSignatureHandler.invoke(myProject, myInitialRoot, myLabeler.getRules(), null);
-					}
+					UsageViewManager.getInstance(myProject).closeContent(myContent);
+					final TypeMigrationDialog.MultipleElements dialog = new TypeMigrationDialog.MultipleElements(myProject, myInitialRoots, myLabeler.getMigrationRootTypeFunction(), myLabeler
+							.getRules());
+					dialog.show();
 				});
 			}
 		});
@@ -384,23 +374,17 @@ public class MigrationPanel extends JPanel implements Disposable
 			super.paintComponent(g);
 		}
 
-		@Override
-		public Object getData(@NotNull Key<?> dataId)
+		public Object getData(@NonNls final Key dataId)
 		{
 			if(CommonDataKeys.PSI_ELEMENT == dataId)
 			{
 				final DefaultMutableTreeNode[] selectedNodes = getSelectedNodes(DefaultMutableTreeNode.class, null);
-				return selectedNodes != null && selectedNodes.length == 1 && selectedNodes[0].getUserObject() instanceof MigrationNode ? ((MigrationNode) selectedNodes[0].getUserObject()).getInfo()
-						.getElement() : null;
+				return selectedNodes.length == 1 && selectedNodes[0].getUserObject() instanceof MigrationNode ? ((MigrationNode) selectedNodes[0].getUserObject()).getInfo().getElement() : null;
 			}
-			if(MIGRATION_USAGES.equals(dataId))
+			if(MIGRATION_USAGES_KEYS == dataId)
 			{
 				DefaultMutableTreeNode[] selectedNodes = getSelectedNodes(DefaultMutableTreeNode.class, null);
-				if(selectedNodes == null)
-				{
-					return null;
-				}
-				final Set<TypeMigrationUsageInfo> usageInfos = new HashSet<TypeMigrationUsageInfo>();
+				final Set<TypeMigrationUsageInfo> usageInfos = new HashSet<>();
 				for(DefaultMutableTreeNode selectedNode : selectedNodes)
 				{
 					final Object userObject = selectedNode.getUserObject();
@@ -409,7 +393,7 @@ public class MigrationPanel extends JPanel implements Disposable
 						collectInfos(usageInfos, (MigrationNode) userObject);
 					}
 				}
-				return usageInfos.toArray(new TypeMigrationUsageInfo[usageInfos.size()]);
+				return usageInfos.toArray(new TypeMigrationUsageInfo[0]);
 			}
 			return null;
 		}
@@ -429,35 +413,12 @@ public class MigrationPanel extends JPanel implements Disposable
 		}
 	}
 
-  /*private class PerformRefactoringAction extends AnAction {
-	private PerformRefactoringAction() {
-      super(RefactoringBundle.message("type.migration.migrate.button.text"));
-    }
-
-    public void actionPerformed(final AnActionEvent e) {
-      final DefaultMutableTreeNode[] nodes = myRootsTree.getSelectedNodes(DefaultMutableTreeNode.class, null);
-      for (DefaultMutableTreeNode node : nodes) {
-        final Object userObject = node.getUserObject();
-        if (userObject instanceof MigrationNode) {
-          migrate(((MigrationNode)userObject));
-        }
-      }
-    }
-
-    @Override
-    public void update(final AnActionEvent e) {
-      super.update(e);
-      final MigrationNode[] selectedNodes = myRootsTree.getSelectedNodes(MigrationNode.class, null);
-      e.getPresentation().setEnabled(selectedNodes != null && selectedNodes.length == 1);
-    }
-  }*/
-
 	private class ExcludeAction extends ExcludeIncludeActionBase
 	{
 		public ExcludeAction()
 		{
 			super(RefactoringBundle.message("type.migration.exclude.action.text"));
-			registerCustomShortcutSet(CommonShortcuts.DELETE, myRootsTree);
+			registerCustomShortcutSet(CommonShortcuts.getDelete(), myRootsTree);
 		}
 
 		protected void processUsage(final TypeMigrationUsageInfo usageInfo)
@@ -485,10 +446,6 @@ public class MigrationPanel extends JPanel implements Disposable
 			final Presentation presentation = e.getPresentation();
 			presentation.setEnabled(false);
 			final DefaultMutableTreeNode[] selectedNodes = myRootsTree.getSelectedNodes(DefaultMutableTreeNode.class, null);
-			if(selectedNodes == null)
-			{
-				return;
-			}
 			for(DefaultMutableTreeNode node : selectedNodes)
 			{
 				final Object userObject = node.getUserObject();
@@ -510,7 +467,7 @@ public class MigrationPanel extends JPanel implements Disposable
 	{
 		protected abstract void processUsage(TypeMigrationUsageInfo usageInfo);
 
-		protected ExcludeIncludeActionBase(final String text)
+		ExcludeIncludeActionBase(final String text)
 		{
 			super(text);
 		}
@@ -541,7 +498,7 @@ public class MigrationPanel extends JPanel implements Disposable
 
 	private static class MigrationRootsTreeCellRenderer extends ColoredTreeCellRenderer
 	{
-		public void customizeCellRenderer(final JTree tree, final Object value, final boolean selected, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus)
+		public void customizeCellRenderer(@NotNull final JTree tree, final Object value, final boolean selected, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus)
 		{
 			final Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
 			if(!(userObject instanceof MigrationNode))
@@ -567,9 +524,8 @@ public class MigrationPanel extends JPanel implements Disposable
 					{
 						typeElement = element;
 					}
-					PsiDocumentManager.getInstance(element.getProject()).commitAllDocuments();
-					final UsagePresentation presentation = UsageInfoToUsageConverter.convert(new UsageInfoToUsageConverter.TargetElementsDescriptor(typeElement), new UsageInfo(typeElement))
-							.getPresentation();
+
+					final UsagePresentation presentation = UsageInfoToUsageConverter.convert(new PsiElement[]{typeElement}, new UsageInfo(typeElement)).getPresentation();
 					boolean isPrefix = true;  //skip usage position
 					for(TextChunk chunk : presentation.getText())
 					{

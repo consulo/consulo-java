@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2014 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,162 +15,234 @@
  */
 package com.intellij.refactoring.typeMigration;
 
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
+import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.IncorrectOperationException;
-
-import java.util.Map;
 
 /**
  * @author anna
- * Date: 04-Apr-2008
  */
-public class TypeMigrationReplacementUtil {
-  public static final Logger LOG = Logger.getInstance("#" + TypeMigrationReplacementUtil.class.getName());
+public class TypeMigrationReplacementUtil
+{
+	public static final Logger LOG = Logger.getInstance(TypeMigrationReplacementUtil.class);
 
-  private TypeMigrationReplacementUtil() {
-  }
+	private TypeMigrationReplacementUtil()
+	{
+	}
 
-  public static void replaceExpression(PsiExpression expression, final Project project, Object conversion) {
-    if (conversion instanceof TypeConversionDescriptorBase) {
-      ((TypeConversionDescriptorBase)conversion).replace(expression);
-    } else if (conversion instanceof String) {
-      String replacement = (String)conversion;
-      try {
-        expression.replace(
-            JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(replacement, expression));
-      }
-      catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
-    }
-    else if (expression instanceof PsiReferenceExpression) {
-      final PsiElement resolved = ((PsiReferenceExpression)expression).resolve();
-      final PsiMember replacer = ((PsiMember)conversion);
-      final String method = ((PsiMember)resolved).getName();
-      final String ref = expression.getText();
-      final String newref = ref.substring(0, ref.lastIndexOf(method)) + replacer.getName();
+	public static PsiElement replaceExpression(PsiExpression expression, final Project project, Object conversion, TypeEvaluator typeEvaluator)
+	{
+		if(conversion instanceof TypeConversionDescriptorBase)
+		{
+			try
+			{
+				return ((TypeConversionDescriptorBase) conversion).replace(expression, typeEvaluator);
+			}
+			catch(IncorrectOperationException e)
+			{
+				LOG.error(e);
+			}
+		}
+		else if(conversion instanceof String)
+		{
+			String replacement = (String) conversion;
+			try
+			{
+				return expression.replace(JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(replacement, expression));
+			}
+			catch(IncorrectOperationException e)
+			{
+				LOG.error(e);
+			}
+		}
+		else if(expression instanceof PsiReferenceExpression)
+		{
+			final PsiElement resolved = ((PsiReferenceExpression) expression).resolve();
+			final PsiMember replacer = ((PsiMember) conversion);
+			final String method = ((PsiMember) resolved).getName();
+			final String ref = expression.getText();
+			final String newref = ref.substring(0, ref.lastIndexOf(method)) + replacer.getName();
 
-      if (conversion instanceof PsiMethod) {
-        if (resolved instanceof PsiMethod) {
-          try {
-            expression.replace(
-                JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newref, expression));
-          }
-          catch (IncorrectOperationException e) {
-            LOG.error(e);
-          }
-        }
-        else {
-          try {
-            expression.replace(JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(
-                newref + "()", expression));
-          }
-          catch (IncorrectOperationException e) {
-            LOG.error(e);
-          }
-        }
-      }
-      else if (conversion instanceof PsiField) {
-        if (resolved instanceof PsiField) {
-          try {
-            expression.replace(
-                JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newref, expression));
-          }
-          catch (IncorrectOperationException e) {
-            LOG.error(e);
-          }
-        }
-        else {
-          final PsiElement parent = Util.getEssentialParent(expression);
+			if(conversion instanceof PsiMethod)
+			{
+				if(resolved instanceof PsiMethod)
+				{
+					try
+					{
+						return expression.replace(JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newref, expression));
+					}
+					catch(IncorrectOperationException e)
+					{
+						LOG.error(e);
+					}
+				}
+				else
+				{
+					try
+					{
+						return expression.replace(JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newref + "()", expression));
+					}
+					catch(IncorrectOperationException e)
+					{
+						LOG.error(e);
+					}
+				}
+			}
+			else if(conversion instanceof PsiField)
+			{
+				if(resolved instanceof PsiField)
+				{
+					try
+					{
+						return expression.replace(JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newref, expression));
+					}
+					catch(IncorrectOperationException e)
+					{
+						LOG.error(e);
+					}
+				}
+				else
+				{
+					final PsiElement parent = Util.getEssentialParent(expression);
 
-          if (parent instanceof PsiMethodCallExpression) {
-            try {
-              parent.replace(
-                  JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newref, expression));
-            }
-            catch (IncorrectOperationException e) {
-              LOG.error(e);
-            }
-          }
-        }
-      }
-    }
-  }
+					if(parent instanceof PsiMethodCallExpression)
+					{
+						try
+						{
+							return parent.replace(JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newref, expression));
+						}
+						catch(IncorrectOperationException e)
+						{
+							LOG.error(e);
+						}
+					}
+				}
+			}
+		}
+		return expression;
+	}
 
-  static void migratePsiMemberType(final PsiElement element, final Project project, PsiType migratedType) {
-    try {
-      if (!migratedType.isValid()) {
-        migratedType = JavaPsiFacade.getElementFactory(project).createTypeByFQClassName(migratedType.getCanonicalText());
-      }
-      final PsiTypeElement typeElement =
-          JavaPsiFacade.getInstance(project).getElementFactory().createTypeElement(migratedType);
-      if (element instanceof PsiMethod) {
-        final PsiTypeElement returnTypeElement = ((PsiMethod)element).getReturnTypeElement();
-        if (returnTypeElement != null) {
-          returnTypeElement.replace(typeElement);
-        }
-      }
-      else if (element instanceof PsiVariable) {
-        final PsiTypeElement varTypeElement = ((PsiVariable)element).getTypeElement();
-        if (varTypeElement != null) {
-          varTypeElement.replace(typeElement);
-        }
-      }
-      else {
-        LOG.error("Must not happen: " + element.getClass().getName());
-      }
-    }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
-    }
-  }
+	static PsiType revalidateType(@NotNull PsiType migrationType, @NotNull Project project)
+	{
+		if(!migrationType.isValid())
+		{
+			migrationType = JavaPsiFacade.getElementFactory(project).createTypeByFQClassName(migrationType.getCanonicalText());
+		}
+		return migrationType;
+	}
 
-  static void replaceNewExpressionType(final Project project, final PsiNewExpression expression, final Map.Entry<TypeMigrationUsageInfo, PsiType> info) {
-    final PsiType changeType = info.getValue();
-    if (changeType != null) {
-      try {
-        final PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
-        final PsiType componentType = changeType.getDeepComponentType();
-        if (classReference != null) {
-          final PsiElement psiElement = replaceTypeWithClassReferenceOrKeyword(project, componentType, classReference);
-          final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(psiElement, PsiNewExpression.class);
-          if (newExpression != null && PsiDiamondTypeUtil.canCollapseToDiamond(newExpression, newExpression, changeType)) {
-            final PsiJavaCodeReferenceElement anonymousClassReference = newExpression.getClassOrAnonymousClassReference();
-            if (anonymousClassReference != null) {
-              PsiDiamondTypeUtil.replaceExplicitWithDiamond(anonymousClassReference.getParameterList());
-            }
-          }
-        }
-        else {
-          final PsiElement typeKeyword = getTypeKeyword(expression);
-          if (typeKeyword != null) {
-            replaceTypeWithClassReferenceOrKeyword(project, componentType, typeKeyword);
-          }
-        }
-      }
-      catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
-    }
-  }
+	static void migrateMemberOrVariableType(final PsiElement element, final Project project, PsiType migratedType)
+	{
+		try
+		{
+			migratedType = revalidateType(migratedType, project);
+			final PsiTypeElement typeElement = JavaPsiFacade.getInstance(project).getElementFactory().createTypeElement(migratedType);
+			if(element instanceof PsiMethod)
+			{
+				final PsiTypeElement returnTypeElement = ((PsiMethod) element).getReturnTypeElement();
+				if(returnTypeElement != null)
+				{
+					final PsiElement replaced = returnTypeElement.replace(typeElement);
+					JavaCodeStyleManager.getInstance(project).shortenClassReferences(replaced);
+				}
+			}
+			else if(element instanceof PsiVariable)
+			{
+				final PsiTypeElement varTypeElement = ((PsiVariable) element).getTypeElement();
+				if(varTypeElement != null)
+				{
+					final PsiElement replaced = varTypeElement.replace(typeElement);
+					JavaCodeStyleManager.getInstance(project).shortenClassReferences(replaced);
+				}
+			}
+			else
+			{
+				LOG.error("Must not happen: " + element.getClass().getName());
+			}
+		}
+		catch(IncorrectOperationException e)
+		{
+			LOG.error(e);
+		}
+	}
 
-  private static PsiElement replaceTypeWithClassReferenceOrKeyword(Project project, PsiType componentType, PsiElement typePlace) {
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-    if (componentType instanceof PsiClassType) {
-      return typePlace.replace(factory.createReferenceElementByType((PsiClassType)componentType));
-    } else {
-      return typePlace.replace(getTypeKeyword(((PsiNewExpression)factory.createExpressionFromText("new " + componentType.getPresentableText() + "[0]", typePlace))));
-    }
-  }
+	static PsiNewExpression replaceNewExpressionType(final Project project, final PsiNewExpression expression, final Map.Entry<TypeMigrationUsageInfo, PsiType> info)
+	{
+		final PsiType changeType = info.getValue();
+		if(changeType != null)
+		{
+			try
+			{
+				final PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
+				final PsiType componentType = changeType.getDeepComponentType();
+				if(classReference != null)
+				{
+					final PsiElement psiElement = changeType.equals(RefactoringChangeUtil.getTypeByExpression(expression)) ? classReference : replaceTypeWithClassReferenceOrKeyword(project,
+							componentType, classReference);
+					final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(psiElement, PsiNewExpression.class);
+					if(!tryToReplaceWithDiamond(newExpression, changeType))
+					{
+						return newExpression;
+					}
+				}
+				else
+				{
+					final PsiElement typeKeyword = getTypeKeyword(expression);
+					if(typeKeyword != null)
+					{
+						replaceTypeWithClassReferenceOrKeyword(project, componentType, typeKeyword);
+					}
+				}
+			}
+			catch(IncorrectOperationException e)
+			{
+				LOG.error(e);
+			}
+		}
+		return null;
+	}
 
-  private static PsiElement getTypeKeyword(PsiNewExpression expression) {
-    return ((CompositeElement)expression).findChildByRoleAsPsiElement(ChildRole.TYPE_KEYWORD);
-  }
+	static boolean tryToReplaceWithDiamond(PsiNewExpression newExpression, @Nullable PsiType changeType)
+	{
+		if(newExpression != null && PsiDiamondTypeUtil.canCollapseToDiamond(newExpression, newExpression, changeType))
+		{
+			final PsiJavaCodeReferenceElement anonymousClassReference = newExpression.getClassOrAnonymousClassReference();
+			if(anonymousClassReference != null)
+			{
+				PsiDiamondTypeUtil.replaceExplicitWithDiamond(anonymousClassReference.getParameterList());
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private static PsiElement replaceTypeWithClassReferenceOrKeyword(Project project, PsiType componentType, PsiElement typePlace)
+	{
+		final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+		if(componentType instanceof PsiClassType)
+		{
+			return typePlace.replace(factory.createReferenceElementByType((PsiClassType) componentType));
+		}
+		else
+		{
+			return typePlace.replace(getTypeKeyword(((PsiNewExpression) factory.createExpressionFromText("new " + componentType.getPresentableText() + "[0]", typePlace))));
+		}
+	}
+
+	private static PsiElement getTypeKeyword(PsiNewExpression expression)
+	{
+		return ((CompositeElement) expression).findChildByRoleAsPsiElement(ChildRole.TYPE_KEYWORD);
+	}
 }

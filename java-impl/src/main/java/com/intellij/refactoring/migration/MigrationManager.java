@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,39 @@
  */
 package com.intellij.refactoring.migration;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.project.Project;
 
-public class MigrationManager {
-  private final Project myProject;
-  private final MigrationMapSet myMigrationMapSet = new MigrationMapSet();
+public class MigrationManager
+{
+	private final Project myProject;
+	private final MigrationMapSet myMigrationMapSet = new MigrationMapSet();
 
-  public MigrationManager(Project project) {
-    myProject = project;
-  }
+	public MigrationManager(Project project)
+	{
+		myProject = project;
+	}
 
-  public void showMigrationDialog() {
-    final MigrationDialog migrationDialog = new MigrationDialog(myProject, myMigrationMapSet);
-    migrationDialog.show();
-    if (!migrationDialog.isOK()) {
-      return;
-    }
-    MigrationMap migrationMap = migrationDialog.getMigrationMap();
-    if (migrationMap == null) return;
+	public void showMigrationDialog()
+	{
+		final MigrationDialog migrationDialog = new MigrationDialog(myProject, myMigrationMapSet);
+		if(!migrationDialog.showAndGet())
+		{
+			return;
+		}
+		MigrationMap migrationMap = migrationDialog.getMigrationMap();
+		if(migrationMap == null)
+		{
+			return;
+		}
 
-    new MigrationProcessor(myProject, migrationMap).run();
-  }
+		new MigrationProcessor(myProject, migrationMap, migrationDialog.getScope()).run();
+	}
+
+	@Nullable
+	public MigrationMap findMigrationMap(@NotNull String name)
+	{
+		return myMigrationMapSet.findMigrationMap(name);
+	}
 }

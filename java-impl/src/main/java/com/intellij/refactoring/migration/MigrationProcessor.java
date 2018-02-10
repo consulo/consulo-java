@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,144 +15,215 @@
  */
 package com.intellij.refactoring.migration;
 
+import java.util.ArrayList;
+
+import org.jetbrains.annotations.NotNull;
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.extensions.Extensions;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMigration;
+import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.migration.PsiMigrationManager;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.RefactoringHelper;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 /**
  * @author ven
  */
-class MigrationProcessor extends BaseRefactoringProcessor {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.migration.MigrationProcessor");
-  private final MigrationMap myMigrationMap;
-  private static final String REFACTORING_NAME = RefactoringBundle.message("migration.title");
-  private PsiMigration myPsiMigration;
+public class MigrationProcessor extends BaseRefactoringProcessor
+{
+	private final MigrationMap myMigrationMap;
+	private static final String REFACTORING_NAME = RefactoringBundle.message("migration.title");
+	private PsiMigration myPsiMigration;
+	private final SearchScope mySearchScope;
+	private ArrayList<SmartPsiElementPointer<PsiElement>> myRefsToShorten;
 
-  public MigrationProcessor(Project project, MigrationMap migrationMap) {
-    super(project);
-    myMigrationMap = migrationMap;
-    myPsiMigration = startMigration(project);
-  }
+	public MigrationProcessor(Project project, MigrationMap migrationMap)
+	{
+		this(project, migrationMap, GlobalSearchScope.projectScope(project));
+	}
 
-  @NotNull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
-    return new MigrationUsagesViewDescriptor(myMigrationMap, false);
-  }
+	public MigrationProcessor(Project project, MigrationMap migrationMap, SearchScope scope)
+	{
+		super(project);
+		myMigrationMap = migrationMap;
+		mySearchScope = scope;
+		myPsiMigration = startMigration(project);
+	}
 
-  private PsiMigration startMigration(Project project) {
-    final PsiMigration migration = PsiMigrationManager.getInstance(project).startMigration();
-    findOrCreateEntries(project, migration);
-    return migration;
-  }
+	@Override
+	@NotNull
+	protected UsageViewDescriptor createUsageViewDescriptor(@NotNull UsageInfo[] usages)
+	{
+		return new MigrationUsagesViewDescriptor(myMigrationMap, false);
+	}
 
-  private void findOrCreateEntries(Project project, final PsiMigration migration) {
-    for (int i = 0; i < myMigrationMap.getEntryCount(); i++) {
-      MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
-      if (entry.getType() == MigrationMapEntry.PACKAGE) {
-        MigrationUtil.findOrCreatePackage(project, migration, entry.getOldName());
-      }
-      else {
-        MigrationUtil.findOrCreateClass(project, migration, entry.getOldName());
-      }
-    }
-  }
+	private PsiMigration startMigration(Project project)
+	{
+		final PsiMigration migration = PsiMigrationManager.getInstance(project).startMigration();
+		findOrCreateEntries(project, migration);
+		return migration;
+	}
 
-  @Override
-  protected void refreshElements(PsiElement[] elements) {
-    myPsiMigration = startMigration(myProject);
-  }
+	private void findOrCreateEntries(Project project, final PsiMigration migration)
+	{
+		for(int i = 0; i < myMigrationMap.getEntryCount(); i++)
+		{
+			MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
+			if(entry.getType() == MigrationMapEntry.PACKAGE)
+			{
+				MigrationUtil.findOrCreatePackage(project, migration, entry.getOldName());
+			}
+			else
+			{
+				MigrationUtil.findOrCreateClass(project, migration, entry.getOldName());
+			}
+		}
+	}
 
-  @NotNull
-  protected UsageInfo[] findUsages() {
-    ArrayList<UsageInfo> usagesVector = new ArrayList<UsageInfo>();
-    try {
-      if (myMigrationMap == null) {
-        return UsageInfo.EMPTY_ARRAY;
-      }
-      for (int i = 0; i < myMigrationMap.getEntryCount(); i++) {
-        MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
-        UsageInfo[] usages;
-        if (entry.getType() == MigrationMapEntry.PACKAGE) {
-          usages = MigrationUtil.findPackageUsages(myProject, myPsiMigration, entry.getOldName());
-        }
-        else {
-          usages = MigrationUtil.findClassUsages(myProject, myPsiMigration, entry.getOldName());
-        }
+	@Override
+	protected void refreshElements(@NotNull PsiElement[] elements)
+	{
+		myPsiMigration = startMigration(myProject);
+	}
 
-        for (UsageInfo usage : usages) {
-          usagesVector.add(new MigrationUsageInfo(usage, entry));
-        }
-      }
-    }
-    finally {
-      myPsiMigration.finish();
-      myPsiMigration = null;
-    }
-    return usagesVector.toArray(new MigrationUsageInfo[usagesVector.size()]);
-  }
+	@Override
+	@NotNull
+	protected UsageInfo[] findUsages()
+	{
+		ArrayList<UsageInfo> usagesVector = new ArrayList<>();
+		try
+		{
+			if(myMigrationMap == null)
+			{
+				return UsageInfo.EMPTY_ARRAY;
+			}
+			for(int i = 0; i < myMigrationMap.getEntryCount(); i++)
+			{
+				MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
+				UsageInfo[] usages;
+				if(entry.getType() == MigrationMapEntry.PACKAGE)
+				{
+					usages = MigrationUtil.findPackageUsages(myProject, myPsiMigration, entry.getOldName(), mySearchScope);
+				}
+				else
+				{
+					usages = MigrationUtil.findClassUsages(myProject, myPsiMigration, entry.getOldName(), mySearchScope);
+				}
 
-  protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
-    if (refUsages.get().length == 0) {
-      Messages.showInfoMessage(myProject, RefactoringBundle.message("migration.no.usages.found.in.the.project"), REFACTORING_NAME);
-      return false;
-    }
-    setPreviewUsages(true);
-    return true;
-  }
+				for(UsageInfo usage : usages)
+				{
+					usagesVector.add(new MigrationUsageInfo(usage, entry));
+				}
+			}
+		}
+		finally
+		{
+			//invalidating resolve caches without write action could lead to situations when somebody with read action resolves reference and gets ResolveResult
+			//then here, in another read actions, all caches are invalidated but those resolve result is used without additional checks inside that read action - but it's already invalid
+			ApplicationManager.getApplication().invokeLater(() -> WriteAction.run(this::finishFindMigration), myProject.getDisposed());
+		}
+		return usagesVector.toArray(UsageInfo.EMPTY_ARRAY);
+	}
 
-  protected void performRefactoring(UsageInfo[] usages) {
-    final PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
-    LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
+	private void finishFindMigration()
+	{
+		if(myPsiMigration != null)
+		{
+			myPsiMigration.finish();
+			myPsiMigration = null;
+		}
+	}
 
-    try {
-      for (int i = 0; i < myMigrationMap.getEntryCount(); i++) {
-        MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
-        if (entry.getType() == MigrationMapEntry.PACKAGE) {
-          MigrationUtil.doPackageMigration(myProject, psiMigration, entry.getNewName(), usages);
-        }
-        if (entry.getType() == MigrationMapEntry.CLASS) {
-          MigrationUtil.doClassMigration(myProject, psiMigration, entry.getNewName(), usages);
-        }
-      }
+	@Override
+	protected boolean preprocessUsages(@NotNull Ref<UsageInfo[]> refUsages)
+	{
+		if(refUsages.get().length == 0)
+		{
+			Messages.showInfoMessage(myProject, RefactoringBundle.message("migration.no.usages.found.in.the.project"), REFACTORING_NAME);
+			return false;
+		}
+		setPreviewUsages(true);
+		return true;
+	}
 
-      for(RefactoringHelper helper: Extensions.getExtensions(RefactoringHelper.EP_NAME)) {
-        Object preparedData = helper.prepareOperation(usages);
-        //noinspection unchecked
-        helper.performOperation(myProject, preparedData);
-      }
-    }
-    finally {
-      a.finish();
-      psiMigration.finish();
-    }
-  }
+	@Override
+	protected void performRefactoring(@NotNull UsageInfo[] usages)
+	{
+		finishFindMigration();
+		final PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
+		LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
 
+		myRefsToShorten = new ArrayList<>();
+		try
+		{
+			boolean sameShortNames = false;
+			for(int i = 0; i < myMigrationMap.getEntryCount(); i++)
+			{
+				MigrationMapEntry entry = myMigrationMap.getEntryAt(i);
+				String newName = entry.getNewName();
+				PsiElement element = entry.getType() == MigrationMapEntry.PACKAGE ? MigrationUtil.findOrCreatePackage(myProject, psiMigration, newName) : MigrationUtil.findOrCreateClass(myProject,
+						psiMigration, newName);
+				MigrationUtil.doMigration(element, newName, usages, myRefsToShorten);
+				if(!sameShortNames && Comparing.strEqual(StringUtil.getShortName(entry.getOldName()), StringUtil.getShortName(entry.getNewName())))
+				{
+					sameShortNames = true;
+				}
+			}
 
-  protected String getCommandName() {
-    return REFACTORING_NAME;
-  }
+			if(!sameShortNames)
+			{
+				myRefsToShorten.clear();
+			}
+		}
+		finally
+		{
+			a.finish();
+			psiMigration.finish();
+		}
+	}
 
-  public static class MigrationUsageInfo extends UsageInfo {
-    public MigrationMapEntry mapEntry;
+	@Override
+	protected void performPsiSpoilingRefactoring()
+	{
+		JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(myProject);
+		for(SmartPsiElementPointer<PsiElement> pointer : myRefsToShorten)
+		{
+			PsiElement element = pointer.getElement();
+			if(element != null)
+			{
+				styleManager.shortenClassReferences(element);
+			}
+		}
+	}
 
-    public MigrationUsageInfo(UsageInfo info, MigrationMapEntry mapEntry) {
-      super(info.getElement(), info.getRangeInElement().getStartOffset(), info.getRangeInElement().getEndOffset());
-      this.mapEntry = mapEntry;
-    }
-  }
+	@Override
+	@NotNull
+	protected String getCommandName()
+	{
+		return REFACTORING_NAME;
+	}
+
+	static class MigrationUsageInfo extends UsageInfo
+	{
+		MigrationMapEntry mapEntry;
+
+		MigrationUsageInfo(UsageInfo info, MigrationMapEntry mapEntry)
+		{
+			super(info.getElement(), info.getRangeInElement().getStartOffset(), info.getRangeInElement().getEndOffset());
+			this.mapEntry = mapEntry;
+		}
+	}
 }

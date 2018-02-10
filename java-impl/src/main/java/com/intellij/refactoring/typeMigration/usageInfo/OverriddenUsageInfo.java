@@ -15,25 +15,28 @@
  */
 package com.intellij.refactoring.typeMigration.usageInfo;
 
-import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiElement;
 
 /**
  * @author anna
- * Date: 27-Mar-2008
  */
-public class OverridenUsageInfo extends TypeMigrationUsageInfo {
-  private OverriderUsageInfo[] myOverriders;
+public class OverriddenUsageInfo extends TypeMigrationUsageInfo
+{
+	private volatile String myMigrateMethodName;
 
-  public OverridenUsageInfo(@NotNull PsiElement element) {
-    super(element);
-  }
+	public OverriddenUsageInfo(@NotNull PsiElement element)
+	{
+		super(element);
+	}
 
-  public OverriderUsageInfo[] getOverridingElements() {
-    return myOverriders;
-  }
+	public String getMigrateMethodName()
+	{
+		return myMigrateMethodName;
+	}
 
-  public void setOverriders(final OverriderUsageInfo[] overriders) {
-    myOverriders = overriders;
-  }
+	public void setMigrateMethodName(String migrateMethodName)
+	{
+		myMigrateMethodName = migrateMethodName;
+	}
 }

@@ -15,23 +15,25 @@
  */
 package com.intellij.refactoring.typeMigration.usageInfo;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author anna
- * Date: 27-Mar-2008
  */
-public class OverriderUsageInfo extends TypeMigrationUsageInfo{
-  private final PsiMethod myBaseMethod;
+public class OverriderUsageInfo extends TypeMigrationUsageInfo
+{
+	private final PsiMethod myBaseMethod;
 
-  public OverriderUsageInfo(@NotNull PsiElement element, PsiMethod baseMethod) {
-    super(element);
-    myBaseMethod = baseMethod;
-  }
+	public OverriderUsageInfo(@NotNull PsiElement element, PsiMethod baseMethod)
+	{
+		super(element);
+		myBaseMethod = baseMethod;
+	}
 
-  public PsiMethod getBaseMethod() {
-    return myBaseMethod;
-  }
+	public PsiMethod getBaseMethod()
+	{
+		return myBaseMethod;
+	}
 }

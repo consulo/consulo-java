@@ -481,6 +481,28 @@ public class PsiTypesUtil
 		return filterUnusedTypeParameters(typeParameters, superReturnTypeInBaseClassType);
 	}
 
+	public static boolean isAccessibleAt(PsiTypeParameter parameter, PsiElement context)
+	{
+		PsiTypeParameterListOwner owner = parameter.getOwner();
+		if(owner instanceof PsiMethod)
+		{
+			return PsiTreeUtil.isAncestor(owner, context, false);
+		}
+		if(owner instanceof PsiClass)
+		{
+			return PsiTreeUtil.isAncestor(owner, context, false) && InheritanceUtil.hasEnclosingInstanceInScope((PsiClass) owner, context, false, false);
+		}
+		return false;
+	}
+
+	public static boolean allTypeParametersResolved(PsiElement context, PsiType targetType)
+	{
+		TypeParameterSearcher searcher = new TypeParameterSearcher();
+		targetType.accept(searcher);
+		Set<PsiTypeParameter> parameters = searcher.getTypeParameters();
+		return parameters.stream().allMatch(parameter -> isAccessibleAt(parameter, context));
+	}
+
 	public static class TypeParameterSearcher extends PsiTypeVisitor<Boolean>
 	{
 		private final Set<PsiTypeParameter> myTypeParams = new HashSet<>();

@@ -16,11 +16,8 @@
 package com.intellij.refactoring.typeMigration.actions;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
@@ -44,13 +41,6 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction
 	@Override
 	public boolean isEnabledOnElements(@NotNull PsiElement[] elements)
 	{
-		Project currProject = DataManager.getInstance().getDataContext().getData(CommonDataKeys.PROJECT);
-
-		if(currProject == null)
-		{
-			return false;
-		}
-
 		if(elements.length > 1)
 		{
 			return false;
