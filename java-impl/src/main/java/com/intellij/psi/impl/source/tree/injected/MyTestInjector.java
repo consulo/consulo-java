@@ -186,7 +186,14 @@ public class MyTestInjector {
         }
       }
     };
-    InjectedLanguageManager.getInstance(psiManager.getProject()).registerMultiHostInjector(myMultiHostInjector, parent, XmlAttributeValue.class);
+    InjectedLanguageManager.getInstance(psiManager.getProject()).registerMultiHostInjector(myMultiHostInjector, XmlAttributeValue.class);
+    Disposer.register(parent, new Disposable() {
+      @Override
+      public void dispose() {
+        boolean b = InjectedLanguageManager.getInstance(psiManager.getProject()).unregisterMultiHostInjector(myMultiHostInjector);
+        assert b;
+      }
+    });
 
     final LanguageInjector myInjector = new LanguageInjector() {
       @Override
