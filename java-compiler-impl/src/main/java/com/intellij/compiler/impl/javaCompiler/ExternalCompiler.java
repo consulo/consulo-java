@@ -47,7 +47,10 @@ public abstract class ExternalCompiler implements BackendCompiler
 		buf.append("=============================================================================\n");
 		buf.append("Running compiler: ").append(commandLine);
 
-		LOG.info(buf.toString());
+		if(LOG.isDebugEnabled())
+		{
+			LOG.debug(buf.toString());
+		}
 
 		try
 		{
